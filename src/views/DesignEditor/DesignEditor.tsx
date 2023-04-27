@@ -6,7 +6,6 @@ import Preview from "./components/Preview"
 const DesignEditor = () => {
   const editorType = useEditorType()
   const { displayPreview, setDisplayPreview } = useDesignEditorContext()
-  console.log(editorType)
   return (
     <>
       {displayPreview && <Preview isOpen={displayPreview} setIsOpen={setDisplayPreview} />}
