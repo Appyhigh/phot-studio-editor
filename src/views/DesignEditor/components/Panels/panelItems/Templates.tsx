@@ -21,7 +21,7 @@ export default function () {
   const { setCurrentScene, currentScene, setScenes, setCurrentDesign } = useDesignEditorContext()
   const designs = useSelector(selectPublicDesigns)
   const editorType = useEditorType()
-  
+
   const loadGraphicTemplate = async (payload: IDesign): Promise<{ scenes: IScene[]; design: IDesign }> => {
     const scenes: IScene[] = []
     const { scenes: scns, ...design } = payload

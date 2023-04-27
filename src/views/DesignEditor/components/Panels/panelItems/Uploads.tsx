@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
 import Scrollable from "~/components/Scrollable"
@@ -16,6 +16,7 @@ export default function () {
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const [selectedImage, setSelectedImage] = React.useState<any>(null)
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -39,6 +40,12 @@ export default function () {
     }
 
     setUploads([...uploads, upload])
+
+    editor.objects.clear()
+    editor.objects.add(upload).then(() => {
+      editor.objects.setAsBackgroundImage()
+      setSelectedImage(upload.preview)
+    })
   }
 
   const handleInputFileRefClick = () => {
@@ -49,44 +56,32 @@ export default function () {
     handleDropFiles(e.target.files!)
   }
 
-  const addImageToCanvas = (props: Partial<ILayer>) => {
-    editor.objects.add(props)
+  const discardHandler = () => {
+    setUploads([])
+    editor.objects.clear()
   }
+
   return (
     <DropZone handleDropFiles={handleDropFiles}>
       <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        <Block
-          $style={{
-            display: "flex",
-            alignItems: "center",
-            fontWeight: 500,
-            justifyContent: "space-between",
-            padding: "1.5rem",
-          }}
-        >
-          <Block>Uploads</Block>
-
-          <Block onClick={() => setIsSidebarOpen(false)} $style={{ cursor: "pointer", display: "flex" }}>
-            <AngleDoubleLeft size={18} />
-          </Block>
-        </Block>
+        {uploads.length === 0 && (
+          <Button
+            onClick={handleInputFileRefClick}
+            size={SIZE.compact}
+            overrides={{
+              Root: {
+                style: {
+                  width: "100%",
+                },
+              },
+            }}
+          >
+            Upload from Device
+          </Button>
+        )}
         <Scrollable>
           <Block padding={"0 1.5rem"}>
-            <Button
-              onClick={handleInputFileRefClick}
-              size={SIZE.compact}
-              overrides={{
-                Root: {
-                  style: {
-                    width: "100%",
-                  },
-                },
-              }}
-            >
-              Computer
-            </Button>
             <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
-
             <div
               style={{
                 marginTop: "1rem",
@@ -103,10 +98,20 @@ export default function () {
                     alignItems: "center",
                     cursor: "pointer",
                   }}
-                  onClick={() => addImageToCanvas(upload)}
+                  // onClick={() => addImageToCanvas(upload)}
                 >
                   <div>
                     <img width="100%" src={upload.preview ? upload.preview : upload.url} alt="preview" />
+                    {selectedImage === upload.preview && (
+                      <div>
+                        <div>
+                          <button>Remove Background</button>
+                        </div>
+                        <div>
+                          <button onClick={discardHandler}>Discard</button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

@@ -6,6 +6,7 @@ import Scrollable from "~/components/Scrollable"
 import { images } from "~/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
+import Uploads from "./Uploads"
 
 const Images = () => {
   const editor = useEditor()
@@ -18,7 +19,10 @@ const Images = () => {
           type: "StaticImage",
           src: url,
         }
-        editor.objects.add(options)
+        editor.objects.clear()
+        editor.objects.add(options).then(() => {
+          editor.objects.setAsBackgroundImage()
+        })
       }
     },
     [editor]
@@ -41,11 +45,23 @@ const Images = () => {
           <AngleDoubleLeft size={18} />
         </Block>
       </Block>
+      <Uploads />
+      <Block padding="0 1.5rem" marginBottom="1.5rem">
+        Try Sample Images
+      </Block>
       <Scrollable>
         <Block padding="0 1.5rem">
           <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr" }}>
             {images.map((image, index) => {
-              return <ImageItem key={index} onClick={() => addObject(image.src.large)} preview={image.src.small} />
+              return (
+                <ImageItem
+                  key={index}
+                  onClick={() => {
+                    addObject(image.src.large2x)
+                  }}
+                  preview={image.src.small}
+                />
+              )
             })}
           </div>
         </Block>

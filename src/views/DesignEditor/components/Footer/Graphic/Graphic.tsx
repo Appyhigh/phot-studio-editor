@@ -11,7 +11,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 const Graphic = () => {
   return (
     <Container>
-      <Scenes />
+      {/* <Scenes /> */}
       <Common />
     </Container>
   )
