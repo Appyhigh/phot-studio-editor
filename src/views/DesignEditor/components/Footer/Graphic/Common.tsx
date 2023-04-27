@@ -32,7 +32,6 @@ const Common = () => {
   })
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
-  console.log(editor)
 
   const resetHandler = () => {
     editor.objects.clear()
