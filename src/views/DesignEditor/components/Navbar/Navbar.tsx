@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useCallback } from "react"
 import { styled, ThemeProvider, DarkTheme } from "baseui"
 import { Theme } from "baseui/theme"
 import { Button, KIND } from "baseui/button"
@@ -142,6 +142,22 @@ const Navbar = () => {
     a.click()
   }
 
+  const makeDownloadToPNG = (data: Object) => {
+    const dataStr = `${data}`
+    const a = document.createElement("a")
+    a.href = dataStr
+    a.download = "image.png"
+    a.click()
+  }
+
+  const exportToPNG = useCallback(async () => {
+    if (editor) {
+      const template = editor.scene.exportToJSON()
+      const image = (await editor.renderer.render(template)) as string
+      makeDownloadToPNG(image)
+    }
+  }, [editor])
+
   const makeDownloadTemplate = async () => {
     if (editor) {
       if (editorType === "GRAPHIC") {
@@ -149,7 +165,7 @@ const Navbar = () => {
       } else if (editorType === "PRESENTATION") {
         return parsePresentationJSON()
       } else {
-      return parseVideoJSON()
+        return parseVideoJSON()
       }
     }
   }
@@ -292,7 +308,7 @@ const Navbar = () => {
 
           <Button
             size="compact"
-            onClick={makeDownloadTemplate}
+            onClick={exportToPNG}
             kind={KIND.tertiary}
             overrides={{
               StartEnhancer: {
