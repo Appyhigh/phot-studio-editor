@@ -20,7 +20,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 
 interface Options {
   zoomRatio: number
-  zoomRatioTemp: number,
+  zoomRatioTemp: number
 }
 
 const Common = () => {
@@ -28,11 +28,16 @@ const Common = () => {
   const zoomMax = 240
   const [options, setOptions] = React.useState<Options>({
     zoomRatio: 20,
-    zoomRatioTemp: 20
+    zoomRatioTemp: 20,
   })
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
 
+  const resetHandler = () => {
+    editor.objects.clear()
+    editor.history.reset()
+    editor.history.save()
+  }
   React.useEffect(() => {
     setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 100) })
   }, [zoomRatio])
@@ -173,17 +178,34 @@ const Common = () => {
         />
       </div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
+        <Button
+          kind={KIND.tertiary}
+          size={SIZE.compact}
+          onClick={() => {
+            // function is called twice because there will be shomehow 1 element left in undo
+            resetHandler()
+            resetHandler()
+          }}
+        >
           <Icons.Refresh size={16} />
         </Button>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
+        <Button
+          kind={KIND.tertiary}
+          size={SIZE.compact}
+          onClick={() => {
+            editor.history.undo()
+          }}
+        >
           <Icons.Undo size={22} />
         </Button>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
+        <Button
+          kind={KIND.tertiary}
+          size={SIZE.compact}
+          onClick={() => {
+            editor.history.redo()
+          }}
+        >
           <Icons.Redo size={22} />
-        </Button>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
-          <Icons.TimePast size={16} />
         </Button>
       </div>
     </Container>
