@@ -18,10 +18,11 @@ const Images = () => {
         const options = {
           type: "StaticImage",
           src: url,
+          preview: url,
         }
-        editor.objects.clear()
+        // editor.objects.clear()
         editor.objects.add(options).then(() => {
-          editor.objects.setAsBackgroundImage()
+          // editor.objects.setAsBackgroundImage()
         })
       }
     },

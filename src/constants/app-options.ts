@@ -33,10 +33,10 @@ export const BASE_ITEMS = [
   //   id: "pixabay",
   //   name: "Pixabay",
   // },
-  // {
-  //   id: "layers",
-  //   name: "Layers",
-  // },
+  {
+    id: "layers",
+    name: "Layers",
+  },
 ]
 
 export const VIDEO_PANEL_ITEMS = [
