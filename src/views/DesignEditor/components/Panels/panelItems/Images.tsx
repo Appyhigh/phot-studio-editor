@@ -18,11 +18,10 @@ const Images = () => {
         const options = {
           type: "StaticImage",
           src: url,
+          preview: url,
+          metadata: { generationDate: new Date().getTime() },
         }
-        editor.objects.clear()
-        editor.objects.add(options).then(() => {
-          editor.objects.setAsBackgroundImage()
-        })
+        editor.objects.add(options)
       }
     },
     [editor]
@@ -57,7 +56,7 @@ const Images = () => {
                 <ImageItem
                   key={index}
                   onClick={() => {
-                    addObject(image.src.large2x)
+                    addObject(image.src.medium)
                   }}
                   preview={image.src.small}
                 />

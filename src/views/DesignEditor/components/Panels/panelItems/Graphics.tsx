@@ -20,6 +20,7 @@ const Graphics = () => {
         const options = {
           type: "StaticVector",
           src: url,
+          metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options)
       }
@@ -33,6 +34,7 @@ const Graphics = () => {
     editor.objects.add({
       src: url,
       type: "StaticVector",
+      metadata: { generationDate: new Date().getTime() },
     })
   }
 

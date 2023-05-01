@@ -27,6 +27,7 @@ const Pixabay = () => {
         const options = {
           type: "StaticImage",
           src: url,
+          metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options)
       }
