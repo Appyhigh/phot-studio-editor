@@ -1,4 +1,4 @@
-import { createTheme } from "baseui";
+import { createTheme } from "baseui"
 
 const primitives = {
   black: "#000000",
@@ -29,7 +29,7 @@ const primitives = {
   scale900: "32px",
   scale950: "36px",
   scale1000: "40px",
-};
+}
 
 const overrides = {
   colors: {
@@ -77,7 +77,7 @@ const overrides = {
       fontWeight: "400",
     },
   },
-  sizing:{
+  sizing: {
     scale0: primitives.scale0,
     scale100: primitives.scale100,
     scale200: primitives.scale200,
@@ -93,11 +93,9 @@ const overrides = {
     scale850: primitives.scale850,
     scale900: primitives.scale900,
     scale950: primitives.scale950,
-    scale1000:primitives.scale1000,
-  }
-};
+    scale1000: primitives.scale1000,
+  },
+}
 
-const theme = createTheme(
-  primitives, overrides);
+export const CustomTheme = createTheme(primitives, overrides)
 
-export default theme;

@@ -11,13 +11,11 @@ import { I18nextProvider } from "react-i18next"
 import { TimerProvider } from "@layerhub-io/use-timer"
 import i18next from "i18next"
 import "./translations"
-import CustomTheme from "./theme"
+import { CustomTheme } from "./theme"
 
 const engine = new Styletron()
 
-const Provider = ({ children }: { children: React.ReactNode }) => {
-  console.log(CustomTheme);
-  
+const Provider = ({ children }: { children: React.ReactNode }) => {  
   return (
     <ReduxProvier store={store}>
       <DesignEditorProvider>
