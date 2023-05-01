@@ -1,5 +1,5 @@
 import React from "react"
-import { styled, ThemeProvider, DarkTheme } from "baseui"
+import { styled, ThemeProvider, DarkTheme, useStyletron } from "baseui"
 import { Theme } from "baseui/theme"
 import { Button, KIND } from "baseui/button"
 import Logo from "~/components/Icons/Logo"
@@ -14,6 +14,7 @@ import { loadVideoEditorAssets } from "~/utils/video"
 import DesignTitle from "./DesignTitle"
 import { IDesign } from "~/interfaces/DesignEditor"
 import Github from "~/components/Icons/Github"
+import CustomTheme from "../../../../theme";
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "64px",
@@ -25,6 +26,12 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 }))
 
 const Navbar = () => {
+  console.log(CustomTheme);
+  const [css, theme] = useStyletron();
+
+  console.log(theme);
+  
+
   const { setDisplayPreview, setScenes, setCurrentDesign, currentDesign, scenes } = useDesignEditorContext()
   const editorType = useEditorType()
   const editor = useEditor()
@@ -260,7 +267,7 @@ const Navbar = () => {
 
   return (
     // @ts-ignore
-    <ThemeProvider theme={DarkTheme}>
+    <ThemeProvider theme={CustomTheme}>
       <Container>
         <div style={{ color: "#ffffff" }}>
           <Logo size={36} />
