@@ -21,14 +21,14 @@ const Layers = () => {
 
   React.useEffect(() => {
     if (objects) {
-      setLayerObjects(objects)
+      setLayerObjects(objects.reverse())
     }
   }, [objects])
 
   React.useEffect(() => {
     let watcher = async () => {
       if (objects) {
-        setLayerObjects([...objects])
+        setLayerObjects([...objects.reverse()])
       }
     }
     if (editor) {
@@ -48,6 +48,7 @@ const Layers = () => {
           type: "StaticImage",
           src: url,
           preview: url,
+          metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options)
       }
@@ -105,81 +106,116 @@ const Layers = () => {
               <button>Option 4</button>
             </div>
           ) : (
-            layerObjects.reverse().map((object) => {
-              return (
-                <Block
-                  $style={{
-                    display: "grid",
-                    gridTemplateColumns: "1fr 90px",
-                    fontSize: "14px",
-                    alignItems: "center",
-                    ":hover": {
-                      background: "rgb(245,246,247)",
-                    },
-                  }}
-                  key={object.id}
-                >
-                  {object.text ? (
-                    <div style={{ fontFamily: object.fontFamily }}>
-                      {object.textLines.map((line: any) => (
-                        <div>{line}</div>
-                      ))}
-                    </div>
-                  ) : (
-                    <img src={object.preview} style={{ objectFit: "cover" }} alt="nn" height="100px" width="100px" />
-                  )}
-                  <Block $style={{ cursor: "pointer" }} onClick={() => editor.objects.select(object.id)}>
-                    {object.name}
-                  </Block>
-                  <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                    {!object.text && (
-                      <button
-                        onClick={() => {
-                          setActiveLayerPanel(object)
-                        }}
-                      >
-                        Applicable AI Options
-                      </button>
-                    )}
-                    {object.locked ? (
-                      <Button
-                        kind={KIND.tertiary}
-                        size={SIZE.mini}
-                        onClick={() => editor.objects.unlock(object.id)}
-                        overrides={{
-                          Root: {
-                            style: {
-                              paddingLeft: "4px",
-                              paddingRight: "4px",
-                            },
-                          },
-                        }}
-                      >
-                        <Locked size={24} />
-                      </Button>
+            layerObjects
+              .sort((a, b) => b.metadata.generationDate - a.metadata.generationDate)
+              .map((object) => {
+                return (
+                  <Block
+                    $style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 90px",
+                      fontSize: "14px",
+                      alignItems: "center",
+                      ":hover": {
+                        background: "rgb(245,246,247)",
+                      },
+                    }}
+                    key={object.id}
+                  >
+                    {object.text ? (
+                      <div style={{ fontFamily: object.fontFamily }}>
+                        {object.textLines.map((line: any) => (
+                          <div>{line}</div>
+                        ))}
+                      </div>
                     ) : (
-                      <Button
-                        kind={KIND.tertiary}
-                        size={SIZE.mini}
-                        onClick={() => editor.objects.lock(object.id)}
-                        overrides={{
-                          Root: {
-                            style: {
-                              paddingLeft: "4px",
-                              paddingRight: "4px",
-                            },
-                          },
-                        }}
-                      >
-                        <Unlocked size={24} />
-                      </Button>
+                      <img src={object.preview} style={{ objectFit: "cover" }} alt="nn" height="100px" width="100px" />
                     )}
+                    <Block $style={{ cursor: "pointer" }} onClick={() => editor.objects.select(object.id)}>
+                      {object.name}
+                    </Block>
+                    <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                      {!object.text && (
+                        <button
+                          onClick={() => {
+                            setActiveLayerPanel(object)
+                          }}
+                        >
+                          Applicable AI Options
+                        </button>
+                      )}
 
-                    {object.visible ? (
+                      {object.locked ? (
+                        <Button
+                          kind={KIND.tertiary}
+                          size={SIZE.mini}
+                          onClick={() => editor.objects.unlock(object.id)}
+                          overrides={{
+                            Root: {
+                              style: {
+                                paddingLeft: "4px",
+                                paddingRight: "4px",
+                              },
+                            },
+                          }}
+                        >
+                          <Locked size={24} />
+                        </Button>
+                      ) : (
+                        <Button
+                          kind={KIND.tertiary}
+                          size={SIZE.mini}
+                          onClick={() => editor.objects.lock(object.id)}
+                          overrides={{
+                            Root: {
+                              style: {
+                                paddingLeft: "4px",
+                                paddingRight: "4px",
+                              },
+                            },
+                          }}
+                        >
+                          <Unlocked size={24} />
+                        </Button>
+                      )}
+
+                      {object.visible ? (
+                        <Button
+                          kind={KIND.tertiary}
+                          size={SIZE.mini}
+                          onClick={() => editor.objects.update({ visible: false }, object.id)}
+                          overrides={{
+                            Root: {
+                              style: {
+                                paddingLeft: "4px",
+                                paddingRight: "4px",
+                              },
+                            },
+                          }}
+                        >
+                          <Eye size={24} />
+                        </Button>
+                      ) : (
+                        <Button
+                          kind={KIND.tertiary}
+                          size={SIZE.mini}
+                          onClick={() => editor.objects.update({ visible: true }, object.id)}
+                          overrides={{
+                            Root: {
+                              style: {
+                                paddingLeft: "4px",
+                                paddingRight: "4px",
+                              },
+                            },
+                          }}
+                        >
+                          <EyeCrossed size={24} />
+                        </Button>
+                      )}
                       <Button
                         kind={KIND.tertiary}
                         size={SIZE.mini}
-                        onClick={() => editor.objects.update({ visible: false }, object.id)}
+                        onClick={() => editor.objects.remove(object.id)}
                         overrides={{
                           Root: {
                             style: {
@@ -189,44 +225,12 @@ const Layers = () => {
                           },
                         }}
                       >
-                        <Eye size={24} />
+                        <Delete size={24} />
                       </Button>
-                    ) : (
-                      <Button
-                        kind={KIND.tertiary}
-                        size={SIZE.mini}
-                        onClick={() => editor.objects.update({ visible: true }, object.id)}
-                        overrides={{
-                          Root: {
-                            style: {
-                              paddingLeft: "4px",
-                              paddingRight: "4px",
-                            },
-                          },
-                        }}
-                      >
-                        <EyeCrossed size={24} />
-                      </Button>
-                    )}
-                    <Button
-                      kind={KIND.tertiary}
-                      size={SIZE.mini}
-                      onClick={() => editor.objects.remove(object.id)}
-                      overrides={{
-                        Root: {
-                          style: {
-                            paddingLeft: "4px",
-                            paddingRight: "4px",
-                          },
-                        },
-                      }}
-                    >
-                      <Delete size={24} />
-                    </Button>
+                    </Block>
                   </Block>
-                </Block>
-              )
-            })
+                )
+              })
           )}
         </Block>
       </Scrollable>

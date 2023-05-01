@@ -35,6 +35,7 @@ export default function () {
       src: base64,
       preview: preview,
       type: type,
+      metadata: { generationDate: new Date().getTime() },
     }
 
     setUploads([...uploads, upload])

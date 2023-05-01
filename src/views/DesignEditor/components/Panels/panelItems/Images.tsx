@@ -19,6 +19,7 @@ const Images = () => {
           type: "StaticImage",
           src: url,
           preview: url,
+          metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options)
       }
