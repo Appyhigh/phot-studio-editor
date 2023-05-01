@@ -91,7 +91,6 @@ const Layers = () => {
               <button
                 onClick={() => {
                   // Get the output image from the backend
-
                   const url = "https://ik.imagekit.io/rxld8u68i/removed-background.jpeg?updatedAt=1682652974131"
                   // Add the removed background layer
                   addObject(url)
@@ -120,18 +119,28 @@ const Layers = () => {
                   }}
                   key={object.id}
                 >
-                  <img src={object.preview} style={{ objectFit: "cover" }} alt="nn" height="100px" width="100px" />
+                  {object.text ? (
+                    <div style={{ fontFamily: object.fontFamily }}>
+                      {object.textLines.map((line: any) => (
+                        <div>{line}</div>
+                      ))}
+                    </div>
+                  ) : (
+                    <img src={object.preview} style={{ objectFit: "cover" }} alt="nn" height="100px" width="100px" />
+                  )}
                   <Block $style={{ cursor: "pointer" }} onClick={() => editor.objects.select(object.id)}>
                     {object.name}
                   </Block>
                   <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                    <button
-                      onClick={() => {
-                        setActiveLayerPanel(object)
-                      }}
-                    >
-                      Applicable AI Options
-                    </button>
+                    {!object.text && (
+                      <button
+                        onClick={() => {
+                          setActiveLayerPanel(object)
+                        }}
+                      >
+                        Applicable AI Options
+                      </button>
+                    )}
                     {object.locked ? (
                       <Button
                         kind={KIND.tertiary}
