@@ -1,12 +1,83 @@
-import { Input } from "baseui/input"
+import { Input, SIZE } from "baseui/input"
 import classes from "./style.module.css"
-import { Padding } from "baseui/popover/styled-components"
 import { Block } from "baseui/block"
+import useDesignEditorContext from "~/hooks/useDesignEditorContext"
+import { useEditor, useFrame } from "@layerhub-io/react"
+import { useEffect, useState } from "react"
+import { fixedSizeFrames, resizeSampleFrame } from "~/constants/editor"
+import { Button, SHAPE } from "baseui/button"
 
-const ResizeCanvasPopup = ({ showResizeCanvas }: any) => {
+const ResizeCanvasPopup = () => {
+  const [desiredFrame, setDesiredFrame] = useState({
+    width: 0,
+    height: 0,
+  })
+
+  const [selectedFrame, setSelectedFrame] = useState<any>({
+    id: 0,
+    width: 0,
+    height: 0,
+  })
+
+  const [othersFrame, setOthersFrame] = useState<any>({
+    id: 0,
+    width: 0,
+    height: 0,
+  })
+  const [activeKey, setActiveKey] = useState<string | number>("0")
+
+  const { currentDesign, setCurrentDesign } = useDesignEditorContext()
+  const editor = useEditor()
+
+  const frame = useFrame()
+  const applyResize = () => {
+    // @ts-ignore
+    const size = activeKey === "0" ? selectedFrame : activeKey === "1" ? othersFrame : desiredFrame
+    if (editor) {
+      editor.frame.resize({
+        width: parseInt(size.width),
+        height: parseInt(size.height),
+      })
+      setCurrentDesign({
+        ...currentDesign,
+        frame: {
+          width: parseInt(size.width),
+          height: parseInt(size.height),
+        },
+      })
+    }
+  }
+
+  useEffect(() => {
+    // @ts-ignore
+    if (
+      (activeKey === "0" && selectedFrame.id !== 0) ||
+      // @ts-ignore
+      (activeKey === "1" && othersFrame.id !== 0) ||
+      // @ts-ignore
+      (activeKey === "2" && !!parseInt(desiredFrame.width) && !!parseInt(desiredFrame.height))
+    ) {
+      {
+        applyResize()
+      }
+    }
+  }, [selectedFrame, othersFrame])
+
+  useEffect(() => {
+    if (frame) {
+      setDesiredFrame({
+        width: frame.width,
+        height: frame.height,
+      })
+    }
+  }, [frame])
+
+  // @ts-ignore
+  const isCustomizedEnabled = activeKey === "2" && !!parseInt(desiredFrame.width) && !!parseInt(desiredFrame.height)
+
   return (
-    <div className={classes.resizeCanvas}>
-      <div
+    <Block className={classes.resizeCanvas}>
+      <Block
         style={{
           height: "342px",
           width: "251px",
@@ -26,93 +97,50 @@ const ResizeCanvasPopup = ({ showResizeCanvas }: any) => {
         <div style={{ margin: "4px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Fixed Size</p>
           <div style={{ display: "flex", justifyContent: "center", flexDirection: "row", color: "#92929D" }}>
-            <Block
-              $style={{
-                width: "40px",
-                height: "40px",
-                border: "1.5px solid #92929D",
-                borderRadius: "4px",
-                margin: "0px 6px",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                ":hover": {
-                  color: "#000",
-                  cursor: "pointer",
-                  border: "1.5px solid #000",
-                },
-              }}
-            >
-              <p>1:1</p>
-            </Block>
-            <Block
-              $style={{
-                width: "40px",
-                height: "48px",
-                border: "1.5px solid #92929D",
-                borderRadius: "4px",
-                margin: "0px 6px",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                ":hover": {
-                  color: "#000",
-                  cursor: "pointer",
-                  border: "1.5px solid #000",
-                },
-              }}
-            >
-              <p>4:5</p>
-            </Block>{" "}
-            <Block
-              $style={{
-                width: "60px",
-                height: "32px",
-                border: "1.5px solid #92929D",
-                borderRadius: "4px",
-                margin: "0px 6px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                ":hover": {
-                  color: "#000",
-                  cursor: "pointer",
-                  border: "1.5px solid #000",
-                },
-              }}
-            >
-              <p>16:9</p>
-            </Block>
-            <Block
-              $style={{
-                width: "30px",
-                height: "50px",
-                border: "1.5px solid #92929D",
-                borderRadius: "4px",
-                margin: "0px 6px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                ":hover": {
-                  color: "#000",
-                  cursor: "pointer",
-                  border: "1.5px solid #000",
-                },
-              }}
-            >
-              <p>1:2</p>
-            </Block>
+            {fixedSizeFrames.map((sample, index) => (
+              <Block
+                key={index}
+                onClick={() => {
+                  setActiveKey("0")
+                  setSelectedFrame(sample)
+                }}
+                $style={{
+                  width: sample.frameWidth,
+                  height: sample.frameHeight,
+                  border: "1.5px solid #92929D",
+                  borderRadius: "4px",
+                  marginRight: "12px",
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  ":hover": {
+                    color: "#000",
+                    cursor: "pointer",
+                    border: "1.5px solid #000",
+                  },
+                }}
+              >
+                <p>{sample.name}</p>
+              </Block>
+            ))}
           </div>
         </div>
         <div style={{ border: "1px solid #F1F1F5", width: "100%", marginTop: "12px" }}></div>
         <div style={{ margin: "4px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Custom Size</p>
+          <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
           <div style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+
+           
             <Input
               type="number"
               placeholder="width"
+              value={desiredFrame.width}
+              onChange={(e: any) => {
+                setActiveKey("2")
+                setDesiredFrame({ ...desiredFrame, width: e.target.value })
+              }}
               overrides={{
                 Input: {
                   style: {
@@ -136,6 +164,11 @@ const ResizeCanvasPopup = ({ showResizeCanvas }: any) => {
             <Input
               type="number"
               placeholder="height"
+              onChange={(e: any) => {
+                setActiveKey("2")
+                setDesiredFrame({ ...desiredFrame, height: e.target.value })
+              }}
+              value={desiredFrame.height}
               overrides={{
                 Input: {
                   style: {
@@ -156,6 +189,12 @@ const ResizeCanvasPopup = ({ showResizeCanvas }: any) => {
                 },
               }}
             />
+            </div>
+            <br/>
+            <Button disabled={!isCustomizedEnabled} onClick={applyResize} size={SIZE.mini} style={{width:"75px"}}      shape={SHAPE.pill}
+>
+              Resize
+            </Button>
           </div>
         </div>
         <div style={{ border: "1px solid #F1F1F5", width: "100%", marginTop: "12px" }}></div>
@@ -172,26 +211,28 @@ const ResizeCanvasPopup = ({ showResizeCanvas }: any) => {
               color: "#44444F",
             }}
           >
-            <label style={{ display: "flex", alignItems: "center" }}>
-              <input type="checkbox" name="option" value="Video (1920 x 1080 px)" /> Video{" "}
-              <span style={{ color: "#92929D",marginLeft:"3px" }}> (1920 x 1080 px)</span>
-            </label>
-            <label style={{ display: "flex", alignItems: "center" }}>
-              <input type="checkbox" name="option" value="Facebook Post (940 x 788 px)" /> Facebook Post{" "}
-              <span style={{ color: "#92929D",marginLeft:"3px" }}> (940 x 788 px)</span>{" "}
-            </label>
-            <label style={{ display: "flex", alignItems: "center" }}>
-              <input type="checkbox" name="option" value="Facebook Cover (1640 x 924 px)" /> Facebook Cover{" "}
-              <span style={{ color: "#92929D" ,marginLeft:"3px"}}> (1640 x 924 px)</span>
-            </label>{" "}
-            <label style={{ display: "flex", alignItems: "center" }}>
-              <input type="checkbox" name="option" value="Logo (500 x 500 px)" /> Logo{" "}
-              <span style={{ color: "#92929D",marginLeft:"3px" }}> (500 x 500 px)</span>
-            </label>
+            {resizeSampleFrame.map((sampleFrame, index) => (
+              <label style={{ display: "flex", alignItems: "center" }} key={index}>
+                <input
+                  type="checkbox"
+                  name={sampleFrame.name}
+                  checked={othersFrame.id == sampleFrame.id ? true : false}
+                  onClick={() => {
+                    setActiveKey("1")
+                    setOthersFrame(sampleFrame)
+                  }}
+                />{" "}
+                {sampleFrame.name}
+                <span style={{ color: "#92929D", marginLeft: "3px" }}>
+                  {" "}
+                  ({sampleFrame.width} x {sampleFrame.height}px)
+                </span>
+              </label>
+            ))}
           </div>
         </div>
-      </div>
-    </div>
+      </Block>
+    </Block>
   )
 }
 

@@ -4,10 +4,8 @@ import { Theme } from "baseui/theme"
 import Icons from "~/components/Icons"
 import { Button, KIND, SIZE } from "baseui/button"
 import { Slider } from "baseui/slider"
-import { Input } from "baseui/input"
 import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { StatefulTooltip } from "baseui/tooltip"
-import { Block } from "baseui/block"
 import { PLACEMENT } from "baseui/toast"
 import ResizeCanvasPopup from "./ResizeCanvasPopup"
 import classes from "./style.module.css"
@@ -37,11 +35,6 @@ const Common = () => {
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
 
-  const resetHandler = () => {
-    editor.objects.clear()
-    editor.history.reset()
-    editor.history.save()
-  }
   React.useEffect(() => {
     setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 100) })
   }, [zoomRatio])
@@ -53,8 +46,6 @@ const Common = () => {
       }
     }
   }
-
-  const [showResizeCanvas, setShowResizeCanvas] = useState(false)
 
   const applyZoomRatio = (type: string, e: any) => {
     const value = e.target.value
@@ -75,6 +66,11 @@ const Common = () => {
     }
   }
 
+  const resetHandler = () => {
+    editor.objects.clear()
+    editor.history.reset()
+    editor.history.save()
+  }
   return (
     <Container>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "start", position: "relative" }}>
@@ -82,37 +78,32 @@ const Common = () => {
           placement={PLACEMENT.bottom}
           showArrow={true}
           accessibilityType={"tooltip"}
-          content="All changes are saved"
+          content={"Restore"}
         >
           <Button
             kind={KIND.tertiary}
             size={SIZE.compact}
             onClick={() => {
-              editor.history.save()
+              // function is called twice because there will be shomehow 1 element left in undo
+              resetHandler()
+              resetHandler()
             }}
           >
-            <Icons.Refresh size={16} />
+            <Icons.Save size={26} />
           </Button>
         </StatefulTooltip>
         <div style={{ position: "relative" }} className={classes.resizeCanvasBtn}>
           <Button kind={KIND.tertiary} size={SIZE.compact} className={classes.resizeCanvasBtn}>
             <Icons.CanvasResize size={26} />
           </Button>
-          <ResizeCanvasPopup showResizeCanvas={showResizeCanvas} />
+          <ResizeCanvasPopup />
         </div>
 
         <Button kind={KIND.tertiary} size={SIZE.compact}>
-          <Icons.Transparency size={30} />
+          <Icons.Transparency size={26} />
         </Button>
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
-          <Icons.Expand size={16} />
-        </Button>
-        <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => editor.zoom.zoomToFit()}>
-          <Icons.Compress size={16} />
-        </Button>
-      </div>
+
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
         <Slider
           overrides={{

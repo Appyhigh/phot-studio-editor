@@ -352,11 +352,7 @@ const ResizeTemplate = () => {
             </Tab>
           </Tabs>
         </Block>
-        <Block $style={{ display: "flex", alignItems: "center", justifyContent: "center", paddingBottom: "2rem" }}>
-          <Button disabled={!isEnabled} onClick={applyResize} style={{ width: "190px" }}>
-            Resize template
-          </Button>
-        </Block>
+      
       </Modal>
     </>
   )
