@@ -130,69 +130,84 @@ const ResizeCanvasPopup = () => {
         <div style={{ margin: "4px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Custom Size</p>
           <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-          <div style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
-
-           
-            <Input
-              type="number"
-              placeholder="width"
-              value={desiredFrame.width}
-              onChange={(e: any) => {
-                setActiveKey("2")
-                setDesiredFrame({ ...desiredFrame, width: e.target.value })
-              }}
-              overrides={{
-                Input: {
-                  style: {
-                    backgroundColor: "#ffffff",
-                    textAlign: "center",
-                    paddingLeft: 0,
-                    paddingRight: 0,
+            <div style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+              <Input
+                type="number"
+                placeholder="width"
+                value={desiredFrame.width}
+                onChange={(e: any) => {
+                  setActiveKey("2")
+                  setDesiredFrame({ ...desiredFrame, width: e.target.value })
+                }}
+                overrides={{
+                  Root: {
+                    style: {
+                      borderTopStyle: "none",
+                      borderBottomStyle: "none",
+                      borderRightStyle: "none",
+                      borderLeftStyle: "none",
+                      outline: "transparent",
+                      backgroundColor: "transparent",
+                    },
                   },
-                },
-                Root: {
-                  style: {
-                    border: "1px solid #92929D",
-                    height: "32px",
-                    width: "86px",
-                    borderRadius: "4px",
-                    marginRight: "6px",
+                  InputContainer: {
+                    style: {
+                      border: "1px solid #92929D",
+                      textAlign: "center",
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      height: "32px",
+                      width: "86px",
+                      borderRadius: "4px",
+                      marginRight: "6px",
+                      backgroundColor: "#fff",
+                    },
                   },
-                },
-              }}
-            />{" "}
-            <Input
-              type="number"
-              placeholder="height"
-              onChange={(e: any) => {
-                setActiveKey("2")
-                setDesiredFrame({ ...desiredFrame, height: e.target.value })
-              }}
-              value={desiredFrame.height}
-              overrides={{
-                Input: {
-                  style: {
-                    backgroundColor: "#ffffff",
-                    textAlign: "center",
-                    paddingLeft: 0,
-                    paddingRight: 0,
+                }}
+              />{" "}
+              <Input
+                type="number"
+                placeholder="height"
+                onChange={(e: any) => {
+                  setActiveKey("2")
+                  setDesiredFrame({ ...desiredFrame, height: e.target.value })
+                }}
+                value={desiredFrame.height}
+                overrides={{
+                  Root: {
+                    style: {
+                      borderTopStyle: "none",
+                      borderBottomStyle: "none",
+                      borderRightStyle: "none",
+                      borderLeftStyle: "none",
+                      outline: "transparent",
+                      backgroundColor: "transparent",
+                    },
                   },
-                },
-                Root: {
-                  style: {
-                    border: "1px solid #92929D",
-                    height: "32px",
-                    width: "86px",
-                    borderRadius: "4px",
-                    marginLeft: "6px",
+                  InputContainer: {
+                    style: {
+                      border: "1px solid #92929D",
+                      textAlign: "center",
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                      height: "32px",
+                      width: "86px",
+                      borderRadius: "4px",
+                      marginRight: "6px",
+                      backgroundColor: "#fff",
+                    },
                   },
-                },
-              }}
-            />
+                }}
+              />
             </div>
-            <br/>
-            <Button disabled={!isCustomizedEnabled} onClick={applyResize} size={SIZE.mini} style={{width:"75px"}}      shape={SHAPE.pill}
->
+            <br />
+            <Button
+              disabled={!isCustomizedEnabled}
+              onClick={applyResize}
+              size={SIZE.mini}
+              style={{ width: "75px" }}
+              shape={SHAPE.pill}
+            >
               Resize
             </Button>
           </div>
@@ -217,7 +232,7 @@ const ResizeCanvasPopup = () => {
                   type="checkbox"
                   name={sampleFrame.name}
                   checked={othersFrame.id == sampleFrame.id ? true : false}
-                  onClick={() => {
+                  onChange={() => {
                     setActiveKey("1")
                     setOthersFrame(sampleFrame)
                   }}
