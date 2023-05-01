@@ -1,0 +1,11 @@
+.resizeCanvas{
+    display: none;
+}
+.resizeCanvasBtn:hover .resizeCanvas{
+    display: block;
+}
+.sizeSelectionInput input{
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+}

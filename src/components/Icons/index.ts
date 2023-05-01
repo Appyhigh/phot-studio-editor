@@ -24,6 +24,9 @@ import ArrowBackOutline from "./ArrowBackOutline"
 import Underline from "./Underline"
 import Add from "./Add"
 import Video from "./Video"
+import CanvasResize from "./CanvasResize"
+import Transparency from "./Transparency"
+import Share from "./Share"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -51,6 +54,9 @@ class Icons {
   static ArrowBackOutline = ArrowBackOutline
   static Underline = Underline
   static Add = Add
+  static CanvasResize = CanvasResize
+  static Transparency = Transparency
+  static Share = Share
 }
 
 export default Icons
