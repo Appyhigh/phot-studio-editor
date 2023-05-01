@@ -1,12 +1,11 @@
-import { Input, SIZE } from "baseui/input"
-import classes from "./style.module.css"
+import { SIZE } from "baseui/input"
 import { Block } from "baseui/block"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import { useEffect, useState } from "react"
 import { fixedSizeFrames, resizeSampleFrame } from "~/constants/editor"
 import { Button, SHAPE } from "baseui/button"
-
+import CommonInput from "~/components/UI/Common/Input"
 const ResizeCanvasPopup = () => {
   const [desiredFrame, setDesiredFrame] = useState({
     width: 0,
@@ -53,9 +52,7 @@ const ResizeCanvasPopup = () => {
     if (
       (activeKey === "0" && selectedFrame.id !== 0) ||
       // @ts-ignore
-      (activeKey === "1" && othersFrame.id !== 0) ||
-      // @ts-ignore
-      (activeKey === "2" && !!parseInt(desiredFrame.width) && !!parseInt(desiredFrame.height))
+      (activeKey === "1" && othersFrame.id !== 0)
     ) {
       {
         applyResize()
@@ -75,8 +72,17 @@ const ResizeCanvasPopup = () => {
   // @ts-ignore
   const isCustomizedEnabled = activeKey === "2" && !!parseInt(desiredFrame.width) && !!parseInt(desiredFrame.height)
 
+  const handleWidth = (width: any) => {
+    setActiveKey("2")
+    setDesiredFrame({ ...desiredFrame, width: width })
+  }
+
+  const handleHeight = (height: any) => {
+    setActiveKey("2")
+    setDesiredFrame({ ...desiredFrame, height: height })
+  }
   return (
-    <Block className={classes.resizeCanvas}>
+    <Block className={"resizeCanvas"}>
       <Block
         style={{
           height: "auto-fit",
@@ -94,9 +100,9 @@ const ResizeCanvasPopup = () => {
           bottom: "45px",
         }}
       >
-        <div style={{ margin: "4px 16px" }}>
+        <Block $style={{ margin: "4px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Fixed Size</p>
-          <div style={{ display: "flex", justifyContent: "center", flexDirection: "row", color: "#92929D" }}>
+          <Block $style={{ display: "flex", justifyContent: "center", flexDirection: "row", color: "#92929D" }}>
             {fixedSizeFrames.map((sample, index) => (
               <Block
                 key={index}
@@ -124,80 +130,29 @@ const ResizeCanvasPopup = () => {
                 <p>{sample.name}</p>
               </Block>
             ))}
-          </div>
-        </div>
+          </Block>
+        </Block>
         <div style={{ border: "1px solid #F1F1F5", width: "100%", marginTop: "12px" }}></div>
         <div style={{ margin: "4px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Custom Size</p>
           <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
             <div style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
-              <Input
+              <CommonInput
                 type="number"
                 placeholder="width"
+                handleChange={handleWidth}
                 value={desiredFrame.width}
-                onChange={(e: any) => {
-                  setActiveKey("2")
-                  setDesiredFrame({ ...desiredFrame, width: e.target.value })
-                }}
-                overrides={{
-                  Root: {
-                    style: {
-                      borderTopStyle: "none",
-                      borderBottomStyle: "none",
-                      borderRightStyle: "none",
-                      borderLeftStyle: "none",
-                      outline: "transparent",
-                      backgroundColor: "transparent",
-                    },
-                  },
-                  InputContainer: {
-                    style: {
-                      border: "1px solid #92929D",
-                      textAlign: "center",
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                      height: "32px",
-                      width: "86px",
-                      borderRadius: "4px",
-                      marginRight: "6px",
-                      backgroundColor: "#fff",
-                    },
-                  },
-                }}
-              />{" "}
-              <Input
+                width="86px"
+                height="32px"
+              />
+
+              <CommonInput
                 type="number"
-                placeholder="height"
-                onChange={(e: any) => {
-                  setActiveKey("2")
-                  setDesiredFrame({ ...desiredFrame, height: e.target.value })
-                }}
+                placeholder="width"
+                handleChange={handleHeight}
                 value={desiredFrame.height}
-                overrides={{
-                  Root: {
-                    style: {
-                      borderTopStyle: "none",
-                      borderBottomStyle: "none",
-                      borderRightStyle: "none",
-                      borderLeftStyle: "none",
-                      outline: "transparent",
-                      backgroundColor: "transparent",
-                    },
-                  },
-                  InputContainer: {
-                    style: {
-                      border: "1px solid #92929D",
-                      textAlign: "center",
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                      height: "32px",
-                      width: "86px",
-                      borderRadius: "4px",
-                      marginRight: "6px",
-                      backgroundColor: "#fff",
-                    },
-                  },
-                }}
+                width="86px"
+                height="32px"
               />
             </div>
             <br />
@@ -217,7 +172,7 @@ const ResizeCanvasPopup = () => {
         <div style={{ margin: "4px 16px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Others</p>
           <div
-            className={classes.sizeSelectionInput}
+            className={"sizeSelectionInput"}
             style={{
               display: "flex",
               justifyContent: "center",

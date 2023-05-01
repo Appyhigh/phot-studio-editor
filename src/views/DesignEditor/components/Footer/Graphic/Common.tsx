@@ -8,7 +8,6 @@ import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { StatefulTooltip } from "baseui/tooltip"
 import { PLACEMENT } from "baseui/toast"
 import ResizeCanvasPopup from "./ResizeCanvasPopup"
-import classes from "./style.module.css"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "50px",
@@ -92,8 +91,8 @@ const Common = () => {
             <Icons.Save size={26} />
           </Button>
         </StatefulTooltip>
-        <div style={{ position: "relative" }} className={classes.resizeCanvasBtn}>
-          <Button kind={KIND.tertiary} size={SIZE.compact} className={classes.resizeCanvasBtn}>
+        <div style={{ position: "relative" }} className={"resizeCanvasBtn"}>
+          <Button kind={KIND.tertiary} size={SIZE.compact} className={"resizeCanvasBtn"}>
             <Icons.CanvasResize size={26} />
           </Button>
           <ResizeCanvasPopup />
@@ -114,7 +113,6 @@ const Common = () => {
                 height: "20px",
                 width: "20px",
                 paddingLeft: 0,
-                backgroundColor: "#44444F",
               },
             },
             Track: {
@@ -126,7 +124,6 @@ const Common = () => {
             InnerTrack: {
               style: {
                 height: "4px",
-                backgroundColor: "#44444F",
               },
             },
           }}
