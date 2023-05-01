@@ -79,7 +79,7 @@ const ResizeCanvasPopup = () => {
     <Block className={classes.resizeCanvas}>
       <Block
         style={{
-          height: "342px",
+          height: "auto-fit",
           width: "251px",
           display: "flex",
           flexDirection: "column",
@@ -90,8 +90,8 @@ const ResizeCanvasPopup = () => {
           borderRadius: "4px",
           position: "absolute",
           zIndex: 500,
-          fontFamily: "Rubik",
           left: "-40px",
+          bottom: "45px",
         }}
       >
         <div style={{ margin: "4px 16px" }}>
@@ -214,7 +214,7 @@ const ResizeCanvasPopup = () => {
         </div>
         <div style={{ border: "1px solid #F1F1F5", width: "100%", marginTop: "12px" }}></div>
 
-        <div style={{ margin: "4px 16px" }}>
+        <div style={{ margin: "4px 16px 16px" }}>
           <p style={{ fontSize: "12px", color: "#000" }}>Others</p>
           <div
             className={classes.sizeSelectionInput}

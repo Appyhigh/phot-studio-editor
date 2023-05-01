@@ -98,10 +98,6 @@ const Common = () => {
           </Button>
           <ResizeCanvasPopup />
         </div>
-
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
-          <Icons.Transparency size={26} />
-        </Button>
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
@@ -111,19 +107,26 @@ const Common = () => {
             ThumbValue: () => null,
             TickBar: () => null,
             Root: {
-              style: { width: "140px" },
+              style: { width: "200px", marginRight: "10px" },
             },
             Thumb: {
               style: {
-                height: "12px",
-                width: "12px",
+                height: "20px",
+                width: "20px",
                 paddingLeft: 0,
+                backgroundColor: "#44444F",
               },
             },
             Track: {
               style: {
                 paddingLeft: 0,
                 paddingRight: 0,
+              },
+            },
+            InnerTrack: {
+              style: {
+                height: "4px",
+                backgroundColor: "#44444F",
               },
             },
           }}
