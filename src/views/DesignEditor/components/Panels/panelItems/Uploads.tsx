@@ -40,7 +40,6 @@ export default function () {
 
     setUploads([...uploads, upload])
 
-    editor.objects.clear()
     editor.objects.add(upload).then(() => {
       setSelectedImage(upload.preview)
     })
@@ -54,9 +53,9 @@ export default function () {
     handleDropFiles(e.target.files!)
   }
 
-  const discardHandler = () => {
+  const discardHandler = (id: string) => {
     setUploads([])
-    editor.objects.clear()
+    editor.objects.removeById(id)
   }
 
   return (
@@ -103,7 +102,13 @@ export default function () {
                     {selectedImage === upload.preview && (
                       <div>
                         <div>
-                          <button onClick={discardHandler}>Discard</button>
+                          <button
+                            onClick={() => {
+                              discardHandler(upload.id)
+                            }}
+                          >
+                            Discard
+                          </button>
                         </div>
                       </div>
                     )}
