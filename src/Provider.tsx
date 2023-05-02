@@ -18,8 +18,8 @@ const engine = new Styletron()
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [frameData, setFrameData] = useState<any>({
-    width: 0,
-    height: 0,
+    width: 1200,
+    height: 1200,
   })
 
   return (
