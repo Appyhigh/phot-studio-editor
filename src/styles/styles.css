@@ -1,42 +1,53 @@
 * {
-    user-select: none;
+  user-select: none;
 }
 
 .react-colorful__saturation-pointer {
-    width: 20px !important;
-    height: 20px !important;
-    border-radius: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 0 !important;
 }
 
 .react-colorful__hue {
-    height: 20px !important;
-    margin-top: 0.5rem;
-    border-radius: 0 !important;
+  height: 20px !important;
+  margin-top: 0.5rem;
+  border-radius: 0 !important;
 }
 
 .react-colorful__pointer .react-colorful__hue-pointer {
-    width: 20px;
-    height: 20px;
-    border-radius: 0 !important;
+  width: 20px;
+  height: 20px;
+  border-radius: 0 !important;
 }
 
-
 .react-colorful__hue .react-colorful__hue-pointer {
-    width: 20px;
-    height: 20px;
-    border-radius: 0 !important;
+  width: 20px;
+  height: 20px;
+  border-radius: 0 !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .react-player video {
-    max-height: 740px;
+  max-height: 740px;
+}
+
+.resizeCanvas {
+  display: none;
+}
+.resizeCanvasBtn:hover .resizeCanvas {
+  display: block;
+}
+.sizeSelectionInput input {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
 }

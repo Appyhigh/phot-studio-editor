@@ -27,6 +27,10 @@ import Video from "./Video"
 import PhotAILogo from "./PhotAILogo"
 import ActivityIcon from "./ActivityIcon"
 import ProfileIcon from "./ProfileIcon"
+import CanvasResize from "./CanvasResize"
+import Transparency from "./Transparency"
+import Share from "./Share"
+import Save from "./Save"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -57,6 +61,10 @@ class Icons {
   static PhotAILogo = PhotAILogo
   static ProfileIcon=ProfileIcon
   static ActivityIcon=ActivityIcon
+  static CanvasResize = CanvasResize
+  static Transparency = Transparency
+  static Share = Share
+  static Save=Save
 }
 
 export default Icons
