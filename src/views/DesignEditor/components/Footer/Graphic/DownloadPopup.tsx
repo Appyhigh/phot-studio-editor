@@ -11,8 +11,11 @@ const DownloadPopup = () => {
   const editor = useEditor()
 
   const [qualityVal, setQualtiyVal] = useState(50)
+  const [sizeVal, setSizeVal] = useState(50)
   const minQuality = 10
   const maxQuality = 100
+  const minSize = 10
+  const maxSize = 100
   const frame = useFrame()
 
   const { frameData } = useContext(FrameSizeContext)
@@ -25,6 +28,9 @@ const DownloadPopup = () => {
     setQualtiyVal(e[0])
   }
 
+  const handleSizeChange = (e: any) => {
+    setSizeVal(e)
+  }
   const exportToPNG = useCallback(async () => {
     if (editor) {
       const template = editor.scene.exportToJSON()
@@ -90,18 +96,31 @@ const DownloadPopup = () => {
           <p style={{ fontSize: "14px", color: "#44444F" }}>File Type</p>
           <SelectInput handleChange={handleTypeChange} />
         </Block>
-        <Block>
-          <p style={{ fontSize: "14px", color: "#44444F" }}>
-            Quality <span style={{ fontSize: "9px" }}>({qualityVal})</span>
-            <SliderBar
-              width="190px"
-              minVal={minQuality}
-              maxVal={maxQuality}
-              thumbSize={"14px"}
-              val={[qualityVal]}
-              handleChange={handleQualityChange}
-            />
+        <Block style={{ marginBottom: "6px" }}>
+          <p style={{ fontSize: "14px", color: "#44444F", marginBottom: "0px" }}>
+            Size <span style={{ color: "#92929D" }}> (1414*2000px)</span>
           </p>
+          <SliderBar
+            width="424px"
+            minVal={minSize}
+            maxVal={maxSize}
+            thumbSize={"14px"}
+            val={[sizeVal]}
+            handleChange={handleSizeChange}
+          />
+        </Block>
+        <Block style={{ marginBottom: "6px" }}>
+          <p style={{ fontSize: "14px", color: "#44444F", marginBottom: "0px" }}>
+            Quality <span style={{ fontSize: "9px" }}>({qualityVal})</span>
+          </p>
+          <SliderBar
+            width="190px"
+            minVal={minQuality}
+            maxVal={maxQuality}
+            thumbSize={"14px"}
+            val={[qualityVal]}
+            handleChange={handleQualityChange}
+          />
         </Block>
         <Block
           style={{

@@ -144,7 +144,10 @@ const Common = () => {
           </Button>
         </StatefulTooltip>
         <div style={{ position: "relative" }} className={"downloadResultBtn"}>
-          <Button style={{ color: "#92929D", height: "38px" }} kind={KIND.secondary}>
+          <Button
+            style={{ color: "#FFF", height: "38px", backgroundColor: "#92929D", fontSize: "12px" }}
+            kind={KIND.secondary}
+          >
             Download
           </Button>
           <DownloadPopup />

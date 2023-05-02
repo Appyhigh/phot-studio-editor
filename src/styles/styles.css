@@ -59,3 +59,7 @@ input[type="number"] {
 .downloadResultBtn:hover .downloadPopup {
   display: block;
 }
+
+.pointer{
+  cursor: pointer;
+}
