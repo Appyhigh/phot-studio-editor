@@ -8,7 +8,7 @@ import { selectPages } from "./store/slices/design-editor/selectors"
 import { nanoid } from "nanoid"
 import { useAppDispatch } from "./store/store"
 import { addPage } from "./store/slices/design-editor/actions"
-
+import { CustomTheme } from "./theme"
 const Pages = () => {
   const [isOpen, setIsOpen] = React.useState(false)
   const pages = useSelector(selectPages)
@@ -22,7 +22,7 @@ const Pages = () => {
     )
   }
   return (
-    <ThemeProvider theme={LightTheme}>
+    <ThemeProvider theme={CustomTheme}>
       <Button
         onClick={() => setIsOpen(true)}
         kind={KIND.secondary}
