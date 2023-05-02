@@ -3618,6 +3618,76 @@ export const sampleFrames = [
   },
 ]
 
+export const resizeSampleFrame = [
+  {
+    id: 1,
+    name: "Video",
+    width: 1920,
+    height: 1080,
+    unit: "px",
+  },
+  {
+    id: 2,
+    name: "Facebook Post",
+    width: 940,
+    height: 788,
+    unit: "px",
+  },
+  {
+    id: 3,
+    name: "Facebook Cover",
+    width: 1640,
+    height: 924,
+    unit: "px",
+  },
+  {
+    id: 4,
+    name: "Logo",
+    width: 500,
+    height: 500,
+    unit: "px",
+  },
+]
+
+export const fixedSizeFrames = [
+  {
+    id: 1,
+    name: "1:1",
+    width: "512px",
+    height: "512px",
+    unit: "px",
+    frameWidth: "40px",
+    frameHeight: "40px",
+  },
+  {
+    id: 2,
+    name: "4:5",
+    width: "480px",
+    height: "600px",
+    unit: "px",
+    frameWidth: "40px",
+    frameHeight: "48px",
+  },
+  {
+    id: 3,
+    name: "16:9",
+    width: "1920px",
+    height: "1080px",
+    unit: "px",
+    frameWidth: "60px",
+    frameHeight: "32px",
+  },
+  {
+    id: 4,
+    name: "1:2",
+    width: "512px",
+    height: "1024px",
+    unit: "px",
+    frameWidth: "30px",
+    frameHeight: "50px",
+  },
+]
+
 const layers: ILayer[] = []
 
 const graphicTemplate = {

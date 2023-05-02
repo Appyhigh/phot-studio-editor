@@ -1,14 +1,13 @@
-import React from "react"
+import React, { useState } from "react"
 import { styled } from "baseui"
 import { Theme } from "baseui/theme"
 import Icons from "~/components/Icons"
 import { Button, KIND, SIZE } from "baseui/button"
 import { Slider } from "baseui/slider"
-import { Input } from "baseui/input"
 import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { StatefulTooltip } from "baseui/tooltip"
-import { Block } from "baseui/block"
 import { PLACEMENT } from "baseui/toast"
+import ResizeCanvasPopup from "./ResizeCanvasPopup"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "50px",
@@ -16,6 +15,8 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  marginLeft: "30px",
+  marginRight: "28px",
 }))
 
 interface Options {
@@ -33,11 +34,6 @@ const Common = () => {
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
 
-  const resetHandler = () => {
-    editor.objects.clear()
-    editor.history.reset()
-    editor.history.save()
-  }
   React.useEffect(() => {
     setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 100) })
   }, [zoomRatio])
@@ -69,44 +65,53 @@ const Common = () => {
     }
   }
 
+  const resetHandler = () => {
+    editor.objects.clear()
+    editor.history.reset()
+    editor.history.save()
+  }
   return (
     <Container>
-      <div>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
-          <Icons.Layers size={20} />
-        </Button>
-      </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <Button kind={KIND.tertiary} size={SIZE.compact}>
-          <Icons.Expand size={16} />
-        </Button>
-        <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => editor.zoom.zoomToFit()}>
-          <Icons.Compress size={16} />
-        </Button>
-        <Block>
-          <StatefulTooltip
-            placement={PLACEMENT.bottom}
-            showArrow={true}
-            accessibilityType={"tooltip"}
-            content="Zoom Out"
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "start", position: "relative" }}>
+        <StatefulTooltip
+          placement={PLACEMENT.bottom}
+          showArrow={true}
+          accessibilityType={"tooltip"}
+          content={"Restore"}
+        >
+          <Button
+            kind={KIND.tertiary}
+            size={SIZE.compact}
+            onClick={() => {
+              // function is called twice because there will be shomehow 1 element left in undo
+              resetHandler()
+              resetHandler()
+            }}
           >
-            <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => editor.zoom.zoomOut()}>
-              <Icons.RemoveCircleOutline size={24} />
-            </Button>
-          </StatefulTooltip>
-        </Block>
+            <Icons.Save size={26} />
+          </Button>
+        </StatefulTooltip>
+        <div style={{ position: "relative" }} className={"resizeCanvasBtn"}>
+          <Button kind={KIND.tertiary} size={SIZE.compact} className={"resizeCanvasBtn"}>
+            <Icons.CanvasResize size={26} />
+          </Button>
+          <ResizeCanvasPopup />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
         <Slider
           overrides={{
             InnerThumb: () => null,
             ThumbValue: () => null,
             TickBar: () => null,
             Root: {
-              style: { width: "140px" },
+              style: { width: "200px", marginRight: "10px" },
             },
             Thumb: {
               style: {
-                height: "12px",
-                width: "12px",
+                height: "20px",
+                width: "20px",
                 paddingLeft: 0,
               },
             },
@@ -116,79 +121,17 @@ const Common = () => {
                 paddingRight: 0,
               },
             },
+            InnerTrack: {
+              style: {
+                height: "4px",
+              },
+            },
           }}
           value={[options.zoomRatio]}
           onChange={({ value }) => applyZoomRatio("zoomRatio", { target: { value: value[0] } })}
           min={zoomMin}
           max={zoomMax}
         />
-        <Block>
-          <StatefulTooltip
-            placement={PLACEMENT.bottom}
-            showArrow={true}
-            accessibilityType={"tooltip"}
-            content="Zoom Out"
-          >
-            <Button kind={KIND.tertiary} size={SIZE.compact} onClick={() => editor.zoom.zoomIn()}>
-              <Icons.AddCircleOutline size={24} />
-            </Button>
-          </StatefulTooltip>
-        </Block>
-        <Input
-          type="number"
-          endEnhancer="%"
-          overrides={{
-            Input: {
-              style: {
-                backgroundColor: "#ffffff",
-                textAlign: "center",
-                paddingLeft: 0,
-                paddingRight: 0,
-              },
-            },
-            Root: {
-              style: {
-                borderBottomColor: "rgba(0,0,0,0.15)",
-                borderTopColor: "rgba(0,0,0,0.15)",
-                borderRightColor: "rgba(0,0,0,0.15)",
-                borderLeftColor: "rgba(0,0,0,0.15)",
-                borderTopWidth: "1px",
-                borderBottomWidth: "1px",
-                borderRightWidth: "1px",
-                borderLeftWidth: "1px",
-                height: "20px",
-                width: "52px",
-                paddingRight: 0,
-              },
-            },
-            EndEnhancer: {
-              style: {
-                paddingLeft: 0,
-                paddingRight: "10px",
-                backgroundColor: "#ffffff",
-              },
-            },
-          }}
-          size={SIZE.mini}
-          max={zoomMax}
-          min={zoomMin}
-          onChange={(e) => handleChange("zoomRatioTemp", parseFloat(e.target.value))}
-          onKeyUp={(e) => applyZoomRatio("zoomRatio", e)}
-          value={options.zoomRatioTemp}
-        />
-      </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-        <Button
-          kind={KIND.tertiary}
-          size={SIZE.compact}
-          onClick={() => {
-            // function is called twice because there will be shomehow 1 element left in undo
-            resetHandler()
-            resetHandler()
-          }}
-        >
-          <Icons.Refresh size={16} />
-        </Button>
         <Button
           kind={KIND.tertiary}
           size={SIZE.compact}
@@ -206,6 +149,20 @@ const Common = () => {
           }}
         >
           <Icons.Redo size={22} />
+        </Button>
+        <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType={"tooltip"} content="Share">
+          <Button
+            kind={KIND.tertiary}
+            size={SIZE.compact}
+            onClick={() => {
+              editor.history.save()
+            }}
+          >
+            <Icons.Share size={16} />
+          </Button>
+        </StatefulTooltip>
+        <Button style={{ color: "#92929D", height: "38px" }} kind={KIND.secondary}>
+          Download
         </Button>
       </div>
     </Container>
