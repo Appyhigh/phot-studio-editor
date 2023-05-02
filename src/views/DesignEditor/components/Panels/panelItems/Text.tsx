@@ -34,8 +34,8 @@ const textOptions = {
 export default function () {
   const editor = useEditor()
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const components = useSelector(selectPublicComponents) 
-  
+  const components = useSelector(selectPublicComponents)
+
   const addObject = async () => {
     if (editor) {
       const font: FontItem = {
@@ -54,7 +54,7 @@ export default function () {
         fontStyle: "normal",
         fontURL: font.url,
         fill: "#333333",
-        metadata: {},
+        metadata: { generationDate: new Date().getTime() },
       }
       editor.objects.add(options)
     }

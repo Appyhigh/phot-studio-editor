@@ -1,5 +1,6 @@
-import React from "react"
-import { styled, ThemeProvider, DarkTheme } from "baseui"
+import React,{useCallback} from "react"
+import { styled, ThemeProvider, DarkTheme, useStyletron } from "baseui"
+
 import { Theme } from "baseui/theme"
 import { Button, KIND } from "baseui/button"
 import Logo from "~/components/Icons/Logo"
@@ -14,7 +15,7 @@ import { loadVideoEditorAssets } from "~/utils/video"
 import DesignTitle from "./DesignTitle"
 import { IDesign } from "~/interfaces/DesignEditor"
 import Github from "~/components/Icons/Github"
-
+import { CustomTheme } from "~/theme"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "64px",
   background: $theme.colors.black,
@@ -25,6 +26,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 }))
 
 const Navbar = () => {
+  const [css, theme] = useStyletron()
   const { setDisplayPreview, setScenes, setCurrentDesign, currentDesign, scenes } = useDesignEditorContext()
   const editorType = useEditorType()
   const editor = useEditor()
@@ -142,6 +144,22 @@ const Navbar = () => {
     a.click()
   }
 
+  const makeDownloadToPNG = (data: Object) => {
+    const dataStr = `${data}`
+    const a = document.createElement("a")
+    a.href = dataStr
+    a.download = "image.png"
+    a.click()
+  }
+
+  const exportToPNG = useCallback(async () => {
+    if (editor) {
+      const template = editor.scene.exportToJSON()
+      const image = (await editor.renderer.render(template)) as string
+      makeDownloadToPNG(image)
+    }
+  }, [editor])
+
   const makeDownloadTemplate = async () => {
     if (editor) {
       if (editorType === "GRAPHIC") {
@@ -149,7 +167,7 @@ const Navbar = () => {
       } else if (editorType === "PRESENTATION") {
         return parsePresentationJSON()
       } else {
-      return parseVideoJSON()
+        return parseVideoJSON()
       }
     }
   }
@@ -260,7 +278,7 @@ const Navbar = () => {
 
   return (
     // @ts-ignore
-    <ThemeProvider theme={DarkTheme}>
+    <ThemeProvider theme={CustomTheme}>
       <Container>
         <div style={{ color: "#ffffff" }}>
           <Logo size={36} />
@@ -292,7 +310,7 @@ const Navbar = () => {
 
           <Button
             size="compact"
-            onClick={makeDownloadTemplate}
+            onClick={exportToPNG}
             kind={KIND.tertiary}
             overrides={{
               StartEnhancer: {

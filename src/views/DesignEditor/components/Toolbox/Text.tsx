@@ -58,31 +58,32 @@ export default function () {
   const activeObject = useActiveObject() as Required<IStaticText>
   const { setActiveSubMenu } = useAppContext()
   const editor = useEditor()
-  const fonts = useSelector(selectAllFonts)
+  // const fonts = useSelector(selectAllFonts)
+  // console.log(fonts)
 
-  React.useEffect(() => {
-    if (activeObject && activeObject.type === "StaticText") {
-      const textProperties = getTextProperties(activeObject, fonts)
-      setState({ ...state, ...textProperties })
-    }
-  }, [activeObject])
+  // React.useEffect(() => {
+  //   if (activeObject && activeObject.type === "StaticText") {
+  //     const textProperties = getTextProperties(activeObject, fonts)
+  //     setState({ ...state, ...textProperties })
+  //   }
+  // }, [activeObject])
 
-  React.useEffect(() => {
-    let watcher = async () => {
-      if (activeObject && activeObject.type === "StaticText") {
-        const textProperties = getTextProperties(activeObject, fonts)
-        setState({ ...state, ...textProperties })
-      }
-    }
-    if (editor) {
-      editor.on("history:changed", watcher)
-    }
-    return () => {
-      if (editor) {
-        editor.off("history:changed", watcher)
-      }
-    }
-  }, [editor, activeObject])
+  // React.useEffect(() => {
+  //   let watcher = async () => {
+  //     if (activeObject && activeObject.type === "StaticText") {
+  //       const textProperties = getTextProperties(activeObject, fonts)
+  //       setState({ ...state, ...textProperties })
+  //     }
+  //   }
+  //   if (editor) {
+  //     editor.on("history:changed", watcher)
+  //   }
+  //   return () => {
+  //     if (editor) {
+  //       editor.off("history:changed", watcher)
+  //     }
+  //   }
+  // }, [editor, activeObject])
 
   const makeBold = React.useCallback(async () => {
     if (state.bold) {

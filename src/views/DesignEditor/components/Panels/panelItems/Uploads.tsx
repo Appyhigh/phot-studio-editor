@@ -1,6 +1,5 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Block } from "baseui/block"
-import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
 import Scrollable from "~/components/Scrollable"
 import { Button, SIZE } from "baseui/button"
 import DropZone from "~/components/Dropzone"
@@ -8,7 +7,6 @@ import { useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { nanoid } from "nanoid"
 import { captureFrame, loadVideoResource } from "~/utils/video"
-import { ILayer } from "@layerhub-io/types"
 import { toBase64 } from "~/utils/data"
 
 export default function () {
@@ -37,13 +35,12 @@ export default function () {
       src: base64,
       preview: preview,
       type: type,
+      metadata: { generationDate: new Date().getTime() },
     }
 
     setUploads([...uploads, upload])
 
-    editor.objects.clear()
     editor.objects.add(upload).then(() => {
-      editor.objects.setAsBackgroundImage()
       setSelectedImage(upload.preview)
     })
   }
@@ -56,9 +53,9 @@ export default function () {
     handleDropFiles(e.target.files!)
   }
 
-  const discardHandler = () => {
+  const discardHandler = (id: string) => {
     setUploads([])
-    editor.objects.clear()
+    editor.objects.removeById(id)
   }
 
   return (
@@ -105,10 +102,13 @@ export default function () {
                     {selectedImage === upload.preview && (
                       <div>
                         <div>
-                          <button>Remove Background</button>
-                        </div>
-                        <div>
-                          <button onClick={discardHandler}>Discard</button>
+                          <button
+                            onClick={() => {
+                              discardHandler(upload.id)
+                            }}
+                          >
+                            Discard
+                          </button>
                         </div>
                       </div>
                     )}
