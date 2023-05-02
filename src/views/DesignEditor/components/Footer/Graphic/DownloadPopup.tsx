@@ -11,6 +11,7 @@ const DownloadPopup = () => {
   const [qualityVal, setQualtiyVal] = useState(50)
   const minQuality = 10
   const maxQuality = 100
+  const frame = useFrame()
 
   const handleTypeChange = (e: any) => {
     setSelectedType(e)
@@ -41,12 +42,14 @@ const DownloadPopup = () => {
   const makeDownloadToSVG = (data: Object) => {
     const dataStr = `${data}`
     const a = document.createElement("a")
-    const svgFile = `<svg width="589" height="883" viewBox="0 0 589 883" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <rect width="589" height="883" fill="url(#pattern0)"/>
+    const width = frame.width
+    const height = frame.height
+    const svgFile = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <rect width="${width}" height="${height}" fill="url(#pattern0)"/>
     <defs>
-    <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
-    <use xlink:href="#image0_118_3" transform="scale(0.000366166 0.000244249)"/>
-    <image id="image0_118_3" width="2731" height="4096" xlink:href="${dataStr}"/>
+    <pattern id="pattern0" width="1" height="1">
+    <use xlink:href="#image0_118_3" />
+    <image id="image0_118_3" width="${width}" height="${height}" xlink:href="${dataStr}"/>
     </pattern>
     </defs>
     </svg>`
