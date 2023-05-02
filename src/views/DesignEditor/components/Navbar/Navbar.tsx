@@ -1,5 +1,6 @@
-import React from "react"
+import React,{useCallback} from "react"
 import { styled, ThemeProvider, DarkTheme, useStyletron } from "baseui"
+
 import { Theme } from "baseui/theme"
 import { Button, KIND } from "baseui/button"
 import Logo from "~/components/Icons/Logo"
@@ -142,6 +143,22 @@ const Navbar = () => {
     a.download = "template.json"
     a.click()
   }
+
+  const makeDownloadToPNG = (data: Object) => {
+    const dataStr = `${data}`
+    const a = document.createElement("a")
+    a.href = dataStr
+    a.download = "image.png"
+    a.click()
+  }
+
+  const exportToPNG = useCallback(async () => {
+    if (editor) {
+      const template = editor.scene.exportToJSON()
+      const image = (await editor.renderer.render(template)) as string
+      makeDownloadToPNG(image)
+    }
+  }, [editor])
 
   const makeDownloadTemplate = async () => {
     if (editor) {
@@ -293,7 +310,7 @@ const Navbar = () => {
 
           <Button
             size="compact"
-            onClick={makeDownloadTemplate}
+            onClick={exportToPNG}
             kind={KIND.tertiary}
             overrides={{
               StartEnhancer: {
