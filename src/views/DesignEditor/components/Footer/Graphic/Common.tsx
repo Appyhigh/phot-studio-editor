@@ -8,6 +8,8 @@ import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { StatefulTooltip } from "baseui/tooltip"
 import { PLACEMENT } from "baseui/toast"
 import ResizeCanvasPopup from "./ResizeCanvasPopup"
+import DownloadPopup from "./DownloadPopup"
+import SliderBar from "~/components/UI/Common/SliderBar"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "50px",
@@ -44,6 +46,10 @@ const Common = () => {
         setOptions({ ...options, zoomRatioTemp: value })
       }
     }
+  }
+
+  const handleZoomChange = (e: any) => {
+    applyZoomRatio("zoomRatio", { target: { value: e[0] } })
   }
 
   const applyZoomRatio = (type: string, e: any) => {
@@ -100,37 +106,13 @@ const Common = () => {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-        <Slider
-          overrides={{
-            InnerThumb: () => null,
-            ThumbValue: () => null,
-            TickBar: () => null,
-            Root: {
-              style: { width: "200px", marginRight: "10px" },
-            },
-            Thumb: {
-              style: {
-                height: "20px",
-                width: "20px",
-                paddingLeft: 0,
-              },
-            },
-            Track: {
-              style: {
-                paddingLeft: 0,
-                paddingRight: 0,
-              },
-            },
-            InnerTrack: {
-              style: {
-                height: "4px",
-              },
-            },
-          }}
-          value={[options.zoomRatio]}
-          onChange={({ value }) => applyZoomRatio("zoomRatio", { target: { value: value[0] } })}
-          min={zoomMin}
-          max={zoomMax}
+        <SliderBar
+          width="200px"
+          minVal={zoomMin}
+          maxVal={zoomMax}
+          thumbSize={"20px"}
+          val={[options.zoomRatio]}
+          handleChange={handleZoomChange}
         />
         <Button
           kind={KIND.tertiary}
@@ -161,9 +143,12 @@ const Common = () => {
             <Icons.Share size={16} />
           </Button>
         </StatefulTooltip>
-        <Button style={{ color: "#92929D", height: "38px" }} kind={KIND.secondary}>
-          Download
-        </Button>
+        <div style={{ position: "relative" }} className={"downloadResultBtn"}>
+          <Button style={{ color: "#92929D", height: "38px" }} kind={KIND.secondary}>
+            Download
+          </Button>
+          <DownloadPopup />
+        </div>
       </div>
     </Container>
   )
