@@ -27,8 +27,8 @@ const BaseBtn = ({ title, bgColor, txtColor, hoverBgColor }: BaseBtnProps) => {
             borderRightRadius: "10px",
             fontFamily: "Poppins",
             fontWeight: 600,
-            marginLeft: "8px",
-            marginRight: "8px",
+            marginLeft: "12px",
+            marginRight: "4px",
             ":hover": {
               backgroundColor: hoverBgColor,
               cursor: "pointer",
