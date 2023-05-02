@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Provider as ScenifyProvider } from "@layerhub-io/react"
 import { Client as Styletron } from "styletron-engine-atomic"
 import { Provider as StyletronProvider } from "styletron-react"
@@ -12,21 +12,29 @@ import { TimerProvider } from "@layerhub-io/use-timer"
 import i18next from "i18next"
 import "./translations"
 import { CustomTheme } from "./theme"
+import FrameSizeContext from "./contexts/FrameSizeContext"
 
 const engine = new Styletron()
 
-const Provider = ({ children }: { children: React.ReactNode }) => {  
+const Provider = ({ children }: { children: React.ReactNode }) => {
+  const [frameData, setFrameData] = useState<any>({
+    width: 0,
+    height: 0,
+  })
+
   return (
     <ReduxProvier store={store}>
       <DesignEditorProvider>
         <TimerProvider>
           <AppProvider>
             <ScenifyProvider>
-              <StyletronProvider value={engine}>
-                <BaseProvider theme={CustomTheme}>
-                  <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                </BaseProvider>
-              </StyletronProvider>
+              <FrameSizeContext.Provider value={{ frameData, setFrameData }}>
+                <StyletronProvider value={engine}>
+                  <BaseProvider theme={CustomTheme}>
+                    <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                  </BaseProvider>
+                </StyletronProvider>
+              </FrameSizeContext.Provider>
             </ScenifyProvider>
           </AppProvider>
         </TimerProvider>

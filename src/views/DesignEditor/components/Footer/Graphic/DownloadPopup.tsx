@@ -1,17 +1,21 @@
 import { useEditor, useFrame } from "@layerhub-io/react"
 import { Block } from "baseui/block"
-import { useCallback, useState } from "react"
+import { useCallback, useContext, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
+import FrameSizeContext from "~/contexts/FrameSizeContext"
 
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
   const editor = useEditor()
+
   const [qualityVal, setQualtiyVal] = useState(50)
   const minQuality = 10
   const maxQuality = 100
   const frame = useFrame()
+
+  const { frameData } = useContext(FrameSizeContext)
 
   const handleTypeChange = (e: any) => {
     setSelectedType(e)
@@ -29,7 +33,7 @@ const DownloadPopup = () => {
         makeDownloadToPNG(image)
       } else makeDownloadToSVG(image)
     }
-  }, [editor, selectedType])
+  }, [editor, selectedType, frame])
 
   const makeDownloadToPNG = (data: Object) => {
     const dataStr = `${data}`
@@ -42,8 +46,8 @@ const DownloadPopup = () => {
   const makeDownloadToSVG = (data: Object) => {
     const dataStr = `${data}`
     const a = document.createElement("a")
-    const width = frame.width
-    const height = frame.height
+    const width = frameData.width
+    const height = frameData.height
     const svgFile = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <rect width="${width}" height="${height}" fill="url(#pattern0)"/>
     <defs>
