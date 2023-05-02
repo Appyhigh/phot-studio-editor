@@ -103,27 +103,6 @@ input[type="number"] {
   display: block;
 }
 
-.circular-progress {
-  position: relative;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  margin: 40px auto 0px;
-}
-
-.circular-progress:before {
-  content: "";
-  position: absolute;
-  height: 96%;
-  width: 96%;
-  display: flex;
-  background-color: #fff;
-  justify-content: center;
-  border-radius: 50%;
-}
-
 @media only screen and (min-width: 992px) {
   .google-ad-container {
     min-height: 280px;
@@ -134,143 +113,6 @@ input[type="number"] {
   .google-sticky-ad {
     display: none;
   }
-}
-
-.Homepage {
-  background: linear-gradient(292.45deg, #7f197c 0%, #3b3b9a 98.67%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  transform: rotate(-180deg);
-}
-
-.InputFiledHeaderText__slim {
-  font-weight: 400;
-  text-align: center;
-  color: white;
-}
-
-@media only screen and (max-width: 768px) {
-  .InputFiledHeaderText__slim {
-    display: block;
-  }
-
-  .test_line::before {
-    display: none;
-  }
-  .step_ios {
-    display: none;
-  }
-}
-
-.BottomData__blueHiglight {
-  background-color: rgba(105, 201, 208, 0.4);
-}
-
-.BottomData__redHighlight {
-  background-color: rgba(238, 29, 82, 0.3);
-}
-
-.Footer__PolicyTabs {
-  /* line-height: 63px; */
-  margin-bottom: 35px;
-  cursor: pointer;
-  display: inline-block;
-  /* identical to box height, or 262% */
-  color: #212121;
-}
-
-@media (min-width: 768px) {
-  .Footer__PolicyTabs {
-    font-weight: 700;
-  }
-}
-
-.Footer__PolicyTabs:not(:last-of-type) {
-  margin-right: 60px !important;
-}
-
-.VideoPlayer__Wrapper {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.VideoPlayer__Wrapper__Play {
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 97%;
-  justify-content: center;
-  display: flex;
-}
-
-.VideoPlayer__Wrapper__Play:hover {
-  background: rgba(0, 0, 0, 0.6);
-  cursor: pointer;
-}
-
-.VideoPlayer__Wrapper__Image {
-  z-index: 100;
-  opacity: 0;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@media screen and (min-width: 850px) {
-  .step-line-pc:before {
-    display: block !important;
-  }
-}
-
-.VideoPlayer__Wrapper__Image:hover {
-  background: #f2f6f7;
-  display: block;
-  opacity: 1;
-  transition: 0.5s;
-}
-
-.test_line::before {
-  content: "";
-  background-color: #dddddd;
-  position: absolute;
-  top: 20px;
-  left: 12%;
-  transform: translateY(-50%);
-  height: 4px;
-  width: 75%;
-  z-index: -1;
-}
-
-.step-line-pc:before {
-  content: "";
-  background-color: #dddddd;
-  position: absolute;
-  top: 40px;
-  transform: translateY(-50%);
-  height: 4px;
-  width: 68%;
-  z-index: -1;
-  display: none;
-}
-
-.step_ios {
-  content: "";
-  background-color: #dddddd;
-  position: absolute;
-  height: 100%;
-  width: 4px;
-  right: 2.7%;
-  z-index: 0;
 }
 
 .center {
@@ -767,31 +609,6 @@ button:focus {
   border: none;
 }
 
-.splide__pagination__page {
-  transform: translateY(35px) scale(1);
-  padding: 0 !important;
-  border-radius: 50% !important;
-  width: 8px !important;
-  height: 8px !important;
-}
-
-.splide__pagination__page.is-active {
-  transform: translateY(35px) scale(1) !important;
-  padding: 0 !important;
-  border-radius: 50% !important;
-  background: linear-gradient(292.45deg, #546ee1 0%, #804db5 98.67%) !important;
-}
-
-@media (max-width: 950px) {
-  .splide__pagination__page {
-    transform: translateY(30px) scale(1);
-  }
-
-  .splide__pagination__page.is-active {
-    transform: translateY(30px) scale(1) !important;
-  }
-}
-
 .d-inline-block {
   display: inline-block;
 }
@@ -849,38 +666,6 @@ a {
 ul {
   list-style-type: none;
 }
-
-.russia {
-  background-position-y: -56px;
-}
-
-.turkey {
-  background-position-y: -112px;
-}
-
-.thailand {
-  background-position-y: -168px;
-}
-
-.spain {
-  background-position-y: -224px;
-}
-
-.phillipines {
-  background-position-y: -280px;
-}
-
-.usa {
-  background-position-y: -336px;
-}
-
-.indonesia {
-  background-position-y: -392px;
-}
-.malay {
-  background-position-y: -448px;
-}
-
 .sr-only {
   position: absolute;
   left: -10000px;
