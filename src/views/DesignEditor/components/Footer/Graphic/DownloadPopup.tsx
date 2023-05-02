@@ -1,28 +1,18 @@
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { Block } from "baseui/block"
-import { Slider } from "baseui/slider"
-import { Console } from "console"
 import { useCallback, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
-import useDesignEditorContext from "~/hooks/useDesignEditorContext"
-import useEditorType from "~/hooks/useEditorType"
-import { IDesign } from "~/interfaces/DesignEditor"
 
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
-  const editorType = useEditorType()
   const editor = useEditor()
-  const { currentDesign, scenes } = useDesignEditorContext()
-
   const [qualityVal, setQualtiyVal] = useState(50)
   const minQuality = 10
   const maxQuality = 100
 
   const handleTypeChange = (e: any) => {
-    console.log("type", e)
-
     setSelectedType(e)
   }
 
@@ -34,16 +24,36 @@ const DownloadPopup = () => {
     if (editor) {
       const template = editor.scene.exportToJSON()
       const image = (await editor.renderer.render(template)) as string
-      makeDownloadToPNG(image)
+      if (selectedType != "svg") {
+        makeDownloadToPNG(image)
+      } else makeDownloadToSVG(image)
     }
   }, [editor, selectedType])
 
   const makeDownloadToPNG = (data: Object) => {
-    console.log("type h", selectedType)
     const dataStr = `${data}`
     const a = document.createElement("a")
     a.href = dataStr
     a.download = `image.${selectedType}`
+    a.click()
+  }
+
+  const makeDownloadToSVG = (data: Object) => {
+    const dataStr = `${data}`
+    const a = document.createElement("a")
+    const svgFile = `<svg width="589" height="883" viewBox="0 0 589 883" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <rect width="589" height="883" fill="url(#pattern0)"/>
+    <defs>
+    <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
+    <use xlink:href="#image0_118_3" transform="scale(0.000366166 0.000244249)"/>
+    <image id="image0_118_3" width="2731" height="4096" xlink:href="${dataStr}"/>
+    </pattern>
+    </defs>
+    </svg>`
+
+    const svgBlob = new Blob([svgFile], { type: "image/svg+xml" })
+    a.href = URL.createObjectURL(svgBlob)
+    a.download = `image.svg`
     a.click()
   }
 
@@ -64,7 +74,7 @@ const DownloadPopup = () => {
           position: "absolute",
           zIndex: 500,
           right: "6px",
-          bottom: "50px",
+          bottom: "40px",
           padding: "16px 16px 23px 16px",
         }}
       >

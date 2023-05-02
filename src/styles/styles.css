@@ -53,6 +53,7 @@ input[type="number"] {
 }
 
 .downloadPopup {
+  display: none;
 }
 
 .downloadResultBtn:hover .downloadPopup {

@@ -8,7 +8,7 @@ interface BaseBtnProps {
   marginLeft?: string
   padding?: string
   borderColor?: string
-  handleClick?: () => void;
+  handleClick?: any
 }
 
 const BaseBtn = ({
@@ -41,7 +41,6 @@ const BaseBtn = ({
             borderRightRadius: "10px",
             fontFamily: "Poppins",
             fontWeight: 500,
-            border: borderColor ? `1px solid ${borderColor}` : "",
             marginLeft: marginLeft ? marginLeft : "12px",
             marginRight: "4px",
             ":hover": {
