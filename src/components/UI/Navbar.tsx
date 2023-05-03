@@ -16,7 +16,6 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 }))
 
 const Navbar = () => {
-  console.log(CustomTheme);
   
   return (
     <Container>
