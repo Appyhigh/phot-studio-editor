@@ -32,19 +32,17 @@ const BasePannel = () => {
   return (
     <Container className="d-flex align-items-center flex-row">
       <Block className="d-flex justify-content-start align-items-center">
-        <Block className="flex-center pointer">
+        <Block
+          className="flex-center pointer"
+          onClick={() => {
+            setIsSidebarOpen(true)
+            // @ts-ignore
+            setActivePanel("Images")
+          }}
+        >
           <Icons.UploadBaseIcon size={24} />
           <ParagraphXSmall>
-            <TextBlock
-              onClick={() => {
-                setIsSidebarOpen(true)
-                // @ts-ignore
-                setActivePanel("Images")
-              }}
-            >
-              {" "}
-              Upload Images
-            </TextBlock>
+            <TextBlock> Upload Images</TextBlock>
           </ParagraphXSmall>
         </Block>
         <Block className="flex-center pointer">
@@ -53,19 +51,17 @@ const BasePannel = () => {
             <TextBlock> Stock Images</TextBlock>
           </ParagraphXSmall>
         </Block>
-        <Block className="flex-center pointer">
+        <Block
+          className="flex-center pointer"
+          onClick={() => {
+            setIsSidebarOpen(true)
+            // @ts-ignore
+            setActivePanel("Text")
+          }}
+        >
           <Icons.TextIcon size={24} />
           <ParagraphXSmall>
-            <TextBlock
-              onClick={() => {
-                setIsSidebarOpen(true)
-                // @ts-ignore
-                setActivePanel("Text")
-              }}
-            >
-              {" "}
-              Add Text
-            </TextBlock>
+            <TextBlock> Add Text</TextBlock>
           </ParagraphXSmall>
         </Block>
         <Block className="flex-center pointer p-relative resizeCanvasBtn">
