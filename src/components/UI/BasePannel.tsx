@@ -19,7 +19,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   padding: "15px 20px",
 }))
 
-const TextBlock = styled<"p", {}, Theme>("p", ({ $theme }) => ({
+const TextBlock = styled<"span", {}, Theme>("span", ({ $theme }) => ({
   color: $theme.colors.accent,
   margin: "0px 25px 0px 6px",
 }))
