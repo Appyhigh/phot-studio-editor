@@ -3,7 +3,6 @@ import { styled } from "baseui"
 import { Theme } from "baseui/theme"
 import Icons from "../Icons"
 import BaseBtn from "./Common/BaseBtn"
-import { CustomTheme } from "~/theme"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "70px",
   background: $theme.colors.white,

@@ -15,9 +15,6 @@ import BaseBtn from "./Common/BaseBtn"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
   background: $theme.colors.white,
-  display: "flex",
-  alignItems: "center",
-  flexDirection: "row",
   boxShadow: "inset 0px -1px 0px #E2E2EA",
   padding: "15px 20px",
 }))
@@ -33,7 +30,7 @@ const BasePannel = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
   return (
-    <Container>
+    <Container className="d-flex align-items-center flex-row">
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center pointer">
           <Icons.UploadBaseIcon size={24} />
