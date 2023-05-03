@@ -1,6 +1,6 @@
 import { useEditor, useFrame } from "@layerhub-io/react"
 import { Block } from "baseui/block"
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
@@ -92,8 +92,10 @@ const DownloadPopup = () => {
           padding: "16px 16px 23px 16px",
         }}
       >
-        <Block>
-          <p style={{ fontSize: "14px", color: "#44444F" }}>File Type</p>
+        <Block className="pb-2">
+          <p className="pb-1" style={{ fontSize: "14px", color: "#44444F" }}>
+            File Type
+          </p>
           <SelectInput handleChange={handleTypeChange} />
         </Block>
         <Block style={{ marginBottom: "6px" }}>
@@ -122,13 +124,7 @@ const DownloadPopup = () => {
             handleChange={handleQualityChange}
           />
         </Block>
-        <Block
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            flexDirection: "column",
-          }}
-        >
+        <Block className="d-flex justify-content-start flex-column">
           <BaseBtn
             title={"Download"}
             handleClick={exportToPNG}
@@ -138,6 +134,7 @@ const DownloadPopup = () => {
             padding="60px"
           />
           <p
+            className="pt-1 pb-2"
             style={{
               color: "#92929D",
               fontSize: "9px",
@@ -162,6 +159,7 @@ const DownloadPopup = () => {
             borderColor="#6729F3"
           />
           <p
+            className="pt-1 pb-2"
             style={{
               color: "#92929D",
               fontSize: "9px",

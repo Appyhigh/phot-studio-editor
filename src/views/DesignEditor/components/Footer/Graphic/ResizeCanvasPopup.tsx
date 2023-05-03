@@ -33,6 +33,10 @@ const ResizeCanvasPopup = () => {
     // @ts-ignore
     const size = activeKey === "0" ? selectedFrame : activeKey === "1" ? othersFrame : desiredFrame
     if (editor) {
+      editor.frame.resize({
+        width: parseInt(size.width),
+        height: parseInt(size.height),
+      })
       setCurrentDesign({
         ...currentDesign,
         frame: {

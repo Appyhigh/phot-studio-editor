@@ -1,4 +1,3 @@
-import { Button, KIND } from "baseui/button"
 interface BaseBtnProps {
   title: string
   bgColor: string

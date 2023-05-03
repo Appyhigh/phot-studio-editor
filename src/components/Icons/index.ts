@@ -24,6 +24,9 @@ import ArrowBackOutline from "./ArrowBackOutline"
 import Underline from "./Underline"
 import Add from "./Add"
 import Video from "./Video"
+import PhotAILogo from "./PhotAILogo"
+import ActivityIcon from "./ActivityIcon"
+import ProfileIcon from "./ProfileIcon"
 import CanvasResize from "./CanvasResize"
 import Transparency from "./Transparency"
 import Share from "./Share"
@@ -55,6 +58,9 @@ class Icons {
   static ArrowBackOutline = ArrowBackOutline
   static Underline = Underline
   static Add = Add
+  static PhotAILogo = PhotAILogo
+  static ProfileIcon=ProfileIcon
+  static ActivityIcon=ActivityIcon
   static CanvasResize = CanvasResize
   static Transparency = Transparency
   static Share = Share
