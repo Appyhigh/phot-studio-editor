@@ -254,8 +254,8 @@ class ApiService {
   getFonts(): Promise<IFontFamily[]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = await this.base.get("/fonts")
-        resolve(data.fonts)
+        const { data } = await axios.get("https://devapi.phot.ai/app/api/v1/phot-studio/fetch-fonts")
+        resolve(data)
       } catch (err) {
         reject(err)
       }
