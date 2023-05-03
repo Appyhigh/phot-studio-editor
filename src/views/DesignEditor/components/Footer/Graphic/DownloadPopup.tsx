@@ -4,7 +4,6 @@ import { useCallback, useContext, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
-import FrameSizeContext from "~/contexts/FrameSizeContext"
 
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
@@ -17,8 +16,6 @@ const DownloadPopup = () => {
   const minSize = 10
   const maxSize = 100
   const frame = useFrame()
-
-  const { frameData } = useContext(FrameSizeContext)
 
   const handleTypeChange = (e: any) => {
     setSelectedType(e)
@@ -49,13 +46,14 @@ const DownloadPopup = () => {
     a.click()
   }
 
-  const makeDownloadToSVG = (data: Object) => {
-    const dataStr = `${data}`
-    const a = document.createElement("a")
-    const width = frameData.width
-    const height = frameData.height
+  const makeDownloadToSVG = useCallback(
+    (data: Object) => {
+      const dataStr = `${data}`
+      const a = document.createElement("a")
+      const width = frame.width
+      const height = frame.height
 
-    const svgFile = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      const svgFile = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <rect width="${width}" height="${height}" fill="url(#pattern0)"/>
     <defs>
     <pattern id="pattern0" width="1" height="1">
@@ -65,11 +63,13 @@ const DownloadPopup = () => {
     </defs>
     </svg>`
 
-    const svgBlob = new Blob([svgFile], { type: "image/svg+xml" })
-    a.href = URL.createObjectURL(svgBlob)
-    a.download = `image.svg`
-    a.click()
-  }
+      const svgBlob = new Blob([svgFile], { type: "image/svg+xml" })
+      a.href = URL.createObjectURL(svgBlob)
+      a.download = `image.svg`
+      a.click()
+    },
+    [frame]
+  )
 
   return (
     <Block className="downloadPopup">

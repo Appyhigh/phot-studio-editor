@@ -6,7 +6,6 @@ import { useContext, useEffect, useState } from "react"
 import { fixedSizeFrames, resizeSampleFrame } from "~/constants/editor"
 import { Button, SHAPE } from "baseui/button"
 import CommonInput from "~/components/UI/Common/Input"
-import FrameSizeContext from "~/contexts/FrameSizeContext"
 const ResizeCanvasPopup = () => {
   const [desiredFrame, setDesiredFrame] = useState({
     width: 0,
@@ -25,7 +24,6 @@ const ResizeCanvasPopup = () => {
     height: 0,
   })
   const [activeKey, setActiveKey] = useState<string | number>("0")
-  const { setFrameData } = useContext(FrameSizeContext)
 
   const { currentDesign, setCurrentDesign } = useDesignEditorContext()
   const editor = useEditor()
@@ -35,11 +33,6 @@ const ResizeCanvasPopup = () => {
     // @ts-ignore
     const size = activeKey === "0" ? selectedFrame : activeKey === "1" ? othersFrame : desiredFrame
     if (editor) {
-      setFrameData((prev: any) => ({ ...prev, width: parseInt(size.width), height: parseInt(size.height) }))
-      editor.frame.resize({
-        width: parseInt(size.width),
-        height: parseInt(size.height),
-      })
       setCurrentDesign({
         ...currentDesign,
         frame: {
