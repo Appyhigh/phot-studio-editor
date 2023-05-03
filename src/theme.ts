@@ -15,6 +15,7 @@ const primitives = {
   sliderTrackFillActive: "#44444F",
   sliderHandleInnerFillSelectedActive: "#44444F",
   sliderHandleInnerFillSelectedHover: "#44444F",
+  primaryB:"#F1F2F6",
   secondary: "#6729F3",
   primaryFontFamily: "Rubik",
   secondaryFontFamily: "Poppins",
@@ -52,6 +53,7 @@ const overrides = {
     sliderHandleInnerFillSelectedActive: primitives.sliderHandleInnerFillSelectedActive,
     sliderHandleInnerFillSelectedHover: primitives.sliderHandleInnerFillSelectedHover,
     sliderTrackFillActive: primitives.sliderTrackFillActive,
+    primaryB:primitives.primaryB
   },
   typography: {
     primaryExtraBold: {
