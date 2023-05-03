@@ -10,7 +10,7 @@ import Scrollable from "~/components/Scrollable"
 import { Block } from "baseui/block"
 import { Delete } from "baseui/icon"
 import { useSelector } from "react-redux"
-import { selectFonts } from "~/store/slices/fonts/selectors"
+import { selectAllFonts } from "~/store/slices/fonts/selectors"
 import { useAppDispatch } from "~/store/store"
 import { queryFonts } from "~/store/slices/fonts/actions"
 import InfiniteScrolling from "~/components/InfiniteScrolling"
@@ -21,7 +21,7 @@ export default function () {
   const [pageNumber, setPageNumber] = React.useState(1)
   const [query, setQuery] = React.useState("")
   const { setActiveSubMenu } = useAppContext()
-  const fonts = useSelector(selectFonts)
+  const fonts = useSelector(selectAllFonts)
   const [commonFonts, setCommonFonts] = React.useState<any[]>([])
   const [searchQuery] = useDebounce(query, 250)
   const [css] = useStyletron()
