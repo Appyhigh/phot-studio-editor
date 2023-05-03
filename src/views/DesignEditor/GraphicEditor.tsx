@@ -5,11 +5,13 @@ import Toolbox from "./components/Toolbox"
 import EditorContainer from "./components/EditorContainer"
 import ContextMenu from "./components/ContextMenu"
 import Navbar from "~/components/UI/Navbar"
+import BasePannel from "~/components/UI/BasePannel"
 
 const GraphicEditor = () => {
   return (
     <EditorContainer>
       <Navbar />
+      <BasePannel />
 
       <div style={{ display: "flex", flex: 1 }}>
         <Panels />

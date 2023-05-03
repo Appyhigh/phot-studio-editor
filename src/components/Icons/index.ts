@@ -31,6 +31,9 @@ import CanvasResize from "./CanvasResize"
 import Transparency from "./Transparency"
 import Share from "./Share"
 import Save from "./Save"
+import UploadBaseIcon from "./UploadBaseIcon"
+import TextIcon from "./TextIcon"
+import StockImg from "./StockImg"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -59,12 +62,15 @@ class Icons {
   static Underline = Underline
   static Add = Add
   static PhotAILogo = PhotAILogo
-  static ProfileIcon=ProfileIcon
-  static ActivityIcon=ActivityIcon
+  static ProfileIcon = ProfileIcon
+  static ActivityIcon = ActivityIcon
   static CanvasResize = CanvasResize
   static Transparency = Transparency
   static Share = Share
-  static Save=Save
+  static Save = Save
+  static StockImg = StockImg
+  static UploadBaseIcon = UploadBaseIcon
+  static TextIcon = TextIcon
 }
 
 export default Icons

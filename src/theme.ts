@@ -11,6 +11,7 @@ const primitives = {
   grey700: "#44444F",
   caution: "#FF974A",
   secondary: "#6729F3",
+  accent: "#6729F3",
   primaryFontFamily: "Rubik",
   secondaryFontFamily: "Poppins",
   scale0: "2px",
@@ -29,6 +30,7 @@ const primitives = {
   scale900: "32px",
   scale950: "36px",
   scale1000: "40px",
+  backgroundSecondary: "#696974",
 }
 
 const overrides = {
@@ -42,6 +44,8 @@ const overrides = {
     darkGrey: primitives.grey600,
     darkestGrey: primitives.grey700,
     caution: primitives.caution,
+    accent: primitives.accent,
+    backgroundSecondary:primitives.backgroundSecondary
   },
   typography: {
     primaryExtraBold: {
@@ -76,6 +80,12 @@ const overrides = {
       fontFamily: "Poppins",
       fontWeight: "400",
     },
+    ParagraphXSmall: {
+      fontFamily: "Poppins",
+      fontWeight: "500",
+      fontSie: "12px",
+      lineHeight: "18",
+    },
   },
   sizing: {
     scale0: primitives.scale0,
@@ -98,4 +108,3 @@ const overrides = {
 }
 
 export const CustomTheme = createTheme(primitives, overrides)
-
