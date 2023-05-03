@@ -1,7 +1,11 @@
+import { useStyletron } from "baseui"
+
 const SelectInput = ({ handleChange }: any) => {
+  const [css, theme] = useStyletron()
+
   return (
     <select
-      onChange={(e:any)=>{
+      onChange={(e: any) => {
         handleChange(e.target.value)
       }}
       name="downloadOption"
@@ -9,18 +13,15 @@ const SelectInput = ({ handleChange }: any) => {
       style={{
         position: "relative",
         border: "1px solid #F1F1F5",
-        borderRadius: "4px",
         padding: "12px 20px 16px 12px",
         width: "428px",
-        color: "#696974",
-        fontFamily: "Rubik",
       }}
+      className={css({ color: theme.colors.backgroundSecondary, borderRadius: theme.sizing.scale100 })}
     >
       <option value="jpg">JPG</option>
       <option value="png">PNG</option>
       <option value="jpeg">JPEG</option>
       <option value="svg">SVG</option>
-
     </select>
   )
 }
