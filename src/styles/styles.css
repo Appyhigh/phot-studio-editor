@@ -585,6 +585,11 @@ button:focus {
   margin-right: 2rem;
 }
 
+.mx-2 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
 .stack {
   display: flex;
   justify-content: center;
