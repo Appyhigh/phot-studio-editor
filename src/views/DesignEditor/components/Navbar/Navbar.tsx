@@ -1,4 +1,4 @@
-import React,{useCallback} from "react"
+import React, { useCallback } from "react"
 import { styled, ThemeProvider, DarkTheme, useStyletron } from "baseui"
 
 import { Theme } from "baseui/theme"
@@ -26,6 +26,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 }))
 
 const Navbar = () => {
+
   const [css, theme] = useStyletron()
   const { setDisplayPreview, setScenes, setCurrentDesign, currentDesign, scenes } = useDesignEditorContext()
   const editorType = useEditorType()

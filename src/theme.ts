@@ -10,6 +10,11 @@ const primitives = {
   grey600: "#92929D",
   grey700: "#44444F",
   caution: "#FF974A",
+  sliderHandleInnerFill: "#44444F",
+  sliderHandleFill: "#44444F",
+  sliderTrackFillActive: "#44444F",
+  sliderHandleInnerFillSelectedActive: "#44444F",
+  sliderHandleInnerFillSelectedHover: "#44444F",
   secondary: "#6729F3",
   primaryFontFamily: "Rubik",
   secondaryFontFamily: "Poppins",
@@ -42,6 +47,11 @@ const overrides = {
     darkGrey: primitives.grey600,
     darkestGrey: primitives.grey700,
     caution: primitives.caution,
+    sliderHandleInnerFill: primitives.sliderHandleInnerFill,
+    sliderHandleFill: primitives.sliderHandleFill,
+    sliderHandleInnerFillSelectedActive: primitives.sliderHandleInnerFillSelectedActive,
+    sliderHandleInnerFillSelectedHover: primitives.sliderHandleInnerFillSelectedHover,
+    sliderTrackFillActive: primitives.sliderTrackFillActive,
   },
   typography: {
     primaryExtraBold: {
@@ -98,4 +108,3 @@ const overrides = {
 }
 
 export const CustomTheme = createTheme(primitives, overrides)
-

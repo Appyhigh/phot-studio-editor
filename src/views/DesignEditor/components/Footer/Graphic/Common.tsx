@@ -11,7 +11,6 @@ import ResizeCanvasPopup from "./ResizeCanvasPopup"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "50px",
-  background: $theme.colors.white,
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
