@@ -53,18 +53,6 @@ input[type="number"] {
   max-height: 740px;
 }
 
-.resizeCanvas {
-  display: none;
-}
-.resizeCanvasBtn:hover .resizeCanvas {
-  display: block;
-}
-.sizeSelectionInput input {
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-}
-
 .max-w-750 {
   width: 100%;
   max-width: 752px;
@@ -637,4 +625,28 @@ a {
 
 ul {
   list-style-type: none;
+}
+
+/* download popup  */
+
+.downloadPopup {
+  display: none;
+}
+
+.downloadResultBtn:hover .downloadPopup {
+  display: block;
+}
+
+/* resize canvas  */
+
+.resizeCanvas {
+  display: none;
+}
+.resizeCanvasBtn:hover .resizeCanvas {
+  display: block;
+}
+.sizeSelectionInput input {
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
 }

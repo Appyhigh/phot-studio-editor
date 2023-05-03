@@ -15,7 +15,7 @@ import { CustomTheme } from "./theme"
 
 const engine = new Styletron()
 
-const Provider = ({ children }: { children: React.ReactNode }) => {  
+const Provider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ReduxProvier store={store}>
       <DesignEditorProvider>
