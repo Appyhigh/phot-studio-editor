@@ -1,9 +1,23 @@
 import { useEditor, useFrame } from "@layerhub-io/react"
+import { Theme, styled } from "baseui"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
+
+const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
+  width: "460px",
+  height: "auto-fit",
+  background: $theme.colors.white,
+  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
+  border: `1px solid ${$theme.colors.borderTransparent}`,
+  borderRadius: $theme.sizing.scale500,
+  zIndex: 500,
+  right: "6px",
+  bottom: "40px",
+  padding: "16px 16px 23px 16px",
+}))
 
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
@@ -73,25 +87,7 @@ const DownloadPopup = () => {
 
   return (
     <Block className="downloadPopup">
-      <Block
-        style={{
-          height: "auto-fit",
-          width: "460px",
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "#fff",
-          justifyContent: "flex-start",
-          alignItems: "start",
-          border: "1px solid #F1F1F5",
-          boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
-          borderRadius: "12px",
-          position: "absolute",
-          zIndex: 500,
-          right: "6px",
-          bottom: "40px",
-          padding: "16px 16px 23px 16px",
-        }}
-      >
+      <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column">
         <Block className="pb-2">
           <p className="pb-1" style={{ fontSize: "14px", color: "#44444F" }}>
             File Type
@@ -143,13 +139,7 @@ const DownloadPopup = () => {
             Preview Image (611 × 408)
           </p>
         </Block>
-        <Block
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            flexDirection: "column",
-          }}
-        >
+        <Block className="d-flex justify-content-start flex-column">
           <BaseBtn
             title={"Download HD"}
             bgColor="#FFF"
@@ -168,7 +158,7 @@ const DownloadPopup = () => {
             Full Image (2157 × 1440)
           </p>
         </Block>
-      </Block>
+      </Box>
     </Block>
   )
 }
