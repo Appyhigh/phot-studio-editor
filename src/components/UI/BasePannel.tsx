@@ -8,7 +8,9 @@ import { SIZE } from "baseui/input"
 import { ParagraphXSmall } from "baseui/typography"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import useAppContext from "~/hooks/useAppContext"
-import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
+import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup"
+import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/DownloadPopup"
+import BaseBtn from "./Common/BaseBtn"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
@@ -69,7 +71,7 @@ const BasePannel = () => {
             </TextBlock>
           </ParagraphXSmall>
         </Block>
-        <Block className="flex-center">
+        <Block className="flex-center pointer p-relative resizeCanvasBtn">
           <ParagraphXSmall
             className={css({
               color: theme.colors.backgroundSecondary,
@@ -80,6 +82,7 @@ const BasePannel = () => {
           <Block className="ml-1 flex-center">
             <Icons.CanvasResize size={24} />
           </Block>
+          <ResizeCanvasPopup />
         </Block>
       </Block>
       <div className="flex-1"></div>
@@ -89,16 +92,10 @@ const BasePannel = () => {
             <Icons.Share size={16} />
           </Button>
         </StatefulTooltip>
-        <Button
-          kind={KIND.secondary}
-          style={{ height: "38px" }}
-          className={css({
-            backgroundColor: theme.colors.accent,
-            color: theme.colors.white,
-          })}
-        >
-          <ParagraphXSmall> Download</ParagraphXSmall>
-        </Button>
+        <div className={"p-relative downloadResultBtn"}>
+          <BaseBtn txtColor={"#fff"} bgColor={"#6729F3"} title={"Download"} />
+          <DownloadPopup />
+        </div>
       </Block>
     </Container>
   )
