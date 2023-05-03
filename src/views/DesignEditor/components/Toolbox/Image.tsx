@@ -6,16 +6,17 @@ const Image = () => {
   return (
     <Block
       $style={{
-        flex: 1,
         display: "flex",
         alignItems: "center",
         padding: "0 12px",
+        backgroundColor: "#fff",
         justifyContent: "space-between",
       }}
     >
-      <Block>
+      {/* //dont need for now  */}
+      {/* <Block>
         <Flip />
-      </Block>
+      </Block> */}
       <Common />
     </Block>
   )

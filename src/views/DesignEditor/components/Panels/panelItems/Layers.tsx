@@ -18,12 +18,17 @@ const Layers = () => {
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
-
+ 
   React.useEffect(() => {
+    console.log(objects);
+    
     if (objects) {
       setLayerObjects(objects.reverse())
     }
   }, [objects])
+
+
+
 
   React.useEffect(() => {
     let watcher = async () => {

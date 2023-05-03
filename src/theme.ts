@@ -12,6 +12,7 @@ const primitives = {
   caution: "#FF974A",
   secondary: "#6729F3",
   accent: "#6729F3",
+  primaryB:"#F1F2F6",
   primaryFontFamily: "Rubik",
   secondaryFontFamily: "Poppins",
   scale0: "2px",
@@ -40,14 +41,15 @@ const overrides = {
     darkBlack: primitives.black600,
     white: primitives.white,
     primary100: primitives.primary100,
-    lightGrey: primitives.grey400,
+    grey400: primitives.grey400,
     grey: primitives.grey500,
     primary500: primitives.primary500,
     darkestGrey: primitives.grey700,
     caution: primitives.caution,
     accent: primitives.accent,
     backgroundSecondary:primitives.backgroundSecondary,
-    borderAccent:primitives.borderAccent
+    borderAccent:primitives.borderAccent,
+    primaryB:primitives.primaryB
   },
   typography: {
     primaryExtraBold: {
