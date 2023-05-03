@@ -7,7 +7,7 @@ const primitives = {
   primary100: "#EEEEEE",
   grey400: "#F1F1F5",
   grey500: "#696974",
-  grey600: "#92929D",
+  primary500: "#44444F",
   grey700: "#44444F",
   caution: "#FF974A",
   secondary: "#6729F3",
@@ -31,6 +31,7 @@ const primitives = {
   scale950: "36px",
   scale1000: "40px",
   backgroundSecondary: "#696974",
+  borderAccent:"#92929D"
 }
 
 const overrides = {
@@ -41,11 +42,12 @@ const overrides = {
     primary100: primitives.primary100,
     lightGrey: primitives.grey400,
     grey: primitives.grey500,
-    darkGrey: primitives.grey600,
+    primary500: primitives.primary500,
     darkestGrey: primitives.grey700,
     caution: primitives.caution,
     accent: primitives.accent,
-    backgroundSecondary:primitives.backgroundSecondary
+    backgroundSecondary:primitives.backgroundSecondary,
+    borderAccent:primitives.borderAccent
   },
   typography: {
     primaryExtraBold: {

@@ -1,5 +1,5 @@
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { Theme, styled } from "baseui"
+import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
@@ -19,9 +19,15 @@ const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   padding: "16px 16px 23px 16px",
 }))
 
+const SubHeading = styled<"p", {}, Theme>("p", ({ $theme }) => ({
+  fontSize: $theme.sizing.scale550,
+  color: $theme.colors.primary500,
+}))
+
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
   const editor = useEditor()
+  const [css, theme] = useStyletron()
 
   const [qualityVal, setQualtiyVal] = useState(50)
   const [sizeVal, setSizeVal] = useState(50)
@@ -89,15 +95,13 @@ const DownloadPopup = () => {
     <Block className="downloadPopup">
       <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column">
         <Block className="pb-2">
-          <p className="pb-1" style={{ fontSize: "14px", color: "#44444F" }}>
-            File Type
-          </p>
+          <SubHeading className="pb-1">File Type</SubHeading>
           <SelectInput handleChange={handleTypeChange} />
         </Block>
         <Block style={{ marginBottom: "6px" }}>
-          <p style={{ fontSize: "14px", color: "#44444F", marginBottom: "0px" }}>
-            Size <span style={{ color: "#92929D" }}> (1414*2000px)</span>
-          </p>
+          <SubHeading className="mb-0">
+            Size <span className={css({ fontSize: theme.colors.borderAccent })}> (1414*2000px)</span>
+          </SubHeading>
           <SliderBar
             width="424px"
             minVal={minSize}
@@ -108,9 +112,9 @@ const DownloadPopup = () => {
           />
         </Block>
         <Block style={{ marginBottom: "6px" }}>
-          <p style={{ fontSize: "14px", color: "#44444F", marginBottom: "0px" }}>
-            Quality <span style={{ fontSize: "9px" }}>({qualityVal})</span>
-          </p>
+          <SubHeading className="mb-0">
+            Quality <span className={css({ fontSize: theme.sizing.scale400 })}>({qualityVal})</span>
+          </SubHeading>
           <SliderBar
             width="190px"
             minVal={minQuality}
