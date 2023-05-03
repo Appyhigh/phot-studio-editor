@@ -6,17 +6,13 @@ import { Slider } from "baseui/slider"
 import { PLACEMENT } from "baseui/toast"
 import { StatefulTooltip } from "baseui/tooltip"
 import React from "react"
-import { styled } from "styletron-react"
+import { styled } from "baseui"
 import Icons from "~/components/Icons"
-import { CustomTheme } from "~/theme"
 
 // @ts-ignore
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "50px",
-  background: "#FFF",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  background: $theme.colors.white,
   margin: "0px 16px 16px 30px",
   padding: "0px 100px",
 }))
@@ -65,7 +61,7 @@ const CanvasEditingPannel = () => {
   }
 
   return (
-    <Container>
+    <Container className="d-flex justify-content-center align-items-center">
       <div className="d-flex justify-content-start align-items-center mr-2 p-relative">
         <StatefulTooltip
           placement={PLACEMENT.bottom}
