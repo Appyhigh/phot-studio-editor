@@ -2,7 +2,7 @@ import { SIZE } from "baseui/input"
 import { Block } from "baseui/block"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { fixedSizeFrames, resizeSampleFrame } from "~/constants/editor"
 import { Button, SHAPE } from "baseui/button"
 import CommonInput from "~/components/UI/Common/Input"
@@ -100,8 +100,10 @@ const ResizeCanvasPopup = () => {
           bottom: "45px",
         }}
       >
-        <Block $style={{ margin: "4px 16px" }}>
-          <p style={{ fontSize: "12px", color: "#000" }}>Fixed Size</p>
+        <Block className="mt-2 mx-2 ">
+          <p className="pb-1" style={{ fontSize: "12px", color: "#000" }}>
+            Fixed Size
+          </p>
           <Block $style={{ display: "flex", justifyContent: "center", flexDirection: "row", color: "#92929D" }}>
             {fixedSizeFrames.map((sample, index) => (
               <Block
@@ -134,7 +136,9 @@ const ResizeCanvasPopup = () => {
         </Block>
         <div style={{ border: "1px solid #F1F1F5", width: "100%", marginTop: "12px" }}></div>
         <div style={{ margin: "4px 16px" }}>
-          <p style={{ fontSize: "12px", color: "#000" }}>Custom Size</p>
+          <p className="pt-1 pb-1" style={{ fontSize: "12px", color: "#000" }}>
+            Custom Size
+          </p>
           <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
             <div style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
               <CommonInput
@@ -170,7 +174,9 @@ const ResizeCanvasPopup = () => {
         <div style={{ border: "1px solid #F1F1F5", width: "100%", marginTop: "12px" }}></div>
 
         <div style={{ margin: "4px 16px 16px" }}>
-          <p style={{ fontSize: "12px", color: "#000" }}>Others</p>
+          <p className="pb-1 pt-1" style={{ fontSize: "12px", color: "#000" }}>
+            Others
+          </p>
           <div
             className={"sizeSelectionInput"}
             style={{
@@ -182,7 +188,7 @@ const ResizeCanvasPopup = () => {
             }}
           >
             {resizeSampleFrame.map((sampleFrame, index) => (
-              <label style={{ display: "flex", alignItems: "center" }} key={index}>
+              <label className="d-flex align-items-center mt-1" key={index}>
                 <input
                   type="checkbox"
                   name={sampleFrame.name}
