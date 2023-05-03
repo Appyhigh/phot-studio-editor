@@ -6,6 +6,9 @@ import { PLACEMENT } from "baseui/toast"
 import { Button, KIND } from "baseui/button"
 import { SIZE } from "baseui/input"
 import { ParagraphXSmall } from "baseui/typography"
+import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
+import useAppContext from "~/hooks/useAppContext"
+import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
@@ -24,26 +27,46 @@ const TextBlock = styled<"p", {}, Theme>("p", ({ $theme }) => ({
 
 const BasePannel = () => {
   const [css, theme] = useStyletron()
+  const { setActivePanel } = useAppContext()
+  const setIsSidebarOpen = useSetIsSidebarOpen()
 
   return (
     <Container>
       <Block className="d-flex justify-content-start align-items-center">
-        <Block className="flex-center">
+        <Block className="flex-center pointer">
           <Icons.UploadBaseIcon size={24} />
           <ParagraphXSmall>
-            <TextBlock> Upload Images</TextBlock>
+            <TextBlock
+              onClick={() => {
+                setIsSidebarOpen(true)
+                // @ts-ignore
+                setActivePanel("Images")
+              }}
+            >
+              {" "}
+              Upload Images
+            </TextBlock>
           </ParagraphXSmall>
         </Block>
-        <Block className="flex-center">
+        <Block className="flex-center pointer">
           <Icons.StockImg size={24} />
           <ParagraphXSmall>
             <TextBlock> Stock Images</TextBlock>
           </ParagraphXSmall>
         </Block>
-        <Block className="flex-center">
+        <Block className="flex-center pointer">
           <Icons.TextIcon size={24} />
           <ParagraphXSmall>
-            <TextBlock> Add Text</TextBlock>
+            <TextBlock
+              onClick={() => {
+                setIsSidebarOpen(true)
+                // @ts-ignore
+                setActivePanel("Text")
+              }}
+            >
+              {" "}
+              Add Text
+            </TextBlock>
           </ParagraphXSmall>
         </Block>
         <Block className="flex-center">
