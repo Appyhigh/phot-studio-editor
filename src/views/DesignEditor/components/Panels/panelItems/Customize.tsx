@@ -37,29 +37,31 @@ const Customize = () => {
     const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
     if (bgObject) {
       editor.objects.remove(bgObject.id)
+      editor.objects.unsetBackgroundImage()
     }
     editor.frame.setBackgroundColor(color)
   }
 
   const handleChange = (type: string, value: any) => {
+
     setState({ ...state, [type]: value })
+    editor.objects.unsetBackgroundImage()
     changeBackgroundColor(value)
   }
 
   const setTransparentBG = () => {
     const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
-    if (!bgObject) {
-      const options = {
-        type: "StaticImage",
-        src: checkboxBGUrl,
-        preview: checkboxBGUrl,
-        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
-      }
-      editor.objects.add(options).then(() => {
-        editor.objects.setAsBackgroundImage()
-      })
-      editor.frame.setBackgroundColor("#fff")
+    editor.objects.unsetBackgroundImage()
+
+    const options = {
+      type: "StaticImage",
+      src: checkboxBGUrl,
+      preview: checkboxBGUrl,
+      metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
     }
+    editor.objects.add(options).then(() => {
+      editor.objects.setAsBackgroundImage()
+    })
   }
 
   return (
