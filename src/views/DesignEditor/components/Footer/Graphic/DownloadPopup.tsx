@@ -15,8 +15,8 @@ const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   border: `1px solid ${$theme.colors.borderTransparent}`,
   borderRadius: $theme.sizing.scale500,
   zIndex: 500,
-  right: "6px",
-  bottom: "40px",
+  right: "0px",
+  top: "35px",
   padding: "16px 16px 23px 16px",
 }))
 

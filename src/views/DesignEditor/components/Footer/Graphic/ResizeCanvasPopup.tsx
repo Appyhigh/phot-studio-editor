@@ -2,7 +2,7 @@ import { SIZE } from "baseui/input"
 import { Block } from "baseui/block"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { fixedSizeFrames, resizeSampleFrame } from "~/constants/editor"
 import { Button, SHAPE } from "baseui/button"
 import CommonInput from "~/components/UI/Common/Input"
@@ -84,27 +84,24 @@ const ResizeCanvasPopup = () => {
   return (
     <Block className={"resizeCanvas"}>
       <Block
+        className="d-flex align-items-start flex-column p-absolute"
         style={{
           height: "auto-fit",
           width: "251px",
-          display: "flex",
-          flexDirection: "column",
           backgroundColor: "#fff",
-          alignItems: "start",
           border: "1px solid #F1F1F5",
           boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)",
           borderRadius: "4px",
-          position: "absolute",
           zIndex: 500,
-          left: "-40px",
-          bottom: "45px",
+          left: "10px",
+          top: "30px",
         }}
       >
         <Block className="mt-2 mx-2 ">
           <p className="pb-1" style={{ fontSize: "12px", color: "#000" }}>
             Fixed Size
           </p>
-          <Block $style={{ display: "flex", justifyContent: "center", flexDirection: "row", color: "#92929D" }}>
+          <Block className="d-flex justify-content-center flex-row" $style={{ color: "#92929D" }}>
             {fixedSizeFrames.map((sample, index) => (
               <Block
                 key={index}
@@ -112,19 +109,15 @@ const ResizeCanvasPopup = () => {
                   setActiveKey("0")
                   setSelectedFrame(sample)
                 }}
+                className="d-flex text-center justify-content-center align-items-center pointer"
                 $style={{
                   width: sample.frameWidth,
                   height: sample.frameHeight,
                   border: "1.5px solid #92929D",
                   borderRadius: "4px",
                   marginRight: "12px",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
                   ":hover": {
                     color: "#000",
-                    cursor: "pointer",
                     border: "1.5px solid #000",
                   },
                 }}
@@ -139,8 +132,8 @@ const ResizeCanvasPopup = () => {
           <p className="pt-1 pb-1" style={{ fontSize: "12px", color: "#000" }}>
             Custom Size
           </p>
-          <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
-            <div style={{ display: "flex", justifyContent: "center", flexDirection: "row" }}>
+          <div className="d-flex justify-content-center flex-column">
+            <div className="d-flex justify-content-center flex-row">
               <CommonInput
                 type="number"
                 placeholder="width"
@@ -178,11 +171,8 @@ const ResizeCanvasPopup = () => {
             Others
           </p>
           <div
-            className={"sizeSelectionInput"}
+            className={"sizeSelectionInput d-flex justify-content-center flex-column"}
             style={{
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
               fontSize: "11px",
               color: "#44444F",
             }}

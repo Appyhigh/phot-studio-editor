@@ -1,6 +1,6 @@
 function Share({ size }: { size: number }) {
   return (
-    <svg width="17" height={size} viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -13,5 +13,4 @@ function Share({ size }: { size: number }) {
   )
 }
 
-
-export default Share;
+export default Share

@@ -3,7 +3,6 @@ import { styled } from "baseui"
 import { Theme } from "baseui/theme"
 import Icons from "../Icons"
 import BaseBtn from "./Common/BaseBtn"
-
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "70px",
   background: $theme.colors.white,
@@ -12,9 +11,11 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   flexDirection: "row",
   boxShadow: "inset 0px -1px 0px #E2E2EA",
   padding: "15px 20px",
+  
 }))
 
 const Navbar = () => {
+  
   return (
     <Container>
       <Block className="d-flex justify-content-start pointer">

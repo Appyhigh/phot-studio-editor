@@ -627,6 +627,12 @@ ul {
   list-style-type: none;
 }
 
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
 /* download popup  */
 
 .downloadPopup {

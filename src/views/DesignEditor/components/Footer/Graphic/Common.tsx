@@ -1,13 +1,11 @@
-import React, { useState } from "react"
+import React from "react"
 import { styled } from "baseui"
 import { Theme } from "baseui/theme"
 import Icons from "~/components/Icons"
 import { Button, KIND, SIZE } from "baseui/button"
-import { Slider } from "baseui/slider"
 import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { StatefulTooltip } from "baseui/tooltip"
 import { PLACEMENT } from "baseui/toast"
-import ResizeCanvasPopup from "./ResizeCanvasPopup"
 import DownloadPopup from "./DownloadPopup"
 import SliderBar from "~/components/UI/Common/SliderBar"
 
@@ -96,12 +94,7 @@ const Common = () => {
             <Icons.Save size={26} />
           </Button>
         </StatefulTooltip>
-        <div style={{ position: "relative" }} className={"resizeCanvasBtn"}>
-          <Button kind={KIND.tertiary} size={SIZE.compact} className={"resizeCanvasBtn"}>
-            <Icons.CanvasResize size={26} />
-          </Button>
-          <ResizeCanvasPopup />
-        </div>
+       
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
@@ -142,15 +135,7 @@ const Common = () => {
             <Icons.Share size={16} />
           </Button>
         </StatefulTooltip>
-        <div style={{ position: "relative" }} className={"downloadResultBtn"}>
-          <Button
-            style={{ color: "#FFF", height: "38px", backgroundColor: "#92929D", fontSize: "12px" }}
-            kind={KIND.secondary}
-          >
-            Download
-          </Button>
-          <DownloadPopup />
-        </div>
+       
       </div>
     </Container>
   )
