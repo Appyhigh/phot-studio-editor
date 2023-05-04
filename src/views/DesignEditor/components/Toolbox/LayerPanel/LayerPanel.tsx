@@ -15,9 +15,9 @@ interface ToolboxState {
 const DEFAULT_TOOLBOX = "Canvas"
 
 const Container = styled("div", (props) => ({
-  minWidth: "80px",
+  minWidth: "115px",
   height: "100%",
-  backgroundColor: props.$theme.colors.white,
+
   display: "flex",
 }))
 
@@ -35,16 +35,18 @@ const LayerPanel = () => {
 
   const editor = useEditor()
   const objects = useObjects() as ILayer[]
-  const activeObject = useActiveObject() as ILayer
+  const activeObject = useActiveObject() as any
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
   const [showObjectTypeText, setShowObjectTypeText] = useState(false)
 
+  console.log("type", activeObject?._objects)
+
   React.useEffect(() => {
     if (objects) {
-      console.log(objects);
-      
+      console.log(objects)
+
       setLayerObjects(objects.reverse())
     }
   }, [objects])
@@ -93,18 +95,62 @@ const LayerPanel = () => {
     [editor]
   )
 
+  console.log("active layer", layerObjects)
+
   return (
     <Container
       className="layerPanelBlock"
-      style={{ minWidth: showObjectTypeText ? "180px" : "80px", maxWidth: "400px",height:activeObject?"90%":"100%" }}
-      onMouseEnter={() => {
-        setShowObjectTypeText(true)
-      }}
-      onMouseLeave={() => {
-        setShowObjectTypeText(false)
+      style={{
+        minWidth: showObjectTypeText ? "200px" : "105px",
+        maxWidth: "400px",
+        height: activeObject ? "90%" : "100%",
       }}
     >
-      <Block className="d-flex flex-column flex-1">
+      <Block className="flex-center">
+        <button
+          style={{ height: "25px", width: "25px" }}
+          onClick={() => {
+            setShowObjectTypeText(!showObjectTypeText)
+          }}
+        >
+          <Block>
+            <div style={{ position: "relative", marginRight: "-1px" }}>
+              <svg
+                style={{ transform: "scaleX(-1)" }}
+                width="24"
+                height="106"
+                viewBox="0 0 24 106"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 0C0 10.9874 6.98495 20.613 14.5043 28.6243C19.1998 33.6269 23.1778 40.369 23 48.775C22.8157 57.4869 18.1934 64.9566 13.1406 70.5521C6.01112 78.4474 0 88.0499 0 98.6878V106V0Z"
+                  fill="white"
+                />
+              </svg>
+              <div style={{ position: "absolute", top: "36%", left: "35%" }}>
+                <svg
+                  style={{ transform: showObjectTypeText ? "scaleX(-1)" : "scaleX(1)" }}
+                  width="8"
+                  height="15"
+                  viewBox="0 0 8 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7 1.84912L1 7.84912L7 13.8491"
+                    stroke="#B6B6B6"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </Block>
+        </button>
+      </Block>
+      <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
         <Scrollable autoHide={true}>
           <Block className="p-1">
             {layerObjects.length === 0 ? (
@@ -119,7 +165,13 @@ const LayerPanel = () => {
                       $style={{
                         fontSize: "14px",
                         backgroundColor:
-                          activeObject?.id == object.id || activeLayerPanel?.id == object.id ? "rgb(245,246,247)" : "",
+                          activeObject?.id == object.id ||
+                          activeLayerPanel?.id == object.id ||
+                          activeObject?._objects?.map((x: any) => {
+                            return x.id == object.id
+                          })
+                            ? "rgb(245,246,247)"
+                            : "",
                         ":hover": {
                           background: "rgb(245,246,247)",
                         },
@@ -127,6 +179,7 @@ const LayerPanel = () => {
                       key={object.id}
                       onClick={() => {
                         setActiveLayerPanel(object)
+                        editor.objects.select(object.id)
                       }}
                     >
                       {object.text ? (
@@ -138,16 +191,16 @@ const LayerPanel = () => {
                       ) : (
                         <img
                           src={object.preview}
-                          style={{ borderRadius: "4px" }}
+                          style={{
+                            borderRadius: "4px",
+                            width: showObjectTypeText ? "40px" : "48px",
+                            height: showObjectTypeText ? "40px" : "48px",
+                          }}
                           alt="nn"
-                          className="mx-1 my-1 layerPanelImg"
+                          className="mx-1 my-1"
                         />
                       )}
-                      {showObjectTypeText && (
-                        <Block onClick={() => editor.objects.select(object.id)} className="objectTypeText">
-                          {object.name}
-                        </Block>
-                      )}
+                      {showObjectTypeText && <Block className="objectTypeText">{object.name}</Block>}
                     </Block>
                   )
                 })

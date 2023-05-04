@@ -5,17 +5,19 @@ const Multiple = () => {
   return (
     <Block
       $style={{
-        flex: 1,
         display: "flex",
         alignItems: "center",
         padding: "0 12px",
-        justifyContent: "space-between",
+        backgroundColor:"#FFF"
       }}
     >
-      <Block>Multiple</Block>
+      {/* //not needed for now  */}
+      {/* <Block>Multiple</Block> */}
       <Common />
     </Block>
   )
 }
 
 export default Multiple
+
+
