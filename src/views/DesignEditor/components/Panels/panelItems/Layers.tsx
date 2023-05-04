@@ -19,17 +19,12 @@ const Layers = () => {
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
- 
+
   React.useEffect(() => {
-    console.log(objects);
-    
     if (objects) {
       setLayerObjects(objects.reverse())
     }
   }, [objects])
-
-
-
 
   React.useEffect(() => {
     let watcher = async () => {
@@ -46,6 +41,7 @@ const Layers = () => {
       }
     }
   }, [editor, objects])
+
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -114,7 +110,7 @@ const Layers = () => {
           ) : (
             layerObjects
               .filter((el) => el.metadata?.type !== backgroundLayerType)
-              .sort((a, b) => b.metadata.generationDate - a.metadata.generationDate)
+              .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
               .map((object) => {
                 return (
                   <Block

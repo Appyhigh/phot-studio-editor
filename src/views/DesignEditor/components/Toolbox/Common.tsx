@@ -19,6 +19,8 @@ import BringToFront from "~/components/Icons/BringToFront"
 import SendToBack from "~/components/Icons/SendToBack"
 import AlignBottom from "~/components/Icons/AlignBottom"
 import Opacity from "./Shared/Opacity"
+import Eye from "~/components/Icons/Eye"
+import EyeCrossed from "~/components/Icons/EyeCrossed"
 
 const Common = () => {
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
@@ -80,6 +82,7 @@ const Common = () => {
       <CommonAlign />
       <Opacity />
       <LockUnlock />
+      <Visiblity />
       <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Duplicate">
         <Button onClick={() => editor.objects.clone()} size={SIZE.mini} kind={KIND.tertiary}>
           <DuplicateIcon size={22} />
@@ -256,6 +259,60 @@ const LockUnlock = () => {
         <LockedIcon size={24} />
       </Button>
     </StatefulTooltip>
+  )
+}
+
+const Visiblity = () => {
+  const [state, setState] = React.useState<{ visible: boolean }>({ visible: true })
+  const editor = useEditor()
+  const activeObject = useActiveObject()
+
+  React.useEffect(() => {
+    if (activeObject) {
+      // @ts-ignore
+      setState({ visible: !!activeObject.visible })
+    }
+  }, [activeObject])
+  return state.visible ? (
+    <Button
+      kind={KIND.tertiary}
+      size={SIZE.mini}
+      onClick={() => {
+        editor.objects.update({ visible: false })
+
+        setState({ visible: false })
+      }}
+      overrides={{
+        Root: {
+          style: {
+            paddingLeft: "4px",
+            paddingRight: "4px",
+          },
+        },
+      }}
+    >
+      <Eye size={24} />
+    </Button>
+  ) : (
+    <Button
+      kind={KIND.tertiary}
+      size={SIZE.mini}
+      onClick={() => {
+        editor.objects.update({ visible: true })
+
+        setState({ visible: true })
+      }}
+      overrides={{
+        Root: {
+          style: {
+            paddingLeft: "4px",
+            paddingRight: "4px",
+          },
+        },
+      }}
+    >
+      <EyeCrossed size={24} />
+    </Button>
   )
 }
 

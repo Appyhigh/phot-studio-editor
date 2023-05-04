@@ -7,7 +7,10 @@ import Toolbox from "../../Toolbox"
 import CanvasEditingPannel from "./CanvasEditingPannel"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
-  maxWidth: "600px",
+  display: "flex",
+  flexDirection: "row",
+  width: "100%",
+  justifyContent:"center"
 }))
 
 const Graphic = () => {
@@ -15,8 +18,9 @@ const Graphic = () => {
     <Container>
       {/* <Scenes /> */}
       {/* <Common /> */}
-      <Toolbox />
       <CanvasEditingPannel />
+
+      {/* <Toolbox /> */}
       {/* <Common /> */}
     </Container>
   )

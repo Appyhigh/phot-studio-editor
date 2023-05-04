@@ -13,8 +13,14 @@ import Icons from "~/components/Icons"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "50px",
   background: $theme.colors.white,
-  margin: "0px 16px 16px 30px",
+  margin: "0px 40px 16px 16px",
   padding: "0px 100px",
+  [$theme.mediaQuery.medium]: {
+    padding: "0px 20px",
+  },
+  [$theme.mediaQuery.large]: {
+    padding: "0px 80px",
+  },
 }))
 
 interface Options {

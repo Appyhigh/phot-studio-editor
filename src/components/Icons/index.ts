@@ -34,6 +34,8 @@ import Save from "./Save"
 import UploadBaseIcon from "./UploadBaseIcon"
 import TextIcon from "./TextIcon"
 import StockImg from "./StockImg"
+import SliderIcon from "./SliderIcon"
+import SliderBtn from "./SliderBtn"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -71,6 +73,8 @@ class Icons {
   static StockImg = StockImg
   static UploadBaseIcon = UploadBaseIcon
   static TextIcon = TextIcon
+  static SliderBtn = SliderBtn
+  static SliderIcon = SliderIcon
 }
 
 export default Icons
