@@ -1,7 +1,7 @@
 import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
@@ -30,7 +30,6 @@ const DownloadPopup = () => {
   const editor = useEditor()
   const objects: any = useObjects()
   const [css, theme] = useStyletron()
-
   const [qualityVal, setQualtiyVal] = useState(50)
   const [sizeVal, setSizeVal] = useState(50)
   const minQuality = 10
@@ -50,15 +49,31 @@ const DownloadPopup = () => {
   const handleSizeChange = (e: any) => {
     setSizeVal(e)
   }
+
   const exportToPNG = useCallback(async () => {
-    if (editor) {
+    if (editor && objects) {
       let template: any = editor.scene.exportToJSON()
-      const checkboxBGLayerIndex = template.layers.findIndex((el) => el?.metadata?.type === backgroundLayerType)
-      const canvasBGLayerIndex = template.layers.findIndex((el) => el?.id === "background")
+
+      // Exclude the Background & Checkbox Layer
+      const checkboxBGLayerIndex = template.layers.findIndex((el: any) => el?.metadata?.type === backgroundLayerType)
+      const canvasBGLayerIndex = template.layers.findIndex((el: any) => el?.id === "background")
+
       if (checkboxBGLayerIndex !== -1) {
         template.layers.splice(checkboxBGLayerIndex, 1)
         template.layers.splice(canvasBGLayerIndex, 1)
       }
+
+      // Exclude the hidden layers from exports
+      const hiddenLayersIDs: string[] = []
+
+      objects.forEach((el: any) => {
+        if (el?.visible === false) {
+          hiddenLayersIDs.push(el.id)
+        }
+      })
+
+      template = { ...template, layers: template.layers.filter((layer: any) => !hiddenLayersIDs.includes(layer.id)) }
+
       const image = (await editor.renderer.render(template)) as string
       if (selectedType != "svg") {
         makeDownloadToPNG(image)
