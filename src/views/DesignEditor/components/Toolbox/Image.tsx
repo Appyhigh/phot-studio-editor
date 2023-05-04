@@ -1,16 +1,16 @@
 import { Block } from "baseui/block"
 import Common from "./Common"
 import Flip from "./Shared/Flip"
+import { useStyletron } from "baseui"
 
 const Image = () => {
+
   return (
     <Block
+      className="d-flex align-items-center justify-content-between"
       $style={{
-        display: "flex",
-        alignItems: "center",
         padding: "0 12px",
         backgroundColor: "#fff",
-        justifyContent: "space-between",
       }}
     >
       {/* //dont need for now  */}
