@@ -31,38 +31,42 @@ const Canvas = () => {
   }, [editor, activeObject])
 
   return (
-    <Block
-      $style={{
-        flex: 1,
-        display: "flex",
-        alignItems: "center",
-        padding: "0 12px",
-        justifyContent: "space-between",
-      }}
-    >
-      <Block
-        $style={{
-          flex: 1,
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <Block onClick={() => setActiveSubMenu("CanvasFill")}>
-          <Block
-            $style={{
-              height: "24px",
-              width: "24px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              cursor: "pointer",
-              backgroundColor: state.fill,
-              border: "1px solid #dedede",
-            }}
-          />
-        </Block>
-      </Block>
-    </Block>
+    <></>
+    // {canvas Fill option }
+
+    
+    // <Block
+    //   $style={{
+    //     flex: 1,
+    //     display: "flex",
+    //     alignItems: "center",
+    //     padding: "0 12px",
+    //     justifyContent: "space-between",
+    //   }}
+    // >
+    //   <Block
+    //     $style={{
+    //       flex: 1,
+    //       display: "flex",
+    //       alignItems: "center",
+    //     }}
+    //   >
+    //     <Block onClick={() => setActiveSubMenu("CanvasFill")}>
+    //       <Block
+    //         $style={{
+    //           height: "24px",
+    //           width: "24px",
+    //           display: "flex",
+    //           alignItems: "center",
+    //           justifyContent: "center",
+    //           cursor: "pointer",
+    //           backgroundColor: state.fill,
+    //           border: "1px solid #dedede",
+    //         }}
+    //       />
+    //     </Block>
+    //   </Block>
+    // </Block>
   )
 }
 

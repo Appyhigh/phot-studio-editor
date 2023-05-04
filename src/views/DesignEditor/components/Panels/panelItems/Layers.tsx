@@ -42,6 +42,7 @@ const Layers = () => {
     }
   }, [editor, objects])
 
+
   const addObject = React.useCallback(
     (url: string) => {
       if (editor) {
@@ -109,7 +110,7 @@ const Layers = () => {
           ) : (
             layerObjects
               .filter((el) => el.metadata?.type !== backgroundLayerType)
-              .sort((a, b) => b.metadata.generationDate - a.metadata.generationDate)
+              .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
               .map((object) => {
                 return (
                   <Block

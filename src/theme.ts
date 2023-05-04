@@ -46,7 +46,7 @@ const overrides = {
     darkBlack: primitives.black600,
     white: primitives.white,
     primary100: primitives.primary100,
-    lightGrey: primitives.grey400,
+    grey400: primitives.grey400,
     grey: primitives.grey500,
     primary500: primitives.primary500,
     darkestGrey: primitives.grey700,
@@ -59,7 +59,7 @@ const overrides = {
     primaryB:primitives.primaryB,
     accent: primitives.accent,
     backgroundSecondary:primitives.backgroundSecondary,
-    borderAccent:primitives.borderAccent
+    borderAccent:primitives.borderAccent,
   },
   typography: {
     primaryExtraBold: {

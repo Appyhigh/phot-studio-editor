@@ -6,6 +6,7 @@ import EditorContainer from "./components/EditorContainer"
 import ContextMenu from "./components/ContextMenu"
 import Navbar from "~/components/UI/Navbar"
 import BasePannel from "~/components/UI/BasePannel"
+import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 
 const GraphicEditor = () => {
   return (
@@ -16,10 +17,11 @@ const GraphicEditor = () => {
       <div style={{ display: "flex", flex: 1 }}>
         <Panels />
         <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>
-          <Toolbox />
+          {/* <Toolbox /> */}
           <Canvas />
           <Footer />
         </div>
+        <LayerPanel />
       </div>
     </EditorContainer>
   )

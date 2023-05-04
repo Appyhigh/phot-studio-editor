@@ -11,11 +11,10 @@ const Locked = () => {
   return (
     <Block
       $style={{
-        flex: 1,
         display: "flex",
         alignItems: "center",
+        backgroundColor:"#FFF",
         padding: "0 12px",
-        justifyContent: "flex-end",
       }}
     >
       <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Unlock">

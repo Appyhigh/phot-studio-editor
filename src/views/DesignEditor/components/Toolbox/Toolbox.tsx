@@ -13,6 +13,8 @@ interface ToolboxState {
 }
 
 const Container = styled("div", (props) => ({
+  
+  backgroundColor: props.$theme.colors.primaryB,
   boxShadow: "rgb(0 0 0 / 15%) 0px 1px 1px",
   height: "50px",
   display: "flex",
@@ -21,7 +23,7 @@ const Container = styled("div", (props) => ({
 const Toolbox = () => {
   const [state, setState] = React.useState<ToolboxState>({ toolbox: "Text" })
   const { setActiveSubMenu } = useAppContext()
-  const activeObject = useActiveObject() as ILayer
+  const activeObject = useActiveObject() as any
   const editor = useEditor()
 
   React.useEffect(() => {
