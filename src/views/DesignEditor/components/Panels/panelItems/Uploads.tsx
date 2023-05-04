@@ -42,6 +42,8 @@ export default function () {
 
     editor.objects.add(upload).then(() => {
       setSelectedImage(upload.preview)
+      const fileInfo: any = document.getElementById("inputFile")
+      if (fileInfo.value) fileInfo.value = ""
     })
   }
 
@@ -78,7 +80,13 @@ export default function () {
         )}
         <Scrollable>
           <Block padding={"0 1.5rem"}>
-            <input onChange={handleFileInput} type="file" id="file" ref={inputFileRef} style={{ display: "none" }} />
+            <input
+              onChange={handleFileInput}
+              type="file"
+              id="inputFile"
+              ref={inputFileRef}
+              style={{ display: "none" }}
+            />
             <div
               style={{
                 marginTop: "1rem",
