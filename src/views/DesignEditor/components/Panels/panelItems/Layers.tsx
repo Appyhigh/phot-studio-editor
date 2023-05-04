@@ -11,6 +11,7 @@ import EyeCrossed from "~/components/Icons/EyeCrossed"
 import Delete from "~/components/Icons/Delete"
 import { Button, KIND, SIZE } from "baseui/button"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
+import { backgroundLayerType } from "~/constants/contants"
 
 const Layers = () => {
   const editor = useEditor()
@@ -107,6 +108,7 @@ const Layers = () => {
             </div>
           ) : (
             layerObjects
+              .filter((el) => el.metadata?.type !== backgroundLayerType)
               .sort((a, b) => b.metadata.generationDate - a.metadata.generationDate)
               .map((object) => {
                 return (

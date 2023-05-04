@@ -1,11 +1,28 @@
-import React from "react"
-import { Canvas as LayerhubCanvas } from "@layerhub-io/react"
+import { useEffect } from "react"
+import { Canvas as LayerhubCanvas, useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import Playback from "../Playback"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import ContextMenu from "../ContextMenu"
+import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
+  const editor = useEditor()
+  const frame = useFrame()
+  useEffect(() => {
+    if (editor) {
+      const options = {
+        type: "StaticImage",
+        src: checkboxBGUrl,
+        preview: checkboxBGUrl,
+        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      }
+      editor.objects.add(options).then(() => {
+        editor.objects.setAsBackgroundImage()
+      })
+    }
+  }, [editor, frame])
+
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
       {displayPlayback && <Playback />}
