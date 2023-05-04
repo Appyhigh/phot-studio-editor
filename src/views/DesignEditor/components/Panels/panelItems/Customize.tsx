@@ -4,7 +4,7 @@ import { HexColorPicker } from "react-colorful"
 import { StatefulPopover, PLACEMENT } from "baseui/popover"
 import { Plus } from "baseui/icon"
 import { Input } from "baseui/input"
-import { useEditor, useFrame } from "@layerhub-io/react"
+import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Modal, ROLE } from "baseui/modal"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
@@ -15,8 +15,10 @@ import SwapHorizontal from "~/components/Icons/SwapHorizontal"
 import { Tabs, Tab } from "baseui/tabs"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
+import { ILayer } from "@layerhub-io/types"
+import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
-const colors = ["#ffffff", "#9B9B9B", "#4A4A4A", "#000000", "#A70C2C", "#DA9A15", "#F8E71D", "#47821A", "#4990E2"]
+const colors = ["#ffffff", "#9B9B9B", "#4A4A4A", "#000000", "#A70C2C", "#4990E2", "#F8E71D", "#47821A"]
 
 interface State {
   backgroundColor: string
@@ -24,6 +26,7 @@ interface State {
 
 const Customize = () => {
   const editor = useEditor()
+  const objects = useObjects() as ILayer[]
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
   const [state, setState] = React.useState<State>({
@@ -31,13 +34,32 @@ const Customize = () => {
   })
 
   const changeBackgroundColor = (color: string) => {
-    if (editor) {
-      editor.frame.setBackgroundColor(color)
+    const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
+    if (bgObject) {
+      editor.objects.remove(bgObject.id)
     }
+    editor.frame.setBackgroundColor(color)
   }
+
   const handleChange = (type: string, value: any) => {
     setState({ ...state, [type]: value })
     changeBackgroundColor(value)
+  }
+
+  const setTransparentBG = () => {
+    const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
+    if (!bgObject) {
+      const options = {
+        type: "StaticImage",
+        src: checkboxBGUrl,
+        preview: checkboxBGUrl,
+        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      }
+      editor.objects.add(options).then(() => {
+        editor.objects.setAsBackgroundImage()
+      })
+      editor.frame.setBackgroundColor("#fff")
+    }
   }
 
   return (
@@ -153,6 +175,22 @@ const Customize = () => {
                     }}
                   />
                 ))}
+
+                {/* Transparent Background option */}
+                <div
+                  onClick={setTransparentBG}
+                  key={"#fff"}
+                  style={{
+                    backgroundImage: `url('${checkboxBGUrl}')`,
+                    backgroundPosition: "center",
+                    backgroundSize: "cover",
+                    background: "#fff",
+                    borderRadius: "4px",
+                    border: "1px solid #d7d8e3",
+                    height: "34px",
+                    cursor: "pointer",
+                  }}
+                />
               </div>
             </div>
           </Block>
@@ -352,7 +390,6 @@ const ResizeTemplate = () => {
             </Tab>
           </Tabs>
         </Block>
-      
       </Modal>
     </>
   )

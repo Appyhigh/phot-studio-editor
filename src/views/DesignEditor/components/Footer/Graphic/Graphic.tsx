@@ -4,9 +4,10 @@ import { Theme } from "baseui/theme"
 import Common from "./Common"
 import Scenes from "./Scenes"
 import Toolbox from "../../Toolbox"
+import CanvasEditingPannel from "./CanvasEditingPannel"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
-  background: $theme.colors.white,
+  maxWidth: "600px",
 }))
 
 const Graphic = () => {
@@ -15,6 +16,8 @@ const Graphic = () => {
       {/* <Scenes /> */}
       {/* <Common /> */}
       <Toolbox />
+      <CanvasEditingPannel />
+      {/* <Common /> */}
     </Container>
   )
 }

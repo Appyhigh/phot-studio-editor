@@ -16,3 +16,6 @@ export const defaultTextOptions: TextOptions = {
   font: {},
   activeStyle: {},
 }
+
+export const checkboxBGUrl = "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473"
+export const backgroundLayerType = "CHECKBOX_BACKGROUND"
