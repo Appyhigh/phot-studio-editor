@@ -8,7 +8,6 @@ import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
 import Toolbox from "../Toolbox"
 import Icons from "~/components/Icons"
-import { backgroundLayerType } from "~/constants/contants"
 
 interface ToolboxState {
   toolbox: string
@@ -100,7 +99,7 @@ const LayerPanel = () => {
       >
         <Block className="flex-center">
           <Block
-            className="pointer"
+          className="pointer"
             onClick={() => {
               setShowObjectTypeText(!showObjectTypeText)
             }}
@@ -132,7 +131,6 @@ const LayerPanel = () => {
                 <Box />
               ) : (
                 layerObjects
-                  .filter((el) => el.metadata?.type !== backgroundLayerType)
                   .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
                   .map((object) => {
                     return (
