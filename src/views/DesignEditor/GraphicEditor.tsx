@@ -6,7 +6,7 @@ import EditorContainer from "./components/EditorContainer"
 import ContextMenu from "./components/ContextMenu"
 import Navbar from "~/components/UI/Navbar"
 import BasePannel from "~/components/UI/BasePannel"
-import LayerPanel from "./components/Toolbox/LayerPanel"
+import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 
 const GraphicEditor = () => {
   return (

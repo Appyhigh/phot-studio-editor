@@ -24,6 +24,7 @@ const Toolbox = () => {
   const { setActiveSubMenu } = useAppContext()
   const activeObject = useActiveObject() as ILayer
   const editor = useEditor()
+console.log(activeObject);
 
   React.useEffect(() => {
     const selectionType = getSelectionType(activeObject)

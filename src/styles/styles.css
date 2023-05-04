@@ -568,7 +568,7 @@ button:focus {
   display: inline-block;
 }
 
-.mx-1{
+.mx-1 {
   margin-left: 8px;
   margin-right: 8px;
 }
@@ -659,4 +659,27 @@ ul {
   width: 16px;
   height: 16px;
   margin-right: 6px;
+}
+.layerPanelBlock {
+  max-width: 80px;
+  transition: "ease width 0.1s",
+
+}
+.layerPanelImg {
+  width: 48px;
+  height: 48px;
+}
+.layerPanelBlock:hover {
+  transition: "ease width 0.1s";
+}
+.layerPanelBlock:hover .layerPanelImg {
+  width: 40px;
+  height: 40px;
+}
+.objectTypeText {
+  display: none;
+}
+.layerPanelBlock:hover .objectTypeText {
+  display: block;
+  transition: "ease width 0.1s";
 }
