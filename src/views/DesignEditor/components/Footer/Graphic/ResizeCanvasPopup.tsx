@@ -30,9 +30,10 @@ const ResizeCanvasPopup = () => {
 
   const frame = useFrame()
   const applyResize = () => {
-    // @ts-ignore
     const size = activeKey === "0" ? selectedFrame : activeKey === "1" ? othersFrame : desiredFrame
     if (editor) {
+      editor.objects.unsetBackgroundImage()
+
       editor.frame.resize({
         width: parseInt(size.width),
         height: parseInt(size.height),
@@ -94,7 +95,7 @@ const ResizeCanvasPopup = () => {
           borderRadius: "4px",
           zIndex: 500,
           left: "10px",
-          top: "30px",
+          top: "25px",
         }}
       >
         <Block className="mt-2 mx-2 ">
