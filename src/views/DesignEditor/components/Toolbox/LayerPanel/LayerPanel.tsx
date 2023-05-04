@@ -3,7 +3,6 @@ import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { ILayer } from "@layerhub-io/types"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { styled } from "baseui"
 import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
@@ -37,7 +36,6 @@ const LayerPanel = () => {
   const objects = useObjects() as ILayer[]
   const activeObject = useActiveObject() as any
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
-  const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
   const [showObjectTypeText, setShowObjectTypeText] = useState(false)
 
@@ -76,21 +74,6 @@ const LayerPanel = () => {
     }
   }, [activeObject])
 
-  const addObject = React.useCallback(
-    (url: string) => {
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          src: url,
-          preview: url,
-          metadata: { generationDate: new Date().getTime() },
-        }
-        editor.objects.add(options)
-      }
-    },
-    [editor]
-  )
-
   useEffect(() => {
     if (activeObject?.id) {
       setActiveLayerPanel(activeObject)
@@ -107,30 +90,29 @@ const LayerPanel = () => {
   return (
     <div className="d-flex flex-column p-relative">
       <Container
-        className="layerPanelBlock"
+        className="p-relative"
         style={{
           minWidth: showObjectTypeText ? "200px" : "105px",
           maxWidth: "400px",
           height: activeObject ? "88%" : "100%",
-          position: "relative",
         }}
       >
         <Block className="flex-center">
-          <button
-            style={{ height: "25px", width: "25px" }}
+          <Block
+          className="pointer"
             onClick={() => {
               setShowObjectTypeText(!showObjectTypeText)
             }}
           >
             <Block>
-              <div style={{ position: "relative", marginRight: "-1px" }}>
+              <div className="p-relative" style={{ marginRight: "-1px" }}>
                 <div style={{ transform: "scaleX(-1)" }}>
                   <Icons.SliderBtn size={106} />
                 </div>
 
                 <div
+                  className="p-absolute"
                   style={{
-                    position: "absolute",
                     top: "36%",
                     left: "35%",
                     transform: showObjectTypeText ? "scaleX(-1)" : "scaleX(1)",
@@ -140,7 +122,7 @@ const LayerPanel = () => {
                 </div>
               </div>
             </Block>
-          </button>
+          </Block>
         </Block>
         <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
           <Scrollable autoHide={true}>
@@ -189,7 +171,7 @@ const LayerPanel = () => {
                             className="mx-1 my-1"
                           />
                         )}
-                        {showObjectTypeText && <Block className="objectTypeText">{object.name}</Block>}
+                        {showObjectTypeText && <Block>{object.name}</Block>}
                       </Block>
                     )
                   })

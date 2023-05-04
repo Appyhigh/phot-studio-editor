@@ -18,7 +18,6 @@ const primitives = {
   primaryB:"#F1F2F6",
   secondary: "#6729F3",
   accent: "#6729F3",
-  primaryB:"#F1F2F6",
   primaryFontFamily: "Rubik",
   secondaryFontFamily: "Poppins",
   scale0: "2px",
@@ -61,7 +60,6 @@ const overrides = {
     accent: primitives.accent,
     backgroundSecondary:primitives.backgroundSecondary,
     borderAccent:primitives.borderAccent,
-    primaryB:primitives.primaryB
   },
   typography: {
     primaryExtraBold: {

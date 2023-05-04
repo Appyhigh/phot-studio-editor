@@ -660,10 +660,3 @@ ul {
   height: 16px;
   margin-right: 6px;
 }
-.layerPanelBlock {
-  max-width: 80px;
-  transition: "ease width 0.1s";
-}
-.layerPanelBlock:hover {
-  transition: "ease width 0.1s";
-}
