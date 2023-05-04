@@ -7,7 +7,7 @@ const primitives = {
   primary100: "#EEEEEE",
   grey400: "#F1F1F5",
   grey500: "#696974",
-  grey600: "#92929D",
+  primary500: "#44444F",
   grey700: "#44444F",
   caution: "#FF974A",
   sliderHandleInnerFill: "#44444F",
@@ -17,6 +17,7 @@ const primitives = {
   sliderHandleInnerFillSelectedHover: "#44444F",
   primaryB:"#F1F2F6",
   secondary: "#6729F3",
+  accent: "#6729F3",
   primaryFontFamily: "Rubik",
   secondaryFontFamily: "Poppins",
   scale0: "2px",
@@ -35,6 +36,8 @@ const primitives = {
   scale900: "32px",
   scale950: "36px",
   scale1000: "40px",
+  backgroundSecondary: "#696974",
+  borderAccent:"#92929D"
 }
 
 const overrides = {
@@ -45,7 +48,7 @@ const overrides = {
     primary100: primitives.primary100,
     lightGrey: primitives.grey400,
     grey: primitives.grey500,
-    darkGrey: primitives.grey600,
+    primary500: primitives.primary500,
     darkestGrey: primitives.grey700,
     caution: primitives.caution,
     sliderHandleInnerFill: primitives.sliderHandleInnerFill,
@@ -53,7 +56,10 @@ const overrides = {
     sliderHandleInnerFillSelectedActive: primitives.sliderHandleInnerFillSelectedActive,
     sliderHandleInnerFillSelectedHover: primitives.sliderHandleInnerFillSelectedHover,
     sliderTrackFillActive: primitives.sliderTrackFillActive,
-    primaryB:primitives.primaryB
+    primaryB:primitives.primaryB,
+    accent: primitives.accent,
+    backgroundSecondary:primitives.backgroundSecondary,
+    borderAccent:primitives.borderAccent
   },
   typography: {
     primaryExtraBold: {
@@ -87,6 +93,11 @@ const overrides = {
     secondaryLight: {
       fontFamily: "Poppins",
       fontWeight: "400",
+    },
+    ParagraphXSmall: {
+      fontFamily: "Poppins",
+      fontWeight: "500",
+      fontSize: "12px",
     },
   },
   sizing: {

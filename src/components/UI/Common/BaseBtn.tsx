@@ -1,44 +1,34 @@
-import { Button, KIND } from "baseui/button"
+import { useStyletron } from "baseui"
+import { ParagraphXSmall } from "baseui/typography"
 
 interface BaseBtnProps {
   title: string
   bgColor: string
   txtColor: string
   hoverBgColor?: string
+  marginLeft?: string
+  padding?: string
+  borderColor?: string
+  handleClick?: () => void
 }
+const BaseBtn = ({ title, bgColor, txtColor, marginLeft, padding, borderColor, handleClick }: BaseBtnProps) => {
+  const [css, theme] = useStyletron()
 
-const BaseBtn = ({ title, bgColor, txtColor, hoverBgColor }: BaseBtnProps) => {
   return (
-    <Button
-      kind={KIND.secondary}
-      overrides={{
-        Root: {
-          style: {
-            fontSize: "12px",
-            paddingTop: "9px",
-            paddingBottom: "9px",
-            paddingLeft: "24px",
-            paddingRight: "24px",
-            backgroundColor: bgColor,
-            color: txtColor,
-            borderBottomRadius: "10px",
-            borderTopRadius: "10px",
-            borderLeftRadius: "10px",
-            borderRightRadius: "10px",
-            fontFamily: "Poppins",
-            fontWeight: 600,
-            marginLeft: "12px",
-            marginRight: "4px",
-            ":hover": {
-              backgroundColor: hoverBgColor,
-              cursor: "pointer",
-            },
-          },
-        },
+    <button
+      className="pointer"
+      onClick={handleClick}
+      style={{
+        padding: padding ? ` 9px ${padding}` : "9px 24px",
+        backgroundColor: bgColor,
+        borderRadius: "10px",
+        border: borderColor ? `1px solid ${borderColor}` : `1px solid ${bgColor}`,
+        marginLeft: marginLeft ? marginLeft : "12px",
+        marginRight: "4px",
       }}
     >
-      {title}
-    </Button>
+      <ParagraphXSmall className={css({ color: txtColor })}>{title}</ParagraphXSmall>
+    </button>
   )
 }
 
