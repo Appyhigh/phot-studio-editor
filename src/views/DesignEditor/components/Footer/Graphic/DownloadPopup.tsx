@@ -1,10 +1,11 @@
-import { useEditor, useFrame } from "@layerhub-io/react"
+import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
+import { backgroundLayerType } from "~/constants/contants"
 
 const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   width: "460px",
@@ -27,6 +28,7 @@ const SubHeading = styled<"p", {}, Theme>("p", ({ $theme }) => ({
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
   const editor = useEditor()
+  const objects: any = useObjects()
   const [css, theme] = useStyletron()
 
   const [qualityVal, setQualtiyVal] = useState(50)
@@ -50,13 +52,19 @@ const DownloadPopup = () => {
   }
   const exportToPNG = useCallback(async () => {
     if (editor) {
-      const template = editor.scene.exportToJSON()
+      let template: any = editor.scene.exportToJSON()
+      const checkboxBGLayerIndex = template.layers.findIndex((el) => el?.metadata?.type === backgroundLayerType)
+      const canvasBGLayerIndex = template.layers.findIndex((el) => el?.id === "background")
+      if (checkboxBGLayerIndex !== -1) {
+        template.layers.splice(checkboxBGLayerIndex, 1)
+        template.layers.splice(canvasBGLayerIndex, 1)
+      }
       const image = (await editor.renderer.render(template)) as string
       if (selectedType != "svg") {
         makeDownloadToPNG(image)
       } else makeDownloadToSVG(image)
     }
-  }, [editor, selectedType, frame])
+  }, [editor, selectedType, frame, objects])
 
   const makeDownloadToPNG = (data: Object) => {
     const dataStr = `${data}`
