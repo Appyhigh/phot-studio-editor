@@ -29,15 +29,15 @@ const BasePannel = () => {
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center">
           <BaseBtn bgColor="#6729F3" title={"Add"} txtColor="#fff" padding="15px" fontSize={"14"}>
-            <Block className="d-flex align-items-center">
-              <Block className="pr-1">
+            <span className="d-flex align-items-center">
+              <span className="pr-1">
                 <Icons.Plus size={16} />
-              </Block>
+              </span>
               Add
-              <Block className="pl-3">
+              <span className="pl-3">
                 <Icons.ArrowDown size={14} />
-              </Block>
-            </Block>
+              </span>
+            </span>
           </BaseBtn>
           <StatefulTooltip
             placement={PLACEMENT.bottom}

@@ -5,6 +5,7 @@ import EditorContainer from "./components/EditorContainer"
 import Navbar from "~/components/UI/Navbar"
 import BasePannel from "~/components/UI/BasePannel"
 import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
+import { Block } from "baseui/block"
 
 const GraphicEditor = () => {
   return (
