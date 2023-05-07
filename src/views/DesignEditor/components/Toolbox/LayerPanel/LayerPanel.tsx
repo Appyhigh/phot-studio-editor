@@ -94,7 +94,6 @@ const LayerPanel = () => {
         style={{
           minWidth: showObjectTypeText ? "200px" : "105px",
           maxWidth: "400px",
-          height: activeObject ? "88%" : "100%",
         }}
       >
         <Block className="flex-center">
@@ -180,9 +179,7 @@ const LayerPanel = () => {
           </Scrollable>
         </Block>
       </Container>
-      <Block className="p-absolute" style={{ bottom: "16px", right: "5px" }}>
-        <Toolbox />
-      </Block>
+   
     </div>
   )
 }

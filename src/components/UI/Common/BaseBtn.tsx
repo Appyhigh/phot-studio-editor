@@ -10,8 +10,20 @@ interface BaseBtnProps {
   padding?: string
   borderColor?: string
   handleClick?: () => void
+  children?: any
+  fontSize?: string
 }
-const BaseBtn = ({ title, bgColor, txtColor, marginLeft, padding, borderColor, handleClick }: BaseBtnProps) => {
+const BaseBtn = ({
+  title,
+  bgColor,
+  txtColor,
+  marginLeft,
+  padding,
+  borderColor,
+  handleClick,
+  children,
+  fontSize,
+}: BaseBtnProps) => {
   const [css, theme] = useStyletron()
 
   return (
@@ -27,7 +39,7 @@ const BaseBtn = ({ title, bgColor, txtColor, marginLeft, padding, borderColor, h
         marginRight: "4px",
       }}
     >
-      <ParagraphXSmall className={css({ color: txtColor })}>{title}</ParagraphXSmall>
+      <ParagraphXSmall className={css({ color: txtColor,fontSize:fontSize?fontSize:"12px" })}>{children || title}</ParagraphXSmall>
     </button>
   )
 }

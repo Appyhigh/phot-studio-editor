@@ -3,25 +3,12 @@ import { Theme } from "baseui"
 import { Button, KIND } from "baseui/button"
 import { SIZE } from "baseui/input"
 import { Slider } from "baseui/slider"
-import { PLACEMENT } from "baseui/toast"
-import { StatefulTooltip } from "baseui/tooltip"
 import React from "react"
 import { styled } from "baseui"
 import Icons from "~/components/Icons"
 
 // @ts-ignore
-const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
-  height: "50px",
-  background: $theme.colors.white,
-  margin: "0px 40px 16px 16px",
-  padding: "0px 100px",
-  [$theme.mediaQuery.medium]: {
-    padding: "0px 20px",
-  },
-  [$theme.mediaQuery.large]: {
-    padding: "0px 80px",
-  },
-}))
+const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({}))
 
 interface Options {
   zoomRatio: number
@@ -60,34 +47,9 @@ const CanvasEditingPannel = () => {
     }
   }
 
-  const resetHandler = () => {
-    editor.objects.clear()
-    editor.history.reset()
-    editor.history.save()
-  }
-
   return (
     <Container className="d-flex justify-content-center align-items-center">
-      <div className="d-flex justify-content-start align-items-center mr-2 p-relative">
-        <StatefulTooltip
-          placement={PLACEMENT.bottom}
-          showArrow={true}
-          accessibilityType={"tooltip"}
-          content={"Restore"}
-        >
-          <Button
-            kind={KIND.tertiary}
-            size={SIZE.compact}
-            onClick={() => {
-              // function is called twice because there will be shomehow 1 element left in undo
-              resetHandler()
-              resetHandler()
-            }}
-          >
-            <Icons.Save size={26} />
-          </Button>
-        </StatefulTooltip>
-      </div>
+      <div className="d-flex justify-content-start align-items-center mr-2 p-relative"></div>
 
       <Slider
         overrides={{
@@ -95,7 +57,15 @@ const CanvasEditingPannel = () => {
           ThumbValue: () => null,
           TickBar: () => null,
           Root: {
-            style: { width: "200px", marginRight: "10px" },
+            style: ({ $theme }) => {
+              return {
+                width: "150px",
+                marginRight: "10px",
+                [$theme.mediaQuery.large]: {
+                  width: "200px",
+                },
+              }
+            },
           },
           Thumb: {
             style: {

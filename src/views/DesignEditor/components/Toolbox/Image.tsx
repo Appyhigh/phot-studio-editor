@@ -11,6 +11,7 @@ const Image = () => {
       $style={{
         padding: "0 12px",
         backgroundColor: "#fff",
+        borderRadius:"8px"
       }}
     >
       {/* //dont need for now  */}
