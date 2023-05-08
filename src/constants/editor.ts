@@ -3653,8 +3653,8 @@ export const fixedSizeFrames = [
   {
     id: 1,
     name: "1:1",
-    width: "512px",
-    height: "512px",
+    width: 512,
+    height: 512,
     unit: "px",
     frameWidth: "40px",
     frameHeight: "40px",
@@ -3662,8 +3662,8 @@ export const fixedSizeFrames = [
   {
     id: 2,
     name: "4:5",
-    width: "480px",
-    height: "600px",
+    width: 480,
+    height: 600,
     unit: "px",
     frameWidth: "40px",
     frameHeight: "48px",
@@ -3671,8 +3671,8 @@ export const fixedSizeFrames = [
   {
     id: 3,
     name: "16:9",
-    width: "1920px",
-    height: "1080px",
+    width: 1920,
+    height: 1080,
     unit: "px",
     frameWidth: "60px",
     frameHeight: "32px",
@@ -3680,11 +3680,101 @@ export const fixedSizeFrames = [
   {
     id: 4,
     name: "1:2",
-    width: "512px",
-    height: "1024px",
+    width: 512,
+    height: 1024,
     unit: "px",
     frameWidth: "30px",
     frameHeight: "50px",
+  },
+]
+
+export const fixedSizeFrameTypes = [
+  {
+    id: 1,
+    name: "Presentation (4:3)",
+    subHeading: "1024 X 768px",
+    width: 1024,
+    height: 768,
+    unit: "px",
+    imgHeight:"61px",
+    img: "Presentation4_3",
+  },
+  {
+    id: 2,
+    name: "Presentation (16:9)",
+    subHeading: "1920 X 1080px",
+    width: 1920,
+    height: 1080,
+    unit: "px",
+    imgHeight:"61px",
+
+    img: "Presentation16_9",
+  },
+  {
+    id: 3,
+    name: "Social Media Story",
+    subHeading: "512 X 1024px",
+    width: 512,
+    height: 1024,
+    unit: "px",
+    imgHeight:"61px",
+
+    img: "SocialMediaStory",
+  },
+  {
+    id: 4,
+    name: "Instagram Post",
+    subHeading: "1080 X 1080px",
+    width: 1080,
+    height: 1080,
+    unit: "px",
+    imgHeight:"70px",
+
+    img: "InstgaramR",
+  },
+  {
+    id: 5,
+    name: "Facebook Post",
+    subHeading: "1200 X 1200px",
+    width: 1200,
+    height: 1200,
+    unit: "px",
+    imgHeight:"70px",
+
+    img: "FacebookPost",
+  },
+  {
+    id: 6,
+    name: "Facebook Cover",
+    subHeading: "1702 X 630px",
+    width: 1702,
+    height: 630,
+    unit: "px",
+    imgHeight:"70px",
+
+    img: "FacebookCover",
+  },
+  {
+    id: 7,
+    name: "Youtube Thumbnail",
+    subHeading: "1280 X 720px",
+    width: 1280,
+    height: 720,
+    unit: "px",
+    imgHeight:"46px",
+
+    img: "YoutubeThumbNail",
+  },
+  {
+    id: 8,
+    name: "Twitter Post",
+    subHeading: "1200 X 675px",
+    width: 1200,
+    height: 675,
+    unit: "px",
+    imgHeight:"46px",
+
+    img: "TwitterPost",
   },
 ]
 

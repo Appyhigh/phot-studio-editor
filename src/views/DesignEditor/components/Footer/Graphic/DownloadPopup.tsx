@@ -17,7 +17,7 @@ const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   zIndex: 500,
   right: "0px",
   top: "35px",
-  padding: "16px 16px 23px 16px",
+  padding: "16px 16px 16px 16px",
 }))
 
 const SubHeading = styled<"p", {}, Theme>("p", ({ $theme }) => ({
@@ -147,43 +147,56 @@ const DownloadPopup = () => {
             handleChange={handleQualityChange}
           />
         </Block>
-        <Block className="d-flex justify-content-start flex-column">
-          <BaseBtn
-            title={"Download"}
-            handleClick={exportToPNG}
-            bgColor="#6729F3"
-            txtColor="#fff"
-            marginLeft="0px"
-            padding="60px"
-          />
-          <p
-            className="pt-1 pb-2"
-            style={{
-              color: "#92929D",
-              fontSize: "9px",
-            }}
-          >
-            Preview Image (611 × 408)
-          </p>
-        </Block>
-        <Block className="d-flex justify-content-start flex-column">
-          <BaseBtn
-            title={"Download HD"}
-            bgColor="#FFF"
-            txtColor="#6729F3"
-            marginLeft="0px"
-            padding="52px"
-            borderColor="#6729F3"
-          />
-          <p
-            className="pt-1 pb-2"
-            style={{
-              color: "#92929D",
-              fontSize: "9px",
-            }}
-          >
-            Full Image (2157 × 1440)
-          </p>
+        <Block className="d-flex justify-content-start flex-row">
+          <Block>
+            <BaseBtn
+              title={"Download HD"}
+              bgColor="#FFF"
+              txtColor="#6729F3"
+              marginLeft="0px"
+              padding="60px"
+              borderColor="#6729F3"
+            />
+            <div
+              className="pt-1 pb-2 flex-center"
+              style={{
+                color: "#92929D",
+                fontSize: "12px",
+                fontWeight: 300,
+                margin:"auto"
+              }}
+            >
+              1 Credit{" "}
+              <p
+                className="mx-1"
+                style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#92929D" }}
+              ></p>
+              Full Image (2157 × 1440)
+            </div>
+          </Block>
+          <Block>
+            <Block className="d-flex justify-content-start flex-column ml-2">
+              <BaseBtn
+                title={"Download"}
+                handleClick={exportToPNG}
+                bgColor="#6729F3"
+                txtColor="#fff"
+                marginLeft="0px"
+                padding="68px"
+              />
+              <p
+                className="pt-1 pb-2"
+                style={{
+                  color: "#92929D",
+                  fontSize: "12px",
+                  fontWeight: 300,
+                  textAlign:"center"
+                }}
+              >
+                Preview Image (611 × 408){" "}
+              </p>
+            </Block>
+          </Block>
         </Block>
       </Box>
     </Block>

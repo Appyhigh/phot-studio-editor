@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Button, SIZE } from "baseui/button"
 import { HexColorPicker } from "react-colorful"
 import { StatefulPopover, PLACEMENT } from "baseui/popover"
@@ -53,15 +53,15 @@ const Customize = () => {
     const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
     editor.objects.unsetBackgroundImage()
 
-    const options = {
-      type: "StaticImage",
-      src: checkboxBGUrl,
-      preview: checkboxBGUrl,
-      metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
-    }
-    editor.objects.add(options).then(() => {
-      editor.objects.setAsBackgroundImage()
-    })
+      const options = {
+        type: "StaticImage",
+        src: checkboxBGUrl,
+        preview: checkboxBGUrl,
+        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      }
+      editor.objects.add(options).then(() => {
+        editor.objects.setAsBackgroundImage()
+      })
   }
 
   return (

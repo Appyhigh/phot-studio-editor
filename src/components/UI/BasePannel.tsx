@@ -10,6 +10,7 @@ import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/Downlo
 import BaseBtn from "./Common/BaseBtn"
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel"
 import { useEditor } from "@layerhub-io/react"
+import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
   background: $theme.colors.white,
@@ -24,21 +25,25 @@ const BasePannel = () => {
     editor.history.reset()
     editor.history.save()
   }
+
   return (
     <Container className="d-flex align-items-center flex-row">
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center">
-          <BaseBtn bgColor="#6729F3" title={"Add"} txtColor="#fff" padding="15px" fontSize={"14"}>
-            <span className="d-flex align-items-center">
-              <span className="pr-1">
-                <Icons.Plus size={16} />
+          <div className="p-relative addPopupBtn">
+            <BaseBtn bgColor="#6729F3" title={"Add"} txtColor="#fff" padding="15px" fontSize={"14"} >
+              <span className="d-flex align-items-center">
+                <span className="pr-1">
+                  <Icons.Plus size={16} />
+                </span>
+                Add
+                <span className="pl-3">
+                  <Icons.ArrowDown size={14} />
+                </span>
               </span>
-              Add
-              <span className="pl-3">
-                <Icons.ArrowDown size={14} />
-              </span>
-            </span>
-          </BaseBtn>
+            </BaseBtn>
+            <AddPopup/>
+          </div>
           <StatefulTooltip
             placement={PLACEMENT.bottom}
             showArrow={true}

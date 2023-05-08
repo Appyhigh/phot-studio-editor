@@ -38,6 +38,14 @@ import SliderIcon from "./SliderIcon"
 import SliderBtn from "./SliderBtn"
 import Plus from "./Plus"
 import ArrowDown from "./ArrowDown"
+import FacebookPost from "./FacebookPost"
+import FacebookCover from "./FacebookCover"
+import InstgaramR from "./InstagramR"
+import Presentation4_3 from "./Presentation4_3"
+import Presentation16_9 from "./Presentation16_9"
+import SocialMediaStory from "./SocialMediaStory"
+import YoutubeThumbNail from "./YoutubeThumbanil"
+import TwitterPost from "./TwitterPost"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -79,6 +87,14 @@ class Icons {
   static SliderIcon = SliderIcon
   static Plus = Plus
   static ArrowDown = ArrowDown
+  static FacebookPost = FacebookPost
+  static FacebookCover = FacebookCover
+  static InstgaramR = InstgaramR
+  static Presentation4_3 = Presentation4_3
+  static Presentation16_9 = Presentation16_9
+  static SocialMediaStory = SocialMediaStory
+  static YoutubeThumbNail = YoutubeThumbNail
+  static TwitterPost = TwitterPost
 }
 
 export default Icons

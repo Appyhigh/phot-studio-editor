@@ -185,6 +185,9 @@ input[type="number"] {
   display: flex;
 }
 
+.flex-wrap{
+  flex-wrap: wrap;
+}
 .flex-column {
   flex-direction: column;
 }
@@ -659,4 +662,16 @@ ul {
   width: 16px;
   height: 16px;
   margin-right: 6px;
+}
+
+/* add Popup  */
+
+
+
+.addPopup {
+  display: none;
+}
+
+.addPopupBtn:hover .addPopup {
+  display: block;
 }

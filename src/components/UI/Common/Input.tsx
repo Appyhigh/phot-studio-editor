@@ -8,6 +8,7 @@ const CommonInput = ({ type, placeholder, width, height, value, handleChange }: 
       onChange={(e: any) => {
         handleChange(e.target.value)
       }}
+      
       value={value}
       overrides={{
         Root: {
@@ -20,17 +21,23 @@ const CommonInput = ({ type, placeholder, width, height, value, handleChange }: 
             backgroundColor: "transparent",
           },
         },
+        Input:{
+          style:{
+            backgroundColor: "#fff",
+            fontWeight: 400,
+            fontSize: "12px",
+          }
+        },
         InputContainer: {
           style: {
             border: "1px solid #92929D",
             textAlign: "center",
-            paddingLeft: 0,
-            paddingRight: 0,
             height: height,
             width: width,
+            padding:"1px",
             borderRadius: "4px",
-            marginRight: "6px",
-            backgroundColor: "#fff",
+            marginRight: "10px",
+            
           },
         },
       }}
