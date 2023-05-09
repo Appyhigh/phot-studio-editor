@@ -10,9 +10,25 @@ import ResizeFrameCanvas from "./ResizeCanvasTypes"
 import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType } from "~/constants/contants"
 import Icons from "~/components/Icons"
+import { Theme, styled, useStyletron } from "baseui"
+import { LabelXSmall, ParagraphSmall } from "baseui/typography"
+
+const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
+  height: "auto-fit",
+  width: "421px",
+  backgroundColor: $theme.colors.white,
+  // @ts-ignore
+  border: `1px solid ${$theme.colors.grey400}`,
+  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)",
+  borderRadius: $theme.sizing.scale400,
+  zIndex: 500,
+  top: "48px",
+  right: "0px",
+}))
 
 const ResizeCanvasPopup = ({ show }: any) => {
   const objects = useObjects() as ILayer[]
+  const [css, theme] = useStyletron()
 
   const [desiredFrame, setDesiredFrame] = useState({
     width: 0,
@@ -34,13 +50,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
   const applyResize = () => {
     const size = activeKey === "0" ? selectedFrame : desiredFrame
     if (editor) {
-      const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
-      if (bgObject) {
-        console.log(bgObject)
-        editor.objects.remove(bgObject.id)
-        editor.objects.unsetBackgroundImage()
-      }
-
+      editor.objects.unsetBackgroundImage()
       editor.frame.resize({
         width: parseInt(size.width),
         height: parseInt(size.height),
@@ -83,27 +93,14 @@ const ResizeCanvasPopup = ({ show }: any) => {
   return (
     <Block style={{ display: show ? "block" : "none" }}>
       <Block className={"resizeCanvas"}>
-        <Block
-          className="d-flex align-items-start flex-column p-absolute resizeCanvasCon"
-          style={{
-            height: "auto-fit",
-            width: "421px",
-            backgroundColor: "#fff",
-            border: "1px solid #F1F1F5",
-            boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)",
-            borderRadius: "10px",
-            zIndex: 500,
-            top: "45px",
-            right: "-290px",
-          }}
-        >
+        <Box className="d-flex align-items-start flex-column p-absolute resizeCanvasCon">
           <div className="p-absolute" style={{ rotate: "-90deg", top: "-60px", left: "114px" }}>
-            <Icons.SliderBtn size={106} width="10"/>
+            <Icons.SliderBtn size={106} width="10" />
           </div>
           <div style={{ margin: "4px 16px" }}>
-            <p className="pt-1 pb-1" style={{ fontSize: "14px", color: "#44444F", fontWeight: "500" }}>
+            <ParagraphSmall className="pt-1 pb-1" style={{ color: "#44444F" }}>
               Custom Size
-            </p>
+            </ParagraphSmall>
             <div className="d-flex justify-content-center flex-column">
               <div className="d-flex justify-content-center flex-row">
                 <div className="mr-1">
@@ -130,9 +127,9 @@ const ResizeCanvasPopup = ({ show }: any) => {
           <div style={{ border: "1px solid #F1F1F5", width: "90%", marginTop: "12px", marginLeft: "20px" }}></div>
 
           <Block className="mt-2 mx-2 ">
-            <p className="pt-1 pb-1" style={{ fontSize: "14px", color: "#44444F", fontWeight: "500" }}>
+            <ParagraphSmall className="pt-1 pb-1" style={{ color: "#44444F" }}>
               Fixed Size
-            </p>
+            </ParagraphSmall>
             <Block className="d-flex justify-content-start flex-row flex-wrap ml-1" $style={{ color: "#92929D" }}>
               {fixedSizeFrameTypes.map((sample, index) => {
                 const { img, name, subHeading, imgHeight, id } = sample
@@ -154,7 +151,13 @@ const ResizeCanvasPopup = ({ show }: any) => {
                     <Block style={{ height: imgHeight, marginBottom: "8px" }} className="flex-center">
                       {Component && <Component color={id === selectedFrame.id ? "#000" : "#92929D"} />}
                     </Block>
-                    <p style={{ fontSize: "12px", color: "#44444F" }}>{name}</p>
+                    <LabelXSmall
+                      className={css({
+                        color: theme.colors.primary500,
+                      })}
+                    >
+                      {name}
+                    </LabelXSmall>
                     <p style={{ fontSize: "11px" }}>{subHeading}</p>
                   </Block>
                 )
@@ -180,7 +183,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
           >
             Resize Template
           </Button>
-        </Block>
+        </Box>
       </Block>
     </Block>
   )

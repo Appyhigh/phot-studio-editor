@@ -37,7 +37,7 @@ const CommonInput = ({ type, placeholder, width, height, value, handleChange }: 
             padding:"1px",
             borderRadius: "4px",
             marginRight: "10px",
-            
+            backgroundColor: "#fff",
           },
         },
       }}

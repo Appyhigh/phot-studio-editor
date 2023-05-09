@@ -262,6 +262,9 @@ input[type="number"] {
   margin-right: auto;
 }
 
+.m-auto {
+  margin: auto;
+}
 .m-0 {
   margin: 0;
 }
@@ -664,10 +667,11 @@ ul {
 .resizeCanvas {
   display: none;
   position: absolute;
-  min-width: 450px;
-  min-height: 400px;
-  right: 10px;
-  top: 1px;
+  min-width: 350px;
+  min-height: 200px;
+  left: -25px;
+  top: 0px;
+  z-index: 500;
 }
 .resizeCanvasBtn:hover .resizeCanvas {
   display: block;

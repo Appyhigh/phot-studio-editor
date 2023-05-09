@@ -17,7 +17,7 @@ const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   zIndex: 500,
   right: "0px",
   top: "35px",
-  padding: "16px 16px 16px 16px",
+  padding: $theme.sizing.scale600,
 }))
 
 const SubHeading = styled<"p", {}, Theme>("p", ({ $theme }) => ({
@@ -122,7 +122,7 @@ const DownloadPopup = () => {
           <SubHeading className="pb-1">File Type</SubHeading>
           <SelectInput handleChange={handleTypeChange} />
         </Block>
-        <Block style={{ marginBottom: "6px" }}>
+        <Block className="mb-1">
           <SubHeading className="mb-0">
             Size <span className={css({ fontSize: theme.colors.borderAccent })}> (1414*2000px)</span>
           </SubHeading>
@@ -135,7 +135,7 @@ const DownloadPopup = () => {
             handleChange={handleSizeChange}
           />
         </Block>
-        <Block style={{ marginBottom: "6px" }}>
+        <Block className="mb-1">
           <SubHeading className="mb-0">
             Quality <span className={css({ fontSize: theme.sizing.scale400 })}>({qualityVal})</span>
           </SubHeading>
@@ -159,12 +159,11 @@ const DownloadPopup = () => {
               borderColor="#6729F3"
             />
             <div
-              className="pt-1 pb-2 flex-center"
+              className="pt-1 pb-2 flex-center m-auto"
               style={{
                 color: "#92929D",
                 fontSize: "12px",
                 fontWeight: 300,
-                margin:"auto"
               }}
             >
               1 Credit{" "}
@@ -186,12 +185,11 @@ const DownloadPopup = () => {
                 padding="68px"
               />
               <p
-                className="pt-1 pb-2"
+                className="pt-1 pb-2 text-center"
                 style={{
                   color: "#92929D",
                   fontSize: "12px",
                   fontWeight: 300,
-                  textAlign:"center"
                 }}
               >
                 Preview Image (611 × 408){" "}

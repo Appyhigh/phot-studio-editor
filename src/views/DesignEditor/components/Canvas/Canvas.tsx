@@ -14,13 +14,6 @@ const Canvas = () => {
 
   useEffect(() => {
     if (editor) {
-      const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
-      if (bgObject) {
-        editor.objects.remove(bgObject.id)
-        editor.objects.updateContextObjects()
-        editor.objects.unsetBackgroundImage()
-      }
-
       const options = {
         type: "StaticImage",
         src: checkboxBGUrl,
