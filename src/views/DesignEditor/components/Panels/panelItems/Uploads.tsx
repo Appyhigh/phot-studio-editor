@@ -8,6 +8,10 @@ import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { nanoid } from "nanoid"
 import { captureFrame, loadVideoResource } from "~/utils/video"
 import { toBase64 } from "~/utils/data"
+import UploadInput from "~/components/UI/UploadInput"
+import UploadPreview from "./UploadPreview"
+import Icons from "~/components/Icons"
+import useAppContext from "~/hooks/useAppContext"
 
 export default function () {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -59,26 +63,35 @@ export default function () {
     setUploads([])
     editor.objects.removeById(id)
   }
+  const { setActivePanel } = useAppContext()
 
   return (
     <DropZone handleDropFiles={handleDropFiles}>
       <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {uploads.length === 0 && (
-          <Button
-            onClick={handleInputFileRefClick}
-            size={SIZE.compact}
-            overrides={{
-              Root: {
-                style: {
-                  width: "100%",
-                },
-              },
-            }}
-          >
-            Upload from Device
-          </Button>
-        )}
-        <Scrollable>
+        <Block
+          $style={{
+            display: "flex",
+            alignItems: "center",
+            fontWeight: 600,
+            fontSize: "16px",
+            justifyContent: "flex-start",
+            padding: "20px 0px 0px 16px",
+          }}
+        >
+          <Block className="pl-1">{uploads.length === 0 && "Add Image"}</Block>
+          <Block>
+            {uploads.length != 0 && (
+              <div className="d-flex justify-content-start flex-row align-items-start pointer"  onClick={() => {
+                setIsSidebarOpen(false)
+              }} >
+                <Icons.ChevronRight size="16" /> <p>Image</p>
+              </div>
+            )}
+          </Block>
+        </Block>
+        {uploads.length === 0 && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />}
+
+        <>
           <Block padding={"0 1.5rem"}>
             <input
               onChange={handleFileInput}
@@ -106,26 +119,23 @@ export default function () {
                   // onClick={() => addImageToCanvas(upload)}
                 >
                   <div>
-                    <img width="100%" src={upload.preview ? upload.preview : upload.url} alt="preview" />
-                    {selectedImage === upload.preview && (
-                      <div>
-                        <div>
-                          <button
-                            onClick={() => {
-                              discardHandler(upload.id)
-                            }}
-                          >
-                            Discard
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                    <div
+                      key={upload.id}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
+                      // onClick={() => addImageToCanvas(upload)}
+                    >
+                      <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </Block>
-        </Scrollable>
+        </>
       </Block>
     </DropZone>
   )

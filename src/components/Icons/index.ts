@@ -49,6 +49,9 @@ import TwitterPost from "./TwitterPost"
 import BgRemover from "./BgRemover"
 import ImagineAi from "./ImagineAI"
 import CircleIcon from "./CircleIcon"
+import Upload from "./Upload"
+import Trash from "./Trash"
+import ChevronRight from "./ChevronRight"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -101,6 +104,9 @@ class Icons {
   static BgRemover = BgRemover
   static ImagineAi = ImagineAi
   static CircleIcon = CircleIcon
+  static Upload = Upload
+  static Trash =Trash
+  static ChevronRight=ChevronRight
 }
 
 export default Icons

@@ -34,7 +34,7 @@ const PanelsList = () => {
     <Block
       id="EditorPanelItem"
       $style={{
-        width: isSidebarOpen ? "306px" : 0,
+        width: isSidebarOpen ? "360px" : 0,
         flex: "none",
         display: "flex",
         transition: "ease width 0.1s",
