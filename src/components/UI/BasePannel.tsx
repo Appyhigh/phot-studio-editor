@@ -33,12 +33,7 @@ const BasePannel = () => {
     <Container className="d-flex align-items-center flex-row">
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center">
-          <div
-            className="p-relative addPopupBtn"
-            onMouseOver={() => {
-              setCanvasResizePopup(true)
-            }}
-          >
+          <div className="p-relative addPopupBtn">
             <BaseBtn bgColor="#6729F3" title={"Add"} txtColor="#fff" padding="15px" fontSize={"14"}>
               <span className="d-flex align-items-center">
                 <span className="pr-1">
@@ -71,9 +66,14 @@ const BasePannel = () => {
               <Icons.Save size={26} />
             </Button>
           </StatefulTooltip>
-          <Block className="flex-center pointer p-relative resizeCanvasBtn">
+          <Block
+            className="flex-center pointer p-relative resizeCanvasBtn"
+            onMouseOver={() => {
+              setCanvasResizePopup(true)
+            }}
+          >
             <Icons.CanvasResize size={24} />
-            <ResizeCanvasPopup  show={showCanvasResizePopup} />
+            <ResizeCanvasPopup show={showCanvasResizePopup} />
           </Block>
         </Block>
       </Block>
