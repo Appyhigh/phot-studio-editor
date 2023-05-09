@@ -115,8 +115,9 @@ const DownloadPopup = () => {
   )
 
   return (
+    <Block className="download-wrapper">
     <Block className="downloadPopup">
-      <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column">
+      <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column" style={{top:"35px"}}>
         <Block className="pb-2">
           <SubHeading className="pb-1">File Type</SubHeading>
           <SelectInput handleChange={handleTypeChange} />
@@ -199,6 +200,7 @@ const DownloadPopup = () => {
           </Block>
         </Block>
       </Box>
+    </Block>
     </Block>
   )
 }

@@ -11,6 +11,7 @@ import BaseBtn from "./Common/BaseBtn"
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel"
 import { useEditor } from "@layerhub-io/react"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup"
+import { useState } from "react"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
   background: $theme.colors.white,
@@ -26,12 +27,19 @@ const BasePannel = () => {
     editor.history.save()
   }
 
+  const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
+
   return (
     <Container className="d-flex align-items-center flex-row">
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center">
-          <div className="p-relative addPopupBtn">
-            <BaseBtn bgColor="#6729F3" title={"Add"} txtColor="#fff" padding="15px" fontSize={"14"} >
+          <div
+            className="p-relative addPopupBtn"
+            onMouseOver={() => {
+              setCanvasResizePopup(true)
+            }}
+          >
+            <BaseBtn bgColor="#6729F3" title={"Add"} txtColor="#fff" padding="15px" fontSize={"14"}>
               <span className="d-flex align-items-center">
                 <span className="pr-1">
                   <Icons.Plus size={16} />
@@ -42,7 +50,7 @@ const BasePannel = () => {
                 </span>
               </span>
             </BaseBtn>
-            <AddPopup/>
+            <AddPopup />
           </div>
           <StatefulTooltip
             placement={PLACEMENT.bottom}
@@ -65,7 +73,7 @@ const BasePannel = () => {
           </StatefulTooltip>
           <Block className="flex-center pointer p-relative resizeCanvasBtn">
             <Icons.CanvasResize size={24} />
-            <ResizeCanvasPopup />
+            <ResizeCanvasPopup  show={showCanvasResizePopup} />
           </Block>
         </Block>
       </Block>

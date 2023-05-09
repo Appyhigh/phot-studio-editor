@@ -185,7 +185,7 @@ input[type="number"] {
   display: flex;
 }
 
-.flex-wrap{
+.flex-wrap {
   flex-wrap: wrap;
 }
 .flex-column {
@@ -641,12 +641,21 @@ ul {
   flex-direction: row;
 }
 /* download popup  */
-
-.downloadPopup {
+.download-wrapper {
   display: none;
+  min-width: 298px;
+  min-height: 260px;
+  top: 10px;
+  right: 2px;
+  position: absolute;
+  z-index: 500;
+}
+.downloadPopup {
+  min-width: 298px;
+  min-height: 260px;
 }
 
-.downloadResultBtn:hover .downloadPopup {
+.downloadResultBtn:hover .download-wrapper {
   display: block;
 }
 
@@ -654,6 +663,11 @@ ul {
 
 .resizeCanvas {
   display: none;
+  position: absolute;
+  min-width: 450px;
+  min-height: 400px;
+  right: 10px;
+  top: 1px;
 }
 .resizeCanvasBtn:hover .resizeCanvas {
   display: block;
@@ -666,10 +680,17 @@ ul {
 
 /* add Popup  */
 
-
-
 .addPopup {
   display: none;
+  position: absolute;
+  min-width: 265px;
+  min-height: 200px;
+  top: 20px;
+}
+
+.addPopupCon {
+  min-width: 298px;
+  min-height: 200px;
 }
 
 .addPopupBtn:hover .addPopup {
