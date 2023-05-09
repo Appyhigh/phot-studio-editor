@@ -1,4 +1,4 @@
-function BgRemove({ size }: { size: any }) {
+function BgRemover({ size }: { size: any }) {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_2997_3354)">
@@ -57,4 +57,4 @@ function BgRemove({ size }: { size: any }) {
 }
 
 
-export default BgRemove;
+export default BgRemover;

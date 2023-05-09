@@ -11,41 +11,95 @@ export const BASE_ITEMS = [
   {
     id: "images",
     name: "Images",
-    icon:""
+    label: "Images",
+    icon: "",
   },
   {
     id: "customize",
     name: "Customize",
-    icon:""
+    label: "Customize",
+    icon: "",
   },
-  {
-    id: "uploads",
-    name: "Uploads",
-  },
+  // {
+  //   id: "uploads",
+  //   name: "Uploads",
+  // },
   {
     id: "text",
     name: "Text",
-    icon:""
-  },
-  // {
-  //   id: "bgremover",
-  //   icon:"BgRemover",
-  //   name: "BgRemover",
-  // },
-  {
-    id: "graphics",
-    name: "Graphics",
-  },
-
-  {
-    id: "pixabay",
-    name: "Pixabay",
+    label: "Text",
+    icon: "",
   },
   {
     id: "layers",
     name: "Layers",
-    icon:""
+    label: "Layers",
+    icon: "",
   },
+  {
+    id: "bgremover",
+    icon: "BgRemover",
+    label: "Remove Background",
+    name: "BgRemover",
+  },
+  {
+    id: "imagineai",
+    icon: "ImagineAi",
+    label: "Imagine AI",
+    name: "CommonPanel",
+  },
+  {
+    id: "objectremover",
+    icon: "CircleIcon",
+    label: "Object Remover",
+    name: "CommonPanel",
+  },
+  {
+    id: "videobgremover",
+    icon: "CircleIcon",
+    label: "Video Bg Remover",
+    name: "CommonPanel",
+  },
+  {
+    id: "videoenhancer",
+    icon: "CircleIcon",
+    label: "Video Enhancer",
+    name: "CommonPanel",
+  },
+  {
+    id: "blurbg",
+    icon: "CircleIcon",
+    label: "Blur BG",
+    name: "CommonPanel",
+  },
+  {
+    id: "objectreplacer",
+    icon: "CircleIcon",
+    label: "Object Replacer",
+    name: "CommonPanel",
+  },
+  {
+    id: "imagecolorizer",
+    icon: "CircleIcon",
+    label: "Image Colorizer",
+    name: "CommonPanel",
+  },
+  {
+    id: "passportphotomaker",
+    icon: "CircleIcon",
+    label: "Object Remover",
+    name: "Passport PhotoMaker",
+  },
+
+  // {
+  //   id: "graphics",
+  //   name: "Graphics",
+  // },
+
+  // {
+  //   id: "pixabay",
+  //   name: "Pixabay",
+  // },
 ]
 
 export const VIDEO_PANEL_ITEMS = [
@@ -93,4 +147,6 @@ export enum PanelType {
   BACKGROUND = "Background",
   IMAGES = "Images",
   UPLOADS = "Uploads",
+  IMAGINEAI = "ImageineAi",
+  BGREMOVER = "BgRemover",
 }

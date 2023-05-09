@@ -15,7 +15,7 @@ const Panels = () => {
       <Block className="d-flex">
         
       <PanelItem />
-      <Block className="m-auto pointer" style={{position:"absolute",left:isSidebarOpen?"385px":"80px",top:"50%",zIndex:5}}>
+      <Block className="m-auto pointer" style={{position:"absolute",left:isSidebarOpen?"400px":"100px",top:"50%",zIndex:5}}>
         <div
           className="p-relative"
           style={{ marginRight: "-2px" }}

@@ -46,6 +46,9 @@ import Presentation16_9 from "./Presentation16_9"
 import SocialMediaStory from "./SocialMediaStory"
 import YoutubeThumbNail from "./YoutubeThumbanil"
 import TwitterPost from "./TwitterPost"
+import BgRemover from "./BgRemover"
+import ImagineAi from "./ImagineAI"
+import CircleIcon from "./CircleIcon"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -95,6 +98,9 @@ class Icons {
   static SocialMediaStory = SocialMediaStory
   static YoutubeThumbNail = YoutubeThumbNail
   static TwitterPost = TwitterPost
+  static BgRemover = BgRemover
+  static ImagineAi = ImagineAi
+  static CircleIcon = CircleIcon
 }
 
 export default Icons

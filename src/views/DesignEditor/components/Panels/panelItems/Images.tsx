@@ -40,9 +40,7 @@ const Images = () => {
       >
         <Block>Images</Block>
 
-        <Block onClick={() => setIsSidebarOpen(false)} $style={{ cursor: "pointer", display: "flex" }}>
-          <AngleDoubleLeft size={18} />
-        </Block>
+       
       </Block>
       <Uploads />
       <Block padding="0 1.5rem" marginBottom="1.5rem">

@@ -9,11 +9,11 @@ import Scrollable from "~/components/Scrollable"
 import { Block } from "baseui/block"
 
 const Container = styled("div", (props) => ({
-  width: "80px",
+  width: "100px",
   backgroundColor: props.$theme.colors.white,
   display: "flex",
   flex: "none",
-  borderRight:"2px solid rgb(238, 238, 238)",
+  borderRight: "2px solid rgb(238, 238, 238)",
 }))
 
 const PanelsList = () => {
@@ -27,7 +27,8 @@ const PanelsList = () => {
       <Scrollable autoHide={true}>
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
-            label={t(`panels.panelsList.${panelListItem.id}`)}
+            // @ts-ignore
+            label={panelListItem.label}
             name={panelListItem.name}
             key={panelListItem.name}
             // @ts-ignore
@@ -42,6 +43,7 @@ const PanelsList = () => {
 
 const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   const { setActivePanel } = useAppContext()
+
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [css, theme] = useStyletron()
 
@@ -55,8 +57,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         setActivePanel(name)
       }}
       $style={{
-        width: "80px",
-        height: "80px",
+        padding:"16px 15px",
         backgroundColor: theme.colors.white,
         display: "flex",
         alignItems: "center",
@@ -76,7 +77,16 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
       }}
     >
       <Icon size={24} />
-      <div>{label}</div>
+      <div
+        className="text-center"
+        style={{
+          fontWeight: activePanel ? 500 : 400,
+          minWidth:"100px",
+          color: activePanel===name ? "#000" : "#92929D",
+        }}
+      >
+        {label}
+      </div>
     </Block>
   )
 }
