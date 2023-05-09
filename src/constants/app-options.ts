@@ -88,7 +88,7 @@ export const BASE_ITEMS = [
     id: "passportphotomaker",
     icon: "CircleIcon",
     label: "Object Remover",
-    name: "Passport PhotoMaker",
+    name: "CommonPanel",
   },
 
   // {

@@ -52,6 +52,11 @@ import CircleIcon from "./CircleIcon"
 import Upload from "./Upload"
 import Trash from "./Trash"
 import ChevronRight from "./ChevronRight"
+import InputContainer from "./InputContainer"
+import GoogleDrive from "./GoogleDrive"
+import GooglePhotos from "./GooglePhotos"
+import Phone from "./Phone"
+import DropBox from "./Dropbox"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -105,8 +110,13 @@ class Icons {
   static ImagineAi = ImagineAi
   static CircleIcon = CircleIcon
   static Upload = Upload
-  static Trash =Trash
-  static ChevronRight=ChevronRight
+  static Trash = Trash
+  static ChevronRight = ChevronRight
+  static InputContainer = InputContainer
+  static DropBox = DropBox
+  static GooglePhotos = GooglePhotos
+  static GoogleDrive = GoogleDrive
+  static Phone = Phone
 }
 
 export default Icons

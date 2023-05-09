@@ -81,10 +81,10 @@ export default function () {
           <Block className="pl-1">{uploads.length === 0 && "Add Image"}</Block>
           <Block>
             {uploads.length != 0 && (
-              <div className="d-flex justify-content-start flex-row align-items-start pointer"  onClick={() => {
+              <div className="d-flex justify-content-start flex-row align-items-center pointer"  onClick={() => {
                 setIsSidebarOpen(false)
               }} >
-                <Icons.ChevronRight size="16" /> <p>Image</p>
+                <Icons.ChevronRight size="16" /> <p className="ml-1">Image</p>
               </div>
             )}
           </Block>
@@ -102,7 +102,7 @@ export default function () {
             />
             <div
               style={{
-                marginTop: "1rem",
+                marginTop: "0.5rem",
                 display: "grid",
                 gap: "0.5rem",
                 gridTemplateColumns: "1fr 1fr",

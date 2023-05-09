@@ -1,7 +1,7 @@
 function BgRemover({ size }: { size: any }) {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g clip-path="url(#clip0_2997_3354)">
+      <g clipPath="url(#clip0_2997_3354)">
         <rect width="32" height="32" rx="6" fill="url(#paint0_linear_2997_3354)" />
         <rect width="32" height="32" rx="6" fill="url(#paint1_linear_2997_3354)" />
         <path

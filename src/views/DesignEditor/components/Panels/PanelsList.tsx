@@ -30,7 +30,7 @@ const PanelsList = () => {
             // @ts-ignore
             label={panelListItem.label}
             name={panelListItem.name}
-            key={panelListItem.name}
+            key={panelListItem.id}
             // @ts-ignore
             icon={panelListItem.icon ? panelListItem.icon : panelListItem.name}
             activePanel={activePanel}
