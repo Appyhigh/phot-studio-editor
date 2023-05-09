@@ -11,6 +11,7 @@ import { ILayer } from "@layerhub-io/types"
 import Icons from "~/components/Icons"
 import { Theme, styled, useStyletron } from "baseui"
 import { LabelXSmall, ParagraphSmall } from "baseui/typography"
+import { backgroundLayerType } from "~/constants/contants"
 
 const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "auto-fit",
@@ -49,7 +50,14 @@ const ResizeCanvasPopup = ({ show }: any) => {
   const applyResize = () => {
     const size = activeKey === "0" ? selectedFrame : desiredFrame
     if (editor) {
-      editor.objects.unsetBackgroundImage()
+      const bgObject = editor.frame.background.canvas._objects.filter(
+        (el: any) => el.metadata?.type === backgroundLayerType
+      )[0]
+
+      if (bgObject) {
+        editor.objects.remove(bgObject.id)
+        editor.objects.unsetBackgroundImage()
+      }
       editor.frame.resize({
         width: parseInt(size.width),
         height: parseInt(size.height),
