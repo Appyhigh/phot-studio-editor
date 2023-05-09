@@ -1,11 +1,9 @@
 import React, { useState } from "react"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
-import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
 import Scrollable from "~/components/Scrollable"
 import { images } from "~/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import Uploads from "./Uploads"
 import SwiperWrapper from "./Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
@@ -78,57 +76,57 @@ const Images = () => {
       )}
 
       {showBgOptions && (
-                  <Scrollable>
-
-        <Block className="mt-4">
-          <div
-            style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
-            className="d-flex  flex-row"
-          >
+        <Scrollable>
+          <Block className="mt-4">
             <div
-              style={{
-                width: "50%",
-                textAlign: "center",
-                padding: "11px 0px",
-                background: "#171725",
-                color: "#fff",
-                borderRadius: "4px 0px 0px 4px",
-              }}
+              style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
+              className="d-flex  flex-row"
             >
-              Backgrounds
-            </div>
-            <div
-              style={{
-                width: "50%",
-                textAlign: "center",
-                padding: "11px 0px",
-                color: "#696974",
-                borderRadius: "0px 4px 4px 0px",
-              }}
-            >
-              Upload
-            </div>
-          </div>
-
-          {BgOptions.map((each) => (
-            <>
-              <Block
-                padding="0 20px"
-                $style={{
-                  display: "flex",
-                  alignItems: "center",
-                  fontWeight: 600,
-                  fontSize: "16px",
-                  margin: "20px 0px 14px 0px",
-                  justifyContent: "flex-start",
+              <div
+                style={{
+                  width: "50%",
+                  textAlign: "center",
+                  padding: "11px 0px",
+                  background: "#171725",
+                  color: "#fff",
+                  borderRadius: "4px 0px 0px 4px",
                 }}
               >
-                {each.heading}
-              </Block>
-              <SwiperWrapper data={each.options} />
-            </>
-          ))}
-        </Block>
+                Backgrounds
+              </div>
+              <div
+                style={{
+                  width: "50%",
+                  textAlign: "center",
+                  padding: "11px 0px",
+                  color: "#696974",
+                  borderRadius: "0px 4px 4px 0px",
+                }}
+              >
+                Upload
+              </div>
+            </div>
+
+            {BgOptions.map((each, index) => (
+              <>
+                <Block
+                  key={index}
+                  padding="0 20px"
+                  $style={{
+                    display: "flex",
+                    alignItems: "center",
+                    fontWeight: 600,
+                    fontSize: "16px",
+                    margin: "20px 0px 14px 0px",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  {each.heading}
+                </Block>
+                <SwiperWrapper data={each.options} />
+              </>
+            ))}
+          </Block>
         </Scrollable>
       )}
     </Block>
