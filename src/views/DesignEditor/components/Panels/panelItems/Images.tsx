@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
@@ -10,7 +10,8 @@ import Uploads from "./Uploads"
 
 const Images = () => {
   const editor = useEditor()
-  const setIsSidebarOpen = useSetIsSidebarOpen()
+  const [trySampleImgShow, setTrySampleImgShow] = useState(true)
+  const [showBgOptions, setShowBgOptions] = useState(false)
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -26,31 +27,95 @@ const Images = () => {
     },
     [editor]
   )
+  const handleCloseSampleImg = () => {
+    setTrySampleImgShow(!trySampleImgShow)
+  }
 
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-    
-      <Uploads />
-      <Block padding="0 1.5rem" marginBottom="1.5rem">
-        Try Sample Images
-      </Block>
-      <Scrollable>
-        <Block padding="0 1.5rem">
-          <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr" }}>
-            {images.map((image, index) => {
-              return (
-                <ImageItem
-                  key={index}
-                  onClick={() => {
-                    addObject(image.src.medium)
-                  }}
-                  preview={image.src.small}
-                />
-              )
-            })}
+      <Uploads handleCloseSampleImg={handleCloseSampleImg} />
+      {trySampleImgShow && (
+        <>
+          {" "}
+          <Block
+            padding="0 20px"
+            marginBottom="1.5rem"
+            $style={{
+              display: "flex",
+              alignItems: "center",
+              fontWeight: 600,
+              fontSize: "16px",
+              marginLeft: "10px",
+              justifyContent: "flex-start",
+            }}
+          >
+            Try Sample Images
+          </Block>
+          <Scrollable>
+            <Block padding="0 1.5rem">
+              <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
+                {images.map((image, index) => {
+                  return (
+                    <ImageItem
+                      key={index}
+                      onClick={() => {
+                        addObject(image.src.medium)
+                      }}
+                      preview={image.src.small}
+                    />
+                  )
+                })}
+              </div>
+            </Block>
+          </Scrollable>
+        </>
+      )}
+
+      {showBgOptions&&
+
+      <Block className="mt-4">
+        <div
+          style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
+          className="d-flex  flex-row"
+        >
+          <div
+            style={{
+              width: "50%",
+              textAlign: "center",
+              padding: "11px 0px",
+              background: "#171725",
+              color: "#fff",
+              borderRadius: "4px 0px 0px 4px",
+            }}
+          >
+            Backgrounds
           </div>
+          <div
+            style={{
+              width: "50%",
+              textAlign: "center",
+              padding: "11px 0px",
+              color: "#696974",
+              borderRadius: "0px 4px 4px 0px",
+            }}
+          >
+            Upload
+          </div>
+        </div>
+        <Block
+          padding="0 20px"
+          $style={{
+            display: "flex",
+            alignItems: "center",
+            fontWeight: 600,
+            fontSize: "16px",
+            margin: "20px 0px 14px 0px",
+            justifyContent: "flex-start",
+          }}
+        >
+          Solid Colors
         </Block>
-      </Scrollable>
+      </Block>}
     </Block>
   )
 }

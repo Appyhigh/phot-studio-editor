@@ -13,7 +13,7 @@ import UploadPreview from "./UploadPreview"
 import Icons from "~/components/Icons"
 import useAppContext from "~/hooks/useAppContext"
 
-export default function () {
+export default function ({ handleCloseSampleImg }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
@@ -22,7 +22,7 @@ export default function () {
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-
+    handleCloseSampleImg()
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -61,6 +61,7 @@ export default function () {
 
   const discardHandler = (id: string) => {
     setUploads([])
+    handleCloseSampleImg()
     editor.objects.removeById(id)
   }
   const { setActivePanel } = useAppContext()
@@ -81,9 +82,12 @@ export default function () {
           <Block className="pl-1">{uploads.length === 0 && "Add Image"}</Block>
           <Block>
             {uploads.length != 0 && (
-              <div className="d-flex justify-content-start flex-row align-items-center pointer"  onClick={() => {
-                setIsSidebarOpen(false)
-              }} >
+              <div
+                className="d-flex justify-content-start flex-row align-items-center pointer"
+                onClick={() => {
+                  setIsSidebarOpen(false)
+                }}
+              >
                 <Icons.ChevronRight size="16" /> <p className="ml-1">Image</p>
               </div>
             )}
