@@ -13,7 +13,7 @@ import UploadPreview from "./UploadPreview"
 import Icons from "~/components/Icons"
 import useAppContext from "~/hooks/useAppContext"
 
-export default function ({ handleCloseSampleImg }: any) {
+export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
@@ -23,6 +23,7 @@ export default function ({ handleCloseSampleImg }: any) {
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
     handleCloseSampleImg()
+    handleCloseBgOptions()
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -62,6 +63,8 @@ export default function ({ handleCloseSampleImg }: any) {
   const discardHandler = (id: string) => {
     setUploads([])
     handleCloseSampleImg()
+    handleCloseBgOptions()
+
     editor.objects.removeById(id)
   }
   const { setActivePanel } = useAppContext()
