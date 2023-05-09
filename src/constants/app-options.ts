@@ -11,31 +11,40 @@ export const BASE_ITEMS = [
   {
     id: "images",
     name: "Images",
+    icon:""
   },
   {
     id: "customize",
     name: "Customize",
+    icon:""
   },
-  // {
-  //   id: "uploads",
-  //   name: "Uploads",
-  // },
+  {
+    id: "uploads",
+    name: "Uploads",
+  },
   {
     id: "text",
     name: "Text",
+    icon:""
   },
   // {
-  //   id: "graphics",
-  //   name: "Graphics",
+  //   id: "bgremover",
+  //   icon:"BgRemover",
+  //   name: "BgRemover",
   // },
+  {
+    id: "graphics",
+    name: "Graphics",
+  },
 
-  // {
-  //   id: "pixabay",
-  //   name: "Pixabay",
-  // },
+  {
+    id: "pixabay",
+    name: "Pixabay",
+  },
   {
     id: "layers",
     name: "Layers",
+    icon:""
   },
 ]
 

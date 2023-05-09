@@ -3,6 +3,8 @@ import useAppContext from "~/hooks/useAppContext"
 import panelItems from "./panelItems"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import { Block } from "baseui/block"
+import Icons from "~/components/Icons"
+import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 
 interface State {
   panel: string
@@ -11,6 +13,7 @@ const PanelsList = () => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
   const { activePanel, activeSubMenu } = useAppContext()
+  const setIsSidebarOpen = useSetIsSidebarOpen()
 
   React.useEffect(() => {
     setState({ panel: activePanel })
@@ -31,16 +34,19 @@ const PanelsList = () => {
     <Block
       id="EditorPanelItem"
       $style={{
-        background: "#ffffff",
         width: isSidebarOpen ? "306px" : 0,
         flex: "none",
-        borderRight: "1px solid #d7d8e3",
         display: "flex",
         transition: "ease width 0.1s",
         overflow: "hidden",
+        position: "relative",
       }}
     >
-      {Component && <Component />}
+      {Component && (
+        <div className="d-flex flex-1" style={{ backgroundColor: "#FFF", position: "relative" }}>
+          <Component />
+        </div>
+      )}{" "}
     </Block>
   )
 }

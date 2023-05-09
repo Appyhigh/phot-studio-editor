@@ -10,9 +10,10 @@ import { Block } from "baseui/block"
 
 const Container = styled("div", (props) => ({
   width: "80px",
-  backgroundColor: props.$theme.colors.primary100,
+  backgroundColor: props.$theme.colors.white,
   display: "flex",
   flex: "none",
+  borderRight:"2px solid rgb(238, 238, 238)",
 }))
 
 const PanelsList = () => {
@@ -20,6 +21,7 @@ const PanelsList = () => {
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
+
   return (
     <Container>
       <Scrollable autoHide={true}>
@@ -28,7 +30,8 @@ const PanelsList = () => {
             label={t(`panels.panelsList.${panelListItem.id}`)}
             name={panelListItem.name}
             key={panelListItem.name}
-            icon={panelListItem.name}
+            // @ts-ignore
+            icon={panelListItem.icon ? panelListItem.icon : panelListItem.name}
             activePanel={activePanel}
           />
         ))}
@@ -41,7 +44,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   const { setActivePanel } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [css, theme] = useStyletron()
-  
+
   // @ts-ignore
   const Icon = Icons[icon]
   return (
@@ -54,7 +57,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
       $style={{
         width: "80px",
         height: "80px",
-        backgroundColor: name === activePanel ? theme.colors.white : theme.colors.primary100,
+        backgroundColor: theme.colors.white,
         display: "flex",
         alignItems: "center",
         flexDirection: "column",

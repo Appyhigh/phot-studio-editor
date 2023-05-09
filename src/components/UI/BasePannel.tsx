@@ -17,6 +17,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   background: $theme.colors.white,
   boxShadow: "inset 0px -1px 0px #E2E2EA",
   padding: "15px 20px",
+  borderLeft: "2px solid #E2E2EA",
 }))
 
 const BasePannel = () => {
