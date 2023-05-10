@@ -12,7 +12,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   },
 }))
 
-const LineWithText = styled<"p", {}, Theme>("p", ({ $theme }) => ({
+const LineWithText = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   borderBottom: `1px solid ${$theme.colors.borderAccent}`,
   lineHeight: "0.1em",
   margin: "16px auto 20px",

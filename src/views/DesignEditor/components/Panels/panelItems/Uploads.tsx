@@ -93,10 +93,7 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
                   handleCloseBgOptions()
                 }}
               >
-                <Icons.ChevronRight size="16" />{" "}
-                <p className="ml-1">
-                  <LabelLarge>Image</LabelLarge>
-                </p>
+                <Icons.ChevronRight size="16" /> <LabelLarge className="ml-1">Image</LabelLarge>
               </div>
             )}
           </Block>
