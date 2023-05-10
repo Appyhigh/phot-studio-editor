@@ -98,7 +98,7 @@ const LayerPanel = () => {
       >
         <Block className="flex-center">
           <Block
-          className="pointer"
+            className="pointer"
             onClick={() => {
               setShowObjectTypeText(!showObjectTypeText)
             }}
@@ -179,7 +179,6 @@ const LayerPanel = () => {
           </Scrollable>
         </Block>
       </Container>
-   
     </div>
   )
 }
