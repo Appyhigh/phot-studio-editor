@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Button, SIZE } from "baseui/button"
 import { HexColorPicker } from "react-colorful"
 import { StatefulPopover, PLACEMENT } from "baseui/popover"
@@ -18,7 +18,7 @@ import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
-const colors = ["#ffffff", "#9B9B9B", "#4A4A4A", "#000000", "#A70C2C", "#4990E2", "#F8E71D", "#47821A"]
+const colors = ["#FFF", "#9B9B9B", "#4A4A4A", "#000000", "#A70C2C", "#4990E2", "#F8E71D", "#47821A"]
 
 interface State {
   backgroundColor: string
@@ -26,7 +26,7 @@ interface State {
 
 const Customize = () => {
   const editor = useEditor()
-  const objects = useObjects() as ILayer[]
+
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
   const [state, setState] = React.useState<State>({
@@ -34,7 +34,10 @@ const Customize = () => {
   })
 
   const changeBackgroundColor = (color: string) => {
-    const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
+    const bgObject = editor.frame.background.canvas._objects.filter(
+      (el: any) => el.metadata?.type === backgroundLayerType
+    )[0]
+
     if (bgObject) {
       editor.objects.remove(bgObject.id)
       editor.objects.unsetBackgroundImage()
@@ -43,25 +46,27 @@ const Customize = () => {
   }
 
   const handleChange = (type: string, value: any) => {
-
     setState({ ...state, [type]: value })
-    editor.objects.unsetBackgroundImage()
     changeBackgroundColor(value)
   }
 
   const setTransparentBG = () => {
-    const bgObject = objects.filter((el) => el.metadata?.type === backgroundLayerType)[0]
-    editor.objects.unsetBackgroundImage()
+    const bgObject = editor?.frame?.background?.canvas?._objects.filter(
+      (el: any) => el.metadata?.type === backgroundLayerType
+    )[0]
 
-    const options = {
-      type: "StaticImage",
-      src: checkboxBGUrl,
-      preview: checkboxBGUrl,
-      metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
-    }
-    editor.objects.add(options).then(() => {
-      editor.objects.setAsBackgroundImage()
-    })
+    if (!bgObject) {
+      editor?.frame?.setBackgroundColor("#FFF")
+      const options = {
+        type: "StaticImage",
+        src: checkboxBGUrl,
+        preview: checkboxBGUrl,
+        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      }
+      editor.objects.add(options).then(() => {
+        editor.objects.setAsBackgroundImage()
+      })
+    } else editor?.frame?.setBackgroundColor("#FFF")
   }
 
   return (

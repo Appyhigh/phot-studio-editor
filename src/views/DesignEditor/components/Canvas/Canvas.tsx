@@ -11,15 +11,22 @@ const Canvas = () => {
   const frame = useFrame()
   useEffect(() => {
     if (editor) {
-      const options = {
-        type: "StaticImage",
-        src: checkboxBGUrl,
-        preview: checkboxBGUrl,
-        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      if (
+        (editor.frame.background.canvas._objects.length >= 3 &&
+          editor.frame.background.canvas._objects[2].type == "BackgroundImage") ||
+        (editor.frame.background.canvas._objects.length >= 2 &&
+          editor.frame.background.canvas._objects[1].fill == "#ffffff")
+      ) {
+        const options = {
+          type: "StaticImage",
+          src: checkboxBGUrl,
+          preview: checkboxBGUrl,
+          metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+        }
+        editor.objects.add(options).then(() => {
+          editor.objects.setAsBackgroundImage()
+        })
       }
-      editor.objects.add(options).then(() => {
-        editor.objects.setAsBackgroundImage()
-      })
     }
   }, [editor, frame])
 
