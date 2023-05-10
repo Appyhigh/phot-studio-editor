@@ -33,17 +33,16 @@ const PanelsList = () => {
   return (
     <Block
       id="EditorPanelItem"
+      className="d-flex p-relative"
       $style={{
         width: isSidebarOpen ? "360px" : 0,
         flex: "none",
-        display: "flex",
         transition: "ease width 0.1s",
         overflow: "hidden",
-        position: "relative",
-      }}
+    }}
     >
       {Component && (
-        <div className="d-flex flex-1" style={{ backgroundColor: "#FFF", position: "relative" }}>
+        <div className="d-flex flex-1 p-relative" style={{ backgroundColor: "#FFF"}}>
           <Component />
         </div>
       )}{" "}

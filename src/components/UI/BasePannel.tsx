@@ -15,9 +15,9 @@ import { useState } from "react"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
   background: $theme.colors.white,
-  boxShadow: "inset 0px -1px 0px #E2E2EA",
+  boxShadow: `inset 0px -1px 0px ${$theme.colors.borderAccentLight}`,
   padding: "15px 20px",
-  borderLeft: "2px solid #E2E2EA",
+  borderLeft: `2px solid ${$theme.colors.borderAccentLight}`,
 }))
 
 const BasePannel = () => {

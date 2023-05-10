@@ -12,6 +12,7 @@ import UploadInput from "~/components/UI/UploadInput"
 import UploadPreview from "./UploadPreview"
 import Icons from "~/components/Icons"
 import useAppContext from "~/hooks/useAppContext"
+import { LabelLarge } from "baseui/typography"
 
 export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -67,22 +68,17 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
 
     editor.objects.removeById(id)
   }
-  const { setActivePanel } = useAppContext()
 
   return (
     <DropZone handleDropFiles={handleDropFiles}>
-      <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <Block className="d-flex flex-1 flex-column">
         <Block
+          className="d-flex align-items-center flex-start"
           $style={{
-            display: "flex",
-            alignItems: "center",
-            fontWeight: 600,
-            fontSize: "16px",
-            justifyContent: "flex-start",
             padding: "20px 0px 0px 16px",
           }}
         >
-          <Block className="pl-1">{uploads.length === 0 && "Add Image"}</Block>
+          <Block className="pl-1">{uploads.length === 0 && <LabelLarge>Add Image</LabelLarge>}</Block>
           <Block>
             {uploads.length != 0 && (
               <div
@@ -91,7 +87,10 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
                   setIsSidebarOpen(false)
                 }}
               >
-                <Icons.ChevronRight size="16" /> <p className="ml-1">Image</p>
+                <Icons.ChevronRight size="16" />{" "}
+                <p className="ml-1">
+                  <LabelLarge>Image</LabelLarge>
+                </p>
               </div>
             )}
           </Block>
@@ -118,26 +117,11 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
               {uploads.map((upload) => (
                 <div
                   key={upload.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    cursor: "pointer",
-                  }}
+                  className="d-flex align-items-center pointer"
+
                   // onClick={() => addImageToCanvas(upload)}
                 >
-                  <div>
-                    <div
-                      key={upload.id}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                      }}
-                      // onClick={() => addImageToCanvas(upload)}
-                    >
-                      <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
-                    </div>
-                  </div>
+                  <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
                 </div>
               ))}
             </div>

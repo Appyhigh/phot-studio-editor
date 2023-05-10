@@ -13,32 +13,34 @@ const Panels = () => {
     <>
       <PanelsList />
       <Block className="d-flex">
-        
-      <PanelItem />
-      <Block className="m-auto pointer" style={{position:"absolute",left:isSidebarOpen?"460px":"100px",top:"50%",zIndex:5}}>
-        <div
-          className="p-relative"
-          style={{ marginRight: "-2px" }}
-          onClick={() => {
-            setIsSidebarOpen(!isSidebarOpen)
-          }}
+        <PanelItem />
+        <Block
+          className="m-auto pointer p-absolute"
+          style={{ left: isSidebarOpen ? "460px" : "100px", top: "50%", zIndex: 5 }}
         >
-          <div>
-            <Icons.SliderBtn size={106} />
-          </div>
-
           <div
-            className="p-absolute"
-            style={{
-              top: "36%",
-              left: "35%",
-              transform: !isSidebarOpen ? "scaleX(-1)" : "scaleX(1)",
+            className="p-relative"
+            style={{ marginRight: "-2px" }}
+            onClick={() => {
+              setIsSidebarOpen(!isSidebarOpen)
             }}
           >
-            <Icons.SliderIcon size={15} />
+            <div>
+              <Icons.SliderBtn size={106} />
+            </div>
+
+            <div
+              className="p-absolute"
+              style={{
+                top: "36%",
+                left: "35%",
+                transform: !isSidebarOpen ? "scaleX(-1)" : "scaleX(1)",
+              }}
+            >
+              <Icons.SliderIcon size={15} />
+            </div>
           </div>
-        </div>
-      </Block>
+        </Block>
       </Block>
     </>
   )

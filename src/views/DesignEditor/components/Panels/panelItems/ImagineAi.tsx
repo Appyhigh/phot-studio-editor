@@ -1,5 +1,5 @@
 const ImageineAi=()=>{
-    return <h1>Bg Remover</h1>
+    return <h1>Imageine AI</h1>
 }
 
 export default ImageineAi;

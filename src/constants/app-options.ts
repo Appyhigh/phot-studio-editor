@@ -147,6 +147,4 @@ export enum PanelType {
   BACKGROUND = "Background",
   IMAGES = "Images",
   UPLOADS = "Uploads",
-  IMAGINEAI = "ImageineAi",
-  BGREMOVER = "BgRemover",
 }

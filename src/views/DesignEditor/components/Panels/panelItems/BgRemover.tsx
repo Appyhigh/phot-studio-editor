@@ -28,13 +28,13 @@ const BgRemover = () => {
   )
 
   return (
-    <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+    <Block className="d-flex flex-column flex-1">
       <Uploads />
-      <Block padding="0 1.5rem" marginBottom="1.5rem">
+      <Block  className="mb-3 py-3">
         Try Sample Images
       </Block>
       <Scrollable>
-        <Block padding="0 1.5rem">
+        <Block className="py-3">
           <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr" }}>
             {images.map((image, index) => {
               return (

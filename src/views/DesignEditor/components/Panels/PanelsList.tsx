@@ -52,6 +52,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   return (
     <Block
       id="EditorPanelList"
+      className="d-flex justify-content-center align-items-center flex-column"
       onClick={() => {
         setIsSidebarOpen(true)
         setActivePanel(name)
@@ -59,10 +60,6 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
       $style={{
         padding:"16px 15px",
         backgroundColor: theme.colors.white,
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        justifyContent: "center",
         fontFamily: "Poppins",
         fontWeight: 500,
         fontSize: "0.8rem",

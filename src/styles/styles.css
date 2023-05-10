@@ -457,6 +457,10 @@ input[type="number"] {
   padding-left: 2.5rem;
 }
 
+.py-3{
+  padding: 0 1.5rem;
+}
+
 .p-0 {
   padding: 0;
 }
@@ -543,6 +547,9 @@ input[type="number"] {
   width: 75%;
 }
 
+.w-80 {
+  width: 80%;
+}
 .w-100 {
   width: 100%;
 }
@@ -735,8 +742,6 @@ ul {
   background-position: center;
 }
 
-
-
 .swiper-button-next {
   width: 20px !important;
   height: 20px !important;
@@ -747,10 +752,7 @@ ul {
   background-image: url("/src/views/Public/images/chevron-right.svg");
   background-repeat: no-repeat;
   background-position: center;
-  
 }
-
-
 
 .swiper-wrapper {
   align-items: center;

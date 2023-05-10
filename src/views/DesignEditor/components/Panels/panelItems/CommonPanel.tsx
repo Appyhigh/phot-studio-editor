@@ -2,19 +2,15 @@ import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 
-
 const CommonPanel = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
 
   return (
-    <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+    <Block className="d-flex flex-1 flex-column">
       <Block
+        className="d-flex align-items-center justify-content-between p-3"
         $style={{
-          display: "flex",
-          alignItems: "center",
           fontWeight: 500,
-          justifyContent: "space-between",
-          padding: "1.5rem",
         }}
       >
         <Block>Common</Block>

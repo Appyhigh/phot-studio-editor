@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { useStyletron } from "baseui"
+import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { images } from "~/constants/mock-data"
@@ -7,6 +7,13 @@ import { useEditor } from "@layerhub-io/react"
 import Uploads from "./Uploads"
 import SwiperWrapper from "./Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
+import { LabelLarge } from "baseui/typography"
+
+const Tabs = styled<"div", {}, Theme>("div", ({ $theme }) => ({
+  width: "50%",
+  textAlign: "center",
+  padding: "11px 0px",
+}))
 
 const Images = () => {
   const editor = useEditor()
@@ -35,28 +42,26 @@ const Images = () => {
     setShowBgOptions(!showBgOptions)
   }
 
+  const [css, theme] = useStyletron()
   return (
-    <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+    <Block className="d-flex flex-1 flex-column">
       <Uploads handleCloseSampleImg={handleCloseSampleImg} handleCloseBgOptions={handleCloseBgOptions} />
       {trySampleImgShow && (
         <>
           {" "}
           <Block
             padding="0 20px"
-            marginBottom="1.5rem"
+            className="d-flex align-items-center justify-content-start mb-3"
             $style={{
-              display: "flex",
-              alignItems: "center",
               fontWeight: 600,
-              fontSize: "16px",
-              marginLeft: "10px",
-              justifyContent: "flex-start",
+              fontSize: theme.sizing.scale600,
+              marginLeft: theme.sizing.scale400,
             }}
           >
             Try Sample Images
           </Block>
           <Scrollable>
-            <Block padding="0 1.5rem">
+            <Block className="py-3">
               <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
                 {images.map((image, index) => {
                   return (
@@ -82,47 +87,37 @@ const Images = () => {
               style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
               className="d-flex  flex-row"
             >
-              <div
+              <Tabs
                 style={{
-                  width: "50%",
-                  textAlign: "center",
-                  padding: "11px 0px",
                   background: "#171725",
                   color: "#fff",
                   borderRadius: "4px 0px 0px 4px",
                 }}
               >
                 Backgrounds
-              </div>
-              <div
+              </Tabs>
+              <Tabs
                 style={{
-                  width: "50%",
-                  textAlign: "center",
-                  padding: "11px 0px",
                   color: "#696974",
                   borderRadius: "0px 4px 4px 0px",
                 }}
               >
                 Upload
-              </div>
+              </Tabs>
             </div>
 
             {BgOptions.map((each, index) => (
               <Block key={index}>
                 <Block
-                  padding="0 20px"
+                  className="d-flex align-items-center justify-content-start"
                   $style={{
-                    display: "flex",
-                    alignItems: "center",
-                    fontWeight: 600,
-                    fontSize: "16px",
                     margin: "20px 0px 14px 0px",
-                    justifyContent: "flex-start",
+                    padding: "0 20px",
                   }}
                 >
-                  {each.heading}
+                  <LabelLarge> {each.heading}</LabelLarge>
                 </Block>
-                <SwiperWrapper  data={each.options} />
+                <SwiperWrapper data={each.options} />
               </Block>
             ))}
           </Block>
