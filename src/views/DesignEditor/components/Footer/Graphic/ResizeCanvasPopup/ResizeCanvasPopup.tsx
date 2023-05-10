@@ -1,34 +1,17 @@
-import { SIZE } from "baseui/input"
 import { Block } from "baseui/block"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
-import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { useEffect, useState } from "react"
 import { fixedSizeFrameTypes } from "~/constants/editor"
-import { Button, SHAPE } from "baseui/button"
 import CommonInput from "~/components/UI/Common/Input"
-import ResizeFrameCanvas from "./ResizeCanvasTypes"
-import { ILayer } from "@layerhub-io/types"
+import ResizeFrameCanvas from "../ResizeCanvasTypes"
 import Icons from "~/components/Icons"
-import { Theme, styled, useStyletron } from "baseui"
-import { LabelXSmall, ParagraphSmall } from "baseui/typography"
+import { useStyletron } from "baseui"
 import { backgroundLayerType } from "~/constants/contants"
-
-const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
-  height: "auto-fit",
-  width: "421px",
-  backgroundColor: $theme.colors.white,
-  // @ts-ignore
-  border: `1px solid ${$theme.colors.grey400}`,
-  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)",
-  borderRadius: $theme.sizing.scale400,
-  zIndex: 500,
-  top: "48px",
-  right: "0px",
-}))
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 const ResizeCanvasPopup = ({ show }: any) => {
-  const objects = useObjects() as ILayer[]
-  const [css, theme] = useStyletron()
 
   const [desiredFrame, setDesiredFrame] = useState({
     width: 0,
@@ -100,14 +83,17 @@ const ResizeCanvasPopup = ({ show }: any) => {
   return (
     <Block style={{ display: show ? "block" : "none" }}>
       <Block className={"resizeCanvas"}>
-        <Box className="d-flex align-items-start flex-column p-absolute resizeCanvasCon">
-          <div className="p-absolute" style={{ rotate: "-90deg", top: "-60px", left: "114px" }}>
+        <div
+          className={clsx(
+            classes.resizeCanvasContainer,
+            "d-flex align-items-start flex-column p-absolute resizeCanvasCon"
+          )}
+        >
+          <div className={clsx(classes.chevronTopIcon, "p-absolute")}>
             <Icons.SliderBtn size={106} width="10" />
           </div>
-          <div style={{ margin: "4px 16px" }}>
-            <ParagraphSmall className="pt-1 pb-1" style={{ color: "#44444F" }}>
-              Custom Size
-            </ParagraphSmall>
+          <div className={classes.subSection}>
+            <div className={clsx(classes.subHeading, "pt-1 pb-1")}>Custom Size</div>
             <div className="d-flex justify-content-center flex-column">
               <div className="d-flex justify-content-center flex-row">
                 <div className="mr-1">
@@ -131,13 +117,12 @@ const ResizeCanvasPopup = ({ show }: any) => {
               </div>
             </div>
           </div>
-          <div style={{ border: "1px solid #F1F1F5", width: "90%", marginTop: "12px", marginLeft: "20px" }}></div>
 
-          <Block className="mt-2 mx-2 ">
-            <ParagraphSmall className="pt-1 pb-1" style={{ color: "#44444F" }}>
-              Fixed Size
-            </ParagraphSmall>
-            <Block className="d-flex justify-content-start flex-row flex-wrap ml-1" $style={{ color: "#92929D" }}>
+          <div className={classes.horizontalLine}></div>
+
+          <div className={clsx(classes.subSection, "mt-2 mx-2 ")}>
+            <div className={clsx(classes.subHeading, "pt-1 pb-1")}> Fixed Size</div>
+            <Block className="d-flex justify-content-start flex-row flex-wrap ml-1">
               {fixedSizeFrameTypes.map((sample, index) => {
                 const { img, name, subHeading, imgHeight, id } = sample
                 // @ts-ignore
@@ -145,52 +130,34 @@ const ResizeCanvasPopup = ({ show }: any) => {
                 return (
                   <Block
                     key={index}
-                    style={{
-                      minWidth: "100px",
-                      margin: index == 1 || index == 4 || index == 7 ? "10px 32px" : "10px 0px",
-                    }}
+                    className={clsx(
+                      index == 1 || index == 4 || index == 7 ? classes.oddOption : classes.evenOption,
+                      "flex-center-column  text-center pointer"
+                    )}
                     onClick={() => {
                       setActiveKey("0")
                       setSelectedFrame(sample)
                     }}
-                    className="d-flex text-center justify-content-center flex-column align-items-center pointer"
                   >
                     <Block style={{ height: imgHeight, marginBottom: "8px" }} className="flex-center">
                       {Component && <Component color={id === selectedFrame.id ? "#000" : "#92929D"} />}
                     </Block>
-                    <LabelXSmall
-                      className={css({
-                        color: theme.colors.primary500,
-                      })}
-                    >
-                      {name}
-                    </LabelXSmall>
-                    <p style={{ fontSize: "11px" }}>{subHeading}</p>
+                    <div className={classes.optionHeading}>{name}</div>
+                    <p className={classes.optionSubHeading}>{subHeading}</p>
                   </Block>
                 )
               })}
             </Block>
-          </Block>
+          </div>
 
-          <Button
+          <button
             disabled={!isEnabled}
             onClick={applyResize}
-            size={SIZE.mini}
-            style={{
-              width: "90%",
-              margin: "20px auto",
-              height: "38px",
-              color: isEnabled ? "#FFF" : "#92929D",
-              fontWeight: "600",
-              letterSpacing: "1px",
-              backgroundColor: isEnabled ? "#000" : "#F1F1F5",
-              borderRadius: "10px",
-            }}
-            shape={SHAPE.pill}
+            className={clsx(classes.resizeBtn, isEnabled && classes.isEnabledBtn)}
           >
             Resize Template
-          </Button>
-        </Box>
+          </button>
+        </div>
       </Block>
     </Block>
   )

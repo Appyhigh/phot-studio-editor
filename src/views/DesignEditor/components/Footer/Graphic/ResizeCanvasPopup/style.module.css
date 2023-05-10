@@ -1,0 +1,69 @@
+.resizeCanvasContainer {
+  height: fit-content;
+  width: 421px;
+  background-color: #fff;
+  border: 1px solid #f1f1f5;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  z-index: 500;
+  top: 48px;
+  right: 0px;
+}
+
+.chevronTopIcon {
+  rotate: -90deg;
+  top: -60px;
+  left: 114px;
+}
+
+.subSection {
+  margin: 4px 16px;
+}
+.subHeading {
+  color: #44444f;
+  font-family: "Rubik";
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.horizontalLine {
+  border: 1px solid #f1f1f5;
+  width: 90%;
+  margin-top: 12px;
+  margin-left: 20px;
+}
+.oddOption {
+  margin: 10px 32px;
+  min-width: 100px;
+}
+
+.evenOption {
+  margin: 10px 0px;
+  min-width: 100px;
+}
+.optionHeading {
+  color: #44444f;
+  font-size: 12px;
+  font-weight: 400;
+  font-family: "Rubik";
+  line-height: 16px;
+}
+.optionSubHeading {
+  font-size: 11px;
+  color: #92929d;
+}
+
+.resizeBtn{
+    width: 90%;
+    margin: 20px auto;
+    height: 38px;
+    color: "#92929D";
+    font-weight: 600;
+    letter-spacing: 1px;
+    background-color:  #F1F1F5;
+    border-radius: 10px;
+}
+.isEnabledBtn{
+    color: #FFF;
+    background-color: #000;
+}

@@ -14,7 +14,7 @@ import TextFill from "./TextFill"
 import PathFill from "./PathFill"
 import CanvasFill from "./CanvasFill"
 import TextEffects from "./TextEffects"
-import BgRemover from "./BgRemover"
+import BgRemover from "./BgRemover/BgRemover"
 import ImagineAi from "./ImagineAi";
 import CommonPanel from "./CommonPanel"
 
