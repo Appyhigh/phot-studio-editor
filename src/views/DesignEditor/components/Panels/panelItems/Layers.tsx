@@ -42,7 +42,6 @@ const Layers = () => {
     }
   }, [editor, objects])
 
-
   const addObject = React.useCallback(
     (url: string) => {
       if (editor) {
@@ -112,127 +111,266 @@ const Layers = () => {
               .filter((el) => el.metadata?.type !== backgroundLayerType)
               .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
               .map((object) => {
-                return (
-                  <Block
-                    $style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 90px",
-                      fontSize: "14px",
-                      alignItems: "center",
-                      ":hover": {
-                        background: "rgb(245,246,247)",
-                      },
-                    }}
-                    key={object.id}
-                  >
-                    {object.text ? (
-                      <div style={{ fontFamily: object.fontFamily }}>
-                        {object.textLines.map((line: any) => (
-                          <div>{line}</div>
-                        ))}
-                      </div>
-                    ) : (
-                      <img src={object.preview} style={{ objectFit: "cover" }} alt="nn" height="100px" width="100px" />
-                    )}
-                    <Block $style={{ cursor: "pointer" }} onClick={() => editor.objects.select(object.id)}>
-                      {object.name}
-                    </Block>
-                    <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-                      {!object.text && (
-                        <button
-                          onClick={() => {
-                            setActiveLayerPanel(object)
-                          }}
-                        >
-                          Applicable AI Options
-                        </button>
-                      )}
-
-                      {object.locked ? (
-                        <Button
-                          kind={KIND.tertiary}
-                          size={SIZE.mini}
-                          onClick={() => editor.objects.unlock(object.id)}
-                          overrides={{
-                            Root: {
-                              style: {
-                                paddingLeft: "4px",
-                                paddingRight: "4px",
-                              },
-                            },
-                          }}
-                        >
-                          <Locked size={24} />
-                        </Button>
-                      ) : (
-                        <Button
-                          kind={KIND.tertiary}
-                          size={SIZE.mini}
-                          onClick={() => editor.objects.lock(object.id)}
-                          overrides={{
-                            Root: {
-                              style: {
-                                paddingLeft: "4px",
-                                paddingRight: "4px",
-                              },
-                            },
-                          }}
-                        >
-                          <Unlocked size={24} />
-                        </Button>
-                      )}
-
-                      {object.visible ? (
-                        <Button
-                          kind={KIND.tertiary}
-                          size={SIZE.mini}
-                          onClick={() => editor.objects.update({ visible: false }, object.id)}
-                          overrides={{
-                            Root: {
-                              style: {
-                                paddingLeft: "4px",
-                                paddingRight: "4px",
-                              },
-                            },
-                          }}
-                        >
-                          <Eye size={24} />
-                        </Button>
-                      ) : (
-                        <Button
-                          kind={KIND.tertiary}
-                          size={SIZE.mini}
-                          onClick={() => editor.objects.update({ visible: true }, object.id)}
-                          overrides={{
-                            Root: {
-                              style: {
-                                paddingLeft: "4px",
-                                paddingRight: "4px",
-                              },
-                            },
-                          }}
-                        >
-                          <EyeCrossed size={24} />
-                        </Button>
-                      )}
-                      <Button
-                        kind={KIND.tertiary}
-                        size={SIZE.mini}
-                        onClick={() => editor.objects.remove(object.id)}
-                        overrides={{
-                          Root: {
-                            style: {
-                              paddingLeft: "4px",
-                              paddingRight: "4px",
-                            },
-                          },
-                        }}
+                if (object._objects) {
+                  return (
+                    <Block
+                      $style={{
+                        gridTemplateColumns: "1fr 90px",
+                        fontSize: "14px",
+                        alignItems: "center",
+                        ":hover": {
+                          background: "rgb(245,246,247)",
+                        },
+                      }}
+                      key={object.id}
+                    >
+                      <Block
+                        $style={{ cursor: "pointer", marginBottom: "20px" }}
+                        onClick={() => editor.objects.select(object.id)}
                       >
-                        <Delete size={24} />
-                      </Button>
+                        {object.name}
+                      </Block>
+                      {object._objects.map((el: any) => {
+                        console.log(el)
+                        if (el.text) {
+                          return (
+                            <Block className="d-flex align-items-center" $style={{ flexWrap: "wrap" }}>
+                              {el.text}
+                            </Block>
+                          )
+                        } else {
+                          return (
+                            <Block className="d-flex align-items-center" $style={{ flexWrap: "wrap" }}>
+                              <img style={{ width: "100px", height: "100px" }} src={el.preview} />
+                            </Block>
+                          )
+                        }
+                      })}
+                      <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                        {!object.text && (
+                          <button
+                            onClick={() => {
+                              setActiveLayerPanel(object)
+                            }}
+                          >
+                            Applicable AI Options
+                          </button>
+                        )}
+
+                        {object.locked ? (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.unlock(object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <Locked size={24} />
+                          </Button>
+                        ) : (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.lock(object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <Unlocked size={24} />
+                          </Button>
+                        )}
+
+                        {object.visible ? (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.update({ visible: false }, object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <Eye size={24} />
+                          </Button>
+                        ) : (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.update({ visible: true }, object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <EyeCrossed size={24} />
+                          </Button>
+                        )}
+                        <Button
+                          kind={KIND.tertiary}
+                          size={SIZE.mini}
+                          onClick={() => editor.objects.remove(object.id)}
+                          overrides={{
+                            Root: {
+                              style: {
+                                paddingLeft: "4px",
+                                paddingRight: "4px",
+                              },
+                            },
+                          }}
+                        >
+                          <Delete size={24} />
+                        </Button>
+                      </Block>
                     </Block>
-                  </Block>
-                )
+                  )
+                } else {
+                  return (
+                    <Block
+                      $style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 90px",
+                        fontSize: "14px",
+                        alignItems: "center",
+                        ":hover": {
+                          background: "rgb(245,246,247)",
+                        },
+                      }}
+                      key={object.id}
+                    >
+                      {object.text ? (
+                        <div style={{ fontFamily: object.fontFamily }}>
+                          {object.textLines.map((line: any) => (
+                            <div>{line}</div>
+                          ))}
+                        </div>
+                      ) : (
+                        <img
+                          src={object.preview}
+                          style={{ objectFit: "cover" }}
+                          alt="nn"
+                          height="100px"
+                          width="100px"
+                        />
+                      )}
+                      <Block $style={{ cursor: "pointer" }} onClick={() => editor.objects.select(object.id)}>
+                        {object.name}
+                      </Block>
+                      <Block $style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                        {!object.text && (
+                          <button
+                            onClick={() => {
+                              setActiveLayerPanel(object)
+                            }}
+                          >
+                            Applicable AI Options
+                          </button>
+                        )}
+
+                        {object.locked ? (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.unlock(object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <Locked size={24} />
+                          </Button>
+                        ) : (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.lock(object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <Unlocked size={24} />
+                          </Button>
+                        )}
+
+                        {object.visible ? (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.update({ visible: false }, object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <Eye size={24} />
+                          </Button>
+                        ) : (
+                          <Button
+                            kind={KIND.tertiary}
+                            size={SIZE.mini}
+                            onClick={() => editor.objects.update({ visible: true }, object.id)}
+                            overrides={{
+                              Root: {
+                                style: {
+                                  paddingLeft: "4px",
+                                  paddingRight: "4px",
+                                },
+                              },
+                            }}
+                          >
+                            <EyeCrossed size={24} />
+                          </Button>
+                        )}
+                        <Button
+                          kind={KIND.tertiary}
+                          size={SIZE.mini}
+                          onClick={() => editor.objects.remove(object.id)}
+                          overrides={{
+                            Root: {
+                              style: {
+                                paddingLeft: "4px",
+                                paddingRight: "4px",
+                              },
+                            },
+                          }}
+                        >
+                          <Delete size={24} />
+                        </Button>
+                      </Block>
+                    </Block>
+                  )
+                }
               })
           )}
         </Block>
