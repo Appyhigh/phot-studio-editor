@@ -650,6 +650,14 @@ ul {
   align-items: center;
   flex-direction: row;
 }
+
+.flex-center-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 /* download popup  */
 .download-wrapper {
   display: none;

@@ -1,34 +1,25 @@
 import { Block } from "baseui/block"
-import PanelItem from "./PanelItem"
-import PanelsList from "./PanelsList"
+import PanelItem from "./PanelItem/PanelItem"
+import PanelsList from "./PanelsList/PanelsList"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import Icons from "~/components/Icons"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
-import { useStyletron } from "baseui"
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 const Panels = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isSidebarOpen = useIsSidebarOpen()
-  const [css, theme] = useStyletron()
   return (
     <>
       <PanelsList />
       <Block className="d-flex">
         <PanelItem />
         <Block
-          className="m-auto pointer p-absolute"
-          $style={{
-            top: "50%",
-            zIndex: 5,
-            left: isSidebarOpen ? "390px" : "90px",
-            [theme.mediaQuery.large]: {
-              left: isSidebarOpen ? "460px" : "100px",
-            },
-          }}
+          className={clsx("m-auto pointer p-absolute", classes.sliderBtnWrapper, isSidebarOpen && classes.sliderOpen)}
         >
           <Block
-            className="p-relative"
-            $style={{ marginRight: "-2px" }}
+            className={clsx("p-relative", classes.sliderBtn)}
             onClick={() => {
               setIsSidebarOpen(!isSidebarOpen)
             }}
@@ -37,14 +28,7 @@ const Panels = () => {
               <Icons.SliderBtn size={106} />
             </div>
 
-            <Block
-              className="p-absolute"
-              $style={{
-                top: "36%",
-                left: "35%",
-                transform: !isSidebarOpen ? "scaleX(-1)" : "scaleX(1)",
-              }}
-            >
+            <Block className={clsx("p-absolute", classes.sliderIcon, isSidebarOpen && classes.sliderIconTransform)}>
               <Icons.SliderIcon size={15} />
             </Block>
           </Block>

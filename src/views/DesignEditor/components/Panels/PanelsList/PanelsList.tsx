@@ -1,4 +1,4 @@
-import { useStyletron, styled, Theme } from "baseui"
+import {  styled, Theme } from "baseui"
 import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
@@ -7,6 +7,8 @@ import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import useEditorType from "~/hooks/useEditorType"
 import Scrollable from "~/components/Scrollable"
 import { Block } from "baseui/block"
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   backgroundColor: $theme.colors.white,
@@ -20,18 +22,9 @@ const PanelsList = () => {
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
-  const [css, theme] = useStyletron()
 
   return (
-    <Container
-      $style={{
-        width: "90px",
-        // @ts-ignore
-        [theme.mediaQuery.large]: {
-          width: "100px",
-        },
-      }}
-    >
+    <Container className={classes.panelListSection}>
       <Scrollable autoHide={true}>
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
@@ -53,45 +46,21 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   const { setActivePanel } = useAppContext()
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const [css, theme] = useStyletron()
 
   // @ts-ignore
   const Icon = Icons[icon]
   return (
     <Block
       id="EditorPanelList"
-      className="d-flex justify-content-center align-items-center flex-column"
+      className={clsx(classes.panelListItem, "flex-center-column")}
       onClick={() => {
         setIsSidebarOpen(true)
         setActivePanel(name)
       }}
-      $style={{
-        padding: "16px 15px",
-        backgroundColor: theme.colors.white,
-        fontFamily: "Poppins",
-        fontWeight: 500,
-        fontSize: "0.8rem",
-        userSelect: "none",
-        transition: "all 0.5s",
-        gap: "0.1rem",
-        ":hover": {
-          cursor: "pointer",
-          backgroundColor: theme.colors.white,
-          transition: "all 1s",
-        },
-      }}
     >
       <Icon size={24} />
       <Block
-        className="text-center"
-        $style={{
-          fontWeight: activePanel ? 500 : 400,
-          minWidth: "90px",
-          color: activePanel === name ? theme.colors.black :theme.colors.borderAccent,
-          [theme.mediaQuery.large]: {
-            width: "100px",
-          },
-        }}
+        className={clsx("text-center", classes.panelListItemEach, activePanel === name && classes.activePanelItem)}
       >
         {label}
       </Block>

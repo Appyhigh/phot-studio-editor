@@ -1,0 +1,36 @@
+.panelListSection {
+  width: 90px;
+}
+
+.panelListItem {
+  padding: 16px 15px;
+  background-color: #fff;
+  font-family: "Poppins";
+  font-size: "0.8rem";
+  user-select: none;
+  transition: all 0.5s;
+  gap: 0.1rem;
+  font-size: 12px;
+}
+
+.panelListItem:hover {
+  cursor: pointer;
+  transition: all 1s;
+}
+.panelListItemEach {
+  font-weight: 400;
+  color: #92929d;
+  width: 90px;
+}
+.activePanelItem {
+  font-weight: 500;
+  color: #000;
+}
+@media screen and (min-width: 1220px) {
+  .panelListSection {
+    width: 100px;
+  }
+  .panelListItemEach {
+    width: 90px;
+  }
+}

@@ -1,0 +1,27 @@
+.sliderBtnWrapper {
+  top: 50%;
+  z-index: 5;
+  left: 90px;
+}
+.sliderOpen {
+  left: 390px;
+}
+.sliderBtn {
+  margin-right: 2px;
+}
+.sliderIcon {
+  top: 36%;
+  left: 35%;
+  transform: scaleX(-1);
+}
+.sliderIconTransform {
+  transform: scaleX(1);
+}
+@media screen and (min-width: 1220px) {
+  .sliderBtnWrapper {
+    width: 100px;
+  }
+  .sliderOpen {
+    left: 460px;
+  }
+}

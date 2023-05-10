@@ -1,9 +1,10 @@
 import React from "react"
 import useAppContext from "~/hooks/useAppContext"
-import panelItems from "./panelItems"
+import panelItems from "../panelItems"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import { Block } from "baseui/block"
-import { useStyletron } from "baseui"
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 interface State {
   panel: string
@@ -28,23 +29,13 @@ const PanelsList = () => {
   // @ts-ignore
   const Component = panelItems[state.panel]
 
-  const [css, theme] = useStyletron()
   return (
     <Block
+      className={clsx("d-flex p-relative", classes.panelItem, isSidebarOpen && classes.sideBarOpenItem)}
       id="EditorPanelItem"
-      className="d-flex p-relative"
-      $style={{
-        width: isSidebarOpen ? "300px" : 0,
-        flex: "none",
-        transition: "ease width 0.1s",
-        overflow: "hidden",
-        [theme.mediaQuery.large]: {
-          width: isSidebarOpen ? "360px" : 0,
-        },
-      }}
     >
       {Component && (
-        <Block className="d-flex flex-1 p-relative" $style={{ backgroundColor: theme.colors.white }}>
+        <Block className="d-flex flex-1 p-relative bg-white">
           <Component />
         </Block>
       )}{" "}
