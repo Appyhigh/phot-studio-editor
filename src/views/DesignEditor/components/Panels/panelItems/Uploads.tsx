@@ -117,8 +117,8 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
               ref={inputFileRef}
               style={{ display: "none" }}
             />
-            <div
-              style={{
+            <Block
+              $style={{
                 marginTop: "0.5rem",
                 display: "grid",
                 gap: "0.5rem",
@@ -135,7 +135,7 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
                   <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
                 </div>
               ))}
-            </div>
+            </Block>
           </Block>
         </>
       </Block>

@@ -1,7 +1,7 @@
 import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
-import GooglePhotos from "../../views/Public/images/google-photos.svg";
+import GooglePhotos from "../../views/Public/images/google-photos.svg"
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   borderRadius: "8px",
   margin: "0px auto 8px",
@@ -55,28 +55,30 @@ const UploadInput = ({ handleInputFileRefClick }: any) => {
         </Block>
 
         <Block className="d-flex flex-column p-absolute w-100">
-          <div style={{ margin: "10px auto 10px" }}>
+          <Block
+            className={css({
+              margin: "10px auto 10px",
+            })}
+          >
             <Icons.Upload size={31} />
-          </div>
-          <div className={"text-center"} style={{ fontSize: "14px", color: "#696974" }}>
+          </Block>
+          <Block className={"text-center"} style={{ fontSize: "14px", color: "#696974" }}>
             Drag and drop your image or
             <p style={{ color: " #6729F3", marginTop: "4px" }}>click to browse</p>
             <LineWithText className="text-center w-80">
               <span
-                className={css({ background: theme.colors.white, color: theme.colors.borderAccent })}
-                style={{ padding: "3px 10px 0px" }}
+                className={css({ background: theme.colors.white, color: theme.colors.borderAccent,padding:"3px 10px 0px" })}
               >
                 Or
               </span>
             </LineWithText>
-          </div>
+          </Block>
           <Block className="d-flex flex-row justify-content-center">
             <IconWrapper>
               <Icons.GoogleDrive />
             </IconWrapper>
-            <IconWrapper >
-              
-              <img src={GooglePhotos}/>
+            <IconWrapper>
+              <img src={GooglePhotos} />
             </IconWrapper>
             <IconWrapper>
               <Icons.DropBox />

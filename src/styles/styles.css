@@ -760,6 +760,7 @@ ul {
 .swiper-wrapper {
   align-items: center;
 }
+
 @media screen and (min-width: 1216px) {
   .swiper-slide {
     width: 96px;

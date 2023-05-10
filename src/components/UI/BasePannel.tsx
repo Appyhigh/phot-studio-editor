@@ -60,12 +60,12 @@ const BasePannel = () => {
             <Button
               kind={KIND.tertiary}
               size={SIZE.compact}
-              style={{
+              className={css({
                 margin: "10px 8px",
                 [theme.mediaQuery.large]: {
                   margin: "10px 15px",
                 },
-              }}
+              })}
               onClick={() => {
                 // function is called twice because there will be shomehow 1 element left in undo
                 resetHandler()
@@ -95,10 +95,10 @@ const BasePannel = () => {
             <Icons.Share size={16} />
           </Button>
         </StatefulTooltip>
-        <div className={"p-relative downloadResultBtn"}>
+        <Block className={"p-relative downloadResultBtn"}>
           <BaseBtn txtColor={"#fff"} bgColor={"#6729F3"} title={"Download"} />
           <DownloadPopup />
-        </div>
+        </Block>
       </Block>
     </Container>
   )

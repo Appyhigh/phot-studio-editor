@@ -21,15 +21,14 @@ const Panels = () => {
             top: "50%",
             zIndex: 5,
             left: isSidebarOpen ? "390px" : "90px",
-
             [theme.mediaQuery.large]: {
               left: isSidebarOpen ? "460px" : "100px",
             },
           }}
         >
-          <div
+          <Block
             className="p-relative"
-            style={{ marginRight: "-2px" }}
+            $style={{ marginRight: "-2px" }}
             onClick={() => {
               setIsSidebarOpen(!isSidebarOpen)
             }}
@@ -38,17 +37,17 @@ const Panels = () => {
               <Icons.SliderBtn size={106} />
             </div>
 
-            <div
+            <Block
               className="p-absolute"
-              style={{
+              $style={{
                 top: "36%",
                 left: "35%",
                 transform: !isSidebarOpen ? "scaleX(-1)" : "scaleX(1)",
               }}
             >
               <Icons.SliderIcon size={15} />
-            </div>
-          </div>
+            </Block>
+          </Block>
         </Block>
       </Block>
     </>

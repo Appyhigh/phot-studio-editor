@@ -87,7 +87,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         $style={{
           fontWeight: activePanel ? 500 : 400,
           minWidth: "90px",
-          color: activePanel === name ? "#000" : "#92929D",
+          color: activePanel === name ? theme.colors.black :theme.colors.borderAccent,
           [theme.mediaQuery.large]: {
             width: "100px",
           },

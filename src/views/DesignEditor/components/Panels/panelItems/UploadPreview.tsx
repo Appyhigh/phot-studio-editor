@@ -48,8 +48,13 @@ const UploadPreview = ({ upload, selectedImage, discardHandler }: any) => {
 
       <Box className={"flex-center flex-column "}>
         <img
-          className="p-absolute"
-          style={{ top: "90px", width: "140px", height: "140px", borderRadius: "4px" }}
+          className={css({
+            position:"absolute",
+            width:"140px",
+            height:"140px",
+            borderRadius:"4px",
+            top:"90px"
+          })} 
           src={upload.preview ? upload.preview : upload.url}
           alt="preview"
         />

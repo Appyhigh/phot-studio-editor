@@ -64,7 +64,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           return (
             <SwiperSlide key={idx}>
               <Block
-                className="pointer flex-center"
+                className="pointer flex-center p-relative"
                 onClick={() => {
                   handleChangeBg(each)
                   handleBgChangeOption({ type, idx })
@@ -73,7 +73,6 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                 $style={{
                   width: "80px",
                   height: "80px",
-                  position: "relative",
                   zIndex: 5,
                   background: each.color || each.gradient ? each.color || each.gradient : `url(${each.img})`,
                   borderRadius: "8px",

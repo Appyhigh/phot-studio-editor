@@ -74,7 +74,7 @@ const Images = () => {
           </Block>
           <Scrollable>
             <Block className="py-3">
-              <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
+              <Block $style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
                 {images.map((image, index) => {
                   return (
                     <ImageItem
@@ -86,7 +86,7 @@ const Images = () => {
                     />
                   )
                 })}
-              </div>
+              </Block>
             </Block>
           </Scrollable>
         </>
@@ -95,28 +95,30 @@ const Images = () => {
    
       {showBgOptions && (
        <>  <Block className="mt-4">
-            <div
-              style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
+            <Block
+              $style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
               className="d-flex  flex-row"
             >
               <Tabs
-                style={{
-             background: "#171725",
-             color: "#fff",
+                $style={{
+                  // @ts-ignore
+                  background: theme.colors.black600,
+                  color: theme.colors.white,
                   borderRadius: "4px 0px 0px 4px",
                 }}
               >
                 Backgrounds
               </Tabs>
               <Tabs
-                style={{
-             color: "#696974",
+                $style={{
+                  // @ts-ignore 
+                  color: theme.colors.grey500,
                   borderRadius: "0px 4px 4px 0px",
                 }}
               >
                 Upload
               </Tabs>
-            </div>
+            </Block>
           </Block>
           <Scrollable>
               <Block className="mt-2">

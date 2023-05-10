@@ -28,18 +28,20 @@ const BaseBtn = ({
 
   return (
     <button
-      className="pointer"
       onClick={handleClick}
-      style={{
+      className={css({
+        cursor:"pointer",
         padding: padding ? ` 9px ${padding}` : "9px 24px",
         backgroundColor: bgColor,
         borderRadius: "10px",
         border: borderColor ? `1px solid ${borderColor}` : `1px solid ${bgColor}`,
         marginLeft: marginLeft ? marginLeft : "12px",
         marginRight: "4px",
-      }}
+      })}
     >
-      <ParagraphXSmall className={css({ color: txtColor,fontSize:fontSize?fontSize:"12px" })}>{children || title}</ParagraphXSmall>
+      <ParagraphXSmall className={css({ color: txtColor, fontSize: fontSize ? fontSize : "12px" })}>
+        {children || title}
+      </ParagraphXSmall>
     </button>
   )
 }

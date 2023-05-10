@@ -44,9 +44,9 @@ const PanelsList = () => {
       }}
     >
       {Component && (
-        <div className="d-flex flex-1 p-relative" style={{ backgroundColor: "#FFF" }}>
+        <Block className="d-flex flex-1 p-relative" $style={{ backgroundColor: theme.colors.white }}>
           <Component />
-        </div>
+        </Block>
       )}{" "}
     </Block>
   )
