@@ -46,6 +46,18 @@ import Presentation16_9 from "./Presentation16_9"
 import SocialMediaStory from "./SocialMediaStory"
 import YoutubeThumbNail from "./YoutubeThumbanil"
 import TwitterPost from "./TwitterPost"
+import BgRemover from "./BgRemover"
+import ImagineAi from "./ImagineAI"
+import CircleIcon from "./CircleIcon"
+import Upload from "./Upload"
+import Trash from "./Trash"
+import ChevronRight from "./ChevronRight"
+import InputContainer from "./InputContainer"
+import GoogleDrive from "./GoogleDrive"
+import GooglePhotos from "./GooglePhotos"
+import Phone from "./Phone"
+import DropBox from "./Dropbox"
+import Selection from "./Selection"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -95,6 +107,18 @@ class Icons {
   static SocialMediaStory = SocialMediaStory
   static YoutubeThumbNail = YoutubeThumbNail
   static TwitterPost = TwitterPost
+  static BgRemover = BgRemover
+  static ImagineAi = ImagineAi
+  static CircleIcon = CircleIcon
+  static Upload = Upload
+  static Trash = Trash
+  static ChevronRight = ChevronRight
+  static InputContainer = InputContainer
+  static DropBox = DropBox
+  static GooglePhotos = GooglePhotos
+  static GoogleDrive = GoogleDrive
+  static Phone = Phone
+  static Selection = Selection
 }
 
 export default Icons

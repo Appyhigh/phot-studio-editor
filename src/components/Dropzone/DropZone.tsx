@@ -59,20 +59,17 @@ const DropZone = ({ children, handleDropFiles }: Props) => {
   }
 
   return (
-    <div style={{ display: "flex", height: "100%", position: "relative", flex: 1 }} ref={dropRef}>
+    <div className="d-flex p-relative" ref={dropRef}>
       {isDragging && (
         <div
+          className="flex-center p-absolute"
           style={{
             backgroundColor: "rgb(246, 246, 246)",
-            position: "absolute",
             top: 0,
             bottom: 0,
             left: 0,
             right: 0,
             zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
           }}
         >
           Drop files here to upload...

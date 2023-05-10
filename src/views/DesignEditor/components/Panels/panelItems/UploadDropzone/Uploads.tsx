@@ -1,24 +1,27 @@
 import React from "react"
 import { Block } from "baseui/block"
-import Scrollable from "~/components/Scrollable"
-import { Button, SIZE } from "baseui/button"
 import DropZone from "~/components/Dropzone"
 import { useEditor } from "@layerhub-io/react"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { nanoid } from "nanoid"
 import { captureFrame, loadVideoResource } from "~/utils/video"
 import { toBase64 } from "~/utils/data"
+import UploadInput from "~/components/UI/UploadInput/UploadInput"
+import UploadPreview from "../UploadPreview/UploadPreview"
+import Icons from "~/components/Icons"
+import { LabelLarge } from "baseui/typography"
+import classes from "./style.module.css"
+import clsx from "clsx"
 
-export default function () {
+export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
-  const setIsSidebarOpen = useSetIsSidebarOpen()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-
+    handleCloseSampleImg()
+    handleCloseBgOptions()
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -57,75 +60,59 @@ export default function () {
 
   const discardHandler = (id: string) => {
     setUploads([])
+    handleCloseSampleImg()
+    handleCloseBgOptions()
     editor.objects.removeById(id)
   }
 
   return (
     <DropZone handleDropFiles={handleDropFiles}>
-      <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-        {uploads.length === 0 && (
-          <Button
-            onClick={handleInputFileRefClick}
-            size={SIZE.compact}
-            overrides={{
-              Root: {
-                style: {
-                  width: "100%",
-                },
-              },
-            }}
-          >
-            Upload from Device
-          </Button>
-        )}
-        <Scrollable>
-          <Block padding={"0 1.5rem"}>
+      <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
+        <Block className="d-flex align-items-center flex-start">
+          <Block className="pl-1">
+            {uploads.length === 0 && <Block className={classes.panelHeading}>Add Image</Block>}
+          </Block>
+          <Block>
+            {uploads.length != 0 && (
+              <div
+                className="d-flex justify-content-start flex-row align-items-center pointer"
+                onClick={() => {
+                  //when right icon with Image is clicked set upload to intital state
+                  setUploads([])
+                  handleCloseSampleImg()
+                  handleCloseBgOptions()
+                }}
+              >
+                <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
+              </div>
+            )}
+          </Block>
+        </Block>
+        {uploads.length === 0 && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />}
+
+        <>
+          <Block className={classes.uploadInputWrapper}>
             <input
               onChange={handleFileInput}
               type="file"
               id="inputFile"
               ref={inputFileRef}
-              style={{ display: "none" }}
+              className={classes.uploadInput}
             />
-            <div
-              style={{
-                marginTop: "1rem",
-                display: "grid",
-                gap: "0.5rem",
-                gridTemplateColumns: "1fr 1fr",
-              }}
-            >
+            <Block className={classes.uploadPreviewSection}>
               {uploads.map((upload) => (
                 <div
                   key={upload.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    cursor: "pointer",
-                  }}
+                  className="d-flex align-items-center pointer"
+
                   // onClick={() => addImageToCanvas(upload)}
                 >
-                  <div>
-                    <img width="100%" src={upload.preview ? upload.preview : upload.url} alt="preview" />
-                    {selectedImage === upload.preview && (
-                      <div>
-                        <div>
-                          <button
-                            onClick={() => {
-                              discardHandler(upload.id)
-                            }}
-                          >
-                            Discard
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
                 </div>
               ))}
-            </div>
+            </Block>
           </Block>
-        </Scrollable>
+        </>
       </Block>
     </DropZone>
   )

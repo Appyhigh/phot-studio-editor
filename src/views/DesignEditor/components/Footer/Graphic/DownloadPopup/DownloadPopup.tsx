@@ -1,29 +1,12 @@
 import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
-import { Theme, styled, useStyletron } from "baseui"
+import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
-import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import { backgroundLayerType } from "~/constants/contants"
-
-const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
-  width: "460px",
-  height: "auto-fit",
-  background: $theme.colors.white,
-  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.12)",
-  border: `1px solid ${$theme.colors.borderTransparent}`,
-  borderRadius: $theme.sizing.scale500,
-  zIndex: 500,
-  right: "0px",
-  top: "35px",
-  padding: $theme.sizing.scale600,
-}))
-
-const SubHeading = styled<"p", {}, Theme>("p", ({ $theme }) => ({
-  fontSize: $theme.sizing.scale550,
-  color: $theme.colors.primary500,
-}))
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
@@ -117,15 +100,17 @@ const DownloadPopup = () => {
   return (
     <Block className="download-wrapper">
       <Block className="downloadPopup">
-        <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column" style={{ top: "35px" }}>
+        <Block
+          className={clsx(classes.downloadPopup, "d-flex justify-flex-start align-items-start p-absolute flex-column")}
+        >
           <Block className="pb-2">
-            <SubHeading className="pb-1">File Type</SubHeading>
+            <div className={clsx("pb-1", classes.subHeading)}>File Type</div>
             <SelectInput handleChange={handleTypeChange} />
           </Block>
           <Block className="mb-1">
-            <SubHeading className="mb-0">
-              Size <span className={css({ fontSize: theme.colors.borderAccent })}> (1414*2000px)</span>
-            </SubHeading>
+            <div className={clsx("mb-0", classes.subHeading)}>
+              Size <span> (1414*2000px)</span>
+            </div>
             <SliderBar
               width="424px"
               minVal={minSize}
@@ -136,9 +121,9 @@ const DownloadPopup = () => {
             />
           </Block>
           <Block className="mb-1">
-            <SubHeading className="mb-0">
-              Quality <span className={css({ fontSize: theme.sizing.scale400 })}>({qualityVal})</span>
-            </SubHeading>
+            <div className={clsx("mb-0", classes.subHeading)}>
+              Quality <span>({qualityVal})</span>
+            </div>
             <SliderBar
               width="190px"
               minVal={minQuality}
@@ -150,54 +135,22 @@ const DownloadPopup = () => {
           </Block>
           <Block className="d-flex justify-content-start flex-row">
             <Block>
-              <BaseBtn
-                title={"Download HD"}
-                bgColor="#FFF"
-                txtColor="#6729F3"
-                marginLeft="0px"
-                padding="60px"
-                borderColor="#6729F3"
-              />
-              <div
-                className="pt-1 pb-2 flex-center m-auto"
-                style={{
-                  color: "#92929D",
-                  fontSize: "12px",
-                  fontWeight: 300,
-                }}
-              >
-                1 Credit{" "}
-                <p
-                  className="mx-1"
-                  style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#92929D" }}
-                ></p>
+              <button className={clsx(classes.downloadBtn, classes.hdBtn)}>Download HD</button>
+              <div className={clsx(classes.subText, "pt-1 pb-2 flex-center m-auto")}>
+                1 Credit <div className={clsx(classes.circleDot, "mx-1")}></div>
                 Full Image (2157 × 1440)
               </div>
             </Block>
             <Block>
               <Block className="d-flex justify-content-start flex-column ml-2">
-                <BaseBtn
-                  title={"Download"}
-                  handleClick={exportToPNG}
-                  bgColor="#6729F3"
-                  txtColor="#fff"
-                  marginLeft="0px"
-                  padding="68px"
-                />
-                <p
-                  className="pt-1 pb-2 text-center"
-                  style={{
-                    color: "#92929D",
-                    fontSize: "12px",
-                    fontWeight: 300,
-                  }}
-                >
-                  Preview Image (611 × 408){" "}
-                </p>
+                <button className={clsx(classes.downloadBtn)} title={"Download"} onClick={exportToPNG}>
+                  Download
+                </button>
+                <div className={clsx(classes.subText, "pt-1 pb-2 flex-center m-auto")}>Preview Image (611 × 408) </div>
               </Block>
             </Block>
           </Block>
-        </Box>
+        </Block>
       </Block>
     </Block>
   )

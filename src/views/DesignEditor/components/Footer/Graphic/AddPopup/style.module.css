@@ -1,0 +1,39 @@
+.chevronTopIcon {
+  rotate: -90deg;
+  top: -60px;
+  left: 70px;
+}
+
+.addSubSection {
+  padding: 22px 10px 16px 24px;
+}
+
+.heading {
+  font-family: "Rubik";
+  font-weight: 500;
+  font-size: 14px;
+  padding-bottom: 6px;
+}
+.subHeading {
+  font-weight: 400;
+  font-size: 12px;
+  list-style: 16px;
+  font-family: "Rubik";
+  color: #92929d;
+}
+.horizontalLine {
+  width: 220px;
+  border: 1px solid #f1f1f5;
+  background: #fff;
+  z-index: 500;
+  margin-left: 20px;
+}
+
+.box {
+  width: 262px;
+  border: 1px solid #f1f1f5;
+  background: #fff;
+  z-index: 500;
+  height: auto-fit;
+  border-radius: 10px;
+}

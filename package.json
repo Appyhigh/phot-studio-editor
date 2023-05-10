@@ -20,6 +20,7 @@
     "are-passive-events-supported": "^1.1.1",
     "axios": "^0.27.2",
     "baseui": "^12.0.0",
+    "clsx": "^1.2.1",
     "i18next": "^21.8.13",
     "immutability-helper": "^3.1.1",
     "install": "^0.13.0",
@@ -38,6 +39,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "styletron-engine-atomic": "1.5.0-beta.2",
     "styletron-react": "6.1.0-beta.2",
+    "swiper": "^9.3.0",
     "use-debounce": "^8.0.4",
     "use-latest": "^1.2.1"
   },

@@ -38,6 +38,13 @@ const primitives = {
   scale1000: "40px",
   backgroundSecondary: "#696974",
   borderAccent: "#92929D",
+  borderAccentLight: "#E2E2EA",
+}
+
+const breakpoints = {
+  small: 769,
+  medium: 1024,
+  large: 1220,
 }
 
 const overrides = {
@@ -60,6 +67,7 @@ const overrides = {
     accent: primitives.accent,
     backgroundSecondary: primitives.backgroundSecondary,
     borderAccent: primitives.borderAccent,
+    borderAccentLight: primitives.borderAccentLight,
   },
   typography: {
     primaryExtraBold: {
@@ -104,6 +112,10 @@ const overrides = {
       fontWeight: "500",
       fontSize: "14px",
     },
+    LabelLarge: {
+      fontWeight: "600",
+      fontSize: "16px",
+    },
     LabelXSmall: { fontFamily: "Rubik", fontWeight: 400, fontSize: "12px", lineHeight: "16px" },
   },
   sizing: {
@@ -126,4 +138,16 @@ const overrides = {
   },
 }
 
-export const CustomTheme = createTheme(primitives, overrides)
+const mediaQuery = Object.keys(breakpoints).reduce(
+  // @ts-ignore
+  (acc, key) => {
+    // @ts-ignore
+    acc.mediaQuery[key] = `@media screen and (min-width: ${breakpoints[key]}px)`
+    return acc
+  },
+  {
+    mediaQuery: {},
+  }
+)
+
+export const CustomTheme = createTheme(primitives, { ...overrides, ...mediaQuery })

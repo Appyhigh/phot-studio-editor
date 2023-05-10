@@ -1,0 +1,29 @@
+.dropFileSection {
+  padding-top: 20px;
+}
+.uploadInputWrapper {
+  padding: 0px 8px;
+}
+
+.uploadPreviewSection {
+  margin-top: 0.5rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.uploadInput {
+  display: none;
+}
+.panelHeading{
+    font-weight: 600;
+    font-size: 16px;
+}
+@media screen and (min-width: 1220px) {
+  .panelHeading {
+    padding: 0px 0px 0px 16px;
+  }
+  .uploadInputWrapper {
+    padding: 0px 24px;
+  }
+}

@@ -1,8 +1,10 @@
 import React from "react"
 import useAppContext from "~/hooks/useAppContext"
-import panelItems from "./panelItems"
+import panelItems from "../panelItems"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import { Block } from "baseui/block"
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 interface State {
   panel: string
@@ -29,18 +31,14 @@ const PanelsList = () => {
 
   return (
     <Block
+      className={clsx("d-flex p-relative", classes.panelItem, isSidebarOpen && classes.sideBarOpenItem)}
       id="EditorPanelItem"
-      $style={{
-        background: "#ffffff",
-        width: isSidebarOpen ? "306px" : 0,
-        flex: "none",
-        borderRight: "1px solid #d7d8e3",
-        display: "flex",
-        transition: "ease width 0.1s",
-        overflow: "hidden",
-      }}
     >
-      {Component && <Component />}
+      {Component && (
+        <Block className="d-flex flex-1 p-relative bg-white">
+          <Component />
+        </Block>
+      )}{" "}
     </Block>
   )
 }

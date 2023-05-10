@@ -1,0 +1,57 @@
+.uploadInputSection {
+  border-radius: 8px;
+  margin: 0px auto 8px;
+  width: 280px;
+}
+
+.uploadInputContainer {
+  width: 280px;
+  height: 200px;
+  position: relative;
+}
+.uploadIcon{
+    margin: 10px auto 10px;
+}
+
+.lineWithText{
+    border-bottom:1px solid #92929D;
+    line-height:0.1em;
+    margin:16px auto 20px;
+    opacity:0.5;
+    padding:0px 10px;
+}
+.lineWithText span{
+    background-color: #FFF;
+    color: #92929D;
+    padding: 3px 10px 0px;
+}
+.iconWrapper{
+    margin: 0px 8px;
+    width: 32px;
+    height: 32px;
+    position: relative;
+   
+}
+
+.uploadText{
+    color:#696974;
+    font-size: 14px;
+}
+.uploadText p{
+    margin-top: 4px;
+    color: #6729F3;
+}
+@media screen and (min-width: 1220px) {
+  .uploadInputSection {
+    width: 319px;
+    margin: 14px auto 26px;
+  }
+  .uploadInputContainer {
+    width: 320px;
+    height: 200px;
+  }
+  .iconWrapper{
+    width: 48px;
+    height: 48px;
+  }
+}

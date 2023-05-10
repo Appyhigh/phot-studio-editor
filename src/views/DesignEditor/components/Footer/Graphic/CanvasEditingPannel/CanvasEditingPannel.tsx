@@ -1,13 +1,11 @@
 import { useEditor, useZoomRatio } from "@layerhub-io/react"
-import { Theme } from "baseui"
 import { Button, KIND } from "baseui/button"
 import { SIZE } from "baseui/input"
 import { Slider } from "baseui/slider"
 import React from "react"
-import { styled } from "baseui"
 import Icons from "~/components/Icons"
-
-// @ts-ignore
+import classes from "./style.module.css"
+import { Block } from "baseui/block"
 
 interface Options {
   zoomRatio: number
@@ -47,7 +45,7 @@ const CanvasEditingPannel = () => {
   }
 
   return (
-    <div className="d-flex justify-content-center align-items-center">
+    <Block className="d-flex justify-content-center align-items-center">
       <div className="d-flex justify-content-start align-items-center mr-2 p-relative"></div>
 
       <Slider
@@ -58,7 +56,7 @@ const CanvasEditingPannel = () => {
           Root: {
             style: ({ $theme }) => {
               return {
-                width: "150px",
+                width: "135px",
                 marginRight: "10px",
                 [$theme.mediaQuery.large]: {
                   width: "200px",
@@ -91,25 +89,23 @@ const CanvasEditingPannel = () => {
         min={zoomMin}
         max={zoomMax}
       />
-      <Button
-        kind={KIND.tertiary}
-        size={SIZE.compact}
+      <Block
+        className={classes.canvasOptions}
         onClick={() => {
           editor.history.undo()
         }}
       >
         <Icons.Undo size={22} />
-      </Button>
-      <Button
-        kind={KIND.tertiary}
-        size={SIZE.compact}
+      </Block>
+      <Block
+        className={classes.canvasOptions}
         onClick={() => {
           editor.history.redo()
         }}
       >
         <Icons.Redo size={22} />
-      </Button>
-    </div>
+      </Block>
+    </Block>
   )
 }
 

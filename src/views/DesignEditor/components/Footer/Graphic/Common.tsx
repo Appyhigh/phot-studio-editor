@@ -6,7 +6,7 @@ import { Button, KIND, SIZE } from "baseui/button"
 import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { StatefulTooltip } from "baseui/tooltip"
 import { PLACEMENT } from "baseui/toast"
-import DownloadPopup from "./DownloadPopup"
+import DownloadPopup from "./DownloadPopup/DownloadPopup"
 import SliderBar from "~/components/UI/Common/SliderBar"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
