@@ -8,7 +8,6 @@ import { styled } from "baseui"
 import Icons from "~/components/Icons"
 
 // @ts-ignore
-const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({}))
 
 interface Options {
   zoomRatio: number
@@ -48,7 +47,7 @@ const CanvasEditingPannel = () => {
   }
 
   return (
-    <Container className="d-flex justify-content-center align-items-center">
+    <div className="d-flex justify-content-center align-items-center">
       <div className="d-flex justify-content-start align-items-center mr-2 p-relative"></div>
 
       <Slider
@@ -110,7 +109,7 @@ const CanvasEditingPannel = () => {
       >
         <Icons.Redo size={22} />
       </Button>
-    </Container>
+    </div>
   )
 }
 

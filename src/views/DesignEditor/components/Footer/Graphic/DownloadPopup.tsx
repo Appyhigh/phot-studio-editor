@@ -1,7 +1,7 @@
 import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useState } from "react"
 import BaseBtn from "~/components/UI/Common/BaseBtn"
 import SelectInput from "~/components/UI/Common/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
@@ -116,89 +116,89 @@ const DownloadPopup = () => {
 
   return (
     <Block className="download-wrapper">
-    <Block className="downloadPopup">
-      <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column" style={{top:"35px"}}>
-        <Block className="pb-2">
-          <SubHeading className="pb-1">File Type</SubHeading>
-          <SelectInput handleChange={handleTypeChange} />
-        </Block>
-        <Block className="mb-1">
-          <SubHeading className="mb-0">
-            Size <span className={css({ fontSize: theme.colors.borderAccent })}> (1414*2000px)</span>
-          </SubHeading>
-          <SliderBar
-            width="424px"
-            minVal={minSize}
-            maxVal={maxSize}
-            thumbSize={"14px"}
-            val={[sizeVal]}
-            handleChange={handleSizeChange}
-          />
-        </Block>
-        <Block className="mb-1">
-          <SubHeading className="mb-0">
-            Quality <span className={css({ fontSize: theme.sizing.scale400 })}>({qualityVal})</span>
-          </SubHeading>
-          <SliderBar
-            width="190px"
-            minVal={minQuality}
-            maxVal={maxQuality}
-            thumbSize={"14px"}
-            val={[qualityVal]}
-            handleChange={handleQualityChange}
-          />
-        </Block>
-        <Block className="d-flex justify-content-start flex-row">
-          <Block>
-            <BaseBtn
-              title={"Download HD"}
-              bgColor="#FFF"
-              txtColor="#6729F3"
-              marginLeft="0px"
-              padding="60px"
-              borderColor="#6729F3"
-            />
-            <div
-              className="pt-1 pb-2 flex-center m-auto"
-              style={{
-                color: "#92929D",
-                fontSize: "12px",
-                fontWeight: 300,
-              }}
-            >
-              1 Credit{" "}
-              <p
-                className="mx-1"
-                style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#92929D" }}
-              ></p>
-              Full Image (2157 × 1440)
-            </div>
+      <Block className="downloadPopup">
+        <Box className="d-flex justify-flex-start align-items-start p-absolute flex-column" style={{ top: "35px" }}>
+          <Block className="pb-2">
+            <SubHeading className="pb-1">File Type</SubHeading>
+            <SelectInput handleChange={handleTypeChange} />
           </Block>
-          <Block>
-            <Block className="d-flex justify-content-start flex-column ml-2">
+          <Block className="mb-1">
+            <SubHeading className="mb-0">
+              Size <span className={css({ fontSize: theme.colors.borderAccent })}> (1414*2000px)</span>
+            </SubHeading>
+            <SliderBar
+              width="424px"
+              minVal={minSize}
+              maxVal={maxSize}
+              thumbSize={"14px"}
+              val={[sizeVal]}
+              handleChange={handleSizeChange}
+            />
+          </Block>
+          <Block className="mb-1">
+            <SubHeading className="mb-0">
+              Quality <span className={css({ fontSize: theme.sizing.scale400 })}>({qualityVal})</span>
+            </SubHeading>
+            <SliderBar
+              width="190px"
+              minVal={minQuality}
+              maxVal={maxQuality}
+              thumbSize={"14px"}
+              val={[qualityVal]}
+              handleChange={handleQualityChange}
+            />
+          </Block>
+          <Block className="d-flex justify-content-start flex-row">
+            <Block>
               <BaseBtn
-                title={"Download"}
-                handleClick={exportToPNG}
-                bgColor="#6729F3"
-                txtColor="#fff"
+                title={"Download HD"}
+                bgColor="#FFF"
+                txtColor="#6729F3"
                 marginLeft="0px"
-                padding="68px"
+                padding="60px"
+                borderColor="#6729F3"
               />
-              <p
-                className="pt-1 pb-2 text-center"
+              <div
+                className="pt-1 pb-2 flex-center m-auto"
                 style={{
                   color: "#92929D",
                   fontSize: "12px",
                   fontWeight: 300,
                 }}
               >
-                Preview Image (611 × 408){" "}
-              </p>
+                1 Credit{" "}
+                <p
+                  className="mx-1"
+                  style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#92929D" }}
+                ></p>
+                Full Image (2157 × 1440)
+              </div>
+            </Block>
+            <Block>
+              <Block className="d-flex justify-content-start flex-column ml-2">
+                <BaseBtn
+                  title={"Download"}
+                  handleClick={exportToPNG}
+                  bgColor="#6729F3"
+                  txtColor="#fff"
+                  marginLeft="0px"
+                  padding="68px"
+                />
+                <p
+                  className="pt-1 pb-2 text-center"
+                  style={{
+                    color: "#92929D",
+                    fontSize: "12px",
+                    fontWeight: 300,
+                  }}
+                >
+                  Preview Image (611 × 408){" "}
+                </p>
+              </Block>
             </Block>
           </Block>
-        </Block>
-      </Box>
-    </Block>
+        </Box>
+      </Block>
     </Block>
   )
 }
