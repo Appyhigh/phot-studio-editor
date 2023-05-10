@@ -6,7 +6,7 @@ import "swiper/css/autoplay"
 import { backgroundLayerType } from "~/constants/contants"
 import { useEditor } from "@layerhub-io/react"
 
-const SwiperWrapper = ({ data }: any) => {
+const SwiperWrapper = ({ data ,key}: any) => {
   const editor = useEditor()
 
   const handleChangeBg = (each: any) => {
@@ -31,6 +31,7 @@ const SwiperWrapper = ({ data }: any) => {
         editor.objects.setAsBackgroundImage()
       })
     } else if (each.gradient) {
+     
     }
   }
 
@@ -52,6 +53,7 @@ const SwiperWrapper = ({ data }: any) => {
                 onClick={() => {
                   handleChangeBg(each)
                 }}
+                key={idx}
                 style={{
                   width: "96px",
                   height: "96px",

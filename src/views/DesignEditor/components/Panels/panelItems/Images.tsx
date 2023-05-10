@@ -108,9 +108,8 @@ const Images = () => {
             </div>
 
             {BgOptions.map((each, index) => (
-              <>
+              <Block key={index}>
                 <Block
-                  key={index}
                   padding="0 20px"
                   $style={{
                     display: "flex",
@@ -123,8 +122,8 @@ const Images = () => {
                 >
                   {each.heading}
                 </Block>
-                <SwiperWrapper data={each.options} />
-              </>
+                <SwiperWrapper  data={each.options} />
+              </Block>
             ))}
           </Block>
         </Scrollable>
