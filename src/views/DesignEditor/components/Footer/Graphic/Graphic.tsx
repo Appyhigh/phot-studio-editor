@@ -14,9 +14,7 @@ const Graphic = () => {
   return (
     <Container className="d-flex justify-content-center flex-row">
       {/* <Scenes /> */}
-      {/* <Common /> */}
-        <Toolbox />
-      {/* <Toolbox /> */}
+      <Toolbox />
       {/* <Common /> */}
     </Container>
   )

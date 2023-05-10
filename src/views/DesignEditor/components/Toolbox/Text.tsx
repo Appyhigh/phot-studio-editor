@@ -210,7 +210,14 @@ export default function () {
   }, [editor, state])
   return (
     <Block
-      $style={{ flex: 1, display: "flex", alignItems: "center", padding: "0 12px", justifyContent: "space-between" }}
+      $style={{
+        flex: 1,
+        display: "flex",
+        alignItems: "center",
+        padding: "0 12px",
+        justifyContent: "space-between",
+        backgroundColor: "#fff",
+      }}
     >
       <Block display={"flex"} gridGap="0.5rem" alignItems={"center"}>
         <Block
