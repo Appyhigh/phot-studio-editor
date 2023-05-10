@@ -4,7 +4,7 @@ import { Theme } from "baseui/theme"
 import Common from "./Common"
 import Scenes from "./Scenes"
 import Toolbox from "../../Toolbox"
-import CanvasEditingPannel from "./CanvasEditingPannel"
+import CanvasEditingPannel from "./CanvasEditingPannel/CanvasEditingPannel"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   width: "100%",

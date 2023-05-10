@@ -1,0 +1,8 @@
+.canvasOptions {
+  margin: 10px 8px;
+}
+@media screen and (min-width: 1220px) {
+  .canvasOptions {
+    margin: 12px 12px 8px;
+  }
+}
