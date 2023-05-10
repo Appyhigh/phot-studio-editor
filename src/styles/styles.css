@@ -457,7 +457,7 @@ input[type="number"] {
   padding-left: 2.5rem;
 }
 
-.py-3{
+.py-3 {
   padding: 0 1.5rem;
 }
 
@@ -717,7 +717,7 @@ ul {
 
 .swiper-slide {
   border-radius: 6px;
-  width: 96px;
+  width: 84px;
   display: flex !important;
   flex-direction: column;
   justify-content: space-between;
@@ -736,6 +736,7 @@ ul {
   height: 20px !important;
   background-color: #fff;
   border-radius: 50%;
+  left: 18px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.04));
   background-image: url("/src/views/Public/images/chevron-left.svg");
   background-repeat: no-repeat;
@@ -756,4 +757,12 @@ ul {
 
 .swiper-wrapper {
   align-items: center;
+}
+@media screen and (min-width: 1216px) {
+  .swiper-slide {
+    width: 96px;
+  }
+  .swiper-button-prev {
+    left: 0px;
+  }
 }

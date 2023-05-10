@@ -4,11 +4,12 @@ import PanelsList from "./PanelsList"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import Icons from "~/components/Icons"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
+import { useStyletron } from "baseui"
 
 const Panels = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isSidebarOpen = useIsSidebarOpen()
-
+  const [css, theme] = useStyletron()
   return (
     <>
       <PanelsList />
@@ -16,7 +17,15 @@ const Panels = () => {
         <PanelItem />
         <Block
           className="m-auto pointer p-absolute"
-          style={{ left: isSidebarOpen ? "460px" : "100px", top: "50%", zIndex: 5 }}
+          $style={{
+            top: "50%",
+            zIndex: 5,
+            left: isSidebarOpen ? "390px" : "90px",
+
+            [theme.mediaQuery.large]: {
+              left: isSidebarOpen ? "460px" : "100px",
+            },
+          }}
         >
           <div
             className="p-relative"

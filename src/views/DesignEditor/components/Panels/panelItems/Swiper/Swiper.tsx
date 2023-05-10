@@ -6,15 +6,17 @@ import "swiper/css/autoplay"
 import { backgroundLayerType } from "~/constants/contants"
 import { useEditor } from "@layerhub-io/react"
 import Icons from "~/components/Icons"
+import { useStyletron } from "baseui"
+import { Block } from "baseui/block"
 
 const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
+  const [css, theme] = useStyletron()
 
-  const handleChangeBg = (each:any) => {
+  const handleChangeBg = (each: any) => {
     const bgObject = editor.frame.background.canvas._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType
     )[0]
-
 
     if (bgObject) {
       editor.objects.remove(bgObject.id)
@@ -37,10 +39,21 @@ const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption
   }
 
   return (
-    <section style={{ width: "340px", height: "120px", marginLeft: "20px" }}>
+    <Block
+      $style={{
+        width: "280px",
+        height: "96px",
+        margin: "0px 10px",
+        [theme.mediaQuery.large]: {
+          width: "340px",
+          height: "96px",
+          marginLeft: "20px",
+        },
+      }}
+    >
       <Swiper
         spaceBetween={8}
-        slidesPerView={3.4}
+        slidesPerView={"auto"}
         loop={true}
         centeredSlides={true}
         navigation={true}
@@ -49,28 +62,31 @@ const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption
         {data.map((each: any, idx: number) => {
           return (
             <SwiperSlide key={idx}>
-              <div
+              <Block
                 className="pointer flex-center"
                 onClick={() => {
-                  handleChangeBg(each)                  
-                  handleBgChangeOption({type,idx});
-
+                  handleChangeBg(each)
+                  handleBgChangeOption({ type, idx })
                 }}
                 key={idx}
-                style={{
-                  width: "96px",
-                  height: "96px",
+                $style={{
+                  width: "80px",
+                  height: "80px",
                   background: each.color || each.gradient ? each.color || each.gradient : `url(${each.img})`,
                   borderRadius: "8px",
+                  [theme.mediaQuery.large]: {
+                    width: "96px",
+                    height: "96px",
+                  },
                 }}
               >
                 {selectedBgOption.type === type && selectedBgOption.id === idx && <Icons.Selection size={"24"} />}
-              </div>
+              </Block>
             </SwiperSlide>
           )
         })}
       </Swiper>
-    </section>
+    </Block>
   )
 }
 

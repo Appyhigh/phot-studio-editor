@@ -1,6 +1,12 @@
-function GoogleDrive({ size }: { size: string }) {
+function GoogleDrive({ size }: { size?: string }) {
   return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={size ? size : "100%"}
+      height={size ? size : "100%"}
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle opacity="0.1" cx="24" cy="24" r="23.5" stroke="#92929D" />
       <g clipPath="url(#clip0_3078_7835)">
         <path d="M14.6666 36.8332L19.3333 28.6665H38L33.3333 36.8332H14.6666Z" fill="#4E91F5" />

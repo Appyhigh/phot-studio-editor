@@ -1,13 +1,16 @@
-import { Theme, styled } from "baseui"
+import { Theme, styled, useStyletron } from "baseui"
+import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
 const Box = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   borderRadius: "8px",
-  width: "319px",
-  margin: "0px auto 0px",
+  width: "280px",
+  [$theme.mediaQuery.large]: {
+    width: "319px",
+  },
 }))
 
 const Button = styled<"button", {}, Theme>("button", ({ $theme }) => ({
-  width: "319px",
+  width: "270px",
   height: "52px",
   textAlign: "center",
   color: $theme.colors.white,
@@ -17,13 +20,31 @@ const Button = styled<"button", {}, Theme>("button", ({ $theme }) => ({
   background: $theme.colors.accent,
   border: "1px solid transparent",
   borderRadius: "8px",
-  marginTop: "20px",
+  marginTop: "6px",
+  [$theme.mediaQuery.large]: {
+    width: "319px",
+    marginTop: "20px",
+  },
 }))
 
 const UploadPreview = ({ upload, selectedImage, discardHandler }: any) => {
+  const [css, theme] = useStyletron()
+
   return (
     <div>
-      <Icons.InputContainer size={"320px"} />
+      <Block
+        $style={{
+          width: "280px",
+          height: "200px",
+          position: "relative",
+          [theme.mediaQuery.large]: {
+            width: "320px",
+            height: "200px",
+          },
+        }}
+      >
+        <Icons.InputContainer />
+      </Block>
 
       <Box className={"flex-center flex-column "}>
         <img
@@ -34,11 +55,18 @@ const UploadPreview = ({ upload, selectedImage, discardHandler }: any) => {
         />
 
         {selectedImage === upload.preview && (
-          <div className="p-absolute" style={{ top: "70px", right: "38px" }}>
+          <Block className="p-absolute"
+          $style={{
+            top:"74px",right:"20px",
+            [theme.mediaQuery.large]:{
+              top: "70px", right: "38px" 
+            }
+          }}
+          >
             <span onClick={discardHandler}>
               <Icons.Trash size={"32"} />
             </span>
-          </div>
+          </Block>
         )}
       </Box>
       {selectedImage === upload.preview && <Button>Remove Background</Button>}

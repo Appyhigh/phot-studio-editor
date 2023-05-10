@@ -1,8 +1,8 @@
-function GooglePhotos({ size }: { size: string }) {
+function GooglePhotos({ size }: { size?: string }) {
   return (
     <svg
-      width="48"
-      height="48"
+      width={size ? size : "100%"}
+      height={size ? size : "100%"}
       viewBox="0 0 48 48"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

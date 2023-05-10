@@ -59,7 +59,7 @@ const CanvasEditingPannel = () => {
           Root: {
             style: ({ $theme }) => {
               return {
-                width: "150px",
+                width: "135px",
                 marginRight: "10px",
                 [$theme.mediaQuery.large]: {
                   width: "200px",

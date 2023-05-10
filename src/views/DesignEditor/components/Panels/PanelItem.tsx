@@ -3,8 +3,7 @@ import useAppContext from "~/hooks/useAppContext"
 import panelItems from "./panelItems"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import { Block } from "baseui/block"
-import Icons from "~/components/Icons"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
+import { useStyletron } from "baseui"
 
 interface State {
   panel: string
@@ -13,7 +12,6 @@ const PanelsList = () => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
   const { activePanel, activeSubMenu } = useAppContext()
-  const setIsSidebarOpen = useSetIsSidebarOpen()
 
   React.useEffect(() => {
     setState({ panel: activePanel })
@@ -30,19 +28,23 @@ const PanelsList = () => {
   // @ts-ignore
   const Component = panelItems[state.panel]
 
+  const [css, theme] = useStyletron()
   return (
     <Block
       id="EditorPanelItem"
       className="d-flex p-relative"
       $style={{
-        width: isSidebarOpen ? "360px" : 0,
+        width: isSidebarOpen ? "300px" : 0,
         flex: "none",
         transition: "ease width 0.1s",
         overflow: "hidden",
-    }}
+        [theme.mediaQuery.large]: {
+          width: isSidebarOpen ? "360px" : 0,
+        },
+      }}
     >
       {Component && (
-        <div className="d-flex flex-1 p-relative" style={{ backgroundColor: "#FFF"}}>
+        <div className="d-flex flex-1 p-relative" style={{ backgroundColor: "#FFF" }}>
           <Component />
         </div>
       )}{" "}

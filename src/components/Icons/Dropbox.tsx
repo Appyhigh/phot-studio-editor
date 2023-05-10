@@ -1,6 +1,12 @@
-function DropBox({ size }: { size: any }) {
+function DropBox({ size }: { size?: any }) {
   return (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width={size ? size : "100%"}
+      height={size ? size : "100%"}
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <circle opacity="0.1" cx="24" cy="24" r="23.5" stroke="#92929D" />
       <g clipPath="url(#clip0_3078_7849)">
         <path

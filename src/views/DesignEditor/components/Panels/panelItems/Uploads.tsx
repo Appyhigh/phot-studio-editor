@@ -10,6 +10,7 @@ import UploadInput from "~/components/UI/UploadInput"
 import UploadPreview from "./UploadPreview"
 import Icons from "~/components/Icons"
 import { LabelLarge } from "baseui/typography"
+import { useStyletron } from "baseui"
 
 export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -66,13 +67,18 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
     editor.objects.removeById(id)
   }
 
+  const [css, theme] = useStyletron()
   return (
     <DropZone handleDropFiles={handleDropFiles}>
       <Block className="d-flex flex-1 flex-column">
         <Block
           className="d-flex align-items-center flex-start"
           $style={{
-            padding: "20px 0px 0px 16px",
+            padding: "20px 0px 0px 6px",
+
+            [theme.mediaQuery.large]: {
+              padding: "20px 0px 0px 16px",
+            },
           }}
         >
           <Block className="pl-1">{uploads.length === 0 && <LabelLarge>Add Image</LabelLarge>}</Block>
@@ -98,7 +104,15 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
         {uploads.length === 0 && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />}
 
         <>
-          <Block padding={"0 1.5rem"}>
+          <Block
+            $style={{
+              padding: "0 8px",
+              [theme.mediaQuery.large]: {
+                padding: "0 1.5rem",
+              },
+            }}
+            padding={"0 1.5rem"}
+          >
             <input
               onChange={handleFileInput}
               type="file"

@@ -1,4 +1,4 @@
-import { Theme, styled } from "baseui"
+import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Icons from "../Icons"
 import { StatefulTooltip } from "baseui/tooltip"
@@ -16,8 +16,11 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   height: "55px",
   background: $theme.colors.white,
   boxShadow: `inset 0px -1px 0px ${$theme.colors.borderAccentLight}`,
-  padding: "15px 20px",
+  padding: "15px 0px",
   borderLeft: `2px solid ${$theme.colors.borderAccentLight}`,
+  [$theme.mediaQuery.large]: {
+    padding: "15px 20px",
+  },
 }))
 
 const BasePannel = () => {
@@ -29,7 +32,7 @@ const BasePannel = () => {
   }
 
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
-
+  const [css, theme] = useStyletron()
   return (
     <Container className="d-flex align-items-center flex-row">
       <Block className="d-flex justify-content-start align-items-center">
@@ -57,7 +60,12 @@ const BasePannel = () => {
             <Button
               kind={KIND.tertiary}
               size={SIZE.compact}
-              style={{ margin: "10px 15px" }}
+              style={{
+                margin: "10px 8px",
+                [theme.mediaQuery.large]: {
+                  margin: "10px 15px",
+                },
+              }}
               onClick={() => {
                 // function is called twice because there will be shomehow 1 element left in undo
                 resetHandler()
