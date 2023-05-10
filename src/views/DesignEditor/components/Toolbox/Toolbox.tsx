@@ -13,7 +13,6 @@ interface ToolboxState {
 }
 
 const Container = styled("div", (props) => ({
-  
   backgroundColor: props.$theme.colors.primaryB,
   height: "50px",
   display: "flex",
@@ -65,10 +64,7 @@ const Toolbox = () => {
   // @ts-ignore
   const Component = Items[state.toolbox]
 
-  return <Container className="mb-2" >{Component && <Component />}</Container>
-
-  // return <Container className="mb-2" >{Component ? <Component /> : state.toolbox}</Container>
-
+  return <Container className="mb-2">{Component && <Component />}</Container>
 }
 
 export default Toolbox
