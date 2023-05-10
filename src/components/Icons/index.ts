@@ -57,6 +57,7 @@ import GoogleDrive from "./GoogleDrive"
 import GooglePhotos from "./GooglePhotos"
 import Phone from "./Phone"
 import DropBox from "./Dropbox"
+import Selection from "./Selection"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -117,6 +118,7 @@ class Icons {
   static GooglePhotos = GooglePhotos
   static GoogleDrive = GoogleDrive
   static Phone = Phone
+  static Selection = Selection
 }
 
 export default Icons

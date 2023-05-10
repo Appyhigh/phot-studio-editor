@@ -5,14 +5,16 @@ import "swiper/css/navigation"
 import "swiper/css/autoplay"
 import { backgroundLayerType } from "~/constants/contants"
 import { useEditor } from "@layerhub-io/react"
+import Icons from "~/components/Icons"
 
-const SwiperWrapper = ({ data ,key}: any) => {
+const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
 
-  const handleChangeBg = (each: any) => {
+  const handleChangeBg = (each:any) => {
     const bgObject = editor.frame.background.canvas._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType
     )[0]
+
 
     if (bgObject) {
       editor.objects.remove(bgObject.id)
@@ -31,7 +33,6 @@ const SwiperWrapper = ({ data ,key}: any) => {
         editor.objects.setAsBackgroundImage()
       })
     } else if (each.gradient) {
-     
     }
   }
 
@@ -49,9 +50,11 @@ const SwiperWrapper = ({ data ,key}: any) => {
           return (
             <SwiperSlide key={idx}>
               <div
-                className="pointer"
+                className="pointer flex-center"
                 onClick={() => {
-                  handleChangeBg(each)
+                  handleChangeBg(each)                  
+                  handleBgChangeOption({type,idx});
+
                 }}
                 key={idx}
                 style={{
@@ -60,7 +63,9 @@ const SwiperWrapper = ({ data ,key}: any) => {
                   background: each.color || each.gradient ? each.color || each.gradient : `url(${each.img})`,
                   borderRadius: "8px",
                 }}
-              ></div>
+              >
+                {selectedBgOption.type === type && selectedBgOption.id === idx && <Icons.Selection size={"24"} />}
+              </div>
             </SwiperSlide>
           )
         })}

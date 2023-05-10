@@ -1,16 +1,32 @@
-import React from "react"
-import { useStyletron } from "baseui"
+import React, { useState } from "react"
+import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
-import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
 import Scrollable from "~/components/Scrollable"
 import { images } from "~/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import Uploads from "./Uploads"
+import SwiperWrapper from "./Swiper/Swiper"
+import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
+import { LabelLarge } from "baseui/typography"
+
+const Tabs = styled<"div", {}, Theme>("div", ({ $theme }) => ({
+  width: "50%",
+  textAlign: "center",
+  padding: "11px 0px",
+}))
 
 const BgRemover = () => {
   const editor = useEditor()
-  const setIsSidebarOpen = useSetIsSidebarOpen()
+  const [trySampleImgShow, setTrySampleImgShow] = useState(true)
+  const [showBgOptions, setShowBgOptions] = useState(false)
+  const [selectedBgOption, setSelectedBgOption] = useState({
+    type: -1,
+    id: 0,
+  })
+
+  const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
+    setSelectedBgOption({ type: type, id: idx })
+  }
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -26,30 +42,100 @@ const BgRemover = () => {
     },
     [editor]
   )
+  const handleCloseSampleImg = () => {
+    setTrySampleImgShow(!trySampleImgShow)
+  }
 
+  const handleCloseBgOptions = () => {
+    setShowBgOptions(!showBgOptions)
+  }
+
+  const [css, theme] = useStyletron()
   return (
-    <Block className="d-flex flex-column flex-1">
-      <Uploads />
-      <Block  className="mb-3 py-3">
-        Try Sample Images
-      </Block>
-      <Scrollable>
-        <Block className="py-3">
-          <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr" }}>
-            {images.map((image, index) => {
-              return (
-                <ImageItem
-                  key={index}
-                  onClick={() => {
-                    addObject(image.src.medium)
+    <Block className="d-flex flex-1 flex-column">
+      <Uploads handleCloseSampleImg={handleCloseSampleImg} handleCloseBgOptions={handleCloseBgOptions} />
+      {trySampleImgShow && (
+        <>
+          {" "}
+          <Block
+            padding="0 20px"
+            className="d-flex align-items-center justify-content-start mb-3"
+            $style={{
+              fontWeight: 600,
+              fontSize: theme.sizing.scale600,
+              marginLeft: theme.sizing.scale400,
+            }}
+          >
+            Try Sample Images
+          </Block>
+          <Scrollable>
+            <Block className="py-3">
+              <div style={{ display: "grid", gap: "8px", gridTemplateColumns: "1fr 1fr 1fr" }}>
+                {images.map((image, index) => {
+                  return (
+                    <ImageItem
+                      key={index}
+                      onClick={() => {
+                        addObject(image.src.medium)
+                      }}
+                      preview={image.src.small}
+                    />
+                  )
+                })}
+              </div>
+            </Block>
+          </Scrollable>
+        </>
+      )}
+
+      {showBgOptions && (
+        <Scrollable>
+          <Block className="mt-4">
+            <div
+              style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
+              className="d-flex  flex-row"
+            >
+              <Tabs
+                style={{
+                  background: "#171725",
+                  color: "#fff",
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+              >
+                Backgrounds
+              </Tabs>
+              <Tabs
+                style={{
+                  color: "#696974",
+                  borderRadius: "0px 4px 4px 0px",
+                }}
+              >
+                Upload
+              </Tabs>
+            </div>
+
+            {BgOptions.map((each, index) => (
+              <Block key={index}>
+                <Block
+                  className="d-flex align-items-center justify-content-start"
+                  $style={{
+                    margin: "20px 0px 14px 0px",
+                    padding: "0 20px",
                   }}
-                  preview={image.src.small}
+                >
+                  <LabelLarge> {each.heading}</LabelLarge>
+                </Block>
+                <SwiperWrapper
+                  type={index}
+                  selectedBgOption={selectedBgOption}
+                  handleBgChangeOption={handleBgChangeOption}
+                  data={each.options}
                 />
-              )
-            })}
-          </div>
-        </Block>
-      </Scrollable>
+              </Block>
+            ))}
+          </Block>
+        </Scrollable>
+      )}
     </Block>
   )
 }

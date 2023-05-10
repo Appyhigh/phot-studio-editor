@@ -19,6 +19,14 @@ const Images = () => {
   const editor = useEditor()
   const [trySampleImgShow, setTrySampleImgShow] = useState(true)
   const [showBgOptions, setShowBgOptions] = useState(false)
+  const [selectedBgOption, setSelectedBgOption] = useState({
+    type: -1,
+    id: 0,
+  })
+
+  const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
+    setSelectedBgOption({ type: type, id: idx })
+  }
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -117,7 +125,12 @@ const Images = () => {
                 >
                   <LabelLarge> {each.heading}</LabelLarge>
                 </Block>
-                <SwiperWrapper data={each.options} />
+                <SwiperWrapper
+                  type={index}
+                  selectedBgOption={selectedBgOption}
+                  handleBgChangeOption={handleBgChangeOption}
+                  data={each.options}
+                />
               </Block>
             ))}
           </Block>

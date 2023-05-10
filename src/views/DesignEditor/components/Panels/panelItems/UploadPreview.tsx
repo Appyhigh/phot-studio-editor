@@ -10,11 +10,11 @@ const Button = styled<"button", {}, Theme>("button", ({ $theme }) => ({
   width: "319px",
   height: "52px",
   textAlign: "center",
-  color: $theme.colors.borderAccent,
+  color: $theme.colors.white,
   fontWeight: 500,
   fontSize: $theme.sizing.scale650,
-  // @ts-ignore 
-  background: $theme.colors.grey400,
+  // @ts-ignore
+  background: $theme.colors.accent,
   border: "1px solid transparent",
   borderRadius: "8px",
   marginTop: "20px",
@@ -34,20 +34,14 @@ const UploadPreview = ({ upload, selectedImage, discardHandler }: any) => {
         />
 
         {selectedImage === upload.preview && (
-          <div className="p-absolute" style={{  top: "70px", right: "38px" }}>
+          <div className="p-absolute" style={{ top: "70px", right: "38px" }}>
             <span onClick={discardHandler}>
               <Icons.Trash size={"32"} />
             </span>
           </div>
         )}
       </Box>
-      {selectedImage === upload.preview && (
-        <div>
-          <div>
-            <Button>Remove Background</Button>
-          </div>
-        </div>
-      )}
+      {selectedImage === upload.preview && <Button>Remove Background</Button>}
     </div>
   )
 }

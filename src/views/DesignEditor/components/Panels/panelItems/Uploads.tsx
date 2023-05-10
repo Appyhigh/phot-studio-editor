@@ -1,7 +1,5 @@
 import React from "react"
 import { Block } from "baseui/block"
-import Scrollable from "~/components/Scrollable"
-import { Button, SIZE } from "baseui/button"
 import DropZone from "~/components/Dropzone"
 import { useEditor } from "@layerhub-io/react"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
@@ -11,7 +9,6 @@ import { toBase64 } from "~/utils/data"
 import UploadInput from "~/components/UI/UploadInput"
 import UploadPreview from "./UploadPreview"
 import Icons from "~/components/Icons"
-import useAppContext from "~/hooks/useAppContext"
 import { LabelLarge } from "baseui/typography"
 
 export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
@@ -84,7 +81,10 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
               <div
                 className="d-flex justify-content-start flex-row align-items-center pointer"
                 onClick={() => {
-                  setIsSidebarOpen(false)
+                  //when right icon with Image is clicked set upload to intital state
+                  setUploads([])
+                  handleCloseSampleImg()
+                  handleCloseBgOptions()
                 }}
               >
                 <Icons.ChevronRight size="16" />{" "}
