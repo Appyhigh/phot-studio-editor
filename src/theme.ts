@@ -15,7 +15,7 @@ const primitives = {
   sliderTrackFillActive: "#44444F",
   sliderHandleInnerFillSelectedActive: "#44444F",
   sliderHandleInnerFillSelectedHover: "#44444F",
-  primaryB:"#F1F2F6",
+  primaryB: "#F1F2F6",
   secondary: "#6729F3",
   accent: "#6729F3",
   primaryFontFamily: "Rubik",
@@ -37,7 +37,7 @@ const primitives = {
   scale950: "36px",
   scale1000: "40px",
   backgroundSecondary: "#696974",
-  borderAccent:"#92929D"
+  borderAccent: "#92929D",
 }
 
 const overrides = {
@@ -56,10 +56,10 @@ const overrides = {
     sliderHandleInnerFillSelectedActive: primitives.sliderHandleInnerFillSelectedActive,
     sliderHandleInnerFillSelectedHover: primitives.sliderHandleInnerFillSelectedHover,
     sliderTrackFillActive: primitives.sliderTrackFillActive,
-    primaryB:primitives.primaryB,
+    primaryB: primitives.primaryB,
     accent: primitives.accent,
-    backgroundSecondary:primitives.backgroundSecondary,
-    borderAccent:primitives.borderAccent,
+    backgroundSecondary: primitives.backgroundSecondary,
+    borderAccent: primitives.borderAccent,
   },
   typography: {
     primaryExtraBold: {
@@ -99,6 +99,12 @@ const overrides = {
       fontWeight: "500",
       fontSize: "12px",
     },
+    ParagraphSmall: {
+      fontFamily: "Rubik",
+      fontWeight: "500",
+      fontSize: "14px",
+    },
+    LabelXSmall: { fontFamily: "Rubik", fontWeight: 400, fontSize: "12px", lineHeight: "16px" },
   },
   sizing: {
     scale0: primitives.scale0,

@@ -4,11 +4,14 @@ import Playback from "../Playback"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import ContextMenu from "../ContextMenu"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
+import { ILayer } from "@layerhub-io/types"
 
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
   const frame = useFrame()
+  const objects = useObjects() as ILayer[]
+
   useEffect(() => {
     if (editor) {
       if (

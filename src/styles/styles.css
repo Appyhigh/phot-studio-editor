@@ -185,6 +185,9 @@ input[type="number"] {
   display: flex;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
 .flex-column {
   flex-direction: column;
 }
@@ -259,6 +262,9 @@ input[type="number"] {
   margin-right: auto;
 }
 
+.m-auto {
+  margin: auto;
+}
 .m-0 {
   margin: 0;
 }
@@ -638,12 +644,21 @@ ul {
   flex-direction: row;
 }
 /* download popup  */
-
-.downloadPopup {
+.download-wrapper {
   display: none;
+  min-width: 298px;
+  min-height: 260px;
+  top: 10px;
+  right: 2px;
+  position: absolute;
+  z-index: 500;
+}
+.downloadPopup {
+  min-width: 298px;
+  min-height: 260px;
 }
 
-.downloadResultBtn:hover .downloadPopup {
+.downloadResultBtn:hover .download-wrapper {
   display: block;
 }
 
@@ -651,6 +666,12 @@ ul {
 
 .resizeCanvas {
   display: none;
+  position: absolute;
+  min-width: 350px;
+  min-height: 200px;
+  left: -25px;
+  top: 0px;
+  z-index: 500;
 }
 .resizeCanvasBtn:hover .resizeCanvas {
   display: block;
@@ -659,4 +680,23 @@ ul {
   width: 16px;
   height: 16px;
   margin-right: 6px;
+}
+
+/* add Popup  */
+
+.addPopup {
+  display: none;
+  position: absolute;
+  min-width: 265px;
+  min-height: 200px;
+  top: 20px;
+}
+
+.addPopupCon {
+  min-width: 298px;
+  min-height: 200px;
+}
+
+.addPopupBtn:hover .addPopup {
+  display: block;
 }

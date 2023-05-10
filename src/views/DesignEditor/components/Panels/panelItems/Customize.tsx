@@ -55,8 +55,10 @@ const Customize = () => {
       (el: any) => el.metadata?.type === backgroundLayerType
     )[0]
 
+
     if (!bgObject) {
       editor?.frame?.setBackgroundColor("#FFF")
+
       const options = {
         type: "StaticImage",
         src: checkboxBGUrl,
@@ -66,6 +68,7 @@ const Customize = () => {
       editor.objects.add(options).then(() => {
         editor.objects.setAsBackgroundImage()
       })
+
     } else editor?.frame?.setBackgroundColor("#FFF")
   }
 
