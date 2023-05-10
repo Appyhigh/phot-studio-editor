@@ -1,4 +1,4 @@
-import { useStyletron, styled } from "baseui"
+import { useStyletron, styled, Theme } from "baseui"
 import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
@@ -8,9 +8,8 @@ import useEditorType from "~/hooks/useEditorType"
 import Scrollable from "~/components/Scrollable"
 import { Block } from "baseui/block"
 
-const Container = styled("div", (props) => ({
-  width: "100px",
-  backgroundColor: props.$theme.colors.white,
+const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
+  backgroundColor: $theme.colors.white,
   display: "flex",
   flex: "none",
   borderRight: "2px solid rgb(238, 238, 238)",
@@ -21,9 +20,18 @@ const PanelsList = () => {
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
+  const [css, theme] = useStyletron()
 
   return (
-    <Container>
+    <Container
+      $style={{
+        width: "90px",
+        // @ts-ignore
+        [theme.mediaQuery.large]: {
+          width: "100px",
+        },
+      }}
+    >
       <Scrollable autoHide={true}>
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
@@ -58,7 +66,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
         setActivePanel(name)
       }}
       $style={{
-        padding:"16px 15px",
+        padding: "16px 15px",
         backgroundColor: theme.colors.white,
         fontFamily: "Poppins",
         fontWeight: 500,
@@ -74,16 +82,19 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
       }}
     >
       <Icon size={24} />
-      <div
+      <Block
         className="text-center"
-        style={{
+        $style={{
           fontWeight: activePanel ? 500 : 400,
-          minWidth:"100px",
-          color: activePanel===name ? "#000" : "#92929D",
+          minWidth: "90px",
+          color: activePanel === name ? "#000" : "#92929D",
+          [theme.mediaQuery.large]: {
+            width: "100px",
+          },
         }}
       >
         {label}
-      </div>
+      </Block>
     </Block>
   )
 }
