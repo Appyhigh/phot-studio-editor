@@ -13,7 +13,7 @@ const Tabs = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   width: "50%",
   textAlign: "center",
   padding: "11px 0px",
-  cursor:"pointer"
+  cursor: "pointer",
 }))
 
 const Images = () => {
@@ -95,52 +95,52 @@ const Images = () => {
    
       {showBgOptions && (
        <>  <Block className="mt-4">
-       <div
-         style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
-         className="d-flex  flex-row"
-       >
-         <Tabs
-           style={{
+            <div
+              style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
+              className="d-flex  flex-row"
+            >
+              <Tabs
+                style={{
              background: "#171725",
              color: "#fff",
-             borderRadius: "4px 0px 0px 4px",
-           }}
-         >
-           Backgrounds
-         </Tabs>
-         <Tabs
-           style={{
+                  borderRadius: "4px 0px 0px 4px",
+                }}
+              >
+                Backgrounds
+              </Tabs>
+              <Tabs
+                style={{
              color: "#696974",
-             borderRadius: "0px 4px 4px 0px",
-           }}
-         >
-           Upload
-         </Tabs>
-       </div>
-     </Block>
-      <Scrollable>
-          <Block className="mt-2">
-            {BgOptions.map((each, index) => (
-              <Block key={index}>
-                <Block
-                  className="d-flex align-items-center justify-content-start"
-                  $style={{
-                    margin: "20px 0px 14px 0px",
-                    padding: "0 20px",
-                  }}
-                >
-                  <LabelLarge> {each.heading}</LabelLarge>
-                </Block>
-                <SwiperWrapper
-                  type={index}
-                  selectedBgOption={selectedBgOption}
-                  handleBgChangeOption={handleBgChangeOption}
-                  data={each.options}
-                />
-              </Block>
-            ))}
+                  borderRadius: "0px 4px 4px 0px",
+                }}
+              >
+                Upload
+              </Tabs>
+            </div>
           </Block>
-        </Scrollable>
+          <Scrollable>
+              <Block className="mt-2">
+                {BgOptions.map((each, index) => (
+                  <Block key={index}>
+                    <Block
+                      className="d-flex align-items-center justify-content-start"
+                      $style={{
+                        margin: "20px 0px 14px 0px",
+                        padding: "0 20px",
+                      }}
+                    >
+                      <LabelLarge> {each.heading}</LabelLarge>
+                    </Block>
+                    <SwiperWrapper
+                      type={index}
+                      selectedBgOption={selectedBgOption}
+                      handleBgChangeOption={handleBgChangeOption}
+                      data={each.options}
+                    />
+                  </Block>
+                ))}
+              </Block>
+          </Scrollable>
         </>
       )}
     </Block>

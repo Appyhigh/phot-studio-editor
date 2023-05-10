@@ -1,6 +1,7 @@
 import { Theme, styled, useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
+import GooglePhotos from "../../views/Public/images/google-photos.svg";
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   borderRadius: "8px",
   margin: "0px auto 8px",
@@ -73,8 +74,9 @@ const UploadInput = ({ handleInputFileRefClick }: any) => {
             <IconWrapper>
               <Icons.GoogleDrive />
             </IconWrapper>
-            <IconWrapper>
-              <Icons.GooglePhotos />
+            <IconWrapper >
+              
+              <img src={GooglePhotos}/>
             </IconWrapper>
             <IconWrapper>
               <Icons.DropBox />

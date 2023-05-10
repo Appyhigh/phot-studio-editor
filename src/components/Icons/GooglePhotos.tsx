@@ -1,4 +1,4 @@
-function GooglePhotos({ size }: { size?: string }) {
+function GooglePhotos({ size }: { size: string }) {
   return (
     <svg
       width={size ? size : "100%"}

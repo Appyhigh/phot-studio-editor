@@ -13,6 +13,7 @@ const Tabs = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   width: "50%",
   textAlign: "center",
   padding: "11px 0px",
+  cursor: "pointer",
 }))
 
 const BgRemover = () => {
@@ -58,12 +59,15 @@ const BgRemover = () => {
         <>
           {" "}
           <Block
-            padding="0 20px"
             className="d-flex align-items-center justify-content-start mb-3"
             $style={{
+              padding: "0 12px",
               fontWeight: 600,
               fontSize: theme.sizing.scale600,
               marginLeft: theme.sizing.scale400,
+              [theme.mediaQuery.large]: {
+                padding: "0 20px",
+              },
             }}
           >
             Try Sample Images
@@ -89,7 +93,8 @@ const BgRemover = () => {
       )}
 
       {showBgOptions && (
-        <Scrollable>
+        <>
+          {" "}
           <Block className="mt-4">
             <div
               style={{ margin: "0px 20px", border: "1px solid #F1F1F5", borderRadius: "4px" }}
@@ -113,28 +118,31 @@ const BgRemover = () => {
                 Upload
               </Tabs>
             </div>
-
-            {BgOptions.map((each, index) => (
-              <Block key={index}>
-                <Block
-                  className="d-flex align-items-center justify-content-start"
-                  $style={{
-                    margin: "20px 0px 14px 0px",
-                    padding: "0 20px",
-                  }}
-                >
-                  <LabelLarge> {each.heading}</LabelLarge>
-                </Block>
-                <SwiperWrapper
-                  type={index}
-                  selectedBgOption={selectedBgOption}
-                  handleBgChangeOption={handleBgChangeOption}
-                  data={each.options}
-                />
-              </Block>
-            ))}
           </Block>
-        </Scrollable>
+          <Scrollable>
+            <Block className="mt-2">
+              {BgOptions.map((each, index) => (
+                <Block key={index}>
+                  <Block
+                    className="d-flex align-items-center justify-content-start"
+                    $style={{
+                      margin: "20px 0px 14px 0px",
+                      padding: "0 20px",
+                    }}
+                  >
+                    <LabelLarge> {each.heading}</LabelLarge>
+                  </Block>
+                  <SwiperWrapper
+                    type={index}
+                    selectedBgOption={selectedBgOption}
+                    handleBgChangeOption={handleBgChangeOption}
+                    data={each.options}
+                  />
+                </Block>
+              ))}
+            </Block>
+          </Scrollable>
+        </>
       )}
     </Block>
   )
