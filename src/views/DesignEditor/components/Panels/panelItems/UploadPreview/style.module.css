@@ -1,0 +1,52 @@
+.uploadPreviewContainer {
+  width: 280px;
+  height: 200px;
+  position: relative;
+}
+
+.uploadPreview {
+  border-radius: 8px;
+  width: 280px;
+}
+.uploadedImg {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 4px;
+  top: 90px;
+}
+.discardBtn {
+  top: 74px;
+  right: 20px;
+}
+
+.removeBgBtn {
+  width: 270px;
+  height: 52px;
+  text-align: center;
+  color: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  background: #6729f3;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  margin-top: 6px;
+}
+
+@media screen and (min-width: 1220px) {
+  .uploadPreviewContainer {
+    width: 320px;
+    height: 200px;
+  }
+  .uploadPreview {
+    width: 319px;
+  }
+  .discardBtn {
+    top: 70px;
+    right: 38px;
+  }
+  .removeBgBtn {
+    width: 319px;
+    margin-top: 20px;
+  }
+}

@@ -1,10 +1,9 @@
 import React, { useState } from "react"
-import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { images } from "~/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
-import Uploads from "../Uploads"
+import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
 import { LabelLarge } from "baseui/typography"
@@ -46,7 +45,6 @@ const Images = () => {
     setShowBgOptions(!showBgOptions)
   }
 
-  const [css, theme] = useStyletron()
   return (
     <Block className="d-flex flex-1 flex-column">
       <Uploads handleCloseSampleImg={handleCloseSampleImg} handleCloseBgOptions={handleCloseBgOptions} />

@@ -19,9 +19,12 @@
 }
 @media screen and (min-width: 1220px) {
   .sliderBtnWrapper {
-    width: 100px;
+    left:100px;
   }
   .sliderOpen {
     left: 460px;
+  }
+  .sliderIcon {
+    left: 10px;
   }
 }

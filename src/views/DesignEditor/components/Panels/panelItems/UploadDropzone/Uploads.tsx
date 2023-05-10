@@ -2,21 +2,20 @@ import React from "react"
 import { Block } from "baseui/block"
 import DropZone from "~/components/Dropzone"
 import { useEditor } from "@layerhub-io/react"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { nanoid } from "nanoid"
 import { captureFrame, loadVideoResource } from "~/utils/video"
 import { toBase64 } from "~/utils/data"
-import UploadInput from "~/components/UI/UploadInput"
-import UploadPreview from "./UploadPreview"
+import UploadInput from "~/components/UI/UploadInput/UploadInput"
+import UploadPreview from "../UploadPreview/UploadPreview"
 import Icons from "~/components/Icons"
 import { LabelLarge } from "baseui/typography"
-import { useStyletron } from "baseui"
+import classes from "./style.module.css"
+import clsx from "clsx"
 
 export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
-  const setIsSidebarOpen = useSetIsSidebarOpen()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
 
   const handleDropFiles = async (files: FileList) => {
@@ -63,25 +62,16 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
     setUploads([])
     handleCloseSampleImg()
     handleCloseBgOptions()
-
     editor.objects.removeById(id)
   }
 
-  const [css, theme] = useStyletron()
   return (
     <DropZone handleDropFiles={handleDropFiles}>
-      <Block className="d-flex flex-1 flex-column">
-        <Block
-          className="d-flex align-items-center flex-start"
-          $style={{
-            padding: "20px 0px 0px 6px",
-
-            [theme.mediaQuery.large]: {
-              padding: "20px 0px 0px 16px",
-            },
-          }}
-        >
-          <Block className="pl-1">{uploads.length === 0 && <LabelLarge>Add Image</LabelLarge>}</Block>
+      <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
+        <Block className="d-flex align-items-center flex-start">
+          <Block className="pl-1">
+            {uploads.length === 0 && <Block className={classes.panelHeading}>Add Image</Block>}
+          </Block>
           <Block>
             {uploads.length != 0 && (
               <div
@@ -93,7 +83,7 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
                   handleCloseBgOptions()
                 }}
               >
-                <Icons.ChevronRight size="16" /> <LabelLarge className="ml-1">Image</LabelLarge>
+                <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
               </div>
             )}
           </Block>
@@ -101,30 +91,15 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
         {uploads.length === 0 && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />}
 
         <>
-          <Block
-            $style={{
-              padding: "0 8px",
-              [theme.mediaQuery.large]: {
-                padding: "0 1.5rem",
-              },
-            }}
-            padding={"0 1.5rem"}
-          >
+          <Block className={classes.uploadInputWrapper}>
             <input
               onChange={handleFileInput}
               type="file"
               id="inputFile"
               ref={inputFileRef}
-              style={{ display: "none" }}
+              className={classes.uploadInput}
             />
-            <Block
-              $style={{
-                marginTop: "0.5rem",
-                display: "grid",
-                gap: "0.5rem",
-                gridTemplateColumns: "1fr 1fr",
-              }}
-            >
+            <Block className={classes.uploadPreviewSection}>
               {uploads.map((upload) => (
                 <div
                   key={upload.id}
