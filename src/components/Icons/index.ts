@@ -36,6 +36,8 @@ import TextIcon from "./TextIcon"
 import StockImg from "./StockImg"
 import SliderIcon from "./SliderIcon"
 import SliderBtn from "./SliderBtn"
+import Plus from "./Plus"
+import ArrowDown from "./ArrowDown"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -75,6 +77,8 @@ class Icons {
   static TextIcon = TextIcon
   static SliderBtn = SliderBtn
   static SliderIcon = SliderIcon
+  static Plus = Plus
+  static ArrowDown = ArrowDown
 }
 
 export default Icons

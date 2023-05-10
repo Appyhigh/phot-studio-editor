@@ -1,10 +1,27 @@
 function Duplicate({ size }: { size: number }) {
   return (
-    <svg height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M18 18H3V5.25C3 4.65326 3.23705 4.08097 3.65901 3.65901C4.08097 3.23705 4.65326 3 5.25 3H15.75C16.3467 3 16.919 3.23705 17.341 3.65901C17.7629 4.08097 18 4.65326 18 5.25V18ZM4.5 16.5H16.5V5.25C16.5 5.05109 16.421 4.86032 16.2803 4.71967C16.1397 4.57902 15.9489 4.5 15.75 4.5H5.25C5.05109 4.5 4.86032 4.57902 4.71967 4.71967C4.57902 4.86032 4.5 5.05109 4.5 5.25V16.5ZM19.5 6.138V19.5H6V21H21V8.25C20.9981 7.7863 20.8529 7.33453 20.5844 6.95648C20.3159 6.57842 19.9372 6.29256 19.5 6.138Z"
-        fill="currentColor"
-      />
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#clip0_2707_8174)">
+        <path
+          d="M19.1 9H2.9C2.40294 9 2 9.39175 2 9.875V22.125C2 22.6082 2.40294 23 2.9 23H19.1C19.5971 23 20 22.6082 20 22.125V9.875C20 9.39175 19.5971 9 19.1 9Z"
+          stroke="#696974"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M6 5H23.1C23.3387 5 23.5676 5.09219 23.7364 5.25628C23.9052 5.42038 24 5.64294 24 5.875V19"
+          stroke="#696974"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_2707_8174">
+          <rect width="26" height="26" fill="white" />
+        </clipPath>
+      </defs>
     </svg>
   )
 }
