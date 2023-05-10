@@ -737,6 +737,7 @@ ul {
   background-color: #fff;
   border-radius: 50%;
   left: 18px;
+  top: 50px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.04));
   background-image: url("/src/views/Public/images/chevron-left.svg");
   background-repeat: no-repeat;
@@ -749,6 +750,7 @@ ul {
   background-color: #fff;
   border-radius: 50%;
   right: 20px;
+  top: 50px;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.04));
   background-image: url("/src/views/Public/images/chevron-right.svg");
   background-repeat: no-repeat;
@@ -764,5 +766,9 @@ ul {
   }
   .swiper-button-prev {
     left: 0px;
+    top: 60px;
+  }
+  .swiper-button-next {
+    top: 60px;
   }
 }

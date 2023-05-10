@@ -9,7 +9,7 @@ import Icons from "~/components/Icons"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 
-const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption }: any) => {
+const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
   const [css, theme] = useStyletron()
 
@@ -32,6 +32,7 @@ const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption
         metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
       }
       editor.objects.add(options).then(() => {
+        editor.frame.setBackgroundColor("#ffffff")
         editor.objects.setAsBackgroundImage()
       })
     } else if (each.gradient) {
@@ -72,6 +73,8 @@ const SwiperWrapper = ({ type, data, key, handleBgChangeOption, selectedBgOption
                 $style={{
                   width: "80px",
                   height: "80px",
+                  position: "relative",
+                  zIndex: 5,
                   background: each.color || each.gradient ? each.color || each.gradient : `url(${each.img})`,
                   borderRadius: "8px",
                   [theme.mediaQuery.large]: {
