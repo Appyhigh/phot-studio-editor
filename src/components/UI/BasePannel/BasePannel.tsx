@@ -1,19 +1,17 @@
-import { Theme, styled, useStyletron } from "baseui"
+import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Icons from "../../Icons"
 import { StatefulTooltip } from "baseui/tooltip"
 import { PLACEMENT } from "baseui/toast"
-import { Button, KIND } from "baseui/button"
-import { SIZE } from "baseui/input"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/DownloadPopup/DownloadPopup"
-import BaseBtn from "../Common/BaseBtn"
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel/CanvasEditingPannel"
 import { useEditor } from "@layerhub-io/react"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
 import { useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
 const BasePannel = () => {
   const editor = useEditor()
@@ -21,6 +19,15 @@ const BasePannel = () => {
     editor.objects.clear()
     editor.history.reset()
     editor.history.save()
+    const options = {
+      type: "StaticImage",
+      src: checkboxBGUrl,
+      preview: checkboxBGUrl,
+      metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+    }
+    editor.objects.add(options).then(() => {
+      editor.objects.setAsBackgroundImage()
+    })
   }
 
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
