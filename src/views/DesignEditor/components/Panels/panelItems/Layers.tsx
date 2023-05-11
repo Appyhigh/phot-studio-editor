@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
 import { useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
@@ -12,6 +12,8 @@ import Delete from "~/components/Icons/Delete"
 import { Button, KIND, SIZE } from "baseui/button"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { backgroundLayerType } from "~/constants/contants"
+import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
+import SelectInput from "~/components/UI/Common/SelectInput"
 
 const Layers = () => {
   const editor = useEditor()
@@ -19,6 +21,7 @@ const Layers = () => {
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
+  const [exportAs, setExportAs] = useState<any>("jpg")
 
   React.useEffect(() => {
     if (objects) {
@@ -56,6 +59,39 @@ const Layers = () => {
     },
     [editor]
   )
+
+  const handleTypeChange = (e: any) => {
+    setExportAs(e)
+  }
+
+  function toDataURL(url: any, callback: any) {
+    var xhr = new XMLHttpRequest()
+    xhr.onload = function () {
+      var reader = new FileReader()
+      reader.onloadend = function () {
+        callback(reader.result)
+      }
+      reader.readAsDataURL(xhr.response)
+    }
+    xhr.open("GET", url)
+    xhr.responseType = "blob"
+    xhr.send()
+  }
+
+  const exportHandler = useCallback(async () => {
+    if (editor && objects) {
+      if (exportAs != "svg") {
+        console.log(activeLayerPanel.preview)
+        if (activeLayerPanel.preview.startsWith("data")) {
+          makeDownloadToPNG(activeLayerPanel.preview, exportAs)
+        } else {
+          toDataURL(activeLayerPanel.preview, function (dataUrl: string) {
+            makeDownloadToPNG(dataUrl, exportAs)
+          })
+        }
+      } else makeDownloadToSVGHandler(activeLayerPanel.preview, { width: "1080px", height: "1080px" })
+    }
+  }, [editor, exportAs, objects, activeLayerPanel])
 
   return (
     <Block $style={{ flex: 1, display: "flex", flexDirection: "column" }}>
@@ -105,6 +141,8 @@ const Layers = () => {
               <button>Option 2</button>
               <button>Option 3</button>
               <button>Option 4</button>
+              <SelectInput handleChange={handleTypeChange} />
+              <button onClick={exportHandler}>Export</button>
             </div>
           ) : (
             layerObjects

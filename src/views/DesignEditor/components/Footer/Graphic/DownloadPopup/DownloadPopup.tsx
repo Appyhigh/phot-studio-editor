@@ -7,6 +7,7 @@ import SliderBar from "~/components/UI/Common/SliderBar"
 import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
 
 const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
@@ -33,7 +34,7 @@ const DownloadPopup = () => {
     setSizeVal(e)
   }
 
-  const exportToPNG = useCallback(async () => {
+  const exportHandler = useCallback(async () => {
     if (editor && objects) {
       let template: any = editor.scene.exportToJSON()
 
@@ -59,43 +60,12 @@ const DownloadPopup = () => {
 
       const image = (await editor.renderer.render(template)) as string
       if (selectedType != "svg") {
-        makeDownloadToPNG(image)
-      } else makeDownloadToSVG(image)
+        makeDownloadToPNG(image, selectedType)
+      } else makeDownloadToSVG(image, frame)
     }
   }, [editor, selectedType, frame, objects])
 
-  const makeDownloadToPNG = (data: Object) => {
-    const dataStr = `${data}`
-    const a = document.createElement("a")
-    a.href = dataStr
-    a.download = `image.${selectedType}`
-    a.click()
-  }
-
-  const makeDownloadToSVG = useCallback(
-    (data: Object) => {
-      const dataStr = `${data}`
-      const a = document.createElement("a")
-      const width = frame.width
-      const height = frame.height
-
-      const svgFile = `<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <rect width="${width}" height="${height}" fill="url(#pattern0)"/>
-    <defs>
-    <pattern id="pattern0" width="1" height="1">
-    <use xlink:href="#image0_118_3" />
-    <image id="image0_118_3" width="${width}" height="${height}" xlink:href="${dataStr}"/>
-    </pattern>
-    </defs>
-    </svg>`
-
-      const svgBlob = new Blob([svgFile], { type: "image/svg+xml" })
-      a.href = URL.createObjectURL(svgBlob)
-      a.download = `image.svg`
-      a.click()
-    },
-    [frame]
-  )
+  const makeDownloadToSVG = useCallback(makeDownloadToSVGHandler, [frame])
 
   return (
     <Block className="download-wrapper">
@@ -143,7 +113,7 @@ const DownloadPopup = () => {
             </Block>
             <Block>
               <Block className="d-flex justify-content-start flex-column ml-2">
-                <button className={clsx(classes.downloadBtn)} title={"Download"} onClick={exportToPNG}>
+                <button className={clsx(classes.downloadBtn)} title={"Download"} onClick={exportHandler}>
                   Download
                 </button>
                 <div className={clsx(classes.subText, "pt-1 pb-2 flex-center m-auto")}>Preview Image (611 × 408) </div>
