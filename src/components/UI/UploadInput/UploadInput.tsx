@@ -4,7 +4,7 @@ import GooglePhotos from "../../../views/Public/images/google-photos.svg"
 import classes from "./style.module.css"
 import clsx from "clsx"
 
-const UploadInput = ({ handleInputFileRefClick }: any) => {
+const UploadInput = ({ handleInputFileRefClick,width,height,type }: any) => {
   return (
     <>
       <Block
@@ -12,10 +12,10 @@ const UploadInput = ({ handleInputFileRefClick }: any) => {
         onClick={handleInputFileRefClick}
       >
         <Block className={classes.uploadInputContainer}>
-          <Icons.InputContainer />
+          <Icons.InputContainer width={width} height={height} />
         </Block>
 
-        <Block className="d-flex flex-column p-absolute w-100">
+        <Block className={clsx("d-flex flex-column p-absolute w-100",type==="modal"&&classes.bgInput)}>
           <Block className={classes.uploadIcon}>
             <Icons.Upload size={31} />
           </Block>
@@ -27,16 +27,16 @@ const UploadInput = ({ handleInputFileRefClick }: any) => {
             </Block>
           </Block>
           <Block className="d-flex flex-row justify-content-center">
-            <Block className={classes.iconWrapper}>
+            <Block className={clsx(classes.iconWrapper,type=="modal"&&classes.modalIconWrapper)}>
               <Icons.GoogleDrive />
             </Block>
-            <Block className={classes.iconWrapper}>
+            <Block className={clsx(classes.iconWrapper,type=="modal"&&classes.modalIconWrapper)}>
               <img src={GooglePhotos} />
             </Block>
-            <Block className={classes.iconWrapper}>
+            <Block className={clsx(classes.iconWrapper,type=="modal"&&classes.modalIconWrapper)}>
               <Icons.DropBox />
             </Block>
-            <Block className={classes.iconWrapper}>
+            <Block className={clsx(classes.iconWrapper,type=="modal"&&classes.modalIconWrapper)}>
               <Icons.Phone />
             </Block>
           </Block>

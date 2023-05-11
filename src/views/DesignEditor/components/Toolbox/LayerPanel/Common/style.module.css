@@ -1,0 +1,67 @@
+.filterOptions {
+  display: grid;
+  gap: 8px;
+  padding: 8px 0px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.filterOption {
+  width: 48px;
+  height: 48px;
+  background: #f1f1f5;
+  border-radius: 5px;
+}
+
+.filterName {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: #92929d;
+}
+.expandedState {
+  padding: 16px 13px 16px;
+}
+
+.blurState {
+  padding: 0px 14px 0px;
+  margin-bottom: 4px;
+}
+
+.filterState {
+  margin: 0px 14px 6px;
+}
+.textureState {
+  margin: 0px 14px 6px;
+}
+.selectedFilter {
+  color: #44444f;
+  border: 2px solid #44444f;
+}
+.selectedFilter .filterName {
+  color: #44444f;
+}
+.threadOption {
+  width: 100px;
+  height: 40px;
+  background: #f1f1f5;
+  border-radius: 8px;
+  color: #92929d;
+}
+
+.selectedTexture {
+  border: 1.5px solid #44444f;
+  color: #44444f;
+}
+
+.baseSliderHeading {
+  font-weight: 500;
+  font-size: 12px;
+  color: #696974;
+}
+.percentageVal {
+  font-size: 12px;
+  color: #92929d;
+}
+
+.adjustState {
+  margin: 10px 15px 10px;
+}
