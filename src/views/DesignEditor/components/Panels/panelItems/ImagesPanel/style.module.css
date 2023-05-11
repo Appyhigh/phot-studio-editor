@@ -21,18 +21,23 @@
   text-align: center;
   padding: 11px 0px;
   cursor: pointer;
+  color: #696974;
+  background-color: #fff;
 }
 
 .leftOption {
   border-radius: 4px 0px 0px 4px;
+}
+
+.rightOption {
+  border-radius: 0px 4px 4px 0px;
+}
+
+.selectedBgChoice {
   color: #fff;
   background-color: #171725;
 }
 
-.rightOption {
-  color: #696974;
-  border-radius: 0px 4px 4px 0px;
-}
 .bgOptionHeading {
   margin: 20px 0px 14px 0px;
   padding: 0px 20px;
@@ -73,18 +78,18 @@
   width: 100%;
 }
 
-.imageItem:hover{
-    opacity: 1;
+.imageItem:hover {
+  opacity: 1;
 }
 .imageItemSection::before:hover {
   opacity: 1;
 }
-.imagePreview{
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    pointer-events: none;
-    vertical-align: middle;
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  vertical-align: middle;
 }
 
 @media screen and (min-width: 1220px) {
