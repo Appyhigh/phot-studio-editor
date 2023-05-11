@@ -9,11 +9,14 @@ import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
 import { LabelLarge } from "baseui/typography"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import BgUpload from "~/components/UI/BgUpload/BgUpload"
 
 const Images = () => {
   const editor = useEditor()
   const [trySampleImgShow, setTrySampleImgShow] = useState(true)
   const [showBgOptions, setShowBgOptions] = useState(false)
+  const [backgroundChoice, setBackgroundChoice] = useState(0)
+
   const [selectedBgOption, setSelectedBgOption] = useState({
     type: -1,
     id: 0,
@@ -79,26 +82,48 @@ const Images = () => {
           {" "}
           <Block className="mt-4">
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
-              <Block className={clsx(classes.tabSection, classes.leftOption)}>Backgrounds</Block>
-              <Block className={clsx(classes.tabSection, classes.rightSection)}>Upload</Block>
+              <Block
+                className={clsx(
+                  classes.tabSection,
+                  classes.leftOption,
+                  backgroundChoice === 0 && classes.selectedBgChoice
+                )}
+                onClick={() => setBackgroundChoice(0)}
+              >
+                Background
+              </Block>
+              <Block
+                className={clsx(
+                  classes.tabSection,
+                  classes.rightOption,
+                  backgroundChoice === 1 && classes.selectedBgChoice
+                )}
+                onClick={() => setBackgroundChoice(1)}
+              >
+                Upload
+              </Block>
             </Block>
           </Block>
           <Scrollable>
-            <Block className="mt-2">
-              {BgOptions.map((each, index) => (
-                <Block key={index}>
-                  <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
-                    <LabelLarge> {each.heading}</LabelLarge>
+            {backgroundChoice === 0 ? (
+              <Block className="mt-2">
+                {BgOptions.map((each, index) => (
+                  <Block key={index}>
+                    <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
+                      <LabelLarge> {each.heading}</LabelLarge>
+                    </Block>
+                    <SwiperWrapper
+                      type={index}
+                      selectedBgOption={selectedBgOption}
+                      handleBgChangeOption={handleBgChangeOption}
+                      data={each.options}
+                    />
                   </Block>
-                  <SwiperWrapper
-                    type={index}
-                    selectedBgOption={selectedBgOption}
-                    handleBgChangeOption={handleBgChangeOption}
-                    data={each.options}
-                  />
-                </Block>
-              ))}
-            </Block>
+                ))}
+              </Block>
+            ) : (
+              <BgUpload />
+            )}
           </Scrollable>
         </>
       )}

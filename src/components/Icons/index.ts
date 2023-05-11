@@ -58,6 +58,7 @@ import GooglePhotos from "./GooglePhotos"
 import Phone from "./Phone"
 import DropBox from "./Dropbox"
 import Selection from "./Selection"
+import SearchIcon from "./SearchIcon"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -119,6 +120,7 @@ class Icons {
   static GoogleDrive = GoogleDrive
   static Phone = Phone
   static Selection = Selection
+  static SearchIcon = SearchIcon
 }
 
 export default Icons

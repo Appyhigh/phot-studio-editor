@@ -1,0 +1,140 @@
+.bgUploadSection {
+  margin: 20px 10px 0px 4px;
+  border-bottom: 1px solid rgba(93, 93, 93, 0.2);
+}
+.tabs {
+  width: 50%;
+  text-align: center;
+  padding: 11px 0px;
+  cursor: pointer;
+  background-color: #fff;
+  color: #696974;
+}
+
+.selectedChoice {
+  color: #6729f3;
+  font-weight: 500;
+  border-bottom: 4px solid #6729f3;
+}
+.uploadInput {
+  min-height: 50vh;
+  margin-left: 10px;
+}
+
+.inputFile {
+  display: none;
+}
+.inputWrapper {
+  margin-left: 10px;
+  position: relative;
+}
+.textInput {
+  height: 55px;
+  width: 275px;
+  margin-top: 20px;
+  border: 1px solid rgba(93, 93, 93, 0.3);
+  border-radius: 7px;
+}
+.iconWrapper {
+  background: #44444f;
+  border: 1px solid #5d5d5d;
+  border-radius: 7px;
+  width: 55px;
+  height: 55px;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.sampleImgSection {
+  margin: 10px 20px 20px 12px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.imageItemSection {
+  background: #f8f8fb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.imageItem {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.006) 8.1%,
+    rgba(0, 0, 0, 0.022) 15.5%,
+    rgba(0, 0, 0, 0.047) 22.5%,
+    rgba(0, 0, 0, 0.079) 29%,
+    rgba(0, 0, 0, 0.117) 35.3%,
+    rgba(0, 0, 0, 0.158) 41.2%,
+    rgba(0, 0, 0, 0.203) 47.1%,
+    rgba(0, 0, 0, 0.247) 52.9%,
+    rgba(0, 0, 0, 0.292) 58.8%,
+    rgba(0, 0, 0, 0.333) 64.7%,
+    rgba(0, 0, 0, 0.371) 71%,
+    rgba(0, 0, 0, 0.403) 77.5%,
+    rgba(0, 0, 0, 0.428) 84.5%,
+    rgba(0, 0, 0, 0.444) 91.9%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  height: 100%;
+  width: 100%;
+}
+
+.imageItem:hover {
+  opacity: 1;
+}
+.imageItemSection::before:hover {
+  opacity: 1;
+}
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  vertical-align: middle;
+}
+.selectedIcon {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 5;
+}
+@media screen and (min-width: 1220px) {
+  .bgUploadSection {
+    margin: 20px 0px 4px 25px;
+    width: 310px;
+  }
+  .uploadInput {
+    margin-left: 20px;
+  }
+  .inputWrapper {
+    margin: 20px 0px 4px 25px;
+  }
+  .textInput {
+    width: 310px;
+    margin: 0px;
+  }
+  .iconWrapper {
+    right: 40px;
+    top: 0px;
+  }
+  .sampleImgSection {
+    margin: 10px 30px 20px 12px;
+  }
+
+  .selectedIcon {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    z-index: 5;
+  }
+}
