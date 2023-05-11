@@ -167,9 +167,10 @@ const ContextMenu = () => {
           </ContextMenuItem>
           {activeObject?.type === "StaticImage" && (
             <ContextMenuItem
-              onClick={() => {
+              onClick={async () => {
                 // handleAsComponentHandler()
-                editor.objects.setAsBackgroundImage()
+                await editor.objects.unsetBackgroundImage()
+                await editor.objects.setAsBackgroundImage()
                 editor.cancelContextMenuRequest()
               }}
               icon="Images"

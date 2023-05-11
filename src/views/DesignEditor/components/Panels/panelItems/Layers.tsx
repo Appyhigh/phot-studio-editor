@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
@@ -19,6 +19,24 @@ const Layers = () => {
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
+  const [bgUrl, setBgUrl] = useState<any>("")
+
+  useEffect(() => {
+    const isBackgroundAnImage = editor.frame.background.canvas._objects[2]?.preview.length > 0
+    const isBackgroundAColor =
+      (!editor.frame.background.canvas._objects[2]?.preview ||
+        editor.frame.background.canvas._objects[2]?.preview.length === 0) &&
+      editor.frame.background.fill
+
+    const backgroundColor = editor.frame.background.fill
+    const backgroundImage = editor.frame.background.canvas._objects[2]?.preview
+
+    if (isBackgroundAnImage) {
+      setBgUrl(backgroundImage)
+    } else if (isBackgroundAColor) {
+      setBgUrl(backgroundColor)
+    }
+  }, [editor.frame.background.canvas._objects[2]])
 
   React.useEffect(() => {
     if (objects) {
@@ -41,7 +59,6 @@ const Layers = () => {
       }
     }
   }, [editor, objects])
-
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -109,7 +126,12 @@ const Layers = () => {
             </div>
           ) : (
             layerObjects
-              .filter((el) => el.metadata?.type !== backgroundLayerType)
+              .filter(
+                (el) =>
+                  el.metadata?.type !== backgroundLayerType &&
+                  el.preview !== editor?.frame?.background?.canvas?._objects[2]?.preview &&
+                  el.type !== "BackgroundImage"
+              )
               .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
               .map((object) => {
                 return (
@@ -235,6 +257,26 @@ const Layers = () => {
                 )
               })
           )}
+          {
+            <Block
+              $style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 90px",
+                fontSize: "14px",
+                alignItems: "center",
+                ":hover": {
+                  background: "rgb(245,246,247)",
+                },
+              }}
+            >
+              {!bgUrl.startsWith("#") ? (
+                <img src={bgUrl} style={{ objectFit: "cover" }} alt="nn" height="100px" width="100px" />
+              ) : (
+                <div style={{ backgroundColor: bgUrl, width: "100px", height: "100px" }}>&nbsp;</div>
+              )}
+              <Block $style={{ cursor: "pointer" }}>Background</Block>
+            </Block>
+          }
         </Block>
       </Scrollable>
     </Block>
