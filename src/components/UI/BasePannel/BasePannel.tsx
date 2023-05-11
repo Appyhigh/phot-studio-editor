@@ -1,4 +1,3 @@
-import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import Icons from "../../Icons"
 import { StatefulTooltip } from "baseui/tooltip"
@@ -15,6 +14,8 @@ import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
 const BasePannel = () => {
   const editor = useEditor()
+  const [showAddPopup, setShowAddPopup] = useState(false)
+
   const resetHandler = () => {
     editor.objects.clear()
     editor.history.reset()
@@ -30,14 +31,22 @@ const BasePannel = () => {
     })
   }
 
+  const handleCloseAddPopup = () => {
+    setShowAddPopup(false)
+  }
+
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
-  const [css, theme] = useStyletron()
   return (
     <Block className={clsx(classes.basePannel, "d-flex align-items-center flex-row")}>
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center">
           <div className="p-relative addPopupBtn">
-            <button className={classes.basePannelBtn}>
+            <button
+              className={classes.basePannelBtn}
+              onMouseOver={() => {
+                setShowAddPopup(true)
+              }}
+            >
               <span className="d-flex align-items-center">
                 <span className="pr-1">
                   <Icons.Plus size={16} />
@@ -48,7 +57,7 @@ const BasePannel = () => {
                 </span>
               </span>
             </button>
-            <AddPopup />
+            <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
           </div>
           <StatefulTooltip
             placement={PLACEMENT.bottom}

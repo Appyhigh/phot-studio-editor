@@ -1,0 +1,94 @@
+.objectLayerSection {
+  margin: 20px;
+}
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.box {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  width: 45%;
+  height: 70px;
+}
+.panelSubHeading {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.modifierSection {
+  margin-top: 30px;
+}
+
+.dropdownWrapper {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  min-height: 42px;
+  max-height: fit-content;
+}
+.box p ,.otherToolsBox p{
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: #696974;
+  margin-top: 10px;
+}
+.otherToolsBox {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  height: 76px;
+}
+.otherToolsBox p{
+    font-weight: 400;
+    text-align: center;
+}
+.dropdownWrapper {
+  margin: 6px 0px;
+}
+.dropdownHeading {
+  margin-left: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #44444f;
+}
+.reverseArrow {
+  transform: scaleY(-1);
+}
+.dropDownHeader {
+  padding: 8px 12px 10px 20px;
+}
+.collapseDropDown {
+  display: none;
+}
+.expandedDropDowon {
+  display: block;
+}
+
+.colorOption {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.colorsWrapper {
+  display: grid;
+  gap: 7px;
+  padding: 8px 0px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+.otherToolsWrapper {
+  display: grid;
+  gap: 7px;
+  padding: 8px 0px;
+  margin: 0px 5px;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media screen and (min-width: 1220px) {
+  .panelHeading {
+    padding: 0px 0px 0px 16px;
+  }
+}

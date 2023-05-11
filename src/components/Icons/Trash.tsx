@@ -1,6 +1,6 @@
-function Trash({ size }: { size: string }) {
+function Trash({ size }: { size?: string }) {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_d_3048_8277)">
         <circle cx="16" cy="12" r="12" transform="rotate(-180 16 12)" fill="#44444F" />
       </g>
@@ -42,5 +42,4 @@ function Trash({ size }: { size: string }) {
   )
 }
 
-
-export default Trash;
+export default Trash

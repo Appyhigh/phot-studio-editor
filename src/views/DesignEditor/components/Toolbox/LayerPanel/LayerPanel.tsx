@@ -6,8 +6,8 @@ import { ILayer } from "@layerhub-io/types"
 import { styled } from "baseui"
 import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
-import Toolbox from "../Toolbox"
 import Icons from "~/components/Icons"
+import ObjectLayer from "./ObjectLayer/ObjectLayer"
 
 interface ToolboxState {
   toolbox: string
@@ -15,7 +15,7 @@ interface ToolboxState {
 const DEFAULT_TOOLBOX = "Canvas"
 
 const Container = styled("div", (props) => ({
-  minWidth: "115px",
+  minWidth: "300px",
   height: "100%",
   display: "flex",
 }))
@@ -31,7 +31,10 @@ const Box = styled("div", (props) => ({
 const LayerPanel = () => {
   const [state, setState] = React.useState<ToolboxState>({ toolbox: "Text" })
   const { setActiveSubMenu } = useAppContext()
-
+  const [showObjectLayer, setShowObjectLayer] = useState(false)
+  const handleCloseObjectLayer = () => {
+    setShowObjectLayer(false)
+  }
   const editor = useEditor()
   const objects = useObjects() as ILayer[]
   const activeObject = useActiveObject() as any
@@ -86,21 +89,28 @@ const LayerPanel = () => {
     })
     return ans?.length >= 1 ? true : false
   }
+  useEffect(()=>{
+ if(!showObjectTypeText) {
+  setShowObjectLayer(false)
+ }
+  },[showObjectTypeText])
 
   return (
     <div className="d-flex flex-column p-relative">
       <Container
         className="p-relative"
         style={{
-          minWidth: showObjectTypeText ? "200px" : "105px",
+          minWidth: showObjectTypeText ? "300px" : "105px",
           maxWidth: "400px",
         }}
       >
+        
         <Block className="flex-center">
           <Block
             className="pointer"
             onClick={() => {
               setShowObjectTypeText(!showObjectTypeText)
+             
             }}
           >
             <Block>
@@ -124,7 +134,10 @@ const LayerPanel = () => {
           </Block>
         </Block>
         <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
+        {showObjectLayer?<ObjectLayer showLayer={showObjectLayer} handleClose={handleCloseObjectLayer} />:
+
           <Scrollable autoHide={true}>
+
             <Block className="p-1">
               {layerObjects.length === 0 ? (
                 <Box />
@@ -149,6 +162,8 @@ const LayerPanel = () => {
                         key={object.id}
                         onClick={() => {
                           setActiveLayerPanel(object)
+                          setShowObjectTypeText(true)
+                          setShowObjectLayer(true)
                           editor.objects.select(object.id)
                         }}
                       >
@@ -176,7 +191,7 @@ const LayerPanel = () => {
                   })
               )}
             </Block>
-          </Scrollable>
+          </Scrollable>}
         </Block>
       </Container>
     </div>

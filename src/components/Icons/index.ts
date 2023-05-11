@@ -59,6 +59,17 @@ import Phone from "./Phone"
 import DropBox from "./Dropbox"
 import Selection from "./Selection"
 import SearchIcon from "./SearchIcon"
+import Adjust from "./Adjust"
+import Drop from "./Drop"
+import Filter from "./Filter"
+import Image from "./Image"
+import Outline from "./Outline";
+import Reflection from "./Reflection"
+import SelectionBack from "./SelectionBack"
+import Texture from "./TextureIcon";
+import TrashIcon from "./TrashIcon"
+import ChevronDown from "./ChevronDown"
+import Blur from "./Blur"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -121,6 +132,17 @@ class Icons {
   static Phone = Phone
   static Selection = Selection
   static SearchIcon = SearchIcon
+  static Adjust=Adjust
+  static Drop=Drop
+  static Filter=Filter
+  static Image =Image
+  static Outline=Outline
+  static SelectionBack=SelectionBack
+  static Reflection =Reflection
+  static Texture=Texture
+  static TrashIcon=TrashIcon
+  static ChevronDown=ChevronDown
+  static Blur=Blur
 }
 
 export default Icons
