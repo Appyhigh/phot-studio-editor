@@ -33,7 +33,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               <Icons.Image />
               <p>Replace</p>
             </div>
-            <div className={clsx(classes.box, " pointer d-flex justify-content-center align-items-center flex-column ml-1")}>
+            <div
+              className={clsx(
+                classes.box,
+                " pointer d-flex justify-content-center align-items-center flex-column ml-1"
+              )}
+            >
               <Icons.TrashIcon size={"20"} />
               <p>Erase</p>
             </div>{" "}
@@ -41,6 +46,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
           {ObjectLayerOption.map((each, idx) => (
             <DropdownWrapper
+              key={idx}
               icon={each.icon}
               activeState={activeState}
               idx={idx}
@@ -52,13 +58,14 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
         <div className={classes.colorsWrapper}>
           {colors.map((each, idx) => {
-            return <div className={classes.colorOption} style={{ backgroundColor: each }}></div>
+            return <div key={idx} className={classes.colorOption} style={{ backgroundColor: each }}></div>
           })}
         </div>
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>
           {[1, 2, 3, 4].map((each, idx) => (
             <div
+            key={idx}
               className={clsx(
                 classes.otherToolsBox,
                 "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"

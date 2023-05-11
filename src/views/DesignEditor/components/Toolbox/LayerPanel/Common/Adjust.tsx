@@ -5,7 +5,7 @@ const Adjust = () => {
   return (
     <div className={classes.adjustState}>
       {AdjustOptions.map((each, idx) => (
-        <BaseSlider name={each.name} />
+        <BaseSlider name={each.name}  key={idx}/>
       ))}
     </div>
   )

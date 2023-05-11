@@ -4,9 +4,9 @@ function ChevronDown({ size }: { size: string }) {
       <path
         d="M10.5391 1.75L6.03906 6.25L1.53906 1.75"
         stroke="#B6B6B6"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   )
