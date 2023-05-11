@@ -2,12 +2,16 @@ import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
-import useAppContext from "~/hooks/useAppContext"
+import React from "react"
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from "baseui/modal"
+import { Button } from "baseui/button"
+import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 
 const AddPopup = ({ handleClose, showPopup }: any) => {
-  const setIsSidebarOpen = useSetIsSidebarOpen()
-  const { setActivePanel } = useAppContext()
+  const [isOpen, setIsOpen] = React.useState(false)
+  function close() {
+    setIsOpen(false)
+  }
 
   return showPopup ? (
     <Block className="addPopup">
@@ -16,18 +20,15 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           <div className={clsx("p-absolute", classes.chevronTopIcon)}>
             <Icons.SliderBtn size={106} width="10" />
           </div>
-          <Block
+          <div
             className={classes.addSubSection}
             onClick={() => {
-              handleClose()
-              setIsSidebarOpen(true)
-              // @ts-ignore 
-              setActivePanel("Images")
+              setIsOpen(true)
             }}
           >
             <Block className={classes.heading}>Image</Block>
             <Block className={classes.subHeading}>Lorem ipsum dolor sit amet consecte. Pulvinar vitae sit</Block>
-          </Block>
+          </div>
           <div className={classes.horizontalLine}></div>
           <Block
             className={classes.addSubSection}
@@ -50,6 +51,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           </Block>
         </Block>
       </Block>
+      <UploadImgModal isOpen={isOpen} handleClose={close} />
     </Block>
   ) : null
 }

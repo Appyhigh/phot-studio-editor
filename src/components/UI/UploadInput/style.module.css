@@ -41,6 +41,15 @@
     margin-top: 4px;
     color: #6729F3;
 }
+
+.bgInput{
+  left: 120px;
+  top:70px;
+}
+.modalIconWrapper{
+  width: 48px;
+    height: 48px;
+}
 @media screen and (min-width: 1220px) {
   .uploadInputSection {
     width: 319px;

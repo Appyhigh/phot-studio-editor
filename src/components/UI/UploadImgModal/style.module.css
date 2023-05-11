@@ -1,0 +1,17 @@
+.modalHeader {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 106%;
+  color: #000000;
+
+}
+
+.inputFile{
+    display: none;
+}
+.modal{
+ padding: 57px 43px 0px; 
+}
+.modalHeader{
+    margin-bottom: 50px;
+}
