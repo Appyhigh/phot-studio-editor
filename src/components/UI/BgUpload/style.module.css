@@ -108,6 +108,17 @@
   left: 30px;
   z-index: 5;
 }
+.textInput {
+  font-family: "Rubik";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #696974;
+  padding: 19px 0px 19px 18px;
+}
+.textInput:focus {
+  border: 1px solid rgba(93, 93, 93, 0.3);
+}
 @media screen and (min-width: 1220px) {
   .bgUploadSection {
     margin: 20px 0px 4px 25px;
