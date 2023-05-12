@@ -44,13 +44,21 @@ const Images = () => {
     setTrySampleImgShow(!trySampleImgShow)
   }
 
+  const handleOpenBgOptions = () => {
+    setShowBgOptions(true)
+  }
+
   const handleCloseBgOptions = () => {
-    setShowBgOptions(!showBgOptions)
+    setShowBgOptions(false)
   }
 
   return (
     <Block className="d-flex flex-1 flex-column">
-      <Uploads handleCloseSampleImg={handleCloseSampleImg} handleCloseBgOptions={handleCloseBgOptions} />
+      <Uploads
+        handleCloseSampleImg={handleCloseSampleImg}
+        handleCloseBgOptions={handleCloseBgOptions}
+        handleOpenBgOptions={handleOpenBgOptions}
+      />
       {trySampleImgShow && (
         <>
           {" "}

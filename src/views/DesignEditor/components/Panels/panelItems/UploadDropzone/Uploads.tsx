@@ -8,11 +8,10 @@ import { toBase64 } from "~/utils/data"
 import UploadInput from "~/components/UI/UploadInput/UploadInput"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import Icons from "~/components/Icons"
-import { LabelLarge } from "baseui/typography"
 import classes from "./style.module.css"
 import clsx from "clsx"
 
-export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
+export default function ({ handleCloseSampleImg, handleCloseBgOptions, handleOpenBgOptions }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
@@ -21,7 +20,6 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
     handleCloseSampleImg()
-    handleCloseBgOptions()
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -44,7 +42,7 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
     setUploads([...uploads, upload])
 
     editor.objects.add(upload).then(() => {
-      setSelectedImage(upload.preview)
+      setSelectedImage(upload)
       const fileInfo: any = document.getElementById("inputFile")
       if (fileInfo.value) fileInfo.value = ""
     })
@@ -107,7 +105,12 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions }: any) {
 
                   // onClick={() => addImageToCanvas(upload)}
                 >
-                  <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
+                  <UploadPreview
+                    handleOpenBgOptions={handleOpenBgOptions}
+                    upload={upload}
+                    selectedImage={selectedImage}
+                    discardHandler={discardHandler}
+                  />
                 </div>
               ))}
             </Block>

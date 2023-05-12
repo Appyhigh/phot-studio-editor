@@ -169,7 +169,10 @@ const ContextMenu = () => {
             <ContextMenuItem
               onClick={() => {
                 // handleAsComponentHandler()
-                editor.objects.setAsBackgroundImage()
+                editor.objects.unsetBackgroundImage()
+                setTimeout(() => {
+                  editor.objects.setAsBackgroundImage()
+                }, 50)
                 editor.cancelContextMenuRequest()
               }}
               icon="Images"
