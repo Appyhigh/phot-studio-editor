@@ -12,7 +12,7 @@ import Delete from "~/components/Icons/Delete"
 import { Button, KIND, SIZE } from "baseui/button"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { backgroundLayerType } from "~/constants/contants"
-import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
+import { makeDownloadToPNG, makeDownloadToSVGHandler, toDataURL } from "~/utils/export"
 import SelectInput from "~/components/UI/Common/SelectInput"
 
 const Layers = () => {
@@ -62,20 +62,6 @@ const Layers = () => {
 
   const handleTypeChange = (e: any) => {
     setExportAs(e)
-  }
-
-  function toDataURL(url: any, callback: any) {
-    var xhr = new XMLHttpRequest()
-    xhr.onload = function () {
-      var reader = new FileReader()
-      reader.onloadend = function () {
-        callback(reader.result)
-      }
-      reader.readAsDataURL(xhr.response)
-    }
-    xhr.open("GET", url)
-    xhr.responseType = "blob"
-    xhr.send()
   }
 
   const exportHandler = useCallback(async () => {
