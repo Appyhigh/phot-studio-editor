@@ -88,7 +88,7 @@ const BgRemover = () => {
               {BgOptions.map((each, index) => (
                 <Block key={index}>
                   <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
-                    <LabelLarge> {each.heading}</LabelLarge>
+                    <LabelLarge>{each.heading}</LabelLarge>
                   </Block>
                   <SwiperWrapper
                     type={index}
