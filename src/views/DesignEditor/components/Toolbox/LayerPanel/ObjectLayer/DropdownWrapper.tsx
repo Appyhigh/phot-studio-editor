@@ -18,9 +18,10 @@ const DropdownWrapper = ({
 }) => {
   // @ts-ignore
   const Icon = Icons[icon]
+  
   // @ts-ignore
   const Component = objectLayerOptions[heading]
-
+  
   return (
     <div className={classes.dropdownWrapper}>
       <div

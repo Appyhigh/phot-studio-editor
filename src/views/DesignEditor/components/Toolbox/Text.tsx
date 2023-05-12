@@ -217,10 +217,12 @@ export default function () {
         padding: "0 12px",
         justifyContent: "space-between",
         backgroundColor: "#fff",
+        flexDirection:"column",
       }}
     >
-      <Block display={"flex"} gridGap="0.5rem" alignItems={"center"}>
-        <Block
+      <Block display={"flex"}  gridGap="0.5rem" alignItems={"center"}>
+        {/* added in right layer panel  */}
+        {/* <Block
           onClick={() => setActiveSubMenu("FontSelector")}
           $style={{
             border: "1px solid rgb(185,185,185)",
@@ -239,9 +241,9 @@ export default function () {
           <Block display={"flex"}>
             <ChevronDown size={22} />
           </Block>
-        </Block>
+        </Block> */}
 
-        <TextFontSize />
+        {/* <TextFontSize /> */}
         <Block display={"flex"} alignItems={"center"}>
           <StatefulTooltip
             placement={PLACEMENT.bottom}
@@ -296,13 +298,13 @@ export default function () {
 
           <TextLetterCase />
 
-          <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} />
+          {/* <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} /> */}
 
-          <TextAlign />
+          {/* <TextAlign /> */}
 
-          <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} />
+          {/* <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} /> */}
 
-          <TextSpacing />
+          {/* <TextSpacing /> */}
           <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} />
           <Button onClick={() => setActiveSubMenu("TextEffects")} size={SIZE.compact} kind={KIND.tertiary}>
             Effects
@@ -312,8 +314,10 @@ export default function () {
             Animate
           </Button>
         </Block>
+        <Common />
+
       </Block>
-      <Common />
+      
     </Block>
   )
 }

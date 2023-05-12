@@ -1,6 +1,6 @@
 import { Slider } from "baseui/slider"
 
-const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize }: any) => {
+const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize,step }: any) => {
   return (
     <Slider
       overrides={{
@@ -29,6 +29,7 @@ const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize }: any)
           },
         },
       }}
+      step={step}
       value={[val]}
       onChange={({ value }) => handleChange(value)}
       min={minVal}

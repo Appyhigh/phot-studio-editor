@@ -8,7 +8,9 @@ import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import ObjectLayer from "./ObjectLayer/ObjectLayer"
-
+import clsx from "clsx"
+import classes from "./style.module.css"
+import TextLayer from "./TextLayer/TextLayer"
 interface ToolboxState {
   toolbox: string
 }
@@ -32,9 +34,16 @@ const LayerPanel = () => {
   const [state, setState] = React.useState<ToolboxState>({ toolbox: "Text" })
   const { setActiveSubMenu } = useAppContext()
   const [showObjectLayer, setShowObjectLayer] = useState(false)
+  const [showTextLayer, setShowTextLayer] = useState(false)
+
   const handleCloseObjectLayer = () => {
     setShowObjectLayer(false)
   }
+
+  const handleCloseTextLayer = () => {
+    setShowTextLayer(false)
+  }
+
   const editor = useEditor()
   const objects = useObjects() as ILayer[]
   const activeObject = useActiveObject() as any
@@ -89,11 +98,11 @@ const LayerPanel = () => {
     })
     return ans?.length >= 1 ? true : false
   }
-  useEffect(()=>{
- if(!showObjectTypeText) {
-  setShowObjectLayer(false)
- }
-  },[showObjectTypeText])
+  useEffect(() => {
+    if (!showObjectTypeText) {
+      setShowObjectLayer(false)
+    }
+  }, [showObjectTypeText])
 
   return (
     <div className="d-flex flex-column p-relative">
@@ -104,13 +113,11 @@ const LayerPanel = () => {
           maxWidth: "400px",
         }}
       >
-        
         <Block className="flex-center">
           <Block
             className="pointer"
             onClick={() => {
               setShowObjectTypeText(!showObjectTypeText)
-             
             }}
           >
             <Block>
@@ -134,64 +141,77 @@ const LayerPanel = () => {
           </Block>
         </Block>
         <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
-        {showObjectLayer?<ObjectLayer showLayer={showObjectLayer} handleClose={handleCloseObjectLayer} />:
-
-          <Scrollable autoHide={true}>
-
-            <Block className="p-1">
-              {layerObjects.length === 0 ? (
-                <Box />
-              ) : (
-                layerObjects
-                  .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
-                  .map((object) => {
-                    return (
-                      <Block
-                        className="d-flex justify-content-start align-items-center pointer"
-                        $style={{
-                          fontSize: "14px",
-                          backgroundColor: check_group(object.id)
-                            ? "rgb(245,246,247)"
-                            : activeObject?.id == object.id
-                            ? "rgb(245,246,247)"
-                            : "#fff",
-                          ":hover": {
-                            background: "rgb(245,246,247)",
-                          },
-                        }}
-                        key={object.id}
-                        onClick={() => {
-                          setActiveLayerPanel(object)
-                          setShowObjectTypeText(true)
-                          setShowObjectLayer(true)
-                          editor.objects.select(object.id)
-                        }}
-                      >
-                        {object.text ? (
-                          <div style={{ fontFamily: object.fontFamily }}>
-                            {object.textLines.map((line: any) => (
-                              <div>{line}</div>
-                            ))}
-                          </div>
-                        ) : (
-                          <img
-                            src={object.preview}
-                            style={{
-                              borderRadius: "4px",
-                              width: showObjectTypeText ? "40px" : "48px",
-                              height: showObjectTypeText ? "40px" : "48px",
-                            }}
-                            alt="nn"
-                            className="mx-1 my-1"
-                          />
-                        )}
-                        {showObjectTypeText && <Block>{object.name}</Block>}
-                      </Block>
-                    )
-                  })
-              )}
-            </Block>
-          </Scrollable>}
+          {showObjectLayer ? (
+            <ObjectLayer showLayer={showObjectLayer} handleClose={handleCloseObjectLayer} />
+          ) : showTextLayer ? (
+            <TextLayer showLayer={showTextLayer} handleClose={handleCloseTextLayer}/>
+          ) : (
+            <Scrollable autoHide={true}>
+              <Block className="p-1">
+                {layerObjects.length === 0 ? (
+                  <Box />
+                ) : (
+                  layerObjects
+                    .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
+                    .map((object) => {
+                      return (
+                        <Block
+                          className="d-flex justify-content-start align-items-center pointer"
+                          $style={{
+                            fontSize: "14px",
+                            backgroundColor: check_group(object.id)
+                              ? "rgb(245,246,247)"
+                              : activeObject?.id == object.id
+                              ? "rgb(245,246,247)"
+                              : "#fff",
+                            ":hover": {
+                              background: "rgb(245,246,247)",
+                            },
+                          }}
+                          key={object.id}
+                          onClick={() => {
+                            if (object.text) {
+                              setShowTextLayer(true)
+                            } else setShowObjectLayer(true)
+                            setActiveLayerPanel(object)
+                            setShowObjectTypeText(true)
+                            editor.objects.select(object.id)
+                          }}
+                        >
+                          {object.text ? (
+                            <div
+                              className={clsx("d-flex justify-content-center align-items-center", classes.textLayer)}
+                            >
+                              <div
+                                className={clsx(
+                                  classes.eachLayer,
+                                  showObjectTypeText ? classes.showObjectTextLayer : classes.hideShowObjectLayerText,
+                                  "flex-center"
+                                )}
+                              >
+                                <Icons.TextIcon size={21} />{" "}
+                              </div>
+                            </div>
+                          ) : (
+                            <img
+                              src={object.preview}
+                              style={{
+                                borderRadius: "4px",
+                                width: showObjectTypeText ? "40px" : "48px",
+                                height: showObjectTypeText ? "40px" : "48px",
+                              }}
+                              alt="nn"
+                              className={classes.eachLayer}
+                            />
+                          )}
+                          {showObjectTypeText && <Block>{object.name}</Block>}
+                        </Block>
+                      )
+                    })
+                )}
+              </Block>
+            </Scrollable>
+          )}
         </Block>
       </Container>
     </div>
