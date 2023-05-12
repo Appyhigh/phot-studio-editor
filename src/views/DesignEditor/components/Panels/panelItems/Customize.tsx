@@ -1,10 +1,10 @@
-import React, { useEffect } from "react"
+import React from "react"
 import { Button, SIZE } from "baseui/button"
 import { HexColorPicker } from "react-colorful"
 import { StatefulPopover, PLACEMENT } from "baseui/popover"
 import { Plus } from "baseui/icon"
 import { Input } from "baseui/input"
-import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { Modal, ROLE } from "baseui/modal"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
@@ -15,7 +15,6 @@ import SwapHorizontal from "~/components/Icons/SwapHorizontal"
 import { Tabs, Tab } from "baseui/tabs"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
-import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
 const colors = ["#FFF", "#9B9B9B", "#4A4A4A", "#000000", "#A70C2C", "#4990E2", "#F8E71D", "#47821A"]
@@ -34,13 +33,13 @@ const Customize = () => {
   })
 
   const changeBackgroundColor = (color: string) => {
+    editor.objects.unsetBackgroundImage()
     const bgObject = editor.frame.background.canvas._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType
     )[0]
 
     if (bgObject) {
       editor.objects.remove(bgObject.id)
-      editor.objects.unsetBackgroundImage()
     }
     editor.frame.setBackgroundColor(color)
   }
@@ -55,7 +54,6 @@ const Customize = () => {
       (el: any) => el.metadata?.type === backgroundLayerType
     )[0]
 
-
     if (!bgObject) {
       editor?.frame?.setBackgroundColor("#FFF")
 
@@ -68,7 +66,6 @@ const Customize = () => {
       editor.objects.add(options).then(() => {
         editor.objects.setAsBackgroundImage()
       })
-
     } else editor?.frame?.setBackgroundColor("#FFF")
   }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useState, useEffect } from "react"
 import { useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
@@ -22,6 +22,24 @@ const Layers = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
   const [exportAs, setExportAs] = useState<any>("jpg")
+  const [bgUrl, setBgUrl] = useState<any>("")
+
+  useEffect(() => {
+    const isBackgroundAnImage = editor.frame.background.canvas._objects[2]?.preview.length > 0
+    const isBackgroundAColor =
+      (!editor.frame.background.canvas._objects[2]?.preview ||
+        editor.frame.background.canvas._objects[2]?.preview.length === 0) &&
+      editor.frame.background.fill
+
+    const backgroundColor = editor.frame.background.fill
+    const backgroundImage = editor.frame.background.canvas._objects[2]?.preview
+
+    if (isBackgroundAnImage) {
+      setBgUrl(backgroundImage)
+    } else if (isBackgroundAColor) {
+      setBgUrl(backgroundColor)
+    }
+  }, [editor.frame.background.canvas._objects[2]])
 
   React.useEffect(() => {
     if (objects) {
@@ -132,7 +150,11 @@ const Layers = () => {
             </div>
           ) : (
             layerObjects
-              .filter((el) => el.metadata?.type !== backgroundLayerType)
+              .filter(
+                (el) =>
+                  el.metadata?.type !== backgroundLayerType &&
+                  el.preview !== editor?.frame?.background?.canvas?._objects[2]?.preview
+              )
               .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
               .map((object) => {
                 if (object._objects) {

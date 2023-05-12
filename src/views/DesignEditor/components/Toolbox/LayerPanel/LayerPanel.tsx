@@ -8,6 +8,9 @@ import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import ObjectLayer from "./ObjectLayer/ObjectLayer"
+import { backgroundLayerType } from "~/constants/contants"
+import classes from "./LayerPanel.module.css"
+import clsx from "clsx"
 
 interface ToolboxState {
   toolbox: string
@@ -42,6 +45,29 @@ const LayerPanel = () => {
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
   const [showObjectTypeText, setShowObjectTypeText] = useState(false)
 
+  const [bgUrl, setBgUrl] = useState<any>("")
+
+  useEffect(() => {
+    console.log(bgUrl)
+  }, [bgUrl])
+
+  React.useEffect(() => {
+    const isBackgroundAnImage = editor?.frame?.background?.canvas?._objects[2]?.preview?.length > 0
+    const isBackgroundAColor =
+      (!editor?.frame?.background?.canvas?._objects[2]?.preview ||
+        editor?.frame?.background?.canvas?._objects[2]?.preview.length === 0) &&
+      editor?.frame?.background?.fill
+
+    const backgroundColor = editor?.frame?.background?.fill
+    const backgroundImage = editor?.frame?.background?.canvas?._objects[2]?.preview
+
+    if (isBackgroundAnImage) {
+      setBgUrl(backgroundImage)
+    } else if (isBackgroundAColor) {
+      setBgUrl(backgroundColor)
+    }
+  }, [editor?.frame?.background?.canvas?._objects[2], editor?.frame?.background?.fill])
+
   React.useEffect(() => {
     if (objects) {
       setLayerObjects(objects.reverse())
@@ -51,6 +77,7 @@ const LayerPanel = () => {
   React.useEffect(() => {
     let watcher = async () => {
       if (objects) {
+        console.log(objects)
         setLayerObjects([...objects.reverse()])
       }
     }
@@ -89,11 +116,11 @@ const LayerPanel = () => {
     })
     return ans?.length >= 1 ? true : false
   }
-  useEffect(()=>{
- if(!showObjectTypeText) {
-  setShowObjectLayer(false)
- }
-  },[showObjectTypeText])
+  useEffect(() => {
+    if (!showObjectTypeText) {
+      setShowObjectLayer(false)
+    }
+  }, [showObjectTypeText])
 
   return (
     <div className="d-flex flex-column p-relative">
@@ -104,13 +131,11 @@ const LayerPanel = () => {
           maxWidth: "400px",
         }}
       >
-        
         <Block className="flex-center">
           <Block
             className="pointer"
             onClick={() => {
               setShowObjectTypeText(!showObjectTypeText)
-             
             }}
           >
             <Block>
@@ -134,64 +159,172 @@ const LayerPanel = () => {
           </Block>
         </Block>
         <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
-        {showObjectLayer?<ObjectLayer showLayer={showObjectLayer} handleClose={handleCloseObjectLayer} />:
-
-          <Scrollable autoHide={true}>
-
-            <Block className="p-1">
-              {layerObjects.length === 0 ? (
+          {showObjectLayer ? (
+            <ObjectLayer showLayer={showObjectLayer} handleClose={handleCloseObjectLayer} />
+          ) : (
+            <Scrollable autoHide={true}>
+              <Block className="p-1">
+                {/* {layerObjects.length === 0 ? (
                 <Box />
               ) : (
-                layerObjects
+                
+              )} */}
+                {layerObjects
+                  .filter(
+                    (el) =>
+                      el.metadata?.type !== backgroundLayerType &&
+                      el.preview !== editor?.frame?.background?.canvas?._objects[2]?.preview &&
+                      el.type !== "BackgroundImage"
+                  )
                   .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
                   .map((object) => {
-                    return (
-                      <Block
-                        className="d-flex justify-content-start align-items-center pointer"
-                        $style={{
-                          fontSize: "14px",
-                          backgroundColor: check_group(object.id)
-                            ? "rgb(245,246,247)"
-                            : activeObject?.id == object.id
-                            ? "rgb(245,246,247)"
-                            : "#fff",
-                          ":hover": {
-                            background: "rgb(245,246,247)",
-                          },
-                        }}
-                        key={object.id}
-                        onClick={() => {
-                          setActiveLayerPanel(object)
-                          setShowObjectTypeText(true)
-                          setShowObjectLayer(true)
-                          editor.objects.select(object.id)
-                        }}
-                      >
-                        {object.text ? (
-                          <div style={{ fontFamily: object.fontFamily }}>
-                            {object.textLines.map((line: any) => (
-                              <div>{line}</div>
-                            ))}
-                          </div>
-                        ) : (
-                          <img
-                            src={object.preview}
-                            style={{
-                              borderRadius: "4px",
-                              width: showObjectTypeText ? "40px" : "48px",
-                              height: showObjectTypeText ? "40px" : "48px",
-                            }}
-                            alt="nn"
-                            className="mx-1 my-1"
-                          />
-                        )}
-                        {showObjectTypeText && <Block>{object.name}</Block>}
-                      </Block>
-                    )
-                  })
-              )}
-            </Block>
-          </Scrollable>}
+                    if (object._objects) {
+                      return (
+                        <Block
+                          className="pointer"
+                          $style={{
+                            fontSize: "14px",
+                            backgroundColor: "rgb(245,246,247)",
+                            ":hover": {
+                              background: "rgb(245,246,247)",
+                            },
+                          }}
+                          key={object.id}
+                        >
+                          {object._objects.map((object: any) => {
+                            return (
+                              <Block
+                                className="d-flex justify-content-start align-items-center pointer"
+                                $style={{
+                                  fontSize: "14px",
+                                  backgroundColor: check_group(object.id)
+                                    ? "rgb(245,246,247)"
+                                    : activeObject?.id == object.id
+                                    ? "rgb(245,246,247)"
+                                    : "#E3E6FF",
+                                  ":hover": {
+                                    background: "rgb(245,246,247)",
+                                  },
+                                }}
+                                key={object.id}
+                                onClick={() => {
+                                  setActiveLayerPanel(object)
+                                  setShowObjectTypeText(true)
+                                  setShowObjectLayer(true)
+                                  editor.objects.select(object.id)
+                                }}
+                              >
+                                {object.text ? (
+                                  <div style={{ fontFamily: object.fontFamily }}>
+                                    {object.textLines.map((line: any) => (
+                                      <div>{line}</div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <img
+                                    src={object.preview}
+                                    style={{
+                                      borderRadius: "4px",
+                                      width: showObjectTypeText ? "40px" : "48px",
+                                      height: showObjectTypeText ? "40px" : "48px",
+                                    }}
+                                    alt="nn"
+                                    className="mx-1 my-1"
+                                  />
+                                )}
+                                {showObjectTypeText && <Block>{object.name}</Block>}
+                              </Block>
+                            )
+                          })}
+                        </Block>
+                      )
+                    } else {
+                      return (
+                        <Block
+                          className="d-flex justify-content-start align-items-center pointer"
+                          $style={{
+                            fontSize: "14px",
+                            backgroundColor: check_group(object.id)
+                              ? "rgb(245,246,247)"
+                              : activeObject?.id == object.id
+                              ? "rgb(245,246,247)"
+                              : "#fff",
+                            ":hover": {
+                              background: "rgb(245,246,247)",
+                            },
+                          }}
+                          key={object.id}
+                          onClick={() => {
+                            setActiveLayerPanel(object)
+                            setShowObjectTypeText(true)
+                            setShowObjectLayer(true)
+                            editor.objects.select(object.id)
+                          }}
+                        >
+                          {object.text ? (
+                            <div style={{ fontFamily: object.fontFamily }}>
+                              {object.textLines.map((line: any) => (
+                                <div>{line}</div>
+                              ))}
+                            </div>
+                          ) : (
+                            <img
+                              src={object.preview}
+                              style={{
+                                borderRadius: "4px",
+                                width: showObjectTypeText ? "40px" : "48px",
+                                height: showObjectTypeText ? "40px" : "48px",
+                              }}
+                              alt="nn"
+                              className="mx-1 my-1"
+                            />
+                          )}
+                          {showObjectTypeText && <Block>{object.name}</Block>}
+                        </Block>
+                      )
+                    }
+                  })}
+                <Block
+                  className="d-flex justify-content-start align-items-center pointer"
+                  $style={{
+                    fontSize: "14px",
+                    backgroundColor: "#fff",
+                    ":hover": {
+                      background: "rgb(245,246,247)",
+                    },
+                  }}
+                  onClick={() => {
+                    // setActiveLayerPanel(object)
+                    // editor.objects.select(object.id)
+                  }}
+                >
+                  {!bgUrl.startsWith("#") ? (
+                    <img
+                      src={bgUrl}
+                      alt="nn"
+                      style={{
+                        width: showObjectTypeText ? "40px" : "48px",
+                        height: showObjectTypeText ? "40px" : "48px",
+                      }}
+                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: showObjectTypeText ? "40px" : "48px",
+                        height: showObjectTypeText ? "40px" : "48px",
+                        backgroundColor: bgUrl,
+                      }}
+                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                    >
+                      &nbsp;
+                    </div>
+                  )}
+                  {showObjectTypeText && <Block>Background</Block>}
+                </Block>
+              </Block>
+            </Scrollable>
+          )}
         </Block>
       </Container>
     </div>
