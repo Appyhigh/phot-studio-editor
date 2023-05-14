@@ -18,3 +18,14 @@
   color: #44444f;
   margin: 25px 0px 8px;
 }
+.colorSection{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 0.25rem;
+}
+.eachColor{
+  height: 62px;
+  width: 62px;
+  cursor: pointer;
+  border-radius: 4px;
+}

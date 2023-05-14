@@ -3,10 +3,8 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import React from "react"
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from "baseui/modal"
-import { Button } from "baseui/button"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useEditor } from "@layerhub-io/react"
 import { FontItem } from "~/interfaces/common"
 import { loadFonts } from "~/utils/fonts"
 import { nanoid } from "nanoid"
@@ -19,8 +17,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
     setIsOpen(false)
   }
 
-  const activeObject=useActiveObject()
-  const addObject = async () => {
+  const addText = async () => {
     if (editor) {
       const font: FontItem = {
         name: "OpenSans-Regular",
@@ -77,7 +74,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           <Block
             className={classes.addSubSection}
             onClick={() => {
-              addObject()
+              addText();
               handleClose()
             }}
           >

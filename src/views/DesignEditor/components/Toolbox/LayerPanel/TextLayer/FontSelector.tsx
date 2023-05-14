@@ -4,7 +4,6 @@ import Icons from "~/components/Icons"
 import React, { useState } from "react"
 import { queryFonts } from "~/store/slices/fonts/actions"
 import { useSelector } from "react-redux"
-import useAppContext from "~/hooks/useAppContext"
 import { useDebounce } from "use-debounce"
 import { useStyletron } from "styletron-react"
 import { useAppDispatch } from "~/store/store"
@@ -57,22 +56,6 @@ const FontSelector = () => {
     }
   }
 
-  React.useEffect(() => {
-    dispath(
-      queryFonts({
-        query: searchQuery,
-        skip: pageNumber,
-        take: 100,
-      })
-    )
-    setHasMore(false)
-    if (!searchQuery) {
-      setHasMore(true)
-    } else {
-      setHasMore(false)
-    }
-  }, [searchQuery])
-
   const fetchData = React.useCallback(() => {
     if (!searchQuery) {
       dispath(
@@ -105,26 +88,15 @@ const FontSelector = () => {
       </div>
       <div className={activeState ? classes.expandedDropDowon : classes.collapseDropDown}>
         <>
-          <Block $style={{ display: "grid", gap: "0.2rem", width: "230px" }}>
+          <Block className={classes.fontSection}>
             <InfiniteScrolling fetchData={fetchData} hasMore={hasMore}>
-              <Block $style={{ display: "grid" }}>
+              <Block>
                 {commonFonts.map((font, index) => {
                   return (
                     <div
                       key={index}
                       onClick={() => handleFontFamilyChange(font)}
-                      className={css({
-                        height: "40px",
-                        display: "flex",
-                        alignItems: "center",
-                        cursor: "pointer",
-                        fontSize: "14px",
-                        padding: "0 12px",
-                        width: "232px",
-                        ":hover": {
-                          backgroundColor: "rgb(245,246,247)",
-                        },
-                      })}
+                      className={classes.eachFont}
                       id={font.id}
                     >
                       <img src={font.preview} />

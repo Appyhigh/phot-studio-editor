@@ -98,3 +98,20 @@
 .deleteTextIcon{
   margin-left: 4px;
 }
+.fontSection{
+  display: grid;
+  gap: 0.2rem;
+  width: 230px;
+}
+.eachFont{
+  height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 12px;
+  width: 232px;
+}
+.eachFont:hover{
+  background-color: rgb(245,246,247);
+}

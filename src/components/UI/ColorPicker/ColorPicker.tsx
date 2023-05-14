@@ -4,15 +4,12 @@ import React from "react"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { throttle } from "lodash"
 import { Block } from "baseui/block"
-import Scrollable from "~/components/Scrollable"
-import { Delete } from "baseui/icon"
 import { HexColorPicker } from "react-colorful"
 
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
 const ColorPicker = ({ isOpen, handleClose, inputColor }: any) => {
-    
   const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
   const editor = useEditor()
@@ -60,7 +57,9 @@ const ColorPicker = ({ isOpen, handleClose, inputColor }: any) => {
       <div className={classes.modal}>
         <>
           <Block className={classes.colorPickerSection}>
-            <HexColorPicker onChange={updateObjectFill}  />
+            <div className="hex-color-picker">
+              <HexColorPicker onChange={updateObjectFill} />
+            </div>
             <div className={classes.colorPickerInput}>
               <input
                 className={classes.colorPickerInputField}
@@ -72,17 +71,13 @@ const ColorPicker = ({ isOpen, handleClose, inputColor }: any) => {
             </div>
             <Block>
               <Block className={classes.colorTypeHeading}>Default Colors</Block>
-              <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr", gap: "0.25rem" }}>
+              <Block className={classes.colorSection}>
+                {" "}
                 {DEFAULT_COLORS.map((color, index) => (
                   <Block
-                    $style={{
-                      cursor: "pointer",
-                      borderRadius: "4px",
-                    }}
+                    className={classes.eachColor}
                     onClick={() => updateObjectFill(color)}
                     backgroundColor={color}
-                    height="62px"
-                    width={"62px"}
                     key={index}
                   />
                 ))}
@@ -90,17 +85,12 @@ const ColorPicker = ({ isOpen, handleClose, inputColor }: any) => {
             </Block>
             <Block>
               <Block className={classes.colorTypeHeading}>Document Colors</Block>
-              <Block $style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr", gap: "0.25rem" }}>
+              <Block className={classes.colorSection}>
                 {DOCUMENT_COLORS.map((color, index) => (
                   <Block
-                    $style={{
-                      cursor: "pointer",
-                      borderRadius: "4px",
-                    }}
+                    className={classes.eachColor}
                     onClick={() => updateObjectFill(color)}
                     backgroundColor={color}
-                    height="62px"
-                    width={"62px"}
                     key={index}
                   />
                 ))}
