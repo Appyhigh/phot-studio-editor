@@ -11,9 +11,9 @@ import { HexColorPicker } from "react-colorful"
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
-const ColorPicker = ({ isOpen, handleClose, textColor }: any) => {
+const ColorPicker = ({ isOpen, handleClose, inputColor }: any) => {
     
-  const [color, setColor] = React.useState(textColor)
+  const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
   const editor = useEditor()
   const close = () => {

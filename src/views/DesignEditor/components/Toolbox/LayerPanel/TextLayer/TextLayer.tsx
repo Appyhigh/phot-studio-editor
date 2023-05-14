@@ -16,13 +16,13 @@ import { throttle } from "lodash"
 
 const TextLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
-  const [textContent, setTextConent] = useState("Click here to edit")
   const [isOpen, setIsOpen] = React.useState(false)
   const [textColor, setTextColor] = useState("#000000")
 
   function close() {
     setIsOpen(false)
   }
+
 
   const [activeState, setActiveState] = useState(-1)
   const [align, setAlign] = useState("center")
@@ -35,6 +35,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
   const TEXT_ALIGNS = ["left", "center", "right"]
   const activeObject = useActiveObject()
+  const [textContent, setTextConent] = useState(activeObject?.text)
 
   const updateObjectFill = throttle((color: string) => {
     if (activeObject) {
@@ -47,6 +48,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
     // @ts-ignore
     if (activeObject && activeObject.type === "StaticText") {
       editor.objects.update({ text: textContent })
+
       // @ts-ignore
       setTextConent(activeObject.text)
     } // @ts-ignore
@@ -151,7 +153,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
             })}
           </div>
 
-          <ColorPicker textColor={textColor} isOpen={isOpen} handleClose={close} />
+          <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} />
 
           <div className={clsx(classes.panelSubHeading, "my-2")}>Background color</div>
           <div className={classes.colorsWrapper}>
