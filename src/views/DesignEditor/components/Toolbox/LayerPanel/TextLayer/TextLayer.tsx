@@ -11,11 +11,18 @@ import React, { useEffect, useState } from "react"
 import { TextLayerOption } from "~/views/DesignEditor/utils/TextLayerOtion"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import DeleteIcon from "~/components/Icons/Delete"
-import { Button } from "baseui/button"
+import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
+import { throttle } from "lodash"
 
 const TextLayer = ({ showLayer, handleClose }: any) => {
-  const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A"]
+  const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const [textContent, setTextConent] = useState("Click here to edit")
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [textColor, setTextColor] = useState("#000000")
+
+  function close() {
+    setIsOpen(false)
+  }
 
   const [activeState, setActiveState] = useState(-1)
   const [align, setAlign] = useState("center")
@@ -29,6 +36,13 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
   const TEXT_ALIGNS = ["left", "center", "right"]
   const activeObject = useActiveObject()
 
+  const updateObjectFill = throttle((color: string) => {
+    if (activeObject) {
+      editor.objects.update({ fill: color })
+    }
+
+    setTextColor(color)
+  }, 100)
   useEffect(() => {
     // @ts-ignore
     if (activeObject && activeObject.type === "StaticText") {
@@ -36,7 +50,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
       // @ts-ignore
       setTextConent(activeObject.text)
     } // @ts-ignore
-  }, [activeObject, activeObject?.text, textContent, editor, editor.objects.text])
+  }, [activeObject, editor])
 
   useEffect
   return showLayer ? (
@@ -113,13 +127,49 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
           <div className={clsx(classes.panelSubHeading, "my-2")}>Text color</div>
           <div className={classes.colorsWrapper}>
             {colors.map((each, idx) => {
-              return <div key={idx} className={classes.colorOption} style={{ backgroundColor: each }}></div>
+              return (
+                <div
+                  key={idx}
+                  className={clsx(classes.colorOption, "flex-center")}
+                  onClick={() => {
+                    if (idx === colors.length - 1) {
+                      setIsOpen(true)
+                    } else {
+                      updateObjectFill(each)
+                    }
+                  }}
+                  style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
+                >
+                  {idx === colors.length - 1 && (
+                    <div>
+                      {" "}
+                      <Icons.ColorPlus />{" "}
+                    </div>
+                  )}
+                </div>
+              )
             })}
           </div>
+
+          <ColorPicker textColor={textColor} isOpen={isOpen} handleClose={close} />
+
           <div className={clsx(classes.panelSubHeading, "my-2")}>Background color</div>
           <div className={classes.colorsWrapper}>
             {colors.map((each, idx) => {
-              return <div key={idx} className={classes.colorOption} style={{ backgroundColor: each }}></div>
+              return (
+                <div
+                  key={idx}
+                  className={clsx(classes.colorOption, "flex-center")}
+                  style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
+                >
+                  {idx === colors.length - 1 && (
+                    <div>
+                      {" "}
+                      <Icons.ColorPlus />{" "}
+                    </div>
+                  )}
+                </div>
+              )
             })}
           </div>
           <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>

@@ -1,0 +1,20 @@
+.colorPickerSection {
+  margin: 18px 16px;
+}
+.colorPickerInputField {
+  border: 1px solid #92929d;
+  border-radius: 5px;
+  height: 46px;
+  text-align: center;
+  width: 100%;
+  color: #44444f;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.colorTypeHeading {
+  font-size: 16px;
+  line-height: 19px;
+  color: #44444f;
+  margin: 25px 0px 8px;
+}

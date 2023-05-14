@@ -85,7 +85,6 @@ const Layers = () => {
   const exportHandler = useCallback(async () => {
     if (editor && objects) {
       if (exportAs != "svg") {
-        console.log(activeLayerPanel.preview)
         if (activeLayerPanel.preview.startsWith("data")) {
           makeDownloadToPNG(activeLayerPanel.preview, exportAs)
         } else {

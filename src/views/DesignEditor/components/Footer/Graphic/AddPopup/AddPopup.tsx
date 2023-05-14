@@ -43,7 +43,6 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
       
       editor.objects.add(options)
 
-      console.log(activeObject);
       
     }
   }
