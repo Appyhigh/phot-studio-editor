@@ -176,7 +176,6 @@ const Layers = () => {
                         {object.name}
                       </Block>
                       {object._objects.map((el: any) => {
-                        console.log(el)
                         if (el.text) {
                           return (
                             <Block className="d-flex align-items-center" $style={{ flexWrap: "wrap" }}>

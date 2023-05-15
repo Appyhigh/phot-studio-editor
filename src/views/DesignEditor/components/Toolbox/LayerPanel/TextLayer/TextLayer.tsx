@@ -23,7 +23,6 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
     setIsOpen(false)
   }
 
-
   const [activeState, setActiveState] = useState(-1)
   const [align, setAlign] = useState("center")
   const editor = useEditor()
@@ -35,6 +34,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
   const TEXT_ALIGNS = ["left", "center", "right"]
   const activeObject = useActiveObject()
+  // @ts-ignore
   const [textContent, setTextConent] = useState(activeObject?.text)
 
   const updateObjectFill = throttle((color: string) => {
@@ -47,12 +47,15 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
   useEffect(() => {
     // @ts-ignore
     if (activeObject && activeObject.type === "StaticText") {
-      editor.objects.update({ text: textContent })
-
       // @ts-ignore
-      setTextConent(activeObject.text)
-    } // @ts-ignore
-  }, [activeObject, editor])
+      if (activeObject.isEditing) {
+        // @ts-ignore
+        setTextConent(activeObject.text)
+      } else {
+        editor.objects.update({ text: textContent })
+      }
+    }
+  }, [activeObject,  textContent])
 
   useEffect
   return showLayer ? (

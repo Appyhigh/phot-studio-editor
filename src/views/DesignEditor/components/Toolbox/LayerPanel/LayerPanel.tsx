@@ -115,8 +115,7 @@ const LayerPanel = () => {
 
   useEffect(() => {
     if (activeObject?.id && layerState.isOpenSlider) {
-      console.log(activeObject)
-
+      
       if (activeObject?.text) {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       } else if (activeObject?.metadata?.type == backgroundLayerType) {
