@@ -31,6 +31,46 @@ export const changeLayerFill = (base64ImageData: string, backgroundColor: string
   })
 }
 
+export const changeLayerFillWithGradient = (base64ImageData: string, gradient: string) => {
+  return new Promise((resolve, reject) => {
+    const image = new Image()
+
+    image.onload = function () {
+      let grad: any = gradient
+      const canvas = document.createElement("canvas")
+      canvas.width = image.width
+      canvas.height = image.height
+
+      const context: any = canvas.getContext("2d")
+
+      const gradientFill = context.createLinearGradient(0, 0, canvas.width, canvas.height)
+      grad = grad.slice(gradient.indexOf("(") + 1, gradient.indexOf(")")).split(",")
+
+      grad.forEach((color: string, index: number) => {
+        if (index !== 0) {
+          console.log(1 / (grad.length - 1) + ((index - 1) * 1) / (grad.length - 1))
+          gradientFill.addColorStop(1 / (grad.length - 1) + ((index - 1) * 1) / (grad.length - 1), color.split(" ")[1])
+        }
+      })
+
+      context.fillStyle = gradientFill
+      context.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Draw the image on the canvas
+      context.drawImage(image, 0, 0)
+
+      const canvasDataURL = canvas.toDataURL() // Get base64 representation of the canvas
+      resolve(canvasDataURL)
+    }
+
+    image.onerror = function () {
+      reject(new Error("Failed to load the image."))
+    }
+
+    image.src = base64ImageData
+  })
+}
+
 export const changeLayerBackgroundImage = (image1Data: string, image2Data: string) => {
   return new Promise((resolve, reject) => {
     const image1 = new Image()
