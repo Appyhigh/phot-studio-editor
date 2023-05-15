@@ -7,7 +7,7 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import Icons from "~/components/Icons"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
-import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayerBackground"
+import { changeLayerBackgroundImage, changeLayerFill, changeLayerFillWithGradient } from "~/utils/updateLayerBackground"
 import { useCallback } from "react"
 import { toDataURL } from "~/utils/export"
 
@@ -23,6 +23,21 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           each.color
+        )
+        const options = {
+          type: "StaticImage",
+          src: previewWithUpdatedBackground,
+          preview: previewWithUpdatedBackground,
+          metadata: {
+            generationDate: new Date().getTime(),
+            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+          },
+        }
+        editor.objects.add(options)
+      } else if (each.gradient) {
+        const previewWithUpdatedBackground: any = await changeLayerFillWithGradient(
+          activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+          each.gradient
         )
         const options = {
           type: "StaticImage",
