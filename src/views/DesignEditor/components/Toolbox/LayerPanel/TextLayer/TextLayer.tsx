@@ -156,7 +156,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
             })}
           </div>
 
-          <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} />
+          <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} type="text" />
 
           <div className={clsx(classes.panelSubHeading, "my-2")}>Background color</div>
           <div className={classes.colorsWrapper}>
