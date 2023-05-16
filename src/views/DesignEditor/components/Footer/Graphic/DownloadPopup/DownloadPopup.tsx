@@ -1,5 +1,4 @@
 import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
-import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
 import SelectInput from "~/components/UI/Common/SelectInput"
@@ -13,13 +12,12 @@ const DownloadPopup = () => {
   const [selectedType, setSelectedType] = useState("jpg")
   const editor = useEditor()
   const objects: any = useObjects()
-  const [css, theme] = useStyletron()
-  const [qualityVal, setQualtiyVal] = useState(50)
-  const [sizeVal, setSizeVal] = useState(50)
-  const minQuality = 10
+  const [qualityVal, setQualtiyVal] = useState(80)
+  const [sizeVal, setSizeVal] = useState(1)
+  const minQuality = 1
   const maxQuality = 100
-  const minSize = 10
-  const maxSize = 100
+  const minSize = 0.1
+  const maxSize = 3
   const frame = useFrame()
 
   const handleTypeChange = (e: any) => {
@@ -59,11 +57,13 @@ const DownloadPopup = () => {
       template = { ...template, layers: template.layers.filter((layer: any) => !hiddenLayersIDs.includes(layer.id)) }
 
       const image = (await editor.renderer.render(template)) as string
+      const nWidth = frame.width * sizeVal
+      const nHeight = frame.height * sizeVal
       if (selectedType != "svg") {
-        makeDownloadToPNG(image, selectedType)
-      } else makeDownloadToSVG(image, frame)
+        makeDownloadToPNG(image, selectedType, nHeight, nWidth)
+      } else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
     }
-  }, [editor, selectedType, frame, objects])
+  }, [editor, selectedType, frame, objects, sizeVal])
 
   const makeDownloadToSVG = useCallback(makeDownloadToSVGHandler, [frame])
 
@@ -79,9 +79,10 @@ const DownloadPopup = () => {
           </Block>
           <Block className="mb-1">
             <div className={clsx("mb-0", classes.subHeading)}>
-              Size <span> (1414*2000px)</span>
+              Size <span> ({`${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}px)</span>
             </div>
             <SliderBar
+              step={0.05}
               width="424px"
               minVal={minSize}
               maxVal={maxSize}

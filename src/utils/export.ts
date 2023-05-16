@@ -1,5 +1,11 @@
-export const makeDownloadToPNG = (data: Object, selectedType: string) => {
-  const dataStr = `${data}`
+import { resizeImage } from "./canvasUtils"
+
+export const makeDownloadToPNG = async (data: any, selectedType: string, height?: number, width?: number) => {
+  let image = data
+  if (height && width) {
+    image = await resizeImage(data, height, width)
+  }
+  const dataStr = `${image}`
   const a = document.createElement("a")
   a.href = dataStr
   a.download = `image.${selectedType}`
