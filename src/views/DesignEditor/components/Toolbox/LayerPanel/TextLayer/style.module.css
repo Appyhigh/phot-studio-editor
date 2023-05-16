@@ -11,6 +11,9 @@
   width: 95%;
   font-size: 12px;
   padding: 12px 14px 2px;
+  font-family: "Rubik";
+  line-height: 14px;
+  color: #44444f;
 }
 
 .alignmentWrapper {
@@ -92,18 +95,18 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 14px;
-    color: #696974;
+  color: #696974;
 }
 
-.deleteTextIcon{
+.deleteTextIcon {
   margin-left: 4px;
 }
-.fontSection{
+.fontSection {
   display: grid;
   gap: 0.2rem;
   width: 230px;
 }
-.eachFont{
+.eachFont {
   height: 40px;
   display: flex;
   align-items: center;
@@ -112,6 +115,6 @@
   padding: 0 12px;
   width: 232px;
 }
-.eachFont:hover{
-  background-color: rgb(245,246,247);
+.eachFont:hover {
+  background-color: rgb(245, 246, 247);
 }
