@@ -73,11 +73,7 @@ const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOpti
       {selectedImage?.preview === upload.preview && (
         <button
           onClick={() => {
-            setLoaderPopup((prev: any) => ({ ...prev, showPopup: true }))
-            setTimeout(() => {
-              setLoaderPopup((prev: any) => ({ ...prev, showPopup: false }))
-              removeBackgroundHandler()
-            }, 3000)
+            removeBackgroundHandler()
           }}
           className={classes.removeBgBtn}
         >

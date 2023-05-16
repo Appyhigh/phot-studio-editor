@@ -17,9 +17,7 @@ import { CustomTheme } from "./theme"
 const engine = new Styletron()
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
-  const [loaderPopup, setLoaderPopup] = useState<any>({
-    showUploadPopup: false,
-  })
+  const [loaderPopup, setLoaderPopup] = useState<boolean>(false)
   return (
     <ReduxProvier store={store}>
       <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
