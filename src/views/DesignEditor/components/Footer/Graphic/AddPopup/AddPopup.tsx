@@ -83,7 +83,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           </Block>
         </Block>
       </Block>
-      <UploadImgModal isOpen={isOpen} handleClose={close} />
+      <UploadImgModal  type="add" isOpen={isOpen} handleClose={close} />
     </Block>
   ) : null
 }
