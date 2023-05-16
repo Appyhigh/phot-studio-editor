@@ -35,7 +35,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
   const TEXT_ALIGNS = ["left", "center", "right"]
   const activeObject = useActiveObject()
   // @ts-ignore
-  const [textContent, setTextConent] = useState(activeObject?.text)
+  const [textContent, setTextConent] = useState({ text: activeObject?.text, id: activeObject?.id })
 
   const updateObjectFill = throttle((color: string) => {
     if (activeObject) {
@@ -44,18 +44,20 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
     setTextColor(color)
   }, 100)
+
+  useEffect(() => {
+    if (activeObject) {
+      setTextConent({ text: activeObject?.text, id: activeObject?.id })
+    }
+  }, [activeObject])
   useEffect(() => {
     // @ts-ignore
     if (activeObject && activeObject.type === "StaticText") {
       // @ts-ignore
-      if (activeObject.isEditing) {
-        // @ts-ignore
-        setTextConent(activeObject.text)
-      } else {
-        editor.objects.update({ text: textContent })
-      }
+
+      if (activeObject.id === textContent.id) editor.objects.update({ text: textContent.text })
     }
-  }, [activeObject,  textContent])
+  }, [activeObject, textContent])
 
   useEffect
   return showLayer ? (
@@ -73,9 +75,9 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
           <div className={clsx("mt-3")}>
             <textarea
               className={classes.textAreaSection}
-              value={textContent}
+              value={textContent.text}
               onChange={(e) => {
-                setTextConent(e.target.value)
+                setTextConent((prev) => ({ ...prev, text: e.target.value }))
               }}
             />
           </div>

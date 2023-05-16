@@ -36,7 +36,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const handleChangeBg = useCallback(
     async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
+        editor.objects.removeById(activeObject?.id)
       if (each.color) {
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
