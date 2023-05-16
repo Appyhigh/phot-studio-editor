@@ -1,13 +1,13 @@
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from "baseui/modal"
+import { Modal } from "baseui/modal"
 import classes from "./style.module.css"
-import React, { useCallback, useEffect, useState } from "react"
+import React from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { toBase64 } from "~/utils/data"
 import { nanoid } from "nanoid"
 
-const UploadImgModal = ({ isOpen, handleClose, type }: any) => {
+const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const close = () => {
     handleClose()
   }
@@ -18,48 +18,56 @@ const UploadImgModal = ({ isOpen, handleClose, type }: any) => {
   const editor = useEditor()
   const activeObject = useActiveObject()
 
-  const handleDropFiles = useCallback(
-    async (files: FileList) => {
-      const file = files[0]
-      const isVideo = file.type.includes("video")
-      const base64 = (await toBase64(file)) as string
-      let preview = base64
-      const inputType = isVideo ? "StaticVideo" : "StaticImage"
+  const handleDropFiles = async (files: FileList) => {
+    const file = files[0]
+
+    const isVideo = file.type.includes("video")
+    const base64 = (await toBase64(file)) as string
+    let preview = base64
+    const inputType = isVideo ? "StaticVideo" : "StaticImage"
+    setTimeout(() => {
       close()
-      if (type === "add") {
-        const upload = {
-          id: nanoid(),
-          src: base64,
-          preview: preview,
-          type: inputType,
-          metadata: { generationDate: new Date().getTime() },
-        }
-
-        editor.objects.add(upload).then(() => {
-          const fileInfo: any = document.getElementById("inputNextFile")
-          if (fileInfo.value) fileInfo.value = ""
-        })
-      } else {
-        const upload = {
-          src: preview,
-          preview: preview,
-          type: inputType,
-          metadata: { generationDate: new Date().getTime() },
-        }
-
-        editor.objects.update(upload) 
-          
+    }, 100)
+    if (fileInputType === "add") {
+      const upload = {
+        id: nanoid(),
+        src: base64,
+        preview: preview,
+        type: inputType,
+        metadata: { generationDate: new Date().getTime() },
       }
-    },
-    [editor]
-  )
+
+      editor.objects.add(upload).then(() => {
+        const fileInfo: any = document.getElementById("inputNextFile")
+        if (fileInfo.value) fileInfo.value = ""
+      })
+    } else {
+      let topPosition = activeOb?.top
+      let leftPosition = activeOb?.left
+
+      const upload = {
+        src: preview,
+        id: nanoid(),
+        preview: preview,
+        type: inputType,
+        metadata: { generationDate: new Date().getTime() },
+      }
+      // to replace the object removing the previous active object first
+      editor.objects.remove(activeObject?.id)
+      editor.objects.add(upload)
+
+      setTimeout(() => {
+        editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+      }, 20)
+    }
+  }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleDropFiles(e.target.files!)
   }
 
   const handleInputFileRefClick = () => {
-    if (type === "update") inputReplaceFile.current?.click()
+    if (fileInputType === "update") inputReplaceFile.current?.click()
     else inputNextFile.current?.click()
   }
 
@@ -89,15 +97,15 @@ const UploadImgModal = ({ isOpen, handleClose, type }: any) => {
       isOpen={isOpen}
     >
       <div className={classes.modal}>
-        <div className={classes.modalHeader}>{type === "update" ? "Update " : "Add "}Image</div>
+        <div className={classes.modalHeader}>{fileInputType === "update" ? "Update " : "Add "}Image</div>
         <DropZone handleDropFiles={handleDropFiles}>
           <div className={classes.uploadInput}>
             <UploadInput type="modal" handleInputFileRefClick={handleInputFileRefClick} width={514} height={319} />
             <input
               onChange={handleFileInput}
               type="file"
-              id={type === "update" ? "inputReplace" : "inputNextFile"}
-              ref={type === "update" ? inputReplaceFile : inputNextFile}
+              id={fileInputType === "update" ? "inputReplace" : "inputNextFile"}
+              ref={fileInputType === "update" ? inputReplaceFile : inputNextFile}
               className={classes.inputFile}
             />
           </div>

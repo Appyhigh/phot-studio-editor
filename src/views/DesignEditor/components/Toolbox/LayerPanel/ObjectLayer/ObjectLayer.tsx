@@ -16,6 +16,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [objectBgColor, setObjectBgColor] = useState("#000000")
   const [isOpen, setIsOpen] = React.useState(false)
   const [isReplacePopup, setIsReplacePopup] = useState(false)
+  const [activeOb, setActiveOb] = useState<any>()
 
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
@@ -34,6 +35,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const activeObject = useActiveObject()
 
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
+
   const handleChangeBg = useCallback(
     async (each: any) => {
       editor.objects.removeById(activeObject?.id)
@@ -88,7 +90,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           <div className={clsx(classes.layerSubSection, "flex-center mt-3")}>
             <div
               className={clsx(classes.box, "d-flex justify-content-center align-items-center flex-column mr-1 pointer")}
-              onClick={()=>setIsReplacePopup(true)}
+              onClick={() => {
+                setActiveOb(activeObject)
+                setIsReplacePopup(true)
+              }}
             >
               <Icons.Image />
               <p>Replace</p>
@@ -161,7 +166,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           ))}
         </div>
       </div>
-      <UploadImgModal type="update" isOpen={isReplacePopup} handleClose={handleUpdatePopup} />
+      <UploadImgModal
+        activeOb={activeOb}
+        fileInputType="update"
+        isOpen={isReplacePopup}
+        handleClose={handleUpdatePopup}
+      />
     </Scrollable>
   ) : null
 }
