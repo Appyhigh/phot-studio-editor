@@ -11,7 +11,13 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 
-export default function ({ handleCloseSampleImg, handleCloseBgOptions, handleOpenBgOptions }: any) {
+export default function ({
+  handleCloseSampleImg,
+  handleCloseBgOptions,
+  handleOpenBgOptions,
+  removeBgBtn,
+  disableRemoveBgBtn,
+}: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
@@ -106,6 +112,8 @@ export default function ({ handleCloseSampleImg, handleCloseBgOptions, handleOpe
                   // onClick={() => addImageToCanvas(upload)}
                 >
                   <UploadPreview
+                    removeBgBtn={removeBgBtn}
+                    disableRemoveBgBtn={disableRemoveBgBtn}
                     handleOpenBgOptions={handleOpenBgOptions}
                     upload={upload}
                     selectedImage={selectedImage}

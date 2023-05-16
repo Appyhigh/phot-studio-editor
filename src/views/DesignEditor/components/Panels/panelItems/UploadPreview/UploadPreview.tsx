@@ -9,7 +9,7 @@ import { removeBackgroundWithoutPromps } from "~/services/backgroundRemover-tool
 import { removeBackgroundUsingMask } from "~/utils/removeBackground"
 import { DEFAULT_DIMENSIONS } from "~/utils/common"
 
-const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOptions }: any) => {
+const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOptions,removeBgBtn ,disableRemoveBgBtn}: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
 
@@ -44,6 +44,7 @@ const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOpti
               editor.objects.removeById(selectedImage.id)
               // Stop the loader
               setLoaderPopup(false)
+              disableRemoveBgBtn();
             })
           },
         })
@@ -72,10 +73,12 @@ const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOpti
 
       {selectedImage?.preview === upload.preview && (
         <button
+        disabled={removeBgBtn?false:true}
           onClick={() => {
             removeBackgroundHandler()
           }}
-          className={classes.removeBgBtn}
+          
+          className={clsx(classes.removeBgBtn,!removeBgBtn && classes.disabledBtn)}
         >
           Remove Background
         </button>

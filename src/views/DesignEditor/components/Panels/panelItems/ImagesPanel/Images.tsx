@@ -23,7 +23,7 @@ const Images = () => {
   const [trySampleImgShow, setTrySampleImgShow] = useState(true)
   const [showBgOptions, setShowBgOptions] = useState(false)
   const [backgroundChoice, setBackgroundChoice] = useState(0)
-
+  const [removeBgBtn, setRemoveBgBtn] = useState(false)
   const [selectedBgOption, setSelectedBgOption] = useState({
     type: -1,
     id: 0,
@@ -40,6 +40,7 @@ const Images = () => {
 
   const addObject = React.useCallback(
     (url: string) => {
+      setRemoveBgBtn(true)
       toDataURL(url, async function (dataUrl: string) {
         if (editor) {
           const options = {
@@ -79,6 +80,10 @@ const Images = () => {
     editor.objects.removeById(id)
   }
 
+  const disableRemoveBgBtn = () => {
+    setRemoveBgBtn(false)
+  }
+
   return (
     <Block className="d-flex flex-1 flex-column">
       {showPreviewSampleImg ? (
@@ -108,6 +113,8 @@ const Images = () => {
               )}
             >
               <UploadPreview
+                removeBgBtn={removeBgBtn}
+                disableRemoveBgBtn={disableRemoveBgBtn}
                 handleOpenBgOptions={handleOpenBgOptions}
                 upload={sampleImageUpload}
                 selectedImage={selectedSampleImage}
@@ -119,6 +126,8 @@ const Images = () => {
       ) : (
         <>
           <Uploads
+            removeBgBtn={removeBgBtn}
+            disableRemoveBgBtn={disableRemoveBgBtn}
             handleCloseSampleImg={handleCloseSampleImg}
             handleCloseBgOptions={handleCloseBgOptions}
             handleOpenBgOptions={handleOpenBgOptions}
