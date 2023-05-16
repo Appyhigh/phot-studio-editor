@@ -5,6 +5,7 @@ import Outline from "./Outline";
 import Reflection from "./Reflection";
 import Shadows from "./Shadows";
 import Texture from "./Texture";
+import Transform from "./Transform";
 
 export default{
     Adjust:Adjust,
@@ -13,5 +14,6 @@ export default{
     Outline:Outline,
     Reflection:Reflection,
     Shadows:Shadows,
-    Texture:Texture
+    Texture:Texture,
+    Transform:Transform
 }

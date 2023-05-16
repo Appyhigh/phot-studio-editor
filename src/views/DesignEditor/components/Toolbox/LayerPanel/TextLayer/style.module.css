@@ -1,0 +1,120 @@
+.textLayerSection {
+  margin: 20px;
+}
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
+}
+.textAreaSection {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  width: 95%;
+  font-size: 12px;
+  padding: 12px 14px 2px;
+  font-family: "Rubik";
+  line-height: 14px;
+  color: #44444f;
+}
+
+.alignmentWrapper {
+  display: grid;
+  gap: 5px;
+  padding: 8px 0px;
+  margin: 0px 5px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.alignmentToolBox {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  height: 70px;
+}
+.alignmentToolBox p {
+  font-weight: 400;
+  text-align: center;
+  font-size: 12px;
+  line-height: 14px;
+  color: #696974;
+  margin-top: 10px;
+}
+
+.colorOption {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.colorsWrapper {
+  display: grid;
+  gap: 7px;
+  padding: 8px 0px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.dropdownWrapper {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  min-height: 42px;
+  max-height: fit-content;
+}
+.dropdownWrapper {
+  margin: 6px 0px;
+}
+.dropdownHeading {
+  margin-left: 10px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #44444f;
+}
+.reverseArrow {
+  transform: scaleY(-1);
+}
+.dropDownHeader {
+  padding: 8px 12px 10px 4px;
+  font-size: 14px;
+}
+.collapseDropDown {
+  display: none;
+}
+.expandedDropDowon {
+  display: block;
+}
+
+.selectedAlign {
+  background-color: rgb(238, 238, 238);
+}
+.eraseTextBox {
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  height: 60px;
+}
+
+.eraseTextBox p {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: #696974;
+}
+
+.deleteTextIcon {
+  margin-left: 4px;
+}
+.fontSection {
+  display: grid;
+  gap: 0.2rem;
+  width: 230px;
+}
+.eachFont {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 12px;
+  width: 232px;
+}
+.eachFont:hover {
+  background-color: rgb(245, 246, 247);
+}

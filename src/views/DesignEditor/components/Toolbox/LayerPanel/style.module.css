@@ -1,0 +1,19 @@
+.hideShowObjectLayerText {
+  width: 48px;
+  height: 48px;
+  background: #f1f1f5;
+  border: 1px solid #92929d;
+  border-radius: 4px;
+  margin: 0px 8px;
+}
+.eachLayer {
+  margin: 8px 10px;
+}
+.showObjectTextLayer {
+  width: 40px;
+  height: 40px;
+}
+.bgImage {
+  width: 40px;
+  height: 40px;
+}

@@ -3,14 +3,45 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import React from "react"
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from "baseui/modal"
-import { Button } from "baseui/button"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
+import { useEditor } from "@layerhub-io/react"
+import { FontItem } from "~/interfaces/common"
+import { loadFonts } from "~/utils/fonts"
+import { nanoid } from "nanoid"
 
 const AddPopup = ({ handleClose, showPopup }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
+  const editor =useEditor();
+
   function close() {
     setIsOpen(false)
+  }
+
+  const addText = async () => {
+    if (editor) {
+      const font: FontItem = {
+        name: "OpenSans-Regular",
+        url: "https://fonts.gstatic.com/s/opensans/v27/memSYaGs126MiZpBA-UvWbX2vVnXBbObj2OVZyOOSr4dVJWUgsjZ0C4nY1M2xLER.ttf",
+      }
+      await loadFonts([font])
+      const options = {
+        id: nanoid(),
+        type: "StaticText",
+        width: 500,
+        text: "Click here to edit text",
+        fontSize: 92,
+        fontFamily: font.name,
+        textAlign: "center",
+        fontStyle: "normal",
+        fontURL: font.url,
+        fill: "#333333",
+        metadata: { generationDate: new Date().getTime() },
+      }
+      
+      editor.objects.add(options)
+
+      
+    }
   }
 
   return showPopup ? (
@@ -43,6 +74,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           <Block
             className={classes.addSubSection}
             onClick={() => {
+              addText();
               handleClose()
             }}
           >

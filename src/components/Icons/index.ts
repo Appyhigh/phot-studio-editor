@@ -70,6 +70,8 @@ import Texture from "./TextureIcon";
 import TrashIcon from "./TrashIcon"
 import ChevronDown from "./ChevronDown"
 import Blur from "./Blur"
+import Transform from "./Transform"
+import ColorPlus from "./ColorPlus"
 class Icons {
   static Background = Background
   static Elements = Elements
@@ -143,6 +145,8 @@ class Icons {
   static TrashIcon=TrashIcon
   static ChevronDown=ChevronDown
   static Blur=Blur
+  static Transform=Transform
+  static ColorPlus= ColorPlus
 }
 
 export default Icons
