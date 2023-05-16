@@ -13,6 +13,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import TextLayer from "./TextLayer/TextLayer"
 import BgLayer from "./BgLayer/BgLayer"
+import GroupIcon from "~/components/Icons/GroupIcon"
 
 interface ToolboxState {
   toolbox: string
@@ -115,7 +116,6 @@ const LayerPanel = () => {
 
   useEffect(() => {
     if (activeObject?.id && layerState.isOpenSlider) {
-      
       if (activeObject?.text) {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       } else if (activeObject?.metadata?.type == backgroundLayerType) {
@@ -217,83 +217,81 @@ const LayerPanel = () => {
                           }}
                           key={object.id}
                         >
-                          {object._objects.map((object: any) => {
+                          {object._objects.map((object: any, index: number) => {
                             return (
                               <Block
-                                className="d-flex justify-content-start align-items-center pointer"
+                                className="d-flex flex-column align-items-center"
                                 $style={{
                                   fontSize: "14px",
-                                  backgroundColor: check_group(object.id)
-                                    ? "rgb(245,246,247)"
-                                    : activeObject?.id == object.id
-                                    ? "rgb(245,246,247)"
-                                    : "#E3E6FF",
-                                  ":hover": {
-                                    background: "rgb(245,246,247)",
-                                  },
-                                }}
-                                key={object.id}
-                                onClick={() => {
-                                  if (object.text) {
-                                    setLayerState((prev) => ({
-                                      ...prev,
-                                      isOpenSlider: true,
-                                      textLayer: true,
-                                      objectLayer: false,
-                                      bgLayer: false,
-                                    }))
-                                  } else if (object.metadata?.type === backgroundLayerType) {
-                                    setLayerState((prev) => ({
-                                      ...prev,
-                                      isOpenSlider: true,
-                                      bgLayer: true,
-                                      textLayer: false,
-                                      objectLayer: false,
-                                    }))
-                                  } else
-                                    setLayerState((prev) => ({
-                                      ...prev,
-                                      isOpenSlider: true,
-                                      objectLayer: true,
-                                      textLayer: false,
-                                      bgLayer: false,
-                                    }))
-
-                                  setActiveLayerPanel(object)
+                                  backgroundColor: "#E3E6FF",
                                 }}
                               >
-                                {object.text ? (
-                                  <div
-                                    className={clsx(
-                                      "d-flex justify-content-center align-items-center",
-                                      classes.textLayer
-                                    )}
-                                  >
+                                {index !== 0 && <GroupIcon />}
+                                <Block
+                                  className="d-flex justify-content-start align-items-center pointer w-100"
+                                  key={object.id}
+                                  onClick={() => {
+                                    if (object.text) {
+                                      setLayerState((prev) => ({
+                                        ...prev,
+                                        isOpenSlider: true,
+                                        textLayer: true,
+                                        objectLayer: false,
+                                        bgLayer: false,
+                                      }))
+                                    } else if (object.metadata?.type === backgroundLayerType) {
+                                      setLayerState((prev) => ({
+                                        ...prev,
+                                        isOpenSlider: true,
+                                        bgLayer: true,
+                                        textLayer: false,
+                                        objectLayer: false,
+                                      }))
+                                    } else
+                                      setLayerState((prev) => ({
+                                        ...prev,
+                                        isOpenSlider: true,
+                                        objectLayer: true,
+                                        textLayer: false,
+                                        bgLayer: false,
+                                      }))
+
+                                    setActiveLayerPanel(object)
+                                  }}
+                                >
+                                  {object.text ? (
                                     <div
                                       className={clsx(
-                                        classes.eachLayer,
-                                        layerState.isOpenSlider
-                                          ? classes.showObjectTextLayer
-                                          : classes.hideShowObjectLayerText,
-                                        "flex-center"
+                                        "d-flex justify-content-center align-items-center",
+                                        classes.textLayer
                                       )}
                                     >
-                                      <Icons.TextIcon size={21} />{" "}
+                                      <div
+                                        className={clsx(
+                                          classes.eachLayer,
+                                          layerState.isOpenSlider
+                                            ? classes.showObjectTextLayer
+                                            : classes.hideShowObjectLayerText,
+                                          "flex-center"
+                                        )}
+                                      >
+                                        <Icons.TextIcon size={21} />{" "}
+                                      </div>
                                     </div>
-                                  </div>
-                                ) : (
-                                  <img
-                                    src={object.preview}
-                                    style={{
-                                      borderRadius: "4px",
-                                      width: layerState.isOpenSlider ? "40px" : "48px",
-                                      height: layerState.isOpenSlider ? "40px" : "48px",
-                                    }}
-                                    alt="nn"
-                                    className="mx-1 my-1"
-                                  />
-                                )}
-                                {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                                  ) : (
+                                    <img
+                                      src={object.preview}
+                                      style={{
+                                        borderRadius: "4px",
+                                        width: layerState.isOpenSlider ? "40px" : "48px",
+                                        height: layerState.isOpenSlider ? "40px" : "48px",
+                                      }}
+                                      alt="nn"
+                                      className="mx-1 my-1"
+                                    />
+                                  )}
+                                  {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                                </Block>
                               </Block>
                             )
                           })}

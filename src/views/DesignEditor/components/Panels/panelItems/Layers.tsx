@@ -84,15 +84,35 @@ const Layers = () => {
 
   const exportHandler = useCallback(async () => {
     if (editor && objects) {
+      let image = activeLayerPanel.preview
+
+      if ((!image || image.length === 0) && activeLayerPanel?._objects?.length > 0) {
+        let template: any = editor.scene.exportToJSON()
+        const ids = activeLayerPanel?._objects.map((el: any) => {
+          return el?.metadata?.generationDate
+        })
+        template = {
+          ...template,
+          layers: template.layers.filter((layer: any) => {
+            const targetIds = layer?.objects?.map((el: any) => {
+              return el?.metadata?.generationDate
+            })
+            return JSON.stringify(ids) === JSON.stringify(targetIds)
+          }),
+        }
+
+        image = (await editor.renderer.render(template)) as string
+      }
+
       if (exportAs != "svg") {
-        if (activeLayerPanel.preview.startsWith("data")) {
-          makeDownloadToPNG(activeLayerPanel.preview, exportAs)
+        if (image.startsWith("data")) {
+          makeDownloadToPNG(image, exportAs)
         } else {
-          toDataURL(activeLayerPanel.preview, function (dataUrl: string) {
+          toDataURL(image, function (dataUrl: string) {
             makeDownloadToPNG(dataUrl, exportAs)
           })
         }
-      } else makeDownloadToSVGHandler(activeLayerPanel.preview, { width: "1080px", height: "1080px" })
+      } else makeDownloadToSVGHandler(image, { width: "1080px", height: "1080px" })
     }
   }, [editor, exportAs, objects, activeLayerPanel])
 

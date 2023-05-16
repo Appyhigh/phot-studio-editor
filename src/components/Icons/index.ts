@@ -63,16 +63,18 @@ import Adjust from "./Adjust"
 import Drop from "./Drop"
 import Filter from "./Filter"
 import Image from "./Image"
-import Outline from "./Outline";
+import Outline from "./Outline"
 import Reflection from "./Reflection"
 import SelectionBack from "./SelectionBack"
-import Texture from "./TextureIcon";
+import Texture from "./TextureIcon"
 import TrashIcon from "./TrashIcon"
 import ChevronDown from "./ChevronDown"
 import Blur from "./Blur"
 import Transform from "./Transform"
 import ColorPlus from "./ColorPlus"
+import GroupIcon from "./GroupIcon"
 class Icons {
+  static GroupIcon = GroupIcon
   static Background = Background
   static Elements = Elements
   static Text = Text
@@ -134,19 +136,19 @@ class Icons {
   static Phone = Phone
   static Selection = Selection
   static SearchIcon = SearchIcon
-  static Adjust=Adjust
-  static Drop=Drop
-  static Filter=Filter
-  static Image =Image
-  static Outline=Outline
-  static SelectionBack=SelectionBack
-  static Reflection =Reflection
-  static Texture=Texture
-  static TrashIcon=TrashIcon
-  static ChevronDown=ChevronDown
-  static Blur=Blur
-  static Transform=Transform
-  static ColorPlus= ColorPlus
+  static Adjust = Adjust
+  static Drop = Drop
+  static Filter = Filter
+  static Image = Image
+  static Outline = Outline
+  static SelectionBack = SelectionBack
+  static Reflection = Reflection
+  static Texture = Texture
+  static TrashIcon = TrashIcon
+  static ChevronDown = ChevronDown
+  static Blur = Blur
+  static Transform = Transform
+  static ColorPlus = ColorPlus
 }
 
 export default Icons
