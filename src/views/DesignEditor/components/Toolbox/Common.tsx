@@ -64,7 +64,7 @@ const Common = () => {
         >
           Ungroup
         </Button>
-      ) : state.isMultiple ? (
+      ) : state.isMultiple && !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
         <Button
           onClick={() => {
             editor.objects.group()
