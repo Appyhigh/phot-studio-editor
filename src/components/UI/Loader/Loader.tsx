@@ -1,16 +1,10 @@
 import { Modal } from "baseui/modal"
-import classes from "./style.module.css"
 import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
-import clsx from "clsx"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 
-const Loader = ({ isOpen, handleClose }: any) => {
+const Loader = ({ isOpen }: any) => {
   const { loaderPopup } = useContext(LoaderContext)
-
-  const close = () => {
-    handleClose()
-  }
 
   return loaderPopup.showPopup ? (
     <Modal
@@ -22,8 +16,6 @@ const Loader = ({ isOpen, handleClose }: any) => {
         },
         Close: {
           style: ({ $theme }) => ({
-            outline: `transparent`,
-            margin: "40px 20px",
             display: "none",
           }),
         },
@@ -35,7 +27,6 @@ const Loader = ({ isOpen, handleClose }: any) => {
           }),
         },
       }}
-      onClose={close}
       isOpen={isOpen}
     >
       <div className="flex-center">

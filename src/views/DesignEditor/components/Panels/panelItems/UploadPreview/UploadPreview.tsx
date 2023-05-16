@@ -6,11 +6,10 @@ import { useEditor } from "@layerhub-io/react"
 import { toDataURL } from "~/utils/export"
 import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
-import Loader from "~/components/UI/Loader/Loader"
 
 const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOptions }: any) => {
   const editor = useEditor()
-  const { loaderPopup, setLoaderPopup } = useContext(LoaderContext)
+  const { setLoaderPopup } = useContext(LoaderContext)
 
   const removeBackgroundHandler = () => {
     toDataURL(
@@ -51,18 +50,16 @@ const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOpti
         <button
           onClick={() => {
             setLoaderPopup((prev: any) => ({ ...prev, showPopup: true }))
+            setTimeout(() => {
+              setLoaderPopup((prev: any) => ({ ...prev, showPopup: false }))
+              removeBackgroundHandler()
+            }, 3000)
           }}
           className={classes.removeBgBtn}
         >
           Remove Background
         </button>
       )}
-      <Loader
-        isOpen={loaderPopup.showPopup}
-        handleClose={() => {
-          setLoaderPopup((prev: any) => ({ ...prev, showPopup: true }))
-        }}
-      />
     </div>
   )
 }
