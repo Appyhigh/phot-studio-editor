@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { images } from "~/constants/mock-data"
@@ -10,6 +10,8 @@ import { LabelLarge } from "baseui/typography"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import BgUpload from "~/components/UI/BgUpload/BgUpload"
+import Loader from "~/components/UI/Loader/Loader"
+import LoaderContext from "~/contexts/LoaderContext"
 
 const Images = () => {
   const editor = useEditor()
@@ -21,6 +23,8 @@ const Images = () => {
     type: -1,
     id: 0,
   })
+
+  const { loaderPopup } = useContext(LoaderContext)
 
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
@@ -135,6 +139,7 @@ const Images = () => {
           </Scrollable>
         </>
       )}
+      <Loader isOpen={loaderPopup.showPopup} />
     </Block>
   )
 }
