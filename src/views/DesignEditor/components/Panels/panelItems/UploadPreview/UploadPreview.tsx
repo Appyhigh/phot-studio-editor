@@ -3,30 +3,54 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
-import { toDataURL } from "~/utils/export"
 import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
+import { removeBackgroundWithoutPromps } from "~/services/backgroundRemover-tools-service"
+import { removeBackgroundUsingMask } from "~/utils/removeBackground"
+import { DEFAULT_DIMENSIONS } from "~/utils/common"
 
 const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOptions }: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
 
-  const removeBackgroundHandler = () => {
-    toDataURL(
-      "https://ik.imagekit.io/rxld8u68i/removed-background.jpeg?updatedAt=1682652974131",
-      function (dataUrl: string) {
-        const options = {
-          type: "StaticImage",
-          src: dataUrl,
-          preview: dataUrl,
-          metadata: { generationDate: new Date().getTime() },
-        }
-        editor.objects.add(options).then(() => {
-          handleOpenBgOptions()
-          editor.objects.removeById(selectedImage.id)
+  const removeBackgroundHandler = async () => {
+    try {
+      // Start the loader
+      setLoaderPopup(true)
+      // Get the black and white masked image
+      const result_image = await removeBackgroundWithoutPromps(upload.src, "layer" || "")
+
+      if (result_image.output_image) {
+        // Get the image with removed background
+        removeBackgroundUsingMask({
+          sourceImage: upload.src || "",
+          maskImage: result_image.output_image,
+          canvasStyling: {
+            width: DEFAULT_DIMENSIONS.width,
+            height: DEFAULT_DIMENSIONS.height,
+            ratioedWidth: DEFAULT_DIMENSIONS.width,
+            ratioedHeight: DEFAULT_DIMENSIONS.height,
+          },
+          outputHandler: (image: string) => {
+            // Add the resultant image to the canvas
+            const options = {
+              type: "StaticImage",
+              src: image,
+              preview: image,
+              metadata: { generationDate: new Date().getTime() },
+            }
+            editor.objects.add(options).then(() => {
+              handleOpenBgOptions()
+              editor.objects.removeById(selectedImage.id)
+              // Stop the loader
+              setLoaderPopup(false)
+            })
+          },
         })
       }
-    )
+    } catch (error: any) {
+      console.log("Something went wrong while removing background...", error.message)
+    }
   }
 
   return (
