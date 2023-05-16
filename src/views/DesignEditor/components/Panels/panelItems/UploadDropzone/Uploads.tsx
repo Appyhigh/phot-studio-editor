@@ -17,6 +17,7 @@ export default function ({
   handleOpenBgOptions,
   removeBgBtn,
   disableRemoveBgBtn,
+  activeRemoveBgBtn,
 }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
@@ -36,7 +37,7 @@ export default function ({
     }
 
     const type = isVideo ? "StaticVideo" : "StaticImage"
-
+    activeRemoveBgBtn()
     const upload = {
       id: nanoid(),
       src: base64,

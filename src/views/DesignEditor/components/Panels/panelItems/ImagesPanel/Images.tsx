@@ -84,6 +84,9 @@ const Images = () => {
     setRemoveBgBtn(false)
   }
 
+  const activeRemoveBgBtn = () => {
+    setRemoveBgBtn(true)
+  }
   return (
     <Block className="d-flex flex-1 flex-column">
       {showPreviewSampleImg ? (
@@ -126,6 +129,7 @@ const Images = () => {
       ) : (
         <>
           <Uploads
+            activeRemoveBgBtn={activeRemoveBgBtn}
             removeBgBtn={removeBgBtn}
             disableRemoveBgBtn={disableRemoveBgBtn}
             handleCloseSampleImg={handleCloseSampleImg}
