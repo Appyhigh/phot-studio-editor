@@ -1,0 +1,27 @@
+.contextMenuSection {
+  position: absolute;
+  z-index: 129;
+  width: 240px;
+  background-color: #fff;
+  border: 10px;
+  box-shadow: 0.5px 2px 7px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0;
+}
+.eachMenu {
+  display: flex;
+  height: 32px;
+  font-size: 14px;
+  align-items: center;
+  pad: 0 1rem;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.eachMenu:hover {
+  background-color: rgba(0,0,0,0.075)
+}
+
+.disabledMenu{
+    pointer-events: none;
+    opacity: 0.4;
+}
