@@ -40,7 +40,7 @@ const Flip = ({ type }: any) => {
           <Block width="180px" padding="12px" backgroundColor="#ffffff">
             <Block>
               <Button
-                $style={{ width: "100%", justifyContent: "flex-start" }}
+                className={classes.flipDirectionBtn}
                 startEnhancer={<FlipHorizontal size={24} />}
                 onClick={flipHorizontally}
                 kind={KIND.tertiary}
@@ -50,7 +50,7 @@ const Flip = ({ type }: any) => {
               </Button>
             </Block>
             <Button
-              $style={{ width: "100%", justifyContent: "flex-start" }}
+              className={classes.flipDirectionBtn}
               startEnhancer={<FlipVertical size={24} />}
               onClick={flipVertically}
               kind={KIND.tertiary}

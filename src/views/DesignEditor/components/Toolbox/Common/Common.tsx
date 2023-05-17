@@ -117,7 +117,7 @@ const Common = ({ type }: any) => {
 
           <p className={classes.subHeadingText}>Ungroup</p>
         </button>
-      ) : !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
+      ) : state.isMultiple && !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
         <button
           onClick={() => {
             editor.objects.group()
@@ -141,12 +141,12 @@ const Common = ({ type }: any) => {
       <Visiblity type={type ? type : ""} />
 
       <button
-          disabled={type === "lock" ? true : false}
-          className={clsx(
-            "d-flex justify-content-center align-items-center flex-column ml-1",
-            classes.editingBtn,
-            type === "lock" && classes.disabledBtn
-          )}
+        disabled={type === "lock" ? true : false}
+        className={clsx(
+          "d-flex justify-content-center align-items-center flex-column ml-1",
+          classes.editingBtn,
+          type === "lock" && classes.disabledBtn
+        )}
         onClick={() => editor.objects.remove()}
       >
         <DeleteIcon size={22} />
