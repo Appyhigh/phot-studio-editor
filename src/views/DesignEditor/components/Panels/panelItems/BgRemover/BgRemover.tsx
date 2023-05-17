@@ -18,7 +18,7 @@ import { toDataURL } from "~/utils/export"
 import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 
-const Images = () => {
+const BgRemover = () => {
   const editor = useEditor()
   const [trySampleImgShow, setTrySampleImgShow] = useState(true)
   const [showBgOptions, setShowBgOptions] = useState(false)
@@ -228,4 +228,4 @@ const ImageItem = ({ preview, onClick }: { preview: any; onClick?: (option: any)
   )
 }
 
-export default Images
+export default BgRemover
