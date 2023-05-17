@@ -114,19 +114,18 @@ const LayerPanel = () => {
 
   useEffect(() => {
     if (activeObject?.id && layerState.isOpenSlider) {
-      
-      if (activeObject?.text || activeObject?.name==="StaticText") {
+      if (activeObject?.text || activeObject?.name === "StaticText") {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       } else if (activeObject?.metadata?.type == backgroundLayerType) {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: true }))
-      } else if(activeObject?.name==="StaticImage") {
+      } else if (activeObject?.name === "StaticImage") {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: true, bgLayer: false }))
-      }
-      else {
+      } else {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
-
       }
       setActiveLayerPanel(activeObject)
+    } else if (layerState.isOpenSlider) {
+      setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
     }
   }, [activeObject])
 
