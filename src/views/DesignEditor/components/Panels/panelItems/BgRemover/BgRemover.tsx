@@ -9,6 +9,7 @@ import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
 import { LabelLarge } from "baseui/typography"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import { BgSampleImages } from "~/constants/bg-sample-images"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -57,14 +58,14 @@ const BgRemover = () => {
           <Scrollable>
             <Block className="py-3">
               <Block className={classes.sampleImgSection}>
-                {images.map((image, index) => {
+                {BgSampleImages.map((image, index) => {
                   return (
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        addObject(image.src.medium)
+                        addObject(image.src)
                       }}
-                      preview={image.src.small}
+                      preview={image.src}
                     />
                   )
                 })}
