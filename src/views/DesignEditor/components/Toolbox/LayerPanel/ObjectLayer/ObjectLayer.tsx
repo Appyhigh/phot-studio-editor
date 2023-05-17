@@ -3,7 +3,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import DropdownWrapper from "./DropdownWrapper"
 import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
-import React, { useCallback, useContext, useState } from "react"
+import React, { useCallback, useContext, useEffect, useState } from "react"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
@@ -12,6 +12,7 @@ import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayer
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
+import { ILayerOptions, ILayer } from "@layerhub-io/types"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
@@ -19,7 +20,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isReplacePopup, setIsReplacePopup] = useState(false)
   const [activeOb, setActiveOb] = useState<any>()
-
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
       setActiveState(-1)
@@ -38,9 +38,18 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const { setLoaderPopup } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
 
+  useEffect(() => {
+    if (editor) {
+      console.log(editor.objects.clone)
+      console.log(editor.frame.frame)
+    }
+  }, [editor, activeObject])
+
   const handleChangeBg = useCallback(
     async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
+      let topPosition = activeObject?.top
+      let leftPosition = activeObject?.left
+
       if (each.color) {
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
@@ -55,13 +64,21 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
         }
+        editor.objects.remove(activeObject?.id)
+
         editor.objects.add(options)
+        setTimeout(() => {
+          editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+        }, 20)
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
           const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
             activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
             dataUrl
           )
+          let topPosition = activeObject?.top
+          let leftPosition = activeObject?.left
+
           const options = {
             type: "StaticImage",
             src: previewWithUpdatedBackground,
@@ -71,7 +88,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
             },
           }
+          editor.objects.remove(activeObject?.id)
+
           editor.objects.add(options)
+          setTimeout(() => {
+            editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+          }, 20)
         })
       }
     },

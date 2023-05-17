@@ -10,7 +10,6 @@ import { Block } from "baseui/block"
 import { changeLayerBackgroundImage, changeLayerFill, changeLayerFillWithGradient } from "~/utils/updateLayerBackground"
 import { useCallback } from "react"
 import { toDataURL } from "~/utils/export"
-
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
   const [css, theme] = useStyletron()
@@ -18,12 +17,14 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
 
   const handleChangeBg = useCallback(
     async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
       if (each.color) {
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           each.color
         )
+        let topPosition = activeObject?.top
+        let leftPosition = activeObject?.left
+
         const options = {
           type: "StaticImage",
           src: previewWithUpdatedBackground,
@@ -33,12 +34,20 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
             originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
         }
+        editor.objects.remove(activeObject?.id)
+
         editor.objects.add(options)
+        setTimeout(() => {
+          editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30})
+        }, 20)
       } else if (each.gradient) {
         const previewWithUpdatedBackground: any = await changeLayerFillWithGradient(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           each.gradient
         )
+        let topPosition = activeObject?.top
+        let leftPosition = activeObject?.left
+
         const options = {
           type: "StaticImage",
           src: previewWithUpdatedBackground,
@@ -48,13 +57,21 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
             originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
         }
+        editor.objects.remove(activeObject?.id)
+
         editor.objects.add(options)
+        setTimeout(() => {
+          editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+        }, 20)
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
           const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
             activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
             dataUrl
           )
+          let topPosition = activeObject?.top
+          let leftPosition = activeObject?.left
+
           const options = {
             type: "StaticImage",
             src: previewWithUpdatedBackground,
@@ -64,7 +81,12 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
               originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
             },
           }
+          editor.objects.remove(activeObject?.id)
+
           editor.objects.add(options)
+          setTimeout(() => {
+            editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30})
+          }, 20)
         })
       }
     },
