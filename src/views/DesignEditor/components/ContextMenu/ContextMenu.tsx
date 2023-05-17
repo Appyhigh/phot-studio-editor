@@ -78,7 +78,7 @@ const ContextMenu = () => {
   }
   return (
     <>
-      {!contextMenuRequest.target.locked ? (
+      {
         <div // @ts-ignore
           onContextMenu={(e: Event) => e.preventDefault()}
           style={{
@@ -154,17 +154,30 @@ const ContextMenu = () => {
           >
             <Elements size={24} />
           </ContextMenuItem>
-          <div style={{ margin: "0.5rem 0" }} />
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.lock()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Locked"
-            label="lock"
-          >
-            <Locked size={24} />
-          </ContextMenuItem>
+          {!contextMenuRequest.target.locked ? (
+            <ContextMenuItem
+              onClick={() => {
+                editor.objects.lock()
+                editor.cancelContextMenuRequest()
+              }}
+              icon="Locked"
+              label="lock"
+            >
+              <Locked size={24} />
+            </ContextMenuItem>
+          ) : (
+            <ContextMenuItem
+              onClick={() => {
+                editor.objects.unlock()
+                editor.cancelContextMenuRequest()
+              }}
+              icon="Unlocked"
+              label="unlock"
+            >
+              <Unlocked size={24} />
+            </ContextMenuItem>
+          )}
+
           {activeObject?.type === "StaticImage" && (
             <ContextMenuItem
               onClick={() => {
@@ -182,33 +195,7 @@ const ContextMenu = () => {
             </ContextMenuItem>
           )}
         </div>
-      ) : (
-        <div // @ts-ignore
-          onContextMenu={(e: Event) => e.preventDefault()}
-          style={{
-            position: "absolute",
-            top: `${contextMenuRequest.top}px`,
-            left: `${contextMenuRequest.left}px`,
-            zIndex: 129,
-            width: "240px",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            boxShadow: "0.5px 2px 7px rgba(0, 0, 0, 0.1)",
-            padding: "0.5rem 0",
-          }}
-        >
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.unlock()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Unlocked"
-            label="unlock"
-          >
-            <Unlocked size={24} />
-          </ContextMenuItem>
-        </div>
-      )}
+      }
     </>
   )
 }

@@ -3,7 +3,7 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { Input } from "baseui/input"
 import { Block } from "baseui/block"
 import { ChevronDown } from "baseui/icon"
-import Common from "./Common"
+import Common from "./Common/Common"
 import TextColor from "~/components/Icons/TextColor"
 import Bold from "~/components/Icons/Bold"
 import Italic from "~/components/Icons/Italic"
@@ -214,10 +214,12 @@ export default function () {
         flex: 1,
         display: "flex",
         alignItems: "center",
-        padding: "0 12px",
         justifyContent: "space-between",
         backgroundColor: "#fff",
         flexDirection:"column",
+        borderRadius:"8px",
+        height:"58px",
+        padding:"6px 12px"
       }}
     >
       <Block display={"flex"}  gridGap="0.5rem" alignItems={"center"}>
@@ -245,7 +247,7 @@ export default function () {
 
         {/* <TextFontSize /> */}
         <Block display={"flex"} alignItems={"center"}>
-          <StatefulTooltip
+          {/* <StatefulTooltip
             placement={PLACEMENT.bottom}
             showArrow={true}
             accessibilityType={"tooltip"}
@@ -254,7 +256,7 @@ export default function () {
             <Button onClick={() => setActiveSubMenu("TextFill")} size={SIZE.mini} kind={KIND.tertiary}>
               <TextColor color={state.color} size={22} />
             </Button>
-          </StatefulTooltip>
+          </StatefulTooltip> */}
 
           <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType={"tooltip"} content="Bold">
             <Button

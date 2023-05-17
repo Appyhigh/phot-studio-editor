@@ -1,5 +1,5 @@
 import { Block } from "baseui/block"
-import Common from "./Common"
+import Common from "./Common/Common"
 
 const Multiple = () => {
   return (

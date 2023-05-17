@@ -8,7 +8,8 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { Button, SIZE, KIND } from "baseui/button"
 import OpacityIcon from "~/components/Icons/Opacity."
 import { StatefulTooltip } from "baseui/tooltip"
-
+import clsx from "clsx"
+import classes from "./style.module.css"
 const Opacity = () => {
   const editor = useEditor()
   const [state, setState] = React.useState<{
@@ -58,6 +59,7 @@ const Opacity = () => {
           <Block $style={{ fontSize: "14px" }}>Opacity</Block>
           <Block width={"52px"}></Block>
         </Block>
+        
 
         <Block $style={{ display: "grid", gridTemplateColumns: "1fr 40px", gap: "1rem" }}>
           <Slider
@@ -123,11 +125,14 @@ const Opacity = () => {
     )}
   >
     <Block>
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType={"tooltip"} content="Opacity">
-        <Button kind={KIND.tertiary} size={SIZE.mini}>
+     
+      <div
+          
+          className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+        >
           <OpacityIcon size={24} />
-        </Button>
-      </StatefulTooltip>
+          <p className={clsx(classes.subHeadingText,classes.opacityText)}>Opacity</p>
+        </div>
     </Block>
   </StatefulPopover>
   )

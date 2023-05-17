@@ -18,10 +18,16 @@ import AlignMiddle from "~/components/Icons/AlignMiddle"
 import BringToFront from "~/components/Icons/BringToFront"
 import SendToBack from "~/components/Icons/SendToBack"
 import AlignBottom from "~/components/Icons/AlignBottom"
-import Opacity from "./Shared/Opacity"
+import Opacity from "../Shared/Opacity"
 import Eye from "~/components/Icons/Eye"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
-
+import Flip from "../Shared/Flip"
+import classes from "./style.module.css"
+import clsx from "clsx"
+import ArrowUp from "~/components/Icons/ArrowUp"
+import SendBack from "~/components/Icons/SendBack"
+import Locked from "~/components/Icons/Locked"
+import Layers from "~/components/Icons/Layers"
 const Common = () => {
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
@@ -52,47 +58,71 @@ const Common = () => {
   }, [editor, activeObject])
 
   return (
-    <Block $style={{ display: "flex", alignItems: "center" }}>
+    <Block $style={{ display: "flex", alignItems: "center" }}
+    >
+      <Flip />
+      <div
+        onClick={() => editor.objects.clone()}
+        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+      >
+        <DuplicateIcon size={22} />
+        <p className={clsx(classes.subHeadingText)}>Duplicate</p>
+      </div>
+      <div
+        onClick={() => editor.objects.bringToFront()}
+        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+      >
+        <ArrowUp />
+
+        <p className={clsx(classes.subHeadingText)}>Front</p>
+      </div>
+      <div
+        onClick={() => editor.objects.sendToBack()}
+        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+      >
+        <SendBack />
+
+        <p className={classes.subHeadingText}>Back</p>
+      </div>
+      <LockUnlock />
+
       {state.isGroup ? (
-        <Button
+        <div
           onClick={() => {
             editor.objects.ungroup()
             setState({ ...state, isGroup: false })
           }}
-          size={SIZE.compact}
-          kind={KIND.tertiary}
+          className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
         >
-          Ungroup
-        </Button>
-      ) : state.isMultiple && !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
-        <Button
+          <LayersIcon size={22} />
+
+          <p className={classes.subHeadingText}>Ungroup</p>
+        </div>
+      ) : !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
+        <div
           onClick={() => {
             editor.objects.group()
             setState({ ...state, isGroup: true })
           }}
-          size={SIZE.compact}
-          kind={KIND.tertiary}
+          className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
         >
-          Group
-        </Button>
+          <LayersIcon size={22} />
+          <p className={clsx(classes.subHeadingText)}>Group</p>
+        </div>
       ) : null}
 
-      {(state.isGroup || !state.isMultiple) && <CommonLayers />}
-
+      {/* {(state.isGroup || !state.isMultiple) && <CommonLayers />} */}
       <CommonAlign />
       <Opacity />
-      <LockUnlock />
       <Visiblity />
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Duplicate">
-        <Button onClick={() => editor.objects.clone()} size={SIZE.mini} kind={KIND.tertiary}>
-          <DuplicateIcon size={22} />
-        </Button>
-      </StatefulTooltip>
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Delete">
-        <Button onClick={() => editor.objects.remove()} size={SIZE.mini} kind={KIND.tertiary}>
-          <DeleteIcon size={24} />
-        </Button>
-      </StatefulTooltip>
+
+      <div
+        onClick={() => editor.objects.remove()}
+        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+      >
+        <DeleteIcon size={22} />
+        <p className={clsx(classes.subHeadingText)}>Delete</p>
+      </div>
     </Block>
   )
 }
@@ -210,13 +240,10 @@ const CommonAlign = () => {
       returnFocus
       autoFocus
     >
-      <Block>
-        <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Align">
-          <Button size={SIZE.mini} kind={KIND.tertiary}>
-            <AlignCenter size={24} />
-          </Button>
-        </StatefulTooltip>
-      </Block>
+      <div className="d-flex justify-content-center align-items-center flex-column pointer mx-1">
+        <AlignCenter size={24} />
+        <p className={clsx(classes.subHeadingText)}>Align</p>
+      </div>
     </StatefulPopover>
   )
 }
@@ -247,18 +274,16 @@ const LockUnlock = () => {
       </Button>
     </StatefulTooltip>
   ) : (
-    <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Lock">
-      <Button
-        onClick={() => {
-          editor.objects.lock()
-          setState({ locked: true })
-        }}
-        size={SIZE.mini}
-        kind={KIND.tertiary}
-      >
-        <LockedIcon size={24} />
-      </Button>
-    </StatefulTooltip>
+    <div
+      onClick={() => {
+        editor.objects.lock()
+        setState({ locked: true })
+      }}
+      className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+    >
+      <Locked size={22} />
+      <p className={clsx(classes.subHeadingText, "mt-1")}>Lock</p>
+    </div>
   )
 }
 
@@ -274,45 +299,29 @@ const Visiblity = () => {
     }
   }, [activeObject])
   return state.visible ? (
-    <Button
-      kind={KIND.tertiary}
-      size={SIZE.mini}
+    <div
       onClick={() => {
         editor.objects.update({ visible: false })
 
         setState({ visible: false })
       }}
-      overrides={{
-        Root: {
-          style: {
-            paddingLeft: "4px",
-            paddingRight: "4px",
-          },
-        },
-      }}
+      className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
     >
       <Eye size={24} />
-    </Button>
+      <p className={clsx(classes.subHeadingText)}>Visibility</p>
+    </div>
   ) : (
-    <Button
-      kind={KIND.tertiary}
-      size={SIZE.mini}
+    <div
       onClick={() => {
         editor.objects.update({ visible: true })
 
         setState({ visible: true })
       }}
-      overrides={{
-        Root: {
-          style: {
-            paddingLeft: "4px",
-            paddingRight: "4px",
-          },
-        },
-      }}
+      className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
     >
       <EyeCrossed size={24} />
-    </Button>
+      <p className={clsx(classes.subHeadingText)}>Visibility</p>
+    </div>
   )
 }
 

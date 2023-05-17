@@ -73,6 +73,7 @@ import Blur from "./Blur"
 import Transform from "./Transform"
 import ColorPlus from "./ColorPlus"
 import GroupIcon from "./GroupIcon"
+import Flip from "./Flip"
 class Icons {
   static GroupIcon = GroupIcon
   static Background = Background
@@ -149,6 +150,7 @@ class Icons {
   static Blur = Blur
   static Transform = Transform
   static ColorPlus = ColorPlus
+  static Flip =Flip
 }
 
 export default Icons

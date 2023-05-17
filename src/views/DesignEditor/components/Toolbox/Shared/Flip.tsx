@@ -3,10 +3,10 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import { Button, SIZE, KIND } from "baseui/button"
 import { PLACEMENT, StatefulPopover } from "baseui/popover"
-import { StatefulTooltip } from "baseui/tooltip"
 import FlipHorizontal from "~/components/Icons/FlipHorizontal"
 import FlipVertical from "~/components/Icons/FlipVertical"
-
+import Icons from "~/components/Icons"
+import classes from "./style.module.css"
 const Flip = () => {
   const editor = useEditor()
   const activeObject = useActiveObject() as any
@@ -60,11 +60,12 @@ const Flip = () => {
       )}
     >
       <Block>
-        <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Layers">
-          <Button size={SIZE.compact} kind={KIND.tertiary}>
-            Flip
-          </Button>
-        </StatefulTooltip>
+        <div className="d-flex justify-content-center align-items-center flex-column pointer">
+          <div>
+            <Icons.Flip />
+          </div>
+          <p className={classes.subHeadingText}>Flip</p>
+        </div>
       </Block>
     </StatefulPopover>
   )
