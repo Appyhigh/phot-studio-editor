@@ -6,3 +6,11 @@
     margin-top: 4px;
   }
   
+.editingBtn{
+  background: transparent;
+  cursor: pointer;
+  margin-right: 12px;
+}
+.disabledBtn{
+  cursor: not-allowed;
+}

@@ -6,8 +6,6 @@ import { StatefulTooltip, PLACEMENT } from "baseui/tooltip"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { StatefulPopover } from "baseui/popover"
 import DeleteIcon from "~/components/Icons/Delete"
-import UnlockedIcon from "~/components/Icons/Unlocked"
-import LockedIcon from "~/components/Icons/Locked"
 import DuplicateIcon from "~/components/Icons/Duplicate"
 import LayersIcon from "~/components/Icons/Layers"
 import AlignCenter from "~/components/Icons/AlignCenter"
@@ -27,8 +25,8 @@ import clsx from "clsx"
 import ArrowUp from "~/components/Icons/ArrowUp"
 import SendBack from "~/components/Icons/SendBack"
 import Locked from "~/components/Icons/Locked"
-import Layers from "~/components/Icons/Layers"
-const Common = () => {
+import Unlocked from "~/components/Icons/Unlocked"
+const Common = ({ type }: any) => {
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
 
@@ -58,71 +56,102 @@ const Common = () => {
   }, [editor, activeObject])
 
   return (
-    <Block $style={{ display: "flex", alignItems: "center" }}
-    >
-      <Flip />
-      <div
+    <Block $style={{ display: "flex", alignItems: "center" }}>
+      <Flip type={type} />
+      <button
+        disabled={type === "lock" ? true : false}
+        className={clsx(
+          "d-flex justify-content-center align-items-center flex-column ml-1",
+          classes.editingBtn,
+          type === "lock" && classes.disabledBtn
+        )}
         onClick={() => editor.objects.clone()}
-        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
       >
         <DuplicateIcon size={22} />
         <p className={clsx(classes.subHeadingText)}>Duplicate</p>
-      </div>
-      <div
+      </button>
+      <button
+        disabled={type === "lock" ? true : false}
+        className={clsx(
+          "d-flex justify-content-center align-items-center flex-column ml-1",
+          classes.editingBtn,
+          type === "lock" && classes.disabledBtn
+        )}
         onClick={() => editor.objects.bringToFront()}
-        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
       >
         <ArrowUp />
 
         <p className={clsx(classes.subHeadingText)}>Front</p>
-      </div>
-      <div
+      </button>
+      <button
+        disabled={type === "lock" ? true : false}
+        className={clsx(
+          "d-flex justify-content-center align-items-center flex-column ml-1",
+          classes.editingBtn,
+          type === "lock" && classes.disabledBtn
+        )}
         onClick={() => editor.objects.sendToBack()}
-        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
       >
         <SendBack />
 
         <p className={classes.subHeadingText}>Back</p>
+      </button>
+      <div>
+        <LockUnlock />
       </div>
-      <LockUnlock />
 
       {state.isGroup ? (
-        <div
+        <button
+          disabled={type === "lock" ? true : false}
+          className={clsx(
+            "d-flex justify-content-center align-items-center flex-column ml-1",
+            classes.editingBtn,
+            type === "lock" && classes.disabledBtn
+          )}
           onClick={() => {
             editor.objects.ungroup()
             setState({ ...state, isGroup: false })
           }}
-          className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
         >
           <LayersIcon size={22} />
 
           <p className={classes.subHeadingText}>Ungroup</p>
-        </div>
+        </button>
       ) : !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
-        <div
+        <button
           onClick={() => {
             editor.objects.group()
             setState({ ...state, isGroup: true })
           }}
-          className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+          disabled={type === "lock" ? true : false}
+          className={clsx(
+            "d-flex justify-content-center align-items-center flex-column ml-1",
+            classes.editingBtn,
+            type === "lock" && classes.disabledBtn
+          )}
         >
           <LayersIcon size={22} />
           <p className={clsx(classes.subHeadingText)}>Group</p>
-        </div>
+        </button>
       ) : null}
 
       {/* {(state.isGroup || !state.isMultiple) && <CommonLayers />} */}
-      <CommonAlign />
-      <Opacity />
-      <Visiblity />
+      <CommonAlign type={type ? type : ""} />
+      <Opacity type={type ? type : ""} />
+      <Visiblity type={type ? type : ""} />
 
-      <div
+      <button
+          disabled={type === "lock" ? true : false}
+          className={clsx(
+            "d-flex justify-content-center align-items-center flex-column ml-1",
+            classes.editingBtn,
+            type === "lock" && classes.disabledBtn
+          )}
         onClick={() => editor.objects.remove()}
-        className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
       >
         <DeleteIcon size={22} />
         <p className={clsx(classes.subHeadingText)}>Delete</p>
-      </div>
+      </button>
     </Block>
   )
 }
@@ -210,45 +239,60 @@ const CommonLayers = () => {
   )
 }
 
-const CommonAlign = () => {
+const CommonAlign = ({ type }: any) => {
   const editor = useEditor()
   return (
     <StatefulPopover
       placement={PLACEMENT.bottomRight}
-      content={() => (
-        <Block padding="12px" backgroundColor="#ffffff" display="grid" gridTemplateColumns="1fr 1fr 1fr" gridGap="8px">
-          <Button onClick={() => editor.objects.alignLeft()} kind={KIND.tertiary} size={SIZE.mini}>
-            <AlignLeft size={24} />
-          </Button>
-          <Button onClick={() => editor.objects.alignCenter()} kind={KIND.tertiary} size={SIZE.mini}>
-            <AlignCenter size={24} />
-          </Button>
-          <Button onClick={() => editor.objects.alignRight()} kind={KIND.tertiary} size={SIZE.mini}>
-            <AlignRight size={24} />
-          </Button>
-          <Button onClick={() => editor.objects.alignTop()} kind={KIND.tertiary} size={SIZE.mini}>
-            <AlignTop size={24} />
-          </Button>
-          <Button onClick={() => editor.objects.alignMiddle()} kind={KIND.tertiary} size={SIZE.mini}>
-            <AlignMiddle size={24} />
-          </Button>
-          <Button onClick={() => editor.objects.alignBottom()} kind={KIND.tertiary} size={SIZE.mini}>
-            <AlignBottom size={24} />
-          </Button>
-        </Block>
-      )}
+      content={() =>
+        type === "lock" ? null : (
+          <Block
+            padding="12px"
+            backgroundColor="#ffffff"
+            display="grid"
+            gridTemplateColumns="1fr 1fr 1fr"
+            gridGap="8px"
+          >
+            <Button onClick={() => editor.objects.alignLeft()} kind={KIND.tertiary} size={SIZE.mini}>
+              <AlignLeft size={24} />
+            </Button>
+            <Button onClick={() => editor.objects.alignCenter()} kind={KIND.tertiary} size={SIZE.mini}>
+              <AlignCenter size={24} />
+            </Button>
+            <Button onClick={() => editor.objects.alignRight()} kind={KIND.tertiary} size={SIZE.mini}>
+              <AlignRight size={24} />
+            </Button>
+            <Button onClick={() => editor.objects.alignTop()} kind={KIND.tertiary} size={SIZE.mini}>
+              <AlignTop size={24} />
+            </Button>
+            <Button onClick={() => editor.objects.alignMiddle()} kind={KIND.tertiary} size={SIZE.mini}>
+              <AlignMiddle size={24} />
+            </Button>
+            <Button onClick={() => editor.objects.alignBottom()} kind={KIND.tertiary} size={SIZE.mini}>
+              <AlignBottom size={24} />
+            </Button>
+          </Block>
+        )
+      }
       returnFocus
       autoFocus
     >
-      <div className="d-flex justify-content-center align-items-center flex-column pointer mx-1">
+      <button
+        disabled={type === "lock" ? true : false}
+        className={clsx(
+          "d-flex justify-content-center align-items-center flex-column ml-1",
+          classes.editingBtn,
+          type === "lock" && classes.disabledBtn
+        )}
+      >
         <AlignCenter size={24} />
         <p className={clsx(classes.subHeadingText)}>Align</p>
-      </div>
+      </button>
     </StatefulPopover>
   )
 }
 
-const LockUnlock = () => {
+const LockUnlock = ({ type }: any) => {
   const [state, setState] = React.useState<{ locked: boolean }>({ locked: false })
   const editor = useEditor()
   const activeObject = useActiveObject()
@@ -261,33 +305,41 @@ const LockUnlock = () => {
   }, [activeObject])
 
   return state.locked ? (
-    <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Lock">
-      <Button
-        onClick={() => {
-          editor.objects.unlock()
-          setState({ locked: false })
-        }}
-        size={SIZE.mini}
-        kind={KIND.tertiary}
-      >
-        <UnlockedIcon size={24} />
-      </Button>
-    </StatefulTooltip>
+    <button
+      onClick={() => {
+        editor.objects.unlock()
+        setState({ locked: false })
+      }}
+      disabled={type === "lock" ? true : false}
+      className={clsx(
+        "d-flex justify-content-center align-items-center flex-column ml-1",
+        classes.editingBtn,
+        type === "lock" && classes.disabledBtn
+      )}
+    >
+      <Unlocked size={22} />
+      <p className={clsx(classes.subHeadingText, "mt-1")}>Unlock</p>
+    </button>
   ) : (
-    <div
+    <button
       onClick={() => {
         editor.objects.lock()
         setState({ locked: true })
       }}
-      className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+      disabled={type === "lock" ? true : false}
+      className={clsx(
+        "d-flex justify-content-center align-items-center flex-column ml-1",
+        classes.editingBtn,
+        type === "lock" && classes.disabledBtn
+      )}
     >
       <Locked size={22} />
       <p className={clsx(classes.subHeadingText, "mt-1")}>Lock</p>
-    </div>
+    </button>
   )
 }
 
-const Visiblity = () => {
+const Visiblity = ({ type }: any) => {
   const [state, setState] = React.useState<{ visible: boolean }>({ visible: true })
   const editor = useEditor()
   const activeObject = useActiveObject()
@@ -299,29 +351,39 @@ const Visiblity = () => {
     }
   }, [activeObject])
   return state.visible ? (
-    <div
+    <button
+      disabled={type === "lock" ? true : false}
+      className={clsx(
+        "d-flex justify-content-center align-items-center flex-column ml-1",
+        classes.editingBtn,
+        type === "lock" && classes.disabledBtn
+      )}
       onClick={() => {
         editor.objects.update({ visible: false })
 
         setState({ visible: false })
       }}
-      className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
     >
       <Eye size={24} />
       <p className={clsx(classes.subHeadingText)}>Visibility</p>
-    </div>
+    </button>
   ) : (
-    <div
+    <button
       onClick={() => {
         editor.objects.update({ visible: true })
 
         setState({ visible: true })
       }}
-      className="d-flex justify-content-center align-items-center flex-column pointer mx-1"
+      disabled={type === "lock" ? true : false}
+      className={clsx(
+        "d-flex justify-content-center align-items-center flex-column ml-1",
+        classes.editingBtn,
+        type === "lock" && classes.disabledBtn
+      )}
     >
       <EyeCrossed size={24} />
       <p className={clsx(classes.subHeadingText)}>Visibility</p>
-    </div>
+    </button>
   )
 }
 

@@ -4,31 +4,25 @@ import { useEditor } from "@layerhub-io/react"
 import { PLACEMENT, StatefulTooltip } from "baseui/tooltip"
 import { Button, SIZE, KIND } from "baseui/button"
 import UnlockedIcon from "~/components/Icons/Unlocked"
+import Common from "./Common/Common"
 
 const Locked = () => {
   const editor = useEditor()
 
   return (
     <Block
-      $style={{
-        display: "flex",
-        alignItems: "center",
-        backgroundColor:"#FFF",
-        padding: "0 12px",
-      }}
-    >
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Unlock">
-        <Button
-          onClick={() => {
-            editor.objects.unlock()
-          }}
-          size={SIZE.mini}
-          kind={KIND.tertiary}
-        >
-          <UnlockedIcon size={24} />
-        </Button>
-      </StatefulTooltip>
-    </Block>
+    className="d-flex align-items-center justify-content-between"
+    $style={{
+      padding: "12px",
+      backgroundColor: "#fff",
+      borderRadius: "8px",
+    }}
+  >
+    {/* //dont need for now  */}
+    {/* <Block>
+    </Block> */}
+    <Common type="lock" />
+  </Block>
   )
 }
 
