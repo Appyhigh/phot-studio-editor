@@ -32,6 +32,11 @@
   border-radius: 8px;
   margin-top: 6px;
 }
+.disabledBtn {
+  background: #f1f1f5;
+  color: #92929d;
+  cursor: not-allowed;
+}
 
 @media screen and (min-width: 1220px) {
   .uploadPreviewContainer {
