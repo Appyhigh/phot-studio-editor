@@ -3,7 +3,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import DropdownWrapper from "./DropdownWrapper"
 import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
-import React, { useCallback, useContext, useEffect, useState } from "react"
+import React, { useCallback, useContext, useState } from "react"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
@@ -12,7 +12,6 @@ import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayer
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
-import { ILayerOptions, ILayer } from "@layerhub-io/types"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
@@ -37,14 +36,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const activeObject: any = useActiveObject()
   const { setLoaderPopup } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
-
-  useEffect(() => {
-    if (editor) {
-      console.log(editor.objects.clone)
-      console.log(editor.frame.frame)
-    }
-  }, [editor, activeObject])
-
   const handleChangeBg = useCallback(
     async (each: any) => {
       let topPosition = activeObject?.top
