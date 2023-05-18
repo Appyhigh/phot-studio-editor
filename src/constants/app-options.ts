@@ -147,4 +147,5 @@ export enum PanelType {
   BACKGROUND = "Background",
   IMAGES = "Images",
   UPLOADS = "Uploads",
+  BACKGROUND_REMOVER = "BgRemover",
 }
