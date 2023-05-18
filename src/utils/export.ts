@@ -1,9 +1,9 @@
-import { resizeImage } from "./canvasUtils"
+import { resizeBase64Image } from "./updateLayerBackground"
 
 export const makeDownloadToPNG = async (data: any, selectedType: string, height?: number, width?: number) => {
   let image = data
   if (height && width) {
-    image = await resizeImage(data, height, width)
+    image = await resizeBase64Image(data, width, height)
   }
   const dataStr = `${image}`
   const a = document.createElement("a")
