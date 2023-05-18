@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
@@ -76,7 +76,7 @@ const BgRemover = () => {
     editor.objects.removeById(id)
   }
 
-  return (
+    return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>

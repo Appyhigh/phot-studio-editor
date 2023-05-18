@@ -89,6 +89,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         })
         })
       }
+      editor.objects.removeById(activeObject?.id)
     },
     [mainImgInfo, handleBgChangeOption, selectedBgOption, type]
   )

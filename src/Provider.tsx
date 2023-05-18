@@ -14,6 +14,7 @@ import i18next from "i18next"
 import "./translations"
 import { CustomTheme } from "./theme"
 import MainImageContext from "./contexts/MainImageContext"
+import AuthWrapper from "./hooks/useAuth"
 
 const engine = new Styletron()
 
@@ -39,8 +40,9 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   })
 
   return (
-    <ReduxProvier store={store}>
-      <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+    <AuthWrapper>
+      <ReduxProvier store={store}>
+        <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
         <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
           <DesignEditorProvider>
             <TimerProvider>
@@ -55,9 +57,10 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
               </AppProvider>
             </TimerProvider>
           </DesignEditorProvider>
-        </MainImageContext.Provider>
-      </LoaderContext.Provider>
-    </ReduxProvier>
+          </MainImageContext.Provider>
+        </LoaderContext.Provider>
+      </ReduxProvier>
+    </AuthWrapper>
   )
 }
 
