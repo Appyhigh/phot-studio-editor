@@ -43,7 +43,7 @@
   height: 55px;
   position: absolute;
   top: 20px;
-  right: 20px;
+  right: 15px;
 }
 
 .sampleImgSection {
@@ -135,7 +135,7 @@
     margin: 0px;
   }
   .iconWrapper {
-    right: 40px;
+    right: 30px;
     top: 0px;
   }
   .sampleImgSection {
