@@ -92,8 +92,6 @@
   vertical-align: middle;
 }
 
-
-
 .uploadInputWrapper {
   padding: 0px 8px;
 }
@@ -108,9 +106,9 @@
 .uploadInput {
   display: none;
 }
-.panelHeading{
-    font-weight: 600;
-    font-size: 16px;
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
 }
 @media screen and (min-width: 1220px) {
   .panelHeading {
@@ -138,7 +136,6 @@
     margin-top: 20px;
   }
 }
-
 
 @media screen and (min-width: 1220px) {
   .tryImgHeading {

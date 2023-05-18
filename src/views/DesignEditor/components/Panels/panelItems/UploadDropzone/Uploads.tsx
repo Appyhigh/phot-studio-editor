@@ -45,7 +45,7 @@ export default function () {
       id: nanoid(),
       src: base64,
       preview: preview,
-      original:base64,
+      original: base64,
       type: type,
       metadata: { generationDate: new Date().getTime() },
     }
@@ -60,7 +60,6 @@ export default function () {
       if (fileInfo?.value) fileInfo.value = ""
     })
   }
-
 
   const handleInputFileRefClick = () => {
     inputFileRef.current?.click()
@@ -78,7 +77,7 @@ export default function () {
       ...prev,
       trySampleImg: true,
       bgOptions: false,
-      uploadPreview:false,
+      uploadPreview: false,
       bgRemoverBtnActive: false,
       uploadSection: true,
     }))

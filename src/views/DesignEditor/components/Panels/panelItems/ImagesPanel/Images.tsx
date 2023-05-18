@@ -38,7 +38,7 @@ const Images = () => {
     (url: string) => {
       // @ts-ignore
       setPanelInfo((prev) => ({ ...prev, bgRemoverBtnActive: true }))
-      
+
       toDataURL(url, async function (dataUrl: string) {
         if (editor) {
           const options = {
@@ -46,7 +46,7 @@ const Images = () => {
             src: dataUrl,
             preview: dataUrl,
             id: nanoid(),
-            original:dataUrl,
+            original: dataUrl,
             metadata: { generationDate: new Date().getTime() },
           }
           setPanelInfo((prev: any) => ({
