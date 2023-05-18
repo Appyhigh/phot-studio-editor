@@ -124,6 +124,8 @@ const LayerPanel = () => {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       }
       setActiveLayerPanel(activeObject)
+    } else if (layerState.isOpenSlider) {
+      setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
     }
   }, [activeObject])
 
