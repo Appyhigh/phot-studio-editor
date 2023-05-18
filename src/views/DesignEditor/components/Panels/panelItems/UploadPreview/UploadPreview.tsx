@@ -6,24 +6,18 @@ import { useEditor } from "@layerhub-io/react"
 import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
+import MainImageContext from "~/contexts/MainImageContext"
 
-const UploadPreview = ({
-  upload,
-  selectedImage,
-  discardHandler,
-  handleOpenBgOptions,
-  removeBgBtn,
-  disableRemoveBgBtn,
-}: any) => {
+const UploadPreview = ({ discardHandler }: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
-
+  const { mainImgInfo, setMainImgInfo,panelInfo,setPanelInfo } = useContext(MainImageContext)
   const removeBackgroundHandler = async () => {
     try {
       // Start the loader
       setLoaderPopup(true)
 
-      removeBackgroundController(upload.src, (image: string) => {
+      removeBackgroundController(mainImgInfo.src, (image: string) => {
         // Add the resultant image to the canvas
         const options = {
           type: "StaticImage",
@@ -32,11 +26,11 @@ const UploadPreview = ({
           metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options).then(() => {
-          handleOpenBgOptions()
-          editor.objects.removeById(selectedImage.id)
+          // @ts-ignore 
+           setPanelInfo((prev)=>({...prev,bgOptions:true,bgRemoverBtnActive:false,uploadSection:false,trySampleImg:false}))
+          editor.objects.removeById(mainImgInfo.id)
           // Stop the loader
           setLoaderPopup(false)
-          disableRemoveBgBtn()
         })
       })
     } catch (error: any) {
@@ -50,28 +44,32 @@ const UploadPreview = ({
         <Icons.InputContainer />
       </Block>
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
-        <img className={classes.uploadedImg} src={upload.preview ? upload.preview : upload.url} alt="preview" />
+        <img
+          className={classes.uploadedImg}
+          src={mainImgInfo.preview ? mainImgInfo.preview : mainImgInfo.url}
+          alt="preview"
+        />
 
-        {selectedImage?.preview === upload.preview && (
+        {
           <Block className={clsx("p-absolute", classes.discardBtn)}>
             <span onClick={discardHandler}>
               <Icons.Trash size={"32"} />
             </span>
           </Block>
-        )}
+        }
       </Block>
 
-      {selectedImage?.preview === upload.preview && (
+      {
         <button
-          disabled={removeBgBtn ? false : true}
+          disabled={panelInfo.bgRemoverBtnActive ? false : true}
           onClick={() => {
             removeBackgroundHandler()
           }}
-          className={clsx(classes.removeBgBtn, !removeBgBtn && classes.disabledBtn)}
+          className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
         >
           Remove Background
         </button>
-      )}
+      }
     </div>
   )
 }

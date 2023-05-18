@@ -13,27 +13,48 @@ import LoaderContext from "./contexts/LoaderContext"
 import i18next from "i18next"
 import "./translations"
 import { CustomTheme } from "./theme"
+import MainImageContext from "./contexts/MainImageContext"
 
 const engine = new Styletron()
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [loaderPopup, setLoaderPopup] = useState<boolean>(false)
+
+  const [mainImgInfo, setMainImgInfo] = useState({
+    type: "",
+    id: "",
+    src: "",
+    preview: "",
+    url: "",
+    metadata: {},
+  })
+
+  const [panelInfo, setPanelInfo] = useState({
+    uploadSection: true,
+    trySampleImg: true,
+    uploadPreview: false,
+    bgOptions: false,
+    bgRemoverBtnActive: false,
+  })
+
   return (
     <ReduxProvier store={store}>
       <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
-        <DesignEditorProvider>
-          <TimerProvider>
-            <AppProvider>
-              <ScenifyProvider>
-                <StyletronProvider value={engine}>
-                  <BaseProvider theme={CustomTheme}>
-                    <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                  </BaseProvider>
-                </StyletronProvider>
-              </ScenifyProvider>
-            </AppProvider>
-          </TimerProvider>
-        </DesignEditorProvider>
+        <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
+          <DesignEditorProvider>
+            <TimerProvider>
+              <AppProvider>
+                <ScenifyProvider>
+                  <StyletronProvider value={engine}>
+                    <BaseProvider theme={CustomTheme}>
+                      <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                    </BaseProvider>
+                  </StyletronProvider>
+                </ScenifyProvider>
+              </AppProvider>
+            </TimerProvider>
+          </DesignEditorProvider>
+        </MainImageContext.Provider>
       </LoaderContext.Provider>
     </ReduxProvier>
   )
