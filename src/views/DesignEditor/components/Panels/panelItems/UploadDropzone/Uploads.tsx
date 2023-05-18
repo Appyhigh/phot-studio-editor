@@ -47,12 +47,9 @@ export default function ({
     }
 
     setUploads([...uploads, upload])
-
-    editor.objects.add(upload).then(() => {
-      setSelectedImage(upload)
-      const fileInfo: any = document.getElementById("inputFile")
-      if (fileInfo.value) fileInfo.value = ""
-    })
+    setSelectedImage(upload)
+    const fileInfo: any = document.getElementById("inputFile")
+    if (fileInfo.value) fileInfo.value = ""
   }
 
   const handleInputFileRefClick = () => {
