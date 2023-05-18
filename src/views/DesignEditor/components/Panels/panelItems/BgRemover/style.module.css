@@ -21,18 +21,23 @@
   text-align: center;
   padding: 11px 0px;
   cursor: pointer;
+  color: #696974;
+  background-color: #fff;
 }
 
 .leftOption {
   border-radius: 4px 0px 0px 4px;
+}
+
+.rightOption {
+  border-radius: 0px 4px 4px 0px;
+}
+
+.selectedBgChoice {
   color: #fff;
   background-color: #171725;
 }
 
-.rightOption {
-  color: #696974;
-  border-radius: 0px 4px 4px 0px;
-}
 .bgOptionHeading {
   margin: 20px 0px 14px 0px;
   padding: 0px 20px;
@@ -85,6 +90,51 @@
   object-fit: contain;
   pointer-events: none;
   vertical-align: middle;
+}
+
+.uploadInputWrapper {
+  padding: 0px 8px;
+}
+
+.uploadPreviewSection {
+  margin-top: 0.5rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.uploadInput {
+  display: none;
+}
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
+}
+@media screen and (min-width: 1220px) {
+  .panelHeading {
+    padding: 0px 0px 0px 16px;
+  }
+  .uploadInputWrapper {
+    padding: 0px 24px;
+  }
+}
+
+@media screen and (min-width: 1220px) {
+  .uploadPreviewContainer {
+    width: 320px;
+    height: 200px;
+  }
+  .uploadPreview {
+    width: 319px;
+  }
+  .discardBtn {
+    top: 70px;
+    right: 38px;
+  }
+  .removeBgBtn {
+    width: 319px;
+    margin-top: 20px;
+  }
 }
 
 @media screen and (min-width: 1220px) {
