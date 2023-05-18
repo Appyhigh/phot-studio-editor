@@ -8,8 +8,9 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { Button, SIZE, KIND } from "baseui/button"
 import OpacityIcon from "~/components/Icons/Opacity."
 import { StatefulTooltip } from "baseui/tooltip"
-
-const Opacity = () => {
+import clsx from "clsx"
+import classes from "./style.module.css"
+const Opacity = ({ type }: any) => {
   const editor = useEditor()
   const [state, setState] = React.useState<{
     opacity: number
@@ -51,85 +52,92 @@ const Opacity = () => {
 
   return (
     <StatefulPopover
-    placement={PLACEMENT.bottomLeft}
-    content={() => (
-      <Block width={"200px"} backgroundColor={"#ffffff"} padding={"20px"}>
-        <Block $style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <Block $style={{ fontSize: "14px" }}>Opacity</Block>
-          <Block width={"52px"}></Block>
-        </Block>
+      placement={PLACEMENT.bottomLeft}
+      content={() => (
+        type==="lock"?null:
+        <Block width={"200px"} backgroundColor={"#ffffff"} padding={"20px"}>
+          <Block $style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Block $style={{ fontSize: "14px" }}>Opacity</Block>
+            <Block width={"52px"}></Block>
+          </Block>
 
-        <Block $style={{ display: "grid", gridTemplateColumns: "1fr 40px", gap: "1rem" }}>
-          <Slider
-            overrides={{
-              InnerThumb: () => null,
-              ThumbValue: () => null,
-              TickBar: () => null,
-              Track: {
-                style: {
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                },
-              },
-              Thumb: {
-                style: {
-                  height: "12px",
-                  width: "12px",
-                },
-              },
-            }}
-            min={0}
-            max={100}
-            marks={false}
-            value={[state.opacity]}
-            onChange={(event) => applyTextOpacity("", { target: { value: event.value[0] } })}
-          />
-          <Block $style={{ display: "flex", alignItems: "center" }}>
-            <Input
+          <Block $style={{ display: "grid", gridTemplateColumns: "1fr 40px", gap: "1rem" }}>
+            <Slider
               overrides={{
-                Input: {
+                InnerThumb: () => null,
+                ThumbValue: () => null,
+                TickBar: () => null,
+                Track: {
                   style: {
-                    backgroundColor: "#ffffff",
-                    textAlign: "center",
-                    paddingLeft: 0,
                     paddingRight: 0,
+                    paddingLeft: 0,
                   },
                 },
-                Root: {
+                Thumb: {
                   style: {
-                    borderBottomColor: "rgba(0,0,0,0.15)",
-                    borderTopColor: "rgba(0,0,0,0.15)",
-                    borderRightColor: "rgba(0,0,0,0.15)",
-                    borderLeftColor: "rgba(0,0,0,0.15)",
-                    borderTopWidth: "1px",
-                    borderBottomWidth: "1px",
-                    borderRightWidth: "1px",
-                    borderLeftWidth: "1px",
-                    height: "20px",
+                    height: "12px",
+                    width: "12px",
                   },
                 },
               }}
-              size={SIZE.mini}
-              type={"number"}
-              inputMode="decimal"
-              pattern="[0-9]*(.[0-9]+)?"
-              onChange={(e) => handleChange("opacityTemp", parseFloat(e.target.value))}
-              onBlur={(e) => applyTextOpacity("opacity", e)}
-              value={state.opacityTemp}
+              min={0}
+              max={100}
+              marks={false}
+              value={[state.opacity]}
+              onChange={(event) => applyTextOpacity("", { target: { value: event.value[0] } })}
             />
+            <Block $style={{ display: "flex", alignItems: "center" }}>
+              <Input
+                overrides={{
+                  Input: {
+                    style: {
+                      backgroundColor: "#ffffff",
+                      textAlign: "center",
+                      paddingLeft: 0,
+                      paddingRight: 0,
+                    },
+                  },
+                  Root: {
+                    style: {
+                      borderBottomColor: "rgba(0,0,0,0.15)",
+                      borderTopColor: "rgba(0,0,0,0.15)",
+                      borderRightColor: "rgba(0,0,0,0.15)",
+                      borderLeftColor: "rgba(0,0,0,0.15)",
+                      borderTopWidth: "1px",
+                      borderBottomWidth: "1px",
+                      borderRightWidth: "1px",
+                      borderLeftWidth: "1px",
+                      height: "20px",
+                    },
+                  },
+                }}
+                size={SIZE.mini}
+                type={"number"}
+                inputMode="decimal"
+                pattern="[0-9]*(.[0-9]+)?"
+                onChange={(e) => handleChange("opacityTemp", parseFloat(e.target.value))}
+                onBlur={(e) => applyTextOpacity("opacity", e)}
+                value={state.opacityTemp}
+              />
+            </Block>
           </Block>
         </Block>
-      </Block>
-    )}
-  >
-    <Block>
-      <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType={"tooltip"} content="Opacity">
-        <Button kind={KIND.tertiary} size={SIZE.mini}>
+      )}
+    >
+      <Block>
+        <button
+          disabled={type === "lock" ? true : false}
+          className={clsx(
+            "d-flex justify-content-center align-items-center flex-column ml-1",
+            classes.editingBtn,
+            type === "lock" && classes.disabledBtn
+          )}
+        >
           <OpacityIcon size={24} />
-        </Button>
-      </StatefulTooltip>
-    </Block>
-  </StatefulPopover>
+          <p className={clsx(classes.subHeadingText, classes.opacityText)}>Opacity</p>
+        </button>
+      </Block>
+    </StatefulPopover>
   )
 }
 

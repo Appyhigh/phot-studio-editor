@@ -1,5 +1,4 @@
 import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/react"
-import { useStyletron } from "baseui"
 import BringToFront from "~/components/Icons/BringToFront"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
@@ -8,7 +7,8 @@ import Locked from "~/components/Icons/Locked"
 import Paste from "~/components/Icons/Paste"
 import SendToBack from "~/components/Icons/SendToBack"
 import Unlocked from "~/components/Icons/Unlocked"
-
+import classes from "./style.module.css"
+import clsx from "clsx"
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
   const editor = useEditor()
@@ -29,16 +29,10 @@ const ContextMenu = () => {
     return (
       <div // @ts-ignore
         onContextMenu={(e: Event) => e.preventDefault()}
+        className={classes.contextMenuSection}
         style={{
-          position: "absolute",
           top: `${contextMenuRequest.top}px`,
           left: `${contextMenuRequest.left}px`,
-          zIndex: 129,
-          width: "240px",
-          backgroundColor: "#ffffff",
-          borderRadius: "10px",
-          boxShadow: "0.5px 2px 7px rgba(0, 0, 0, 0.1)",
-          padding: "0.5rem 0",
         }}
       >
         <ContextMenuItem
@@ -78,83 +72,78 @@ const ContextMenu = () => {
   }
   return (
     <>
-      {!contextMenuRequest.target.locked ? (
-        <div // @ts-ignore
-          onContextMenu={(e: Event) => e.preventDefault()}
-          style={{
-            position: "absolute",
-            top: `${contextMenuRequest.top}px`,
-            left: `${contextMenuRequest.left}px`,
-            zIndex: 129,
-            width: "240px",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            boxShadow: "0.5px 2px 7px rgba(0, 0, 0, 0.1)",
-            padding: "0.5rem 0",
+      <div // @ts-ignore
+        onContextMenu={(e: Event) => e.preventDefault()}
+        className={classes.contextMenuSection}
+        style={{
+          top: `${contextMenuRequest.top}px`,
+          left: `${contextMenuRequest.left}px`,
+        }}
+      >
+        <ContextMenuItem
+          onClick={() => {
+            editor.objects.copy()
+            editor.cancelContextMenuRequest()
           }}
+          icon="Duplicate"
+          label="copy"
         >
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.copy()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Duplicate"
-            label="copy"
-          >
-            <Duplicate size={24} />
-          </ContextMenuItem>
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.paste()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Paste"
-            label="paste"
-          >
-            <Paste size={24} />
-          </ContextMenuItem>
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.remove()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Delete"
-            label="delete"
-          >
-            <Delete size={24} />
-          </ContextMenuItem>
-          <div style={{ margin: "0.5rem 0" }} />
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.bringForward()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Forward"
-            label="bring forward"
-          >
-            <BringToFront size={24} />
-          </ContextMenuItem>
-          <ContextMenuItem
-            onClick={() => {
-              editor.objects.sendBackwards()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Backward"
-            label="send backward"
-          >
-            <SendToBack size={24} />
-          </ContextMenuItem>
-          <ContextMenuItem
-            onClick={() => {
-              handleAsComponentHandler()
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Elements"
-            label="Save as component"
-          >
-            <Elements size={24} />
-          </ContextMenuItem>
-          <div style={{ margin: "0.5rem 0" }} />
+          <Duplicate size={24} />
+        </ContextMenuItem>
+        <ContextMenuItem
+          onClick={() => {
+            editor.objects.paste()
+            editor.cancelContextMenuRequest()
+          }}
+          icon="Paste"
+          label="paste"
+        >
+          <Paste size={24} />
+        </ContextMenuItem>
+        <ContextMenuItem
+          onClick={() => {
+            editor.objects.remove()
+            editor.cancelContextMenuRequest()
+          }}
+          icon="Delete"
+          label="delete"
+        >
+          <Delete size={24} />
+        </ContextMenuItem>
+        <div style={{ margin: "0.5rem 0" }} />
+        <ContextMenuItem
+          onClick={() => {
+            editor.objects.bringForward()
+            editor.cancelContextMenuRequest()
+          }}
+          icon="Forward"
+          label="bring forward"
+        >
+          <BringToFront size={24} />
+        </ContextMenuItem>
+        <ContextMenuItem
+          onClick={() => {
+            editor.objects.sendBackwards()
+            editor.cancelContextMenuRequest()
+          }}
+          icon="Backward"
+          label="send backward"
+        >
+          <SendToBack size={24} />
+        </ContextMenuItem>
+        <ContextMenuItem
+          onClick={() => {
+            handleAsComponentHandler()
+            editor.cancelContextMenuRequest()
+          }}
+          icon="Elements"
+          label="Save as component"
+        >
+          <Elements size={24} />
+        </ContextMenuItem>
+        <div style={{ margin: "0.5rem 0" }} />
+
+        {!contextMenuRequest.target.locked ? (
           <ContextMenuItem
             onClick={() => {
               editor.objects.lock()
@@ -165,38 +154,7 @@ const ContextMenu = () => {
           >
             <Locked size={24} />
           </ContextMenuItem>
-          {activeObject?.type === "StaticImage" && (
-            <ContextMenuItem
-              onClick={() => {
-                // handleAsComponentHandler()
-                editor.objects.unsetBackgroundImage()
-                setTimeout(() => {
-                  editor.objects.setAsBackgroundImage()
-                }, 50)
-                editor.cancelContextMenuRequest()
-              }}
-              icon="Images"
-              label="Set as background image"
-            >
-              <Elements size={24} />
-            </ContextMenuItem>
-          )}
-        </div>
-      ) : (
-        <div // @ts-ignore
-          onContextMenu={(e: Event) => e.preventDefault()}
-          style={{
-            position: "absolute",
-            top: `${contextMenuRequest.top}px`,
-            left: `${contextMenuRequest.left}px`,
-            zIndex: 129,
-            width: "240px",
-            backgroundColor: "#ffffff",
-            borderRadius: "10px",
-            boxShadow: "0.5px 2px 7px rgba(0, 0, 0, 0.1)",
-            padding: "0.5rem 0",
-          }}
-        >
+        ) : (
           <ContextMenuItem
             onClick={() => {
               editor.objects.unlock()
@@ -207,8 +165,24 @@ const ContextMenu = () => {
           >
             <Unlocked size={24} />
           </ContextMenuItem>
-        </div>
-      )}
+        )}
+        {activeObject?.type === "StaticImage" && (
+          <ContextMenuItem
+            onClick={() => {
+              // handleAsComponentHandler()
+              editor.objects.unsetBackgroundImage()
+              setTimeout(() => {
+                editor.objects.setAsBackgroundImage()
+              }, 50)
+              editor.cancelContextMenuRequest()
+            }}
+            icon="Images"
+            label="Set as background image"
+          >
+            <Elements size={24} />
+          </ContextMenuItem>
+        )}
+      </div>
     </>
   )
 }
@@ -225,26 +199,12 @@ const ContextMenuItem = ({
   disabled?: boolean
   children: React.ReactNode
 }) => {
-  const [css] = useStyletron()
   return (
-    <div
-      onClick={onClick}
-      className={css({
-        display: "flex",
-        height: "32px",
-        fontSize: "14px",
-        alignItems: "center",
-        padding: "0 1rem",
-        gap: "1rem",
-        cursor: "pointer",
-        pointerEvents: disabled ? "none" : "auto",
-        opacity: disabled ? 0.4 : 1,
-        ":hover": {
-          backgroundColor: "rgba(0,0,0,0.075)",
-        },
-      })}
-    >
-      {children} {label}
+    <div onClick={onClick} className={clsx(classes.eachMenu, disabled && classes.disabledMenu)}>
+      <div style={{ width: "25px" }} className={"d-flex justify-content-center"}>
+        {children}
+      </div>{" "}
+      {label}
     </div>
   )
 }
