@@ -19,7 +19,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isReplacePopup, setIsReplacePopup] = useState(false)
   const [activeOb, setActiveOb] = useState<any>()
-
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
       setActiveState(-1)
@@ -37,10 +36,11 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const activeObject: any = useActiveObject()
   const { setLoaderPopup } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
-
   const handleChangeBg = useCallback(
     async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
+      let topPosition = activeObject?.top
+      let leftPosition = activeObject?.left
+
       if (each.color) {
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
@@ -55,13 +55,21 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
         }
+        editor.objects.remove(activeObject?.id)
+
         editor.objects.add(options)
+        setTimeout(() => {
+          editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+        }, 20)
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
           const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
             activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
             dataUrl
           )
+          let topPosition = activeObject?.top
+          let leftPosition = activeObject?.left
+
           const options = {
             type: "StaticImage",
             src: previewWithUpdatedBackground,
@@ -71,7 +79,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
             },
           }
+          editor.objects.remove(activeObject?.id)
+
           editor.objects.add(options)
+          setTimeout(() => {
+            editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+          }, 20)
         })
       }
     },
