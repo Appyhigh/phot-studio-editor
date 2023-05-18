@@ -24,9 +24,12 @@ const Canvas = () => {
           preview: checkboxBGUrl,
           metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
         }
-        editor.objects.add(options).then(() => {
-          editor.objects.setAsBackgroundImage()
-        })
+        // Timeout works as a fix so canvas does not get dislocated
+        setTimeout(() => {
+          editor.objects.add(options).then(() => {
+            editor.objects.setAsBackgroundImage()
+          })
+        }, 1000)
       }
     }
   }, [editor, frame])
