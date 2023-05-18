@@ -21,7 +21,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isReplacePopup, setIsReplacePopup] = useState(false)
   const [activeOb, setActiveOb] = useState<any>()
-  const { mainImgInfo, setMainImgInfo ,setPanelInfo} = useContext(MainImageContext)
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
 
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
@@ -121,10 +121,20 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
+          id: nanoid(),
           metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options).then(() => {
+          // @ts-ignore
+          setPanelInfo((prev) => ({
+            ...prev,
+            bgOptions: true,
+            bgRemoverBtnActive: false,
+            uploadSection: false,
+            trySampleImg: false,
+          }))
           editor.objects.removeById(activeObject.id)
+          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
           // Stop the loader
           setLoaderPopup(false)
         })
