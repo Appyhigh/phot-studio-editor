@@ -62,7 +62,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       src: previewWithUpdatedBackground,
       preview: previewWithUpdatedBackground,
       metadata: {
-        generationDate: new Date().getTime(),
+        generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? inputImg,
       },
     }
@@ -95,7 +95,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
-          metadata: { generationDate: new Date().getTime() },
+          metadata: {
+            generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+            originalLayerPreview: image,
+          },
         }
         editor.objects.add(options).then(() => {
           editor.objects.removeById(activeObject.id)

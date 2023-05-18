@@ -40,6 +40,7 @@ const UploadPreview = ({
         })
       })
     } catch (error: any) {
+      setLoaderPopup(false)
       console.log("Something went wrong while removing background...", error.message)
     }
   }
