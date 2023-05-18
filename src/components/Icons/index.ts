@@ -73,7 +73,11 @@ import Blur from "./Blur"
 import Transform from "./Transform"
 import ColorPlus from "./ColorPlus"
 import GroupIcon from "./GroupIcon"
+import PopupCloseIcon from "./PopupCloseIcon"
+import GoogleIcon from "./GoogleIcon"
 class Icons {
+  static GoogleIcon = GoogleIcon
+  static PopupCloseIcon = PopupCloseIcon
   static GroupIcon = GroupIcon
   static Background = Background
   static Elements = Elements

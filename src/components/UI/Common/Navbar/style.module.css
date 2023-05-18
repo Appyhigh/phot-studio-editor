@@ -26,3 +26,564 @@
   color: #fff;
   background-color: #ff974a;
 }
+
+.navbarSection {
+  max-height: 78px;
+  position: relative;
+}
+
+.navbar {
+  display: flex;
+  padding: 14px 15px 10px;
+  align-items: center;
+  background-color: #ffffff;
+}
+
+.loginPopupCon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  outline: none;
+  border: none;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.leftSection {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  font-family: "Rubik";
+}
+
+.logoHeading {
+  color: #212121;
+  font-size: 36px;
+  line-height: 43px;
+  margin: 0px !important;
+}
+
+.logoHeading:hover {
+  cursor: pointer;
+}
+
+.leftSection h2 {
+  font-size: 36px;
+}
+
+.leftSection span {
+  font-weight: 700;
+  margin-right: 3px;
+  background: linear-gradient(144.67deg, #96e7f9 -61.34%, #e09eff 83.7%, #8d34ff 180.05%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-fill-color: transparent;
+}
+
+.horizontaLine {
+  height: 2px;
+  width: 100%;
+  display: block;
+  background: #f7f7f7;
+  position: absolute;
+  top: 66px;
+}
+
+.loginWrapper {
+  margin-left: 12px;
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.loginButton:hover {
+  cursor: pointer;
+}
+
+.roundDP {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.roundProfileDP {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+.roundDP :nth-child(1) {
+  border-radius: 50%;
+}
+
+.roundDP:hover {
+  cursor: pointer;
+}
+
+.roundProfileDP :nth-child(1) {
+  border-radius: 50%;
+}
+
+.roundProfileDP:hover {
+  cursor: pointer;
+}
+
+.profileWrapper {
+  position: relative;
+  margin-left: 8px;
+}
+
+.headerProfile {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.userInfo {
+  display: flex;
+  max-width: 221px;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 3px;
+}
+
+.userEmail {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+  margin-left: 8px;
+
+  color: #000000;
+
+  max-width: 221px;
+  text-overflow: ellipsis;
+}
+.profileFooter {
+  text-align: center;
+  border-top: 1px solid #dadce0;
+  font-size: 14px;
+  padding: 8px 0px;
+  font-family: "Rubik";
+}
+
+.profileFooter:hover {
+  cursor: pointer;
+}
+
+.signOut {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 0px;
+  padding: 12px 12px 12px 28px;
+}
+
+.signOut:hover {
+  cursor: pointer;
+  background-color: #e1e8f8;
+}
+
+.signText {
+  color: #000000;
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: 4px;
+  font-family: "Roboto";
+}
+
+.visibleRemove {
+  display: none;
+}
+
+.visibleAdd {
+  display: block;
+}
+
+.loginWrapper:nth-child(1) {
+  border-radius: 50%;
+}
+
+.rightSection {
+  display: none;
+  flex: 1;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.productsListWrapper {
+  position: relative;
+  margin: 0px 16px;
+}
+
+.productsListWrapper:hover {
+  cursor: pointer;
+}
+
+.productsLinks {
+  display: flex;
+  align-items: center;
+}
+
+.productsLinks:hover {
+  cursor: pointer;
+}
+
+.productsContainer {
+  display: none;
+  min-width: 298px;
+  min-height: 260px;
+  left: 0px;
+  position: absolute;
+  z-index: 500;
+}
+
+.productCon {
+  min-width: 325px;
+  min-height: 260px;
+  background: #ffffff;
+  box-shadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  left: 0px;
+  position: absolute;
+  padding: 16px 25px;
+  z-index: 500;
+  top: 18px;
+}
+
+.productsListWrapper:hover .productsContainer {
+  display: block;
+}
+
+.productListContainer:hover {
+  display: block;
+}
+
+.products {
+  margin-right: 8px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #212121;
+}
+
+.productListHeading {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  margin: 0px 0px 2px;
+  padding-top: 24px;
+  color: #777777;
+}
+
+.mobileProductList > div a {
+  font-size: 15px;
+  line-height: 14px;
+  color: #000000;
+  display: block;
+  margin: 14px 0px;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.productsContainer a {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 15px !important;
+  line-height: 18px;
+  /* identical to box height */
+  display: block;
+  padding: 0px;
+  color: #000000;
+  margin: 14px 0px !important;
+  height: 18px;
+}
+
+.productsContainer a:hover {
+  cursor: pointer;
+  color: #8d34ff;
+  font-weight: 600 !important;
+  text-decoration: underline;
+  transition: all 0.035s ease-in-out;
+}
+
+.productListHeading:hover {
+  cursor: pointer !important;
+}
+
+.productsVisibleAdd {
+  display: block;
+}
+
+.activeNavLink {
+  color: #8d34ff !important;
+}
+
+.productListNavLink {
+  display: flex;
+  align-items: center;
+}
+
+.productListNavLink:hover {
+  cursor: pointer;
+}
+
+.profileContainer {
+  display: none;
+  min-width: 298px;
+  min-height: 200px;
+  right: -60px;
+  position: absolute;
+  z-index: 500;
+}
+
+.profileCon {
+  min-width: 298px;
+  min-height: 200px;
+  max-height: 200px;
+  background: #ffffff;
+  box-shadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  right: 0px;
+  position: absolute;
+  padding: 23px 23px 21px 23px;
+  z-index: 500;
+  top: 18px;
+}
+
+.profileWrapper:hover .profileContainer {
+  display: block;
+}
+
+@media (min-width: 375px) {
+  .signText {
+    margin-left: 12px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 450px) {
+  .navbar {
+    padding: 15px 25px 10px;
+  }
+
+  .horizontaLine {
+    top: 68px;
+  }
+
+  .signText {
+    font-size: 14px;
+    margin-left: 16px;
+  }
+}
+
+.rightNavLinks {
+  margin: 10px 16px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: #212121 !important;
+}
+
+.profileLoader {
+  display: flex;
+}
+
+.profileLinks a {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+  color: #000000;
+}
+
+.profilePopupLinks {
+  margin: 10px 0px 20px;
+}
+
+.profileLinks {
+  padding: 10px 0px 9px;
+}
+
+.creditsOfProfile {
+  display: flex;
+  flex: 1;
+}
+.remainingCredits {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  background: linear-gradient(95.27deg, #7bc0ff -20.65%, #ac31ff 104.88%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.drawer {
+  display: flex;
+  align-items: center;
+}
+
+.buyMoreCredits {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  text-transform: uppercase;
+  background: linear-gradient(152.2deg, #6f48b4 2.29%, #fe5795 94.34%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-left: auto;
+}
+
+.buyMoreCredits:hover {
+  cursor: pointer;
+}
+
+.mobileProductList {
+  background-color: #eeeeee;
+  height: 0px;
+  transition: height 0.3s linear;
+  overflow: hidden;
+  padding: 0px;
+  visibility: hidden;
+  transition: visibility 0.3s ease-out, height 0.3s ease-out;
+}
+
+.mobileProductList > div {
+  padding-left: 24px;
+}
+
+.showProduct {
+  /* display: block; */
+  /* height: 350px; */
+  height: 211px;
+  margin-bottom: 14px;
+  margin-top: -12px;
+  /* padding: 24px; */
+  visibility: visible;
+}
+
+@media (min-width: 600px) {
+  .signText {
+    margin-left: 24px;
+  }
+  .roundDP {
+    width: 40px;
+    height: 40px;
+  }
+
+  .loginWrapper {
+    width: 40px;
+    height: 40px;
+  }
+  .profileLoader {
+    margin: 0px 16px 1px 20px;
+  }
+  .profileContainer {
+    right: 0px;
+  }
+}
+
+@media (min-width: 900px) {
+  .navbar {
+    padding: 20px 50px 10px;
+  }
+  .signText {
+    font-size: 14px;
+    margin-left: 24px;
+  }
+  .horizontaLine {
+    top: 72px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .rightSection {
+    display: flex;
+  }
+  .rightNavLinks {
+    margin: 0px 12px;
+  }
+  .horizontaLine {
+    top: 75px;
+  }
+  .auth {
+    display: none;
+  }
+  .drawer {
+    display: none;
+  }
+
+  .productCon a {
+    display: inline-block;
+    height: auto !important;
+    margin-top: 0 !important;
+    margin-bottom: 7px !important;
+    line-height: 20px;
+  }
+
+  .productListHeading {
+    margin-bottom: 14px !important;
+  }
+  .productsContainer {
+    left: -60px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .profileWrapper {
+    margin-left: 16px;
+  }
+  .rightNavLinks {
+    margin: 0px 16px;
+  }
+  .productsListWrapper {
+    padding-left: 12px;
+  }
+  .productsContainer {
+    left: -40px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .navbar {
+    padding: 20px 72px 13px;
+  }
+
+  .profileLoader {
+    display: flex;
+    align-items: flex-start;
+    margin: 0px 16px 6px 30px;
+  }
+  .rightNavLinks {
+    margin: 0px 16px;
+  }
+  .horizontaLine {
+    top: 77px;
+  }
+  .productsListWrapper {
+    padding-left: 20px;
+  }
+  .productsContainer {
+    left: -10px;
+  }
+}
