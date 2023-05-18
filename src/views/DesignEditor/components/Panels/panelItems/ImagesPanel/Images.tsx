@@ -54,7 +54,6 @@ const Images = () => {
           setTrySampleImgShow(false)
           setSampleImageUpload(options)
           setSelectedSampleImage(options)
-          editor.objects.add(options)
         }
       })
     },
