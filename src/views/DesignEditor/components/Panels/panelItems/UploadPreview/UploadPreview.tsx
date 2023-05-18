@@ -29,7 +29,7 @@ const UploadPreview = ({
           type: "StaticImage",
           src: image,
           preview: image,
-          metadata: { generationDate: new Date().getTime() },
+          metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
         }
         editor.objects.add(options).then(() => {
           handleOpenBgOptions()
