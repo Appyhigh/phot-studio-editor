@@ -1,0 +1,132 @@
+.popup {
+  background: white;
+  padding: 30px 0px;
+  border-radius: 20px;
+  position: relative;
+  width: 310px;
+  height: 430px;
+}
+
+.topHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 28px;
+}
+
+.closeIconWrapper {
+  width: 16px;
+  height: 16px;
+}
+
+.iconWrapper {
+  height: 155px;
+  width: 193px;
+  margin: auto;
+}
+
+.topHeader h3 {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.loginBtn {
+  background: #ffffff;
+  border: 1px solid #cccccc !important;
+  border-radius: 16px;
+  padding: 16px 0px;
+  width: 100%;
+  color: black;
+  font-style: normal;
+}
+
+.continueWithGoogleText {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  margin-top: 4px;
+  text-align: center;
+
+  color: #333b4f;
+}
+
+.googleCon {
+  margin-top: 3px;
+}
+
+.loginBtnWrapper {
+  margin: 0 28px;
+  margin-top: 36px;
+}
+
+.topHeader span {
+  background: linear-gradient(144.67deg, #96e7f9 -61.34%, #e09eff 83.7%, #8d34ff 180.05%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-fill-color: transparent;
+}
+
+.mainHeading {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.topHeader button {
+  background: none;
+}
+
+.text {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  text-align: center;
+  color: #777777;
+  padding: 0 16px;
+  margin-top: 4px;
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
+}
+@media screen and (min-width: 600px) {
+  .popup {
+    width: 520px;
+  }
+
+  .mainHeading {
+    font-size: 28px;
+    padding: 0 132px;
+    margin-top: 30px;
+  }
+
+  .iconWrapper {
+    height: 155px;
+    width: 193px;
+    margin: auto;
+  }
+
+  .text {
+    padding: 0 50px;
+    font-size: 16px;
+    margin-top: 4px;
+  }
+
+  .loginBtnWrapper {
+    margin-top: 44px;
+  }
+
+  .loginBtn {
+    font-size: 16px;
+  }
+}
