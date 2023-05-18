@@ -60,6 +60,9 @@ const DownloadPopup = () => {
       console.log(image)
       const nWidth = frame.width * sizeVal
       const nHeight = frame.height * sizeVal
+      if (selectedType != "svg") {
+        makeDownloadToPNG(image, selectedType, nHeight, nWidth)
+      } else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
     }
   }, [editor, selectedType, frame, objects, sizeVal])
 
