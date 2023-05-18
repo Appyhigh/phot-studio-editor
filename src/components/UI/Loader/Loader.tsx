@@ -6,7 +6,7 @@ import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 const Loader = ({ isOpen }: any) => {
   const { loaderPopup } = useContext(LoaderContext)
 
-  return loaderPopup.showPopup ? (
+  return loaderPopup ? (
     <Modal
       overrides={{
         Root: {
@@ -29,8 +29,8 @@ const Loader = ({ isOpen }: any) => {
       }}
       isOpen={isOpen}
     >
-      <div className="flex-center">
-        <img src={LoaderSpinner} />
+      <div className="flex-center" >
+        <img src={LoaderSpinner}/>
       </div>
     </Modal>
   ) : null

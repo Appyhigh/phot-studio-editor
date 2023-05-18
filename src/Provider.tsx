@@ -13,31 +13,32 @@ import LoaderContext from "./contexts/LoaderContext"
 import i18next from "i18next"
 import "./translations"
 import { CustomTheme } from "./theme"
+import AuthWrapper from "./hooks/useAuth"
 
 const engine = new Styletron()
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
-  const [loaderPopup, setLoaderPopup] = useState<any>({
-    showUploadPopup: false,
-  })
+  const [loaderPopup, setLoaderPopup] = useState<boolean>(false)
   return (
-    <ReduxProvier store={store}>
-      <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
-        <DesignEditorProvider>
-          <TimerProvider>
-            <AppProvider>
-              <ScenifyProvider>
-                <StyletronProvider value={engine}>
-                  <BaseProvider theme={CustomTheme}>
-                    <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                  </BaseProvider>
-                </StyletronProvider>
-              </ScenifyProvider>
-            </AppProvider>
-          </TimerProvider>
-        </DesignEditorProvider>
-      </LoaderContext.Provider>
-    </ReduxProvier>
+    <AuthWrapper>
+      <ReduxProvier store={store}>
+        <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+          <DesignEditorProvider>
+            <TimerProvider>
+              <AppProvider>
+                <ScenifyProvider>
+                  <StyletronProvider value={engine}>
+                    <BaseProvider theme={CustomTheme}>
+                      <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                    </BaseProvider>
+                  </StyletronProvider>
+                </ScenifyProvider>
+              </AppProvider>
+            </TimerProvider>
+          </DesignEditorProvider>
+        </LoaderContext.Provider>
+      </ReduxProvier>
+    </AuthWrapper>
   )
 }
 

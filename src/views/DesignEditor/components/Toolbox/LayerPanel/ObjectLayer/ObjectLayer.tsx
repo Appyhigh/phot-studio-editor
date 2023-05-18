@@ -3,13 +3,14 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import DropdownWrapper from "./DropdownWrapper"
 import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useContext, useState } from "react"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
-import { toDataURL } from "~/utils/export"
-import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayerBackground"
+import { changeLayerFill } from "~/utils/updateLayerBackground"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
+import LoaderContext from "~/contexts/LoaderContext"
+import { removeBackgroundController } from "~/utils/removeBackground"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
@@ -32,49 +33,85 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   const editor = useEditor()
-  const activeObject = useActiveObject()
-
+  const activeObject: any = useActiveObject()
+  const { setLoaderPopup } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
 
   const handleChangeBg = useCallback(
     async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
-      if (each.color) {
-        const previewWithUpdatedBackground: any = await changeLayerFill(
-          activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          each.color
-        )
-        const options = {
-          type: "StaticImage",
-          src: previewWithUpdatedBackground,
-          preview: previewWithUpdatedBackground,
-          metadata: {
-            generationDate: new Date().getTime(),
-            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          },
-        }
-        editor.objects.add(options)
-      } else if (each.img) {
-        toDataURL(each.img, async function (dataUrl: string) {
-          const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-            activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-            dataUrl
-          )
-          const options = {
-            type: "StaticImage",
-            src: previewWithUpdatedBackground,
-            preview: previewWithUpdatedBackground,
-            metadata: {
-              generationDate: new Date().getTime(),
-              originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-            },
-          }
-          editor.objects.add(options)
-        })
+      let inputImage
+
+      // If layer contains the originalImage then send it in changeLayerFill or else send the preview after removing background
+      if (activeObject?.metadata?.originalLayerPreview) {
+        inputImage = activeObject?.metadata?.originalLayerPreview
+        changeBGFillHandler(inputImage, each.color)
+      } else {
+        removeBackgroundBeforeChangingColor(each)
       }
     },
     [activeObject]
   )
+
+  const changeBGFillHandler = async (inputImg: string, BG: string) => {
+    const previewWithUpdatedBackground: any = await changeLayerFill(
+      activeObject?.metadata?.originalLayerPreview ?? inputImg,
+      BG
+    )
+    const options = {
+      type: "StaticImage",
+      src: previewWithUpdatedBackground,
+      preview: previewWithUpdatedBackground,
+      metadata: {
+        generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? inputImg,
+      },
+    }
+    editor.objects.add(options).then(() => {
+      setLoaderPopup(false)
+      editor.objects.removeById(activeObject?.id)
+    })
+  }
+
+  const removeBackgroundBeforeChangingColor = async (each: any) => {
+    try {
+      setLoaderPopup(true)
+      removeBackgroundController(activeObject.preview, async (image: string) => {
+        changeBGFillHandler(image, each.color)
+      })
+    } catch (error: any) {
+      setLoaderPopup(false)
+      console.log("Something went wrong while removing background...", error.message)
+    }
+  }
+
+  const removeBackgroundHandler = async () => {
+    try {
+      // Start the loader
+      setLoaderPopup(true)
+
+      removeBackgroundController(activeObject.preview, (image: string) => {
+        // Add the resultant image to the canvas
+        const options = {
+          type: "StaticImage",
+          src: image,
+          preview: image,
+          metadata: {
+            generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+            originalLayerPreview: image,
+          },
+        }
+        editor.objects.add(options).then(() => {
+          editor.objects.removeById(activeObject.id)
+          // Stop the loader
+          setLoaderPopup(false)
+        })
+      })
+    } catch (error: any) {
+      setLoaderPopup(false)
+      console.log("Something went wrong while removing background...", error.message)
+    }
+  }
+
   return showLayer ? (
     <Scrollable>
       <div className={classes.objectLayerSection}>
@@ -152,7 +189,17 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>
-          {[1, 2, 3, 4].map((each, idx) => (
+          <div
+            onClick={removeBackgroundHandler}
+            className={clsx(
+              classes.otherToolsBox,
+              "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
+            )}
+          >
+            <Icons.Image />
+            <p>Remove Background</p>
+          </div>
+          {[1, 2, 3].map((each, idx) => (
             <div
               key={idx}
               className={clsx(
@@ -161,7 +208,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               )}
             >
               <Icons.Image />
-              <p>Remove Background</p>
+              <p>Tool</p>
             </div>
           ))}
         </div>

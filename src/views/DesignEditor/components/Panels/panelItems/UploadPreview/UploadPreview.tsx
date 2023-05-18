@@ -5,11 +5,16 @@ import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
 import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
-import { removeBackgroundWithoutPromps } from "~/services/backgroundRemover-tools-service"
-import { removeBackgroundUsingMask } from "~/utils/removeBackground"
-import { DEFAULT_DIMENSIONS } from "~/utils/common"
+import { removeBackgroundController } from "~/utils/removeBackground"
 
-const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOptions }: any) => {
+const UploadPreview = ({
+  upload,
+  selectedImage,
+  discardHandler,
+  handleOpenBgOptions,
+  removeBgBtn,
+  disableRemoveBgBtn,
+}: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
 
@@ -17,38 +22,25 @@ const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOpti
     try {
       // Start the loader
       setLoaderPopup(true)
-      // Get the black and white masked image
-      const result_image = await removeBackgroundWithoutPromps(upload.src, "layer" || "")
 
-      if (result_image.output_image) {
-        // Get the image with removed background
-        removeBackgroundUsingMask({
-          sourceImage: upload.src || "",
-          maskImage: result_image.output_image,
-          canvasStyling: {
-            width: DEFAULT_DIMENSIONS.width,
-            height: DEFAULT_DIMENSIONS.height,
-            ratioedWidth: DEFAULT_DIMENSIONS.width,
-            ratioedHeight: DEFAULT_DIMENSIONS.height,
-          },
-          outputHandler: (image: string) => {
-            // Add the resultant image to the canvas
-            const options = {
-              type: "StaticImage",
-              src: image,
-              preview: image,
-              metadata: { generationDate: new Date().getTime() },
-            }
-            editor.objects.add(options).then(() => {
-              handleOpenBgOptions()
-              editor.objects.removeById(selectedImage.id)
-              // Stop the loader
-              setLoaderPopup(false)
-            })
-          },
+      removeBackgroundController(upload.src, (image: string) => {
+        // Add the resultant image to the canvas
+        const options = {
+          type: "StaticImage",
+          src: image,
+          preview: image,
+          metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
+        }
+        editor.objects.add(options).then(() => {
+          handleOpenBgOptions()
+          editor.objects.removeById(selectedImage.id)
+          // Stop the loader
+          setLoaderPopup(false)
+          disableRemoveBgBtn()
         })
-      }
+      })
     } catch (error: any) {
+      setLoaderPopup(false)
       console.log("Something went wrong while removing background...", error.message)
     }
   }
@@ -72,14 +64,11 @@ const UploadPreview = ({ upload, selectedImage, discardHandler, handleOpenBgOpti
 
       {selectedImage?.preview === upload.preview && (
         <button
+          disabled={removeBgBtn ? false : true}
           onClick={() => {
-            setLoaderPopup((prev: any) => ({ ...prev, showPopup: true }))
-            setTimeout(() => {
-              setLoaderPopup((prev: any) => ({ ...prev, showPopup: false }))
-              removeBackgroundHandler()
-            }, 3000)
+            removeBackgroundHandler()
           }}
-          className={classes.removeBgBtn}
+          className={clsx(classes.removeBgBtn, !removeBgBtn && classes.disabledBtn)}
         >
           Remove Background
         </button>

@@ -42,8 +42,6 @@ const LayerPanel = () => {
     objectLayer: false,
     textLayer: false,
   })
-  const [showObjectLayer, setShowObjectLayer] = useState(false)
-  const [showTextLayer, setShowTextLayer] = useState(false)
   const handleCloseObjectLayer = () => {
     setLayerState((prev) => ({ ...prev, objectLayer: false }))
   }
@@ -116,12 +114,14 @@ const LayerPanel = () => {
 
   useEffect(() => {
     if (activeObject?.id && layerState.isOpenSlider) {
-      if (activeObject?.text) {
+      if (activeObject?.text || activeObject?.name === "StaticText") {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       } else if (activeObject?.metadata?.type == backgroundLayerType) {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: true }))
-      } else {
+      } else if (activeObject?.name === "StaticImage") {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: true, bgLayer: false }))
+      } else {
+        setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       }
       setActiveLayerPanel(activeObject)
     }
@@ -220,6 +220,7 @@ const LayerPanel = () => {
                           {object._objects.map((object: any, index: number) => {
                             return (
                               <Block
+                                key={index}
                                 className="d-flex flex-column align-items-center"
                                 $style={{
                                   fontSize: "14px",
@@ -231,7 +232,7 @@ const LayerPanel = () => {
                                   className="d-flex justify-content-start align-items-center pointer w-100"
                                   key={object.id}
                                   onClick={() => {
-                                    if (object.text) {
+                                    if (object.text || object.name === "StaticText") {
                                       setLayerState((prev) => ({
                                         ...prev,
                                         isOpenSlider: true,
@@ -259,7 +260,7 @@ const LayerPanel = () => {
                                     setActiveLayerPanel(object)
                                   }}
                                 >
-                                  {object.text ? (
+                                  {object.text || object.name === "StaticText" ? (
                                     <div
                                       className={clsx(
                                         "d-flex justify-content-center align-items-center",
@@ -314,7 +315,7 @@ const LayerPanel = () => {
                           }}
                           key={object.id}
                           onClick={() => {
-                            if (object.text) {
+                            if (object.text || object.name === "StaticText") {
                               setLayerState((prev) => ({
                                 ...prev,
                                 isOpenSlider: true,
@@ -344,7 +345,7 @@ const LayerPanel = () => {
                             editor.objects.select(object.id)
                           }}
                         >
-                          {object.text ? (
+                          {object.text || object.name === "StaticText" ? (
                             <div
                               className={clsx("d-flex justify-content-center align-items-center", classes.textLayer)}
                             >

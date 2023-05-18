@@ -1,9 +1,7 @@
 import React from "react"
 
 const LoaderContext = React.createContext({
-  loaderPopup: {
-    showPopup: false,
-  },
+  loaderPopup: false,
   setLoaderPopup: (item: any) => {
     console.log("Dummy Initializer for ", item)
   },
