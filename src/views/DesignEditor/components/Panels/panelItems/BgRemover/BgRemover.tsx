@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
@@ -25,6 +25,8 @@ const BgRemover = () => {
     type: -1,
     id: 0,
   })
+  const objects = useObjects()
+  const activeObject = useActiveObject()
 
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
@@ -36,18 +38,26 @@ const BgRemover = () => {
     (url: string) => {
       // @ts-ignore
       setPanelInfo((prev) => ({ ...prev, bgRemoverBtnActive: true }))
+      
       toDataURL(url, async function (dataUrl: string) {
         if (editor) {
           const options = {
             type: "StaticImage",
-            id: nanoid(),
             src: dataUrl,
             preview: dataUrl,
+            id: nanoid(),
+            original:dataUrl,
             metadata: { generationDate: new Date().getTime() },
           }
-          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-          setPanelInfo((prev: any) => ({ ...prev, UploadPreview: true, bgOptions: false, trySampleImg: false }))
+          setPanelInfo((prev: any) => ({
+            ...prev,
+            UploadPreview: true,
+            bgOptions: false,
+            trySampleImg: false,
+            uploadSection: false,
+          }))
           editor.objects.add(options)
+          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
         }
       })
     },
@@ -56,7 +66,13 @@ const BgRemover = () => {
 
   const discardSampleImageHandler = (id: string) => {
     setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-    setPanelInfo((prev: any) => ({ ...prev, UploadPreview: false, bgOptions: false, trySampleImg: true }))
+    setPanelInfo((prev: any) => ({
+      ...prev,
+      UploadPreview: false,
+      bgOptions: false,
+      trySampleImg: true,
+      uploadSection: true,
+    }))
     editor.objects.removeById(id)
   }
 
@@ -70,15 +86,15 @@ const BgRemover = () => {
                 className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
                 onClick={() => {
                   //when right icon with Image is clicked set upload to intital state
+                  setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
                   setPanelInfo((prev: any) => ({
                     ...prev,
-                    UploadPreview: false,
-                    BgOptions: false,
+                    uploadPreview: false,
+                    bgOptions: false,
                     uploadSection: true,
                     trySampleImg: true,
                     bgRemoveBtnActive: false,
                   }))
-                  setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
                 }}
               >
                 <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>Image</Block>
