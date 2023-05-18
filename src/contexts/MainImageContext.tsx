@@ -7,6 +7,7 @@ const MainImageContext = React.createContext({
     src: "",
     url: "",
     preview: "",
+    original:"",
     metadata: {},
   },
   panelInfo: {

@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Block } from "baseui/block"
 import DropZone from "~/components/Dropzone"
 import { useEditor } from "@layerhub-io/react"
@@ -45,6 +45,7 @@ export default function () {
       id: nanoid(),
       src: base64,
       preview: preview,
+      original:base64,
       type: type,
       metadata: { generationDate: new Date().getTime() },
     }
@@ -56,9 +57,10 @@ export default function () {
     editor.objects.add(upload).then(() => {
       setSelectedImage(upload)
       const fileInfo: any = document.getElementById("inputFile")
-      if (fileInfo.value) fileInfo.value = ""
+      if (fileInfo?.value) fileInfo.value = ""
     })
   }
+
 
   const handleInputFileRefClick = () => {
     inputFileRef.current?.click()

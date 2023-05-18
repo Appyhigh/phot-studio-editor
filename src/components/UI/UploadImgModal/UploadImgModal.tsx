@@ -1,11 +1,12 @@
 import { Modal } from "baseui/modal"
 import classes from "./style.module.css"
-import React from "react"
+import React, { useContext } from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { toBase64 } from "~/utils/data"
 import { nanoid } from "nanoid"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const close = () => {
@@ -14,6 +15,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
   const inputNextFile = React.useRef<HTMLInputElement>(null)
   const inputReplaceFile = React.useRef<HTMLInputElement>(null)
+  const { mainImgInfo, setMainImgInfo ,panelInfo,setPanelInfo} = useContext(MainImageContext)
 
   const editor = useEditor()
   const activeObject = useActiveObject()
@@ -44,15 +46,21 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     } else {
       let topPosition = activeOb?.top
       let leftPosition = activeOb?.left
+      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
 
       const upload = {
         src: preview,
         id: nanoid(),
         preview: preview,
+        original: preview,
         type: inputType,
         metadata: { generationDate: new Date().getTime() },
       }
       // to replace the object removing the previous active object first
+      if (activeOb.id === activeMainObject.id) {
+        setMainImgInfo((prev:any) => ({ ...prev, ...upload }))
+        setPanelInfo((prev:any)=>({...prev,uploadPreview:true,bgOptions:false,bgRemoverBtnActive:true}))  
+      }
       editor.objects.remove(activeObject?.id)
       editor.objects.add(upload)
 

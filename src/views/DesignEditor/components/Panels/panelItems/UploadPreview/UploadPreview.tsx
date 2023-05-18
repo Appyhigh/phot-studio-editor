@@ -7,11 +7,12 @@ import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
+import { nanoid } from "nanoid"
 
 const UploadPreview = ({ discardHandler }: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
-  const { mainImgInfo, setMainImgInfo,panelInfo,setPanelInfo } = useContext(MainImageContext)
+  const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const removeBackgroundHandler = async () => {
     try {
       // Start the loader
@@ -23,12 +24,20 @@ const UploadPreview = ({ discardHandler }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
+          id: nanoid(),
           metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options).then(() => {
-          // @ts-ignore 
-           setPanelInfo((prev)=>({...prev,bgOptions:true,bgRemoverBtnActive:false,uploadSection:false,trySampleImg:false}))
+          // @ts-ignore
+          setPanelInfo((prev) => ({
+            ...prev,
+            bgOptions: true,
+            bgRemoverBtnActive: false,
+            uploadSection: false,
+            trySampleImg: false,
+          }))
           editor.objects.removeById(mainImgInfo.id)
+          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
           // Stop the loader
           setLoaderPopup(false)
         })
@@ -46,7 +55,7 @@ const UploadPreview = ({ discardHandler }: any) => {
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
         <img
           className={classes.uploadedImg}
-          src={mainImgInfo.preview ? mainImgInfo.preview : mainImgInfo.url}
+          src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
           alt="preview"
         />
 

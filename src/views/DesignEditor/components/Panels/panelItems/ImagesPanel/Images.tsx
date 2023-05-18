@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
@@ -25,6 +25,8 @@ const Images = () => {
     type: -1,
     id: 0,
   })
+  const objects = useObjects()
+  const activeObject = useActiveObject()
 
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
@@ -36,16 +38,17 @@ const Images = () => {
     (url: string) => {
       // @ts-ignore
       setPanelInfo((prev) => ({ ...prev, bgRemoverBtnActive: true }))
+      
       toDataURL(url, async function (dataUrl: string) {
         if (editor) {
           const options = {
             type: "StaticImage",
-            id: nanoid(),
             src: dataUrl,
             preview: dataUrl,
+            id: nanoid(),
+            original:dataUrl,
             metadata: { generationDate: new Date().getTime() },
           }
-          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
           setPanelInfo((prev: any) => ({
             ...prev,
             UploadPreview: true,
@@ -54,6 +57,7 @@ const Images = () => {
             uploadSection: false,
           }))
           editor.objects.add(options)
+          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
         }
       })
     },

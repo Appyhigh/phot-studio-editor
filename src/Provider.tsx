@@ -26,6 +26,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     preview: "",
     url: "",
+    original:"",
     metadata: {},
   })
 
