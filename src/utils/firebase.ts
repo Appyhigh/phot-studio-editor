@@ -3,14 +3,15 @@ import { getApp, getApps, initializeApp } from "firebase/app"
 import { getAuth } from "firebase/auth"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBeXUKwxjXFzzv4yH9bwCx-yzv_F-ANo7k",
-  authDomain: "phot-ai.firebaseapp.com",
-  projectId: "phot-ai",
-  storageBucket: "phot-ai.appspot.com",
-  messagingSenderId: "49948541054",
-  appId: "1:49948541054:web:a968582ebd788e7672582f",
-  measurementId: "G-YG6QRMYN3Z",
+  apiKey: import.meta.env.VITE_FIREBASE_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASURMENT_ID,
 }
+
 
 let analytics: Analytics
 
