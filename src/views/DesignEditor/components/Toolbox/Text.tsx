@@ -216,13 +216,13 @@ export default function () {
         alignItems: "center",
         justifyContent: "space-between",
         backgroundColor: "#fff",
-        flexDirection:"column",
-        borderRadius:"8px",
-        height:"58px",
-        padding:"6px 12px"
+        flexDirection: "column",
+        borderRadius: "8px",
+        height: "58px",
+        padding: "6px 12px",
       }}
     >
-      <Block display={"flex"}  gridGap="0.5rem" alignItems={"center"}>
+      <Block display={"flex"} gridGap="0.5rem" alignItems={"center"}>
         {/* added in right layer panel  */}
         {/* <Block
           onClick={() => setActiveSubMenu("FontSelector")}
@@ -312,14 +312,9 @@ export default function () {
             Effects
           </Button>
           <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} />
-          <Button size={SIZE.compact} kind={KIND.tertiary}>
-            Animate
-          </Button>
         </Block>
         <Common />
-
       </Block>
-      
     </Block>
   )
 }
