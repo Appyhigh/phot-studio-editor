@@ -57,11 +57,9 @@ const DownloadPopup = () => {
       template = { ...template, layers: template.layers.filter((layer: any) => !hiddenLayersIDs.includes(layer.id)) }
 
       const image = (await editor.renderer.render(template)) as string
+      console.log(image)
       const nWidth = frame.width * sizeVal
       const nHeight = frame.height * sizeVal
-      if (selectedType != "svg") {
-        makeDownloadToPNG(image, selectedType, nHeight, nWidth)
-      } else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
     }
   }, [editor, selectedType, frame, objects, sizeVal])
 
