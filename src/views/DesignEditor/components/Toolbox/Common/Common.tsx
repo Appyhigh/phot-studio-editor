@@ -143,14 +143,15 @@ const Common = ({ type }: any) => {
       <button
         disabled={type === "lock" ? true : false}
         className={clsx(
-          "d-flex justify-content-center align-items-center flex-column ml-1",
+          "d-flex justify-content-center pt-1 align-items-center flex-column ml-1",
           classes.editingBtn,
-          type === "lock" && classes.disabledBtn
+          classes.type === "lock" && classes.disabledBtn,
+          classes.editingBtnDelete
         )}
         onClick={() => editor.objects.remove()}
       >
-        <DeleteIcon size={22} />
-        <p className={clsx(classes.subHeadingText)}>Delete</p>
+        <DeleteIcon size={20} />
+        <p className={clsx(classes.subHeadingText, classes.subHeadingTextDelete)}>Delete</p>
       </button>
     </Block>
   )

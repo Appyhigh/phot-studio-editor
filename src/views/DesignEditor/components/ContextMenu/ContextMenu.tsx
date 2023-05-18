@@ -201,7 +201,10 @@ const ContextMenuItem = ({
 }) => {
   return (
     <div onClick={onClick} className={clsx(classes.eachMenu, disabled && classes.disabledMenu)}>
-      {children} {label}
+      <div style={{ width: "25px" }} className={"d-flex justify-content-center"}>
+        {children}
+      </div>{" "}
+      {label}
     </div>
   )
 }

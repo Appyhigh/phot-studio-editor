@@ -5,7 +5,7 @@
   background-color: #fff;
   border: 10px;
   box-shadow: 0.5px 2px 7px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
 }
 .eachMenu {
   display: flex;
@@ -18,10 +18,10 @@
 }
 
 .eachMenu:hover {
-  background-color: rgba(0,0,0,0.075)
+  background-color: rgba(0, 0, 0, 0.075);
 }
 
-.disabledMenu{
-    pointer-events: none;
-    opacity: 0.4;
+.disabledMenu {
+  pointer-events: none;
+  opacity: 0.4;
 }
