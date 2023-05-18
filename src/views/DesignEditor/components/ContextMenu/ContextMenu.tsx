@@ -1,5 +1,6 @@
 import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/react"
 import { useStyletron } from "baseui"
+import { useContext } from "react"
 import BringToFront from "~/components/Icons/BringToFront"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
@@ -8,11 +9,29 @@ import Locked from "~/components/Icons/Locked"
 import Paste from "~/components/Icons/Paste"
 import SendToBack from "~/components/Icons/SendToBack"
 import Unlocked from "~/components/Icons/Unlocked"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
   const editor = useEditor()
   const activeObject: any = useActiveObject()
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+
+  const deleteHandler = () => {
+    if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    }
+    editor.objects.remove(activeObject?.id)
+  }
   const handleAsComponentHandler = async () => {
     if (editor) {
       const component: any = await editor.scene.exportAsComponent()
@@ -115,7 +134,7 @@ const ContextMenu = () => {
           </ContextMenuItem>
           <ContextMenuItem
             onClick={() => {
-              editor.objects.remove()
+              deleteHandler()
               editor.cancelContextMenuRequest()
             }}
             icon="Delete"

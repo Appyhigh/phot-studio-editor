@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Button, SIZE, KIND } from "baseui/button"
 import { Checkbox } from "baseui/checkbox"
 import { Block } from "baseui/block"
@@ -21,12 +21,30 @@ import AlignBottom from "~/components/Icons/AlignBottom"
 import Opacity from "./Shared/Opacity"
 import Eye from "~/components/Icons/Eye"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const Common = () => {
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
 
   const editor = useEditor()
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+
+  const deleteHandler = () => {
+    if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    }
+    editor.objects.remove(activeObject?.id)
+  }
 
   React.useEffect(() => {
     if (activeObject) {
@@ -89,7 +107,7 @@ const Common = () => {
         </Button>
       </StatefulTooltip>
       <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType="tooltip" content="Delete">
-        <Button onClick={() => editor.objects.remove()} size={SIZE.mini} kind={KIND.tertiary}>
+        <Button onClick={() => deleteHandler()} size={SIZE.mini} kind={KIND.tertiary}>
           <DeleteIcon size={24} />
         </Button>
       </StatefulTooltip>
