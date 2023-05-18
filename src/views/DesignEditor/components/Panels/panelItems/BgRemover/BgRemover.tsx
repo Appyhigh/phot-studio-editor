@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { images } from "~/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
@@ -54,7 +53,6 @@ const BgRemover = () => {
           setTrySampleImgShow(false)
           setSampleImageUpload(options)
           setSelectedSampleImage(options)
-          editor.objects.add(options)
         }
       })
     },

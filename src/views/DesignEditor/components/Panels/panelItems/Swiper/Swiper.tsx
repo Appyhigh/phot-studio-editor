@@ -18,7 +18,6 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
 
   const handleChangeBg = useCallback(
     async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
       if (each.color) {
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
@@ -67,6 +66,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           editor.objects.add(options)
         })
       }
+      editor.objects.removeById(activeObject?.id)
     },
     [activeObject]
   )

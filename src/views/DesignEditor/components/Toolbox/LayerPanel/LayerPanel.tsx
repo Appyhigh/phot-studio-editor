@@ -222,6 +222,7 @@ const LayerPanel = () => {
                           {object._objects.map((object: any, index: number) => {
                             return (
                               <Block
+                                key={index}
                                 className="d-flex flex-column align-items-center"
                                 $style={{
                                   fontSize: "14px",

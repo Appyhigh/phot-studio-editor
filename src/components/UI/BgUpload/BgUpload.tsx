@@ -1,4 +1,3 @@
-import { Theme, styled } from "baseui"
 import { Block } from "baseui/block"
 import React, { useState } from "react"
 import classes from "./style.module.css"
@@ -6,54 +5,33 @@ import clsx from "clsx"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
 import { toBase64 } from "~/utils/data"
-import { nanoid } from "nanoid"
-import { useEditor } from "@layerhub-io/react"
-import { backgroundLayerType } from "~/constants/contants"
+import { useEditor, useActiveObject } from "@layerhub-io/react"
 import StockImages from "./StockImages"
+import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const editor = useEditor()
-
+  const activeObject: any = useActiveObject()
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-    const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
-    let preview = base64
 
-    const type = isVideo ? "StaticVideo" : "StaticImage"
-
-    const upload = {
-      id: nanoid(),
-      src: base64,
-      preview: preview,
-      type: type,
-      metadata: { generationDate: new Date().getTime() },
-    }
-
-    const bgObject = editor.frame.background.canvas._objects.filter(
-      (el: any) => el.metadata?.type === backgroundLayerType
-    )[0]
-
-    if (bgObject) {
-      editor.objects.remove(bgObject.id)
-      editor.objects.unsetBackgroundImage()
-    }
-
+    const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
+      activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+      base64
+    )
     const options = {
       type: "StaticImage",
-      src: upload.src,
-      preview: upload.preview,
-      metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      src: previewWithUpdatedBackground,
+      preview: previewWithUpdatedBackground,
+      metadata: {
+        generationDate: new Date().getTime(),
+        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+      },
     }
-
-    editor.objects.add(options).then(() => {
-      editor.frame.setBackgroundColor("#ffffff")
-      editor.objects.setAsBackgroundImage()
-
-      const fileInfo: any = document.getElementById("inputBgFile")
-      if (fileInfo.value) fileInfo.value = ""
-    })
+    editor.objects.add(options)
+    editor.objects.removeById(activeObject?.id)
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {

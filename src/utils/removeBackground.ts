@@ -205,20 +205,25 @@ export const removeBackgroundUsingMask = async ({
 
 export const removeBackgroundController = async (inputImage: string, outputHandler: (resultImage: string) => void) => {
   // Get the black and white masked image
-  const result_image = await removeBackgroundWithoutPromps(inputImage, "layer" || "")
+  try {
+    const result_image = await removeBackgroundWithoutPromps(inputImage, "layer" || "")
 
-  if (result_image.output_image) {
-    // Get the image with removed background
-    removeBackgroundUsingMask({
-      sourceImage: inputImage || "",
-      maskImage: result_image.output_image,
-      canvasStyling: {
-        width: DEFAULT_DIMENSIONS.width,
-        height: DEFAULT_DIMENSIONS.height,
-        ratioedWidth: DEFAULT_DIMENSIONS.width,
-        ratioedHeight: DEFAULT_DIMENSIONS.height,
-      },
-      outputHandler: outputHandler,
-    })
+    if (result_image.output_image) {
+      // Get the image with removed background
+      removeBackgroundUsingMask({
+        sourceImage: inputImage || "",
+        maskImage: result_image.output_image,
+        canvasStyling: {
+          width: DEFAULT_DIMENSIONS.width,
+          height: DEFAULT_DIMENSIONS.height,
+          ratioedWidth: DEFAULT_DIMENSIONS.width,
+          ratioedHeight: DEFAULT_DIMENSIONS.height,
+        },
+        outputHandler: outputHandler,
+      })
+    }
+  } catch (error: any) {
+    console.log(error)
+    throw new Error(error)
   }
 }
