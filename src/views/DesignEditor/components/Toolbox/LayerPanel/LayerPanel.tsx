@@ -61,21 +61,22 @@ const LayerPanel = () => {
   const [bgUrl, setBgUrl] = useState<any>("")
 
   React.useEffect(() => {
-    const isBackgroundAnImage = editor?.frame?.background?.canvas?._objects[2]?.preview?.length > 0
-    const isBackgroundAColor =
-      (!editor?.frame?.background?.canvas?._objects[2]?.preview ||
-        editor?.frame?.background?.canvas?._objects[2]?.preview.length === 0) &&
-      editor?.frame?.background?.fill
-
-    const backgroundColor = editor?.frame?.background?.fill
-    const backgroundImage = editor?.frame?.background?.canvas?._objects[2]?.preview
-
-    if (isBackgroundAnImage) {
-      setBgUrl(backgroundImage)
-    } else if (isBackgroundAColor) {
-      setBgUrl(backgroundColor)
+    if (editor) {
+      const bgImageIndex = editor?.frame?.background?.canvas?._objects.findIndex(
+        (el: any) => el.type === "BackgroundImage"
+      )
+      if (bgImageIndex !== -1) {
+        setBgUrl(editor?.frame?.background?.canvas?._objects[bgImageIndex].preview)
+      } else {
+        setBgUrl(editor?.frame?.background?.fill)
+      }
     }
-  }, [editor?.frame?.background?.canvas?._objects[2], editor?.frame?.background?.fill])
+  }, [
+    activeObject,
+    editor?.frame?.background?.fill,
+    editor?.frame?.background?.canvas?._objects,
+    editor?.frame?.background?.canvas?._objects.findIndex((el: any) => el.type === "BackgroundImage"),
+  ])
 
   React.useEffect(() => {
     if (objects) {
@@ -192,19 +193,13 @@ const LayerPanel = () => {
           ) : (
             <Scrollable autoHide={true}>
               <Block className="p-1">
-                {/* {layerObjects.length === 0 ? (
-                <Box />
-              ) : (
-                
-              )} */}
                 {layerObjects
-                  .filter(
-                    (el) =>
-                      el.metadata?.type !== backgroundLayerType &&
-                      el.preview !== editor?.frame?.background?.canvas?._objects[2]?.preview &&
-                      el.type !== "BackgroundImage"
-                  )
-                  .sort((a, b) => b.metadata?.generationDate - a.metadata?.generationDate)
+                  .filter((el) => {
+                    return el.metadata?.type !== backgroundLayerType && el.type !== "BackgroundImage"
+                  })
+                  .sort((a, b) => {
+                    return b.metadata?.generationDate - a.metadata?.generationDate
+                  })
                   .map((object) => {
                     if (object._objects) {
                       return (
