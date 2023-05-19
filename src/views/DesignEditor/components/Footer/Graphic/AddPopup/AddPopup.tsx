@@ -11,7 +11,7 @@ import { nanoid } from "nanoid"
 
 const AddPopup = ({ handleClose, showPopup }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const editor =useEditor();
+  const editor = useEditor()
 
   function close() {
     setIsOpen(false)
@@ -37,10 +37,8 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
         fill: "#333333",
         metadata: { generationDate: new Date().getTime() },
       }
-      
-      editor.objects.add(options)
 
-      
+      editor.objects.add(options)
     }
   }
 
@@ -64,17 +62,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           <Block
             className={classes.addSubSection}
             onClick={() => {
-              handleClose()
-            }}
-          >
-            <Block className={classes.heading}>Video</Block>
-            <Block className={classes.subHeading}>Lorem ipsum dolor sit amet consecte. Pulvinar vitae sit</Block>
-          </Block>
-          <div className={classes.horizontalLine}></div>
-          <Block
-            className={classes.addSubSection}
-            onClick={() => {
-              addText();
+              addText()
               handleClose()
             }}
           >
@@ -83,7 +71,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
           </Block>
         </Block>
       </Block>
-      <UploadImgModal  fileInputType="add" isOpen={isOpen} handleClose={close} />
+      <UploadImgModal fileInputType="add" isOpen={isOpen} handleClose={close} />
     </Block>
   ) : null
 }
