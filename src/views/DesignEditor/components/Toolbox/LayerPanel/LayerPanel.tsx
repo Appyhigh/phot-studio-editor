@@ -205,7 +205,7 @@ const LayerPanel = () => {
                     })
                     .reverse()
                     .map((object: any) => {
-                      if (object._objects) {
+                      if (object?.objects) {
                         return (
                           <Block
                             className="pointer"
@@ -218,7 +218,7 @@ const LayerPanel = () => {
                             }}
                             key={object.id}
                           >
-                            {object._objects.map((object: any, index: number) => {
+                            {object.objects.map((object: any, index: number) => {
                               return (
                                 <Block
                                   key={index}
