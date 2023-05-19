@@ -117,7 +117,7 @@ const LayerPanel = () => {
     if (activeObject?.id && layerState.isOpenSlider) {
       if (activeObject?.text || activeObject?.name === "StaticText") {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
-      } else if (activeObject?.metadata?.type == backgroundLayerType) {
+      } else if (activeObject?.metadata?.type == backgroundLayerType || activeObject?.metadata?.type == "deviceUpload") {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: true }))
       } else if (activeObject?.name === "StaticImage") {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: true, bgLayer: false }))
