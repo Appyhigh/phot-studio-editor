@@ -48,11 +48,10 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       const bgObject = editor?.frame?.background?.canvas?._objects.filter(
         (el: any) => el.metadata?.type === backgroundLayerType
       )[0]
-    
+
       if (bgObject) {
-        
         editor.objects.remove(bgObject.id)
-        editor.objects.unsetBackgroundImage();
+        editor.objects.unsetBackgroundImage()
       }
 
       editor?.frame?.setBackgroundColor("#FFF")
@@ -66,7 +65,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       editor.objects.add(options).then(() => {
         editor.objects.setAsBackgroundImage()
       })
-    
     } else {
       let topPosition = activeOb?.top
       let leftPosition = activeOb?.left
@@ -81,7 +79,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         metadata: { generationDate: new Date().getTime() },
       }
       // to replace the object removing the previous active object first
-      if (activeOb.id === activeMainObject.id) {
+      if (activeOb.id === activeMainObject?.id) {
         setMainImgInfo((prev: any) => ({ ...prev, ...upload }))
         setPanelInfo((prev: any) => ({ ...prev, uploadPreview: true, bgOptions: false, bgRemoverBtnActive: true }))
       }

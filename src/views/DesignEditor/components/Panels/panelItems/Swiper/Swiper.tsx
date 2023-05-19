@@ -45,7 +45,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         })
       } else if (each.gradient) {
         const previewWithUpdatedBackground: any = await changeLayerFillWithGradient(
-          activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
+          activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
           each.gradient
         )
         const options = {
@@ -56,7 +56,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           id: nanoid(),
           metadata: {
             generationDate: new Date().getTime(),
-            originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
+            originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
           },
         }
         editor.objects.removeById(mainImgInfo.id)
