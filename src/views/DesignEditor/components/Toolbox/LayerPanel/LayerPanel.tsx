@@ -197,7 +197,6 @@ const LayerPanel = () => {
                   editor.scene
                     .exportToJSON()
                     .layers.filter((el) => {
-                      console.log(el)
                       return (
                         el.metadata?.type !== backgroundLayerType &&
                         el.type !== "BackgroundImage" &&
