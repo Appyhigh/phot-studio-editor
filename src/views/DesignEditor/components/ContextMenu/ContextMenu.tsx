@@ -114,6 +114,7 @@ const ContextMenu = () => {
         <ContextMenuItem
           onClick={() => {
             editor.objects.bringForward()
+            editor.objects.update({ name: activeObject.name })
             editor.cancelContextMenuRequest()
           }}
           icon="Forward"
@@ -124,6 +125,7 @@ const ContextMenu = () => {
         <ContextMenuItem
           onClick={() => {
             editor.objects.sendBackwards()
+            editor.objects.update({ name: activeObject.name })
             editor.cancelContextMenuRequest()
           }}
           icon="Backward"
