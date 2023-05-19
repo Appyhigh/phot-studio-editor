@@ -7,6 +7,7 @@ import { Block } from "baseui/block"
 import { HexColorPicker } from "react-colorful"
 import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayerBackground"
 import { toDataURL } from "~/utils/export"
+import { Button } from "baseui/button"
 
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
@@ -27,7 +28,8 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: 
     }
 
     setColor(color)
-  }, 100)
+    close()
+  }, 1000)
 
   return (
     <Modal
@@ -65,7 +67,7 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: 
           style: ({ $theme }) => ({
             backgroundColor: $theme.colors.white,
             width: "382px",
-            height: "550px",
+            height: "600px",
             borderTopLeftRadius: "10px",
             borderBottomLeftRadius: "10px",
             borderTopRightRadius: "10px",
@@ -80,16 +82,14 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: 
         <>
           <Block className={classes.colorPickerSection}>
             <div className="hex-color-picker">
-              <HexColorPicker onChange={updateObjectFill} />
-            </div>
-            <div className={classes.colorPickerInput}>
-              <input
-                className={classes.colorPickerInputField}
-                value={color}
-                onChange={(e) => {
-                  setColor(e.target.value)
+              <HexColorPicker
+                onChange={(color) => {
+                  setColor(color)
                 }}
               />
+            </div>
+            <div className={classes.colorPickerInput}>
+              <input className={classes.colorPickerInputField} value={color} />
             </div>
             <Block>
               <Block className={classes.colorTypeHeading}>Default Colors</Block>
@@ -117,6 +117,15 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: 
                   />
                 ))}
               </Block>
+            </Block>
+            <Block className="w-100 mt-3">
+              <Button
+                onClick={() => updateObjectFill(color)}
+                $colors={{ backgroundColor: "#6729F3", color: "#fff" }}
+                className="w-100 p-5 mt-5 d-inline-block"
+              >
+                Change Color
+              </Button>
             </Block>
           </Block>
         </>

@@ -91,8 +91,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       setLoaderPopup(false)
       if (activeObject?.id === activeMainObject?.id) {
         setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-      } 
-       editor.objects.removeById(activeObject?.id)
+      }
+      editor.objects.removeById(activeObject?.id)
     })
   }
 
@@ -100,7 +100,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     try {
       setLoaderPopup(true)
       removeBackgroundController(activeObject.preview, async (image: string) => {
-        setPanelInfo((prev:any) => ({
+        setPanelInfo((prev: any) => ({
           ...prev,
           bgOptions: true,
           bgRemoverBtnActive: false,
@@ -127,7 +127,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
-          id:nanoid(),
+          id: nanoid(),
           metadata: {
             generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
             originalLayerPreview: image,
@@ -145,7 +145,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           }))
           if (activeObject?.id === mainImgInfo?.id) {
             setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-          } 
+          }
           editor.objects.removeById(activeObject.id)
           // Stop the loader
           setLoaderPopup(false)
@@ -230,7 +230,13 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             )
           })}
         </div>
-        <ColorPicker inputColor={objectBgColor} isOpen={isOpen} handleClose={close} type="object"     handleChangeBg={handleChangeBg}/>
+        <ColorPicker
+          inputColor={objectBgColor}
+          isOpen={isOpen}
+          handleClose={close}
+          type="object"
+          handleChangeBg={handleChangeBg}
+        />
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>
