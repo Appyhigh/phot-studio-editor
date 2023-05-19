@@ -14,6 +14,8 @@ import clsx from "clsx"
 import TextLayer from "./TextLayer/TextLayer"
 import BgLayer from "./BgLayer/BgLayer"
 import GroupIcon from "~/components/Icons/GroupIcon"
+import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
+import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
 
 interface ToolboxState {
   toolbox: string
@@ -136,12 +138,16 @@ const LayerPanel = () => {
     return ans?.length >= 1 ? true : false
   }
 
+  const handleExport = ({ object, idx }: any) => {
+    console.log(idx)
+  }
+
   return (
     <div className="d-flex flex-column p-relative">
       <Container
         className="p-relative"
         style={{
-          minWidth: layerState.isOpenSlider ? "300px" : "105px",
+          minWidth: layerState.isOpenSlider ? "300px" : "111px",
           maxWidth: "400px",
         }}
       >
@@ -191,12 +197,13 @@ const LayerPanel = () => {
             <BgLayer showLayer={layerState.bgLayer} handleClose={handleCloseBgLayer} />
           ) : (
             <Scrollable autoHide={true}>
-              <Block className="p-1">
+              <Block className="py-1">
                 {/* {layerObjects.length === 0 ? (
                 <Box />
               ) : (
                 
               )} */}
+                <SingleLayerExport />
                 {layerObjects
                   .filter(
                     (el) =>
@@ -209,7 +216,7 @@ const LayerPanel = () => {
                     if (object._objects) {
                       return (
                         <Block
-                          className="pointer"
+                          className={clsx(classes.eachLayerSection, "pointer p-relative eachLayerSec")}
                           $style={{
                             fontSize: "14px",
                             backgroundColor: "rgb(245,246,247)",
@@ -223,12 +230,21 @@ const LayerPanel = () => {
                             return (
                               <Block
                                 key={index}
-                                className="d-flex flex-column align-items-center"
+                                className="d-flex flex-column align-items-center eachLayerSec"
                                 $style={{
                                   fontSize: "14px",
                                   backgroundColor: "#E3E6FF",
                                 }}
                               >
+                                <div
+                                  className={"threeDotsIcon"}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleExport({ object, index })
+                                  }}
+                                >
+                                  <SingleLayerIcon />
+                                </div>
                                 {index !== 0 && <GroupIcon />}
                                 <Block
                                   className="d-flex justify-content-start align-items-center pointer w-100"
@@ -286,8 +302,8 @@ const LayerPanel = () => {
                                       src={object.preview}
                                       style={{
                                         borderRadius: "4px",
-                                        width: layerState.isOpenSlider ? "40px" : "48px",
-                                        height: layerState.isOpenSlider ? "40px" : "48px",
+                                        width: layerState.isOpenSlider ? "40px" : "60px",
+                                        height: layerState.isOpenSlider ? "40px" : "60px",
                                       }}
                                       alt="nn"
                                       className="mx-1 my-1"
@@ -303,7 +319,7 @@ const LayerPanel = () => {
                     } else {
                       return (
                         <Block
-                          className="d-flex justify-content-start align-items-center pointer"
+                          className="d-flex justify-content-start align-items-center pointer p-relative eachLayerSec"
                           $style={{
                             fontSize: "14px",
                             backgroundColor: check_group(object.id)
@@ -347,6 +363,15 @@ const LayerPanel = () => {
                             editor.objects.select(object.id)
                           }}
                         >
+                          <div
+                            className={"threeDotsIcon"}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleExport(object, 0)
+                            }}
+                          >
+                            <SingleLayerIcon />
+                          </div>
                           {object.text || object.name === "StaticText" ? (
                             <div
                               className={clsx("d-flex justify-content-center align-items-center", classes.textLayer)}
@@ -368,8 +393,8 @@ const LayerPanel = () => {
                               src={object.preview}
                               style={{
                                 borderRadius: "4px",
-                                width: layerState.isOpenSlider ? "40px" : "48px",
-                                height: layerState.isOpenSlider ? "40px" : "48px",
+                                width: layerState.isOpenSlider ? "40px" : "60px",
+                                height: layerState.isOpenSlider ? "40px" : "60px",
                               }}
                               alt="nn"
                               className="mx-1 my-1"
@@ -381,7 +406,7 @@ const LayerPanel = () => {
                     }
                   })}
                 <Block
-                  className="d-flex justify-content-start align-items-center pointer"
+                  className="d-flex justify-content-start align-items-center pointer p-relative eachLayerSec"
                   $style={{
                     fontSize: "14px",
                     backgroundColor: "#fff",
@@ -399,24 +424,27 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
+                  <div className={"threeDotsIcon"}>
+                    <SingleLayerIcon />
+                  </div>
                   {!bgUrl.startsWith("#") ? (
                     <img
                       src={bgUrl}
                       alt="nn"
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "48px",
-                        height: layerState.isOpenSlider ? "40px" : "48px",
+                        width: layerState.isOpenSlider ? "40px" : "60px",
+                        height: layerState.isOpenSlider ? "40px" : "60px",
                       }}
-                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                      className={clsx(classes.bgImage)}
                     />
                   ) : (
                     <div
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "48px",
-                        height: layerState.isOpenSlider ? "40px" : "48px",
+                        width: layerState.isOpenSlider ? "40px" : "60px",
+                        height: layerState.isOpenSlider ? "40px" : "60px",
                         backgroundColor: bgUrl,
                       }}
-                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                      className={clsx(classes.bgImage)}
                     >
                       &nbsp;
                     </div>

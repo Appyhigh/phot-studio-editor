@@ -644,6 +644,15 @@ ul {
   position: absolute;
   z-index: 500;
 }
+.single-download{
+  max-width: 250px;
+  min-height: 260px;
+  top: -30px;
+  right: 280px;
+  position: absolute;
+  z-index: 500;
+
+}
 .downloadPopup {
   min-width: 298px;
   min-height: 260px;
@@ -773,6 +782,24 @@ ul {
   border-radius: 50%;
   width: 16px;
   height: 16px;
+}
+
+.threeDotsIcon {
+  display: none;
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  height: 16px;
+  width: 28px;
+  padding-left: 5px;
+}
+.threeDotsIcon svg{
+  margin-bottom: 4px;
+}
+.eachLayerSec:hover .threeDotsIcon{
+  display: block;
 }
 @media screen and (min-width: 1216px) {
   .swiper-slide {

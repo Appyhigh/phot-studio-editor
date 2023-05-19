@@ -9,6 +9,14 @@ import SendToBack from "~/components/Icons/SendToBack"
 import Unlocked from "~/components/Icons/Unlocked"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import Icons from "~/components/Icons"
+import ArrowUp from "~/components/Icons/ArrowUp"
+import SendBack from "~/components/Icons/SendBack"
+import EyeCrossed from "~/components/Icons/EyeCrossed"
+import Eye from "~/components/Icons/Eye"
+import Ungroup from "~/components/Icons/Ungroup"
+import DownloadIcon from "~/components/Icons/DownloadIcon"
+import DownloadPopup from "../Footer/Graphic/DownloadPopup/DownloadPopup"
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
   const editor = useEditor()
@@ -71,7 +79,7 @@ const ContextMenu = () => {
     )
   }
   return (
-    <>
+    <div className={classes.mainContextMenu}>
       <div // @ts-ignore
         onContextMenu={(e: Event) => e.preventDefault()}
         className={classes.contextMenuSection}
@@ -86,11 +94,11 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Duplicate"
-          label="copy"
+          label="Duplicate"
         >
           <Duplicate size={24} />
         </ContextMenuItem>
-        <ContextMenuItem
+        {/* <ContextMenuItem
           onClick={() => {
             editor.objects.paste()
             editor.cancelContextMenuRequest()
@@ -99,27 +107,26 @@ const ContextMenu = () => {
           label="paste"
         >
           <Paste size={24} />
-        </ContextMenuItem>
+        </ContextMenuItem> */}
         <ContextMenuItem
           onClick={() => {
             editor.objects.remove()
             editor.cancelContextMenuRequest()
           }}
           icon="Delete"
-          label="delete"
+          label="Delete"
         >
           <Delete size={24} />
         </ContextMenuItem>
-        <div style={{ margin: "0.5rem 0" }} />
         <ContextMenuItem
           onClick={() => {
             editor.objects.bringForward()
             editor.cancelContextMenuRequest()
           }}
           icon="Forward"
-          label="bring forward"
+          label="Bring forward"
         >
-          <BringToFront size={24} />
+          <ArrowUp />
         </ContextMenuItem>
         <ContextMenuItem
           onClick={() => {
@@ -127,11 +134,11 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Backward"
-          label="send backward"
+          label="Send backward"
         >
-          <SendToBack size={24} />
+          <SendBack />
         </ContextMenuItem>
-        <ContextMenuItem
+        {/* <ContextMenuItem
           onClick={() => {
             handleAsComponentHandler()
             editor.cancelContextMenuRequest()
@@ -140,8 +147,7 @@ const ContextMenu = () => {
           label="Save as component"
         >
           <Elements size={24} />
-        </ContextMenuItem>
-        <div style={{ margin: "0.5rem 0" }} />
+        </ContextMenuItem> */}
 
         {!contextMenuRequest.target.locked ? (
           <ContextMenuItem
@@ -150,9 +156,9 @@ const ContextMenu = () => {
               editor.cancelContextMenuRequest()
             }}
             icon="Locked"
-            label="lock"
+            label="Lock"
           >
-            <Locked size={24} />
+            <Unlocked size={22} />
           </ContextMenuItem>
         ) : (
           <ContextMenuItem
@@ -163,10 +169,10 @@ const ContextMenu = () => {
             icon="Unlocked"
             label="unlock"
           >
-            <Unlocked size={24} />
+            <Unlocked size={22} />
           </ContextMenuItem>
         )}
-        {activeObject?.type === "StaticImage" && (
+        {/* {activeObject?.type === "StaticImage" && (
           <ContextMenuItem
             onClick={() => {
               // handleAsComponentHandler()
@@ -181,14 +187,65 @@ const ContextMenu = () => {
           >
             <Elements size={24} />
           </ContextMenuItem>
+        )} */}
+        {activeObject?.visible === true ? (
+          <ContextMenuItem
+            onClick={() => {
+              editor.objects.update({ visible: false })
+              editor.cancelContextMenuRequest()
+            }}
+            icon="eye"
+            label="Visibility"
+          >
+            <Eye size={24} />
+          </ContextMenuItem>
+        ) : (
+          <ContextMenuItem
+            onClick={() => {
+              editor.objects.update({ visible: true })
+              editor.cancelContextMenuRequest()
+            }}
+            icon="eye"
+            label="Visibility"
+          >
+            <EyeCrossed size={24} />
+          </ContextMenuItem>
         )}
+        {activeObject.type === "group" && (
+          <ContextMenuItem
+            onClick={() => {
+              editor.objects.ungroup()
+              editor.cancelContextMenuRequest()
+            }}
+            icon="layers"
+            label="Ungroup"
+          >
+            <Ungroup />
+          </ContextMenuItem>
+        )}
+        <div className="p-relative">
+          <ContextMenuItem
+            onClick={() => {
+              editor.cancelContextMenuRequest()
+            }}
+            icon="download"
+            label="Download"
+          >
+            <DownloadIcon />
+          </ContextMenuItem>
+          <DownloadPopup typeOfDownload="single-layer" />
+        </div>
+        <div className={clsx(classes.chevronTopIcon)}>
+          <Icons.SliderBtn size={20} width="10" />
+        </div>
       </div>
-    </>
+    </div>
   )
 }
 
 const ContextMenuItem = ({
   label,
+  icon,
   onClick,
   children,
   disabled = false,
@@ -200,11 +257,18 @@ const ContextMenuItem = ({
   children: React.ReactNode
 }) => {
   return (
-    <div onClick={onClick} className={clsx(classes.eachMenu, disabled && classes.disabledMenu)}>
-      <div style={{ width: "25px" }} className={"d-flex justify-content-center"}>
-        {children}
-      </div>{" "}
-      {label}
+    <div>
+      <div onClick={onClick} className={clsx(classes.eachMenu, disabled && classes.disabledMenu)}>
+        <div style={{ width: "25px" }} className={"d-flex justify-content-center mr-2"}>
+          {children}
+        </div>{" "}
+        {label}
+        {icon === "download" && (
+          <div className={classes.rightIcon}>
+            <Icons.SliderIcon size={15} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

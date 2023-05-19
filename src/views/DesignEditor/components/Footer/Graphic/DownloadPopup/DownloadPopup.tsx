@@ -8,7 +8,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
 
-const DownloadPopup = () => {
+const DownloadPopup = ({ typeOfDownload }: any) => {
   const [selectedType, setSelectedType] = useState("jpg")
   const editor = useEditor()
   const objects: any = useObjects()
@@ -68,7 +68,7 @@ const DownloadPopup = () => {
   const makeDownloadToSVG = useCallback(makeDownloadToSVGHandler, [frame])
 
   return (
-    <Block className="download-wrapper">
+    <Block className={clsx(typeOfDownload === "single-layer" ? "single-download" : "download-wrapper")}>
       <Block className="downloadPopup">
         <Block
           className={clsx(classes.downloadPopup, "d-flex justify-flex-start align-items-start p-absolute flex-column")}
