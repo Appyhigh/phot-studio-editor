@@ -197,7 +197,6 @@ const LayerPanel = () => {
                   editor.scene
                     .exportToJSON()
                     .layers.filter((el) => {
-                      console.log(el)
                       return (
                         el.metadata?.type !== backgroundLayerType &&
                         el.type !== "BackgroundImage" &&
@@ -205,10 +204,13 @@ const LayerPanel = () => {
                       )
                     })
                     .reverse()
-                    .map((object: any) => {
-                      if (object?.objects) {
+                    .map((obj: any) => {
+                      if (obj?.objects) {
                         return (
                           <Block
+                            onClick={() => {
+                              editor.objects.select(obj.id)
+                            }}
                             className="pointer"
                             $style={{
                               fontSize: "14px",
@@ -217,9 +219,9 @@ const LayerPanel = () => {
                                 background: "rgb(245,246,247)",
                               },
                             }}
-                            key={object.id}
+                            key={obj.id}
                           >
-                            {object.objects.map((object: any, index: number) => {
+                            {obj.objects.map((object: any, index: number) => {
                               return (
                                 <Block
                                   key={index}
@@ -229,38 +231,19 @@ const LayerPanel = () => {
                                     backgroundColor: "#E3E6FF",
                                   }}
                                 >
-                                  {index !== 0 && <GroupIcon />}
+                                  {index !== 0 && (
+                                    <div
+                                      onClick={() => {
+                                        editor.objects.select(obj.id)
+                                        editor.objects.ungroup()
+                                      }}
+                                    >
+                                      <GroupIcon />
+                                    </div>
+                                  )}
                                   <Block
                                     className="d-flex justify-content-start align-items-center pointer w-100"
                                     key={object.id}
-                                    onClick={() => {
-                                      if (object.text || object.name === "StaticText") {
-                                        setLayerState((prev) => ({
-                                          ...prev,
-                                          isOpenSlider: true,
-                                          textLayer: true,
-                                          objectLayer: false,
-                                          bgLayer: false,
-                                        }))
-                                      } else if (object.metadata?.type === backgroundLayerType) {
-                                        setLayerState((prev) => ({
-                                          ...prev,
-                                          isOpenSlider: true,
-                                          bgLayer: true,
-                                          textLayer: false,
-                                          objectLayer: false,
-                                        }))
-                                      } else
-                                        setLayerState((prev) => ({
-                                          ...prev,
-                                          isOpenSlider: true,
-                                          objectLayer: true,
-                                          textLayer: false,
-                                          bgLayer: false,
-                                        }))
-
-                                      setActiveLayerPanel(object)
-                                    }}
                                   >
                                     {object.text || object.name === "StaticText" ? (
                                       <div
@@ -306,18 +289,18 @@ const LayerPanel = () => {
                             className="d-flex justify-content-start align-items-center pointer"
                             $style={{
                               fontSize: "14px",
-                              backgroundColor: check_group(object.id)
+                              backgroundColor: check_group(obj.id)
                                 ? "rgb(245,246,247)"
-                                : activeObject?.id == object.id
+                                : activeObject?.id == obj.id
                                 ? "rgb(245,246,247)"
                                 : "#fff",
                               ":hover": {
                                 background: "rgb(245,246,247)",
                               },
                             }}
-                            key={object.id}
+                            key={obj.id}
                             onClick={() => {
-                              if (object.text || object.name === "StaticText") {
+                              if (obj.text || obj.name === "StaticText") {
                                 setLayerState((prev) => ({
                                   ...prev,
                                   isOpenSlider: true,
@@ -325,7 +308,7 @@ const LayerPanel = () => {
                                   objectLayer: false,
                                   bgLayer: false,
                                 }))
-                              } else if (object.metadata?.type === backgroundLayerType) {
+                              } else if (obj.metadata?.type === backgroundLayerType) {
                                 setLayerState((prev) => ({
                                   ...prev,
                                   isOpenSlider: true,
@@ -342,12 +325,12 @@ const LayerPanel = () => {
                                   bgLayer: false,
                                 }))
 
-                              setActiveLayerPanel(object)
+                              setActiveLayerPanel(obj)
 
-                              editor.objects.select(object.id)
+                              editor.objects.select(obj.id)
                             }}
                           >
-                            {object.text || object.name === "StaticText" ? (
+                            {obj.text || obj.name === "StaticText" ? (
                               <div
                                 className={clsx("d-flex justify-content-center align-items-center", classes.textLayer)}
                               >
@@ -365,7 +348,7 @@ const LayerPanel = () => {
                               </div>
                             ) : (
                               <img
-                                src={object.preview ?? object.src}
+                                src={obj.preview ?? obj.src}
                                 style={{
                                   borderRadius: "4px",
                                   width: layerState.isOpenSlider ? "40px" : "48px",
@@ -375,7 +358,7 @@ const LayerPanel = () => {
                                 className="mx-1 my-1"
                               />
                             )}
-                            {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                            {layerState.isOpenSlider && <Block>{obj.name}</Block>}
                           </Block>
                         )
                       }

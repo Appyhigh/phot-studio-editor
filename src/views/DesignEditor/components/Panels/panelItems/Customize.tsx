@@ -183,7 +183,6 @@ const Customize = () => {
                   />
                 ))}
 
-                {/* Transparent Background option */}
                 <div
                   onClick={setTransparentBG}
                   key={"#fff"}

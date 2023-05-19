@@ -160,25 +160,6 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
           <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} type="text" />
 
-          <div className={clsx(classes.panelSubHeading, "my-2")}>Background color</div>
-          <div className={classes.colorsWrapper}>
-            {colors.map((each, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className={clsx(classes.colorOption, "flex-center")}
-                  style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
-                >
-                  {idx === colors.length - 1 && (
-                    <div>
-                      {" "}
-                      <Icons.ColorPlus />{" "}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
           <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>
           {TextLayerOption.map((each, idx) => (
             <DropdownWrapper
