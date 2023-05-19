@@ -14,7 +14,7 @@ interface ToolboxState {
 
 const Container = styled("div", (props) => ({
   backgroundColor: props.$theme.colors.primaryB,
-  height: "50px",
+  height: "58px",
   display: "flex",
 }))
 

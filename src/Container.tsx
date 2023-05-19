@@ -56,7 +56,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   const initializeGSI = useCallback(() => {
     // @ts-ignore:next-line
     window?.google?.accounts.id.initialize({
-      client_id: "49948541054-qcj6t48nshfb5vnchgpbcg75as6m9jfe.apps.googleusercontent.com",
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       callback: async (response: any) => {
         const idToken = response.credential
         const credential = GoogleAuthProvider.credential(idToken)

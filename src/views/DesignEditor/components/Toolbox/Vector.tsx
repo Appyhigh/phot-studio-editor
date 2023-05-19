@@ -1,7 +1,7 @@
 import React from "react"
 import { Block } from "baseui/block"
 import { HexColorPicker } from "react-colorful"
-import Common from "./Common"
+import Common from "./Common/Common"
 import { useActiveObject } from "@layerhub-io/react"
 import { groupBy } from "lodash"
 import { PLACEMENT, StatefulPopover } from "baseui/popover"

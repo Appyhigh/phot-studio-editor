@@ -7,13 +7,11 @@ import React, { useCallback, useContext, useState } from "react"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
-import { toDataURL } from "~/utils/export"
-import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayerBackground"
+import { changeLayerFill } from "~/utils/updateLayerBackground"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
@@ -43,52 +41,14 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   const handleChangeBg = useCallback(
     async (each: any) => {
-      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-      const base64Str =
-        activeObject?.id === activeMainObject?.id
-          ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview
-          : activeObject?.metadata?.originalLayerPreview ?? activeObject.preview
+      let inputImage
 
-      if (each.color) {
-        const previewWithUpdatedBackground: any = await changeLayerFill(base64Str, each.color)
-        const options = {
-          type: "StaticImage",
-          src: previewWithUpdatedBackground,
-          preview: previewWithUpdatedBackground,
-          id: nanoid(),
-          metadata: {
-            generationDate: new Date().getTime(),
-            originalLayerPreview: base64Str,
-          },
-        }
-        editor.objects.removeById(activeObject?.id)
-        if (activeObject?.id === activeMainObject?.id) editor.objects.removeById(mainImgInfo.id)
-
-        editor.objects.add(options).then(() => {
-          //@ts-ignore
-          if (activeObject?.id === activeMainObject?.id) setMainImgInfo((prev) => ({ ...prev, ...options }))
-        })
-      } else if (each.img) {
-        toDataURL(each.img, async function (dataUrl: string) {
-          const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(base64Str, dataUrl)
-          const options = {
-            type: "StaticImage",
-            src: previewWithUpdatedBackground,
-            preview: previewWithUpdatedBackground,
-            id: nanoid(),
-            metadata: {
-              generationDate: new Date().getTime(),
-              originalLayerPreview: base64Str,
-            },
-          }
-          editor.objects.removeById(mainImgInfo.id)
-          if (activeObject?.id === activeMainObject?.id) editor.objects.removeById(mainImgInfo.id)
-
-          editor.objects.add(options).then(() => {
-            //@ts-ignore
-            if (activeObject?.id === activeMainObject?.id) setMainImgInfo((prev) => ({ ...prev, ...options }))
-          })
-        })
+      // If layer contains the originalImage then send it in changeLayerFill or else send the preview after removing background
+      if (activeObject?.metadata?.originalLayerPreview) {
+        inputImage = activeObject?.metadata?.originalLayerPreview
+        changeBGFillHandler(inputImage, each.color)
+      } else {
+        removeBackgroundBeforeChangingColor(each)
       }
     },
     [activeObject]
@@ -110,6 +70,43 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     editor.objects.remove(activeObject?.id)
   }
 
+  const changeBGFillHandler = async (inputImg: string, BG: string) => {
+    const previewWithUpdatedBackground: any = await changeLayerFill(
+      activeObject?.metadata?.originalLayerPreview ?? inputImg,
+      BG
+    )
+    const options = {
+      type: "StaticImage",
+      src: previewWithUpdatedBackground,
+      preview: previewWithUpdatedBackground,
+      metadata: {
+        generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? inputImg,
+      },
+    }
+    editor.objects.add(options).then(() => {
+      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
+      setLoaderPopup(false)
+      editor.objects.removeById(activeObject?.id)
+      if (activeObject?.id === activeMainObject?.id) {
+        editor.objects.removeById(mainImgInfo.id)
+        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+      }
+    })
+  }
+
+  const removeBackgroundBeforeChangingColor = async (each: any) => {
+    try {
+      setLoaderPopup(true)
+      removeBackgroundController(activeObject.preview, async (image: string) => {
+        changeBGFillHandler(image, each.color)
+      })
+    } catch (error: any) {
+      setLoaderPopup(false)
+      console.log("Something went wrong while removing background...", error.message)
+    }
+  }
+
   const removeBackgroundHandler = async () => {
     try {
       // Start the loader
@@ -121,8 +118,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
-          id: nanoid(),
-          metadata: { generationDate: new Date().getTime() },
+          metadata: {
+            generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+            originalLayerPreview: image,
+          },
         }
         editor.objects.add(options).then(() => {
           // @ts-ignore
@@ -140,6 +139,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         })
       })
     } catch (error: any) {
+      setLoaderPopup(false)
       console.log("Something went wrong while removing background...", error.message)
     }
   }
