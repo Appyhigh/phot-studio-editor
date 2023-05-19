@@ -237,7 +237,9 @@ input[type="number"] {
   margin-left: auto;
   margin-right: auto;
 }
-
+.ml-auto{
+  margin-left: auto;
+}
 .m-auto {
   margin: auto;
 }

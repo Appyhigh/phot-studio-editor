@@ -1,7 +1,7 @@
 import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
-import SelectInput from "~/components/UI/Common/SelectInput"
+import SelectInput from "~/components/UI/Common/SelectInput/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
@@ -9,7 +9,7 @@ import clsx from "clsx"
 import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
 
 const DownloadPopup = ({ typeOfDownload }: any) => {
-  const [selectedType, setSelectedType] = useState("jpg")
+  const [selectedType, setSelectedType] = useState("Jpg")
   const editor = useEditor()
   const objects: any = useObjects()
   const [qualityVal, setQualtiyVal] = useState(80)
@@ -75,12 +75,10 @@ const DownloadPopup = ({ typeOfDownload }: any) => {
         >
           <Block className="pb-2">
             <div className={clsx("pb-1", classes.subHeading)}>File Type</div>
-            <SelectInput handleChange={handleTypeChange} />
+            <SelectInput handleChange={handleTypeChange} selectedType={selectedType} />
           </Block>
           <Block className="mb-1">
-            <div className={clsx("mb-0", classes.subHeading)}>
-              Size <span> ({`${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}px)</span>
-            </div>
+            <div className={clsx("mb-0", classes.subHeading)}>Size</div>
             <SliderBar
               step={0.05}
               width="424px"
@@ -90,13 +88,16 @@ const DownloadPopup = ({ typeOfDownload }: any) => {
               val={[sizeVal]}
               handleChange={handleSizeChange}
             />
+            <div className={classes.subHeading}>
+              <span> ({`${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}px)</span>
+            </div>
           </Block>
           <Block className="mb-1">
             <div className={clsx("mb-0", classes.subHeading)}>
               Quality <span>({qualityVal})</span>
             </div>
             <SliderBar
-              width="190px"
+              width="424px"
               minVal={minQuality}
               maxVal={maxQuality}
               thumbSize={"14px"}

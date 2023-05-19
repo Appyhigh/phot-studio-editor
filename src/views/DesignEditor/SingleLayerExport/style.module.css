@@ -1,7 +1,15 @@
 .mainContextMenu {
+  display: none;
   position: absolute;
+  z-index: 200;
+  right: 360px;
 }
-
+.showMenu {
+  display: block;
+}
+.contextMenuFull {
+  right: 550px;
+}
 .mainContext {
   display: flex;
   flex-direction: row;
@@ -41,7 +49,6 @@
   right: -10px;
 }
 
-
 .rightIcon {
   transform: rotate(-180deg);
   margin: 0px 20px 0px auto;
@@ -49,4 +56,8 @@
 .disabledMenu {
   pointer-events: none;
   opacity: 0.4;
+}
+
+.selectedDownload {
+  background: #f1f1f5;
 }

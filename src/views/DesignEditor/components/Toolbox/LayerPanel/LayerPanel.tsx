@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
@@ -38,6 +38,9 @@ interface layerProps {
 const LayerPanel = () => {
   const [state, setState] = React.useState<ToolboxState>({ toolbox: "Text" })
   const { setActiveSubMenu } = useAppContext()
+  const [showSinlgeLayer, setShowSingleLayer] = useState(false)
+  const rightPanelRef = useRef()
+
   const [layerState, setLayerState] = useState<layerProps>({
     isOpenSlider: false,
     bgLayer: false,
@@ -62,6 +65,23 @@ const LayerPanel = () => {
 
   const [bgUrl, setBgUrl] = useState<any>("")
 
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      // @ts-ignore
+      if (showSinlgeLayer && rightPanelRef.current && !rightPanelRef.current.contains(e.target)) {
+        setShowSingleLayer(false)
+      }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutside)
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [showSinlgeLayer])
   React.useEffect(() => {
     const isBackgroundAnImage = editor?.frame?.background?.canvas?._objects[2]?.preview?.length > 0
     const isBackgroundAColor =
@@ -143,7 +163,7 @@ const LayerPanel = () => {
   }
 
   return (
-    <div className="d-flex flex-column p-relative">
+    <div className="d-flex flex-column p-relative" ref={rightPanelRef}>
       <Container
         className="p-relative"
         style={{
@@ -188,7 +208,10 @@ const LayerPanel = () => {
             </Block>
           </Block>
         </Block>
-        <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
+
+        <Block className="d-flex flex-column flex-1 p-relative pt-2" style={{ backgroundColor: "#FFF" }}>
+          <SingleLayerExport isOpenSlider={layerState.isOpenSlider} show={showSinlgeLayer} />
+
           {layerState.objectLayer ? (
             <ObjectLayer showLayer={layerState.objectLayer} handleClose={handleCloseObjectLayer} />
           ) : layerState.textLayer ? (
@@ -203,7 +226,6 @@ const LayerPanel = () => {
               ) : (
                 
               )} */}
-                <SingleLayerExport />
                 {layerObjects
                   .filter(
                     (el) =>
@@ -240,6 +262,7 @@ const LayerPanel = () => {
                                   className={"threeDotsIcon"}
                                   onClick={(e) => {
                                     e.stopPropagation()
+                                    setShowSingleLayer((showSinlgeLayer) => !showSinlgeLayer)
                                     handleExport({ object, index })
                                   }}
                                 >
@@ -366,8 +389,8 @@ const LayerPanel = () => {
                           <div
                             className={"threeDotsIcon"}
                             onClick={(e) => {
+                              setShowSingleLayer((showSinlgeLayer) => !showSinlgeLayer)
                               e.stopPropagation()
-                              handleExport(object, 0)
                             }}
                           >
                             <SingleLayerIcon />
@@ -424,7 +447,13 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
-                  <div className={"threeDotsIcon"}>
+                  <div
+                    className={"threeDotsIcon"}
+                    onClick={(e) => {
+                      setShowSingleLayer((showSinlgeLayer) => !showSinlgeLayer)
+                      e.stopPropagation()
+                    }}
+                  >
                     <SingleLayerIcon />
                   </div>
                   {!bgUrl.startsWith("#") ? (
