@@ -77,7 +77,10 @@ const Common = ({ type }: any) => {
           classes.editingBtn,
           type === "lock" && classes.disabledBtn
         )}
-        onClick={() => editor.objects.bringToFront()}
+        onClick={() => {
+          editor.objects.update({ name: activeObject.name })
+          editor.objects.bringToFront()
+        }}
       >
         <ArrowUp />
 
@@ -90,7 +93,10 @@ const Common = ({ type }: any) => {
           classes.editingBtn,
           type === "lock" && classes.disabledBtn
         )}
-        onClick={() => editor.objects.sendToBack()}
+        onClick={() => {
+          editor.objects.update({ name: activeObject.name })
+          editor.objects.sendToBack()
+        }}
       >
         <SendBack />
 
