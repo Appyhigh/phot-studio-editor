@@ -230,7 +230,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             )
           })}
         </div>
-        <ColorPicker inputColor={objectBgColor} isOpen={isOpen} handleClose={close} type="object" />
+        <ColorPicker inputColor={objectBgColor} isOpen={isOpen} handleClose={close} type="object"     handleChangeBg={handleChangeBg}/>
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>

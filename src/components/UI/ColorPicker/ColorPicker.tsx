@@ -11,50 +11,10 @@ import { toDataURL } from "~/utils/export"
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
-const ColorPicker = ({ isOpen, handleClose, inputColor, type }: any) => {
+const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: any) => {
   const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
   const editor = useEditor()
-
-  const handleChangeBg = useCallback(
-    async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
-      if (each.color) {
-        const previewWithUpdatedBackground: any = await changeLayerFill(
-          activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          each.color
-        )
-        const options = {
-          type: "StaticImage",
-          src: previewWithUpdatedBackground,
-          preview: previewWithUpdatedBackground,
-          metadata: {
-            generationDate: new Date().getTime(),
-            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          },
-        }
-        editor.objects.add(options)
-      } else if (each.img) {
-        toDataURL(each.img, async function (dataUrl: string) {
-          const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-            activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-            dataUrl
-          )
-          const options = {
-            type: "StaticImage",
-            src: previewWithUpdatedBackground,
-            preview: previewWithUpdatedBackground,
-            metadata: {
-              generationDate: new Date().getTime(),
-              originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-            },
-          }
-          editor.objects.add(options)
-        })
-      }
-    },
-    [activeObject]
-  )
 
   const close = () => {
     handleClose()
