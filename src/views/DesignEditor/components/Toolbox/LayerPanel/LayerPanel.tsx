@@ -208,6 +208,9 @@ const LayerPanel = () => {
                       if (obj?.objects) {
                         return (
                           <Block
+                            onClick={() => {
+                              editor.objects.select(obj.id)
+                            }}
                             className="pointer"
                             $style={{
                               fontSize: "14px",
@@ -241,34 +244,6 @@ const LayerPanel = () => {
                                   <Block
                                     className="d-flex justify-content-start align-items-center pointer w-100"
                                     key={object.id}
-                                    onClick={() => {
-                                      if (object.text || object.name === "StaticText") {
-                                        setLayerState((prev) => ({
-                                          ...prev,
-                                          isOpenSlider: true,
-                                          textLayer: true,
-                                          objectLayer: false,
-                                          bgLayer: false,
-                                        }))
-                                      } else if (object.metadata?.type === backgroundLayerType) {
-                                        setLayerState((prev) => ({
-                                          ...prev,
-                                          isOpenSlider: true,
-                                          bgLayer: true,
-                                          textLayer: false,
-                                          objectLayer: false,
-                                        }))
-                                      } else
-                                        setLayerState((prev) => ({
-                                          ...prev,
-                                          isOpenSlider: true,
-                                          objectLayer: true,
-                                          textLayer: false,
-                                          bgLayer: false,
-                                        }))
-                                      editor.objects.select(object.id)
-                                      setActiveLayerPanel(object)
-                                    }}
                                   >
                                     {object.text || object.name === "StaticText" ? (
                                       <div
