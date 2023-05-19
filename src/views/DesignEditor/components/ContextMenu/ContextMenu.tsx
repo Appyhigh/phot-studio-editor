@@ -131,7 +131,7 @@ const ContextMenu = () => {
         >
           <SendToBack size={24} />
         </ContextMenuItem>
-        <ContextMenuItem
+        {/* <ContextMenuItem
           onClick={() => {
             handleAsComponentHandler()
             editor.cancelContextMenuRequest()
@@ -140,7 +140,7 @@ const ContextMenu = () => {
           label="Save as component"
         >
           <Elements size={24} />
-        </ContextMenuItem>
+        </ContextMenuItem> */}
         <div style={{ margin: "0.5rem 0" }} />
 
         {!contextMenuRequest.target.locked ? (
@@ -173,6 +173,7 @@ const ContextMenu = () => {
               editor.objects.unsetBackgroundImage()
               setTimeout(() => {
                 editor.objects.setAsBackgroundImage()
+                editor.objects.remove()
               }, 50)
               editor.cancelContextMenuRequest()
             }}
