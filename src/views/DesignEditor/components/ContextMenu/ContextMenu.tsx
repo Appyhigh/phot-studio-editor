@@ -1,4 +1,5 @@
 import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/react"
+import { useContext } from "react"
 import BringToFront from "~/components/Icons/BringToFront"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
@@ -7,12 +8,31 @@ import Locked from "~/components/Icons/Locked"
 import Paste from "~/components/Icons/Paste"
 import SendToBack from "~/components/Icons/SendToBack"
 import Unlocked from "~/components/Icons/Unlocked"
+import MainImageContext from "~/contexts/MainImageContext"
 import classes from "./style.module.css"
 import clsx from "clsx"
+
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
   const editor = useEditor()
   const activeObject: any = useActiveObject()
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+
+  const deleteHandler = () => {
+    if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    }
+    editor.objects.remove(activeObject?.id)
+  }
   const handleAsComponentHandler = async () => {
     if (editor) {
       const component: any = await editor.scene.exportAsComponent()
@@ -42,7 +62,7 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Duplicate"
-          label="copy"
+          label="Copy"
         >
           <Duplicate size={24} />
         </ContextMenuItem>
@@ -52,18 +72,18 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Paste"
-          label="paste"
+          label="Paste"
         >
           <Paste size={24} />
         </ContextMenuItem>
         <ContextMenuItem
           disabled={true}
           onClick={() => {
-            editor.objects.remove()
+            deleteHandler()
             editor.cancelContextMenuRequest()
           }}
           icon="Delete"
-          label="delete"
+          label="Delete"
         >
           <Delete size={24} />
         </ContextMenuItem>
@@ -86,7 +106,7 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Duplicate"
-          label="copy"
+          label="Copy"
         >
           <Duplicate size={24} />
         </ContextMenuItem>
@@ -96,17 +116,17 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Paste"
-          label="paste"
+          label="Paste"
         >
           <Paste size={24} />
         </ContextMenuItem>
         <ContextMenuItem
           onClick={() => {
-            editor.objects.remove()
+            deleteHandler()
             editor.cancelContextMenuRequest()
           }}
           icon="Delete"
-          label="delete"
+          label="Delete"
         >
           <Delete size={24} />
         </ContextMenuItem>
@@ -118,7 +138,7 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Forward"
-          label="bring forward"
+          label="Bring forward"
         >
           <BringToFront size={24} />
         </ContextMenuItem>
@@ -129,7 +149,7 @@ const ContextMenu = () => {
             editor.cancelContextMenuRequest()
           }}
           icon="Backward"
-          label="send backward"
+          label="Send backward"
         >
           <SendToBack size={24} />
         </ContextMenuItem>
@@ -152,7 +172,7 @@ const ContextMenu = () => {
               editor.cancelContextMenuRequest()
             }}
             icon="Locked"
-            label="lock"
+            label="Lock"
           >
             <Locked size={24} />
           </ContextMenuItem>
@@ -163,7 +183,7 @@ const ContextMenu = () => {
               editor.cancelContextMenuRequest()
             }}
             icon="Unlocked"
-            label="unlock"
+            label="Unlock"
           >
             <Unlocked size={24} />
           </ContextMenuItem>

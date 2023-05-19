@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Button, SIZE, KIND } from "baseui/button"
 import { Checkbox } from "baseui/checkbox"
 import { Block } from "baseui/block"
@@ -26,7 +26,26 @@ import ArrowUp from "~/components/Icons/ArrowUp"
 import SendBack from "~/components/Icons/SendBack"
 import Locked from "~/components/Icons/Locked"
 import Unlocked from "~/components/Icons/Unlocked"
+import MainImageContext from "~/contexts/MainImageContext"
+
 const Common = ({ type }: any) => {
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+
+  const deleteHandler = () => {
+    if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    }
+    editor.objects.remove(activeObject?.id)
+  }
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
 
@@ -155,7 +174,7 @@ const Common = ({ type }: any) => {
           classes.type === "lock" && classes.disabledBtn,
           classes.editingBtnDelete
         )}
-        onClick={() => editor.objects.remove()}
+        onClick={() => deleteHandler()}
       >
         <DeleteIcon size={20} />
         <p className={clsx(classes.subHeadingText, classes.subHeadingTextDelete)}>Delete</p>

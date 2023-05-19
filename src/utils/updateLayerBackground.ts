@@ -1,7 +1,6 @@
 export const changeLayerFill = (base64ImageData: string, backgroundColor: string) => {
   return new Promise((resolve, reject) => {
-    const image = new Image()
-
+    const image = new Image()    
     image.onload = function () {
       const canvas = document.createElement("canvas")
       canvas.width = image.width
@@ -78,7 +77,6 @@ export const changeLayerFillWithGradient = (base64ImageData: string, gradient: s
 
       grad.forEach((color: string, index: number) => {
         if (index !== 0) {
-          console.log(1 / (grad.length - 1) + ((index - 1) * 1) / (grad.length - 1))
           gradientFill.addColorStop(1 / (grad.length - 1) + ((index - 1) * 1) / (grad.length - 1), color.split(" ")[1])
         }
       })
