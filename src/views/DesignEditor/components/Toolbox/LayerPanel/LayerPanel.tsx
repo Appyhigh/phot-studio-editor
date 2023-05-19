@@ -197,6 +197,7 @@ const LayerPanel = () => {
                   editor.scene
                     .exportToJSON()
                     .layers.filter((el) => {
+                      console.log(el)
                       return (
                         el.metadata?.type !== backgroundLayerType &&
                         el.type !== "BackgroundImage" &&
@@ -282,7 +283,7 @@ const LayerPanel = () => {
                                       </div>
                                     ) : (
                                       <img
-                                        src={object.preview}
+                                        src={object.preview ?? object.src}
                                         style={{
                                           borderRadius: "4px",
                                           width: layerState.isOpenSlider ? "40px" : "48px",
@@ -364,7 +365,7 @@ const LayerPanel = () => {
                               </div>
                             ) : (
                               <img
-                                src={object.preview}
+                                src={object.preview ?? object.src}
                                 style={{
                                   borderRadius: "4px",
                                   width: layerState.isOpenSlider ? "40px" : "48px",
