@@ -12,6 +12,7 @@ import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
+import { nanoid } from "nanoid"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
@@ -79,6 +80,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       type: "StaticImage",
       src: previewWithUpdatedBackground,
       preview: previewWithUpdatedBackground,
+      id: nanoid(),
       metadata: {
         generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? inputImg,
@@ -87,11 +89,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     editor.objects.add(options).then(() => {
       const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
       setLoaderPopup(false)
-      editor.objects.removeById(activeObject?.id)
       if (activeObject?.id === activeMainObject?.id) {
-        editor.objects.removeById(mainImgInfo.id)
         setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-      }
+      } 
+       editor.objects.removeById(activeObject?.id)
     })
   }
 
@@ -99,6 +100,14 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     try {
       setLoaderPopup(true)
       removeBackgroundController(activeObject.preview, async (image: string) => {
+        setPanelInfo((prev:any) => ({
+          ...prev,
+          bgOptions: true,
+          bgRemoverBtnActive: false,
+          uploadSection: false,
+          trySampleImg: false,
+          uploadPreview: false,
+        }))
         changeBGFillHandler(image, each.color)
       })
     } catch (error: any) {
@@ -118,6 +127,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
+          id:nanoid(),
           metadata: {
             generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
             originalLayerPreview: image,
@@ -131,9 +141,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             bgRemoverBtnActive: false,
             uploadSection: false,
             trySampleImg: false,
+            uploadPreview: false,
           }))
+          if (activeObject?.id === mainImgInfo?.id) {
+            setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+          } 
           editor.objects.removeById(activeObject.id)
-          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
           // Stop the loader
           setLoaderPopup(false)
         })

@@ -19,10 +19,8 @@ const ContextMenu = () => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
 
   const deleteHandler = () => {
-    console.log("hit")
     if (activeObject?.id === mainImgInfo.id) {
       // @ts-ignore
-      console.log("hit")
       setPanelInfo((prev) => ({
         ...prev,
         uploadSection: true,
@@ -124,7 +122,7 @@ const ContextMenu = () => {
         </ContextMenuItem>
         <ContextMenuItem
           onClick={() => {
-            editor.objects.remove()
+            deleteHandler()
             editor.cancelContextMenuRequest()
           }}
           icon="Delete"

@@ -56,7 +56,6 @@ const BgRemover = () => {
             trySampleImg: false,
             uploadSection: false,
           }))
-          editor.objects.add(options)
           setMainImgInfo((prev: any) => ({ ...prev, ...options }))
         }
       })

@@ -21,10 +21,9 @@ const Images = () => {
         if (editor) {
           const options = {
             type: "StaticImage",
+            id: nanoid(),
             src: dataUrl,
             preview: dataUrl,
-            id: nanoid(),
-            original: dataUrl,
             metadata: { generationDate: new Date().getTime() },
           }
           editor.objects.add(options)

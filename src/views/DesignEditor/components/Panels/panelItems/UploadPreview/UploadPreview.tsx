@@ -7,6 +7,7 @@ import { useContext } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
+import { nanoid } from "nanoid"
 
 const UploadPreview = ({ discardHandler }: any) => {
   const editor = useEditor()
@@ -23,6 +24,7 @@ const UploadPreview = ({ discardHandler }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
+          id: nanoid(),
           metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
         }
         editor.objects.add(options).then(() => {
