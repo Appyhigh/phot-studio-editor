@@ -22,8 +22,6 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
 
-  console.log(activeObject)
-
   useEffect(() => {
     if (!show) {
       setShowDownloadPopup(false)
@@ -39,7 +37,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
         <ContextMenuItem
           disabled={true}
           onClick={() => {
-            editor.objects.copy()
+            editor.objects.clone()
             editor.cancelContextMenuRequest()
           }}
           icon="Duplicate"
@@ -80,9 +78,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
           >
             <ContextMenuItem
               onClick={() => {
-                editor.objects.clipboard(activeOb?.id)
-                editor.objects.paste()
-
+                editor.objects.clone()
                 editor.cancelContextMenuRequest()
               }}
               icon="Duplicate"
@@ -129,7 +125,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                   editor.cancelContextMenuRequest()
                 }}
                 icon="Locked"
-                label="Lock"
+                label="Unlock"
               >
                 <Unlocked size={22} />
               </ContextMenuItem>
@@ -140,9 +136,22 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                   editor.cancelContextMenuRequest()
                 }}
                 icon="Unlocked"
-                label="unlock"
+                label="Lock"
               >
                 <Unlocked size={22} />
+              </ContextMenuItem>
+            )}
+
+            {activeObject?.type === "group" && (
+              <ContextMenuItem
+                onClick={() => {
+                  editor.objects.ungroup()
+                  editor.cancelContextMenuRequest()
+                }}
+                icon="group"
+                label="Ungroup"
+              >
+                <Ungroup />
               </ContextMenuItem>
             )}
 

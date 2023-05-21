@@ -136,15 +136,12 @@ const LayerPanel = () => {
   }, [activeObject])
 
   useEffect(() => {
-    if (activeObject?.id && layerState.isOpenSlider) {
+    if (activeObject?.id && layerState.isOpenSlider&&!showSinlgeLayer) {
       if (activeObject?.text || activeObject?.name === "StaticText") {
-        setShowSingleLayer(false)
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       } else if (activeObject?.metadata?.type == backgroundLayerType) {
-        setShowSingleLayer(false)
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: true }))
       } else if (activeObject?.name === "StaticImage") {
-        setShowSingleLayer(false)
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: true, bgLayer: false }))
       } else {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
@@ -172,7 +169,7 @@ const LayerPanel = () => {
           maxWidth: "400px",
         }}
       >
-                    <SingleLayerExport isOpenSlider={layerState.isOpenSlider} show={showSinlgeLayer} />
+      <SingleLayerExport isOpenSlider={layerState.isOpenSlider} show={showSinlgeLayer} />
 
         <Block className="flex-center">
           <Block
@@ -191,7 +188,6 @@ const LayerPanel = () => {
               }
             }}
           >
-
             <Block>
               <div className="p-relative" style={{ marginRight: "-1px" }}>
                 <div style={{ transform: "scaleX(-1)" }}>
@@ -260,14 +256,13 @@ const LayerPanel = () => {
                                   backgroundColor: "#E3E6FF",
                                 }}
                               >
-                                <SingleLayerExport isOpenSlider={layerState.isOpenSlider} show={showSinlgeLayer} />
                                 <div
                                   className={"threeDotsIcon"}
                                   onClick={(e) => {
+                                    e.stopPropagation()
                                     editor.objects.select(object.id)
                                     setActiveSingleLayer(object)
                                     setShowSingleLayer(true)
-                                    e.stopPropagation()
                                   }}
                                 >
                                   <SingleLayerIcon />
@@ -393,10 +388,10 @@ const LayerPanel = () => {
                           <div
                             className={"threeDotsIcon"}
                             onClick={(e) => {
+                              e.stopPropagation()
                               editor.objects.select(object.id)
                               setActiveSingleLayer(object)
                               setShowSingleLayer(true)
-                              e.stopPropagation()
                             }}
                           >
                             <SingleLayerIcon />
@@ -453,6 +448,7 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
+                  
                   {!bgUrl.startsWith("#") ? (
                     <img
                       src={bgUrl}
