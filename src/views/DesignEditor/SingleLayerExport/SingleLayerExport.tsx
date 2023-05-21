@@ -24,11 +24,11 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
 
   console.log(activeObject)
 
-  useEffect(()=>{
-   if(!show){
-    setShowDownloadPopup(false)
-   }
-  },[show])
+  useEffect(() => {
+    if (!show) {
+      setShowDownloadPopup(false)
+    }
+  }, [show])
 
   if (activeObject?.type === "Background" && show) {
     return (
@@ -73,14 +73,16 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   }
   return (
     show && (
-      <div className={clsx(classes.mainContextMenu, show && classes.showMenu)}>
+      <div className={clsx(classes.mainContextMenu, show && classes.showMenu, isOpenSlider && classes.contextMenuFull)}>
         <div className={classes.mainContext}>
           <div // @ts-ignore
             className={classes.contextMenuSection}
           >
             <ContextMenuItem
               onClick={() => {
-                editor.objects.copy()
+                editor.objects.clipboard(activeOb?.id)
+                editor.objects.paste()
+
                 editor.cancelContextMenuRequest()
               }}
               icon="Duplicate"
@@ -209,18 +211,25 @@ const ContextMenuItem = ({
   onClick,
   children,
   disabled = false,
-  showDownloadPopup=false
+  showDownloadPopup = false,
 }: {
   icon: string
   label: string
   onClick: () => void
   disabled?: boolean
   children: React.ReactNode
-  showDownloadPopup?:boolean
+  showDownloadPopup?: boolean
 }) => {
   return (
     <div>
-      <div onClick={onClick} className={clsx(classes.eachMenu, disabled && classes.disabledMenu ,showDownloadPopup&&classes.selectedDownload)}>
+      <div
+        onClick={onClick}
+        className={clsx(
+          classes.eachMenu,
+          disabled && classes.disabledMenu,
+          showDownloadPopup && classes.selectedDownload
+        )}
+      >
         <div style={{ width: "25px" }} className={"d-flex justify-content-center mr-2"}>
           {children}
         </div>{" "}

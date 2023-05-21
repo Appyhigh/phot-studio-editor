@@ -4,6 +4,9 @@
   width: 428px;
   border-radius: 4px;
 }
+.singleLayerSelect{
+  width: 210px;
+}
 
 .selectedType {
   font-weight: 400;
