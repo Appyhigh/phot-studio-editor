@@ -33,6 +33,10 @@
   z-index: 500;
 }
 
+.previewImg{
+  margin: 8px 8px 8px 12px;
+}
+
 .eachLayerSection:hover .threeDotsIcon {
   display: block;
 }

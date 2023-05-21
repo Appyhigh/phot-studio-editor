@@ -38,7 +38,7 @@ interface layerProps {
 const LayerPanel = () => {
   const [state, setState] = React.useState<ToolboxState>({ toolbox: "Text" })
   const { setActiveSubMenu } = useAppContext()
-  const [showSinlgeLayer, setShowSingleLayer] = useState(false)
+  const [showSingleLayer, setShowSingleLayer] = useState(false)
   const rightPanelRef = useRef()
   const [activeSingleLayer, setActiveSingleLayer] = useState()
 
@@ -71,7 +71,7 @@ const LayerPanel = () => {
       // If the menu is open and the clicked target is not within the menu,
       // then close the menu
       // @ts-ignore
-      if (showSinlgeLayer && rightPanelRef.current && !rightPanelRef.current.contains(e.target)) {
+      if (showSingleLayer && rightPanelRef.current && !rightPanelRef.current.contains(e.target)) {
         setShowSingleLayer(false)
       }
     }
@@ -82,7 +82,7 @@ const LayerPanel = () => {
       // Cleanup the event listener
       document.removeEventListener("mousedown", checkIfClickedOutside)
     }
-  }, [showSinlgeLayer])
+  }, [showSingleLayer])
   React.useEffect(() => {
     const isBackgroundAnImage = editor?.frame?.background?.canvas?._objects[2]?.preview?.length > 0
     const isBackgroundAColor =
@@ -136,13 +136,16 @@ const LayerPanel = () => {
   }, [activeObject])
 
   useEffect(() => {
-    if (activeObject?.id && layerState.isOpenSlider&&!showSinlgeLayer) {
+    if (activeObject?.id && layerState.isOpenSlider && !showSingleLayer) {
       if (activeObject?.text || activeObject?.name === "StaticText") {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
+        setShowSingleLayer(false)
       } else if (activeObject?.metadata?.type == backgroundLayerType) {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: true }))
+        setShowSingleLayer(false)
       } else if (activeObject?.name === "StaticImage") {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: true, bgLayer: false }))
+        setShowSingleLayer(false)
       } else {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       }
@@ -169,7 +172,7 @@ const LayerPanel = () => {
           maxWidth: "400px",
         }}
       >
-      <SingleLayerExport isOpenSlider={layerState.isOpenSlider} show={showSinlgeLayer} />
+        <SingleLayerExport isOpenSlider={layerState.isOpenSlider} show={showSingleLayer} />
 
         <Block className="flex-center">
           <Block
@@ -296,7 +299,7 @@ const LayerPanel = () => {
                                         textLayer: false,
                                         bgLayer: false,
                                       }))
-
+                                    setShowSingleLayer(false)
                                     setActiveLayerPanel(object)
                                   }}
                                 >
@@ -328,7 +331,7 @@ const LayerPanel = () => {
                                         height: layerState.isOpenSlider ? "40px" : "60px",
                                       }}
                                       alt="nn"
-                                      className="mx-1 my-1"
+                                      className={classes.previewImg}
                                     />
                                   )}
                                   {layerState.isOpenSlider && <Block>{object.name}</Block>}
@@ -379,7 +382,7 @@ const LayerPanel = () => {
                                 textLayer: false,
                                 bgLayer: false,
                               }))
-
+                           setShowSingleLayer(false)
                             setActiveLayerPanel(object)
 
                             editor.objects.select(object.id)
@@ -421,7 +424,7 @@ const LayerPanel = () => {
                                 height: layerState.isOpenSlider ? "40px" : "60px",
                               }}
                               alt="nn"
-                              className="mx-1 my-1"
+                              className={classes.previewImg}
                             />
                           )}
                           {layerState.isOpenSlider && <Block>{object.name}</Block>}
@@ -448,7 +451,6 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
-                  
                   {!bgUrl.startsWith("#") ? (
                     <img
                       src={bgUrl}

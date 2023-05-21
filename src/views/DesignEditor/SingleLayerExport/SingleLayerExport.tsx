@@ -121,7 +121,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             {activeObject?.locked ? (
               <ContextMenuItem
                 onClick={() => {
-                  editor.objects.lock()
+                  editor.objects.unlock()
                   editor.cancelContextMenuRequest()
                 }}
                 icon="Locked"
@@ -132,7 +132,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             ) : (
               <ContextMenuItem
                 onClick={() => {
-                  editor.objects.unlock()
+                  editor.objects.lock()
                   editor.cancelContextMenuRequest()
                 }}
                 icon="Unlocked"
