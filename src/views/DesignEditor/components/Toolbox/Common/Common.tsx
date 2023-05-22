@@ -84,7 +84,12 @@ const Common = ({ type }: any) => {
           classes.editingBtn,
           type === "lock" && classes.disabledBtn
         )}
-        onClick={() => editor.objects.clone()}
+        onClick={() => {
+          editor.objects.clone()
+          setTimeout(() => {
+            editor.objects.update({ name: activeObject.name })
+          }, 10)
+        }}
       >
         <DuplicateIcon size={22} />
         <p className={clsx(classes.subHeadingText)}>Duplicate</p>
