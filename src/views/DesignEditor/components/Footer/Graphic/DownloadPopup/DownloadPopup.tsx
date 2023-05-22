@@ -8,7 +8,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
 
-const DownloadPopup = ({ typeOfDownload }: any) => {
+const DownloadPopup = ({ typeOfDownload,typeGroup }: any) => {
   const [selectedType, setSelectedType] = useState("Jpg")
   const editor = useEditor()
   const objects: any = useObjects()
@@ -71,7 +71,9 @@ const DownloadPopup = ({ typeOfDownload }: any) => {
     <Block className={clsx(typeOfDownload === "single-layer" ? "single-download" : "download-wrapper")}>
       <Block className="downloadPopup">
         <Block
-          className={clsx(classes.downloadPopup, typeOfDownload==="single-layer"&&classes.singleLayerDownload, "d-flex justify-flex-start align-items-start p-absolute flex-column")}
+          className={clsx(classes.downloadPopup, typeOfDownload==="single-layer"&&classes.singleLayerDownload, "d-flex justify-flex-start align-items-start p-absolute flex-column",
+          typeGroup&&classes.groupDownload
+          )}
         >
           <Block className="pb-2">
             <div className={clsx("pb-1", classes.subHeading)}>File Type</div>

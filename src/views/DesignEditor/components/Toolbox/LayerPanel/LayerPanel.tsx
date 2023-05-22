@@ -242,7 +242,7 @@ const LayerPanel = () => {
                     if (object._objects) {
                       return (
                         <div key={idx}>
-                          {selectedSingleId ===grp_id  && (
+                          {selectedSingleId === grp_id && (
                             <SingleLayerExport
                               isOpenSlider={layerState.isOpenSlider}
                               show={showSingleLayer}
@@ -359,7 +359,7 @@ const LayerPanel = () => {
                       )
                     } else {
                       return (
-                        <div>
+                        <div key={idx}>
                           {selectedSingleId === object.id && (
                             <SingleLayerExport
                               isOpenSlider={layerState.isOpenSlider}

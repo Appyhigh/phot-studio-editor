@@ -6,13 +6,18 @@
   border-radius: 12px;
   z-index: 500;
   right: 0px;
-  top: -100px;
+  top: 35px;
   padding: 16px;
+  bottom: 0px;
 }
 .singleLayerDownload {
   width: 250px;
+  top: -40px;
+  padding: 16px 16px 0px;
 }
-
+.groupDownload{
+  top: -120px;
+}
 .subHeading {
   font-size: 14px;
   color: #44444f;
@@ -30,7 +35,7 @@
   border-radius: 10px;
   font-weight: 500;
   font-family: "Poppins";
-padding: 9px 63px;
+  padding: 9px 63px;
   background-color: #fff;
   border-color: #6729f3;
   color: #6729f3;
@@ -43,7 +48,7 @@ padding: 9px 63px;
   background-color: #6729f3;
   margin-left: 0px;
 }
-.singleLayerDownloadBtn{
+.singleLayerDownloadBtn {
   width: 210px;
   padding: 9px 30px;
   margin-left: 0px;

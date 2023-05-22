@@ -28,6 +28,8 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
     }
   }, [show])
 
+  
+
   if (activeObject?.type === "Background" && show) {
     return (
       <div // @ts-ignore
@@ -202,10 +204,12 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
               >
                 <DownloadIcon />
               </ContextMenuItem>
-              {showDownloadPopup && show && <DownloadPopup typeOfDownload="single-layer" />}
-            </div>
-            <div className={clsx(classes.chevronTopIcon)}>
-              <Icons.SliderBtn size={20} width="10" />
+              {showDownloadPopup && show && (
+                <DownloadPopup
+                  typeOfDownload="single-layer"
+                  typeGroup={activeObject?.type === "group" ? true : false}
+                />
+              )}
             </div>
           </div>
         </div>

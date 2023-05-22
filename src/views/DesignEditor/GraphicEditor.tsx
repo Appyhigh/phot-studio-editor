@@ -3,9 +3,9 @@ import Canvas from "./components/Canvas"
 import Footer from "./components/Footer"
 import EditorContainer from "./components/EditorContainer"
 import BasePannel from "~/components/UI/BasePannel/BasePannel"
-import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 import { Block } from "baseui/block"
 import Navbar from "~/components/UI/Common/Navbar/Navbar"
+import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 
 const GraphicEditor = () => {
   return (
