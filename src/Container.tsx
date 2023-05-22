@@ -10,11 +10,15 @@ import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/useAuth"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
+import { useEditor } from "@layerhub-io/react"
+import { ILayer } from "@layerhub-io/types"
+import { backgroundLayerType } from "./constants/contants"
 
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
   const dispatch = useAppDispatch()
+  const editor = useEditor()
   const updateMediaQuery = (value: number) => {
     if (!isMobile && value >= 800) {
       setIsMobile(false)
@@ -87,6 +91,42 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }, 3000)
     return () => clearTimeout(timer)
   }, [user, loading, initializeGSI])
+
+  const addObjects = async (layers: any) => {
+    if (layers) {
+      layers.map((layer: ILayer) => {
+        editor.objects.add(layer).then(() => {
+          editor.objects.update({ top: layer.top, left: layer.left })
+        })
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (editor) {
+      const savedTemplate = localStorage.getItem("studio-template") as string
+      const layers = JSON.parse(savedTemplate)
+      addObjects(layers)
+    }
+  }, [editor])
+
+  useEffect(() => {
+    if (editor) {
+      editor.on("history:changed", () => {
+        const currentScene = editor.scene.exportToJSON()
+
+        localStorage.setItem(
+          "studio-template",
+          JSON.stringify(
+            currentScene.layers.filter(
+              (el) =>
+                el.metadata?.type !== backgroundLayerType && el.type !== "BackgroundImage" && el.type !== "Background"
+            )
+          )
+        )
+      })
+    }
+  }, [editor])
 
   return (
     <div
