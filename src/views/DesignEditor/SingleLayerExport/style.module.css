@@ -1,14 +1,14 @@
 .mainContextMenu {
   display: none;
-  position: absolute;
+  position: fixed;
   z-index: 200;
-  right: 360px;
+  right: 370px;
 }
 .showMenu {
   display: block;
 }
 .contextMenuFull {
-  right: 555px;
+  right: 540px;
 }
 .mainContext {
   display: flex;
@@ -20,13 +20,14 @@
   position: absolute;
   z-index: 129;
   width: 280px;
-  background-color: #fff;
+  background-color: white;
   border: 10px;
   box-shadow: 0.5px 2px 7px rgba(0, 0, 0, 0.1);
   border: 1px solid #f1f1f5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   padding: 28px 0px 17px 0px;
+  max-height: 365px;
 }
 .eachMenu {
   display: flex;

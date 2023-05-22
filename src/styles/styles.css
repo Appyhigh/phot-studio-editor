@@ -649,11 +649,12 @@ ul {
 .single-download{
   max-width: 250px;
   min-height: 260px;
-  top: -30px;
-  right: 280px;
-  position: absolute;
+  transform: translateX(-250px);
+  position: sticky;
+  bottom: 100px;
   z-index: 500;
-
+  top: -30px;
+   
 }
 .downloadPopup {
   min-width: 298px;
