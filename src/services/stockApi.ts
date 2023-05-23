@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const defaultProps = {
-  search: "haute",
+  search: "",
   page: 1,
   perPage: 12,
 }
