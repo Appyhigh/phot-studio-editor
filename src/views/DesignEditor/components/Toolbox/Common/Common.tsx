@@ -26,6 +26,7 @@ import ArrowUp from "~/components/Icons/ArrowUp"
 import SendBack from "~/components/Icons/SendBack"
 import Locked from "~/components/Icons/Locked"
 import Unlocked from "~/components/Icons/Unlocked"
+import Ungroup from "~/components/Icons/Ungroup"
 import MainImageContext from "~/contexts/MainImageContext"
 
 const Common = ({ type }: any) => {
@@ -143,8 +144,7 @@ const Common = ({ type }: any) => {
             setState({ ...state, isGroup: false })
           }}
         >
-          <LayersIcon size={22} />
-
+          <Ungroup />
           <p className={classes.subHeadingText}>Ungroup</p>
         </button>
       ) : state.isMultiple && !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
@@ -382,7 +382,8 @@ const Visiblity = ({ type }: any) => {
       setState({ visible: !!activeObject.visible })
     }
   }, [activeObject])
-  return state.visible ? (
+  // @ts-ignore
+  return state.visible || activeObject?.visible ? (
     <button
       disabled={type === "lock" ? true : false}
       className={clsx(

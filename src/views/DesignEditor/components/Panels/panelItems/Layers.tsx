@@ -13,7 +13,7 @@ import { Button, KIND, SIZE } from "baseui/button"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { backgroundLayerType } from "~/constants/contants"
 import { makeDownloadToPNG, makeDownloadToSVGHandler, toDataURL } from "~/utils/export"
-import SelectInput from "~/components/UI/Common/SelectInput"
+import SelectInput from "~/components/UI/Common/SelectInput/SelectInput"
 
 const Layers = () => {
   const editor = useEditor()

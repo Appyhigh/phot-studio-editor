@@ -1,4 +1,17 @@
 .mainContextMenu {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  right: 370px;
+  top: 130px;
+}
+.showMenu {
+  display: block;
+}
+.contextMenuFull {
+  right: 562px;
+}
+.mainContext {
   display: flex;
   flex-direction: row;
   position: relative;
@@ -8,14 +21,13 @@
   position: absolute;
   z-index: 129;
   width: 280px;
-  background-color: #fff;
+  background-color: white;
   border: 10px;
   box-shadow: 0.5px 2px 7px rgba(0, 0, 0, 0.1);
   border: 1px solid #f1f1f5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
   border-radius: 8px;
   padding: 28px 0px 17px 0px;
-
 }
 .eachMenu {
   display: flex;
@@ -38,11 +50,15 @@
   right: -10px;
 }
 
-.rightIcon{
+.rightIcon {
   transform: rotate(-180deg);
-  margin:0px 20px 0px auto;
+  margin: 0px 20px 0px auto;
 }
 .disabledMenu {
   pointer-events: none;
   opacity: 0.4;
+}
+
+.selectedDownload {
+  background: #f1f1f5;
 }

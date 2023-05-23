@@ -1,19 +1,42 @@
 .hideShowObjectLayerText {
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   background: #f1f1f5;
   border: 1px solid #92929d;
   border-radius: 4px;
   margin: 0px 8px;
 }
 .eachLayer {
-  margin: 8px 10px;
+  margin: 8px 10px 8px 14px;
 }
 .showObjectTextLayer {
   width: 40px;
   height: 40px;
+ 
 }
 .bgImage {
   width: 40px;
   height: 40px;
+  margin: 8px 10px 8px 14px;
+}
+
+.threeDotsIcon {
+  display: none;
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  height: 16px;
+  width: 28px;
+  padding: auto;
+  z-index: 500;
+}
+
+.previewImg{
+  margin: 8px 8px 8px 12px;
+}
+
+.eachLayerSection:hover .threeDotsIcon {
+  display: block;
 }
