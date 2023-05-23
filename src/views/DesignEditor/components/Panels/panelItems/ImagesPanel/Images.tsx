@@ -54,23 +54,22 @@ const Images = () => {
                   />
                 )
               })}
-               {images.map((image, index) => {
-                  return (
-                    <ImageItem
-                      key={index}
-                      onClick={() => {
-                        addObject(image.src.medium)
-                      }}
-                      preview={image.src.small}
-                    />
-                  )
-                })}
+              {images.map((image, index) => {
+                return (
+                  <ImageItem
+                    key={index}
+                    onClick={() => {
+                      addObject(image.src.medium)
+                    }}
+                    preview={image.src.small}
+                  />
+                )
+              })}
             </Block>
           </Block>
         </Scrollable>
       </>
       <Loader isOpen={loaderPopup} />
-
     </Block>
   )
 }

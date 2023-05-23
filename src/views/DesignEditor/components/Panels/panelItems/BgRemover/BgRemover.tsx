@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
@@ -16,78 +16,68 @@ import UploadPreview from "../UploadPreview/UploadPreview"
 import { toDataURL } from "~/utils/export"
 import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const BgRemover = () => {
   const editor = useEditor()
-  const [trySampleImgShow, setTrySampleImgShow] = useState(true)
-  const [showBgOptions, setShowBgOptions] = useState(false)
   const [backgroundChoice, setBackgroundChoice] = useState(0)
-  const [removeBgBtn, setRemoveBgBtn] = useState(false)
   const [selectedBgOption, setSelectedBgOption] = useState({
     type: -1,
     id: 0,
   })
+  const objects = useObjects()
+  const activeObject = useActiveObject()
 
-  const [sampleImageUpload, setSampleImageUpload] = React.useState<any>()
-  const [selectedSampleImage, setSelectedSampleImage] = React.useState<any>(null)
-  const [showPreviewSampleImg, setShowPreviewSampleImg] = useState(false)
   const { loaderPopup } = useContext(LoaderContext)
-
+  const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
   }
 
   const addObject = React.useCallback(
     (url: string) => {
-      setRemoveBgBtn(true)
+      // @ts-ignore
+      setPanelInfo((prev) => ({ ...prev, bgRemoverBtnActive: true }))
+
       toDataURL(url, async function (dataUrl: string) {
         if (editor) {
           const options = {
             type: "StaticImage",
-            id: nanoid(),
             src: dataUrl,
             preview: dataUrl,
+            id: nanoid(),
+            original: dataUrl,
             metadata: { generationDate: new Date().getTime() },
           }
-          setShowPreviewSampleImg(true)
-          setTrySampleImgShow(false)
-          setSampleImageUpload(options)
-          setSelectedSampleImage(options)
+          setPanelInfo((prev: any) => ({
+            ...prev,
+            UploadPreview: true,
+            bgOptions: false,
+            trySampleImg: false,
+            uploadSection: false,
+          }))
+          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
         }
       })
     },
     [editor]
   )
-  const handleCloseSampleImg = () => {
-    setTrySampleImgShow(!trySampleImgShow)
-  }
-
-  const handleOpenBgOptions = () => {
-    setShowBgOptions(true)
-  }
-
-  const handleCloseBgOptions = () => {
-    setShowBgOptions(false)
-  }
 
   const discardSampleImageHandler = (id: string) => {
-    setShowPreviewSampleImg(false)
-    setSampleImageUpload([])
-    setShowBgOptions(false)
-    setTrySampleImgShow(true)
+    setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    setPanelInfo((prev: any) => ({
+      ...prev,
+      UploadPreview: false,
+      bgOptions: false,
+      trySampleImg: true,
+      uploadSection: true,
+    }))
     editor.objects.removeById(id)
   }
 
-  const disableRemoveBgBtn = () => {
-    setRemoveBgBtn(false)
-  }
-
-  const activeRemoveBgBtn = () => {
-    setRemoveBgBtn(true)
-  }
-  return (
+    return (
     <Block className="d-flex flex-1 flex-column">
-      {showPreviewSampleImg ? (
+      {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>
           <Block paddingTop={"20px"}>
             {
@@ -95,10 +85,15 @@ const BgRemover = () => {
                 className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
                 onClick={() => {
                   //when right icon with Image is clicked set upload to intital state
-                  setShowPreviewSampleImg(false)
-                  setSampleImageUpload([])
-                  setShowBgOptions(false)
-                  setTrySampleImgShow(true)
+                  setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+                  setPanelInfo((prev: any) => ({
+                    ...prev,
+                    uploadPreview: false,
+                    bgOptions: false,
+                    uploadSection: true,
+                    trySampleImg: true,
+                    bgRemoveBtnActive: false,
+                  }))
                 }}
               >
                 <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>Image</Block>
@@ -113,30 +108,16 @@ const BgRemover = () => {
                 "d-flex align-items-center pointer"
               )}
             >
-              <UploadPreview
-                removeBgBtn={removeBgBtn}
-                disableRemoveBgBtn={disableRemoveBgBtn}
-                handleOpenBgOptions={handleOpenBgOptions}
-                upload={sampleImageUpload}
-                selectedImage={selectedSampleImage}
-                discardHandler={discardSampleImageHandler}
-              />
+              <UploadPreview discardHandler={discardSampleImageHandler} />
             </div>
           </Block>
         </Block>
       ) : (
         <>
-          <Uploads
-            activeRemoveBgBtn={activeRemoveBgBtn}
-            removeBgBtn={removeBgBtn}
-            disableRemoveBgBtn={disableRemoveBgBtn}
-            handleCloseSampleImg={handleCloseSampleImg}
-            handleCloseBgOptions={handleCloseBgOptions}
-            handleOpenBgOptions={handleOpenBgOptions}
-          />
+          <Uploads />
         </>
       )}
-      {trySampleImgShow && (
+      {panelInfo.trySampleImg && (
         <>
           {" "}
           <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
@@ -162,7 +143,7 @@ const BgRemover = () => {
         </>
       )}
 
-      {showBgOptions && (
+      {panelInfo.bgOptions && (
         <>
           {" "}
           <Block className="mt-4">

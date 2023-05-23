@@ -97,7 +97,7 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
               <span> {`${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}px</span>
             </div>
           </Block>
-          {(selectedType === "Jpg" || selectedType === "Jpeg") && (
+          {(selectedType === "jpg" || selectedType === "jpeg") && (
             <Block className="mb-1 mt-1">
               <div className={clsx("mb-0", classes.subHeading)}>Quality</div>
               <SliderBar

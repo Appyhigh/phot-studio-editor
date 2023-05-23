@@ -11,6 +11,8 @@ import { changeLayerFill } from "~/utils/updateLayerBackground"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
+import MainImageContext from "~/contexts/MainImageContext"
+import { nanoid } from "nanoid"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
@@ -18,6 +20,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const [isReplacePopup, setIsReplacePopup] = useState(false)
   const [activeOb, setActiveOb] = useState<any>()
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
 
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
@@ -52,6 +55,22 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     [activeObject]
   )
 
+  const eraseHandler = () => {
+    if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    }
+    editor.objects.remove(activeObject?.id)
+  }
+
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
     const previewWithUpdatedBackground: any = await changeLayerFill(
       activeObject?.metadata?.originalLayerPreview ?? inputImg,
@@ -61,13 +80,18 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       type: "StaticImage",
       src: previewWithUpdatedBackground,
       preview: previewWithUpdatedBackground,
+      id: nanoid(),
       metadata: {
         generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? inputImg,
       },
     }
     editor.objects.add(options).then(() => {
+      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
       setLoaderPopup(false)
+      if (activeObject?.id === activeMainObject?.id) {
+        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+      }
       editor.objects.removeById(activeObject?.id)
     })
   }
@@ -76,6 +100,14 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     try {
       setLoaderPopup(true)
       removeBackgroundController(activeObject.preview, async (image: string) => {
+        setPanelInfo((prev: any) => ({
+          ...prev,
+          bgOptions: true,
+          bgRemoverBtnActive: false,
+          uploadSection: false,
+          trySampleImg: false,
+          uploadPreview: false,
+        }))
         changeBGFillHandler(image, each.color)
       })
     } catch (error: any) {
@@ -95,12 +127,25 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           type: "StaticImage",
           src: image,
           preview: image,
+          id: nanoid(),
           metadata: {
             generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
             originalLayerPreview: image,
           },
         }
         editor.objects.add(options).then(() => {
+          // @ts-ignore
+          setPanelInfo((prev) => ({
+            ...prev,
+            bgOptions: true,
+            bgRemoverBtnActive: false,
+            uploadSection: false,
+            trySampleImg: false,
+            uploadPreview: false,
+          }))
+          if (activeObject?.id === mainImgInfo?.id) {
+            setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+          }
           editor.objects.removeById(activeObject.id)
           // Stop the loader
           setLoaderPopup(false)
@@ -141,7 +186,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                 " pointer d-flex justify-content-center align-items-center flex-column ml-1"
               )}
               // @ts-ignore
-              onClick={() => editor.objects.remove(activeObject?.id)}
+              onClick={() => eraseHandler()}
             >
               <Icons.TrashIcon size={"20"} />
               <p>Erase</p>
@@ -185,7 +230,13 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             )
           })}
         </div>
-        <ColorPicker inputColor={objectBgColor} isOpen={isOpen} handleClose={close} type="object" />
+        <ColorPicker
+          inputColor={objectBgColor}
+          isOpen={isOpen}
+          handleClose={close}
+          type="object"
+          handleChangeBg={handleChangeBg}
+        />
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>

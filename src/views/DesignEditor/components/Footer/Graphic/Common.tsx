@@ -94,7 +94,6 @@ const Common = () => {
             <Icons.Save size={26} />
           </Button>
         </StatefulTooltip>
-       
       </div>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
@@ -135,7 +134,6 @@ const Common = () => {
             <Icons.Share size={16} />
           </Button>
         </StatefulTooltip>
-       
       </div>
     </Container>
   )

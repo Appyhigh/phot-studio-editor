@@ -13,16 +13,37 @@ import LoaderContext from "./contexts/LoaderContext"
 import i18next from "i18next"
 import "./translations"
 import { CustomTheme } from "./theme"
+import MainImageContext from "./contexts/MainImageContext"
 import AuthWrapper from "./hooks/useAuth"
 
 const engine = new Styletron()
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [loaderPopup, setLoaderPopup] = useState<boolean>(false)
+
+  const [mainImgInfo, setMainImgInfo] = useState({
+    type: "",
+    id: "",
+    src: "",
+    preview: "",
+    url: "",
+    original:"",
+    metadata: {},
+  })
+
+  const [panelInfo, setPanelInfo] = useState({
+    uploadSection: true,
+    trySampleImg: true,
+    uploadPreview: false,
+    bgOptions: false,
+    bgRemoverBtnActive: false,
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
         <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+        <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
           <DesignEditorProvider>
             <TimerProvider>
               <AppProvider>
@@ -36,6 +57,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
               </AppProvider>
             </TimerProvider>
           </DesignEditorProvider>
+          </MainImageContext.Provider>
         </LoaderContext.Provider>
       </ReduxProvier>
     </AuthWrapper>

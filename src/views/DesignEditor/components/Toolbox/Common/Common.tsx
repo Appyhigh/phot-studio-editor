@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import { Button, SIZE, KIND } from "baseui/button"
 import { Checkbox } from "baseui/checkbox"
 import { Block } from "baseui/block"
@@ -27,7 +27,26 @@ import SendBack from "~/components/Icons/SendBack"
 import Locked from "~/components/Icons/Locked"
 import Unlocked from "~/components/Icons/Unlocked"
 import Ungroup from "~/components/Icons/Ungroup"
+import MainImageContext from "~/contexts/MainImageContext"
+
 const Common = ({ type }: any) => {
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+
+  const deleteHandler = () => {
+    if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    }
+    editor.objects.remove(activeObject?.id)
+  }
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
 
@@ -66,7 +85,12 @@ const Common = ({ type }: any) => {
           classes.editingBtn,
           type === "lock" && classes.disabledBtn
         )}
-        onClick={() => editor.objects.clone()}
+        onClick={() => {
+          editor.objects.clone()
+          setTimeout(() => {
+            editor.objects.update({ name: activeObject.name })
+          }, 10)
+        }}
       >
         <DuplicateIcon size={22} />
         <p className={clsx(classes.subHeadingText)}>Duplicate</p>
@@ -78,7 +102,10 @@ const Common = ({ type }: any) => {
           classes.editingBtn,
           type === "lock" && classes.disabledBtn
         )}
-        onClick={() => editor.objects.bringToFront()}
+        onClick={() => {
+          editor.objects.update({ name: activeObject.name })
+          editor.objects.bringToFront()
+        }}
       >
         <ArrowUp />
 
@@ -91,7 +118,10 @@ const Common = ({ type }: any) => {
           classes.editingBtn,
           type === "lock" && classes.disabledBtn
         )}
-        onClick={() => editor.objects.sendToBack()}
+        onClick={() => {
+          editor.objects.update({ name: activeObject.name })
+          editor.objects.sendToBack()
+        }}
       >
         <SendBack />
 
@@ -114,12 +144,13 @@ const Common = ({ type }: any) => {
             setState({ ...state, isGroup: false })
           }}
         >
-         <Ungroup/>
+          <Ungroup />
           <p className={classes.subHeadingText}>Ungroup</p>
         </button>
       ) : state.isMultiple && !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
         <button
           onClick={() => {
+            editor.objects.update({ name: activeObject.name })
             editor.objects.group()
             setState({ ...state, isGroup: true })
           }}
@@ -148,7 +179,7 @@ const Common = ({ type }: any) => {
           classes.type === "lock" && classes.disabledBtn,
           classes.editingBtnDelete
         )}
-        onClick={() => editor.objects.remove()}
+        onClick={() => deleteHandler()}
       >
         <DeleteIcon size={20} />
         <p className={clsx(classes.subHeadingText, classes.subHeadingTextDelete)}>Delete</p>

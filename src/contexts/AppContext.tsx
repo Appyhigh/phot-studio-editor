@@ -45,10 +45,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
   const [currentTemplate, setCurrentTemplate] = useState(null)
 
-  useEffect(() => {
-    console.log(activePanel)
-  }, [activePanel])
-
   const context = {
     isMobile,
     setIsMobile,

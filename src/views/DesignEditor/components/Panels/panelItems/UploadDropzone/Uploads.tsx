@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext, useEffect } from "react"
 import { Block } from "baseui/block"
 import DropZone from "~/components/Dropzone"
 import { useEditor } from "@layerhub-io/react"
@@ -10,23 +10,26 @@ import UploadPreview from "../UploadPreview/UploadPreview"
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import MainImageContext from "~/contexts/MainImageContext"
 
-export default function ({
-  handleCloseSampleImg,
-  handleCloseBgOptions,
-  handleOpenBgOptions,
-  removeBgBtn,
-  disableRemoveBgBtn,
-  activeRemoveBgBtn,
-}: any) {
+export default function () {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
+  const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-    handleCloseSampleImg()
+    // @ts-ignore
+    setPanelInfo((prev) => ({
+      ...prev,
+      trySampleImg: false,
+      bgRemoverBtnActive: true,
+      uploadSection: false,
+      bgOptions: false,
+      UploadPreview: true,
+    }))
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -37,19 +40,23 @@ export default function ({
     }
 
     const type = isVideo ? "StaticVideo" : "StaticImage"
-    activeRemoveBgBtn()
+    // @ts-ignore
     const upload = {
       id: nanoid(),
       src: base64,
       preview: preview,
+      original: base64,
       type: type,
       metadata: { generationDate: new Date().getTime() },
     }
 
+    // @ts-ignore
+    setMainImgInfo((prev) => ({ ...prev, ...upload }))
     setUploads([...uploads, upload])
+
     setSelectedImage(upload)
     const fileInfo: any = document.getElementById("inputFile")
-    if (fileInfo.value) fileInfo.value = ""
+    if (fileInfo?.value) fileInfo.value = ""
   }
 
   const handleInputFileRefClick = () => {
@@ -62,8 +69,16 @@ export default function ({
 
   const discardHandler = (id: string) => {
     setUploads([])
-    handleCloseSampleImg()
-    handleCloseBgOptions()
+    setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    // @ts-ignore
+    setPanelInfo((prev) => ({
+      ...prev,
+      trySampleImg: true,
+      bgOptions: false,
+      uploadPreview: false,
+      bgRemoverBtnActive: false,
+      uploadSection: true,
+    }))
     editor.objects.removeById(id)
   }
 
@@ -72,17 +87,24 @@ export default function ({
       <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
         <Block className="d-flex align-items-center flex-start">
           <Block className="pl-1">
-            {uploads.length === 0 && <Block className={classes.panelHeading}>Add Image</Block>}
+            {mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>}
           </Block>
           <Block>
-            {uploads.length != 0 && (
+            {mainImgInfo.id && (
               <div
                 className="d-flex justify-content-start flex-row align-items-center pointer"
                 onClick={() => {
                   //when right icon with Image is clicked set upload to intital state
+                  setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
                   setUploads([])
-                  handleCloseSampleImg()
-                  handleCloseBgOptions()
+                  // @ts-ignore
+                  setPanelInfo((prev) => ({
+                    ...prev,
+                    trySampleImg: true,
+                    bgOptions: false,
+                    uploadSection: true,
+                    bgRemoveBtnActive: false,
+                  }))
                 }}
               >
                 <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
@@ -90,7 +112,7 @@ export default function ({
             )}
           </Block>
         </Block>
-        {uploads.length === 0 && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />}
+        {mainImgInfo.id == "" && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />}
 
         <>
           <Block className={classes.uploadInputWrapper}>
@@ -109,14 +131,7 @@ export default function ({
 
                   // onClick={() => addImageToCanvas(upload)}
                 >
-                  <UploadPreview
-                    removeBgBtn={removeBgBtn}
-                    disableRemoveBgBtn={disableRemoveBgBtn}
-                    handleOpenBgOptions={handleOpenBgOptions}
-                    upload={upload}
-                    selectedImage={selectedImage}
-                    discardHandler={discardHandler}
-                  />
+                  <UploadPreview upload={upload} selectedImage={selectedImage} discardHandler={discardHandler} />
                 </div>
               ))}
             </Block>

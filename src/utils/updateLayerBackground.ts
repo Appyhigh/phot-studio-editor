@@ -1,7 +1,6 @@
 export const changeLayerFill = (base64ImageData: string, backgroundColor: string) => {
   return new Promise((resolve, reject) => {
-    const image = new Image()
-
+    const image = new Image()    
     image.onload = function () {
       const canvas = document.createElement("canvas")
       canvas.width = image.width
@@ -31,6 +30,36 @@ export const changeLayerFill = (base64ImageData: string, backgroundColor: string
   })
 }
 
+export function resizeBase64Image(base64: string, newWidth: number, newHeight: number) {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+
+    img.onload = function () {
+      const canvas = document.createElement("canvas")
+      const ctx: any = canvas.getContext("2d")
+
+      canvas.width = newWidth
+      canvas.height = newHeight
+
+      // Set transparent background
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.globalCompositeOperation = "destination-over"
+
+      ctx.drawImage(img, 0, 0, newWidth, newHeight)
+
+      const resizedBase64 = canvas.toDataURL() // You can change the format if desired
+
+      resolve(resizedBase64)
+    }
+
+    img.onerror = function (error) {
+      reject(error)
+    }
+
+    img.src = base64
+  })
+}
+
 export const changeLayerFillWithGradient = (base64ImageData: string, gradient: string) => {
   return new Promise((resolve, reject) => {
     const image = new Image()
@@ -48,7 +77,6 @@ export const changeLayerFillWithGradient = (base64ImageData: string, gradient: s
 
       grad.forEach((color: string, index: number) => {
         if (index !== 0) {
-          console.log(1 / (grad.length - 1) + ((index - 1) * 1) / (grad.length - 1))
           gradientFill.addColorStop(1 / (grad.length - 1) + ((index - 1) * 1) / (grad.length - 1), color.split(" ")[1])
         }
       })

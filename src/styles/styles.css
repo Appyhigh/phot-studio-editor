@@ -788,7 +788,7 @@ ul {
 .threeDotsIcon {
   display: none;
   position: absolute;
-  right: 20px;
+  right: 8px;
   top: 12px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 10px;

@@ -14,28 +14,28 @@ export const BASE_ITEMS = [
     label: "Images",
     icon: "",
   },
-  {
-    id: "customize",
-    name: "Customize",
-    label: "Customize",
-    icon: "",
-  },
+  // {
+  //   id: "customize",
+  //   name: "Customize",
+  //   label: "Customize",
+  //   icon: "",
+  // },
   // {
   //   id: "uploads",
   //   name: "Uploads",
   // },
-  {
-    id: "text",
-    name: "Text",
-    label: "Text",
-    icon: "",
-  },
-  {
-    id: "layers",
-    name: "Layers",
-    label: "Layers",
-    icon: "",
-  },
+  // {
+  //   id: "text",
+  //   name: "Text",
+  //   label: "Text",
+  //   icon: "",
+  // },
+  // {
+  //   id: "layers",
+  //   name: "Layers",
+  //   label: "Layers",
+  //   icon: "",
+  // },
   {
     id: "bgremover",
     icon: "BgRemover",

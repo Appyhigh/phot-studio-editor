@@ -28,8 +28,6 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
     }
   }, [show])
 
-  
-
   if (activeObject?.type === "Background" && show) {
     return (
       <div // @ts-ignore
@@ -81,6 +79,9 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             <ContextMenuItem
               onClick={() => {
                 editor.objects.clone()
+                setTimeout(() => {
+                  editor.objects.update({ name: activeObject.name })
+                }, 10)
                 editor.cancelContextMenuRequest()
               }}
               icon="Duplicate"
@@ -101,7 +102,8 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             </ContextMenuItem>
             <ContextMenuItem
               onClick={() => {
-                editor.objects.bringForward()
+                editor.objects.update({ name: activeObject.name })
+                editor.objects.bringToFront()
                 editor.cancelContextMenuRequest()
               }}
               icon="Forward"
@@ -111,7 +113,8 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             </ContextMenuItem>
             <ContextMenuItem
               onClick={() => {
-                editor.objects.sendBackwards()
+                editor.objects.update({ name: activeObject.name })
+                editor.objects.sendToBack()
                 editor.cancelContextMenuRequest()
               }}
               icon="Backward"
@@ -178,18 +181,6 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 label="Visibility"
               >
                 <EyeCrossed size={24} />
-              </ContextMenuItem>
-            )}
-            {activeObject?.type === "group" && (
-              <ContextMenuItem
-                onClick={() => {
-                  editor.objects.ungroup()
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="layers"
-                label="Ungroup"
-              >
-                <Ungroup />
               </ContextMenuItem>
             )}
             <div className="p-relative">

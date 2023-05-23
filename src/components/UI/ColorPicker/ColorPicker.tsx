@@ -7,54 +7,15 @@ import { Block } from "baseui/block"
 import { HexColorPicker } from "react-colorful"
 import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayerBackground"
 import { toDataURL } from "~/utils/export"
+import { Button } from "baseui/button"
 
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
-const ColorPicker = ({ isOpen, handleClose, inputColor, type }: any) => {
+const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: any) => {
   const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
   const editor = useEditor()
-
-  const handleChangeBg = useCallback(
-    async (each: any) => {
-      editor.objects.removeById(activeObject?.id)
-      if (each.color) {
-        const previewWithUpdatedBackground: any = await changeLayerFill(
-          activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          each.color
-        )
-        const options = {
-          type: "StaticImage",
-          src: previewWithUpdatedBackground,
-          preview: previewWithUpdatedBackground,
-          metadata: {
-            generationDate: new Date().getTime(),
-            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          },
-        }
-        editor.objects.add(options)
-      } else if (each.img) {
-        toDataURL(each.img, async function (dataUrl: string) {
-          const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-            activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-            dataUrl
-          )
-          const options = {
-            type: "StaticImage",
-            src: previewWithUpdatedBackground,
-            preview: previewWithUpdatedBackground,
-            metadata: {
-              generationDate: new Date().getTime(),
-              originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-            },
-          }
-          editor.objects.add(options)
-        })
-      }
-    },
-    [activeObject]
-  )
 
   const close = () => {
     handleClose()
@@ -67,7 +28,8 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type }: any) => {
     }
 
     setColor(color)
-  }, 100)
+    close()
+  }, 1000)
 
   return (
     <Modal
@@ -105,7 +67,7 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type }: any) => {
           style: ({ $theme }) => ({
             backgroundColor: $theme.colors.white,
             width: "382px",
-            height: "550px",
+            height: "600px",
             borderTopLeftRadius: "10px",
             borderBottomLeftRadius: "10px",
             borderTopRightRadius: "10px",
@@ -120,16 +82,14 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type }: any) => {
         <>
           <Block className={classes.colorPickerSection}>
             <div className="hex-color-picker">
-              <HexColorPicker onChange={updateObjectFill} />
-            </div>
-            <div className={classes.colorPickerInput}>
-              <input
-                className={classes.colorPickerInputField}
-                value={color}
-                onChange={(e) => {
-                  setColor(e.target.value)
+              <HexColorPicker
+                onChange={(color) => {
+                  setColor(color)
                 }}
               />
+            </div>
+            <div className={classes.colorPickerInput}>
+              <input className={classes.colorPickerInputField} value={color} />
             </div>
             <Block>
               <Block className={classes.colorTypeHeading}>Default Colors</Block>
@@ -157,6 +117,15 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type }: any) => {
                   />
                 ))}
               </Block>
+            </Block>
+            <Block className="w-100 mt-3">
+              <Button
+                onClick={() => updateObjectFill(color)}
+                $colors={{ backgroundColor: "#6729F3", color: "#fff" }}
+                className="w-100 p-5 mt-5 d-inline-block"
+              >
+                Change Color
+              </Button>
             </Block>
           </Block>
         </>
