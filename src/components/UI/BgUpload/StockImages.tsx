@@ -4,11 +4,36 @@ import clsx from "clsx"
 import { images } from "~/constants/mock-data"
 import { useEditor } from "@layerhub-io/react"
 import { backgroundLayerType } from "~/constants/contants"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { getStockImages } from "~/services/stockApi"
 
 const StockImages = () => {
   const editor = useEditor()
   const [selectedImg, setSelectedImg] = useState(-1)
+  const [res, setRes] = useState<any[]>([])
+
+  useEffect(() => {
+    getStockImages().then((res) => {
+      setRes(res)
+    })
+  }, [])
+
+  const [search, setSearch] = useState("")
+  const searchImages = (e: any) => {
+    console.log("value", search)
+    if (search) {
+      const filteredImages = res.filter((image) => {
+        return image.tags.includes(search)
+      })
+      setRes(filteredImages)
+    } else if (search === "") {
+      getStockImages().then((res) => {
+        setRes(res)
+      })
+    } else {
+      setRes(res)
+    }
+  }
 
   const setBgImg = React.useCallback(
     (url: string) => {
@@ -39,24 +64,24 @@ const StockImages = () => {
   return (
     <div className={classes.stockImgSection}>
       <div className={classes.inputWrapper}>
-        <input className={classes.textInput} />
-        <div className={clsx(classes.iconWrapper, "flex-center")}>
+        <input className={classes.textInput} onChange={(e) => setSearch(e.target.value)} />
+        <button className={clsx(classes.iconWrapper, "flex-center")} onClick={searchImages}>
           <Icons.SearchIcon />
-        </div>
+        </button>
       </div>
 
       <div className={classes.sampleImgSection}>
-        {images.map((image, index) => {
+        {res.map((image, index) => {
           return (
             <ImageItem
               key={index}
               idx={index}
               selectedImage={selectedImg}
               onClick={() => {
-                setBgImg(image.src.medium)
+                setBgImg(image.largeImageURL)
                 setSelectedImg(index)
               }}
-              preview={image.src.small}
+              preview={image.previewURL}
             />
           )
         })}
