@@ -27,18 +27,23 @@
 .inputWrapper {
   margin-left: 10px;
   position: relative;
+  display: flex;
 }
 .textInput {
   height: 55px;
-  width: 275px;
+  width: 75%;
   margin-top: 20px;
   border: 1px solid rgba(93, 93, 93, 0.3);
   border-radius: 7px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
 }
 .iconWrapper {
   background: #44444f;
   border: 1px solid #5d5d5d;
   border-radius: 7px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
   width: 55px;
   height: 55px;
   position: absolute;
@@ -111,6 +116,7 @@
 }
 .textInput {
   font-family: "Rubik";
+  width: 75%;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
@@ -129,10 +135,11 @@
     margin-left: 20px;
   }
   .inputWrapper {
-    margin: 20px 0px 4px 25px;
+    margin: 20px 0px 12px 25px;
+    display: flex;
   }
   .textInput {
-    width: 310px;
+    width: 75%;
     margin: 0px;
   }
   .iconWrapper {
