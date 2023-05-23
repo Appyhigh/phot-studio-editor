@@ -8,33 +8,50 @@
   right: 0px;
   top: 35px;
   padding: 16px;
+  bottom: 0px;
 }
-
+.singleLayerDownload {
+  width: 250px;
+  top: -40px;
+  padding: 16px 16px 0px;
+}
+.groupDownload{
+  top: -120px;
+}
 .subHeading {
   font-size: 14px;
   color: #44444f;
 }
 .subHeading span {
   color: #92929d;
-  font-size: 10px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: #92929d;
 }
 .downloadBtn {
   font-size: 12px;
   cursor: pointer;
-  margin-left: 12px;
   border-radius: 10px;
   font-weight: 500;
   font-family: "Poppins";
-  color: #fff;
-  background-color: #6729f3;
-  padding: 9px 60px;
-}
-
-.hdBtn {
+  padding: 9px 63px;
   background-color: #fff;
   border-color: #6729f3;
   color: #6729f3;
   border: 1px solid #6729f3;
+  margin-left: 24px;
+}
+
+.hdBtn {
+  color: #fff;
+  background-color: #6729f3;
+  margin-left: 0px;
+}
+.singleLayerDownloadBtn {
+  width: 210px;
+  padding: 9px 30px;
+  margin-left: 0px;
 }
 .subText {
   color: #92929d;

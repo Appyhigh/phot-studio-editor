@@ -1,0 +1,28 @@
+.selectInputFormatSection {
+  position: relative;
+  border: 1px solid #f1f1f5;
+  width: 428px;
+  border-radius: 4px;
+}
+.singleLayerSelect {
+  width: 210px;
+}
+
+.selectedType {
+  text-transform: capitalize;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  padding: 12px 20px 16px 12px;
+
+  font-family: "Rubik";
+  color: #696974;
+  border-bottom: 1px solid #f1f1f5;
+}
+.eachOption {
+  padding: 8px 20px 8px 12px;
+}
+
+.eachOption:hover {
+  background-color: #f1f1f5;
+}

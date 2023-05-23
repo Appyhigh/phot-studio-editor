@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
@@ -14,6 +14,8 @@ import clsx from "clsx"
 import TextLayer from "./TextLayer/TextLayer"
 import BgLayer from "./BgLayer/BgLayer"
 import GroupIcon from "~/components/Icons/GroupIcon"
+import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
+import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
 
 interface ToolboxState {
   toolbox: string
@@ -36,6 +38,11 @@ interface layerProps {
 const LayerPanel = () => {
   const [state, setState] = React.useState<ToolboxState>({ toolbox: "Text" })
   const { setActiveSubMenu } = useAppContext()
+
+  const [showSingleLayer, setShowSingleLayer] = useState(false)
+  const rightPanelRef = useRef()
+  const [activeSingleLayer, setActiveSingleLayer] = useState()
+
   const [layerState, setLayerState] = useState<layerProps>({
     isOpenSlider: false,
     bgLayer: false,
@@ -57,6 +64,26 @@ const LayerPanel = () => {
   const activeObject = useActiveObject() as any
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
+  const [selectedSingleId, setSelectedSingleId] = useState("")
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      // @ts-ignore
+      if (showSingleLayer && rightPanelRef.current && !rightPanelRef.current.contains(e.target)) {
+        setShowSingleLayer(false)
+        setSelectedSingleId("")
+      }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutside)
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [showSingleLayer, selectedSingleId])
 
   const [bgUrl, setBgUrl] = useState<any>("")
 
@@ -114,13 +141,19 @@ const LayerPanel = () => {
   }, [activeObject])
 
   useEffect(() => {
-    if (activeObject?.id && layerState.isOpenSlider) {
+    if (activeObject?.id && layerState.isOpenSlider && !showSingleLayer) {
       if (activeObject?.text || activeObject?.name === "StaticText") {
         setLayerState((prev) => ({ ...prev, textLayer: true, isOpenSlider: true, objectLayer: false, bgLayer: false }))
-      } else if (activeObject?.metadata?.type == backgroundLayerType || activeObject?.metadata?.type == "deviceUpload") {
+        setShowSingleLayer(false)
+      } else if (
+        activeObject?.metadata?.type == backgroundLayerType ||
+        activeObject?.metadata?.type == "deviceUpload"
+      ) {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: true }))
+        setShowSingleLayer(false)
       } else if (activeObject?.name === "StaticImage") {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: true, bgLayer: false }))
+        setShowSingleLayer(false)
       } else {
         setLayerState((prev) => ({ ...prev, textLayer: false, isOpenSlider: true, objectLayer: false, bgLayer: false }))
       }
@@ -138,11 +171,12 @@ const LayerPanel = () => {
   }
 
   return (
-    <div className="d-flex flex-column p-relative">
+    // @ts-ignore
+    <div className="d-flex flex-column p-relative" ref={rightPanelRef}>
       <Container
         className="p-relative"
         style={{
-          minWidth: layerState.isOpenSlider ? "300px" : "105px",
+          minWidth: layerState.isOpenSlider ? "300px" : "111px",
           maxWidth: "400px",
         }}
       >
@@ -183,7 +217,7 @@ const LayerPanel = () => {
             </Block>
           </Block>
         </Block>
-        <Block className="d-flex flex-column flex-1" style={{ backgroundColor: "#FFF" }}>
+        <Block className="d-flex flex-column flex-1 p-relative pt-2" style={{ backgroundColor: "#FFF" }}>
           {layerState.objectLayer ? (
             <ObjectLayer showLayer={layerState.objectLayer} handleClose={handleCloseObjectLayer} />
           ) : layerState.textLayer ? (
@@ -191,7 +225,12 @@ const LayerPanel = () => {
           ) : layerState.bgLayer ? (
             <BgLayer showLayer={layerState.bgLayer} handleClose={handleCloseBgLayer} />
           ) : (
-            <Scrollable autoHide={true}>
+            <Scrollable
+              onScroll={() => {
+                setShowSingleLayer(false)
+              }}
+              autoHide={true}
+            >
               <Block className="p-1">
                 {editor &&
                   editor.scene
@@ -204,167 +243,215 @@ const LayerPanel = () => {
                       )
                     })
                     .reverse()
-                    .map((obj: any) => {
+                    .map((obj: any, idx: number) => {
+                      const grp_id = obj.id
                       if (obj?.objects) {
                         return (
-                          <Block
-                            onClick={() => {
-                              editor.objects.select(obj.id)
-                            }}
-                            className="pointer"
-                            $style={{
-                              fontSize: "14px",
-                              backgroundColor: "rgb(245,246,247)",
-                              ":hover": {
-                                background: "rgb(245,246,247)",
-                              },
-                            }}
-                            key={obj.id}
-                          >
-                            {obj.objects.map((object: any, index: number) => {
-                              return (
-                                <Block
-                                  key={index}
-                                  className="d-flex flex-column align-items-center"
-                                  $style={{
-                                    fontSize: "14px",
-                                    backgroundColor: "#E3E6FF",
-                                  }}
-                                >
-                                  {index !== 0 && (
-                                    <div
-                                      onClick={() => {
-                                        editor.objects.select(obj.id)
-                                        editor.objects.ungroup()
-                                      }}
-                                    >
-                                      <GroupIcon />
-                                    </div>
-                                  )}
+                          <div key={idx}>
+                            {selectedSingleId === grp_id && (
+                              <SingleLayerExport
+                                isOpenSlider={layerState.isOpenSlider}
+                                show={showSingleLayer}
+                                selectedSingleId={selectedSingleId}
+                              />
+                            )}
+                            <Block
+                              onClick={() => {
+                                editor.objects.select(obj.id)
+                              }}
+                              className={clsx(classes.eachLayerSection, "pointer p-relative eachLayerSec")}
+                              $style={{
+                                fontSize: "14px",
+                                backgroundColor: "rgb(245,246,247)",
+                                ":hover": {
+                                  background: "rgb(245,246,247)",
+                                },
+                              }}
+                            >
+                              {obj.objects.map((object: any, index: number) => {
+                                return (
                                   <Block
-                                    className="d-flex justify-content-start align-items-center pointer w-100"
-                                    key={object.id}
+                                    key={index}
+                                    className="d-flex flex-column align-items-center eachLayerSec p-relative"
+                                    $style={{
+                                      fontSize: "14px",
+                                      backgroundColor: "#E3E6FF",
+                                    }}
                                   >
-                                    {object.text || object.name === "StaticText" ? (
+                                    {index === 0 && (
                                       <div
-                                        className={clsx(
-                                          "d-flex justify-content-center align-items-center",
-                                          classes.textLayer
-                                        )}
+                                        className={"threeDotsIcon"}
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          editor.objects.select(grp_id)
+                                          setActiveSingleLayer(object)
+                                          setShowSingleLayer(true)
+                                          setSelectedSingleId(grp_id)
+                                        }}
                                       >
+                                        <SingleLayerIcon />
+                                      </div>
+                                    )}
+                                    {index !== 0 && (
+                                      <div
+                                        onClick={() => {
+                                          editor.objects.select(obj.id)
+                                          editor.objects.ungroup()
+                                        }}
+                                      >
+                                        <GroupIcon />
+                                      </div>
+                                    )}
+                                    <Block
+                                      className="d-flex justify-content-start align-items-center pointer w-100"
+                                      key={object.id}
+                                    >
+                                      {object.text || object.name === "StaticText" ? (
                                         <div
                                           className={clsx(
-                                            classes.eachLayer,
-                                            layerState.isOpenSlider
-                                              ? classes.showObjectTextLayer
-                                              : classes.hideShowObjectLayerText,
-                                            "flex-center"
+                                            "d-flex justify-content-center align-items-center",
+                                            classes.textLayer
                                           )}
                                         >
-                                          <Icons.TextIcon size={21} />{" "}
+                                          <div
+                                            className={clsx(
+                                              classes.eachLayer,
+                                              layerState.isOpenSlider
+                                                ? classes.showObjectTextLayer
+                                                : classes.hideShowObjectLayerText,
+                                              "flex-center"
+                                            )}
+                                          >
+                                            <Icons.TextIcon size={21} />{" "}
+                                          </div>
                                         </div>
-                                      </div>
-                                    ) : (
-                                      <img
-                                        src={object.preview ?? object.src}
-                                        style={{
-                                          borderRadius: "4px",
-                                          width: layerState.isOpenSlider ? "40px" : "48px",
-                                          height: layerState.isOpenSlider ? "40px" : "48px",
-                                        }}
-                                        alt="nn"
-                                        className="mx-1 my-1"
-                                      />
-                                    )}
-                                    {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                                      ) : (
+                                        <img
+                                          src={object.preview ?? object.src}
+                                          style={{
+                                            borderRadius: "4px",
+                                            width: layerState.isOpenSlider ? "40px" : "60px",
+                                            height: layerState.isOpenSlider ? "40px" : "60px",
+                                          }}
+                                          alt="nn"
+                                          className="mx-1 my-1"
+                                        />
+                                      )}
+                                      {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                                    </Block>
                                   </Block>
-                                </Block>
-                              )
-                            })}
-                          </Block>
+                                )
+                              })}
+                            </Block>
+                          </div>
                         )
                       } else {
                         return (
-                          <Block
-                            className="d-flex justify-content-start align-items-center pointer"
-                            $style={{
-                              fontSize: "14px",
-                              backgroundColor: check_group(obj.id)
-                                ? "rgb(245,246,247)"
-                                : activeObject?.id == obj.id
-                                ? "rgb(245,246,247)"
-                                : "#fff",
-                              ":hover": {
-                                background: "rgb(245,246,247)",
-                              },
-                            }}
-                            key={obj.id}
-                            onClick={() => {
-                              if (obj.text || obj.name === "StaticText") {
-                                setLayerState((prev) => ({
-                                  ...prev,
-                                  isOpenSlider: true,
-                                  textLayer: true,
-                                  objectLayer: false,
-                                  bgLayer: false,
-                                }))
-                              } else if (obj.metadata?.type === backgroundLayerType) {
-                                setLayerState((prev) => ({
-                                  ...prev,
-                                  isOpenSlider: true,
-                                  bgLayer: true,
-                                  textLayer: false,
-                                  objectLayer: false,
-                                }))
-                              } else
-                                setLayerState((prev) => ({
-                                  ...prev,
-                                  isOpenSlider: true,
-                                  objectLayer: true,
-                                  textLayer: false,
-                                  bgLayer: false,
-                                }))
-
-                              setActiveLayerPanel(obj)
-
-                              editor.objects.select(obj.id)
-                            }}
-                          >
-                            {obj.text || obj.name === "StaticText" ? (
-                              <div
-                                className={clsx("d-flex justify-content-center align-items-center", classes.textLayer)}
-                              >
-                                <div
-                                  className={clsx(
-                                    classes.eachLayer,
-                                    layerState.isOpenSlider
-                                      ? classes.showObjectTextLayer
-                                      : classes.hideShowObjectLayerText,
-                                    "flex-center"
-                                  )}
-                                >
-                                  <Icons.TextIcon size={21} />{" "}
-                                </div>
-                              </div>
-                            ) : (
-                              <img
-                                src={obj.preview ?? obj.src}
-                                style={{
-                                  borderRadius: "4px",
-                                  width: layerState.isOpenSlider ? "40px" : "48px",
-                                  height: layerState.isOpenSlider ? "40px" : "48px",
-                                }}
-                                alt="nn"
-                                className="mx-1 my-1"
+                          <div key={obj.id}>
+                            {selectedSingleId === obj.id && (
+                              <SingleLayerExport
+                                isOpenSlider={layerState.isOpenSlider}
+                                show={showSingleLayer}
+                                selectedSingleId={selectedSingleId}
                               />
                             )}
-                            {layerState.isOpenSlider && <Block>{obj.name}</Block>}
-                          </Block>
+                            <Block
+                              className="d-flex justify-content-start align-items-center pointer p-relative eachLayerSec"
+                              $style={{
+                                fontSize: "14px",
+                                backgroundColor: check_group(obj.id)
+                                  ? "rgb(245,246,247)"
+                                  : activeObject?.id == obj.id
+                                  ? "rgb(245,246,247)"
+                                  : "#fff",
+                                ":hover": {
+                                  background: "rgb(245,246,247)",
+                                },
+                              }}
+                              onClick={() => {
+                                if (obj.text || obj.name === "StaticText") {
+                                  setLayerState((prev) => ({
+                                    ...prev,
+                                    isOpenSlider: true,
+                                    textLayer: true,
+                                    objectLayer: false,
+                                    bgLayer: false,
+                                  }))
+                                } else if (obj.metadata?.type === backgroundLayerType) {
+                                  setLayerState((prev) => ({
+                                    ...prev,
+                                    isOpenSlider: true,
+                                    bgLayer: true,
+                                    textLayer: false,
+                                    objectLayer: false,
+                                  }))
+                                } else
+                                  setLayerState((prev) => ({
+                                    ...prev,
+                                    isOpenSlider: true,
+                                    objectLayer: true,
+                                    textLayer: false,
+                                    bgLayer: false,
+                                  }))
+                                setShowSingleLayer(false)
+                                setActiveLayerPanel(obj)
+
+                                editor.objects.select(obj.id)
+                              }}
+                            >
+                              <div
+                                className={"threeDotsIcon"}
+                                id={obj.id}
+                                onClick={(e) => {
+                                  e.stopPropagation()
+
+                                  setSelectedSingleId(obj.id)
+                                  editor.objects.select(obj.id)
+                                  setActiveSingleLayer(obj)
+                                  setShowSingleLayer(true)
+                                }}
+                              >
+                                <SingleLayerIcon />
+                              </div>
+                              {obj.text || obj.name === "StaticText" ? (
+                                <div
+                                  className={clsx(
+                                    "d-flex justify-content-center align-items-center",
+                                    classes.textLayer
+                                  )}
+                                >
+                                  <div
+                                    className={clsx(
+                                      classes.eachLayer,
+                                      layerState.isOpenSlider
+                                        ? classes.showObjectTextLayer
+                                        : classes.hideShowObjectLayerText,
+                                      "flex-center"
+                                    )}
+                                  >
+                                    <Icons.TextIcon size={21} />{" "}
+                                  </div>
+                                </div>
+                              ) : (
+                                <img
+                                  src={obj.preview ?? obj.src}
+                                  style={{
+                                    borderRadius: "4px",
+                                    width: layerState.isOpenSlider ? "40px" : "60px",
+                                    height: layerState.isOpenSlider ? "40px" : "60px",
+                                  }}
+                                  alt="nn"
+                                  className="mx-1 my-1"
+                                />
+                              )}
+                              {layerState.isOpenSlider && <Block>{obj.name}</Block>}
+                            </Block>
+                          </div>
                         )
                       }
                     })}
                 <Block
-                  className="d-flex justify-content-start align-items-center pointer"
+                  className="d-flex justify-content-start align-items-center pointer p-relative eachLayerSec"
                   $style={{
                     fontSize: "14px",
                     backgroundColor: "#fff",
@@ -382,24 +469,24 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
-                  {!bgUrl.startsWith("#") ? (
+                  {!bgUrl?.startsWith("#") ? (
                     <img
                       src={bgUrl}
                       alt="nn"
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "48px",
-                        height: layerState.isOpenSlider ? "40px" : "48px",
+                        width: layerState.isOpenSlider ? "40px" : "60px",
+                        height: layerState.isOpenSlider ? "40px" : "60px",
                       }}
                       className={clsx(classes.bgImage, "mx-1 my-1")}
                     />
                   ) : (
                     <div
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "48px",
-                        height: layerState.isOpenSlider ? "40px" : "48px",
+                        width: layerState.isOpenSlider ? "40px" : "60px",
+                        height: layerState.isOpenSlider ? "40px" : "60px",
                         backgroundColor: bgUrl,
                       }}
-                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                      className={clsx(classes.bgImage)}
                     >
                       &nbsp;
                     </div>
