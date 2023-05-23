@@ -222,7 +222,12 @@ const LayerPanel = () => {
           ) : layerState.bgLayer ? (
             <BgLayer showLayer={layerState.bgLayer} handleClose={handleCloseBgLayer} />
           ) : (
-            <Scrollable autoHide={true}>
+            <Scrollable
+              autoHide={true}
+              onScroll={() => {
+                setShowSingleLayer(false)
+              }}
+            >
               <Block className="py-1">
                 {/* {layerObjects.length === 0 ? (
                 <Box />
