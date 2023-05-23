@@ -21,7 +21,6 @@ const StockImages = () => {
 
   const [search, setSearch] = useState("")
   const searchImages = (e: any) => {
-    console.log("value", search)
     if (search) {
       getStockImages(search).then((res) => {
         setRes(res)
@@ -67,11 +66,11 @@ const StockImages = () => {
           return (
             <ImageItem
               key={index}
-              idx={index}
+              idx={image.mongo_id.$oid}
               selectedImage={selectedImg}
               onClick={() => {
                 setBgImg(image.image_url_list[0])
-                setSelectedImg(index)
+                setSelectedImg(image.mongo_id.$oid)
               }}
               preview={image.image_url_list[0]}
             />
