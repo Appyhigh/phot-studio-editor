@@ -469,7 +469,7 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
-                  {!bgUrl.startsWith("#") ? (
+                  {!bgUrl?.startsWith("#") ? (
                     <img
                       src={bgUrl}
                       alt="nn"

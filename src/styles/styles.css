@@ -649,7 +649,7 @@ ul {
 .single-download {
   max-width: 250px;
   min-height: 260px;
-  top: -30px;
+  top: -80px;
   right: 280px;
   position: absolute;
   z-index: 500;

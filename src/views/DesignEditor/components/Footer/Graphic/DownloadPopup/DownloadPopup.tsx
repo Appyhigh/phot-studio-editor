@@ -1,9 +1,8 @@
-import { useEditor, useFrame, useObjects } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import { useCallback, useState } from "react"
 import SelectInput from "~/components/UI/Common/SelectInput/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
-import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
@@ -18,7 +17,7 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
   const maxQuality = 100
   const minSize = 0.1
   const maxSize = 3
-  const frame = useFrame()
+  const activeObject: any = useActiveObject()
 
   const handleTypeChange = (e: any) => {
     setSelectedType(e)
@@ -34,38 +33,39 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
 
   const exportHandler = useCallback(async () => {
     if (editor && objects) {
-      let template: any = editor.scene.exportToJSON()
+      let image = activeObject.preview
 
-      // Exclude the Background & Checkbox Layer
-      const checkboxBGLayerIndex = template.layers.findIndex((el: any) => el?.metadata?.type === backgroundLayerType)
-      const canvasBGLayerIndex = template.layers.findIndex((el: any) => el?.id === "background")
-
-      if (checkboxBGLayerIndex !== -1) {
-        template.layers.splice(checkboxBGLayerIndex, 1)
-        template.layers.splice(canvasBGLayerIndex, 1)
-      }
-
-      // Exclude the hidden layers from exports
-      const hiddenLayersIDs: string[] = []
-
-      objects.forEach((el: any) => {
-        if (el?.visible === false) {
-          hiddenLayersIDs.push(el.id)
+      if ((!image || image.length === 0) && activeObject?._objects?.length > 0) {
+        let template: any = editor.scene.exportToJSON()
+        const ids = activeObject?._objects.map((el: any) => {
+          return el?.metadata?.generationDate
+        })
+        template = {
+          ...template,
+          layers: template.layers.filter((layer: any) => {
+            const targetIds = layer?.objects?.map((el: any) => {
+              return el?.metadata?.generationDate
+            })
+            return JSON.stringify(ids) === JSON.stringify(targetIds)
+          }),
         }
-      })
 
-      template = { ...template, layers: template.layers.filter((layer: any) => !hiddenLayersIDs.includes(layer.id)) }
-
-      const image = (await editor.renderer.render(template)) as string
-      const nWidth = frame.width * sizeVal
-      const nHeight = frame.height * sizeVal
+        image = (await editor.renderer.render(template)) as string
+      }
+      const nWidth = activeObject.width * activeObject?.scaleX * sizeVal
+      const nHeight = activeObject.height * activeObject?.scaleY * sizeVal
       if (selectedType != "svg") {
         makeDownloadToPNG(image, selectedType, nHeight, nWidth)
       } else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
     }
-  }, [editor, selectedType, frame, objects, sizeVal])
+  }, [editor, selectedType, activeObject, objects, sizeVal])
 
-  const makeDownloadToSVG = useCallback(makeDownloadToSVGHandler, [frame])
+  const makeDownloadToSVG = useCallback(makeDownloadToSVGHandler, [
+    activeObject?.width,
+    activeObject?.height,
+    activeObject?.scaleY,
+    activeObject?.scaleX,
+  ])
 
   return (
     <Block className={clsx(typeOfDownload === "single-layer" ? "single-download" : "download-wrapper")}>
@@ -94,7 +94,15 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
               handleChange={handleSizeChange}
             />
             <div className={classes.subHeading}>
-              <span> {`${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}px</span>
+              <span>
+                {" "}
+                {`${(activeObject?.width * activeObject?.scaleX * sizeVal).toFixed(0)} * ${(
+                  activeObject?.height *
+                  activeObject?.scaleY *
+                  sizeVal
+                ).toFixed(0)}`}
+                px
+              </span>
             </div>
           </Block>
           {(selectedType === "jpg" || selectedType === "jpeg") && (
@@ -110,7 +118,7 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
               />
               <div className={clsx("mb-1", classes.subHeading)}>
                 {" "}
-                <span>File Size : Medium</span>
+                <span>File Size : {qualityVal >= 80 ? "High" : qualityVal >= 30 ? "Medium" : "Low"}</span>
               </div>
             </Block>
           )}
@@ -122,6 +130,7 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
                   classes.hdBtn,
                   typeOfDownload === "single-layer" && classes.singleLayerDownloadBtn
                 )}
+                onClick={exportHandler}
               >
                 Download HD
               </button>
