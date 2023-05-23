@@ -1,10 +1,54 @@
 function Images({ size }: { size: number }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" height={size} viewBox="0 0 24 24">
-      <path
-        fill="currentColor"
-        d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5c0-1.1.9-2 2-2zm0 1.5a.5.5 0 0 0-.5.5v14c0 .28.22.5.5.5h14a.5.5 0 0 0 .5-.5V5a.5.5 0 0 0-.5-.5H5zm5.75 10.1l3.05-4.15a2 2 0 0 1 3.22-.01L21 15.78V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-.09l3.82-5.25a2 2 0 0 1 3.22 0l.7.95zm3.6 4.9H19a.5.5 0 0 0 .5-.5v-2.72l-3.69-4.94a.5.5 0 0 0-.8 0l-3.33 4.53 2.68 3.63zm-5.51-4.96a.5.5 0 0 0-.81 0l-3.44 4.74a.5.5 0 0 0 .41.22h7.5l-3.66-4.96zM8.5 10a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
-      ></path>
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0_4700_114761)">
+        <path
+          d="M14.8889 2H3.61111C2.72132 2 2 2.72132 2 3.61111V14.8889C2 15.7787 2.72132 16.5 3.61111 16.5H14.8889C15.7787 16.5 16.5 15.7787 16.5 14.8889V3.61111C16.5 2.72132 15.7787 2 14.8889 2Z"
+          fill="white"
+        />
+        <path
+          d="M5.75 7.75C6.85457 7.75 7.75 6.85457 7.75 5.75C7.75 4.64543 6.85457 3.75 5.75 3.75C4.64543 3.75 3.75 4.64543 3.75 5.75C3.75 6.85457 4.64543 7.75 5.75 7.75Z"
+          fill="black"
+        />
+        <path
+          d="M5.75 7.75C6.85457 7.75 7.75 6.85457 7.75 5.75C7.75 4.64543 6.85457 3.75 5.75 3.75C4.64543 3.75 3.75 4.64543 3.75 5.75C3.75 6.85457 4.64543 7.75 5.75 7.75Z"
+          fill="url(#paint0_linear_4700_114761)"
+        />
+        <path
+          d="M16.25 13.75L11.75 9.25L3.5 18.5"
+          stroke="url(#paint1_linear_4700_114761)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <linearGradient
+          id="paint0_linear_4700_114761"
+          x1="4.05556"
+          y1="5.32143"
+          x2="7.75743"
+          y2="5.04054"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stop-color="#3E5387" />
+          <stop offset="1" stop-color="#542670" />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_4700_114761"
+          x1="4.41667"
+          y1="12.8839"
+          x2="15.479"
+          y2="11.795"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stop-color="#3E5387" />
+          <stop offset="1" stop-color="#542670" />
+        </linearGradient>
+        <clipPath id="clip0_4700_114761">
+          <rect width="18" height="18" fill="white" />
+        </clipPath>
+      </defs>
     </svg>
   )
 }

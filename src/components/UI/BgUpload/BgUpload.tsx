@@ -55,12 +55,13 @@ const BgUpload = () => {
         </div>
       </div>
       {bgChoice === 0 ? (
-        <DropZone handleDropFiles={handleDropFiles}>
+        <DropZone  handleDropFiles={handleDropFiles}>
           <div className={classes.uploadInput}>
             <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
             <input
               onChange={handleFileInput}
               type="file"
+              accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
               id="inputBgFile"
               ref={inputFileRef}
               className={classes.inputFile}

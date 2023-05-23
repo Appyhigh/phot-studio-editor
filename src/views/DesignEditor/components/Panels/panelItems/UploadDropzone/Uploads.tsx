@@ -145,6 +145,7 @@ export default function ({ uploadType, activePanel }: any) {
             <input
               onChange={handleFileInput}
               type="file"
+              accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
               id="inputFile"
               ref={inputFileRef}
               className={classes.uploadInput}

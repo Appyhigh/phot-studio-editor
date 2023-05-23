@@ -11,7 +11,7 @@ export const BASE_ITEMS = [
   {
     id: "images",
     name: "Images",
-    label: "Images",
+    label: "Image",
     icon: "",
   },
   // {
