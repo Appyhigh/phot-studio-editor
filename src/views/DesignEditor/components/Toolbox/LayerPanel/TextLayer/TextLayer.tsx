@@ -179,7 +179,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
               <div className={classes.deleteTextIcon}>
                 <DeleteIcon size={24} />
               </div>
-              <p>Erase</p>
+              <p>Delete</p>
             </div>
           </div>
         </div>

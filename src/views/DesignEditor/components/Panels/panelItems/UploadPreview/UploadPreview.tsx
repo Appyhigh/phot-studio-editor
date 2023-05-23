@@ -3,7 +3,7 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
@@ -14,6 +14,7 @@ const UploadPreview = ({ discardHandler, uploadType, upload }: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
+
   const removeBackgroundHandler = async () => {
     try {
       // Start the loader
@@ -55,12 +56,8 @@ const UploadPreview = ({ discardHandler, uploadType, upload }: any) => {
         <Icons.InputContainer />
       </Block>
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
-        {uploadType === LOCAL_SAMPLE_IMG ? (
-          <img
-            className={classes.uploadedImg}
-            src={upload.preview ? upload.preview : upload.src}
-            alt="preview"
-          />
+        {uploadType === LOCAL_SAMPLE_IMG && upload ? (
+          <img className={classes.uploadedImg} src={upload.preview ? upload.preview : upload.src} alt="preview" />
         ) : (
           <img
             className={classes.uploadedImg}
@@ -93,7 +90,6 @@ const UploadPreview = ({ discardHandler, uploadType, upload }: any) => {
           disabled={panelInfo.bgRemoverBtnActive ? false : true}
           onClick={() => {
             removeBackgroundHandler()
-
           }}
           className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
         >

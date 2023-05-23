@@ -13,7 +13,7 @@ import clsx from "clsx"
 import MainImageContext from "~/contexts/MainImageContext"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 
-export default function ({ uploadType }: any) {
+export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
@@ -99,38 +99,38 @@ export default function ({ uploadType }: any) {
             )}
           </Block>
           <Block>
-            {uploadType === LOCAL_SAMPLE_IMG && uploads.length != 0 ? (
-              <div
-                className="d-flex justify-content-start flex-row align-items-center pointer"
-                onClick={() => {
-                  //when right icon with Image is clicked set upload to intital state
-                  setUploads([])
-                }}
-              >
-                <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
-              </div>
-            ) : (
-              mainImgInfo.id && (
-                <div
-                  className="d-flex justify-content-start flex-row align-items-center pointer"
-                  onClick={() => {
-                    //when right icon with Image is clicked set upload to intital state
-                    setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-                    setUploads([])
-                    // @ts-ignore
-                    setPanelInfo((prev) => ({
-                      ...prev,
-                      trySampleImg: true,
-                      bgOptions: false,
-                      uploadSection: true,
-                      bgRemoveBtnActive: false,
-                    }))
-                  }}
-                >
-                  <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
-                </div>
-              )
-            )}
+            {activePanel === "Images"
+              ? uploadType === LOCAL_SAMPLE_IMG &&
+                uploads.length != 0 && (
+                  <div
+                    className="d-flex justify-content-start flex-row align-items-center pointer"
+                    onClick={() => {
+                      //when right icon with Image is clicked set upload to intital state
+                      setUploads([])
+                    }}
+                  >
+                    <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
+                  </div>
+                )
+              : mainImgInfo.id && (
+                  <div
+                    className="d-flex justify-content-start flex-row align-items-center pointer"
+                    onClick={() => {
+                      //when right icon with Image is clicked set upload to intital state
+                      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+                      // @ts-ignore
+                      setPanelInfo((prev) => ({
+                        ...prev,
+                        trySampleImg: true,
+                        bgOptions: false,
+                        uploadSection: true,
+                        bgRemoveBtnActive: false,
+                      }))
+                    }}
+                  >
+                    <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
+                  </div>
+                )}
           </Block>
         </Block>
         {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0 ? (
@@ -150,8 +150,10 @@ export default function ({ uploadType }: any) {
               className={classes.uploadInput}
             />
             <Block className={classes.uploadPreviewSection}>
-              {uploadType === LOCAL_SAMPLE_IMG && uploads.length != 0
-                ? uploads.map((upload) => (
+              {activePanel === "Images"
+                ? uploadType === LOCAL_SAMPLE_IMG &&
+                  uploads.length != 0 &&
+                  uploads.map((upload) => (
                     <div
                       key={upload.id}
                       className="d-flex align-items-center pointer"

@@ -189,7 +189,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               onClick={() => eraseHandler()}
             >
               <Icons.TrashIcon size={"20"} />
-              <p>Erase</p>
+              <p>Delete</p>
             </div>{" "}
           </div>
           <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
