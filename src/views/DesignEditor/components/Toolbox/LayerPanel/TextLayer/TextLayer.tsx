@@ -160,7 +160,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
           <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} type="text" />
 
-          <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>
+          {/* <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>
           {TextLayerOption.map((each, idx) => (
             <DropdownWrapper
               key={idx}
@@ -170,7 +170,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
               heading={each.name}
               handleActiveState={handleActiveState}
             />
-          ))}
+          ))} */}
           <div
             onClick={() => editor.objects.remove()}
             className={clsx("pointer flex-column-center center mt-3", classes.eraseTextBox)}

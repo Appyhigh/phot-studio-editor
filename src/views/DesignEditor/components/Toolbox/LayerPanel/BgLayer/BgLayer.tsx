@@ -125,7 +125,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
               <p>Erase</p>
             </div>{" "}
           </div>
-          <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
+          {/* <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
           {BgLayerOption.map((each, idx) => (
             <DropdownWrapper
               key={idx}
@@ -135,7 +135,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
               heading={each.name}
               handleActiveState={handleActiveState}
             />
-          ))}
+          ))} */}
         </div>
         <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background" />
 
