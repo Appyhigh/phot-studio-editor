@@ -23,24 +23,21 @@ const StockImages = () => {
   const searchImages = (e: any) => {
     console.log("value", search)
     if (search) {
-      const filteredImages = res.filter((image) => {
-        return image.prompt.includes(search)
+      getStockImages(search).then((res) => {
+        setRes(res)
       })
-      setRes(filteredImages)
     } else if (search === "") {
       getStockImages().then((res) => {
         setRes(res)
       })
-    } else {
-      setRes(res)
     }
   }
 
   const setBgImg = useCallback(
-    async function (dataUrl: string) {
+    async function (url: string) {
       const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        dataUrl
+        url
       )
       const options = {
         type: "StaticImage",
