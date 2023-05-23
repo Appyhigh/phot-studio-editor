@@ -56,7 +56,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
             }}
           >
             <Block className={classes.heading}>Image</Block>
-            <Block className={classes.subHeading}>Lorem ipsum dolor sit amet consecte. Pulvinar vitae sit</Block>
+            <Block className={classes.subHeading}>Upload an image in JPG, PNG, or BMP format</Block>
           </div>
           <div className={classes.horizontalLine}></div>
           <Block
@@ -67,7 +67,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
             }}
           >
             <Block className={classes.heading}>Text</Block>
-            <Block className={classes.subHeading}>Lorem ipsum dolor sit amet consecte. Pulvinar vitae sit</Block>
+            <Block className={classes.subHeading}>Add text to the canvas</Block>
           </Block>
         </Block>
       </Block>
