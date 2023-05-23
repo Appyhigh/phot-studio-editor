@@ -6,30 +6,30 @@ import { backgroundLayerType } from "~/constants/contants"
 import { useEffect, useState, useCallback } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
+import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 
 const StockImages = () => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [selectedImg, setSelectedImg] = useState(-1)
   const [res, setRes] = useState<any[]>([])
+  const [loader, setLoader] = useState(false)
 
   useEffect(() => {
+    setLoader(true)
     getStockImages().then((res) => {
+      setLoader(false)
       setRes(res)
     })
   }, [])
 
   const [search, setSearch] = useState("")
-  const searchImages = (e: any) => {
-    if (search) {
-      getStockImages(search).then((res) => {
-        setRes(res)
-      })
-    } else if (search === "") {
-      getStockImages().then((res) => {
-        setRes(res)
-      })
-    }
+  const searchImages = () => {
+    setLoader(true)
+    getStockImages(search).then((res) => {
+      setLoader(false)
+      setRes(res)
+    })
   }
 
   const setBgImg = useCallback(
@@ -61,22 +61,26 @@ const StockImages = () => {
         </button>
       </div>
 
-      <div className={classes.sampleImgSection}>
-        {res.map((image, index) => {
-          return (
-            <ImageItem
-              key={index}
-              idx={image.mongo_id.$oid}
-              selectedImage={selectedImg}
-              onClick={() => {
-                setBgImg(image.image_url_list[0])
-                setSelectedImg(image.mongo_id.$oid)
-              }}
-              preview={image.image_url_list[0]}
-            />
-          )
-        })}
-      </div>
+      {loader ? (
+        <img className={classes.stockImagesLoader} src={LoaderSpinner} />
+      ) : (
+        <div className={classes.sampleImgSection}>
+          {res.map((image, index) => {
+            return (
+              <ImageItem
+                key={index}
+                idx={image.mongo_id.$oid}
+                selectedImage={selectedImg}
+                onClick={() => {
+                  setBgImg(image.image_url_list[0])
+                  setSelectedImg(image.mongo_id.$oid)
+                }}
+                preview={image.image_url_list[0]}
+              />
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
