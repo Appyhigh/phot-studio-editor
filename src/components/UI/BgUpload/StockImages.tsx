@@ -1,14 +1,15 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { images } from "~/constants/mock-data"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { backgroundLayerType } from "~/constants/contants"
-import React, { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { getStockImages } from "~/services/stockApi"
+import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 
 const StockImages = () => {
   const editor = useEditor()
+  const activeObject: any = useActiveObject()
   const [selectedImg, setSelectedImg] = useState(-1)
   const [res, setRes] = useState<any[]>([])
 
@@ -23,7 +24,7 @@ const StockImages = () => {
     console.log("value", search)
     if (search) {
       const filteredImages = res.filter((image) => {
-        return image.tags.includes(search)
+        return image.prompt.includes(search)
       })
       setRes(filteredImages)
     } else if (search === "") {
@@ -35,28 +36,22 @@ const StockImages = () => {
     }
   }
 
-  const setBgImg = React.useCallback(
-    (url: string) => {
-      const bgObject = editor.frame.background.canvas._objects.filter(
-        (el: any) => el.metadata?.type === backgroundLayerType
-      )[0]
-
-      if (bgObject) {
-        editor.objects.remove(bgObject.id)
-        editor.objects.unsetBackgroundImage()
+  const setBgImg = useCallback(
+    async function (dataUrl: string) {
+      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
+        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+        dataUrl
+      )
+      const options = {
+        type: "StaticImage",
+        src: previewWithUpdatedBackground,
+        preview: previewWithUpdatedBackground,
+        metadata: {
+          generationDate: new Date().getTime(),
+          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+        },
       }
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          src: url,
-          preview: url,
-          metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
-        }
-        editor.objects.add(options).then(() => {
-          editor.frame.setBackgroundColor("#ffffff")
-          editor.objects.setAsBackgroundImage()
-        })
-      }
+      editor.objects.add(options)
     },
     [editor]
   )
@@ -78,10 +73,10 @@ const StockImages = () => {
               idx={index}
               selectedImage={selectedImg}
               onClick={() => {
-                setBgImg(image.largeImageURL)
+                setBgImg(image.image_url_list[0])
                 setSelectedImg(index)
               }}
-              preview={image.previewURL}
+              preview={image.image_url_list[0]}
             />
           )
         })}
