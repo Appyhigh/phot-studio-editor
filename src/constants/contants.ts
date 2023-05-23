@@ -20,3 +20,4 @@ export const defaultTextOptions: TextOptions = {
 export const checkboxBGUrl = "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473"
 export const backgroundLayerType = "CHECKBOX_BACKGROUND"
 export const deviceUploadType="DEVICE_UPLOAD"
+export const LOCAL_SAMPLE_IMG="local_sample_img"
