@@ -15,7 +15,7 @@
   top: -40px;
   padding: 16px 16px 0px;
 }
-.groupDownload{
+.groupDownload {
   top: -120px;
 }
 .subHeading {
@@ -30,6 +30,7 @@
   color: #92929d;
 }
 .downloadBtn {
+  width: 100%;
   font-size: 12px;
   cursor: pointer;
   border-radius: 10px;
@@ -40,7 +41,6 @@
   border-color: #6729f3;
   color: #6729f3;
   border: 1px solid #6729f3;
-  margin-left: 24px;
 }
 
 .hdBtn {

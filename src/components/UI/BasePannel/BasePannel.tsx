@@ -91,9 +91,9 @@ const BasePannel = () => {
       <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
         <CanvasEditingPannel />
         <StatefulTooltip placement={PLACEMENT.bottom} showArrow={true} accessibilityType={"tooltip"} content="Share">
-          <Block className={clsx(classes.canvasOptions, "pointer")}>
+          {/* <Block className={clsx(classes.canvasOptions, "pointer")}>
             <Icons.Share size={16} />
-          </Block>
+          </Block> */}
         </StatefulTooltip>
         <Block className={"p-relative downloadResultBtn"}>
           <button className={classes.basePannelBtn}>Download</button>
