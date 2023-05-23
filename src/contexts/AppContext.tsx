@@ -19,6 +19,8 @@ interface IAppContext {
   setCurrentTemplate: any
   res: any[]
   setRes: (res: any[]) => void
+  search: string
+  setSearch: (search: string) => void
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -38,6 +40,8 @@ export const AppContext = createContext<IAppContext>({
   setCurrentTemplate: {},
   res: [],
   setRes: () => {},
+  search: "",
+  setSearch: () => {},
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -49,6 +53,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [res, setRes] = useState<any[]>([])
+  const [search, setSearch] = useState<string>("")
 
   const context = {
     isMobile,
@@ -67,6 +72,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentTemplate,
     res,
     setRes,
+    search,
+    setSearch,
   }
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>
 }

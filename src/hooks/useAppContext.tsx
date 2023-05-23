@@ -19,6 +19,8 @@ const useAppContext = () => {
     setCurrentTemplate,
     res,
     setRes,
+    search,
+    setSearch,
   } = useContext(AppContext)
   return {
     isMobile,
@@ -37,6 +39,8 @@ const useAppContext = () => {
     setCurrentTemplate,
     res,
     setRes,
+    search,
+    setSearch,
   }
 }
 
