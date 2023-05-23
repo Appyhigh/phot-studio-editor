@@ -15,6 +15,7 @@ import Eye from "~/components/Icons/Eye"
 import Ungroup from "~/components/Icons/Ungroup"
 import DownloadIcon from "~/components/Icons/DownloadIcon"
 import DownloadPopup from "../Footer/Graphic/DownloadPopup/DownloadPopup"
+import Elements from "~/components/Icons/Elements"
 
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
@@ -191,23 +192,7 @@ const ContextMenu = () => {
             <Unlocked size={22} />
           </ContextMenuItem>
         )}
-        {/* {activeObject?.type === "StaticImage" && (
-          <ContextMenuItem
-            onClick={() => {
-              // handleAsComponentHandler()
-              editor.objects.unsetBackgroundImage()
-              setTimeout(() => {
-                editor.objects.setAsBackgroundImage()
-                editor.objects.remove()
-              }, 50)
-              editor.cancelContextMenuRequest()
-            }}
-            icon="Images"
-            label="Set as background image"
-          >
-            <Elements size={24} />
-          </ContextMenuItem>
-        )} */}
+
         {activeObject?.visible === true ? (
           <ContextMenuItem
             onClick={() => {
@@ -243,6 +228,24 @@ const ContextMenu = () => {
             <Ungroup />
           </ContextMenuItem>
         )}
+        {activeObject?.type === "StaticImage" && (
+          <ContextMenuItem
+            onClick={() => {
+              // handleAsComponentHandler()
+              editor.objects.unsetBackgroundImage()
+              setTimeout(() => {
+                editor.objects.setAsBackgroundImage()
+                editor.objects.remove()
+              }, 50)
+              editor.cancelContextMenuRequest()
+            }}
+            icon="Images"
+            label="Set as background image"
+          >
+            <Elements size={24} />
+          </ContextMenuItem>
+        )}
+
         <div className="p-relative">
           <ContextMenuItem
             onClick={() => {
