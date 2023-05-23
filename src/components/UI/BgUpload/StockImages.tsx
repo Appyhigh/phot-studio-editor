@@ -7,20 +7,25 @@ import { useEffect, useState, useCallback } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import useAppContext from "~/hooks/useAppContext"
 
 const StockImages = () => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [selectedImg, setSelectedImg] = useState(-1)
-  const [res, setRes] = useState<any[]>([])
+  const { res, setRes } = useAppContext()
   const [loader, setLoader] = useState(false)
 
   useEffect(() => {
-    setLoader(true)
-    getStockImages().then((res) => {
-      setLoader(false)
-      setRes(res)
-    })
+    if (res.length == 0) {
+      setLoader(true)
+      console.log("RES BEFORE", res)
+      getStockImages().then((res) => {
+        setLoader(false)
+        setRes(res)
+        console.log("RES AFTER", res)
+      })
+    }
   }, [])
 
   const [search, setSearch] = useState("")

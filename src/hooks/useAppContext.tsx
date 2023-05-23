@@ -17,6 +17,8 @@ const useAppContext = () => {
     setUploads,
     currentTemplate,
     setCurrentTemplate,
+    res,
+    setRes,
   } = useContext(AppContext)
   return {
     isMobile,
@@ -33,6 +35,8 @@ const useAppContext = () => {
     setUploads,
     currentTemplate,
     setCurrentTemplate,
+    res,
+    setRes,
   }
 }
 

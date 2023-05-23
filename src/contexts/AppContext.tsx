@@ -17,6 +17,8 @@ interface IAppContext {
   setActiveSubMenu: (option: string) => void
   currentTemplate: any
   setCurrentTemplate: any
+  res: any[]
+  setRes: (res: any[]) => void
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -34,6 +36,8 @@ export const AppContext = createContext<IAppContext>({
   setActiveSubMenu: (value: string) => {},
   currentTemplate: {},
   setCurrentTemplate: {},
+  res: [],
+  setRes: () => {},
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -44,6 +48,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [activePanel, setActivePanel] = useState<PanelType>(PanelType.BACKGROUND_REMOVER)
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
   const [currentTemplate, setCurrentTemplate] = useState(null)
+  const [res, setRes] = useState<any[]>([])
 
   const context = {
     isMobile,
@@ -60,6 +65,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setUploads,
     currentTemplate,
     setCurrentTemplate,
+    res,
+    setRes,
   }
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>
 }
