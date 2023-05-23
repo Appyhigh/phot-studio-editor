@@ -92,10 +92,79 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     return () => clearTimeout(timer)
   }, [user, loading, initializeGSI])
 
+  const openDatabase = () => {
+    return new Promise((resolve, reject) => {
+      const request = window.indexedDB.open("Phot-Studio", 1)
+
+      request.onerror = (event: any) => {
+        console.error("IndexedDB error:", event.target.error)
+        reject()
+      }
+
+      request.onsuccess = (event: any) => {
+        const db = event.target.result
+        resolve(db)
+      }
+
+      request.onupgradeneeded = (event: any) => {
+        const db = event.target.result
+
+        if (!db.objectStoreNames.contains("Phot-Studio-Canvas-Store")) {
+          db.createObjectStore("Phot-Studio-Canvas-Store")
+        }
+      }
+    })
+  }
+
+  const saveData = async (data: any) => {
+    try {
+      const db: any = await openDatabase()
+
+      const transaction = db.transaction("Phot-Studio-Canvas-Store", "readwrite")
+      const objectStore = transaction.objectStore("Phot-Studio-Canvas-Store")
+
+      const putRequest = objectStore.put(data, "dataKey")
+
+      putRequest.onerror = (event: any) => {
+        console.error("IndexedDB put error:", event.target.error)
+      }
+
+      putRequest.onsuccess = () => {
+        // console.log("Data stored successfully in IndexedDB")
+      }
+    } catch (error) {
+      console.error("Failed to save data to IndexedDB:", error)
+    }
+  }
+
+  const fetchDataFromLocal = async () => {
+    try {
+      const db: any = await openDatabase()
+
+      const transaction = db.transaction("Phot-Studio-Canvas-Store", "readonly")
+      const objectStore = transaction.objectStore("Phot-Studio-Canvas-Store")
+
+      const getRequest = objectStore.get("dataKey")
+
+      getRequest.onerror = (event: any) => {
+        console.error("IndexedDB get error:", event.target.error)
+      }
+
+      getRequest.onsuccess = (event: any) => {
+        const data = event.target.result
+        const layers = data
+        addObjects(layers)
+      }
+    } catch (error) {
+      console.error("Failed to fetch data from IndexedDB:", error)
+    }
+  }
+
   const addObjects = async (layers: any) => {
     if (layers) {
       layers.map((layer: ILayer) => {
         editor.objects.add(layer).then(() => {
+          console.log("added")
           editor.objects.update({ top: layer.top, left: layer.left })
         })
       })
@@ -104,9 +173,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (editor) {
-      const savedTemplate = localStorage.getItem("studio-template") as string
-      const layers = JSON.parse(savedTemplate)
-      addObjects(layers)
+      fetchDataFromLocal()
     }
   }, [editor])
 
@@ -115,13 +182,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       editor.on("history:changed", () => {
         const currentScene = editor.scene.exportToJSON()
 
-        localStorage.setItem(
-          "studio-template",
-          JSON.stringify(
-            currentScene.layers.filter(
-              (el) =>
-                el.metadata?.type !== backgroundLayerType && el.type !== "BackgroundImage" && el.type !== "Background"
-            )
+        saveData(
+          currentScene.layers.filter(
+            (el) =>
+              el.metadata?.type !== backgroundLayerType && el.type !== "BackgroundImage" && el.type !== "Background"
           )
         )
       })
