@@ -3,36 +3,41 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { backgroundLayerType } from "~/constants/contants"
-import { useEffect, useState, useCallback } from "react"
+import { useState, useCallback, useRef } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
+import usePagination from "~/hooks/usePagination"
 
 const StockImages = () => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [selectedImg, setSelectedImg] = useState(-1)
-  const { res, setRes } = useAppContext()
-  const [loader, setLoader] = useState(false)
+  const { setRes } = useAppContext()
+  const { search, setSearch } = useAppContext()
+  const [page, setPage] = useState(1)
+  const { res, more, loading } = usePagination(search, page)
 
-  useEffect(() => {
-    if (res.length == 0) {
-      setLoader(true)
-      console.log("RES BEFORE", res)
-      getStockImages().then((res) => {
-        setLoader(false)
-        setRes(res)
-        console.log("RES AFTER", res)
+  const observer = useRef<any>()
+
+  const lastElementRef = useCallback(
+    (element?: any) => {
+      if (observer.current) observer.current.disconnect()
+
+      if (!more) return
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && more) setPage((prev) => prev + 1)
       })
-    }
-  }, [])
 
-  const [search, setSearch] = useState("")
+      if (element) observer.current.observe(element)
+    },
+    [more]
+  )
+
   const searchImages = () => {
-    setLoader(true)
     getStockImages(search).then((res) => {
-      setLoader(false)
       setRes(res)
     })
   }
@@ -60,18 +65,15 @@ const StockImages = () => {
   return (
     <div className={classes.stockImgSection}>
       <div className={classes.inputWrapper}>
-        <input className={classes.textInput} onChange={(e) => setSearch(e.target.value)} />
+        <input className={classes.textInput} onChange={(e) => setSearch(e.target.value)} defaultValue={search} />
         <button className={clsx(classes.iconWrapper, "flex-center")} onClick={searchImages}>
           <Icons.SearchIcon />
         </button>
       </div>
-
-      {loader ? (
-        <img className={classes.stockImagesLoader} src={LoaderSpinner} />
-      ) : (
-        <div className={classes.sampleImgSection}>
-          {res.map((image, index) => {
-            return (
+      <div className={classes.sampleImgSection}>
+        {res.map((image: any, index: any) => {
+          return (
+            <div ref={index === res.length - 1 ? lastElementRef : undefined}>
               <ImageItem
                 key={index}
                 idx={image.mongo_id.$oid}
@@ -82,10 +84,11 @@ const StockImages = () => {
                 }}
                 preview={image.image_url_list[0]}
               />
-            )
-          })}
-        </div>
-      )}
+            </div>
+          )
+        })}
+      </div>
+      {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
     </div>
   )
 }
