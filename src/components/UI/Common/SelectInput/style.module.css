@@ -4,11 +4,12 @@
   width: 428px;
   border-radius: 4px;
 }
-.singleLayerSelect{
+.singleLayerSelect {
   width: 210px;
 }
 
 .selectedType {
+  text-transform: capitalize;
   font-weight: 400;
   font-size: 16px;
   line-height: 19px;
@@ -22,6 +23,6 @@
   padding: 8px 20px 8px 12px;
 }
 
-.eachOption:hover{
-    background-color: #f1f1f5;
+.eachOption:hover {
+  background-color: #f1f1f5;
 }

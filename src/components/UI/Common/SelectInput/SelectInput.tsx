@@ -31,42 +31,42 @@ const SelectInput = ({ handleChange, selectedType, typeOfDownload }: any) => {
           <div
             className={clsx(classes.eachOption, "d-flex flex-row")}
             onClick={() => {
-              handleChange("Jpg")
+              handleChange("jpg")
               setShowMenu(false)
             }}
           >
             Jpg
-            <div className="ml-auto">{selectedType === "Jpg" && <SelectedFormat />}</div>
+            <div className="ml-auto">{selectedType === "jpg" && <SelectedFormat />}</div>
           </div>
           <div
             onClick={() => {
-              handleChange("Png")
+              handleChange("png")
               setShowMenu(false)
             }}
             className={clsx(classes.eachOption, "d-flex flex-row")}
           >
             Png
-            <div className="ml-auto">{selectedType === "Png" && <SelectedFormat />}</div>
+            <div className="ml-auto">{selectedType === "png" && <SelectedFormat />}</div>
           </div>
           <div
             onClick={() => {
-              handleChange("Jpeg")
+              handleChange("jpeg")
               setShowMenu(false)
             }}
             className={clsx(classes.eachOption, "d-flex flex-row")}
           >
             Jpeg
-            <div className="ml-auto">{selectedType === "Jpeg" && <SelectedFormat />}</div>
+            <div className="ml-auto">{selectedType === "jpeg" && <SelectedFormat />}</div>
           </div>
           <div
             onClick={() => {
-              handleChange("Svg")
+              handleChange("svg")
               setShowMenu(false)
             }}
             className={clsx(classes.eachOption, "d-flex flex-row")}
           >
             Svg
-            <div className="ml-auto">{selectedType === "Svg" && <SelectedFormat />}</div>
+            <div className="ml-auto">{selectedType === "svg" && <SelectedFormat />}</div>
           </div>
           {/* <div
             onClick={() => {
