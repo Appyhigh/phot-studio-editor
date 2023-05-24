@@ -9,8 +9,10 @@ import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
 import usePagination from "~/hooks/usePagination"
+import { toDataURL } from "~/utils/export"
+import { nanoid } from "nanoid"
 
-const StockImages = () => {
+const StockImages = (props: any) => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [selectedImg, setSelectedImg] = useState(-1)
@@ -41,6 +43,24 @@ const StockImages = () => {
       setRes(res)
     })
   }
+
+  const addObject = useCallback(
+    (url: string) => {
+      toDataURL(url, async function (dataUrl: string) {
+        if (editor) {
+          const options = {
+            type: "StaticImage",
+            id: nanoid(),
+            src: dataUrl,
+            preview: dataUrl,
+            metadata: { generationDate: new Date().getTime() },
+          }
+          editor.objects.add(options)
+        }
+      })
+    },
+    [editor]
+  )
 
   const setBgImg = useCallback(
     async function (url: string) {
@@ -79,8 +99,11 @@ const StockImages = () => {
                 idx={image.mongo_id.$oid}
                 selectedImage={selectedImg}
                 onClick={() => {
-                  setBgImg(image.image_url_list[0])
-                  setSelectedImg(image.mongo_id.$oid)
+                  {
+                    props.imageAs == "foreground"
+                      ? addObject(image.image_url_list[0])
+                      : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
+                  }
                 }}
                 preview={image.image_url_list[0]}
               />

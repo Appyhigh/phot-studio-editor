@@ -83,7 +83,7 @@ const Images = () => {
           </Scrollable>
         ) : (
           <Scrollable>
-            <StockImages />
+            <StockImages imageAs="foreground" />
           </Scrollable>
         )}
       </>
