@@ -49,7 +49,7 @@ const ContextMenu = () => {
     return <></>
   }
 
-  if (contextMenuRequest.target.type === "Background") {
+  if (contextMenuRequest?.target?.type === "Background") {
     return (
       <div // @ts-ignore
         onContextMenu={(e: Event) => e.preventDefault()}
@@ -231,7 +231,7 @@ const ContextMenu = () => {
             <EyeCrossed size={24} />
           </ContextMenuItem>
         )}
-        {activeObject.type === "group" && (
+        {activeObject?.type === "group" && (
           <ContextMenuItem
             onClick={() => {
               editor.objects.ungroup()

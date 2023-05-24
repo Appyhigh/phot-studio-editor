@@ -5,7 +5,7 @@ import { PLACEMENT } from "baseui/toast"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/DownloadPopup/DownloadPopup"
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel/CanvasEditingPannel"
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useObjects } from "@layerhub-io/react"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
 import { useState } from "react"
 import classes from "./style.module.css"
@@ -15,20 +15,33 @@ import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 const BasePannel = () => {
   const editor = useEditor()
   const [showAddPopup, setShowAddPopup] = useState(false)
+  const objects = useObjects()
 
   const resetHandler = () => {
-    editor.objects.clear()
+    // editor.objects.clear()
+
+    //  @ts-ignore
+    objects.map((x) => {
+      if (x.type !== "BackgroundImage" || x?.metadata?.type != backgroundLayerType) editor.objects.removeById(x.id)
+    })
+
     editor.history.reset()
     editor.history.save()
-    const options = {
-      type: "StaticImage",
-      src: checkboxBGUrl,
-      preview: checkboxBGUrl,
-      metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+    const bgImageIndex = editor?.frame?.background?.canvas?._objects.findIndex(
+      (el: any) => el.type === "BackgroundImage" || el?.metadata?.type === backgroundLayerType
+    )
+    if (bgImageIndex == -1) {
+      const options = {
+        type: "BackgroundImage",
+        src: checkboxBGUrl,
+        preview: checkboxBGUrl,
+        metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      }
+      editor.frame.setBackgroundColor("#ffff")
+      editor.objects.add(options).then(() => {
+        editor.objects.setAsBackgroundImage()
+      })
     }
-    editor.objects.add(options).then(() => {
-      editor.objects.setAsBackgroundImage()
-    })
   }
 
   const handleCloseAddPopup = () => {

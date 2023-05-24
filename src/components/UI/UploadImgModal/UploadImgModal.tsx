@@ -140,6 +140,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
             <input
               onChange={handleFileInput}
               type="file"
+              accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
               id={fileInputType === "update" ? "inputReplace" : "inputNextFile"}
               ref={fileInputType === "update" ? inputReplaceFile : inputNextFile}
               className={classes.inputFile}

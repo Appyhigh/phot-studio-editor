@@ -3,16 +3,18 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 
-const UploadPreview = ({ discardHandler }: any) => {
+const UploadPreview = ({ discardHandler, uploadType, upload }: any) => {
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
+
   const removeBackgroundHandler = async () => {
     try {
       // Start the loader
@@ -54,11 +56,15 @@ const UploadPreview = ({ discardHandler }: any) => {
         <Icons.InputContainer />
       </Block>
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
-        <img
-          className={classes.uploadedImg}
-          src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
-          alt="preview"
-        />
+        {uploadType === LOCAL_SAMPLE_IMG && upload ? (
+          <img className={classes.uploadedImg} src={upload.preview ? upload.preview : upload.src} alt="preview" />
+        ) : (
+          <img
+            className={classes.uploadedImg}
+            src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
+            alt="preview"
+          />
+        )}
 
         {
           <Block className={clsx("p-absolute", classes.discardBtn)}>
@@ -69,7 +75,17 @@ const UploadPreview = ({ discardHandler }: any) => {
         }
       </Block>
 
-      {
+      {uploadType === LOCAL_SAMPLE_IMG ? (
+        <button
+          onClick={() => {
+            editor.objects.add(upload)
+            discardHandler()
+          }}
+          className={clsx(classes.removeBgBtn)}
+        >
+          Add
+        </button>
+      ) : (
         <button
           disabled={panelInfo.bgRemoverBtnActive ? false : true}
           onClick={() => {
@@ -79,7 +95,7 @@ const UploadPreview = ({ discardHandler }: any) => {
         >
           Remove Background
         </button>
-      }
+      )}
     </div>
   )
 }

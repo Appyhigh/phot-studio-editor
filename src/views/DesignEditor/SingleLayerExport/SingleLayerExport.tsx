@@ -80,7 +80,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
               onClick={() => {
                 editor.objects.clone()
                 setTimeout(() => {
-                  editor.objects.update({ name: activeObject.name })
+                  editor.objects.update({ name: activeObject?.name })
                 }, 10)
                 editor.cancelContextMenuRequest()
               }}
@@ -102,7 +102,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             </ContextMenuItem>
             <ContextMenuItem
               onClick={() => {
-                editor.objects.update({ name: activeObject.name })
+                editor.objects.update({ name: activeObject?.name })
                 editor.objects.bringToFront()
                 editor.cancelContextMenuRequest()
               }}
@@ -113,7 +113,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             </ContextMenuItem>
             <ContextMenuItem
               onClick={() => {
-                editor.objects.update({ name: activeObject.name })
+                editor.objects.update({ name: activeObject?.name })
                 editor.objects.sendToBack()
                 editor.cancelContextMenuRequest()
               }}

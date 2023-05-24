@@ -10,10 +10,14 @@ import { BgSampleImages } from "~/constants/bg-sample-images"
 import { toDataURL } from "~/utils/export"
 import { nanoid } from "nanoid"
 import { images } from "~/constants/mock-data"
+import Uploads from "../UploadDropzone/Uploads"
+import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
+import useAppContext from "~/hooks/useAppContext"
 
 const Images = () => {
   const editor = useEditor()
   const { loaderPopup } = useContext(LoaderContext)
+  const { activePanel } = useAppContext()
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -36,7 +40,7 @@ const Images = () => {
   return (
     <Block className="d-flex flex-1 flex-column">
       <>
-        {" "}
+        <Uploads activePanel={activePanel} uploadType={LOCAL_SAMPLE_IMG} />{" "}
         <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3 mt-3")}>
           Try Sample Images
         </Block>

@@ -1,4 +1,4 @@
-import {  styled, Theme } from "baseui"
+import { styled, Theme } from "baseui"
 import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
@@ -52,13 +52,20 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   return (
     <Block
       id="EditorPanelList"
-      className={clsx(classes.panelListItem, "flex-center-column")}
+      className={clsx(classes.panelListItem, "flex-center-column",activePanel!==name&&classes.inActivePanel)}
       onClick={() => {
         setIsSidebarOpen(true)
         setActivePanel(name)
       }}
     >
-      <Icon size={24} />
+      {name === "Images" ? (
+        <div className={classes.imagesIcon}>
+          <Icon size={24} />
+        </div>
+      ) : (
+        <Icon size={24} />
+      )}
+
       <Block
         className={clsx("text-center", classes.panelListItemEach, activePanel === name && classes.activePanelItem)}
       >

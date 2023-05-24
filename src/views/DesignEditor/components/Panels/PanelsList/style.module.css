@@ -27,6 +27,18 @@
   font-weight: 500;
   color: #000;
 }
+.imagesIcon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(85.66deg, #3e5387 11.38%, #542670 97.9%);
+  border-radius: 6px;
+}
+.inActivePanel{
+  opacity: 0.5;
+}
 @media screen and (min-width: 1220px) {
   .panelListSection {
     width: 100px;

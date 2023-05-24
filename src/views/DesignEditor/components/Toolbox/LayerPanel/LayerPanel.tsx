@@ -90,7 +90,7 @@ const LayerPanel = () => {
   React.useEffect(() => {
     if (editor) {
       const bgImageIndex = editor?.frame?.background?.canvas?._objects.findIndex(
-        (el: any) => el.type === "BackgroundImage"
+        (el: any) => el.type === "BackgroundImage" || el?.metadata?.type === backgroundLayerType
       )
       if (bgImageIndex !== -1) {
         setBgUrl(editor?.frame?.background?.canvas?._objects[bgImageIndex].preview)
