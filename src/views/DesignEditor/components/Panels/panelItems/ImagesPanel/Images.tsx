@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useEditor } from "@layerhub-io/react"
@@ -13,6 +13,7 @@ import { images } from "~/constants/mock-data"
 import Uploads from "../UploadDropzone/Uploads"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import useAppContext from "~/hooks/useAppContext"
+import StockImages from "~/components/UI/BgUpload/StockImages"
 
 const Images = () => {
   const editor = useEditor()
@@ -37,41 +38,54 @@ const Images = () => {
     [editor]
   )
 
+  const [bgChoice, setBgChoice] = useState(0)
+
   return (
     <Block className="d-flex flex-1 flex-column">
       <>
         <Uploads activePanel={activePanel} uploadType={LOCAL_SAMPLE_IMG} />{" "}
-        <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3 mt-3")}>
-          Try Sample Images
-        </Block>
-        <Scrollable>
-          <Block className="py-3">
-            <Block className={classes.sampleImgSection}>
-              {BgSampleImages.map((image, index) => {
-                return (
-                  <ImageItem
-                    key={index}
-                    onClick={() => {
-                      addObject(image.src)
-                    }}
-                    preview={image.src}
-                  />
-                )
-              })}
-              {images.map((image, index) => {
-                return (
-                  <ImageItem
-                    key={index}
-                    onClick={() => {
-                      addObject(image.src.medium)
-                    }}
-                    preview={image.src.small}
-                  />
-                )
-              })}
+        <div className={clsx(classes.bgUploadSection, "d-flex  flex-row")}>
+          <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
+            Sample Images
+          </div>
+          <div className={clsx(classes.tabs, bgChoice === 1 && classes.selectedChoice)} onClick={() => setBgChoice(1)}>
+            Stock Images
+          </div>
+        </div>
+        {bgChoice === 0 ? (
+          <Scrollable>
+            <Block className="py-3 mt-2">
+              <Block className={classes.sampleImgSection}>
+                {BgSampleImages.map((image, index) => {
+                  return (
+                    <ImageItem
+                      key={index}
+                      onClick={() => {
+                        addObject(image.src)
+                      }}
+                      preview={image.src}
+                    />
+                  )
+                })}
+                {images.map((image, index) => {
+                  return (
+                    <ImageItem
+                      key={index}
+                      onClick={() => {
+                        addObject(image.src.medium)
+                      }}
+                      preview={image.src.small}
+                    />
+                  )
+                })}
+              </Block>
             </Block>
-          </Block>
-        </Scrollable>
+          </Scrollable>
+        ) : (
+          <Scrollable>
+            <StockImages />
+          </Scrollable>
+        )}
       </>
       <Loader isOpen={loaderPopup} />
     </Block>
