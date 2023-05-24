@@ -14,6 +14,7 @@ import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/
 import EyeCrossed from "~/components/Icons/EyeCrossed"
 import Paste from "~/components/Icons/Paste"
 import { useEffect, useState } from "react"
+import Elements from "~/components/Icons/Elements"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -181,6 +182,22 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 label="Visibility"
               >
                 <EyeCrossed size={24} />
+              </ContextMenuItem>
+            )}
+            {activeObject?.type === "StaticImage" && (
+              <ContextMenuItem
+                onClick={() => {
+                  // handleAsComponentHandler()
+                  editor.objects.unsetBackgroundImage()
+                  setTimeout(() => {
+                    editor.objects.setAsBackgroundImage()
+                    editor.objects.remove()
+                  }, 50)
+                }}
+                icon="Images"
+                label="Set as background image"
+              >
+                <Elements size={24} />
               </ContextMenuItem>
             )}
             <div className="p-relative">
