@@ -23,28 +23,4 @@ export const BgOptions = [
       { gradient: "linear-gradient(135deg, #5433FF 1.56%, #20BDFF 53.65%, #A5FECB 105.73%)" },
     ],
   },
-  {
-    heading: "Nature",
-    options: [
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-    ],
-  },
-  {
-    heading: "Flowers",
-    options: [
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-      { img: "https://images.pexels.com/photos/1683492/pexels-photo-1683492.jpeg?auto=compress&cs=tinysrgb&h=130" },
-    ],
-  },
 ]

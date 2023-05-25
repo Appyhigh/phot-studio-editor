@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
@@ -17,6 +17,7 @@ import { toDataURL } from "~/utils/export"
 import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
+import { getStockImages } from "~/services/stockApi"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -25,6 +26,8 @@ const BgRemover = () => {
     type: -1,
     id: 0,
   })
+  const [bgDOptions, setBgDOptions] = useState(BgOptions)
+
   const objects = useObjects()
   const activeObject = useActiveObject()
 
@@ -75,7 +78,30 @@ const BgRemover = () => {
     editor.objects.removeById(id)
   }
 
-    return (
+  useEffect(() => {
+    const addCategoryOptions = async (category: any) => {
+      const res = await getStockImages(category)
+      const newOptions = res.map((image: any) => ({ img: image.image_url_list[0] }))
+
+      setBgDOptions((prevOptions) => [
+        ...prevOptions,
+        {
+          heading: category,
+          options: newOptions,
+        },
+      ])
+    }
+
+    const fetchCategories = async () => {
+      await addCategoryOptions("Nature")
+      await addCategoryOptions("Flowers")
+      await addCategoryOptions("Textures")
+    }
+
+    fetchCategories()
+  }, [])
+
+  return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>
@@ -119,7 +145,6 @@ const BgRemover = () => {
       )}
       {panelInfo.trySampleImg && (
         <>
-          {" "}
           <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
             Try Sample Images
           </Block>
@@ -172,8 +197,8 @@ const BgRemover = () => {
           </Block>
           <Scrollable>
             {backgroundChoice === 0 ? (
-              <Block className="mt-2">
-                {BgOptions.map((each, index) => (
+              <Block className="mt-2 mb-2">
+                {bgDOptions.map((each, index) => (
                   <Block key={index}>
                     <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
                       <LabelLarge> {each.heading}</LabelLarge>
