@@ -314,6 +314,7 @@ const LayerPanel = () => {
                                           )}
                                         >
                                           <div
+                                            style={{ transform: "translateX(-7px)" }}
                                             className={clsx(
                                               classes.eachLayer,
                                               layerState.isOpenSlider
@@ -421,6 +422,7 @@ const LayerPanel = () => {
                                   )}
                                 >
                                   <div
+                                    style={{ transform: "translateX(-7px)" }}
                                     className={clsx(
                                       classes.eachLayer,
                                       layerState.isOpenSlider
