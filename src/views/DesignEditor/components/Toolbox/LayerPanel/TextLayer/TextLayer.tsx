@@ -160,17 +160,21 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
           <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} type="text" />
 
-          {/* <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>
-          {TextLayerOption.map((each, idx) => (
-            <DropdownWrapper
-              key={idx}
-              icon={each.icon}
-              activeState={activeState}
-              idx={idx}
-              heading={each.name}
-              handleActiveState={handleActiveState}
-            />
-          ))} */}
+          <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>
+          {TextLayerOption.map((each, idx) => {
+            if (each.name === "Transform") {
+              return (
+                <DropdownWrapper
+                  key={idx}
+                  icon={each.icon}
+                  activeState={activeState}
+                  idx={idx}
+                  heading={each.name}
+                  handleActiveState={handleActiveState}
+                />
+              )
+            }
+          })}
           <div
             onClick={() => editor.objects.remove()}
             className={clsx("pointer flex-column-center center mt-3", classes.eraseTextBox)}

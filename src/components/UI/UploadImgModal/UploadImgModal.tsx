@@ -4,10 +4,10 @@ import React, { useContext } from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
-import { toBase64 } from "~/utils/data"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
+import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const close = () => {
@@ -23,10 +23,9 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-
+    const imageUrl = await getBucketImageUrlFromFile(file)
     const isVideo = file.type.includes("video")
-    const base64 = (await toBase64(file)) as string
-    let preview = base64
+    let preview = imageUrl
     const inputType = isVideo ? "StaticVideo" : "StaticImage"
     setTimeout(() => {
       close()
@@ -34,8 +33,8 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     if (fileInputType === "add") {
       const upload = {
         id: nanoid(),
-        src: base64,
-        preview: preview,
+        src: imageUrl,
+        preview: imageUrl,
         type: inputType,
         metadata: { generationDate: new Date().getTime() },
       }
@@ -58,8 +57,8 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
       const options = {
         type: "StaticImage",
-        src: base64,
-        preview: base64,
+        src: imageUrl,
+        preview: imageUrl,
         metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
       }
       editor.objects.add(options).then(() => {
