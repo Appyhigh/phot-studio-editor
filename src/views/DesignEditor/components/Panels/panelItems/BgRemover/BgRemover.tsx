@@ -13,7 +13,6 @@ import Loader from "~/components/UI/Loader/Loader"
 import LoaderContext from "~/contexts/LoaderContext"
 import { BgSampleImages } from "~/constants/bg-sample-images"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import { toDataURL } from "~/utils/export"
 import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
@@ -39,26 +38,24 @@ const BgRemover = () => {
       // @ts-ignore
       setPanelInfo((prev) => ({ ...prev, bgRemoverBtnActive: true }))
 
-      toDataURL(url, async function (dataUrl: string) {
-        if (editor) {
-          const options = {
-            type: "StaticImage",
-            src: dataUrl,
-            preview: dataUrl,
-            id: nanoid(),
-            original: dataUrl,
-            metadata: { generationDate: new Date().getTime() },
-          }
-          setPanelInfo((prev: any) => ({
-            ...prev,
-            UploadPreview: true,
-            bgOptions: false,
-            trySampleImg: false,
-            uploadSection: false,
-          }))
-          setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+      if (editor) {
+        const options = {
+          type: "StaticImage",
+          src: url,
+          preview: url,
+          id: nanoid(),
+          original: url,
+          metadata: { generationDate: new Date().getTime() },
         }
-      })
+        setPanelInfo((prev: any) => ({
+          ...prev,
+          UploadPreview: true,
+          bgOptions: false,
+          trySampleImg: false,
+          uploadSection: false,
+        }))
+        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+      }
     },
     [editor]
   )
@@ -75,7 +72,7 @@ const BgRemover = () => {
     editor.objects.removeById(id)
   }
 
-    return (
+  return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>

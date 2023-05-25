@@ -164,7 +164,6 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     if (layers) {
       layers.map((layer: ILayer) => {
         editor.objects.add(layer).then(() => {
-          console.log("added")
           editor.objects.update({ top: layer.top, left: layer.left })
         })
       })

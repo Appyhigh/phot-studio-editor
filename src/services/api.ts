@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios"
 import { IDesign, IComponent } from "~/interfaces/DesignEditor"
 import { Resource } from "~/interfaces/editor"
+import { API_BASE_URL } from "~/utils/common"
 
 type IElement = any
 type IFontFamily = any
@@ -254,7 +255,7 @@ class ApiService {
   getFonts(): Promise<IFontFamily[]> {
     return new Promise(async (resolve, reject) => {
       try {
-        const { data } = await axios.get("https://devapi.phot.ai/app/api/v1/phot-studio/fetch-fonts")
+        const { data } = await axios.get(`${API_BASE_URL}/app/api/v1/phot-studio/fetch-fonts`)
         resolve(data)
       } catch (err) {
         reject(err)

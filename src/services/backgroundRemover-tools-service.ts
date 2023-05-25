@@ -7,7 +7,7 @@ export const removeBackgroundWithoutPromps = (image: string | undefined, fileNam
   myHeaders.append("Content-Type", "application/json")
 
   const raw = JSON.stringify({
-    input_image: `${image}`,
+    input_image_link: `${image}`,
     file_name: svgExtensionToJPEG(fileName),
     // op: 'DUMMY',
   })
@@ -20,7 +20,7 @@ export const removeBackgroundWithoutPromps = (image: string | undefined, fileNam
   }
 
   //@ts-ignore
-  return fetch(`${API_BASE_URL}/app/api/v1/user_activity/remove-background`, requestOptions)
+  return fetch(`${API_BASE_URL}/app/api/v1/user_activity/remove-background-v2`, requestOptions)
     .then((response) => {
       return response.json()
     })
