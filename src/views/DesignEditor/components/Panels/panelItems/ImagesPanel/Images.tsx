@@ -7,7 +7,6 @@ import clsx from "clsx"
 import Loader from "~/components/UI/Loader/Loader"
 import LoaderContext from "~/contexts/LoaderContext"
 import { BgSampleImages } from "~/constants/bg-sample-images"
-import { toDataURL } from "~/utils/export"
 import { nanoid } from "nanoid"
 import { images } from "~/constants/mock-data"
 import Uploads from "../UploadDropzone/Uploads"
@@ -21,18 +20,16 @@ const Images = () => {
 
   const addObject = React.useCallback(
     (url: string) => {
-      toDataURL(url, async function (dataUrl: string) {
-        if (editor) {
-          const options = {
-            type: "StaticImage",
-            id: nanoid(),
-            src: dataUrl,
-            preview: dataUrl,
-            metadata: { generationDate: new Date().getTime() },
-          }
-          editor.objects.add(options)
+      if (editor) {
+        const options = {
+          type: "StaticImage",
+          id: nanoid(),
+          src: url,
+          preview: url,
+          metadata: { generationDate: new Date().getTime() },
         }
-      })
+        editor.objects.add(options)
+      }
     },
     [editor]
   )

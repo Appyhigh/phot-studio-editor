@@ -105,7 +105,19 @@
   display: grid;
   gap: 0.2rem;
   width: 230px;
+  height: 200px;
+  overflow-y: scroll;
 }
+
+.fontSection::-webkit-scrollbar {
+  display: none;
+}
+
+.fontSection {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .eachFont {
   height: 40px;
   display: flex;
