@@ -47,10 +47,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     dispatch(getFonts())
-    dispatch(getUploads())
-    dispatch(getPublicComponents())
+    // dispatch(getUploads())
+    // dispatch(getPublicComponents())
     dispatch(getPixabayResources())
-    dispatch(getPublicDesigns())
+    // dispatch(getPublicDesigns())
   }, [])
 
   // @ts-ignore
