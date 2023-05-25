@@ -84,9 +84,9 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           }
           editor.objects.removeById(mainImgInfo.id)
           editor.objects.add(options).then(() => {
-          //@ts-ignore
-          setMainImgInfo((prev) => ({ ...prev, ...options }))
-        })
+            //@ts-ignore
+            setMainImgInfo((prev) => ({ ...prev, ...options }))
+          })
         })
       }
     },
@@ -129,6 +129,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                   height: "80px",
                   zIndex: 5,
                   background: each.color || each.gradient ? each.color || each.gradient : `url(${each.img})`,
+                  backgroundSize: "cover !important",
                   borderRadius: "8px",
                   [theme.mediaQuery.large]: {
                     width: "96px",

@@ -1,6 +1,6 @@
 export const changeLayerFill = (base64ImageData: string, backgroundColor: string) => {
   return new Promise((resolve, reject) => {
-    const image = new Image()    
+    const image = new Image()
     image.onload = function () {
       const canvas = document.createElement("canvas")
       canvas.width = image.width
@@ -103,6 +103,7 @@ export const changeLayerBackgroundImage = (image1Data: string, image2Data: strin
   return new Promise((resolve, reject) => {
     const image1 = new Image()
     const image2 = new Image()
+    image2.crossOrigin = "anonymous"
 
     image1.onload = function () {
       image2.onload = function () {

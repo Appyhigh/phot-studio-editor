@@ -1,37 +1,85 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { images } from "~/constants/mock-data"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { backgroundLayerType } from "~/constants/contants"
-import React, { useState } from "react"
+import { useState, useCallback, useRef } from "react"
+import { getStockImages } from "~/services/stockApi"
+import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
+import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import useAppContext from "~/hooks/useAppContext"
+import usePagination from "~/hooks/usePagination"
+import { toDataURL } from "~/utils/export"
+import { nanoid } from "nanoid"
 
-const StockImages = () => {
+const StockImages = (props: any) => {
   const editor = useEditor()
+  const activeObject: any = useActiveObject()
   const [selectedImg, setSelectedImg] = useState(-1)
+  const { setRes } = useAppContext()
+  const { search, setSearch } = useAppContext()
+  const [page, setPage] = useState(1)
+  const { res, more, loading } = usePagination(search, page)
+  const frame = useFrame()
 
-  const setBgImg = React.useCallback(
-    (url: string) => {
-      const bgObject = editor.frame.background.canvas._objects.filter(
-        (el: any) => el.metadata?.type === backgroundLayerType
-      )[0]
+  const observer = useRef<any>()
 
-      if (bgObject) {
-        editor.objects.remove(bgObject.id)
-        editor.objects.unsetBackgroundImage()
-      }
+  const lastElementRef = useCallback(
+    (element?: any) => {
+      if (observer.current) observer.current.disconnect()
+
+      if (!more) return
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && more) setPage((prev) => prev + 1)
+      })
+
+      if (element) observer.current.observe(element)
+    },
+    [more]
+  )
+
+  const searchImages = () => {
+    getStockImages(search).then((res) => {
+      setRes(res)
+    })
+  }
+
+  const addObject = useCallback(
+    (url: string, width: number) => {
       if (editor) {
         const options = {
           type: "StaticImage",
+          id: nanoid(),
           src: url,
           preview: url,
-          metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+          metadata: { generationDate: new Date().getTime() },
+          scaleX: width > frame.width ? (frame.width - 100) / width : 1,
+          scaleY: width > frame.width ? (frame.width - 100) / width : 1,
         }
-        editor.objects.add(options).then(() => {
-          editor.frame.setBackgroundColor("#ffffff")
-          editor.objects.setAsBackgroundImage()
-        })
+        editor.objects.add(options)
       }
+    },
+    [editor]
+  )
+
+  const setBgImg = useCallback(
+    async function (url: string) {
+      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
+        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+        url
+      )
+      const options = {
+        type: "StaticImage",
+        src: previewWithUpdatedBackground,
+        preview: previewWithUpdatedBackground,
+        metadata: {
+          generationDate: new Date().getTime(),
+          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+        },
+      }
+      editor.objects.add(options)
+      editor.objects.remove()
     },
     [editor]
   )
@@ -39,28 +87,42 @@ const StockImages = () => {
   return (
     <div className={classes.stockImgSection}>
       <div className={classes.inputWrapper}>
-        <input className={classes.textInput} />
-        <div className={clsx(classes.iconWrapper, "flex-center")}>
+        <input
+          className={classes.textInput}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              searchImages()
+            }
+          }}
+          defaultValue={search}
+        />
+        <button className={clsx(classes.iconWrapper, "flex-center")} onClick={searchImages}>
           <Icons.SearchIcon />
-        </div>
+        </button>
       </div>
-
       <div className={classes.sampleImgSection}>
-        {images.map((image, index) => {
+        {res.map((image: any, index: any) => {
           return (
-            <ImageItem
-              key={index}
-              idx={index}
-              selectedImage={selectedImg}
-              onClick={() => {
-                setBgImg(image.src.medium)
-                setSelectedImg(index)
-              }}
-              preview={image.src.small}
-            />
+            <div ref={index === res.length - 1 ? lastElementRef : undefined}>
+              <ImageItem
+                key={index}
+                idx={image.mongo_id.$oid}
+                selectedImage={selectedImg}
+                onClick={() => {
+                  {
+                    props.imageAs == "foreground"
+                      ? addObject(image.image_url_list[0], image.width)
+                      : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
+                  }
+                }}
+                preview={image.image_url_list[0]}
+              />
+            </div>
           )
         })}
       </div>
+      {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
     </div>
   )
 }
