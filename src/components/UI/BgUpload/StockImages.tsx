@@ -46,18 +46,16 @@ const StockImages = (props: any) => {
 
   const addObject = useCallback(
     (url: string) => {
-      toDataURL(url, async function (dataUrl: string) {
-        if (editor) {
-          const options = {
-            type: "StaticImage",
-            id: nanoid(),
-            src: dataUrl,
-            preview: dataUrl,
-            metadata: { generationDate: new Date().getTime() },
-          }
-          editor.objects.add(options)
+      if (editor) {
+        const options = {
+          type: "StaticImage",
+          id: nanoid(),
+          src: url,
+          preview: url,
+          metadata: { generationDate: new Date().getTime() },
         }
-      })
+        editor.objects.add(options)
+      }
     },
     [editor]
   )
