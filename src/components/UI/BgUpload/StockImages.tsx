@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { backgroundLayerType } from "~/constants/contants"
 import { useState, useCallback, useRef } from "react"
 import { getStockImages } from "~/services/stockApi"
@@ -20,6 +20,7 @@ const StockImages = (props: any) => {
   const { search, setSearch } = useAppContext()
   const [page, setPage] = useState(1)
   const { res, more, loading } = usePagination(search, page)
+  const frame = useFrame()
 
   const observer = useRef<any>()
 
@@ -45,7 +46,7 @@ const StockImages = (props: any) => {
   }
 
   const addObject = useCallback(
-    (url: string) => {
+    (url: string, width: number) => {
       if (editor) {
         const options = {
           type: "StaticImage",
@@ -53,6 +54,8 @@ const StockImages = (props: any) => {
           src: url,
           preview: url,
           metadata: { generationDate: new Date().getTime() },
+          scaleX: width > frame.width ? (frame.width - 100) / width : 1,
+          scaleY: width > frame.width ? (frame.width - 100) / width : 1,
         }
         editor.objects.add(options)
       }
@@ -109,7 +112,7 @@ const StockImages = (props: any) => {
                 onClick={() => {
                   {
                     props.imageAs == "foreground"
-                      ? addObject(image.image_url_list[0])
+                      ? addObject(image.image_url_list[0], image.width)
                       : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
                   }
                 }}
