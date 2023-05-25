@@ -31,7 +31,7 @@ const TextProperties = () => {
       const textOptions = getTextOptions(activeObject)
       const isGroup = textOptions.isGroup
       const active = textOptions.fontFamily.split("__")[1]
-      const font = fonts.find((f) => f.family === textOptions.fontFamily.split("__")[0].split("_").join(" "))
+      const font = fonts.find((f) => f?.family === textOptions.fontFamily.split("__")[0].split("_").join(" "))
       if (!font) {
         setState(defaultTextOptions)
         return
@@ -43,7 +43,7 @@ const TextProperties = () => {
           label: fontStyleLabels[file].label,
           id: fontStyleLabels[file].id,
           url: font.files[file],
-          family: font.family,
+          family: font?.family,
         }))
         .sort((a, b) => (a.id > b.id ? 1 : -1))
 
@@ -51,7 +51,7 @@ const TextProperties = () => {
         ...textOptions,
         font,
         styles,
-        fontFamily: font.family,
+        fontFamily: font?.family,
         activeStyle: {
           label: fontStyleLabels[active].label,
           id: fontStyleLabels[active].id,
@@ -66,7 +66,7 @@ const TextProperties = () => {
   const handleChange = async (key: string, value: any) => {
     if (key === "fontStyle") {
       const selected = value[0]
-      const updatedFamily = `${selected.family.split(" ").join("_")}__${selected.value}`
+      const updatedFamily = `${selected?.family.split(" ").join("_")}__${selected.value}`
       const font = {
         name: updatedFamily,
         url: selected.url,

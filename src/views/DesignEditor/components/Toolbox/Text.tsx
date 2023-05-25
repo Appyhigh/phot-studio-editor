@@ -239,7 +239,7 @@ export default function () {
           display={"flex"}
           alignItems={"center"}
         >
-          <Block>{state.family}</Block>
+          <Block>{state?.family}</Block>
           <Block display={"flex"}>
             <ChevronDown size={22} />
           </Block>
