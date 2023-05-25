@@ -85,7 +85,16 @@ const StockImages = (props: any) => {
   return (
     <div className={classes.stockImgSection}>
       <div className={classes.inputWrapper}>
-        <input className={classes.textInput} onChange={(e) => setSearch(e.target.value)} defaultValue={search} />
+        <input
+          className={classes.textInput}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              searchImages()
+            }
+          }}
+          defaultValue={search}
+        />
         <button className={clsx(classes.iconWrapper, "flex-center")} onClick={searchImages}>
           <Icons.SearchIcon />
         </button>
