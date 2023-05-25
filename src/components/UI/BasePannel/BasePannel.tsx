@@ -72,7 +72,8 @@ const BasePannel = () => {
             </button>
             <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
           </div>
-          <StatefulTooltip
+          <div className="ml-3"></div>
+          {/* <StatefulTooltip
             placement={PLACEMENT.bottom}
             showArrow={true}
             accessibilityType={"tooltip"}
@@ -88,7 +89,7 @@ const BasePannel = () => {
             >
               <Icons.Save size={26} />
             </Block>
-          </StatefulTooltip>
+          </StatefulTooltip> */}
           <Block
             className="flex-center pointer p-relative resizeCanvasBtn"
             onMouseOver={() => {
