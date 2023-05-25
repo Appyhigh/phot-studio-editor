@@ -76,6 +76,7 @@ const StockImages = (props: any) => {
         },
       }
       editor.objects.add(options)
+      editor.objects.remove()
     },
     [editor]
   )
