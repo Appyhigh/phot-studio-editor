@@ -12,7 +12,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import MainImageContext from "~/contexts/MainImageContext"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
-import axios from "axios"
+import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 
 export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -23,76 +23,46 @@ export default function ({ uploadType, activePanel }: any) {
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-    const arr = file.name.split(".")
-    const ext = arr[arr.length - 1]
+    const imageUrl = await getBucketImageUrlFromFile(file)
+    const isVideo = file.type.includes("video")
+    const base64 = (await toBase64(file)) as string
+    let preview = base64
+    if (isVideo) {
+      const video = await loadVideoResource(base64)
+      const frame = await captureFrame(video)
+      preview = frame
+    }
 
-    const res = await fetch("https://devapi.phot.ai/app/api/v2/signedURL?tool=BACKGROUND_REMOVER&ext=" + ext)
-    const data = await res.json()
-    const uploadURL = data.uploadUrl
-    const res2 = await fetch(uploadURL, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: file,
-    })
+    const type = isVideo ? "StaticVideo" : "StaticImage"
+    // @ts-ignore
+    const upload = {
+      id: nanoid(),
+      src: imageUrl,
+      preview: imageUrl,
+      original: imageUrl,
+      type: type,
+      metadata: { generationDate: new Date().getTime() },
+    }
 
-    // if(res2.ok){
+    setSelectedImage(upload)
+    const fileInfo: any = document.getElementById("inputFile")
+    if (fileInfo?.value) fileInfo.value = ""
 
-    // }
-
-    // .then((data) => {
-    //   fetch(uploadURL, {
-    //     method: "PUT",
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //     body: file,
-    //   }).then(async (response) => {
-    //     if (response.ok) {
-    //       const imageUrl = uploadURL.split("?")[0]
-    //       const isVideo = file.type.includes("video")
-    //       const base64 = (await toBase64(file)) as string
-    //       let preview = base64
-    //       if (isVideo) {
-    //         const video = await loadVideoResource(base64)
-    //         const frame = await captureFrame(video)
-    //         preview = frame
-    //       }
-
-    //       const type = isVideo ? "StaticVideo" : "StaticImage"
-    //       // @ts-ignore
-    //       const upload = {
-    //         id: nanoid(),
-    //         src: imageUrl,
-    //         preview: imageUrl,
-    //         original: imageUrl,
-    //         type: type,
-    //         metadata: { generationDate: new Date().getTime() },
-    //       }
-
-    //       setSelectedImage(upload)
-    //       const fileInfo: any = document.getElementById("inputFile")
-    //       if (fileInfo?.value) fileInfo.value = ""
-
-    //       if (uploadType === LOCAL_SAMPLE_IMG) {
-    //         setUploads([...uploads, upload])
-    //       } else {
-    //         // @ts-ignore
-    //         setPanelInfo((prev) => ({
-    //           ...prev,
-    //           trySampleImg: false,
-    //           bgRemoverBtnActive: true,
-    //           uploadSection: false,
-    //           bgOptions: false,
-    //           UploadPreview: true,
-    //         }))
-    //         // @ts-ignore
-    //         setMainImgInfo((prev) => ({ ...prev, ...upload }))
-    //       }
-    //     }
-    //   })
-    // })
+    if (uploadType === LOCAL_SAMPLE_IMG) {
+      setUploads([...uploads, upload])
+    } else {
+      // @ts-ignore
+      setPanelInfo((prev) => ({
+        ...prev,
+        trySampleImg: false,
+        bgRemoverBtnActive: true,
+        uploadSection: false,
+        bgOptions: false,
+        UploadPreview: true,
+      }))
+      // @ts-ignore
+      setMainImgInfo((prev) => ({ ...prev, ...upload }))
+    }
   }
 
   const handleInputFileRefClick = () => {

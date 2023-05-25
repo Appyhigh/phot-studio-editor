@@ -422,3 +422,22 @@ export const removeBackgroundController = async (
     throw new Error(error)
   }
 }
+
+export const getBucketImageUrlFromFile = async (file: any) => {
+  const arr = file.name.split(".")
+  const ext = arr[arr.length - 1]
+
+  const res = await fetch("https://devapi.phot.ai/app/api/v2/signedURL?tool=BACKGROUND_REMOVER&ext=" + ext)
+  const data = await res.json()
+  const uploadURL = data.uploadUrl
+  const res2 = await fetch(uploadURL, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    body: file,
+  })
+  if (res2.ok) {
+    return uploadURL.split("?")[0]
+  }
+}
