@@ -1,20 +1,23 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import DropdownWrapper from "./DropdownWrapper"
-import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
-import React, { useCallback, useContext, useState } from "react"
+import React, { useCallback, useContext, useState, useRef } from "react"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
 import { changeLayerFill } from "~/utils/updateLayerBackground"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
-import { removeBackgroundController } from "~/utils/removeBackground"
+import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
+  const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
+  const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
+  const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
+  const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
+  const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
   const [activeState, setActiveState] = useState(-1)
   const [objectBgColor, setObjectBgColor] = useState("#000000")
   const [isOpen, setIsOpen] = React.useState(false)
@@ -99,17 +102,27 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const removeBackgroundBeforeChangingColor = async (each: any) => {
     try {
       setLoaderPopup(true)
-      removeBackgroundController(activeObject.preview, async (image: string) => {
-        setPanelInfo((prev: any) => ({
-          ...prev,
-          bgOptions: true,
-          bgRemoverBtnActive: false,
-          uploadSection: false,
-          trySampleImg: false,
-          uploadPreview: false,
-        }))
-        changeBGFillHandler(image, each.color)
-      })
+      removeBackgroundController(
+        activeObject.preview,
+        async (image: string) => {
+          setPanelInfo((prev: any) => ({
+            ...prev,
+            bgOptions: true,
+            bgRemoverBtnActive: false,
+            uploadSection: false,
+            trySampleImg: false,
+            uploadPreview: false,
+          }))
+          changeBGFillHandler(image, each.color)
+        },
+        virtualSrcImageRef,
+        virtualMaskImageRef,
+        virtualCanvasSrcImageRef,
+        virtualCanvasMaskImageRef,
+        virtualCanvasResultImageRef,
+        activeObject?.width * activeObject?.scaleX,
+        activeObject?.height * activeObject?.scaleY
+      )
     } catch (error: any) {
       setLoaderPopup(false)
       console.log("Something went wrong while removing background...", error.message)
@@ -118,39 +131,64 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   const removeBackgroundHandler = async () => {
     try {
-      // Start the loader
-      setLoaderPopup(true)
-
-      removeBackgroundController(activeObject.preview, (image: string) => {
-        // Add the resultant image to the canvas
+      if (activeObject?.metadata?.originalLayerPreview) {
         const options = {
           type: "StaticImage",
-          src: image,
-          preview: image,
-          id: nanoid(),
+          src: activeObject?.metadata?.originalLayerPreview,
+          preview: activeObject?.metadata?.originalLayerPreview,
           metadata: {
-            generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
-            originalLayerPreview: image,
+            generationDate: activeObject?.metadata?.generationDate,
+            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
         }
         editor.objects.add(options).then(() => {
-          // @ts-ignore
-          setPanelInfo((prev) => ({
-            ...prev,
-            bgOptions: true,
-            bgRemoverBtnActive: false,
-            uploadSection: false,
-            trySampleImg: false,
-            uploadPreview: false,
-          }))
-          if (activeObject?.id === mainImgInfo?.id) {
-            setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-          }
-          editor.objects.removeById(activeObject.id)
-          // Stop the loader
-          setLoaderPopup(false)
+          editor.objects.remove(activeObject.id)
         })
-      })
+      } else {
+        setLoaderPopup(true)
+
+        removeBackgroundController(
+          activeObject?.preview,
+          (image: string) => {
+            // Add the resultant image to the canvas
+            const options = {
+              type: "StaticImage",
+              src: image,
+              preview: image,
+              id: nanoid(),
+              metadata: {
+                generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+                originalLayerPreview: image,
+              },
+            }
+            editor.objects.add(options).then(() => {
+              // @ts-ignore
+              setPanelInfo((prev) => ({
+                ...prev,
+                bgOptions: true,
+                bgRemoverBtnActive: false,
+                uploadSection: false,
+                trySampleImg: false,
+                uploadPreview: false,
+              }))
+              if (activeObject?.id === mainImgInfo?.id) {
+                setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+              }
+              editor.objects.removeById(activeObject.id)
+              // Stop the loader
+              setLoaderPopup(false)
+            })
+          },
+          virtualSrcImageRef,
+          virtualMaskImageRef,
+          virtualCanvasSrcImageRef,
+          virtualCanvasMaskImageRef,
+          virtualCanvasResultImageRef,
+          activeObject?.width * activeObject?.scaleX,
+          activeObject?.height * activeObject?.scaleY
+        )
+      }
+      // Start the loader
     } catch (error: any) {
       setLoaderPopup(false)
       console.log("Something went wrong while removing background...", error.message)
@@ -159,6 +197,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   return showLayer ? (
     <Scrollable>
+      <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
+      <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
+
+      <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
+      <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
+      <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
       <div className={classes.objectLayerSection}>
         <div
           className="d-flex justify-content-start flex-row align-items-center pointer mt-1"

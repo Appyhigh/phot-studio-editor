@@ -12,6 +12,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import MainImageContext from "~/contexts/MainImageContext"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
+import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 
 export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -22,7 +23,7 @@ export default function ({ uploadType, activePanel }: any) {
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-
+    const imageUrl = await getBucketImageUrlFromFile(file)
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -36,9 +37,9 @@ export default function ({ uploadType, activePanel }: any) {
     // @ts-ignore
     const upload = {
       id: nanoid(),
-      src: base64,
-      preview: preview,
-      original: base64,
+      src: imageUrl,
+      preview: imageUrl,
+      original: imageUrl,
       type: type,
       metadata: { generationDate: new Date().getTime() },
     }
@@ -87,101 +88,105 @@ export default function ({ uploadType, activePanel }: any) {
   }
 
   return (
-    <DropZone handleDropFiles={handleDropFiles}>
-      <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
-        <Block className="d-flex align-items-center flex-start">
-          <Block className="pl-1">
-            {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0 ? (
-              <Block className={classes.panelHeading}>Add Image</Block>
-            ) : (
-              uploadType != LOCAL_SAMPLE_IMG &&
-              mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
-            )}
-          </Block>
-          <Block>
-            {activePanel === "Images"
-              ? uploadType === LOCAL_SAMPLE_IMG &&
-                uploads.length != 0 && (
-                  <div
-                    className="d-flex justify-content-start flex-row align-items-center pointer"
-                    onClick={() => {
-                      //when right icon with Image is clicked set upload to intital state
-                      setUploads([])
-                    }}
-                  >
-                    <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
-                  </div>
-                )
-              : mainImgInfo.id && (
-                  <div
-                    className="d-flex justify-content-start flex-row align-items-center pointer"
-                    onClick={() => {
-                      //when right icon with Image is clicked set upload to intital state
-                      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-                      // @ts-ignore
-                      setPanelInfo((prev) => ({
-                        ...prev,
-                        trySampleImg: true,
-                        bgOptions: false,
-                        uploadSection: true,
-                        bgRemoveBtnActive: false,
-                      }))
-                    }}
-                  >
-                    <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
-                  </div>
-                )}
-          </Block>
-        </Block>
-        {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0 ? (
-          <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
-        ) : (
-          mainImgInfo.id == "" &&
-          uploadType !== LOCAL_SAMPLE_IMG && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
-        )}
-
-        <>
-          <Block className={classes.uploadInputWrapper}>
-            <input
-              onChange={handleFileInput}
-              type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
-              id="inputFile"
-              ref={inputFileRef}
-              className={classes.uploadInput}
-            />
-            <Block className={classes.uploadPreviewSection}>
+    <>
+      <DropZone handleDropFiles={handleDropFiles}>
+        <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
+          <Block className="d-flex align-items-center flex-start">
+            <Block className="pl-1">
+              {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0 ? (
+                <Block className={classes.panelHeading}>Add Image</Block>
+              ) : (
+                uploadType != LOCAL_SAMPLE_IMG &&
+                mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
+              )}
+            </Block>
+            <Block>
               {activePanel === "Images"
                 ? uploadType === LOCAL_SAMPLE_IMG &&
-                  uploads.length != 0 &&
-                  uploads.map((upload) => (
+                  uploads.length != 0 && (
                     <div
-                      key={upload.id}
-                      className="d-flex align-items-center pointer"
-
-                      // onClick={() => addImageToCanvas(upload)}
+                      className="d-flex justify-content-start flex-row align-items-center pointer"
+                      onClick={() => {
+                        //when right icon with Image is clicked set upload to intital state
+                        setUploads([])
+                      }}
                     >
-                      <UploadPreview
-                        uploadType={uploadType}
-                        upload={upload}
-                        selectedImage={selectedImage}
-                        discardHandler={() => {
-                          setUploads([])
-                        }}
-                      />
+                      <Icons.ChevronRight size="16" />{" "}
+                      <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
                     </div>
-                  ))
+                  )
                 : mainImgInfo.id && (
-                    <UploadPreview
-                      uploadType={uploadType}
-                      selectedImage={selectedImage}
-                      discardHandler={discardHandler}
-                    />
+                    <div
+                      className="d-flex justify-content-start flex-row align-items-center pointer"
+                      onClick={() => {
+                        //when right icon with Image is clicked set upload to intital state
+                        setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+                        // @ts-ignore
+                        setPanelInfo((prev) => ({
+                          ...prev,
+                          trySampleImg: true,
+                          bgOptions: false,
+                          uploadSection: true,
+                          bgRemoveBtnActive: false,
+                        }))
+                      }}
+                    >
+                      <Icons.ChevronRight size="16" />{" "}
+                      <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
+                    </div>
                   )}
             </Block>
           </Block>
-        </>
-      </Block>
-    </DropZone>
+          {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0 ? (
+            <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
+          ) : (
+            mainImgInfo.id == "" &&
+            uploadType !== LOCAL_SAMPLE_IMG && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
+          )}
+
+          <>
+            <Block className={classes.uploadInputWrapper}>
+              <input
+                onChange={handleFileInput}
+                type="file"
+                accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+                id="inputFile"
+                ref={inputFileRef}
+                className={classes.uploadInput}
+              />
+              <Block className={classes.uploadPreviewSection}>
+                {activePanel === "Images"
+                  ? uploadType === LOCAL_SAMPLE_IMG &&
+                    uploads.length != 0 &&
+                    uploads.map((upload) => (
+                      <div
+                        key={upload.id}
+                        className="d-flex align-items-center pointer"
+
+                        // onClick={() => addImageToCanvas(upload)}
+                      >
+                        <UploadPreview
+                          uploadType={uploadType}
+                          upload={upload}
+                          selectedImage={selectedImage}
+                          discardHandler={() => {
+                            setUploads([])
+                          }}
+                        />
+                      </div>
+                    ))
+                  : mainImgInfo.id && (
+                      <UploadPreview
+                        uploadType={uploadType}
+                        selectedImage={selectedImage}
+                        discardHandler={discardHandler}
+                      />
+                    )}
+              </Block>
+            </Block>
+          </>
+        </Block>
+      </DropZone>
+    </>
   )
 }

@@ -4,7 +4,7 @@ import GooglePhotos from "../../../views/Public/images/google-photos.svg"
 import classes from "./style.module.css"
 import clsx from "clsx"
 
-const UploadInput = ({ handleInputFileRefClick,width,height,type }: any) => {
+const UploadInput = ({ handleInputFileRefClick, width, height, type }: any) => {
   return (
     <>
       <Block
@@ -15,18 +15,18 @@ const UploadInput = ({ handleInputFileRefClick,width,height,type }: any) => {
           <Icons.InputContainer width={width} height={height} />
         </Block>
 
-        <Block className={clsx("d-flex flex-column p-absolute w-100",type==="modal"&&classes.bgInput)}>
+        <Block className={clsx("d-flex flex-column p-absolute w-100", type === "modal" && classes.bgInput)}>
           <Block className={classes.uploadIcon}>
             <Icons.Upload size={31} />
           </Block>
           <Block className={clsx("text-center", classes.uploadText)}>
             Drag and drop your image or
             <p>click to browse</p>
-            <Block className={clsx(classes.lineWithText, "text-center w-80")}>
+            {/* <Block className={clsx(classes.lineWithText, "text-center w-80")}>
               <span>Or</span>
-            </Block>
+            </Block> */}
           </Block>
-          <Block className="d-flex flex-row justify-content-center">
+          {/* <Block className="d-flex flex-row justify-content-center">
             <Block className={clsx(classes.iconWrapper,type=="modal"&&classes.modalIconWrapper)}>
               <Icons.GoogleDrive />
             </Block>
@@ -39,7 +39,7 @@ const UploadInput = ({ handleInputFileRefClick,width,height,type }: any) => {
             <Block className={clsx(classes.iconWrapper,type=="modal"&&classes.modalIconWrapper)}>
               <Icons.Phone />
             </Block>
-          </Block>
+          </Block> */}
         </Block>
       </Block>
     </>

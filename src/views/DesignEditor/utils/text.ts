@@ -7,20 +7,22 @@ export const getTextProperties = (object: Required<IStaticText>, fonts: IFontFam
   const family = object.fontFamily
   const selectedFont = fonts.find((sampleFont) => sampleFont.postScriptName === family)
   const groupedFonts = groupBy(fonts, "family")
-  const selectedFamily = groupedFonts[selectedFont!.family]
-  const hasBold = selectedFamily.find((font) => font.postScriptName.includes("-Bold"))
-  const hasItalic = selectedFamily.find((font) => font.postScriptName.includes("-Italic"))
-  const styleOptions = {
-    hasBold: !!hasBold,
-    hasItalic: !!hasItalic,
-    options: selectedFamily,
-  }
-  return {
-    color,
-    family: selectedFamily[0].family,
-    bold: family.includes("Bold"),
-    italic: family.includes("Italic"),
-    underline: object.underline,
-    styleOptions,
+  if (selectedFont?.family) {
+    const selectedFamily = groupedFonts[selectedFont!.family]
+    const hasBold = selectedFamily.find((font) => font.postScriptName.includes("-Bold"))
+    const hasItalic = selectedFamily.find((font) => font.postScriptName.includes("-Italic"))
+    const styleOptions = {
+      hasBold: !!hasBold,
+      hasItalic: !!hasItalic,
+      options: selectedFamily,
+    }
+    return {
+      color,
+      family: selectedFamily[0]?.family,
+      bold: family.includes("Bold"),
+      italic: family.includes("Italic"),
+      underline: object.underline,
+      styleOptions,
+    }
   }
 }
