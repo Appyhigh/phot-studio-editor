@@ -21,7 +21,6 @@ const StockImages = (props: any) => {
   const [page, setPage] = useState(1)
   const { res, more, loading } = usePagination(search, page)
   const frame = useFrame()
-  const [scale, setScale] = useState(1)
 
   const observer = useRef<any>()
 
@@ -48,14 +47,14 @@ const StockImages = (props: any) => {
 
   const addObject = useCallback(
     (url: string, width: number, height: number) => {
+      let scale = 1
       if (width > frame.width || height > frame.height) {
         if (width / frame.width > height / frame.height) {
-          setScale(frame.width / width)
+          scale = frame.width / width
         } else {
-          setScale(frame.height / height)
+          scale = frame.height / height
         }
       }
-
       if (editor) {
         const options = {
           type: "StaticImage",
