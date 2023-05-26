@@ -21,6 +21,7 @@ const StockImages = (props: any) => {
   const [page, setPage] = useState(1)
   const { res, more, loading } = usePagination(search, page)
   const frame = useFrame()
+  const [scale, setScale] = useState(1)
 
   const observer = useRef<any>()
 
@@ -46,7 +47,15 @@ const StockImages = (props: any) => {
   }
 
   const addObject = useCallback(
-    (url: string, width: number) => {
+    (url: string, width: number, height: number) => {
+      if (width > frame.width || height > frame.height) {
+        if (width / frame.width > height / frame.height) {
+          setScale(frame.width / width)
+        } else {
+          setScale(frame.height / height)
+        }
+      }
+
       if (editor) {
         const options = {
           type: "StaticImage",
@@ -54,8 +63,8 @@ const StockImages = (props: any) => {
           src: url,
           preview: url,
           metadata: { generationDate: new Date().getTime() },
-          scaleX: width > frame.width ? (frame.width - 100) / width : 1,
-          scaleY: width > frame.width ? (frame.width - 100) / width : 1,
+          scaleX: scale,
+          scaleY: scale,
         }
         editor.objects.add(options)
       }
@@ -112,7 +121,7 @@ const StockImages = (props: any) => {
                 onClick={() => {
                   {
                     props.imageAs == "foreground"
-                      ? addObject(image.image_url_list[0], image.width)
+                      ? addObject(image.image_url_list[0], image.width, image.height)
                       : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
                   }
                 }}
