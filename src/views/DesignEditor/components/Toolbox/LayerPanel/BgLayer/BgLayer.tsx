@@ -14,7 +14,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const editor = useEditor()
   const [isReplacePopup, setIsReplacePopup] = useState(false)
-
+  const frame = useFrame()
   function close() {
     setIsOpen(false)
   }
@@ -56,9 +56,15 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
     const bgObject = editor?.frame?.background?.canvas?._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType
     )[0]
-    
+
+    editor?.frame.resize({ width: frame.width, height: frame.height })
+
     const deviceUploadImg = editor?.frame?.background?.canvas?._objects.filter(
       (el: any) => el.metadata?.type === deviceUploadType
+    )[0]
+
+    const backgroundImage = editor?.frame?.background?.canvas?._objects.filter(
+      (el: any) => el?.type === "BackgroundImage"
     )[0]
 
     editor?.frame?.setBackgroundColor("#FFF")
@@ -76,9 +82,9 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
           editor.objects.setAsBackgroundImage()
         }, 100)
       })
-    } else if (deviceUploadImg) {
-      editor.objects.removeById(deviceUploadImg.id)
-
+    } else if (deviceUploadImg || backgroundImage) {
+      if (deviceUploadImg) editor.objects.removeById(deviceUploadImg.id)
+      else if (backgroundImage) editor.objects.removeById(backgroundImage.id)
       const options = {
         type: "BackgroundImage",
         src: checkboxBGUrl,

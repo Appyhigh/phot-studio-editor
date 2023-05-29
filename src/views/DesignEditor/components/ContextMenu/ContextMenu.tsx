@@ -234,7 +234,7 @@ const ContextMenu = () => {
           <ContextMenuItem
             onClick={() => {
               // handleAsComponentHandler()
-
+              editor.frame.resize({ width: frame.width, height: frame.height })
               const bgObject = editor?.frame?.background?.canvas?._objects.filter(
                 (el: any) => el.type === "BackgroundImage"
               )[0]

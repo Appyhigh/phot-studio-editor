@@ -3,7 +3,7 @@ import classes from "./style.module.css"
 import React, { useContext } from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
@@ -17,7 +17,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   const inputNextFile = React.useRef<HTMLInputElement>(null)
   const inputReplaceFile = React.useRef<HTMLInputElement>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-
+  const frame = useFrame()
   const editor = useEditor()
   const activeObject = useActiveObject()
 
@@ -46,9 +46,10 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       handleClose()
     } else if (fileInputType === "bgupdate") {
       const bgObject = editor?.frame?.background?.canvas?._objects.filter(
-        (el: any) => ((el.metadata?.type === backgroundLayerType||el.metadata?.type===deviceUploadType))
+        (el: any) => el.metadata?.type === backgroundLayerType || el.metadata?.type === deviceUploadType
       )[0]
-      
+      editor.frame.resize({ width: frame.width, height: frame.height })
+
       if (bgObject) {
         editor.objects.remove(bgObject.id)
         editor.objects.unsetBackgroundImage()
@@ -67,7 +68,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
           editor.objects.setAsBackgroundImage()
         }, 100)
       })
-      handleClose();
+      handleClose()
     } else {
       let topPosition = activeOb?.top
       let leftPosition = activeOb?.left
@@ -91,7 +92,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
       setTimeout(() => {
         editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
-        
       }, 20)
       handleClose()
     }

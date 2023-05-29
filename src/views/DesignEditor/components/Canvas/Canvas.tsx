@@ -13,10 +13,8 @@ const Canvas = () => {
   useEffect(() => {
     if (editor) {
       if (
-        (editor.frame?.background?.canvas?._objects?.length >= 3 &&
-          editor.frame?.background?.canvas?._objects[2]?.type == "BackgroundImage") ||
-        (editor.frame?.background?.canvas?._objects.length >= 2 &&
-          editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff")
+        editor.frame?.background?.canvas?._objects.length === 2 &&
+        editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff"
       ) {
         const options = {
           type: "BackgroundImage",
@@ -25,11 +23,10 @@ const Canvas = () => {
           metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
         }
         // Timeout works as a fix so canvas does not get dislocated
-       
-          editor.objects.add(options).then(() => {
-            editor.objects.setAsBackgroundImage()
-          })
-       
+
+        editor.objects.add(options).then(() => {
+          editor.objects.setAsBackgroundImage()
+        })
       }
     }
   }, [editor, frame])
