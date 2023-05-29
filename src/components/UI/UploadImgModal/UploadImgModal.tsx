@@ -3,7 +3,7 @@ import classes from "./style.module.css"
 import React, { useContext } from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
@@ -20,6 +20,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
   const editor = useEditor()
   const activeObject = useActiveObject()
+  const frame = useFrame()
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -49,6 +50,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       )[0]
 
       if (bgObject) {
+        editor.frame.resize({ width: frame.width, height: frame.height })
         editor.objects.remove(bgObject.id)
         editor.objects.unsetBackgroundImage()
       }
