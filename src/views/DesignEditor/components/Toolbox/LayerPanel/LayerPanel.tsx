@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { ILayer } from "@layerhub-io/types"
@@ -8,7 +8,7 @@ import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import ObjectLayer from "./ObjectLayer/ObjectLayer"
-import { backgroundLayerType } from "~/constants/contants"
+import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import TextLayer from "./TextLayer/TextLayer"
@@ -16,6 +16,7 @@ import BgLayer from "./BgLayer/BgLayer"
 import GroupIcon from "~/components/Icons/GroupIcon"
 import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
 import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
+import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 
 interface ToolboxState {
   toolbox: string
@@ -86,6 +87,17 @@ const LayerPanel = () => {
   }, [showSingleLayer, selectedSingleId])
 
   const [bgUrl, setBgUrl] = useState<any>("")
+
+// not allowed to select bg image so that it does not detached
+
+  useEffect(() => {
+    if (activeObject) {
+      if(activeObject?.type==="BackgroundImage") {
+        editor.objects.deselect();
+        editor.objects.select("frame")
+      }
+    }
+  }, [activeObject])
 
   React.useEffect(() => {
     if (editor) {

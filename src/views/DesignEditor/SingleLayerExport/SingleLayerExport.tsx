@@ -10,11 +10,12 @@ import SendBack from "~/components/Icons/SendBack"
 import ArrowUp from "~/components/Icons/ArrowUp"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
-import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useContextMenuRequest, useEditor, useFrame } from "@layerhub-io/react"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
 import Paste from "~/components/Icons/Paste"
 import { useEffect, useState } from "react"
 import Elements from "~/components/Icons/Elements"
+import { deviceUploadType } from "~/constants/contants"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -22,7 +23,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
-
+ const frame=useFrame()
   useEffect(() => {
     if (!show) {
       setShowDownloadPopup(false)
@@ -188,11 +189,29 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
               <ContextMenuItem
                 onClick={() => {
                   // handleAsComponentHandler()
+                  editor.frame.resize({ width: frame.width, height: frame.height })
+                  const bgObject = editor?.frame?.background?.canvas?._objects.filter(
+                    (el: any) => el.type === "BackgroundImage"
+                  )[0]
+
+                  const deviceUploadImg = editor?.frame?.background?.canvas?._objects.filter(
+                    (el: any) => el.metadata?.type === deviceUploadType
+                  )[0]
+                  if (bgObject) {
+
+                    editor.objects.removeById(bgObject.id)
+                  } else if (deviceUploadImg) {
+
+                    editor.objects.removeById(deviceUploadImg.id)
+                  }
                   editor.objects.unsetBackgroundImage()
-                  setTimeout(() => {
-                    editor.objects.setAsBackgroundImage()
-                    editor.objects.remove()
-                  }, 50)
+                  const options = {
+                    type: "BackgroundImage",
+                    metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
+                  }
+
+                  editor.objects.setAsBackgroundImage()
+                  editor.objects.update({ ...options })
                 }}
                 icon="Images"
                 label="Set as background image"

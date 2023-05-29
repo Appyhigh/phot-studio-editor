@@ -12,7 +12,7 @@ import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
 import { useEditor } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
-import { backgroundLayerType } from "./constants/contants"
+import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -162,10 +162,19 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
   const addObjects = async (layers: any) => {
     if (layers) {
-      layers.map((layer: ILayer) => {
-        editor.objects.add(layer).then(() => {
-          editor.objects.update({ top: layer.top, left: layer.left })
-        })
+      layers.map((layer: ILayer) => {        
+        const bgObject =
+          layer?.metadata?.type === backgroundLayerType ||
+          layer.type === "BackgroundImage" ||
+          layer?.metadata?.type === deviceUploadType
+           
+        if (bgObject) {
+          editor.objects.setAsBackgroundImage(layer.id)
+        } else {
+          editor.objects.add(layer).then(() => {
+            editor.objects.update({ top: layer.top, left: layer.left })
+          })
+        }
       })
     }
   }

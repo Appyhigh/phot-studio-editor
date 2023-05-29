@@ -43,11 +43,12 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         const fileInfo: any = document.getElementById("inputNextFile")
         if (fileInfo.value) fileInfo.value = ""
       })
+      handleClose()
     } else if (fileInputType === "bgupdate") {
       const bgObject = editor?.frame?.background?.canvas?._objects.filter(
-        (el: any) => el.metadata?.type === backgroundLayerType
+        (el: any) => ((el.metadata?.type === backgroundLayerType||el.metadata?.type===deviceUploadType))
       )[0]
-
+      
       if (bgObject) {
         editor.objects.remove(bgObject.id)
         editor.objects.unsetBackgroundImage()
@@ -56,14 +57,17 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       editor?.frame?.setBackgroundColor("#FFF")
 
       const options = {
-        type: "StaticImage",
+        type: "BackgroundImage",
         src: imageUrl,
         preview: imageUrl,
         metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
       }
       editor.objects.add(options).then(() => {
-        editor.objects.setAsBackgroundImage()
+        setTimeout(() => {
+          editor.objects.setAsBackgroundImage()
+        }, 100)
       })
+      handleClose();
     } else {
       let topPosition = activeOb?.top
       let leftPosition = activeOb?.left
@@ -87,7 +91,9 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
       setTimeout(() => {
         editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
+        
       }, 20)
+      handleClose()
     }
   }
 
