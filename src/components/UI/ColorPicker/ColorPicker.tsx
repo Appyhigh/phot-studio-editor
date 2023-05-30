@@ -12,7 +12,7 @@ import { Button } from "baseui/button"
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
-const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: any) => {
+const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg, handleColor }: any) => {
   const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
   const editor = useEditor()
@@ -25,6 +25,9 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg }: 
       if (type === "object") {
         handleChangeBg({ color: color })
       } else if (type === "text") editor.objects.update({ fill: color })
+      else if (type === "background") {
+        handleColor(color)
+      }
     }
 
     setColor(color)

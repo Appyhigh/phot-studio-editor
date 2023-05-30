@@ -12,7 +12,6 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 
 const ResizeCanvasPopup = ({ show }: any) => {
-
   const [desiredFrame, setDesiredFrame] = useState({
     width: 0,
     height: 0,
@@ -33,18 +32,29 @@ const ResizeCanvasPopup = ({ show }: any) => {
   const applyResize = () => {
     const size = activeKey === "0" ? selectedFrame : desiredFrame
     if (editor) {
-      const bgObject = editor.frame.background.canvas._objects.filter(
-        (el: any) => el.metadata?.type === backgroundLayerType
-      )[0]
+      const bgObject = editor.frame.background.canvas._objects.filter((el: any) => el?.type === "BackgroundImage")[0]
 
       if (bgObject) {
         editor.objects.remove(bgObject.id)
-        editor.objects.unsetBackgroundImage()
+        const options = {
+          type: "BackgroundImage",
+          src: bgObject.preview,
+          preview: bgObject.preview,
+          metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+        }
+        // Timeout works as a fix so canvas does not get dislocated
+
+        editor.objects.add(options).then(() => {
+          setTimeout(() => {
+            editor.objects.setAsBackgroundImage()
+          }, 100)
+        })
       }
       editor.frame.resize({
         width: parseInt(size.width),
         height: parseInt(size.height),
       })
+
       setCurrentDesign({
         ...currentDesign,
         frame: {
@@ -53,6 +63,15 @@ const ResizeCanvasPopup = ({ show }: any) => {
         },
       })
     }
+
+    // after resizing dont allow undo operation
+    setTimeout(() => {
+      editor.history.initialize()
+      editor.history.reset()
+      editor.history.save()
+      editor.history.reset()
+      editor.history.save()
+    }, 200)
   }
 
   useEffect(() => {

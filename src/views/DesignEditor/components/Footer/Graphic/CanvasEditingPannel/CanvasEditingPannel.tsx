@@ -19,6 +19,7 @@ const CanvasEditingPannel = () => {
   })
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
+  const frame = useFrame()
   const activeObject = useActiveObject()
   React.useEffect(() => {
     setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 100) })
@@ -91,10 +92,8 @@ const CanvasEditingPannel = () => {
       <Block
         className={classes.canvasOptions}
         onClick={() => {
-
           const length_obj = editor.frame.background.canvas._objects.length
           if (editor.frame.background.canvas._objects.length === 2) {
-            
             editor.objects.unsetBackgroundImage()
             const options = {
               type: "BackgroundImage",
@@ -108,8 +107,7 @@ const CanvasEditingPannel = () => {
                 editor.objects.setAsBackgroundImage()
               }, 100)
             })
-          }
-           else if (editor.frame.background.canvas._objects[length_obj - 1].metadata.type !== backgroundLayerType) {           
+          } else if (editor.frame.background.canvas._objects[length_obj - 1].metadata.type !== backgroundLayerType) {
             editor.history.undo()
           }
         }}
