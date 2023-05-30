@@ -7,7 +7,7 @@ import FlipHorizontal from "~/components/Icons/FlipHorizontal"
 import FlipVertical from "~/components/Icons/FlipVertical"
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
-import clsx from "clsx"
+import { ToolButton } from "./ToolButton"
 const Flip = ({ type }: any) => {
   const editor = useEditor()
   const activeObject = useActiveObject() as any
@@ -63,19 +63,7 @@ const Flip = ({ type }: any) => {
       }
     >
       <Block>
-        <button
-          disabled={type === "lock" ? true : false}
-          className={clsx(
-            "d-flex justify-content-center align-items-center flex-column ml-1",
-            classes.flipBtn,
-            type === "lock" && classes.disabledBtn
-          )}
-        >
-          <div>
-            <Icons.Flip />
-          </div>
-          <p className={classes.subHeadingText}>Flip</p>
-        </button>
+        <ToolButton type={type} icon={<Icons.Flip />} name="Flip" />
       </Block>
     </StatefulPopover>
   )
