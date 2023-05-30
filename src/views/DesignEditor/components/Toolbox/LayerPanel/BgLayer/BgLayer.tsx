@@ -6,7 +6,7 @@ import DropdownWrapper from "../ObjectLayer/DropdownWrapper"
 import React, { useState } from "react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
 import { BgLayerOption } from "~/views/DesignEditor/utils/BgLayerOptions"
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { backgroundLayerType, checkboxBGUrl, deviceUploadType } from "~/constants/contants"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 
@@ -16,6 +16,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const editor = useEditor()
   const [isReplacePopup, setIsReplacePopup] = useState(false)
+  const frame = useFrame()
 
   function close() {
     setIsOpen(false)
@@ -30,9 +31,11 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
       (el: any) => el.metadata?.type === deviceUploadType
     )[0]
     if (bgObject) {
+      editor.frame.resize({ width: frame.width, height: frame.height })
       editor.objects.remove(bgObject.id)
       editor.objects.unsetBackgroundImage()
     } else if (deviceObject) {
+      editor.frame.resize({ width: frame.width, height: frame.height })
       editor.objects.remove(deviceObject.id)
       editor.objects.unsetBackgroundImage()
     }
@@ -66,12 +69,14 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
         preview: checkboxBGUrl,
         metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
       }
+      editor.frame.resize({ width: frame.width, height: frame.height })
       editor.objects.unsetBackgroundImage()
 
       editor.objects.add(options).then(() => {
         editor.objects.setAsBackgroundImage()
       })
     } else if (deviceUploadImg) {
+      editor.frame.resize({ width: frame.width, height: frame.height })
       editor.objects.unsetBackgroundImage()
 
       const options = {

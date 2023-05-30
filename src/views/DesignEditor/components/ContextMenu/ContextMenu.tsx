@@ -1,4 +1,4 @@
-import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useContextMenuRequest, useEditor, useFrame } from "@layerhub-io/react"
 import { useContext } from "react"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
@@ -22,6 +22,7 @@ const ContextMenu = () => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+  const frame = useFrame()
 
   const deleteHandler = () => {
     if (activeObject?.id === mainImgInfo.id) {
@@ -232,6 +233,7 @@ const ContextMenu = () => {
           <ContextMenuItem
             onClick={() => {
               // handleAsComponentHandler()
+              editor.frame.resize({ width: frame.width, height: frame.height })
               editor.objects.unsetBackgroundImage()
               setTimeout(() => {
                 editor.objects.setAsBackgroundImage()

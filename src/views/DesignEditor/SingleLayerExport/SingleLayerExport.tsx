@@ -10,7 +10,7 @@ import SendBack from "~/components/Icons/SendBack"
 import ArrowUp from "~/components/Icons/ArrowUp"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
-import { useActiveObject, useContextMenuRequest, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useContextMenuRequest, useEditor, useFrame } from "@layerhub-io/react"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
 import Paste from "~/components/Icons/Paste"
 import { useEffect, useState } from "react"
@@ -22,6 +22,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
+  const frame = useFrame()
 
   useEffect(() => {
     if (!show) {
@@ -188,6 +189,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
               <ContextMenuItem
                 onClick={() => {
                   // handleAsComponentHandler()
+                  editor.frame.resize({ width: frame.width, height: frame.height })
                   editor.objects.unsetBackgroundImage()
                   setTimeout(() => {
                     editor.objects.setAsBackgroundImage()

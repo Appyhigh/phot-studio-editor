@@ -12,7 +12,6 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 
 const ResizeCanvasPopup = ({ show }: any) => {
-
   const [desiredFrame, setDesiredFrame] = useState({
     width: 0,
     height: 0,
@@ -38,6 +37,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
       )[0]
 
       if (bgObject) {
+        editor.frame.resize({ width: frame.width, height: frame.height })
         editor.objects.remove(bgObject.id)
         editor.objects.unsetBackgroundImage()
       }
