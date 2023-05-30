@@ -20,7 +20,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   const frame = useFrame()
   const editor = useEditor()
   const activeObject = useActiveObject()
-  const frame = useFrame()
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
