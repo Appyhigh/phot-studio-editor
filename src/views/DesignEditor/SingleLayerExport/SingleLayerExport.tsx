@@ -23,7 +23,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
- const frame=useFrame()
+  const frame = useFrame()
   useEffect(() => {
     if (!show) {
       setShowDownloadPopup(false)
@@ -158,7 +158,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 icon="group"
                 label="Ungroup"
               >
-                <Ungroup />
+                <Ungroup size={26} />
               </ContextMenuItem>
             )}
 
@@ -198,10 +198,8 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                     (el: any) => el.metadata?.type === deviceUploadType
                   )[0]
                   if (bgObject) {
-
                     editor.objects.removeById(bgObject.id)
                   } else if (deviceUploadImg) {
-
                     editor.objects.removeById(deviceUploadImg.id)
                   }
                   editor.objects.unsetBackgroundImage()

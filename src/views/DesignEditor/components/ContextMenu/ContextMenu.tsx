@@ -227,7 +227,7 @@ const ContextMenu = () => {
             icon="layers"
             label="Ungroup"
           >
-            <Ungroup />
+            <Ungroup size={26} />
           </ContextMenuItem>
         )}
         {activeObject?.type === "StaticImage" && (
