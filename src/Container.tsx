@@ -12,7 +12,7 @@ import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
 import { useEditor } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
-import { backgroundLayerType } from "./constants/contants"
+import { backgroundLayerType, checkboxBGUrl, deviceUploadType } from "./constants/contants"
 
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -116,7 +116,8 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     })
   }
 
-  const saveData = async (data: any) => {
+  // @ts-ignore
+  const saveData = async (data, bgColor) => {
     try {
       const db: any = await openDatabase()
 
@@ -124,7 +125,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       const objectStore = transaction.objectStore("Phot-Studio-Canvas-Store")
 
       const putRequest = objectStore.put(data, "dataKey")
-
+      const putBgColor = objectStore.put(bgColor, "bgColor")
       putRequest.onerror = (event: any) => {
         console.error("IndexedDB put error:", event.target.error)
       }
@@ -145,28 +146,72 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       const objectStore = transaction.objectStore("Phot-Studio-Canvas-Store")
 
       const getRequest = objectStore.get("dataKey")
-
+      const getBgColor = objectStore.get("bgColor")
       getRequest.onerror = (event: any) => {
+        console.error("IndexedDB get error:", event.target.error)
+      }
+      getBgColor.onerror = (event: any) => {
         console.error("IndexedDB get error:", event.target.error)
       }
 
       getRequest.onsuccess = (event: any) => {
         const data = event.target.result
         const layers = data
-        addObjects(layers)
+        getBgColor.onsuccess = (event: any) => {
+          const data = event.target.result
+          const bgColor = data
+
+          addObjects(layers, bgColor)
+        }
       }
     } catch (error) {
       console.error("Failed to fetch data from IndexedDB:", error)
     }
   }
 
-  const addObjects = async (layers: any) => {
+  const addObjects = async (layers: any, bgColor: any) => {
     if (layers) {
       layers.map((layer: ILayer) => {
-        editor.objects.add(layer).then(() => {
-          editor.objects.update({ top: layer.top, left: layer.left })
-        })
+        const bgObject =
+          layer?.metadata?.type === backgroundLayerType ||
+          layer.type === "BackgroundImage" ||
+          layer?.metadata?.type === deviceUploadType
+
+        if (bgObject) {
+          const backgroundImg = editor?.frame?.background?.canvas?._objects.filter(
+            (el: any) => el?.type === "BackgroundImage"
+          )[0]
+          editor.objects.removeById(backgroundImg.id)
+          editor.objects.unsetBackgroundImage()
+          const options = {
+            type: "BackgroundImage",
+            src: layer.src,
+            preview: layer.preview,
+            metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+          }
+          // Timeout works as a fix so canvas does not get dislocated
+
+          editor.objects.add(options).then(() => {
+            editor.objects.setAsBackgroundImage()
+          })
+
+          editor.objects.setAsBackgroundImage(layer.id)
+        } else {
+          editor.objects.add(layer).then(() => {
+            editor.objects.update({ top: layer.top, left: layer.left })
+          })
+        }
       })
+      if (bgColor != "#FFF") {
+        const backgroundImg = editor?.frame?.background?.canvas?._objects.filter(
+          (el: any) => el?.type === "BackgroundImage"
+        )[0]
+        if (backgroundImg) {
+          editor.objects.removeById(backgroundImg.id)
+          editor.objects.unsetBackgroundImage()
+        }
+        editor.frame.setBackgroundColor(bgColor)
+      }
     }
   }
 
@@ -180,13 +225,9 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     if (editor) {
       editor.on("history:changed", () => {
         const currentScene = editor.scene.exportToJSON()
-
-        saveData(
-          currentScene.layers.filter(
-            (el) =>
-              el.metadata?.type !== backgroundLayerType && el.type !== "BackgroundImage" && el.type !== "Background"
-          )
-        )
+        const data = currentScene.layers.filter((el) => el.id != "background")
+        const bgColor = editor?.frame?.background?.canvas?._objects[1].fill
+        saveData(data, bgColor)
       })
     }
   }, [editor])

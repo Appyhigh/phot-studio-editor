@@ -16,6 +16,7 @@ import Ungroup from "~/components/Icons/Ungroup"
 import DownloadIcon from "~/components/Icons/DownloadIcon"
 import DownloadPopup from "../Footer/Graphic/DownloadPopup/DownloadPopup"
 import Elements from "~/components/Icons/Elements"
+import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
 
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
@@ -234,11 +235,28 @@ const ContextMenu = () => {
             onClick={() => {
               // handleAsComponentHandler()
               editor.frame.resize({ width: frame.width, height: frame.height })
+              const bgObject = editor?.frame?.background?.canvas?._objects.filter(
+                (el: any) => el.type === "BackgroundImage"
+              )[0]
+
+              const deviceUploadImg = editor?.frame?.background?.canvas?._objects.filter(
+                (el: any) => el.metadata?.type === deviceUploadType || el.metadata?.type === backgroundLayerType
+              )[0]
+
+              if (bgObject) {
+                editor.objects.removeById(bgObject.id)
+              } else if (deviceUploadImg) {
+                editor.objects.removeById(deviceUploadImg.id)
+              }
               editor.objects.unsetBackgroundImage()
-              setTimeout(() => {
-                editor.objects.setAsBackgroundImage()
-                editor.objects.remove()
-              }, 50)
+              const options = {
+                type: "BackgroundImage",
+                metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
+              }
+
+              editor.objects.setAsBackgroundImage()
+              editor.objects.update({ ...options })
+
               editor.cancelContextMenuRequest()
             }}
             icon="Images"

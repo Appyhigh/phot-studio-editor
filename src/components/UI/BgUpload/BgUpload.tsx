@@ -22,7 +22,7 @@ const BgUpload = () => {
       base64
     )
     const options = {
-      type: "StaticImage",
+      type: "BackgroundImage",
       src: previewWithUpdatedBackground,
       preview: previewWithUpdatedBackground,
       metadata: {

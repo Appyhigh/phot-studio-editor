@@ -15,6 +15,7 @@ import EyeCrossed from "~/components/Icons/EyeCrossed"
 import Paste from "~/components/Icons/Paste"
 import { useEffect, useState } from "react"
 import Elements from "~/components/Icons/Elements"
+import { deviceUploadType } from "~/constants/contants"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -190,11 +191,26 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 onClick={() => {
                   // handleAsComponentHandler()
                   editor.frame.resize({ width: frame.width, height: frame.height })
+                  const bgObject = editor?.frame?.background?.canvas?._objects.filter(
+                    (el: any) => el.type === "BackgroundImage"
+                  )[0]
+
+                  const deviceUploadImg = editor?.frame?.background?.canvas?._objects.filter(
+                    (el: any) => el.metadata?.type === deviceUploadType
+                  )[0]
+                  if (bgObject) {
+                    editor.objects.removeById(bgObject.id)
+                  } else if (deviceUploadImg) {
+                    editor.objects.removeById(deviceUploadImg.id)
+                  }
                   editor.objects.unsetBackgroundImage()
-                  setTimeout(() => {
-                    editor.objects.setAsBackgroundImage()
-                    editor.objects.remove()
-                  }, 50)
+                  const options = {
+                    type: "BackgroundImage",
+                    metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
+                  }
+
+                  editor.objects.setAsBackgroundImage()
+                  editor.objects.update({ ...options })
                 }}
                 icon="Images"
                 label="Set as background image"
