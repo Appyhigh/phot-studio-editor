@@ -1,11 +1,10 @@
-import { useEditor, useZoomRatio } from "@layerhub-io/react"
-import { Button, KIND } from "baseui/button"
-import { SIZE } from "baseui/input"
+import { useActiveObject, useEditor, useFrame, useZoomRatio } from "@layerhub-io/react"
 import { Slider } from "baseui/slider"
 import React from "react"
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import { Block } from "baseui/block"
+import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 
 interface Options {
   zoomRatio: number
@@ -20,7 +19,7 @@ const CanvasEditingPannel = () => {
   })
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
-
+  const activeObject = useActiveObject()
   React.useEffect(() => {
     setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 100) })
   }, [zoomRatio])
@@ -92,7 +91,27 @@ const CanvasEditingPannel = () => {
       <Block
         className={classes.canvasOptions}
         onClick={() => {
-          editor.history.undo()
+
+          const length_obj = editor.frame.background.canvas._objects.length
+          if (editor.frame.background.canvas._objects.length === 2) {
+            
+            editor.objects.unsetBackgroundImage()
+            const options = {
+              type: "BackgroundImage",
+              src: checkboxBGUrl,
+              preview: checkboxBGUrl,
+              metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+            }
+
+            editor.objects.add(options).then(() => {
+              setTimeout(() => {
+                editor.objects.setAsBackgroundImage()
+              }, 100)
+            })
+          }
+           else if (editor.frame.background.canvas._objects[length_obj - 1].metadata.type !== backgroundLayerType) {           
+            editor.history.undo()
+          }
         }}
       >
         <Icons.Undo size={22} />
