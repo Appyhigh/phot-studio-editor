@@ -173,9 +173,9 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
 
     await loadFonts([font])
-
-    editor.objects.add(layer).then(() => {
-      editor.objects.update({ ...layer })
+      
+    editor?.objects?.add(layer).then(() => {
+      editor?.objects?.update({ ...layer })
     })
   }
 

@@ -12,7 +12,7 @@ interface Options {
 }
 const CanvasEditingPannel = () => {
   const zoomMin = 10
-  const zoomMax = 240
+  const zoomMax = 300
   const [options, setOptions] = React.useState<Options>({
     zoomRatio: 20,
     zoomRatioTemp: 20,
