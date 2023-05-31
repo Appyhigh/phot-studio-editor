@@ -1,5 +1,5 @@
 export const DeleteFunc = ({ editor, activeObject, mainImgInfo, setMainImgInfo }: any) => {
-  if (activeObject?.id === mainImgInfo.id) {
+  if (mainImgInfo && activeObject?.id === mainImgInfo.id) {
     // @ts-ignore
     setPanelInfo((prev) => ({
       ...prev,
@@ -12,4 +12,5 @@ export const DeleteFunc = ({ editor, activeObject, mainImgInfo, setMainImgInfo }
     setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
   }
   editor.objects.remove(activeObject?.id)
+  editor.cancelContextMenuRequest()
 }
