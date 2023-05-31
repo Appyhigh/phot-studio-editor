@@ -27,12 +27,14 @@ const Customize = () => {
   const editor = useEditor()
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const frame = useFrame()
 
   const [state, setState] = React.useState<State>({
     backgroundColor: "#000000",
   })
 
   const changeBackgroundColor = (color: string) => {
+    editor.frame.resize({ width: frame.width, height: frame.height })
     editor.objects.unsetBackgroundImage()
     const bgObject = editor.frame.background.canvas._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType

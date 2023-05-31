@@ -21,3 +21,4 @@ export const checkboxBGUrl = "https://ik.imagekit.io/rxld8u68i/background.png?up
 export const backgroundLayerType = "CHECKBOX_BACKGROUND"
 export const deviceUploadType="DEVICE_UPLOAD"
 export const LOCAL_SAMPLE_IMG="local_sample_img"
+export const MAIN_IMG_Bg="main_img_bg"

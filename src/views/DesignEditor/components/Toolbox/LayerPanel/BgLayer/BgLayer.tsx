@@ -31,9 +31,11 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
     const backgroundImg = editor.frame.background.canvas._objects.filter((el: any) => el.type === "BackgroundImage")[0]
 
     if (bgObject) {
+      editor.frame.resize({ width: frame.width, height: frame.height })
       editor.objects.remove(bgObject.id)
       editor.objects.unsetBackgroundImage()
     } else if (deviceObject) {
+      editor.frame.resize({ width: frame.width, height: frame.height })
       editor.objects.remove(deviceObject.id)
       editor.objects.unsetBackgroundImage()
     } else if (backgroundImg) {
@@ -76,6 +78,8 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
         preview: checkboxBGUrl,
         metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
       }
+      editor.frame.resize({ width: frame.width, height: frame.height })
+      editor.objects.unsetBackgroundImage()
 
       editor.objects.add(options).then(() => {
         setTimeout(() => {
@@ -83,8 +87,10 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
         }, 100)
       })
     } else if (deviceUploadImg || backgroundImage) {
+      editor.frame.resize({ width: frame.width, height: frame.height })
       if (deviceUploadImg) editor.objects.removeById(deviceUploadImg.id)
       else if (backgroundImage) editor.objects.removeById(backgroundImage.id)
+      editor.objects.unsetBackgroundImage()
       const options = {
         type: "BackgroundImage",
         src: checkboxBGUrl,
@@ -149,7 +155,9 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
             />
           ))} */}
         </div>
-        <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background" />
+        <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background"  handleColor={(each:any)=>{
+          updateObjectFill(each)
+        }}/>
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
         <div className={classes.colorsWrapper}>
