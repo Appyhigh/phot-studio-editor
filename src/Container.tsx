@@ -117,7 +117,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   }
 
   // @ts-ignore
-  const saveData = async (data, bgColor) => {
+  const saveData = async (data, canvasDim) => {
     try {
       const db: any = await openDatabase()
 
@@ -125,7 +125,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       const objectStore = transaction.objectStore("Phot-Studio-Canvas-Store")
 
       const putRequest = objectStore.put(data, "dataKey")
-      const putBgColor = objectStore.put(bgColor, "bgColor")
+      const putCanvasDim = objectStore.put(canvasDim, "canvasDim")
       putRequest.onerror = (event: any) => {
         console.error("IndexedDB put error:", event.target.error)
       }
@@ -146,22 +146,22 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       const objectStore = transaction.objectStore("Phot-Studio-Canvas-Store")
 
       const getRequest = objectStore.get("dataKey")
-      const getBgColor = objectStore.get("bgColor")
+      const getCanvasDim = objectStore.get("canvasDim")
       getRequest.onerror = (event: any) => {
         console.error("IndexedDB get error:", event.target.error)
       }
-      getBgColor.onerror = (event: any) => {
+      getCanvasDim.onerror = (event: any) => {
         console.error("IndexedDB get error:", event.target.error)
       }
 
       getRequest.onsuccess = (event: any) => {
         const data = event.target.result
         const layers = data
-        getBgColor.onsuccess = (event: any) => {
+        getCanvasDim.onsuccess = (event: any) => {
           const data = event.target.result
-          const bgColor = data
+          const canvasDim = data
 
-          addObjects(layers, bgColor)
+          addObjects(layers, canvasDim)
         }
       }
     } catch (error) {
@@ -169,7 +169,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const addObjects = async (layers: any, bgColor: any) => {
+  const addObjects = async (layers: any, canvasDim: any) => {
     if (layers) {
       layers.map((layer: ILayer) => {
         const bgObject =
@@ -194,15 +194,15 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           editor.objects.add(options).then(() => {
             editor.objects.setAsBackgroundImage()
           })
-
-          editor.objects.setAsBackgroundImage(layer.id)
         } else {
           editor.objects.add(layer).then(() => {
             editor.objects.update({ top: layer.top, left: layer.left })
           })
         }
       })
-      if (bgColor != "#FFF") {
+      editor.frame.resize({ width: canvasDim.width, height: canvasDim.height })
+
+      if (canvasDim.bgColor != "#FFF") {
         const backgroundImg = editor?.frame?.background?.canvas?._objects.filter(
           (el: any) => el?.type === "BackgroundImage"
         )[0]
@@ -210,14 +210,14 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           editor.objects.removeById(backgroundImg.id)
           editor.objects.unsetBackgroundImage()
         }
-        editor.frame.setBackgroundColor(bgColor)
+        editor.frame.setBackgroundColor(canvasDim.bgColor)
       }
     }
   }
 
   useEffect(() => {
     if (editor) {
-      fetchDataFromLocal()
+      fetchDataFromLocal()      
     }
   }, [editor])
 
@@ -227,7 +227,14 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         const currentScene = editor.scene.exportToJSON()
         const data = currentScene.layers.filter((el) => el.id != "background")
         const bgColor = editor?.frame?.background?.canvas?._objects[1].fill
-        saveData(data, bgColor)
+        const canvasWidth = editor?.frame?.background?.canvas?._objects[1].width
+        const canvasHeight = editor?.frame?.background?.canvas?._objects[1].height
+        const canvasDim = {
+          bgColor: bgColor,
+          width: canvasWidth,
+          height: canvasHeight,
+        }
+        saveData(data, canvasDim)
       })
     }
   }, [editor])

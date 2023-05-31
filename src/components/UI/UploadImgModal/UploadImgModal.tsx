@@ -1,6 +1,6 @@
 import { Modal } from "baseui/modal"
 import classes from "./style.module.css"
-import React, { useContext } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
@@ -10,16 +10,16 @@ import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
-  const close = () => {
-    handleClose()
-  }
-
   const inputNextFile = React.useRef<HTMLInputElement>(null)
   const inputReplaceFile = React.useRef<HTMLInputElement>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const frame = useFrame()
   const editor = useEditor()
   const activeObject = useActiveObject()
+  const [addImgInfo, setAddImgInfo] = useState({
+    showPreview: false,
+    url: "",
+  })
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -27,23 +27,11 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     const isVideo = file.type.includes("video")
     let preview = imageUrl
     const inputType = isVideo ? "StaticVideo" : "StaticImage"
-    setTimeout(() => {
-      close()
-    }, 100)
-    if (fileInputType === "add") {
-      const upload = {
-        id: nanoid(),
-        src: imageUrl,
-        preview: imageUrl,
-        type: inputType,
-        metadata: { generationDate: new Date().getTime() },
-      }
 
-      editor.objects.add(upload).then(() => {
-        const fileInfo: any = document.getElementById("inputNextFile")
-        if (fileInfo.value) fileInfo.value = ""
-      })
-      handleClose()
+    if (fileInputType === "add") {
+      setAddImgInfo({ showPreview: true, url: imageUrl })
+      const fileInfo: any = document.getElementById("inputNextFile")
+      if (fileInfo.value) fileInfo.value = ""
     } else if (fileInputType === "bgupdate") {
       const bgObject = editor?.frame?.background?.canvas?._objects.filter(
         (el: any) => el.metadata?.type === backgroundLayerType || el.metadata?.type === deviceUploadType
@@ -51,6 +39,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       editor.frame.resize({ width: frame.width, height: frame.height })
 
       if (bgObject) {
+        editor.frame.resize({ width: frame.width, height: frame.height })
         editor.objects.remove(bgObject.id)
         editor.objects.unsetBackgroundImage()
       }
@@ -69,6 +58,9 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         }, 100)
       })
       handleClose()
+      setTimeout(() => {
+        close()
+      }, 100)
     } else {
       let topPosition = activeOb?.top
       let leftPosition = activeOb?.left
@@ -94,11 +86,19 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
       }, 20)
       handleClose()
+      setTimeout(() => {
+        close()
+      }, 100)
     }
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleDropFiles(e.target.files!)
+  }
+
+  const close = () => {
+    setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+    handleClose()
   }
 
   const handleInputFileRefClick = () => {
@@ -117,7 +117,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         Close: {
           style: ({ $theme }) => ({
             outline: `transparent`,
-            margin: "40px 20px",
+            margin: fileInputType === "add" ? "20px" : "40px 20px",
           }),
         },
         Dialog: {
@@ -132,27 +132,58 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       isOpen={isOpen}
     >
       <div className={classes.modal}>
-        <div className={classes.modalHeader}>
-          {fileInputType === "update"
-            ? "Update Image"
-            : fileInputType === "bgupdate"
-            ? "Update background"
-            : "Add  Image"}
-        </div>
-        <DropZone handleDropFiles={handleDropFiles}>
-          <div className={classes.uploadInput}>
-            <UploadInput type="modal" handleInputFileRefClick={handleInputFileRefClick} width={514} height={319} />
-            <input
-              onChange={handleFileInput}
-              type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
-              id={fileInputType === "update" ? "inputReplace" : "inputNextFile"}
-              ref={fileInputType === "update" ? inputReplaceFile : inputNextFile}
-              className={classes.inputFile}
-            />
-          </div>
-        </DropZone>{" "}
+        {!addImgInfo.showPreview && (
+          <>
+            <div className={classes.modalHeader}>
+              {fileInputType === "update"
+                ? "Update Image"
+                : fileInputType === "bgupdate"
+                ? "Update background"
+                : "Add  Image"}
+            </div>
+            <DropZone handleDropFiles={handleDropFiles}>
+              <div className={classes.uploadInput}>
+                <UploadInput type="modal" handleInputFileRefClick={handleInputFileRefClick} width={514} height={319} />
+                <input
+                  onChange={handleFileInput}
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+                  id={fileInputType === "update" ? "inputReplace" : "inputNextFile"}
+                  ref={fileInputType === "update" ? inputReplaceFile : inputNextFile}
+                  className={classes.inputFile}
+                />
+              </div>
+            </DropZone>
+          </>
+        )}
       </div>
+      {fileInputType == "add" && addImgInfo.showPreview && addImgInfo.url && (
+        <div className="d-flex justify-content-center align-items-center flex-column">
+          <div>
+            <img className={classes.addImgPreview} src={addImgInfo.url} alt="preview" />
+          </div>
+          <div>
+            <button
+              onClick={() => {
+                const upload = {
+                  id: nanoid(),
+                  src: addImgInfo.url,
+                  preview: addImgInfo.url,
+                  metadata: { generationDate: new Date().getTime() },
+                  type: "StaticImage",
+                }
+                editor.objects.add(upload).then(() => {
+                  handleClose()
+                  setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+                })
+              }}
+              className={classes.addImgBtn}
+            >
+              Add Image
+            </button>
+          </div>
+        </div>
+      )}
     </Modal>
   )
 }

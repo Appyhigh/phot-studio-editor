@@ -33,6 +33,7 @@ export const changeLayerFill = (base64ImageData: string, backgroundColor: string
 export function resizeBase64Image(base64: string, newWidth: number, newHeight: number) {
   return new Promise((resolve, reject) => {
     const img = new Image()
+    img.crossOrigin = "anonymous"
 
     img.onload = function () {
       const canvas = document.createElement("canvas")

@@ -24,6 +24,8 @@ export const EraseBgFunc = ({ editor, frame }: any) => {
       preview: checkboxBGUrl,
       metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
     }
+    editor.frame.resize({ width: frame.width, height: frame.height })
+    editor.objects.unsetBackgroundImage()
 
     editor.objects.add(options).then(() => {
       setTimeout(() => {
@@ -31,8 +33,10 @@ export const EraseBgFunc = ({ editor, frame }: any) => {
       }, 100)
     })
   } else if (deviceUploadImg || backgroundImage) {
+    editor.frame.resize({ width: frame.width, height: frame.height })
     if (deviceUploadImg) editor.objects.removeById(deviceUploadImg.id)
     else if (backgroundImage) editor.objects.removeById(backgroundImage.id)
+    editor.objects.unsetBackgroundImage()
     const options = {
       type: "BackgroundImage",
       src: checkboxBGUrl,
