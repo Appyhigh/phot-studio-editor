@@ -5,8 +5,6 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { throttle } from "lodash"
 import { Block } from "baseui/block"
 import { HexColorPicker } from "react-colorful"
-import { changeLayerBackgroundImage, changeLayerFill } from "~/utils/updateLayerBackground"
-import { toDataURL } from "~/utils/export"
 import { Button } from "baseui/button"
 
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
@@ -92,7 +90,13 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg, ha
               />
             </div>
             <div className={classes.colorPickerInput}>
-              <input className={classes.colorPickerInputField} value={color} />
+              <input
+                className={classes.colorPickerInputField}
+                onChange={(e) => {
+                  setColor(e.target.value)
+                }}
+                value={inputColor}
+              />
             </div>
             <Block>
               <Block className={classes.colorTypeHeading}>Default Colors</Block>
