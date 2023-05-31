@@ -35,7 +35,7 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
 
   const exportHandlerSingle = useCallback(async () => {
     if (editor && objects) {
-      let image = activeObject.preview
+      let image = activeObject.preview as string
 
       if ((!image || image.length === 0) && activeObject?._objects?.length > 0) {
         let template: any = editor.scene.exportToJSON()

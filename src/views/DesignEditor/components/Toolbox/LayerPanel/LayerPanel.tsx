@@ -43,6 +43,7 @@ const LayerPanel = () => {
   const [showSingleLayer, setShowSingleLayer] = useState(false)
   const rightPanelRef = useRef()
   const [activeSingleLayer, setActiveSingleLayer] = useState()
+ 
 
   const [layerState, setLayerState] = useState<layerProps>({
     isOpenSlider: false,

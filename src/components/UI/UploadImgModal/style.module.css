@@ -3,15 +3,31 @@
   font-size: 20px;
   line-height: 106%;
   color: #000000;
-
 }
 
-.inputFile{
-    display: none;
+.inputFile {
+  display: none;
 }
-.modal{
- padding: 57px 43px 0px; 
+.modal {
+  padding: 57px 43px 0px;
 }
-.modalHeader{
-    margin-bottom: 50px;
+.modalHeader {
+  margin-bottom: 50px;
+}
+.addImgPreview {
+  width: 315px;
+  height: 315px;
+  border-radius: 4px;
+}
+.addImgBtn {
+  width: 299px;
+  height: 50px;
+  text-align: center;
+  color: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  background: #6729f3;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  margin-top: 40px;
 }

@@ -15,9 +15,16 @@
   border-radius: 4px;
   top: 90px;
 }
+.mainBgUploadedImg {
+  top: 125px;
+  left: 80px;
+}
 .discardBtn {
   top: 74px;
   right: 20px;
+}
+.mainImgBgDiscard {
+  top: 110px;
 }
 
 .removeBgBtn {
@@ -38,6 +45,13 @@
   cursor: not-allowed;
 }
 
+.mainImgBg {
+  margin: 20px 0px 0px 10px;
+}
+.mainImgBgBtn {
+  margin-left: 10px;
+}
+
 @media screen and (min-width: 1220px) {
   .uploadPreviewContainer {
     width: 320px;
@@ -50,8 +64,23 @@
     top: 70px;
     right: 38px;
   }
+
+  .mainImgBgDiscard {
+    top: 100px;
+    right: 45px;
+  }
   .removeBgBtn {
     width: 319px;
     margin-top: 20px;
+  }
+  .mainBgUploadedImg {
+    left: 110px;
+  }
+
+  .mainImgBg {
+    margin: 20px 0px 0px 20px;
+  }
+  .mainImgBgBtn {
+    margin-left: 20px;
   }
 }
