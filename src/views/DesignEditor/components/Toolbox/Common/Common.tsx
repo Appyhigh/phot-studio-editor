@@ -17,8 +17,7 @@ import { ToolButton } from "../Shared/ToolButton"
 import { DuplicateFunc } from "~/views/DesignEditor/utils/tools/DuplicateFunc"
 import { FrontFunc } from "~/views/DesignEditor/utils/tools/FrontFunc"
 import { BackFunc } from "~/views/DesignEditor/utils/tools/BackFunc"
-import { UngroupFunc } from "~/views/DesignEditor/utils/tools/UngroupFunc"
-import { GroupFunc } from "~/views/DesignEditor/utils/tools/GroupFunc"
+import { GroupFunc, UngroupFunc } from "~/views/DesignEditor/utils/tools/GroupUngroupFunc"
 import { DeleteFunc } from "~/views/DesignEditor/utils/tools/DeleteFunc"
 
 const Common = ({ type }: any) => {

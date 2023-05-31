@@ -3,6 +3,7 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import Eye from "~/components/Icons/Eye"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
 import { ToolButton } from "./ToolButton"
+import { InvisibleFunc, VisibleFunc } from "~/views/DesignEditor/utils/tools/VisibilityFunc"
 
 const Visibility = ({ type }: any) => {
   const [state, setState] = React.useState<{ visible: boolean }>({ visible: true })
@@ -19,22 +20,14 @@ const Visibility = ({ type }: any) => {
   return state.visible || activeObject?.visible ? (
     <ToolButton
       type={type}
-      func={() => {
-        editor.objects.update({ visible: false })
-
-        setState({ visible: false })
-      }}
+      func={() => InvisibleFunc({ editor, setState })}
       icon={<Eye size={28} />}
       name="Visibility"
     />
   ) : (
     <ToolButton
       type={type}
-      func={() => {
-        editor.objects.update({ visible: true })
-
-        setState({ visible: true })
-      }}
+      func={() => VisibleFunc({ editor, setState })}
       icon={<EyeCrossed size={25} />}
       name="Visibility"
     />
