@@ -102,7 +102,15 @@ const ContextMenu = () => {
         >
           <Paste size={24} />
         </ContextMenuItem> */}
-        <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
+        <ContextMenuItem
+          onClick={() => {
+            activeObject.name == "Initial Frame"
+              ? EraseBgFunc({ editor, frame })
+              : DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })
+          }}
+          icon="Delete"
+          label="Delete"
+        >
           <Delete size={24} />
         </ContextMenuItem>
         <ContextMenuItem onClick={() => FrontFunc({ editor, activeObject })} icon="Forward" label="Bring forward">
