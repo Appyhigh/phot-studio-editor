@@ -1,19 +1,16 @@
 import React, { useCallback, useEffect, useRef } from "react"
 import ResizeObserver from "resize-observer-polyfill"
 import useAppContext from "~/hooks/useAppContext"
-import { getPublicDesigns } from "./store/slices/designs/actions"
-import { getPublicComponents } from "./store/slices/components/actions"
 import { getFonts } from "./store/slices/fonts/actions"
 import { getPixabayResources } from "./store/slices/resources/actions"
-import { getUploads } from "./store/slices/uploads/actions"
 import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/useAuth"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
 import { useEditor } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
-import { backgroundLayerType, checkboxBGUrl, deviceUploadType } from "./constants/contants"
-
+import { backgroundLayerType, deviceUploadType } from "./constants/contants"
+import { loadFonts } from "./utils/fonts"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -169,6 +166,19 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const addText = async (layer: any) => {
+    const font = {
+      name: layer.fontFamily,
+      url: layer.fontURL,
+    }
+
+    await loadFonts([font])
+
+    editor.objects.add(layer).then(() => {
+      editor.objects.update({ ...layer })
+    })
+  }
+
   const addObjects = async (layers: any, canvasDim: any) => {
     if (layers) {
       layers.map((layer: ILayer) => {
@@ -195,9 +205,13 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             editor.objects.setAsBackgroundImage()
           })
         } else {
-          editor.objects.add(layer).then(() => {
-            editor.objects.update({ top: layer.top, left: layer.left })
-          })
+          if (layer.type === "StaticText") {
+            addText(layer)
+          } else {
+            editor.objects.add(layer).then(() => {
+              editor.objects.update({ top: layer.top, left: layer.left })
+            })
+          }
         }
       })
       editor.frame.resize({ width: canvasDim.width, height: canvasDim.height })
@@ -217,7 +231,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (editor) {
-      fetchDataFromLocal()      
+      fetchDataFromLocal()
     }
   }, [editor])
 

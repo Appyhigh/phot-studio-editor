@@ -1,13 +1,13 @@
 import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { queryFonts } from "~/store/slices/fonts/actions"
 import { useSelector } from "react-redux"
 import { useDebounce } from "use-debounce"
 import { useStyletron } from "styletron-react"
 import { useAppDispatch } from "~/store/store"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { groupBy } from "lodash"
 import { selectAllFonts } from "~/store/slices/fonts/selectors"
 import { loadFonts } from "~/utils/fonts"
@@ -15,7 +15,6 @@ import { Block } from "baseui/block"
 import InfiniteScrolling from "~/components/InfiniteScrolling/InfiniteScrolling"
 const FontSelector = () => {
   const [activeState, setActiveState] = useState(false)
-  const [currentFont, setCurrenFont] = useState("OpenSans-Regular")
   const [hasMore, setHasMore] = React.useState(true)
   const [pageNumber, setPageNumber] = React.useState(1)
   const [query] = React.useState("")
@@ -26,6 +25,11 @@ const FontSelector = () => {
   const editor = useEditor()
 
   const dispath = useAppDispatch()
+
+  const activeObject = useActiveObject()
+  const [currentFont, setCurrenFont] = useState(
+    activeObject?.type === "StaticText" ? activeObject?.fontFamily : "OpenSans-Regular"
+  )
 
   React.useEffect(() => {
     const grouped = groupBy(fonts, "family")
