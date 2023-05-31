@@ -25,7 +25,7 @@ const BgUpload = () => {
   const editor = useEditor()
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-
+    
     const imageUrl = await getBucketImageUrlFromFile(file)
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
   }
