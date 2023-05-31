@@ -82,6 +82,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             <ContextMenuItem
               onClick={() => {
                 editor.objects.clone()
+                editor.objects.select("frame")
                 setTimeout(() => {
                   editor.objects.update({ name: activeObject?.name })
                 }, 10)
