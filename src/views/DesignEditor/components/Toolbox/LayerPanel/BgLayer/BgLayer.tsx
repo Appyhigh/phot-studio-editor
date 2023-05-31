@@ -82,7 +82,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
                 classes.box,
                 " pointer d-flex justify-content-center align-items-center flex-column ml-1 pointer"
               )}
-              onClick={() => EraseBgFunc({ editor })}
+              onClick={() => EraseBgFunc({ editor, frame })}
             >
               <Icons.TrashIcon size={"20"} />
               <p>Delete</p>

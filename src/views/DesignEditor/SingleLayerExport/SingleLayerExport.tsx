@@ -108,7 +108,11 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
               </ContextMenuItem>
             )}
             {activeObject?.type === "StaticImage" && (
-              <ContextMenuItem onClick={() => SetBgFunc({ editor })} icon="Images" label="Set as background image">
+              <ContextMenuItem
+                onClick={() => SetBgFunc({ editor, frame })}
+                icon="Images"
+                label="Set as background image"
+              >
                 <Elements size={24} />
               </ContextMenuItem>
             )}

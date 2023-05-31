@@ -1,8 +1,6 @@
-import { useFrame } from "@layerhub-io/react"
 import { backgroundLayerType, checkboxBGUrl, deviceUploadType } from "~/constants/contants"
 
-export const EraseBgFunc = ({ editor }: any) => {
-  const frame = useFrame()
+export const EraseBgFunc = ({ editor, frame }: any) => {
   const bgObject = editor?.frame?.background?.canvas?._objects.filter(
     (el: any) => el.metadata?.type === backgroundLayerType
   )[0]

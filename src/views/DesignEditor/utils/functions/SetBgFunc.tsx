@@ -1,8 +1,6 @@
-import { useFrame } from "@layerhub-io/react"
 import { deviceUploadType } from "~/constants/contants"
 
-export const SetBgFunc = ({ editor }: any) => {
-  const frame = useFrame()
+export const SetBgFunc = ({ editor, frame }: any) => {
   editor.frame.resize({ width: frame.width, height: frame.height })
   const bgObject = editor?.frame?.background?.canvas?._objects.filter((el: any) => el.type === "BackgroundImage")[0]
 

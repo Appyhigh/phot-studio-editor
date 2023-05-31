@@ -26,13 +26,14 @@ import { InvisibleFunc, VisibleFunc } from "../../utils/functions/tools/Visibili
 import { UngroupFunc } from "../../utils/functions/tools/GroupUngroupFunc"
 import { SetBgFunc } from "../../utils/functions/SetBgFunc"
 import { DeleteFunc } from "../../utils/functions/tools/DeleteFunc"
+import { EraseBgFunc } from "../../utils/functions/EraseBgFunc"
 
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
-
+  const frame = useFrame()
   // const handleAsComponentHandler = async () => {
   //   if (editor) {
   //     const component: any = await editor.scene.exportAsComponent()
@@ -101,11 +102,7 @@ const ContextMenu = () => {
         >
           <Paste size={24} />
         </ContextMenuItem> */}
-        <ContextMenuItem
-          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })}
-          icon="Delete"
-          label="Delete"
-        >
+        <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
           <Delete size={24} />
         </ContextMenuItem>
         <ContextMenuItem onClick={() => FrontFunc({ editor, activeObject })} icon="Forward" label="Bring forward">
@@ -151,7 +148,7 @@ const ContextMenu = () => {
           </ContextMenuItem>
         )}
         {activeObject?.type === "StaticImage" && (
-          <ContextMenuItem onClick={() => SetBgFunc({ editor })} icon="Images" label="Set as background image">
+          <ContextMenuItem onClick={() => SetBgFunc({ editor, frame })} icon="Images" label="Set as background image">
             <Elements size={24} />
           </ContextMenuItem>
         )}
