@@ -3,7 +3,7 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import Eye from "~/components/Icons/Eye"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
 import { ToolButton } from "./ToolButton"
-import { InvisibleFunc, VisibleFunc } from "~/views/DesignEditor/utils/tools/VisibilityFunc"
+import { InvisibleFunc, VisibleFunc } from "~/views/DesignEditor/utils/functions/tools/VisibilityFunc"
 
 const Visibility = ({ type }: any) => {
   const [state, setState] = React.useState<{ visible: boolean }>({ visible: true })

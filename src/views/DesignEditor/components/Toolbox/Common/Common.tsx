@@ -14,11 +14,11 @@ import SendBack from "~/components/Icons/SendBack"
 import Ungroup from "~/components/Icons/Ungroup"
 import MainImageContext from "~/contexts/MainImageContext"
 import { ToolButton } from "../Shared/ToolButton"
-import { DuplicateFunc } from "~/views/DesignEditor/utils/tools/DuplicateFunc"
-import { FrontFunc } from "~/views/DesignEditor/utils/tools/FrontFunc"
-import { BackFunc } from "~/views/DesignEditor/utils/tools/BackFunc"
-import { GroupFunc, UngroupFunc } from "~/views/DesignEditor/utils/tools/GroupUngroupFunc"
-import { DeleteFunc } from "~/views/DesignEditor/utils/tools/DeleteFunc"
+import { DuplicateFunc } from "~/views/DesignEditor/utils/functions/tools/DuplicateFunc"
+import { FrontFunc } from "~/views/DesignEditor/utils/functions/tools/FrontFunc"
+import { BackFunc } from "~/views/DesignEditor/utils/functions/tools/BackFunc"
+import { GroupFunc, UngroupFunc } from "~/views/DesignEditor/utils/functions/tools/GroupUngroupFunc"
+import { DeleteFunc } from "~/views/DesignEditor/utils/functions/tools/DeleteFunc"
 
 const Common = ({ type }: any) => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)

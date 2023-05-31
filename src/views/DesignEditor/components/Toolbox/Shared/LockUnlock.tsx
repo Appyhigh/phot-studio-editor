@@ -3,7 +3,7 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import Locked from "~/components/Icons/Locked"
 import Unlocked from "~/components/Icons/Unlocked"
 import { ToolButton } from "./ToolButton"
-import { LockFunc, UnlockFunc } from "~/views/DesignEditor/utils/tools/LockUnlockFunc"
+import { LockFunc, UnlockFunc } from "~/views/DesignEditor/utils/functions/tools/LockUnlockFunc"
 
 const LockUnlock = ({ type }: any) => {
   const [state, setState] = React.useState<{ locked: boolean }>({ locked: false })
