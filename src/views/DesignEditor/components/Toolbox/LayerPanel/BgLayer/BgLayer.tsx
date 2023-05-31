@@ -149,7 +149,9 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
             />
           ))} */}
         </div>
-        <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background" />
+        <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background"  handleColor={(each:any)=>{
+          updateObjectFill(each)
+        }}/>
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
         <div className={classes.colorsWrapper}>

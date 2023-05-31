@@ -1,37 +1,67 @@
 import { Block } from "baseui/block"
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
-import { toBase64 } from "~/utils/data"
-import { useEditor, useActiveObject } from "@layerhub-io/react"
+import { useEditor } from "@layerhub-io/react"
 import StockImages from "./StockImages"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
+import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/UploadPreview/UploadPreview"
+import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
+import { MAIN_IMG_Bg } from "~/constants/contants"
+import { toDataURL } from "~/utils/export"
+import MainImageContext from "~/contexts/MainImageContext"
+import { nanoid } from "nanoid"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
+  const [bgUploadPreview, setBgUploadPreview] = useState({
+    showPreview: false,
+    url: "",
+  })
+  const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
+
   const editor = useEditor()
-  const activeObject: any = useActiveObject()
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-    const base64 = (await toBase64(file)) as string
 
-    const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-      activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-      base64
-    )
-    const options = {
-      type: "BackgroundImage",
-      src: previewWithUpdatedBackground,
-      preview: previewWithUpdatedBackground,
-      metadata: {
-        generationDate: new Date().getTime(),
-        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-      },
-    }
-    editor.objects.add(options)
-    editor.objects.removeById(activeObject?.id)
+    const imageUrl = await getBucketImageUrlFromFile(file)
+    setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
+  }
+
+  const handleImgAdd = () => {
+    const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
+
+    const imageUrl = bgUploadPreview.url
+
+    setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
+
+    toDataURL(imageUrl, async function (dataUrl: string) {
+      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
+        activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
+        dataUrl
+      )
+      const options = {
+        type: "StaticImage",
+        src: previewWithUpdatedBackground,
+        preview: previewWithUpdatedBackground,
+        original: mainImgInfo.original,
+
+        id: nanoid(),
+        metadata: {
+          generationDate: new Date().getTime(),
+          originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
+        },
+      }
+      editor.objects.removeById(mainImgInfo.id)
+      editor.objects.add(options).then(() => {
+        //@ts-ignore
+        setMainImgInfo((prev) => ({ ...prev, ...options }))
+        setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+
+      })
+    })
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +75,7 @@ const BgUpload = () => {
   const [bgChoice, setBgChoice] = useState(0)
 
   return (
-    <Block>
+    <Block className="mb-3">
       <div className={clsx(classes.bgUploadSection, "d-flex  flex-row")}>
         <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
           Upload From PC
@@ -55,19 +85,33 @@ const BgUpload = () => {
         </div>
       </div>
       {bgChoice === 0 ? (
-        <DropZone  handleDropFiles={handleDropFiles}>
-          <div className={classes.uploadInput}>
-            <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
-            <input
-              onChange={handleFileInput}
-              type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
-              id="inputBgFile"
-              ref={inputFileRef}
-              className={classes.inputFile}
+        <>
+          {!bgUploadPreview.showPreview && (
+            <DropZone handleDropFiles={handleDropFiles}>
+              <div className={classes.uploadInput}>
+                <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
+                <input
+                  onChange={handleFileInput}
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+                  id="inputBgFile"
+                  ref={inputFileRef}
+                  className={classes.inputFile}
+                />
+              </div>
+            </DropZone>
+          )}
+          {bgUploadPreview.showPreview && bgUploadPreview.url && (
+            <UploadPreview
+              uploadType={MAIN_IMG_Bg}
+              discardHandler={() => {
+                setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+              }}
+              mainImgUrl={bgUploadPreview.url}
+              handleBgAdd={handleImgAdd}
             />
-          </div>
-        </DropZone>
+          )}
+        </>
       ) : (
         <StockImages />
       )}
