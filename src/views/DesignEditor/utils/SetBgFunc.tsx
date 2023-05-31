@@ -3,7 +3,6 @@ import { deviceUploadType } from "~/constants/contants"
 
 export const SetBgFunc = ({ editor }: any) => {
   const frame = useFrame()
-  // handleAsComponentHandler()
   editor.frame.resize({ width: frame.width, height: frame.height })
   const bgObject = editor?.frame?.background?.canvas?._objects.filter((el: any) => el.type === "BackgroundImage")[0]
 
@@ -23,4 +22,6 @@ export const SetBgFunc = ({ editor }: any) => {
 
   editor.objects.setAsBackgroundImage()
   editor.objects.update({ ...options })
+
+  editor.cancelContextMenuRequest()
 }
