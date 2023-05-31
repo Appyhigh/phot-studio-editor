@@ -3,6 +3,8 @@ import { useActiveObject, useEditor } from "@layerhub-io/react"
 import Locked from "~/components/Icons/Locked"
 import Unlocked from "~/components/Icons/Unlocked"
 import { ToolButton } from "./ToolButton"
+import { LockFunc } from "~/views/DesignEditor/utils/tools/LockFunc"
+import { UnlockFunc } from "~/views/DesignEditor/utils/tools/UnlockFunc"
 
 const LockUnlock = ({ type }: any) => {
   const [state, setState] = React.useState<{ locked: boolean }>({ locked: false })
@@ -17,25 +19,9 @@ const LockUnlock = ({ type }: any) => {
   }, [activeObject])
 
   return state.locked ? (
-    <ToolButton
-      type={type}
-      func={() => {
-        editor.objects.unlock()
-        setState({ locked: false })
-      }}
-      icon={<Unlocked size={27} />}
-      name="Unlock"
-    />
+    <ToolButton type={type} func={() => UnlockFunc({ editor, setState })} icon={<Unlocked size={27} />} name="Unlock" />
   ) : (
-    <ToolButton
-      type={type}
-      func={() => {
-        editor.objects.lock()
-        setState({ locked: true })
-      }}
-      icon={<Locked size={27} />}
-      name="Lock"
-    />
+    <ToolButton type={type} func={() => LockFunc({ editor, setState })} icon={<Locked size={27} />} name="Lock" />
   )
 }
 

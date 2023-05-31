@@ -14,25 +14,16 @@ import SendBack from "~/components/Icons/SendBack"
 import Ungroup from "~/components/Icons/Ungroup"
 import MainImageContext from "~/contexts/MainImageContext"
 import { ToolButton } from "../Shared/ToolButton"
+import { DuplicateFunc } from "~/views/DesignEditor/utils/tools/DuplicateFunc"
+import { FrontFunc } from "~/views/DesignEditor/utils/tools/FrontFunc"
+import { BackFunc } from "~/views/DesignEditor/utils/tools/BackFunc"
+import { UngroupFunc } from "~/views/DesignEditor/utils/tools/UngroupFunc"
+import { GroupFunc } from "~/views/DesignEditor/utils/tools/GroupFunc"
+import { DeleteFunc } from "~/views/DesignEditor/utils/tools/DeleteFunc"
 
 const Common = ({ type }: any) => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
 
-  const deleteHandler = () => {
-    if (activeObject?.id === mainImgInfo.id) {
-      // @ts-ignore
-      setPanelInfo((prev) => ({
-        ...prev,
-        uploadSection: true,
-        trySampleImg: true,
-        uploadPreview: false,
-        bgOptions: false,
-        bgRemoverBtnActive: false,
-      }))
-      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-    }
-    editor.objects.remove(activeObject?.id)
-  }
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
 
@@ -66,41 +57,17 @@ const Common = ({ type }: any) => {
       <Flip type={type} />
       <ToolButton
         type={type}
-        func={() => {
-          editor.objects.clone()
-          setTimeout(() => {
-            editor.objects.update({ name: activeObject.name })
-          }, 10)
-        }}
+        func={() => DuplicateFunc({ editor, activeObject })}
         icon={<DuplicateIcon size={22} />}
         name="Duplicate"
       />
-      <ToolButton
-        type={type}
-        func={() => {
-          editor.objects.update({ name: activeObject.name })
-          editor.objects.bringToFront()
-        }}
-        icon={<ArrowUp />}
-        name="Front"
-      />
-      <ToolButton
-        type={type}
-        func={() => {
-          editor.objects.update({ name: activeObject.name })
-          editor.objects.sendToBack()
-        }}
-        icon={<SendBack />}
-        name="Back"
-      />
+      <ToolButton type={type} func={() => FrontFunc({ editor, activeObject })} icon={<ArrowUp />} name="Front" />
+      <ToolButton type={type} func={() => BackFunc({ editor, activeObject })} icon={<SendBack />} name="Back" />
       <LockUnlock />
       {state.isGroup ? (
         <ToolButton
           type={type}
-          func={() => {
-            editor.objects.ungroup()
-            setState({ ...state, isGroup: false })
-          }}
+          func={() => UngroupFunc({ editor, activeObject, state, setState })}
           icon={<Ungroup size={27} />}
           name="Ungroup"
         />
@@ -108,9 +75,7 @@ const Common = ({ type }: any) => {
         <ToolButton
           type={type}
           func={() => {
-            editor.objects.update({ name: activeObject.name })
-            editor.objects.group()
-            setState({ ...state, isGroup: true })
+            GroupFunc({ editor, activeObject, state, setState })
           }}
           icon={<LayersIcon size={27} />}
           name="Group"
@@ -119,7 +84,12 @@ const Common = ({ type }: any) => {
       <CommonAlign type={type ? type : ""} />
       <Opacity type={type ? type : ""} />
       <Visibility type={type ? type : ""} />
-      <ToolButton type={type} func={() => deleteHandler()} icon={<DeleteIcon size={28} />} name="Delete" />
+      <ToolButton
+        type={type}
+        func={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })}
+        icon={<DeleteIcon size={28} />}
+        name="Delete"
+      />
     </Block>
   )
 }
