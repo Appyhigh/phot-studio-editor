@@ -39,6 +39,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       editor.frame.resize({ width: frame.width, height: frame.height })
 
       if (bgObject) {
+        editor.frame.resize({ width: frame.width, height: frame.height })
         editor.objects.remove(bgObject.id)
         editor.objects.unsetBackgroundImage()
       }

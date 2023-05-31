@@ -35,6 +35,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
       const bgObject = editor.frame.background.canvas._objects.filter((el: any) => el?.type === "BackgroundImage")[0]
 
       if (bgObject) {
+        editor.frame.resize({ width: frame.width, height: frame.height })
         editor.objects.remove(bgObject.id)
         const options = {
           type: "BackgroundImage",
