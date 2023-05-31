@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react"
 import { Block } from "baseui/block"
 import DropZone from "~/components/Dropzone"
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { nanoid } from "nanoid"
 import { captureFrame, loadVideoResource } from "~/utils/video"
 import { toBase64 } from "~/utils/data"
@@ -18,8 +18,18 @@ export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
   const editor = useEditor()
+  const frame = useFrame()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
+  let scale = 1
+
+  const getDimensions = async (url: any, callback: any) => {
+    const img = new Image()
+    img.src = url
+    img.onload = () => {
+      callback(img)
+    }
+  }
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -34,35 +44,46 @@ export default function ({ uploadType, activePanel }: any) {
     }
 
     const type = isVideo ? "StaticVideo" : "StaticImage"
-    // @ts-ignore
-    const upload = {
-      id: nanoid(),
-      src: imageUrl,
-      preview: imageUrl,
-      original: imageUrl,
-      type: type,
-      metadata: { generationDate: new Date().getTime() },
-    }
-
-    setSelectedImage(upload)
-    const fileInfo: any = document.getElementById("inputFile")
-    if (fileInfo?.value) fileInfo.value = ""
-
-    if (uploadType === LOCAL_SAMPLE_IMG) {
-      setUploads([...uploads, upload])
-    } else {
+    await getDimensions(imageUrl, (img: any) => {
+      if (img.width > frame.width || img.height > frame.height) {
+        if (img.width / frame.width > img.height / frame.height) {
+          scale = frame.width / img.width
+        } else {
+          scale = frame.height / img.height
+        }
+      }
       // @ts-ignore
-      setPanelInfo((prev) => ({
-        ...prev,
-        trySampleImg: false,
-        bgRemoverBtnActive: true,
-        uploadSection: false,
-        bgOptions: false,
-        UploadPreview: true,
-      }))
-      // @ts-ignore
-      setMainImgInfo((prev) => ({ ...prev, ...upload }))
-    }
+      const upload = {
+        id: nanoid(),
+        src: imageUrl,
+        preview: imageUrl,
+        original: imageUrl,
+        type: type,
+        scaleX: scale,
+        scaleY: scale,
+        metadata: { generationDate: new Date().getTime() },
+      }
+
+      setSelectedImage(upload)
+      const fileInfo: any = document.getElementById("inputFile")
+      if (fileInfo?.value) fileInfo.value = ""
+
+      if (uploadType === LOCAL_SAMPLE_IMG) {
+        setUploads([...uploads, upload])
+      } else {
+        // @ts-ignore
+        setPanelInfo((prev) => ({
+          ...prev,
+          trySampleImg: false,
+          bgRemoverBtnActive: true,
+          uploadSection: false,
+          bgOptions: false,
+          UploadPreview: true,
+        }))
+        // @ts-ignore
+        setMainImgInfo((prev) => ({ ...prev, ...upload }))
+      }
+    })
   }
 
   const handleInputFileRefClick = () => {
