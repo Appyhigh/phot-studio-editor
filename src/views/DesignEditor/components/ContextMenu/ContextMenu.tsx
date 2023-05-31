@@ -26,19 +26,21 @@ const ContextMenu = () => {
   const frame = useFrame()
 
   const deleteHandler = () => {
-    if (activeObject?.id === mainImgInfo.id) {
-      // @ts-ignore
-      setPanelInfo((prev) => ({
-        ...prev,
-        uploadSection: true,
-        trySampleImg: true,
-        uploadPreview: false,
-        bgOptions: false,
-        bgRemoverBtnActive: false,
-      }))
-      setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    if (activeObject.name != "Initial Frame") {
+      if (activeObject?.id === mainImgInfo.id) {
+        // @ts-ignore
+        setPanelInfo((prev) => ({
+          ...prev,
+          uploadSection: true,
+          trySampleImg: true,
+          uploadPreview: false,
+          bgOptions: false,
+          bgRemoverBtnActive: false,
+        }))
+        setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+      }
+      editor.objects.remove(activeObject?.id)
     }
-    editor.objects.remove(activeObject?.id)
   }
   const handleAsComponentHandler = async () => {
     if (editor) {
@@ -132,6 +134,7 @@ const ContextMenu = () => {
             deleteHandler()
             editor.cancelContextMenuRequest()
           }}
+          disabled={activeObject.name == "Initial Frame" ? true : false}
           icon="Delete"
           label="Delete"
         >
