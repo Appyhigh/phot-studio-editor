@@ -16,6 +16,15 @@ import Paste from "~/components/Icons/Paste"
 import { useEffect, useState } from "react"
 import Elements from "~/components/Icons/Elements"
 import { deviceUploadType } from "~/constants/contants"
+import { DuplicateFunc } from "../utils/functions/tools/DuplicateFunc"
+import { PasteFunc } from "../utils/functions/tools/PasteFunc"
+import { FrontFunc } from "../utils/functions/tools/FrontFunc"
+import { BackFunc } from "../utils/functions/tools/BackFunc"
+import { LockFunc, UnlockFunc } from "../utils/functions/tools/LockUnlockFunc"
+import { UngroupFunc } from "../utils/functions/tools/GroupUngroupFunc"
+import { InvisibleFunc, VisibleFunc } from "../utils/functions/tools/VisibilityFunc"
+import { SetBgFunc } from "../utils/functions/SetBgFunc"
+import { DeleteFunc } from "../utils/functions/tools/DeleteFunc"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -24,7 +33,6 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
   const frame = useFrame()
-
   useEffect(() => {
     if (!show) {
       setShowDownloadPopup(false)
@@ -37,33 +45,15 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
         onContextMenu={(e: Event) => e.preventDefault()}
         className={clsx(classes.contextMenuSection, isOpenSlider && classes.contextMenuFull)}
       >
-        <ContextMenuItem
-          disabled={true}
-          onClick={() => {
-            editor.objects.clone()
-            editor.cancelContextMenuRequest()
-          }}
-          icon="Duplicate"
-          label="copy"
-        >
+        <ContextMenuItem disabled={true} onClick={() => DuplicateFunc({ editor })} icon="Duplicate" label="copy">
           <Duplicate size={24} />
         </ContextMenuItem>
-        <ContextMenuItem
-          onClick={() => {
-            editor.objects.paste()
-            editor.cancelContextMenuRequest()
-          }}
-          icon="Paste"
-          label="paste"
-        >
+        <ContextMenuItem onClick={() => PasteFunc({ editor })} icon="Paste" label="paste">
           <Paste size={24} />
         </ContextMenuItem>
         <ContextMenuItem
           disabled={true}
-          onClick={() => {
-            editor.objects.remove()
-            editor.cancelContextMenuRequest()
-          }}
+          onClick={() => DeleteFunc({ editor, activeObject })}
           icon="Delete"
           label="delete"
         >
@@ -79,140 +69,47 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
           <div // @ts-ignore
             className={classes.contextMenuSection}
           >
-            <ContextMenuItem
-              onClick={() => {
-                editor.objects.clone()
-                editor.objects.select("frame")
-                setTimeout(() => {
-                  editor.objects.update({ name: activeObject?.name })
-                }, 10)
-                editor.cancelContextMenuRequest()
-              }}
-              icon="Duplicate"
-              label="Duplicate"
-            >
+            <ContextMenuItem onClick={() => DuplicateFunc({ editor, activeObject })} icon="Duplicate" label="Duplicate">
               <Duplicate size={24} />
             </ContextMenuItem>
-
-            <ContextMenuItem
-              onClick={() => {
-                editor.objects.remove()
-                editor.cancelContextMenuRequest()
-              }}
-              icon="Delete"
-              label="Delete"
-            >
+            <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
               <Delete size={24} />
             </ContextMenuItem>
-            <ContextMenuItem
-              onClick={() => {
-                editor.objects.update({ name: activeObject?.name })
-                editor.objects.bringToFront()
-                editor.cancelContextMenuRequest()
-              }}
-              icon="Forward"
-              label="Bring forward"
-            >
+            <ContextMenuItem onClick={() => FrontFunc({ editor, activeObject })} icon="Forward" label="Bring forward">
               <ArrowUp />
             </ContextMenuItem>
-            <ContextMenuItem
-              onClick={() => {
-                editor.objects.update({ name: activeObject?.name })
-                editor.objects.sendToBack()
-                editor.cancelContextMenuRequest()
-              }}
-              icon="Backward"
-              label="Send backward"
-            >
+            <ContextMenuItem onClick={() => BackFunc({ editor, activeObject })} icon="Backward" label="Send backward">
               <SendBack />
             </ContextMenuItem>
 
             {activeObject?.locked ? (
-              <ContextMenuItem
-                onClick={() => {
-                  editor.objects.unlock()
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="Locked"
-                label="Unlock"
-              >
+              <ContextMenuItem onClick={() => UnlockFunc({ editor })} icon="Locked" label="Unlock">
                 <Unlocked size={22} />
               </ContextMenuItem>
             ) : (
-              <ContextMenuItem
-                onClick={() => {
-                  editor.objects.lock()
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="Unlocked"
-                label="Lock"
-              >
+              <ContextMenuItem onClick={() => LockFunc({ editor })} icon="Unlocked" label="Lock">
                 <Unlocked size={22} />
               </ContextMenuItem>
             )}
 
             {activeObject?.type === "group" && (
-              <ContextMenuItem
-                onClick={() => {
-                  editor.objects.ungroup()
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="group"
-                label="Ungroup"
-              >
-                <Ungroup />
+              <ContextMenuItem onClick={() => UngroupFunc({ editor })} icon="group" label="Ungroup">
+                <Ungroup size={26} />
               </ContextMenuItem>
             )}
 
             {activeObject?.visible === true ? (
-              <ContextMenuItem
-                onClick={() => {
-                  editor.objects.update({ visible: false })
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="eye"
-                label="Visibility"
-              >
+              <ContextMenuItem onClick={() => InvisibleFunc({ editor })} icon="eye" label="Visibility">
                 <Eye size={24} />
               </ContextMenuItem>
             ) : (
-              <ContextMenuItem
-                onClick={() => {
-                  editor.objects.update({ visible: true })
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="eye"
-                label="Visibility"
-              >
+              <ContextMenuItem onClick={() => VisibleFunc({ editor })} icon="eye" label="Visibility">
                 <EyeCrossed size={24} />
               </ContextMenuItem>
             )}
             {activeObject?.type === "StaticImage" && (
               <ContextMenuItem
-                onClick={() => {
-                  // handleAsComponentHandler()
-                  editor.frame.resize({ width: frame.width, height: frame.height })
-                  const bgObject = editor?.frame?.background?.canvas?._objects.filter(
-                    (el: any) => el.type === "BackgroundImage"
-                  )[0]
-
-                  const deviceUploadImg = editor?.frame?.background?.canvas?._objects.filter(
-                    (el: any) => el.metadata?.type === deviceUploadType
-                  )[0]
-                  if (bgObject) {
-                    editor.objects.removeById(bgObject.id)
-                  } else if (deviceUploadImg) {
-                    editor.objects.removeById(deviceUploadImg.id)
-                  }
-                  editor.objects.unsetBackgroundImage()
-                  const options = {
-                    type: "BackgroundImage",
-                    metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
-                  }
-
-                  editor.objects.setAsBackgroundImage()
-                  editor.objects.update({ ...options })
-                }}
+                onClick={() => SetBgFunc({ editor, frame })}
                 icon="Images"
                 label="Set as background image"
               >
