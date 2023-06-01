@@ -1,5 +1,5 @@
 import { Block } from "baseui/block"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import UploadInput from "../UploadInput/UploadInput"
@@ -13,9 +13,12 @@ import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
+  const [bgUploading, setBgUploading] = useState(false)
+
   const [bgUploadPreview, setBgUploadPreview] = useState({
     showPreview: false,
     url: "",
@@ -24,10 +27,14 @@ const BgUpload = () => {
 
   const editor = useEditor()
   const handleDropFiles = async (files: FileList) => {
+    setBgUploading(true)
     const file = files[0]
-    
     const imageUrl = await getBucketImageUrlFromFile(file)
+
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
+    if (imageUrl) {
+      setBgUploading(false)
+    }
   }
 
   const handleImgAdd = () => {
@@ -59,7 +66,6 @@ const BgUpload = () => {
         //@ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...options }))
         setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-
       })
     })
   }
@@ -84,9 +90,11 @@ const BgUpload = () => {
           Stock Images
         </div>
       </div>
+      {bgUploading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
+
       {bgChoice === 0 ? (
         <>
-          {!bgUploadPreview.showPreview && (
+          {!bgUploadPreview.showPreview&& !bgUploading && (
             <DropZone handleDropFiles={handleDropFiles}>
               <div className={classes.uploadInput}>
                 <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
@@ -101,7 +109,7 @@ const BgUpload = () => {
               </div>
             </DropZone>
           )}
-          {bgUploadPreview.showPreview && bgUploadPreview.url && (
+          {bgUploadPreview.showPreview && bgUploadPreview.url && !bgUploading && (
             <UploadPreview
               uploadType={MAIN_IMG_Bg}
               discardHandler={() => {

@@ -19,6 +19,10 @@
     font-weight: 600;
     font-size: 16px;
 }
+.loadingSpinner{
+  display: flex;
+  justify-content: center;
+}
 @media screen and (min-width: 1220px) {
   .panelHeading {
     padding: 0px 0px 0px 16px;
