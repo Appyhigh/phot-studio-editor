@@ -79,9 +79,7 @@ const Images = () => {
             </Block>
           </Scrollable>
         ) : (
-          <Scrollable>
             <StockImages imageAs="foreground" />
-          </Scrollable>
         )}
       </>
       <Loader isOpen={loaderPopup} />

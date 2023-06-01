@@ -13,18 +13,18 @@
   width: 140px;
   height: 140px;
   border-radius: 4px;
-  top: 90px;
+  top: 40px;
 }
 .mainBgUploadedImg {
-  top: 125px;
+  top: 40px;
   left: 80px;
 }
 .discardBtn {
-  top: 74px;
+  top: 40px;
   right: 20px;
 }
 .mainImgBgDiscard {
-  top: 110px;
+  top: 30px;
 }
 
 .removeBgBtn {
@@ -61,12 +61,12 @@
     width: 319px;
   }
   .discardBtn {
-    top: 70px;
-    right: 38px;
+    top: 20px;
+    right: 20px;
   }
 
   .mainImgBgDiscard {
-    top: 100px;
+    top: 20px;
     right: 45px;
   }
   .removeBgBtn {
