@@ -1,5 +1,5 @@
 import { useActiveObject, useContextMenuRequest, useEditor, useFrame } from "@layerhub-io/react"
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
 import Paste from "~/components/Icons/Paste"
@@ -34,6 +34,13 @@ const ContextMenu = () => {
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const frame = useFrame()
+  const [showDownloadPopup, setShowDownloadPopup] = useState(false)
+
+  useEffect(()=>{
+     if(!contextMenuRequest || !contextMenuRequest.target){
+      setShowDownloadPopup(false)
+     }
+  },[contextMenuRequest])
   // const handleAsComponentHandler = async () => {
   //   if (editor) {
   //     const component: any = await editor.scene.exportAsComponent()
@@ -156,14 +163,17 @@ const ContextMenu = () => {
         <div className="p-relative">
           <ContextMenuItem
             onClick={() => {
-              editor.cancelContextMenuRequest()
+              setShowDownloadPopup(true)
             }}
             icon="download"
             label="Download"
           >
             <DownloadIcon />
           </ContextMenuItem>
-          <DownloadPopup typeOfDownload="single-layer" />
+
+          {showDownloadPopup &&(
+            <DownloadPopup typeOfDownload="single-layer" typeGroup={activeObject?.type === "group" ? true : false} />
+          )}
         </div>
         <div className={clsx(classes.chevronTopIcon)}>
           <Icons.SliderBtn size={20} width="10" />
