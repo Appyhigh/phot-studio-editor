@@ -8,11 +8,13 @@ import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
+import FileError from "../Common/FileError/FileError"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const inputNextFile = React.useRef<HTMLInputElement>(null)
   const inputReplaceFile = React.useRef<HTMLInputElement>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
+  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
   const frame = useFrame()
   const editor = useEditor()
   const activeObject = useActiveObject()
@@ -23,6 +25,18 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
+    if (
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png" ||
+      file.type === "image/bmp" ||
+      file.type === "image/webp"
+    ) {
+      setRejectedFileUpload(false)
+    } else {
+      setRejectedFileUpload(true)
+      return;
+    }
     const imageUrl = await getBucketImageUrlFromFile(file)
     const isVideo = file.type.includes("video")
     let preview = imageUrl
@@ -98,6 +112,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
   const close = () => {
     setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+    setRejectedFileUpload(false)
     handleClose()
   }
 
@@ -132,7 +147,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       isOpen={isOpen}
     >
       <div className={classes.modal}>
-        {!addImgInfo.showPreview && (
+        {!addImgInfo.showPreview && !rejectedFileUpload && (
           <>
             <div className={classes.modalHeader}>
               {fileInputType === "update"
@@ -174,6 +189,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
                 }
                 editor.objects.add(upload).then(() => {
                   handleClose()
+                  setRejectedFileUpload(false)
                   setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
                 })
               }}
@@ -183,6 +199,27 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
             </button>
           </div>
         </div>
+      )}
+      {fileInputType == "add" && rejectedFileUpload && (
+        <FileError
+          handleTry={() => {
+            setRejectedFileUpload(false)
+          }}
+        />
+      )}
+      {fileInputType === "bgupdate" && rejectedFileUpload && (
+        <FileError
+          handleTry={() => {
+            setRejectedFileUpload(false)
+          }}
+        />
+      )}
+       {fileInputType === "update" && rejectedFileUpload && (
+        <FileError
+          handleTry={() => {
+            setRejectedFileUpload(false)
+          }}
+        />
       )}
     </Modal>
   )

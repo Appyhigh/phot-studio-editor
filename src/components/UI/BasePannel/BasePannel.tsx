@@ -7,7 +7,7 @@ import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/Downlo
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel/CanvasEditingPannel"
 import { useEditor, useObjects } from "@layerhub-io/react"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
-import { useState } from "react"
+import {  useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
@@ -43,6 +43,11 @@ const BasePannel = () => {
       })
     }
   }
+
+
+  const downloadBtnDisable =
+    editor?.frame?.background?.canvas?._objects?.length === 3 &&
+    editor?.frame?.background?.canvas?._objects[2]?.metadata?.type === backgroundLayerType
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
@@ -110,8 +115,13 @@ const BasePannel = () => {
           </Block>
         </StatefulTooltip> */}
         <Block className={"p-relative downloadResultBtn"}>
-          <button className={classes.basePannelBtn}>Download</button>
-          <DownloadPopup />
+          <button
+            disabled={downloadBtnDisable ? true : false}
+            className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
+          >
+            Download
+          </button>
+          {!downloadBtnDisable && <DownloadPopup />}
         </Block>
       </Block>
     </Block>

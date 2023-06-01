@@ -24,6 +24,14 @@
 .resetBtn {
   margin: 10px 16px;
 }
+
+.disabledDownloadBtn {
+  background: #f1f1f5;
+  border-radius: 10px;
+  color: #92929d;
+  cursor: not-allowed;
+}
+
 @media screen and (min-width: 1220px) {
   .basePannel {
     padding: 15px 20px;
