@@ -95,7 +95,7 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg, ha
                 onChange={(e) => {
                   setColor(e.target.value)
                 }}
-                value={inputColor}
+                value={color}
               />
             </div>
             <Block>
