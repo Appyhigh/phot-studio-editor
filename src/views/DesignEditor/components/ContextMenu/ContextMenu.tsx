@@ -109,11 +109,12 @@ const ContextMenu = () => {
       >
         <ContextMenuItem
           onClick={() => {
-            editor.objects.copy()
+            editor.objects.clone()
+            editor.objects.select("frame")
             editor.cancelContextMenuRequest()
           }}
           icon="Duplicate"
-          label="Copy"
+          label="Duplicate"
         >
           <Duplicate size={24} />
         </ContextMenuItem>

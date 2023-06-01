@@ -10,7 +10,7 @@ import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 
 const BgLayer = ({ showLayer, handleClose }: any) => {
   const [activeState, setActiveState] = useState(-1)
-  const [bgColor, setBGColor] = useState("")
+  const [bgColor, setBGColor] = useState("#ffffff")
   const [isOpen, setIsOpen] = React.useState(false)
   const editor = useEditor()
   const [isReplacePopup, setIsReplacePopup] = useState(false)
@@ -155,7 +155,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
             />
           ))} */}
         </div>
-        <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background"  handleColor={(each:any)=>{
+        <ColorPicker inputColor={bgColor} isOpen={isOpen} handleClose={close} type="background"  handleColor={(each:any)=>{          
           updateObjectFill(each)
         }}/>
 
@@ -170,6 +170,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
                   if (idx === colors.length - 1) {
                     setIsOpen(true)
                   } else {
+                    setBGColor(each)
                     updateObjectFill(each)
                   }
                 }}
