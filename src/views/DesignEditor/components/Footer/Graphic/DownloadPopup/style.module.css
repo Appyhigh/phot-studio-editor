@@ -40,7 +40,7 @@
   background-color: #fff;
   border-color: #6729f3;
   color: #6729f3;
-  border: 1px solid #6729f3;
+  border: 1px solid #6729f3 !important;
 }
 
 .hdBtn {

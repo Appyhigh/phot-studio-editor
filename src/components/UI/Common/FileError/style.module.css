@@ -1,0 +1,25 @@
+.errorMsgSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorMsgSection p {
+  text-align: center;
+  margin: 100px auto 20px;
+  color: #ff3333;
+}
+
+.tryAgainBtn{
+    width: 250px;
+    height: 48px;
+    text-align: center;
+    color: #fff;
+    font-weight: 500;
+    font-size: 18px;
+    background: #6729f3;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    margin-top: 30px;
+}
