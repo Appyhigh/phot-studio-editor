@@ -20,8 +20,8 @@
   left: 80px;
 }
 .discardBtn {
-  top: 40px;
-  right: 20px;
+  top: 25px;
+  right: 10px;
 }
 .mainImgBgDiscard {
   top: 30px;
@@ -61,13 +61,13 @@
     width: 319px;
   }
   .discardBtn {
-    top: 20px;
-    right: 20px;
+    top: 15px;
+    right: 12px;
   }
 
   .mainImgBgDiscard {
-    top: 20px;
-    right: 45px;
+    top: 15px;
+    right: 40px;
   }
   .removeBgBtn {
     width: 319px;
