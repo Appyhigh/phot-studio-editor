@@ -338,6 +338,9 @@ input[type="number"] {
 .mt-5 {
   margin-top: 2.5rem;
 }
+.mt-6{
+  margin-top: 5rem;
+}
 
 .pt-0 {
   padding-top: 0;

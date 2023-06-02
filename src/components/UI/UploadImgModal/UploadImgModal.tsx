@@ -10,6 +10,9 @@ import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "../Common/FileError/FileError"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import { Block } from "baseui/block"
+import Icons from "~/components/Icons"
+import clsx from "clsx"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const inputNextFile = React.useRef<HTMLInputElement>(null)
@@ -195,6 +198,18 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
             </DropZone>
           </>
         )}
+         {imageLoading && !rejectedFileUpload && (
+        <Block
+          className={clsx("d-flex justify-content-center flex-column pointer p-relative mt-6", classes.uploadInput)}
+        >
+          <Block className={classes.uploadInputContainer}>
+            <Icons.InputContainer  width={514} height={319}/>
+          </Block>
+          <div className={classes.loadingSpinner}>
+            {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+          </div>
+        </Block>
+      )}
       </div>
       {!imageLoading && addImgInfo.showPreview && addImgInfo.url && (
         <div className="d-flex justify-content-center align-items-center flex-column">
@@ -213,7 +228,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
               className={classes.addImgBtn}
             >
               {fileInputType === "add"
-                ? "Addd Image"
+                ? "Add Image"
                 : fileInputType === "bgupdate"
                 ? "Update Background"
                 : "Update Image"}
@@ -229,9 +244,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         />
       )}
 
-      <div className={classes.loadingSpinner}>
-        {imageLoading && !rejectedFileUpload && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
-      </div>
+     
     </Modal>
   )
 }
