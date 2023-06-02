@@ -75,6 +75,8 @@ const StockImages = (props: any) => {
 
   const setBgImg = useCallback(
     async function (url: string) {
+      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
+
       const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         url,
@@ -96,6 +98,8 @@ const StockImages = (props: any) => {
       editor.objects.add(options).then(() => {
         //@ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...options }))
+        editor.objects.position("top", activeMainObject.top)
+        editor.objects.position("left", activeMainObject.left)
       })
     },
     [editor]

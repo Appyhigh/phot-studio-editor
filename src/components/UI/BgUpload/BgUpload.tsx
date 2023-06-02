@@ -60,6 +60,8 @@ const BgUpload = () => {
       editor.objects.add(options).then(() => {
         //@ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...options }))
+        editor.objects.position("top", activeMainObject.top)
+        editor.objects.position("left", activeMainObject.left)
         setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
       })
     })

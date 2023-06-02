@@ -85,6 +85,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       type: "StaticImage",
       src: previewWithUpdatedBackground,
       preview: previewWithUpdatedBackground,
+      original: mainImgInfo.original,
       id: nanoid(),
       metadata: {
         generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
@@ -94,10 +95,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     editor.objects.add(options).then(() => {
       const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
       setLoaderPopup(false)
+      editor.objects.removeById(mainImgInfo.id)
       if (activeObject?.id === activeMainObject?.id) {
         setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+        editor.objects.position("top", activeMainObject.top)
+        editor.objects.position("left", activeMainObject.left)
       }
-      editor.objects.removeById(activeObject?.id)
     })
   }
 

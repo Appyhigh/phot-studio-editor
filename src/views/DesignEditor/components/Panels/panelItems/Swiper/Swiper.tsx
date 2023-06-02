@@ -35,6 +35,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           preview: previewWithUpdatedBackground,
           original: mainImgInfo.original,
           id: nanoid(),
+
           metadata: {
             generationDate: new Date().getTime(),
             originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
@@ -44,6 +45,8 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         editor.objects.add(options).then(() => {
           //@ts-ignore
           setMainImgInfo((prev) => ({ ...prev, ...options }))
+          editor.objects.position("top", activeMainObject.top)
+          editor.objects.position("left", activeMainObject.left)
         })
       } else if (each.gradient) {
         const previewWithUpdatedBackground: any = await changeLayerFillWithGradient(
@@ -67,6 +70,8 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         editor.objects.add(options).then(() => {
           //@ts-ignore
           setMainImgInfo((prev) => ({ ...prev, ...options }))
+          editor.objects.position("top", activeMainObject.top)
+          editor.objects.position("left", activeMainObject.left)
         })
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
@@ -92,6 +97,8 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           editor.objects.add(options).then(() => {
             //@ts-ignore
             setMainImgInfo((prev) => ({ ...prev, ...options }))
+            editor.objects.position("top", activeMainObject.top)
+            editor.objects.position("left", activeMainObject.left)
           })
         })
       }
