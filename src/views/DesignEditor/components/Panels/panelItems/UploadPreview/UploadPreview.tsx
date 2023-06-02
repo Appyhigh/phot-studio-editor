@@ -23,7 +23,7 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
 
   return (
-    <div>
+    <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
       <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
 
