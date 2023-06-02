@@ -136,9 +136,6 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       putRequest.onsuccess = () => {
         // console.log("Data stored successfully in IndexedDB")
       }
-      imageCt.onsucess = (event: any) => {
-        setImagesCt(images)
-      }
     } catch (error) {
       console.error("Failed to save data to IndexedDB:", error)
     }
@@ -164,8 +161,6 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
       getImagesCt.onsuccess = (event: any) => {
         const data = event.target.result
-        console.log("images get form db ", data)
-
         setImagesCt(data)
       }
       getRequest.onsuccess = (event: any) => {
@@ -260,7 +255,9 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         const data = currentScene.layers.filter((el) => el.id != "background")
         currentScene.layers.map((el) => {
           if (el.type === "StaticImage") {
+            // @ts-ignore
             if (images < parseInt(el.name)) {
+              // @ts-ignore
               images = parseInt(el.name)
             }
           }
