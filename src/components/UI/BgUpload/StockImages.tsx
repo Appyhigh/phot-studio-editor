@@ -48,7 +48,7 @@ const StockImages = (props: any) => {
     })
   }
 
-  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+  const { setImagesCt } = useContext(ImagesContext)
 
   const addObject = useCallback(
     (url: string, width: number, height: number) => {

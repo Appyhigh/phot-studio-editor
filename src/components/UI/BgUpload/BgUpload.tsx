@@ -13,7 +13,6 @@ import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
-import ImagesContext from "~/contexts/ImagesCountContext"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -31,7 +30,6 @@ const BgUpload = () => {
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
   }
 
-  const { imagesCt, setImagesCt } = useContext(ImagesContext)
   const handleImgAdd = () => {
     const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
 

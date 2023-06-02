@@ -27,7 +27,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+  const { setImagesCt } = useContext(ImagesContext)
 
   useEffect(() => {
     const containerElement = containerRef.current!

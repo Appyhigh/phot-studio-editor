@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
+import { useEditor } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
@@ -17,7 +17,6 @@ import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
-import ImagesContext from "~/contexts/ImagesCountContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -28,15 +27,11 @@ const BgRemover = () => {
   })
   const [bgDOptions, setBgDOptions] = useState(BgOptions)
 
-  const objects = useObjects()
-  const activeObject = useActiveObject()
-
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
   }
-  const { imagesCt, setImagesCt } = useContext(ImagesContext)
 
   const addObject = React.useCallback(
     (url: string) => {

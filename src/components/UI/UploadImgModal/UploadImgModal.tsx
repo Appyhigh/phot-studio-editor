@@ -24,7 +24,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     url: "",
   })
 
-  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+  const { setImagesCt } = useContext(ImagesContext)
 
 
   const handleDropFiles = async (files: FileList) => {

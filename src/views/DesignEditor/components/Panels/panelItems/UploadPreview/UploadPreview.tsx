@@ -21,7 +21,7 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+  const {  setImagesCt } = useContext(ImagesContext)
 
   const removeBackgroundHandler = async () => {
     try {

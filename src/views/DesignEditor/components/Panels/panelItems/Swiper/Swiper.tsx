@@ -3,7 +3,7 @@ import { Autoplay, Navigation } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/autoplay"
-import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
+import {  useEditor } from "@layerhub-io/react"
 import Icons from "~/components/Icons"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
@@ -12,15 +12,11 @@ import { useCallback, useContext } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
-import ImagesContext from "~/contexts/ImagesCountContext"
 
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
   const [css, theme] = useStyletron()
-  const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
-  const objects = useObjects()
-    const { imagesCt, setImagesCt } = useContext(ImagesContext)
 
   const handleChangeBg = useCallback(
     async (each: any) => {

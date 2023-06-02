@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { useActiveObject, useEditor, useFrame, useObjects } from "@layerhub-io/react"
+import React, { useEffect, useRef, useState } from "react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { ILayer } from "@layerhub-io/types"
@@ -8,7 +8,7 @@ import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import ObjectLayer from "./ObjectLayer/ObjectLayer"
-import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
+import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import TextLayer from "./TextLayer/TextLayer"
@@ -16,8 +16,6 @@ import BgLayer from "./BgLayer/BgLayer"
 import GroupIcon from "~/components/Icons/GroupIcon"
 import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
 import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
-import useDesignEditorContext from "~/hooks/useDesignEditorContext"
-import ImagesContext from "~/contexts/ImagesCountContext"
 
 interface ToolboxState {
   toolbox: string
@@ -44,7 +42,6 @@ const LayerPanel = () => {
   const [showSingleLayer, setShowSingleLayer] = useState(false)
   const rightPanelRef = useRef()
   const [activeSingleLayer, setActiveSingleLayer] = useState()
-  const { setImagesCt } = useContext(ImagesContext)
   const [layerState, setLayerState] = useState<layerProps>({
     isOpenSlider: false,
     bgLayer: false,
