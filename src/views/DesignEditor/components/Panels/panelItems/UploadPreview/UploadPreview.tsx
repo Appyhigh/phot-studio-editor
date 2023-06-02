@@ -10,6 +10,7 @@ import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
+import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 
 const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -20,51 +21,6 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-
-  const removeBackgroundHandler = async () => {
-    try {
-      // Start the loader
-      setLoaderPopup(true)
-
-      removeBackgroundController(
-        mainImgInfo.src,
-        (image: string) => {
-          // Add the resultant image to the canvas
-          const options = {
-            type: "StaticImage",
-            src: image,
-            preview: image,
-            id: nanoid(),
-            metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
-          }
-          editor.objects.add(options).then(() => {
-            // @ts-ignore
-            setPanelInfo((prev) => ({
-              ...prev,
-              bgOptions: true,
-              bgRemoverBtnActive: false,
-              uploadSection: false,
-              trySampleImg: false,
-            }))
-            editor.objects.removeById(mainImgInfo.id)
-            setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-            // Stop the loader
-            setLoaderPopup(false)
-          })
-        },
-        virtualSrcImageRef,
-        virtualMaskImageRef,
-        virtualCanvasSrcImageRef,
-        virtualCanvasMaskImageRef,
-        virtualCanvasResultImageRef,
-        1000,
-        1000
-      )
-    } catch (error: any) {
-      setLoaderPopup(false)
-      console.log("Something went wrong while removing background...", error.message)
-    }
-  }
 
   return (
     <div>
@@ -131,9 +87,20 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
       ) : (
         <button
           disabled={panelInfo.bgRemoverBtnActive ? false : true}
-          onClick={() => {
-            removeBackgroundHandler()
-          }}
+          onClick={() =>
+            RemoveBGFunc(
+              editor,
+              setLoaderPopup,
+              setPanelInfo,
+              mainImgInfo,
+              setMainImgInfo,
+              virtualSrcImageRef,
+              virtualMaskImageRef,
+              virtualCanvasSrcImageRef,
+              virtualCanvasMaskImageRef,
+              virtualCanvasResultImageRef
+            )
+          }
           className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
         >
           Remove Background

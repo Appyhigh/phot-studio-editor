@@ -12,6 +12,7 @@ import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundContro
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
+import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -109,72 +110,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     }
   }
 
-  const removeBackgroundHandler = async () => {
-    try {
-      if (activeObject?.metadata?.originalLayerPreview) {
-        const options = {
-          type: "StaticImage",
-          src: activeObject?.metadata?.originalLayerPreview,
-          preview: activeObject?.metadata?.originalLayerPreview,
-          metadata: {
-            generationDate: activeObject?.metadata?.generationDate,
-            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-          },
-        }
-        editor.objects.add(options).then(() => {
-          editor.objects.remove(activeObject.id)
-        })
-      } else {
-        setLoaderPopup(true)
-
-        removeBackgroundController(
-          activeObject?.preview,
-          (image: string) => {
-            // Add the resultant image to the canvas
-            const options = {
-              type: "StaticImage",
-              src: image,
-              preview: image,
-              id: nanoid(),
-              metadata: {
-                generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
-                originalLayerPreview: image,
-              },
-            }
-            editor.objects.add(options).then(() => {
-              // @ts-ignore
-              setPanelInfo((prev) => ({
-                ...prev,
-                bgOptions: true,
-                bgRemoverBtnActive: false,
-                uploadSection: false,
-                trySampleImg: false,
-                uploadPreview: false,
-              }))
-              if (activeObject?.id === mainImgInfo?.id) {
-                setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-              }
-              editor.objects.removeById(activeObject.id)
-              // Stop the loader
-              setLoaderPopup(false)
-            })
-          },
-          virtualSrcImageRef,
-          virtualMaskImageRef,
-          virtualCanvasSrcImageRef,
-          virtualCanvasMaskImageRef,
-          virtualCanvasResultImageRef,
-          activeObject?.width * activeObject?.scaleX,
-          activeObject?.height * activeObject?.scaleY
-        )
-      }
-      // Start the loader
-    } catch (error: any) {
-      setLoaderPopup(false)
-      console.log("Something went wrong while removing background...", error.message)
-    }
-  }
-
   return showLayer ? (
     <Scrollable>
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -265,7 +200,21 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>
           <div
-            onClick={removeBackgroundHandler}
+            onClick={() =>
+              RemoveBGFunc(
+                editor,
+                setLoaderPopup,
+                setPanelInfo,
+                mainImgInfo,
+                setMainImgInfo,
+                virtualSrcImageRef,
+                virtualMaskImageRef,
+                virtualCanvasSrcImageRef,
+                virtualCanvasMaskImageRef,
+                virtualCanvasResultImageRef,
+                activeObject
+              )
+            }
             className={clsx(
               classes.otherToolsBox,
               "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
