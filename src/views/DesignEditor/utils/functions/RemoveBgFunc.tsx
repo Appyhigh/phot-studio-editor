@@ -20,12 +20,20 @@ export const RemoveBGFunc = async (
         type: "StaticImage",
         src: activeObject?.metadata?.originalLayerPreview,
         preview: activeObject?.metadata?.originalLayerPreview,
+        original: activeObject.original,
+        id: activeObject.id,
+
         metadata: {
           generationDate: activeObject?.metadata?.generationDate,
           originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         },
       }
       editor.objects.add(options).then(() => {
+        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+        editor.objects.position("top", activeObject.top)
+        editor.objects.position("left", activeObject.left)
+        editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+        editor.objects.resize("width", activeObject.width * activeObject.scaleX)
         editor.objects.remove(activeObject.id)
       })
     } else {
@@ -59,6 +67,8 @@ export const RemoveBGFunc = async (
               editor.objects.removeById(activeObject.id)
               editor.objects.position("top", activeObject.top)
               editor.objects.position("left", activeObject.left)
+              editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+              editor.objects.resize("width", activeObject.width * activeObject.scaleX)
             } else editor.objects.removeById(mainImgInfo.id)
             // Stop the loader
             setLoaderPopup(false)
