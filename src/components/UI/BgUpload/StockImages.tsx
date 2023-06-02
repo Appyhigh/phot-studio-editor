@@ -10,9 +10,9 @@ import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
 import usePagination from "~/hooks/usePagination"
 import { toDataURL } from "~/utils/export"
-import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -48,38 +48,6 @@ const StockImages = (props: any) => {
     })
   }
 
-  const setBgImg = useCallback(
-    async function (url: string) {
-      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-
-      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        url,
-        activeObject?.width * activeObject?.scaleX,
-        activeObject?.height * activeObject?.scaleY
-      )
-      const options = {
-        type: "StaticImage",
-        src: previewWithUpdatedBackground,
-        preview: previewWithUpdatedBackground,
-        original: mainImgInfo.original,
-        id: nanoid(),
-        metadata: {
-          generationDate: new Date().getTime(),
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      }
-      editor.objects.removeById(mainImgInfo.id)
-      editor.objects.add(options).then(() => {
-        //@ts-ignore
-        setMainImgInfo((prev) => ({ ...prev, ...options }))
-        editor.objects.position("top", activeMainObject.top)
-        editor.objects.position("left", activeMainObject.left)
-      })
-    },
-    [editor]
-  )
-
   return (
     <div className={classes.stockImgSection}>
       <div className={classes.inputWrapper}>
@@ -109,7 +77,10 @@ const StockImages = (props: any) => {
                   {
                     props.imageAs == "foreground"
                       ? AddObjectFunc(image.image_url_list[0], editor, image.width, image.height, frame)
-                      : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
+                      : (toDataURL(image.image_url_list[0], async function (dataUrl: string) {
+                          HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+                        }),
+                        setSelectedImg(image.mongo_id.$oid))
                   }
                 }}
                 preview={image.image_url_list[0]}

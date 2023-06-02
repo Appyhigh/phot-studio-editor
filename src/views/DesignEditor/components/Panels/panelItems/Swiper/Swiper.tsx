@@ -11,7 +11,7 @@ import { changeLayerBackgroundImage, changeLayerFill, changeLayerFillWithGradien
 import { useCallback, useContext } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
@@ -21,85 +21,13 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
   const objects = useObjects()
   const handleChangeBg = useCallback(
     async (each: any) => {
-      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
       if (each.color) {
-        const previewWithUpdatedBackground: any = await changeLayerFill(
-          activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-          each.color,
-          activeMainObject?.width * activeMainObject?.scaleX,
-          activeMainObject?.height * activeMainObject?.scaleY
-        )
-        const options = {
-          type: "StaticImage",
-          src: previewWithUpdatedBackground,
-          preview: previewWithUpdatedBackground,
-          original: mainImgInfo.original,
-          id: nanoid(),
-
-          metadata: {
-            generationDate: new Date().getTime(),
-            originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-          },
-        }
-        editor.objects.removeById(mainImgInfo.id)
-        editor.objects.add(options).then(() => {
-          //@ts-ignore
-          setMainImgInfo((prev) => ({ ...prev, ...options }))
-          editor.objects.position("top", activeMainObject.top)
-          editor.objects.position("left", activeMainObject.left)
-        })
+        HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.color, changeLayerFill)
       } else if (each.gradient) {
-        const previewWithUpdatedBackground: any = await changeLayerFillWithGradient(
-          activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
-          each.gradient,
-          activeMainObject?.width * activeMainObject?.scaleX,
-          activeMainObject?.height * activeMainObject?.scaleY
-        )
-        const options = {
-          type: "StaticImage",
-          src: previewWithUpdatedBackground,
-          preview: previewWithUpdatedBackground,
-          original: mainImgInfo.original,
-          id: nanoid(),
-          metadata: {
-            generationDate: new Date().getTime(),
-            originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
-          },
-        }
-        editor.objects.removeById(mainImgInfo.id)
-        editor.objects.add(options).then(() => {
-          //@ts-ignore
-          setMainImgInfo((prev) => ({ ...prev, ...options }))
-          editor.objects.position("top", activeMainObject.top)
-          editor.objects.position("left", activeMainObject.left)
-        })
+        HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.gradient, changeLayerFillWithGradient)
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
-          const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-            activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-            dataUrl,
-            activeMainObject?.width * activeMainObject?.scaleX,
-            activeMainObject?.height * activeMainObject?.scaleY
-          )
-          const options = {
-            type: "StaticImage",
-            src: previewWithUpdatedBackground,
-            preview: previewWithUpdatedBackground,
-            original: mainImgInfo.original,
-
-            id: nanoid(),
-            metadata: {
-              generationDate: new Date().getTime(),
-              originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-            },
-          }
-          editor.objects.removeById(mainImgInfo.id)
-          editor.objects.add(options).then(() => {
-            //@ts-ignore
-            setMainImgInfo((prev) => ({ ...prev, ...options }))
-            editor.objects.position("top", activeMainObject.top)
-            editor.objects.position("left", activeMainObject.left)
-          })
+          HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
         })
       }
     },

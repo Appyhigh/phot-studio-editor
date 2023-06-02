@@ -11,6 +11,7 @@ import LoaderContext from "~/contexts/LoaderContext"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -75,33 +76,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
-    const previewWithUpdatedBackground: any = await changeLayerFill(
-      activeObject?.metadata?.originalLayerPreview ?? inputImg,
-      BG,
-      activeObject?.width * activeObject?.scaleX,
-      activeObject?.height * activeObject?.scaleY
-    )
-    const options = {
-      type: "StaticImage",
-      src: previewWithUpdatedBackground,
-      preview: previewWithUpdatedBackground,
-      original: mainImgInfo.original,
-      id: nanoid(),
-      metadata: {
-        generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
-        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? inputImg,
-      },
-    }
-    editor.objects.add(options).then(() => {
-      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-      setLoaderPopup(false)
-      editor.objects.removeById(mainImgInfo.id)
-      if (activeObject?.id === activeMainObject?.id) {
-        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-        editor.objects.position("top", activeMainObject.top)
-        editor.objects.position("left", activeMainObject.left)
-      }
-    })
+    HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill)
   }
 
   const removeBackgroundBeforeChangingColor = async (each: any) => {

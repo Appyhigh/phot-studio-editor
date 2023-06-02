@@ -13,6 +13,7 @@ import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -31,39 +32,11 @@ const BgUpload = () => {
   }
 
   const handleImgAdd = () => {
-    const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-
     const imageUrl = bgUploadPreview.url
-
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
-
     toDataURL(imageUrl, async function (dataUrl: string) {
-      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-        activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        dataUrl,
-        activeMainObject?.width * activeMainObject?.scaleX,
-        activeMainObject?.height * activeMainObject?.scaleY
-      )
-      const options = {
-        type: "StaticImage",
-        src: previewWithUpdatedBackground,
-        preview: previewWithUpdatedBackground,
-        original: mainImgInfo.original,
-
-        id: nanoid(),
-        metadata: {
-          generationDate: new Date().getTime(),
-          originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        },
-      }
-      editor.objects.removeById(mainImgInfo.id)
-      editor.objects.add(options).then(() => {
-        //@ts-ignore
-        setMainImgInfo((prev) => ({ ...prev, ...options }))
-        editor.objects.position("top", activeMainObject.top)
-        editor.objects.position("left", activeMainObject.left)
-        setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-      })
+      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
   }
 
