@@ -1,15 +1,16 @@
-export const DeleteFunc = ({ editor, activeObject, mainImgInfo, setMainImgInfo }: any) => {
+export const DeleteFunc = ({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo }: any) => {
   if (mainImgInfo && activeObject?.id === mainImgInfo.id) {
     // @ts-ignore
-    setPanelInfo((prev) => ({
-      ...prev,
-      uploadSection: true,
-      trySampleImg: true,
-      uploadPreview: false,
-      bgOptions: false,
-      bgRemoverBtnActive: false,
-    }))
-    setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+    if (setPanelInfo)
+      setPanelInfo((prev: any) => ({
+        ...prev,
+        uploadSection: true,
+        trySampleImg: true,
+        uploadPreview: false,
+        bgOptions: false,
+        bgRemoverBtnActive: false,
+      }))
+    if (setMainImgInfo) setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
   }
   editor.objects.remove(activeObject?.id)
   editor.cancelContextMenuRequest()

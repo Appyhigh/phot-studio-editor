@@ -13,6 +13,7 @@ import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 
 const BgUpload = () => {
@@ -32,35 +33,11 @@ const BgUpload = () => {
   }
 
   const handleImgAdd = () => {
-    const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-
     const imageUrl = bgUploadPreview.url
-
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
-
     toDataURL(imageUrl, async function (dataUrl: string) {
-      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-        activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        dataUrl
-      )
-      const options = {
-        type: "StaticImage",
-        src: previewWithUpdatedBackground,
-        preview: previewWithUpdatedBackground,
-        original: mainImgInfo.original,
-
-        id: nanoid(),
-        metadata: {
-          generationDate: new Date().getTime(),
-          originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        },
-      }
-      editor.objects.removeById(mainImgInfo.id)
-      editor.objects.add(options).then(() => {
-        //@ts-ignore
-        setMainImgInfo((prev) => ({ ...prev, ...options }))
-        setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-      })
+      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
   }
 
@@ -104,15 +81,15 @@ const BgUpload = () => {
             )}
 
             {bgUploadPreview.showPreview && bgUploadPreview.url && (
-              <Scrollbars style={{height:"400px"}}>
-              <UploadPreview
-                uploadType={MAIN_IMG_Bg}
-                discardHandler={() => {
-                  setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-                }}
-                mainImgUrl={bgUploadPreview.url}
-                handleBgAdd={handleImgAdd}
-              />
+              <Scrollbars style={{ height: "400px" }}>
+                <UploadPreview
+                  uploadType={MAIN_IMG_Bg}
+                  discardHandler={() => {
+                    setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+                  }}
+                  mainImgUrl={bgUploadPreview.url}
+                  handleBgAdd={handleImgAdd}
+                />
               </Scrollbars>
             )}
           </Scrollbars>
