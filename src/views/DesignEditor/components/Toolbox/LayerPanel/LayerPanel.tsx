@@ -341,17 +341,24 @@ const LayerPanel = () => {
                                         </div>
                                       ) : (
                                         <img
+                                          className="m-1"
                                           src={object.preview ?? object.src}
                                           style={{
                                             borderRadius: "4px",
-                                            width: layerState.isOpenSlider ? "40px" : "60px",
-                                            height: layerState.isOpenSlider ? "40px" : "60px",
+                                            width: layerState.isOpenSlider ? "50px" : "60px",
+                                            height: layerState.isOpenSlider ? "50px" : "60px",
                                           }}
                                           alt="nn"
-                                          className="mx-1 my-1"
                                         />
                                       )}
-                                      {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                                      {layerState.isOpenSlider &&
+                                        (object.text || object.name === "StaticText" ? (
+                                          <Block>
+                                            {object?.text?.length > 30 ? object?.text?.substring(0, 30) + "..." : object?.text}
+                                          </Block>
+                                        ) : (
+                                          <Block className="ml-2">{"Image " + object.name}</Block>
+                                        ))}{" "}
                                     </Block>
                                   </Block>
                                 )
@@ -374,12 +381,12 @@ const LayerPanel = () => {
                               $style={{
                                 fontSize: "14px",
                                 backgroundColor: check_group(obj.id)
-                                  ? "rgb(245,246,247)"
+                                  ? "#F1F1F5"
                                   : activeObject?.id == obj.id
-                                  ? "rgb(245,246,247)"
+                                  ? "#F1F1F5"
                                   : "#fff",
                                 ":hover": {
-                                  background: "rgb(245,246,247)",
+                                  background: "#F1F1F5",
                                 },
                               }}
                               onClick={() => {
@@ -453,7 +460,6 @@ const LayerPanel = () => {
                                   alt="nn"
                                   className={clsx(
                                     classes.bgImage,
-                                    "mx-1 my-1",
                                     layerState.isOpenSlider && classes.bgCloseImage,
                                     classes.bgRemovedImg
                                   )}
@@ -478,7 +484,7 @@ const LayerPanel = () => {
                     fontSize: "14px",
                     backgroundColor: "#fff",
                     ":hover": {
-                      background: "rgb(245,246,247)",
+                      background: "#F1F1F5",
                     },
                   }}
                   onClick={() => {
@@ -498,7 +504,7 @@ const LayerPanel = () => {
                       style={{
                         border: "1px solid #92929D",
                       }}
-                      className={clsx(classes.bgImage, "mx-1 my-1", layerState.isOpenSlider && classes.bgCloseImage)}
+                      className={clsx(classes.bgImage, layerState.isOpenSlider && classes.bgCloseImage)}
                     />
                   ) : (
                     <div

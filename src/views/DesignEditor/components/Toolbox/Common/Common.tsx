@@ -73,7 +73,7 @@ const Common = ({ type }: any) => {
       ) : state.isMultiple && !activeObject?._objects?.map((el: any) => el?._objects?.length > 0).includes(true) ? (
         <ToolButton
           type={type}
-          func={() => {
+          func={() => {            
             GroupFunc({ editor, activeObject, state, setState })
           }}
           icon={<LayersIcon size={27} />}

@@ -1,5 +1,6 @@
 export const GroupFunc = ({ editor, activeObject, state, setState }: any) => {
-  editor.objects.update({ name: activeObject.name })
+  // editor.objects.update({ name: activeObject.name })
+
   editor.objects.group()
   if (setState) setState({ ...state, isGroup: true })
 }

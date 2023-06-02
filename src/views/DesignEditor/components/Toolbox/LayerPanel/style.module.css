@@ -14,26 +14,27 @@
 .showObjectTextLayer {
   width: 50px;
   height: 50px;
-  border: 1px solid #92929D;
+  background: #f1f1f5;
+  border: 1px solid #92929d;
   border-radius: 4px;
 
 }
 .bgImage {
   width: 60px;
   height: 60px;
-  margin: 6px 4px 6px 8px;
+  margin: 8px 10px 8px 6px;
   border-radius: 4px;
-color: #44444F;
-font-size: 14px;
+  color: #44444f;
+  font-size: 14px;
 }
-.bgRemovedImg{
-  border: 1px solid #92929D;
+.bgRemovedImg {
+  border: 1px solid #92929d;
 }
 
-.bgCloseImage{
+.bgCloseImage {
   width: 50px;
   height: 50px;
-  margin-right: 12px;
+  margin-right: 16px;
 }
 .threeDotsIcon {
   display: none;
@@ -48,7 +49,7 @@ font-size: 14px;
   z-index: 500;
 }
 
-.previewImg{
+.previewImg {
   margin: 8px 8px 8px 12px;
 }
 
