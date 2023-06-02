@@ -25,7 +25,9 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
       if (each.color) {
         const previewWithUpdatedBackground: any = await changeLayerFill(
           activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-          each.color
+          each.color,
+          activeMainObject?.width * activeMainObject?.scaleX,
+          activeMainObject?.height * activeMainObject?.scaleY
         )
         const options = {
           type: "StaticImage",
@@ -46,7 +48,9 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
       } else if (each.gradient) {
         const previewWithUpdatedBackground: any = await changeLayerFillWithGradient(
           activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
-          each.gradient
+          each.gradient,
+          activeMainObject?.width * activeMainObject?.scaleX,
+          activeMainObject?.height * activeMainObject?.scaleY
         )
         const options = {
           type: "StaticImage",
@@ -68,7 +72,9 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         toDataURL(each.img, async function (dataUrl: string) {
           const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
             activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-            dataUrl
+            dataUrl,
+            activeMainObject?.width * activeMainObject?.scaleX,
+            activeMainObject?.height * activeMainObject?.scaleY
           )
           const options = {
             type: "StaticImage",

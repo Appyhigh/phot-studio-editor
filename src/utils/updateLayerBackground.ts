@@ -1,10 +1,10 @@
-export const changeLayerFill = (base64ImageData: string, backgroundColor: string) => {
+export const changeLayerFill = (base64ImageData: string, backgroundColor: string, width: number, height: number) => {
   return new Promise((resolve, reject) => {
     const image = new Image()
     image.onload = function () {
       const canvas = document.createElement("canvas")
-      canvas.width = image.width
-      canvas.height = image.height
+      canvas.width = width
+      canvas.height = height
 
       const context = canvas.getContext("2d")
 
@@ -14,7 +14,7 @@ export const changeLayerFill = (base64ImageData: string, backgroundColor: string
         context.fillRect(0, 0, canvas.width, canvas.height)
 
         // Draw the image on the canvas
-        context.drawImage(image, 0, 0)
+        context.drawImage(image, 0, 0, width, height)
 
         // Get base64 representation of the canvas
         const canvasDataURL = canvas.toDataURL()
@@ -61,15 +61,20 @@ export function resizeBase64Image(base64: string, newWidth: number, newHeight: n
   })
 }
 
-export const changeLayerFillWithGradient = (base64ImageData: string, gradient: string) => {
+export const changeLayerFillWithGradient = (
+  base64ImageData: string,
+  gradient: string,
+  width: number,
+  height: number
+) => {
   return new Promise((resolve, reject) => {
     const image = new Image()
 
     image.onload = function () {
       let grad: any = gradient
       const canvas = document.createElement("canvas")
-      canvas.width = image.width
-      canvas.height = image.height
+      canvas.width = width
+      canvas.height = height
 
       const context: any = canvas.getContext("2d")
 
@@ -86,7 +91,7 @@ export const changeLayerFillWithGradient = (base64ImageData: string, gradient: s
       context.fillRect(0, 0, canvas.width, canvas.height)
 
       // Draw the image on the canvas
-      context.drawImage(image, 0, 0)
+      context.drawImage(image, 0, 0, width, height)
 
       const canvasDataURL = canvas.toDataURL() // Get base64 representation of the canvas
       resolve(canvasDataURL)
@@ -100,7 +105,7 @@ export const changeLayerFillWithGradient = (base64ImageData: string, gradient: s
   })
 }
 
-export const changeLayerBackgroundImage = (image1Data: string, image2Data: string) => {
+export const changeLayerBackgroundImage = (image1Data: string, image2Data: string, width: number, height: number) => {
   return new Promise((resolve, reject) => {
     const image1 = new Image()
     const image2 = new Image()
@@ -109,8 +114,8 @@ export const changeLayerBackgroundImage = (image1Data: string, image2Data: strin
     image1.onload = function () {
       image2.onload = function () {
         const canvas = document.createElement("canvas")
-        canvas.width = image1.width
-        canvas.height = image1.height
+        canvas.width = width
+        canvas.height = height
 
         const context = canvas.getContext("2d")
 

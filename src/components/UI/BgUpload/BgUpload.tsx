@@ -25,7 +25,7 @@ const BgUpload = () => {
   const editor = useEditor()
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-    
+
     const imageUrl = await getBucketImageUrlFromFile(file)
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
   }
@@ -40,7 +40,9 @@ const BgUpload = () => {
     toDataURL(imageUrl, async function (dataUrl: string) {
       const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
         activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        dataUrl
+        dataUrl,
+        activeMainObject?.width * activeMainObject?.scaleX,
+        activeMainObject?.height * activeMainObject?.scaleY
       )
       const options = {
         type: "StaticImage",
@@ -59,7 +61,6 @@ const BgUpload = () => {
         //@ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...options }))
         setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-
       })
     })
   }

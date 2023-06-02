@@ -75,7 +75,9 @@ const StockImages = (props: any) => {
     async function (url: string) {
       const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        url
+        url,
+        activeObject?.width * activeObject?.scaleX,
+        activeObject?.height * activeObject?.scaleY
       )
       const options = {
         type: "StaticImage",

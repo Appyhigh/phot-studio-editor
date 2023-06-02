@@ -77,7 +77,9 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
     const previewWithUpdatedBackground: any = await changeLayerFill(
       activeObject?.metadata?.originalLayerPreview ?? inputImg,
-      BG
+      BG,
+      activeObject?.width * activeObject?.scaleX,
+      activeObject?.height * activeObject?.scaleY
     )
     const options = {
       type: "StaticImage",

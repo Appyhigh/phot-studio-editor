@@ -75,7 +75,6 @@ const BgRemover = () => {
     editor.objects.removeById(id)
   }
 
-
   useEffect(() => {
     const addCategoryOptions = async (category: any) => {
       const res = await getStockImages(category)
@@ -98,7 +97,6 @@ const BgRemover = () => {
 
     fetchCategories()
   }, [])
-
 
   return (
     <Block className="d-flex flex-1 flex-column">
