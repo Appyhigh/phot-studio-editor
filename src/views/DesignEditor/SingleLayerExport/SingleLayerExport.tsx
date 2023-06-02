@@ -23,7 +23,7 @@ import { BackFunc } from "../utils/functions/tools/BackFunc"
 import { LockFunc, UnlockFunc } from "../utils/functions/tools/LockUnlockFunc"
 import { UngroupFunc } from "../utils/functions/tools/GroupUngroupFunc"
 import { InvisibleFunc, VisibleFunc } from "../utils/functions/tools/VisibilityFunc"
-import { SetBgFunc } from "../utils/functions/SetBgFunc"
+import { SetCanvasBgFunc } from "../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../utils/functions/tools/DeleteFunc"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
@@ -109,7 +109,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             )}
             {activeObject?.type === "StaticImage" && (
               <ContextMenuItem
-                onClick={() => SetBgFunc({ editor, frame })}
+                onClick={() => SetCanvasBgFunc({ editor, frame })}
                 icon="Images"
                 label="Set as background image"
               >
