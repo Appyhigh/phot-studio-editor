@@ -156,6 +156,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               src: image,
               preview: image,
               id: nanoid(),
+              name:activeObject.name,
               metadata: {
                 generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
                 originalLayerPreview: image,

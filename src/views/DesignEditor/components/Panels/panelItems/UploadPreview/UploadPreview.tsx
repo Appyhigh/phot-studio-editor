@@ -10,6 +10,7 @@ import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -20,6 +21,7 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
+  const { imagesCt, setImagesCt } = useContext(ImagesContext)
 
   const removeBackgroundHandler = async () => {
     try {
@@ -30,11 +32,18 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
         mainImgInfo.src,
         (image: string) => {
           // Add the resultant image to the canvas
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev+1;
+            return prev +1;
+          })
           const options = {
             type: "StaticImage",
             src: image,
             preview: image,
             id: nanoid(),
+            name: latest_ct.toString(),
+
             metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
           }
           editor.objects.add(options).then(() => {
@@ -112,7 +121,12 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
       {uploadType === LOCAL_SAMPLE_IMG ? (
         <button
           onClick={() => {
-            editor.objects.add(upload)
+            let latest_ct = 0
+            setImagesCt((prev: any) => {
+              latest_ct = prev + 1
+              return prev + 1
+            })
+            editor.objects.add({ ...upload, name: latest_ct.toString() })
             discardHandler()
           }}
           className={clsx(classes.removeBgBtn)}

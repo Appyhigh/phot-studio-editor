@@ -5,21 +5,36 @@
   border: 1px solid #92929d;
   border-radius: 4px;
   margin: 0px 8px;
+  border: 1px solid #92929D;
+
 }
 .eachLayer {
   margin: 8px 10px 8px 14px;
 }
 .showObjectTextLayer {
-  width: 40px;
-  height: 40px;
- 
+  width: 50px;
+  height: 50px;
+  border: 1px solid #92929D;
+  border-radius: 4px;
+
 }
 .bgImage {
-  width: 40px;
-  height: 40px;
-  margin: 8px 10px 8px 14px;
+  width: 60px;
+  height: 60px;
+  margin: 6px 4px 6px 8px;
+  border-radius: 4px;
+color: #44444F;
+font-size: 14px;
+}
+.bgRemovedImg{
+  border: 1px solid #92929D;
 }
 
+.bgCloseImage{
+  width: 50px;
+  height: 50px;
+  margin-right: 12px;
+}
 .threeDotsIcon {
   display: none;
   position: absolute;

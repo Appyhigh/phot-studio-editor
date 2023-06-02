@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useActiveObject, useEditor, useFrame, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
@@ -17,6 +17,7 @@ import GroupIcon from "~/components/Icons/GroupIcon"
 import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
 import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 interface ToolboxState {
   toolbox: string
@@ -43,8 +44,7 @@ const LayerPanel = () => {
   const [showSingleLayer, setShowSingleLayer] = useState(false)
   const rightPanelRef = useRef()
   const [activeSingleLayer, setActiveSingleLayer] = useState()
- 
-
+  const { setImagesCt } = useContext(ImagesContext)
   const [layerState, setLayerState] = useState<layerProps>({
     isOpenSlider: false,
     bgLayer: false,
@@ -89,12 +89,12 @@ const LayerPanel = () => {
 
   const [bgUrl, setBgUrl] = useState<any>("")
 
-// not allowed to select bg image so that it does not detached
+  // not allowed to select bg image so that it does not detached
 
   useEffect(() => {
     if (activeObject) {
-      if(activeObject?.type==="BackgroundImage") {
-        editor.objects.deselect();
+      if (activeObject?.type === "BackgroundImage") {
+        editor.objects.deselect()
         editor.objects.select("frame")
       }
     }
@@ -450,16 +450,23 @@ const LayerPanel = () => {
                               ) : (
                                 <img
                                   src={obj.preview ?? obj.src}
-                                  style={{
-                                    borderRadius: "4px",
-                                    width: layerState.isOpenSlider ? "40px" : "60px",
-                                    height: layerState.isOpenSlider ? "40px" : "60px",
-                                  }}
                                   alt="nn"
-                                  className="mx-1 my-1"
+                                  className={clsx(
+                                    classes.bgImage,
+                                    "mx-1 my-1",
+                                    layerState.isOpenSlider && classes.bgCloseImage,
+                                    classes.bgRemovedImg
+                                  )}
                                 />
                               )}
-                              {layerState.isOpenSlider && <Block>{obj.name}</Block>}
+                              {layerState.isOpenSlider &&
+                                (obj.text || obj.name === "StaticText" ? (
+                                  <Block>
+                                    {obj?.text?.length > 30 ? obj?.text?.substring(0, 30) + "..." : obj?.text}
+                                  </Block>
+                                ) : (
+                                  <Block>{"Image " + obj.name}</Block>
+                                ))}
                             </Block>
                           </div>
                         )
@@ -489,19 +496,16 @@ const LayerPanel = () => {
                       src={bgUrl}
                       alt="nn"
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "60px",
-                        height: layerState.isOpenSlider ? "40px" : "60px",
+                        border: "1px solid #92929D",
                       }}
-                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                      className={clsx(classes.bgImage, "mx-1 my-1", layerState.isOpenSlider && classes.bgCloseImage)}
                     />
                   ) : (
                     <div
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "60px",
-                        height: layerState.isOpenSlider ? "40px" : "60px",
                         backgroundColor: bgUrl,
                       }}
-                      className={clsx(classes.bgImage)}
+                      className={clsx(classes.bgImage, layerState.isOpenSlider && classes.bgCloseImage)}
                     >
                       &nbsp;
                     </div>

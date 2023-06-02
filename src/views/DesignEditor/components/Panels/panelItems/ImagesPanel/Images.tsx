@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor } from "@layerhub-io/react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import Loader from "~/components/UI/Loader/Loader"
@@ -13,20 +13,28 @@ import Uploads from "../UploadDropzone/Uploads"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import useAppContext from "~/hooks/useAppContext"
 import StockImages from "~/components/UI/BgUpload/StockImages"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const Images = () => {
   const editor = useEditor()
   const { loaderPopup } = useContext(LoaderContext)
   const { activePanel } = useAppContext()
+  const { setImagesCt } = useContext(ImagesContext)
 
   const addObject = React.useCallback(
     (url: string) => {
       if (editor) {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          return prev + 1
+        })
         const options = {
           type: "StaticImage",
           id: nanoid(),
           src: url,
           preview: url,
+          name: latest_ct.toString(),
           metadata: { generationDate: new Date().getTime() },
         }
         editor.objects.add(options)

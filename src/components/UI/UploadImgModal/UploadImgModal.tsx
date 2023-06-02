@@ -9,6 +9,7 @@ import MainImageContext from "~/contexts/MainImageContext"
 import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "../Common/FileError/FileError"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const inputNextFile = React.useRef<HTMLInputElement>(null)
@@ -22,6 +23,9 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     showPreview: false,
     url: "",
   })
+
+  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -58,12 +62,14 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         editor.objects.unsetBackgroundImage()
       }
 
+
       editor?.frame?.setBackgroundColor("#FFF")
 
       const options = {
         type: "BackgroundImage",
         src: imageUrl,
         preview: imageUrl,
+        
         metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
       }
       editor.objects.add(options).then(() => {
@@ -85,6 +91,8 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         id: nanoid(),
         preview: preview,
         original: preview,
+        name: activeOb.name,
+
         type: inputType,
         metadata: { generationDate: new Date().getTime() },
       }
@@ -180,12 +188,19 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
           <div>
             <button
               onClick={() => {
+                let latest_ct = 0
+                setImagesCt((prev: any) => {
+                  latest_ct = prev+1;
+                  return prev +1;
+                })
                 const upload = {
                   id: nanoid(),
                   src: addImgInfo.url,
                   preview: addImgInfo.url,
                   metadata: { generationDate: new Date().getTime() },
                   type: "StaticImage",
+                  name: latest_ct.toString(),
+
                 }
                 editor.objects.add(upload).then(() => {
                   handleClose()

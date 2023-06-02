@@ -3,7 +3,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { backgroundLayerType } from "~/constants/contants"
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useContext } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
@@ -11,6 +11,8 @@ import useAppContext from "~/hooks/useAppContext"
 import usePagination from "~/hooks/usePagination"
 import { toDataURL } from "~/utils/export"
 import { nanoid } from "nanoid"
+import ImagesContext from "~/contexts/ImagesCountContext"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -21,6 +23,7 @@ const StockImages = (props: any) => {
   const [page, setPage] = useState(1)
   const { res, more, loading } = usePagination(search, page)
   const frame = useFrame()
+  const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
 
   const observer = useRef<any>()
 
@@ -45,6 +48,8 @@ const StockImages = (props: any) => {
     })
   }
 
+  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+
   const addObject = useCallback(
     (url: string, width: number, height: number) => {
       let scale = 1
@@ -55,7 +60,13 @@ const StockImages = (props: any) => {
           scale = frame.height / height
         }
       }
+
       if (editor) {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          return prev + 1
+        })
         const options = {
           type: "StaticImage",
           id: nanoid(),
@@ -64,6 +75,7 @@ const StockImages = (props: any) => {
           metadata: { generationDate: new Date().getTime() },
           scaleX: scale,
           scaleY: scale,
+          name: latest_ct.toString(),
         }
         editor.objects.add(options)
       }
@@ -81,13 +93,19 @@ const StockImages = (props: any) => {
         type: "StaticImage",
         src: previewWithUpdatedBackground,
         preview: previewWithUpdatedBackground,
+        original: mainImgInfo.original,
+        name: mainImgInfo.name,
+        id: nanoid(),
         metadata: {
           generationDate: new Date().getTime(),
           originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         },
       }
-      editor.objects.add(options)
-      editor.objects.remove()
+      editor.objects.removeById(mainImgInfo.id)
+      editor.objects.add(options).then(() => {
+        //@ts-ignore
+        setMainImgInfo((prev) => ({ ...prev, ...options }))
+      })
     },
     [editor]
   )

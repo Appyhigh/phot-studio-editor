@@ -13,6 +13,7 @@ import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -25,11 +26,12 @@ const BgUpload = () => {
   const editor = useEditor()
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
-    
+
     const imageUrl = await getBucketImageUrlFromFile(file)
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
   }
 
+  const { imagesCt, setImagesCt } = useContext(ImagesContext)
   const handleImgAdd = () => {
     const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
 
@@ -42,12 +44,13 @@ const BgUpload = () => {
         activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
         dataUrl
       )
+    
       const options = {
         type: "StaticImage",
         src: previewWithUpdatedBackground,
         preview: previewWithUpdatedBackground,
         original: mainImgInfo.original,
-
+        name:mainImgInfo.name,
         id: nanoid(),
         metadata: {
           generationDate: new Date().getTime(),
@@ -59,7 +62,6 @@ const BgUpload = () => {
         //@ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...options }))
         setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-
       })
     })
   }

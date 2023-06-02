@@ -17,6 +17,7 @@ import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -35,6 +36,7 @@ const BgRemover = () => {
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
   }
+  const { imagesCt, setImagesCt } = useContext(ImagesContext)
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -63,7 +65,10 @@ const BgRemover = () => {
     [editor]
   )
 
-  const discardSampleImageHandler = (id: string) => {
+  const discardSampleImageHandler = () => {
+    // if(mainImgInfo){
+    //   editor.objects.removeById(mainImgInfo.id);
+    // }
     setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
     setPanelInfo((prev: any) => ({
       ...prev,
@@ -72,9 +77,7 @@ const BgRemover = () => {
       trySampleImg: true,
       uploadSection: true,
     }))
-    editor.objects.removeById(id)
   }
-
 
   useEffect(() => {
     const addCategoryOptions = async (category: any) => {
@@ -98,7 +101,6 @@ const BgRemover = () => {
 
     fetchCategories()
   }, [])
-
 
   return (
     <Block className="d-flex flex-1 flex-column">

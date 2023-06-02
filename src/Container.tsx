@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react"
+import React, { useCallback, useContext, useEffect, useRef } from "react"
 import ResizeObserver from "resize-observer-polyfill"
 import useAppContext from "~/hooks/useAppContext"
 import { getFonts } from "./store/slices/fonts/actions"
@@ -11,6 +11,7 @@ import { useEditor } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 import { loadFonts } from "./utils/fonts"
+import ImagesContext from "./contexts/ImagesCountContext"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -25,6 +26,9 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       setIsMobile(false)
     }
   }
+
+  const { imagesCt, setImagesCt } = useContext(ImagesContext)
+
   useEffect(() => {
     const containerElement = containerRef.current!
     const containerWidth = containerElement.clientWidth
@@ -114,7 +118,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   }
 
   // @ts-ignore
-  const saveData = async (data, canvasDim) => {
+  const saveData = async (data, canvasDim, images) => {
     try {
       const db: any = await openDatabase()
 
@@ -123,12 +127,17 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
       const putRequest = objectStore.put(data, "dataKey")
       const putCanvasDim = objectStore.put(canvasDim, "canvasDim")
+      const imageCt = objectStore.put(images, "imagesCt")
+
       putRequest.onerror = (event: any) => {
         console.error("IndexedDB put error:", event.target.error)
       }
 
       putRequest.onsuccess = () => {
         // console.log("Data stored successfully in IndexedDB")
+      }
+      imageCt.onsucess = (event: any) => {
+        setImagesCt(images)
       }
     } catch (error) {
       console.error("Failed to save data to IndexedDB:", error)
@@ -144,6 +153,8 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
       const getRequest = objectStore.get("dataKey")
       const getCanvasDim = objectStore.get("canvasDim")
+      const getImagesCt = objectStore.get("imagesCt")
+
       getRequest.onerror = (event: any) => {
         console.error("IndexedDB get error:", event.target.error)
       }
@@ -151,6 +162,12 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         console.error("IndexedDB get error:", event.target.error)
       }
 
+      getImagesCt.onsuccess = (event: any) => {
+        const data = event.target.result
+        console.log("images get form db ", data)
+
+        setImagesCt(data)
+      }
       getRequest.onsuccess = (event: any) => {
         const data = event.target.result
         const layers = data
@@ -173,7 +190,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
 
     await loadFonts([font])
-      
+
     editor?.objects?.add(layer).then(() => {
       editor?.objects?.update({ ...layer })
     })
@@ -191,7 +208,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           const backgroundImg = editor?.frame?.background?.canvas?._objects.filter(
             (el: any) => el?.type === "BackgroundImage"
           )[0]
-          editor.objects.removeById(backgroundImg.id)
+          editor.objects.removeById(backgroundImg?.id)
           editor.objects.unsetBackgroundImage()
           const options = {
             type: "BackgroundImage",
@@ -239,7 +256,15 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     if (editor) {
       editor.on("history:changed", () => {
         const currentScene = editor.scene.exportToJSON()
+        let images = 0
         const data = currentScene.layers.filter((el) => el.id != "background")
+        currentScene.layers.map((el) => {
+          if (el.type === "StaticImage") {
+            if (images < parseInt(el.name)) {
+              images = parseInt(el.name)
+            }
+          }
+        })
         const bgColor = editor?.frame?.background?.canvas?._objects[1].fill
         const canvasWidth = editor?.frame?.background?.canvas?._objects[1].width
         const canvasHeight = editor?.frame?.background?.canvas?._objects[1].height
@@ -248,7 +273,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           width: canvasWidth,
           height: canvasHeight,
         }
-        saveData(data, canvasDim)
+        saveData(data, canvasDim, images)
       })
     }
   }, [editor])

@@ -14,6 +14,7 @@ import MainImageContext from "~/contexts/MainImageContext"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -33,8 +34,9 @@ export default function ({ uploadType, activePanel }: any) {
     }
   }
 
-  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
+  const { setImagesCt } = useContext(ImagesContext)
 
+  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -69,6 +71,7 @@ export default function ({ uploadType, activePanel }: any) {
           scale = frame.height / img.height
         }
       }
+     
       // @ts-ignore
       const upload = {
         id: nanoid(),
@@ -131,16 +134,18 @@ export default function ({ uploadType, activePanel }: any) {
         <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
           <Block className="d-flex align-items-center flex-start">
             <Block className="pl-1">
-              {uploadType === LOCAL_SAMPLE_IMG && !rejectedFileUpload&& uploads.length === 0 ? (
+              {uploadType === LOCAL_SAMPLE_IMG && !rejectedFileUpload && uploads.length === 0 ? (
                 <Block className={classes.panelHeading}>Add Image</Block>
               ) : (
-                uploadType != LOCAL_SAMPLE_IMG &&  !rejectedFileUpload&&
+                uploadType != LOCAL_SAMPLE_IMG &&
+                !rejectedFileUpload &&
                 mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
               )}
             </Block>
             <Block>
               {activePanel === "Images"
-                ? uploadType === LOCAL_SAMPLE_IMG &&  !rejectedFileUpload&&
+                ? uploadType === LOCAL_SAMPLE_IMG &&
+                  !rejectedFileUpload &&
                   uploads.length != 0 && (
                     <div
                       className="d-flex justify-content-start flex-row align-items-center pointer"
@@ -175,10 +180,11 @@ export default function ({ uploadType, activePanel }: any) {
                   )}
             </Block>
           </Block>
-          {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0  && !rejectedFileUpload? (
+          {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0 && !rejectedFileUpload ? (
             <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
           ) : (
-            mainImgInfo.id == "" && !rejectedFileUpload&&
+            mainImgInfo.id == "" &&
+            !rejectedFileUpload &&
             uploadType !== LOCAL_SAMPLE_IMG && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
           )}
 
@@ -201,7 +207,7 @@ export default function ({ uploadType, activePanel }: any) {
                       }}
                     />
                   )
-                : uploadType !== LOCAL_SAMPLE_IMG&&
+                : uploadType !== LOCAL_SAMPLE_IMG &&
                   rejectedFileUpload && (
                     <FileError
                       handleTry={() => {

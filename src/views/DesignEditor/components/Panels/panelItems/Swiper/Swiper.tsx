@@ -12,6 +12,7 @@ import { useCallback, useContext } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
@@ -19,6 +20,8 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const objects = useObjects()
+    const { imagesCt, setImagesCt } = useContext(ImagesContext)
+
   const handleChangeBg = useCallback(
     async (each: any) => {
       const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
@@ -27,11 +30,13 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
           each.color
         )
+
         const options = {
           type: "StaticImage",
           src: previewWithUpdatedBackground,
           preview: previewWithUpdatedBackground,
           original: mainImgInfo.original,
+          name: mainImgInfo.name,
           id: nanoid(),
           metadata: {
             generationDate: new Date().getTime(),
@@ -48,12 +53,15 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
           activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
           each.gradient
         )
+
         const options = {
           type: "StaticImage",
           src: previewWithUpdatedBackground,
           preview: previewWithUpdatedBackground,
           original: mainImgInfo.original,
           id: nanoid(),
+          name: mainImgInfo.name,
+
           metadata: {
             generationDate: new Date().getTime(),
             originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject?.preview,
@@ -70,11 +78,13 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
             activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
             dataUrl
           )
+
           const options = {
             type: "StaticImage",
             src: previewWithUpdatedBackground,
             preview: previewWithUpdatedBackground,
             original: mainImgInfo.original,
+            name: mainImgInfo.name,
 
             id: nanoid(),
             metadata: {
