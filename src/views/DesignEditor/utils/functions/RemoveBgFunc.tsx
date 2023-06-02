@@ -55,7 +55,11 @@ export const RemoveBGFunc = async (
               uploadPreview: false,
             }))
             setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-            editor.objects.removeById(mainImgInfo.id)
+            if (activeObject) {
+              editor.objects.removeById(activeObject.id)
+              editor.objects.position("top", activeObject.top)
+              editor.objects.position("left", activeObject.left)
+            } else editor.objects.removeById(mainImgInfo.id)
             // Stop the loader
             setLoaderPopup(false)
           })
