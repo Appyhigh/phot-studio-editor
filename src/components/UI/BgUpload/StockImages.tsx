@@ -72,7 +72,7 @@ const StockImages = (props: any) => {
               <div ref={index === res.length - 1 ? lastElementRef : undefined}>
                 <ImageItem
                   key={index}
-                  idx={image.mongo_id.$oid}
+                  idx={image.mongo_id}
                   selectedImage={selectedImg}
                   onClick={() => {
                     {
@@ -87,7 +87,7 @@ const StockImages = (props: any) => {
                               changeLayerBackgroundImage
                             )
                           }),
-                          setSelectedImg(image.mongo_id.$oid))
+                          setSelectedImg(image.mongo_id))
                     }
                   }}
                   preview={image.image_url_list[0]}
