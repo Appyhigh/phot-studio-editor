@@ -50,11 +50,11 @@ const ContextMenu = () => {
   //   }
   // }
 
-  if (!contextMenuRequest || !contextMenuRequest.target) {
+  if (!activeObject || !contextMenuRequest || !contextMenuRequest.target) {
     return <></>
   }
 
-  if (contextMenuRequest?.target?.type === "Background" || activeObject.name == "Initial Frame") {
+  if (activeObject && (contextMenuRequest?.target?.type === "Background" || activeObject.name == "Initial Frame")) {
     return <></>
   }
   return (
