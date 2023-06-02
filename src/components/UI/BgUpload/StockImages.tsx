@@ -2,15 +2,14 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
-import { backgroundLayerType } from "~/constants/contants"
 import { useState, useCallback, useRef } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
 import usePagination from "~/hooks/usePagination"
-import { toDataURL } from "~/utils/export"
 import { nanoid } from "nanoid"
+import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -109,6 +108,7 @@ const StockImages = (props: any) => {
           <Icons.SearchIcon />
         </button>
       </div>
+      <Scrollbars style={{height:"300px",marginTop:"10px"}}>
       <div className={classes.sampleImgSection}>
         {res.map((image: any, index: any) => {
           return (
@@ -131,7 +131,10 @@ const StockImages = (props: any) => {
         })}
       </div>
       {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
+
+      </Scrollbars>
     </div>
+    
   )
 }
 

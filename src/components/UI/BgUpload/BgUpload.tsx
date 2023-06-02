@@ -14,6 +14,7 @@ import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -29,6 +30,7 @@ const BgUpload = () => {
   const handleDropFiles = async (files: FileList) => {
     setBgUploading(true)
     const file = files[0]
+
     const imageUrl = await getBucketImageUrlFromFile(file)
 
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
@@ -94,31 +96,36 @@ const BgUpload = () => {
 
       {bgChoice === 0 ? (
         <>
-          {!bgUploadPreview.showPreview&& !bgUploading && (
-            <DropZone handleDropFiles={handleDropFiles}>
-              <div className={classes.uploadInput}>
-                <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
-                <input
-                  onChange={handleFileInput}
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
-                  id="inputBgFile"
-                  ref={inputFileRef}
-                  className={classes.inputFile}
-                />
-              </div>
-            </DropZone>
-          )}
-          {bgUploadPreview.showPreview && bgUploadPreview.url && !bgUploading && (
-            <UploadPreview
-              uploadType={MAIN_IMG_Bg}
-              discardHandler={() => {
-                setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-              }}
-              mainImgUrl={bgUploadPreview.url}
-              handleBgAdd={handleImgAdd}
-            />
-          )}
+          <Scrollbars style={{ height: "300px" }}>
+            {!bgUploadPreview.showPreview && !bgUploading&& (
+              <DropZone handleDropFiles={handleDropFiles}>
+                <div className={classes.uploadInput}>
+                  <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
+                  <input
+                    onChange={handleFileInput}
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+                    id="inputBgFile"
+                    ref={inputFileRef}
+                    className={classes.inputFile}
+                  />
+                </div>
+              </DropZone>
+            )}
+
+            {bgUploadPreview.showPreview && bgUploadPreview.url &&!bgUploading && (
+              <Scrollbars style={{height:"400px"}}>
+              <UploadPreview
+                uploadType={MAIN_IMG_Bg}
+                discardHandler={() => {
+                  setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+                }}
+                mainImgUrl={bgUploadPreview.url}
+                handleBgAdd={handleImgAdd}
+              />
+              </Scrollbars>
+            )}
+          </Scrollbars>
         </>
       ) : (
         <StockImages />

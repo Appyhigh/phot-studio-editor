@@ -194,8 +194,9 @@ const BgRemover = () => {
               </Block>
             </Block>
           </Block>
-          <Scrollable>
+          <>
             {backgroundChoice === 0 ? (
+              <Scrollable>
               <Block className="mt-2 mb-2">
                 {bgDOptions.map((each, index) => (
                   <Block key={index}>
@@ -211,10 +212,11 @@ const BgRemover = () => {
                   </Block>
                 ))}
               </Block>
+              </Scrollable>
             ) : (
               <BgUpload />
             )}
-          </Scrollable>
+          </>
         </>
       )}
       <Loader isOpen={loaderPopup} />
