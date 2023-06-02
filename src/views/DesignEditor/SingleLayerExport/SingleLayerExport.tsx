@@ -23,7 +23,7 @@ import { BackFunc } from "../utils/functions/tools/BackFunc"
 import { LockFunc, UnlockFunc } from "../utils/functions/tools/LockUnlockFunc"
 import { UngroupFunc } from "../utils/functions/tools/GroupUngroupFunc"
 import { InvisibleFunc, VisibleFunc } from "../utils/functions/tools/VisibilityFunc"
-import { SetBgFunc } from "../utils/functions/SetBgFunc"
+import { SetCanvasBgFunc } from "../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../utils/functions/tools/DeleteFunc"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
@@ -83,11 +83,11 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             </ContextMenuItem>
 
             {activeObject?.locked ? (
-              <ContextMenuItem onClick={() => UnlockFunc({ editor })} icon="Locked" label="Unlock">
+              <ContextMenuItem onClick={() => UnlockFunc({ editor })} icon="Unlocked" label="Unlock">
                 <Unlocked size={22} />
               </ContextMenuItem>
             ) : (
-              <ContextMenuItem onClick={() => LockFunc({ editor })} icon="Unlocked" label="Lock">
+              <ContextMenuItem onClick={() => LockFunc({ editor })} icon="Lock" label="Lock">
                 <Unlocked size={22} />
               </ContextMenuItem>
             )}
@@ -109,7 +109,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             )}
             {activeObject?.type === "StaticImage" && (
               <ContextMenuItem
-                onClick={() => SetBgFunc({ editor, frame })}
+                onClick={() => SetCanvasBgFunc({ editor, frame })}
                 icon="Images"
                 label="Set as background image"
               >
@@ -156,18 +156,32 @@ const ContextMenuItem = ({
   disabled?: boolean
   children: React.ReactNode
   showDownloadPopup?: boolean
+  lock?: false
 }) => {
+  const activeObject = useActiveObject()
+  
   return (
     <div>
-      <div
+      <button
+      // @ts-ignore
+        disabled={(activeObject?.locked && icon != "download" && icon != "Unlocked" )? true : false}
         onClick={onClick}
         className={clsx(
           classes.eachMenu,
           disabled && classes.disabledMenu,
-          showDownloadPopup && classes.selectedDownload
+          showDownloadPopup && classes.selectedDownload,
+          // @ts-ignore 
+          activeObject?.locked && icon != "download" && icon != "Unlocked" && classes.disabledOption
         )}
       >
-        <div style={{ width: "25px" }} className={"d-flex justify-content-center mr-2"}>
+        <div
+          style={{ width: "25px" }}
+          className={clsx(
+            "d-flex justify-content-center mr-2",
+            // @ts-ignore 
+            activeObject?.locked && icon != "download" && icon != "Unlocked" && classes.disabledOption
+          )}
+        >
           {children}
         </div>{" "}
         {label}
@@ -176,7 +190,7 @@ const ContextMenuItem = ({
             <Icons.SliderIcon size={15} />
           </div>
         )}
-      </div>
+      </button>
     </div>
   )
 }

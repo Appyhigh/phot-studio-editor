@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
+import { useActiveObject } from "@layerhub-io/react"
 
 const ContextMenuItem = ({
   label,
@@ -15,9 +16,21 @@ const ContextMenuItem = ({
   disabled?: boolean
   children: React.ReactNode
 }) => {
+  const activeObject = useActiveObject()
+
   return (
     <div>
-      <div onClick={onClick} className={clsx(classes.eachMenu, disabled && classes.disabledMenu)}>
+      <button
+        // @ts-ignore
+        disabled={activeObject?.locked && icon != "download" && icon != "Unlocked" ? true : false}
+        onClick={onClick}
+        className={clsx(
+          classes.eachMenu,
+          disabled && classes.disabledMenu,
+          // @ts-ignore
+          activeObject?.locked && icon != "download" && icon != "Unlocked" && classes.disabledOption
+        )}
+      >
         <div style={{ width: "25px" }} className={"d-flex justify-content-center mr-2"}>
           {children}
         </div>{" "}
@@ -27,7 +40,7 @@ const ContextMenuItem = ({
             <Icons.SliderIcon size={15} />
           </div>
         )}
-      </div>
+      </button>
     </div>
   )
 }

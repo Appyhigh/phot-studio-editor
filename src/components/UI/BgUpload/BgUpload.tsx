@@ -1,5 +1,5 @@
 import { Block } from "baseui/block"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import UploadInput from "../UploadInput/UploadInput"
@@ -13,9 +13,15 @@ import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
+import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
+import Scrollbars from "@layerhub-io/react-custom-scrollbar"
+import Icons from "~/components/Icons"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
+  const [bgUploading, setBgUploading] = useState(false)
+
   const [bgUploadPreview, setBgUploadPreview] = useState({
     showPreview: false,
     url: "",
@@ -24,43 +30,23 @@ const BgUpload = () => {
 
   const editor = useEditor()
   const handleDropFiles = async (files: FileList) => {
+    setBgUploading(true)
     const file = files[0]
-    
+
     const imageUrl = await getBucketImageUrlFromFile(file)
+
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
+    if (imageUrl) {
+      setBgUploading(false)
+    }
   }
 
   const handleImgAdd = () => {
-    const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-
     const imageUrl = bgUploadPreview.url
-
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
-
     toDataURL(imageUrl, async function (dataUrl: string) {
-      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-        activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        dataUrl
-      )
-      const options = {
-        type: "StaticImage",
-        src: previewWithUpdatedBackground,
-        preview: previewWithUpdatedBackground,
-        original: mainImgInfo.original,
-
-        id: nanoid(),
-        metadata: {
-          generationDate: new Date().getTime(),
-          originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        },
-      }
-      editor.objects.removeById(mainImgInfo.id)
-      editor.objects.add(options).then(() => {
-        //@ts-ignore
-        setMainImgInfo((prev) => ({ ...prev, ...options }))
-        setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-
-      })
+      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
   }
 
@@ -75,7 +61,7 @@ const BgUpload = () => {
   const [bgChoice, setBgChoice] = useState(0)
 
   return (
-    <Block className="mb-3">
+    <Block>
       <div className={clsx(classes.bgUploadSection, "d-flex  flex-row")}>
         <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
           Upload From PC
@@ -84,33 +70,48 @@ const BgUpload = () => {
           Stock Images
         </div>
       </div>
+
       {bgChoice === 0 ? (
         <>
-          {!bgUploadPreview.showPreview && (
-            <DropZone handleDropFiles={handleDropFiles}>
-              <div className={classes.uploadInput}>
-                <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
-                <input
-                  onChange={handleFileInput}
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
-                  id="inputBgFile"
-                  ref={inputFileRef}
-                  className={classes.inputFile}
+       
+          <Scrollbars style={{ height: "300px" }}>
+          {bgUploading && bgChoice === 0 && (
+            <div>
+              <Block className={classes.uploadInputContainer}>
+                <Icons.InputContainer  height={185}/>
+                <img className={classes.bgUploadLoader} src={LoaderSpinner} />
+              </Block>
+            </div>
+          )}
+            {!bgUploadPreview.showPreview && !bgUploading && (
+              <DropZone handleDropFiles={handleDropFiles}>
+                <div className={classes.uploadInput}>
+                  <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
+                  <input
+                    onChange={handleFileInput}
+                    type="file"
+                    accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
+                    id="inputBgFile"
+                    ref={inputFileRef}
+                    className={classes.inputFile}
+                  />
+                </div>
+              </DropZone>
+            )}
+
+            {bgUploadPreview.showPreview && bgUploadPreview.url &&  !bgUploading && (
+              <Scrollbars style={{ height: "400px" }}>
+                <UploadPreview
+                  uploadType={MAIN_IMG_Bg}
+                  discardHandler={() => {
+                    setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+                  }}
+                  mainImgUrl={bgUploadPreview.url}
+                  handleBgAdd={handleImgAdd}
                 />
-              </div>
-            </DropZone>
-          )}
-          {bgUploadPreview.showPreview && bgUploadPreview.url && (
-            <UploadPreview
-              uploadType={MAIN_IMG_Bg}
-              discardHandler={() => {
-                setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-              }}
-              mainImgUrl={bgUploadPreview.url}
-              handleBgAdd={handleImgAdd}
-            />
-          )}
+              </Scrollbars>
+            )}
+          </Scrollbars>
         </>
       ) : (
         <StockImages />

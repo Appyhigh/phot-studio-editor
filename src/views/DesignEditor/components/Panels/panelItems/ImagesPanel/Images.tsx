@@ -13,27 +13,12 @@ import Uploads from "../UploadDropzone/Uploads"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import useAppContext from "~/hooks/useAppContext"
 import StockImages from "~/components/UI/BgUpload/StockImages"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 
 const Images = () => {
   const editor = useEditor()
   const { loaderPopup } = useContext(LoaderContext)
   const { activePanel } = useAppContext()
-
-  const addObject = React.useCallback(
-    (url: string) => {
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          id: nanoid(),
-          src: url,
-          preview: url,
-          metadata: { generationDate: new Date().getTime() },
-        }
-        editor.objects.add(options)
-      }
-    },
-    [editor]
-  )
 
   const [bgChoice, setBgChoice] = useState(0)
 
@@ -58,7 +43,7 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        addObject(image.src)
+                        AddObjectFunc(image.src, editor)
                       }}
                       preview={image.src}
                     />
@@ -69,7 +54,7 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        addObject(image.src.medium)
+                        AddObjectFunc(image.src.medium, editor)
                       }}
                       preview={image.src.small}
                     />
@@ -79,9 +64,7 @@ const Images = () => {
             </Block>
           </Scrollable>
         ) : (
-          <Scrollable>
             <StockImages imageAs="foreground" />
-          </Scrollable>
         )}
       </>
       <Loader isOpen={loaderPopup} />

@@ -2,15 +2,17 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
-import { backgroundLayerType } from "~/constants/contants"
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useContext } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
 import usePagination from "~/hooks/usePagination"
+import MainImageContext from "~/contexts/MainImageContext"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
+import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { toDataURL } from "~/utils/export"
-import { nanoid } from "nanoid"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -21,6 +23,7 @@ const StockImages = (props: any) => {
   const [page, setPage] = useState(1)
   const { res, more, loading } = usePagination(search, page)
   const frame = useFrame()
+  const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
 
   const observer = useRef<any>()
 
@@ -45,53 +48,6 @@ const StockImages = (props: any) => {
     })
   }
 
-  const addObject = useCallback(
-    (url: string, width: number, height: number) => {
-      let scale = 1
-      if (width > frame.width || height > frame.height) {
-        if (width / frame.width > height / frame.height) {
-          scale = frame.width / width
-        } else {
-          scale = frame.height / height
-        }
-      }
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          id: nanoid(),
-          src: url,
-          preview: url,
-          metadata: { generationDate: new Date().getTime() },
-          scaleX: scale,
-          scaleY: scale,
-        }
-        editor.objects.add(options)
-      }
-    },
-    [editor]
-  )
-
-  const setBgImg = useCallback(
-    async function (url: string) {
-      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        url
-      )
-      const options = {
-        type: "StaticImage",
-        src: previewWithUpdatedBackground,
-        preview: previewWithUpdatedBackground,
-        metadata: {
-          generationDate: new Date().getTime(),
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      }
-      editor.objects.add(options)
-      editor.objects.remove()
-    },
-    [editor]
-  )
-
   return (
     <div className={classes.stockImgSection}>
       <div className={classes.inputWrapper}>
@@ -109,28 +65,39 @@ const StockImages = (props: any) => {
           <Icons.SearchIcon />
         </button>
       </div>
-      <div className={classes.sampleImgSection}>
-        {res.map((image: any, index: any) => {
-          return (
-            <div ref={index === res.length - 1 ? lastElementRef : undefined}>
-              <ImageItem
-                key={index}
-                idx={image.mongo_id.$oid}
-                selectedImage={selectedImg}
-                onClick={() => {
-                  {
-                    props.imageAs == "foreground"
-                      ? addObject(image.image_url_list[0], image.width, image.height)
-                      : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
-                  }
-                }}
-                preview={image.image_url_list[0]}
-              />
-            </div>
-          )
-        })}
-      </div>
-      {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
+      <Scrollbars style={{ height: "300px", marginTop: "10px" }}>
+        <div className={classes.sampleImgSection}>
+          {res.map((image: any, index: any) => {
+            return (
+              <div ref={index === res.length - 1 ? lastElementRef : undefined}>
+                <ImageItem
+                  key={index}
+                  idx={image.mongo_id}
+                  selectedImage={selectedImg}
+                  onClick={() => {
+                    {
+                      props.imageAs == "foreground"
+                        ? AddObjectFunc(image.image_url_list[0], editor, image.width, image.height, frame)
+                        : (toDataURL(image.image_url_list[0], async function (dataUrl: string) {
+                            HandleBgChangeOption(
+                              editor,
+                              mainImgInfo,
+                              setMainImgInfo,
+                              dataUrl,
+                              changeLayerBackgroundImage
+                            )
+                          }),
+                          setSelectedImg(image.mongo_id))
+                    }
+                  }}
+                  preview={image.image_url_list[0]}
+                />
+              </div>
+            )
+          })}
+        </div>
+        {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
+      </Scrollbars>
     </div>
   )
 }

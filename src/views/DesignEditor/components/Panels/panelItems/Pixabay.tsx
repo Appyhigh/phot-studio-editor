@@ -11,6 +11,7 @@ import { SIZE, Spinner } from "baseui/spinner"
 import api from "~/services/api"
 import AngleDoubleLeft from "~/components/Icons/AngleDoubleLeft"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 
 const Pixabay = () => {
   const editor = useEditor()
@@ -20,20 +21,6 @@ const Pixabay = () => {
   const [isloading, setIsloading] = React.useState(true)
   const [category, setCategory] = useState<string>("")
   const setIsSidebarOpen = useSetIsSidebarOpen()
-
-  const addObject = React.useCallback(
-    (url: string) => {
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          src: url,
-          metadata: { generationDate: new Date().getTime() },
-        }
-        editor.objects.add(options)
-      }
-    },
-    [editor]
-  )
 
   const fetchData = React.useCallback(
     async (reset?: boolean) => {
@@ -120,7 +107,7 @@ const Pixabay = () => {
                 return (
                   <Block
                     $style={{ cursor: "pointer", borderRadius: "10px", overflow: "hidden" }}
-                    onClick={() => addObject(image.src)}
+                    onClick={() => AddObjectFunc(image.src, editor)}
                     key={image.id}
                   >
                     <LazyLoadImage url={image.src} />

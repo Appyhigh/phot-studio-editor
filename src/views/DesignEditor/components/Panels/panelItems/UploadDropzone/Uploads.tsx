@@ -14,10 +14,13 @@ import MainImageContext from "~/contexts/MainImageContext"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 
 export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
+  const [imageLoading, setImageLoading] = useState(false)
+
   const editor = useEditor()
   const frame = useFrame()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
@@ -35,7 +38,6 @@ export default function ({ uploadType, activePanel }: any) {
 
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
-
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
     if (
@@ -48,9 +50,12 @@ export default function ({ uploadType, activePanel }: any) {
       setRejectedFileUpload(false)
     } else {
       setRejectedFileUpload(true)
+      setImageLoading(false)
+
       return
     }
     const imageUrl = await getBucketImageUrlFromFile(file)
+
     const isVideo = file.type.includes("video")
     const base64 = (await toBase64(file)) as string
     let preview = base64
@@ -87,6 +92,7 @@ export default function ({ uploadType, activePanel }: any) {
 
       if (uploadType === LOCAL_SAMPLE_IMG) {
         setUploads([...uploads, upload])
+        if (imageUrl) setImageLoading(false)
       } else {
         // @ts-ignore
         setPanelInfo((prev) => ({
@@ -99,6 +105,7 @@ export default function ({ uploadType, activePanel }: any) {
         }))
         // @ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...upload }))
+        if (imageUrl) setImageLoading(false)
       }
     })
   }
@@ -108,6 +115,7 @@ export default function ({ uploadType, activePanel }: any) {
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageLoading(true)
     handleDropFiles(e.target.files!)
   }
 
@@ -131,16 +139,20 @@ export default function ({ uploadType, activePanel }: any) {
         <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
           <Block className="d-flex align-items-center flex-start">
             <Block className="pl-1">
-              {uploadType === LOCAL_SAMPLE_IMG && !rejectedFileUpload&& uploads.length === 0 ? (
+              {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && !rejectedFileUpload && uploads.length === 0 ? (
                 <Block className={classes.panelHeading}>Add Image</Block>
               ) : (
-                uploadType != LOCAL_SAMPLE_IMG &&  !rejectedFileUpload&&
+                uploadType != LOCAL_SAMPLE_IMG &&
+                !imageLoading &&
+                !rejectedFileUpload &&
                 mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
               )}
             </Block>
             <Block>
               {activePanel === "Images"
-                ? uploadType === LOCAL_SAMPLE_IMG &&  !rejectedFileUpload&&
+                ? uploadType === LOCAL_SAMPLE_IMG &&
+                  !imageLoading &&
+                  !rejectedFileUpload &&
                   uploads.length != 0 && (
                     <div
                       className="d-flex justify-content-start flex-row align-items-center pointer"
@@ -153,7 +165,8 @@ export default function ({ uploadType, activePanel }: any) {
                       <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
                     </div>
                   )
-                : mainImgInfo.id && (
+                : mainImgInfo.id &&
+                  !imageLoading && (
                     <div
                       className="d-flex justify-content-start flex-row align-items-center pointer"
                       onClick={() => {
@@ -175,10 +188,12 @@ export default function ({ uploadType, activePanel }: any) {
                   )}
             </Block>
           </Block>
-          {uploadType === LOCAL_SAMPLE_IMG && uploads.length === 0  && !rejectedFileUpload? (
+          {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && uploads.length === 0 && !rejectedFileUpload ? (
             <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
           ) : (
-            mainImgInfo.id == "" && !rejectedFileUpload&&
+            mainImgInfo.id == "" &&
+            !rejectedFileUpload &&
+            !imageLoading &&
             uploadType !== LOCAL_SAMPLE_IMG && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
           )}
 
@@ -201,7 +216,7 @@ export default function ({ uploadType, activePanel }: any) {
                       }}
                     />
                   )
-                : uploadType !== LOCAL_SAMPLE_IMG&&
+                : uploadType !== LOCAL_SAMPLE_IMG &&
                   rejectedFileUpload && (
                     <FileError
                       handleTry={() => {
@@ -213,6 +228,7 @@ export default function ({ uploadType, activePanel }: any) {
                 {activePanel === "Images"
                   ? uploadType === LOCAL_SAMPLE_IMG &&
                     !rejectedFileUpload &&
+                    !imageLoading &&
                     uploads.length != 0 &&
                     uploads.map((upload) => (
                       <div
@@ -232,7 +248,8 @@ export default function ({ uploadType, activePanel }: any) {
                       </div>
                     ))
                   : mainImgInfo.id &&
-                    !rejectedFileUpload && (
+                    !rejectedFileUpload &&
+                    !imageLoading && (
                       <UploadPreview
                         uploadType={uploadType}
                         selectedImage={selectedImage}
@@ -244,6 +261,18 @@ export default function ({ uploadType, activePanel }: any) {
           </>
         </Block>
       </DropZone>
+      {imageLoading && !rejectedFileUpload && 
+      <Block
+        className={clsx("d-flex justify-content-center flex-column pointer p-relative", classes.uploadInputSection)}
+      >
+        <Block className={classes.uploadInputContainer}>
+          <Icons.InputContainer />
+        </Block>
+        <div className={classes.loadingSpinner}>
+          {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+        </div>
+      </Block>
+}
     </>
   )
 }

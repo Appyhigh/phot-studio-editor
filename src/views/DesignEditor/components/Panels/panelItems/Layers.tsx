@@ -14,6 +14,7 @@ import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import { backgroundLayerType } from "~/constants/contants"
 import { makeDownloadToPNG, makeDownloadToSVGHandler, toDataURL } from "~/utils/export"
 import SelectInput from "~/components/UI/Common/SelectInput/SelectInput"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 
 const Layers = () => {
   const editor = useEditor()
@@ -62,21 +63,6 @@ const Layers = () => {
       }
     }
   }, [editor, objects])
-
-  const addObject = React.useCallback(
-    (url: string) => {
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          src: url,
-          preview: url,
-          metadata: { generationDate: new Date().getTime() },
-        }
-        editor.objects.add(options)
-      }
-    },
-    [editor]
-  )
 
   const handleTypeChange = (e: any) => {
     setExportAs(e)
@@ -154,7 +140,7 @@ const Layers = () => {
                   // Get the output image from the backend
                   const url = "https://ik.imagekit.io/rxld8u68i/removed-background.jpeg?updatedAt=1682652974131"
                   // Add the removed background layer
-                  addObject(url)
+                  AddObjectFunc(url, editor)
                   // Set the old layer's visibility to hidden
                   editor.objects.update({ visible: false }, activeLayerPanel.id)
                 }}
