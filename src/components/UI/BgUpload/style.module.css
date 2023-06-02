@@ -20,7 +20,19 @@
   min-height: 50vh;
   margin-left: 10px;
 }
+.stockImagesLoader {
+  display: block;
+  width: 40%;
+  height: 40%;
+  margin: 0 auto;
+}
 
+.bgUploadLoader {
+  display: block;
+  position: absolute;
+  top: 0px;
+  margin-left: 50px;
+}
 .inputFile {
   display: none;
 }
@@ -133,14 +145,20 @@
 }
 .stockImagesLoader {
   display: block;
-  width: 40%;
-  height: 40%;
-  margin: 0 auto;
+  position: absolute;
+  top: 0px;
+  margin-left: 50px;
 }
 .stockImgSection {
   margin-left: 1rem;
 }
 
+.uploadInputContainer {
+  width: 280px;
+  height: 170px;
+  position: relative;
+  margin: 10px 0px 0px 10px;
+}
 @media screen and (min-width: 1220px) {
   .bgUploadSection {
     margin: 20px 0px 4px 25px;
@@ -160,14 +178,22 @@
   .sampleImgSection {
     margin: 10px 30px 20px 12px;
   }
-
+  .uploadInputContainer {
+    width: 320px;
+    height: 170px;
+    margin: 20px 0px 0px 20px;
+  }
   .selectedIcon {
     position: absolute;
     top: 40px;
     left: 40px;
     z-index: 5;
   }
-  .iconWrapper{
+  .iconWrapper {
     margin: 0px;
+  }
+
+  .bgUploadLoader {
+    margin-left: 70px;
   }
 }

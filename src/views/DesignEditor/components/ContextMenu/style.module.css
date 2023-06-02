@@ -19,6 +19,8 @@
 }
 .eachMenu {
   display: flex;
+  background-color: transparent;
+  width: 280px;
   height: 32px;
   font-size: 14px;
   align-items: center;
@@ -45,4 +47,9 @@
 .disabledMenu {
   pointer-events: none;
   opacity: 0.4;
+}
+
+.disabledOption{
+  opacity: 0.7;
+  cursor: not-allowed;
 }
