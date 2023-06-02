@@ -12,6 +12,7 @@ import usePagination from "~/hooks/usePagination"
 import { toDataURL } from "~/utils/export"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -46,32 +47,6 @@ const StockImages = (props: any) => {
       setRes(res)
     })
   }
-
-  const addObject = useCallback(
-    (url: string, width: number, height: number) => {
-      let scale = 1
-      if (width > frame.width || height > frame.height) {
-        if (width / frame.width > height / frame.height) {
-          scale = frame.width / width
-        } else {
-          scale = frame.height / height
-        }
-      }
-      if (editor) {
-        const options = {
-          type: "StaticImage",
-          id: nanoid(),
-          src: url,
-          preview: url,
-          metadata: { generationDate: new Date().getTime() },
-          scaleX: scale,
-          scaleY: scale,
-        }
-        editor.objects.add(options)
-      }
-    },
-    [editor]
-  )
 
   const setBgImg = useCallback(
     async function (url: string) {
@@ -133,7 +108,7 @@ const StockImages = (props: any) => {
                 onClick={() => {
                   {
                     props.imageAs == "foreground"
-                      ? addObject(image.image_url_list[0], image.width, image.height)
+                      ? AddObjectFunc(image.image_url_list[0], editor, image.width, image.height, frame)
                       : (setBgImg(image.image_url_list[0]), setSelectedImg(image.mongo_id.$oid))
                   }
                 }}
