@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import Loader from "~/components/UI/Loader/Loader"
@@ -14,6 +14,7 @@ import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import useAppContext from "~/hooks/useAppContext"
 import StockImages from "~/components/UI/BgUpload/StockImages"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const Images = () => {
   const editor = useEditor()
@@ -21,7 +22,8 @@ const Images = () => {
   const { activePanel } = useAppContext()
 
   const [bgChoice, setBgChoice] = useState(0)
-
+  const { setImagesCt } = useContext(ImagesContext)
+  const frame = useFrame()
   return (
     <Block className="d-flex flex-1 flex-column">
       <>
@@ -43,7 +45,12 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        AddObjectFunc(image.src, editor)
+                        let latest_ct = 0
+                        setImagesCt((prev: any) => {
+                          latest_ct = prev + 1
+                          AddObjectFunc(image.src, editor, 0, 0, frame, latest_ct)
+                          return prev + 1
+                        })
                       }}
                       preview={image.src}
                     />
@@ -54,7 +61,12 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        AddObjectFunc(image.src.medium, editor)
+                        let latest_ct = 0
+                        setImagesCt((prev: any) => {
+                          latest_ct = prev + 1
+                          AddObjectFunc(image.src.medium, editor, 0, 0, frame, latest_ct)
+                          return prev + 1
+                        })
                       }}
                       preview={image.src.small}
                     />
@@ -64,7 +76,7 @@ const Images = () => {
             </Block>
           </Scrollable>
         ) : (
-            <StockImages imageAs="foreground" />
+          <StockImages imageAs="foreground" />
         )}
       </>
       <Loader isOpen={loaderPopup} />

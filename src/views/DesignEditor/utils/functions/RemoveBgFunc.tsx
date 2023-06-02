@@ -1,4 +1,5 @@
 import { nanoid } from "nanoid"
+import { useContext } from "react"
 import { removeBackgroundController } from "~/utils/removeBackground"
 
 export const RemoveBGFunc = async (
@@ -12,10 +13,14 @@ export const RemoveBGFunc = async (
   virtualCanvasSrcImageRef: any,
   virtualCanvasMaskImageRef: any,
   virtualCanvasResultImageRef: any,
-  activeObject?: any
+  activeObject?: any,
+  latest_ct?: any,
+  upload?: any
 ) => {
   try {
     if (activeObject && activeObject?.metadata?.originalLayerPreview) {
+      console.log("first");
+      
       const options = {
         type: "StaticImage",
         src: activeObject?.metadata?.originalLayerPreview,
@@ -37,7 +42,7 @@ export const RemoveBGFunc = async (
         editor.objects.remove(activeObject.id)
       })
     } else {
-      setLoaderPopup(true)
+      setLoaderPopup(true)      
       removeBackgroundController(
         activeObject ? activeObject?.preview : mainImgInfo.src,
         (image: string) => {
@@ -47,6 +52,7 @@ export const RemoveBGFunc = async (
             src: image,
             preview: image,
             id: nanoid(),
+            name: latest_ct,
             metadata: {
               generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
               originalLayerPreview: image,

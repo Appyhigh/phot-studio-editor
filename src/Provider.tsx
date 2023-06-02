@@ -15,6 +15,7 @@ import "./translations"
 import { CustomTheme } from "./theme"
 import MainImageContext from "./contexts/MainImageContext"
 import AuthWrapper from "./hooks/useAuth"
+import ImagesContext from "./contexts/ImagesCountContext"
 
 const engine = new Styletron()
 
@@ -27,7 +28,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     preview: "",
     url: "",
-    original:"",
+    original: "",
     metadata: {},
   })
 
@@ -39,26 +40,30 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     bgRemoverBtnActive: false,
   })
 
+  const [imagesCt, setImagesCt] = useState(0)
+  
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
-        <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
-        <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
-          <DesignEditorProvider>
-            <TimerProvider>
-              <AppProvider>
-                <ScenifyProvider>
-                  <StyletronProvider value={engine}>
-                    <BaseProvider theme={CustomTheme}>
-                      <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                    </BaseProvider>
-                  </StyletronProvider>
-                </ScenifyProvider>
-              </AppProvider>
-            </TimerProvider>
-          </DesignEditorProvider>
-          </MainImageContext.Provider>
-        </LoaderContext.Provider>
+        <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
+          <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+            <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
+              <DesignEditorProvider>
+                <TimerProvider>
+                  <AppProvider>
+                    <ScenifyProvider>
+                      <StyletronProvider value={engine}>
+                        <BaseProvider theme={CustomTheme}>
+                          <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                        </BaseProvider>
+                      </StyletronProvider>
+                    </ScenifyProvider>
+                  </AppProvider>
+                </TimerProvider>
+              </DesignEditorProvider>
+            </MainImageContext.Provider>
+          </LoaderContext.Provider>
+        </ImagesContext.Provider>
       </ReduxProvier>
     </AuthWrapper>
   )

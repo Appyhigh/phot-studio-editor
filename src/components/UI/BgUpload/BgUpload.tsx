@@ -74,7 +74,7 @@ const BgUpload = () => {
       {bgChoice === 0 ? (
         <>
        
-          <Scrollbars style={{ height: "300px" }}>
+          <Scrollbars style={{ height: "250px" }}>
           {bgUploading && bgChoice === 0 && (
             <div>
               <Block className={classes.uploadInputContainer}>
@@ -86,7 +86,7 @@ const BgUpload = () => {
             {!bgUploadPreview.showPreview && !bgUploading && (
               <DropZone handleDropFiles={handleDropFiles}>
                 <div className={classes.uploadInput}>
-                  <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
+                  <UploadInput height={185} handleInputFileRefClick={handleInputFileRefClick} />
                   <input
                     onChange={handleFileInput}
                     type="file"
@@ -100,7 +100,7 @@ const BgUpload = () => {
             )}
 
             {bgUploadPreview.showPreview && bgUploadPreview.url &&  !bgUploading && (
-              <Scrollbars style={{ height: "400px" }}>
+              <Scrollbars style={{ height: "350px" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
                   discardHandler={() => {
@@ -114,7 +114,7 @@ const BgUpload = () => {
           </Scrollbars>
         </>
       ) : (
-        <StockImages />
+        <StockImages height="165px" />
       )}
     </Block>
   )

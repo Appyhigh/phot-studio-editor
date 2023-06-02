@@ -13,6 +13,7 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { toDataURL } from "~/utils/export"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -42,6 +43,7 @@ const StockImages = (props: any) => {
     [more]
   )
 
+  const { setImagesCt } = useContext(ImagesContext)
   const searchImages = () => {
     getStockImages(search).then((res) => {
       setRes(res)
@@ -65,7 +67,7 @@ const StockImages = (props: any) => {
           <Icons.SearchIcon />
         </button>
       </div>
-      <Scrollbars style={{ height: "300px", marginTop: "10px" }}>
+      <Scrollbars style={{ height: props?.height ? props.height : "300px", marginTop: "10px" }}>
         <div className={classes.sampleImgSection}>
           {res.map((image: any, index: any) => {
             return (
@@ -76,8 +78,20 @@ const StockImages = (props: any) => {
                   selectedImage={selectedImg}
                   onClick={() => {
                     {
+                      let latest_ct = 0
+                      setImagesCt((prev: any) => {
+                        latest_ct = prev + 1
+                        return prev + 1
+                      })
                       props.imageAs == "foreground"
-                        ? AddObjectFunc(image.image_url_list[0], editor, image.width, image.height, frame)
+                        ? AddObjectFunc(
+                            image.image_url_list[0],
+                            editor,
+                            image.width,
+                            image.height,
+                            frame,
+                            (latest_ct = latest_ct)
+                          )
                         : (toDataURL(image.image_url_list[0], async function (dataUrl: string) {
                             HandleBgChangeOption(
                               editor,
