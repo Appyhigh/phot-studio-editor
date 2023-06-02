@@ -85,7 +85,7 @@ const Common = ({ type }: any) => {
       <Visibility type={type ? type : ""} />
       <ToolButton
         type={type}
-        func={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })}
+        func={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
         icon={<DeleteIcon size={28} />}
         name="Delete"
       />

@@ -70,7 +70,7 @@ const ContextMenu = () => {
         </ContextMenuItem>
         <ContextMenuItem
           disabled={true}
-          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })}
+          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
           icon="Delete"
           label="Delete"
         >
