@@ -24,7 +24,7 @@ import { BackFunc } from "../../utils/functions/tools/BackFunc"
 import { LockFunc, UnlockFunc } from "../../utils/functions/tools/LockUnlockFunc"
 import { InvisibleFunc, VisibleFunc } from "../../utils/functions/tools/VisibilityFunc"
 import { UngroupFunc } from "../../utils/functions/tools/GroupUngroupFunc"
-import { SetBgFunc } from "../../utils/functions/SetBgFunc"
+import { SetCanvasBgFunc } from "../../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../../utils/functions/tools/DeleteFunc"
 import { EraseBgFunc } from "../../utils/functions/EraseBgFunc"
 
@@ -77,7 +77,7 @@ const ContextMenu = () => {
         </ContextMenuItem>
         <ContextMenuItem
           disabled={true}
-          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })}
+          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
           icon="Delete"
           label="Delete"
         >
@@ -109,7 +109,11 @@ const ContextMenu = () => {
         >
           <Paste size={24} />
         </ContextMenuItem> */}
-        <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
+        <ContextMenuItem
+          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
+          icon="Delete"
+          label="Delete"
+        >
           <Delete size={24} />
         </ContextMenuItem>
         <ContextMenuItem onClick={() => FrontFunc({ editor, activeObject })} icon="Forward" label="Bring forward">
@@ -155,7 +159,11 @@ const ContextMenu = () => {
           </ContextMenuItem>
         )}
         {activeObject?.type === "StaticImage" && (
-          <ContextMenuItem onClick={() => SetBgFunc({ editor, frame })} icon="Images" label="Set as background image">
+          <ContextMenuItem
+            onClick={() => SetCanvasBgFunc({ editor, frame })}
+            icon="Images"
+            label="Set as background image"
+          >
             <Elements size={24} />
           </ContextMenuItem>
         )}

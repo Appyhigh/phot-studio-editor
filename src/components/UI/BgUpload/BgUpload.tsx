@@ -14,6 +14,7 @@ import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import Icons from "~/components/Icons"
 
@@ -41,35 +42,11 @@ const BgUpload = () => {
   }
 
   const handleImgAdd = () => {
-    const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-
     const imageUrl = bgUploadPreview.url
-
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
-
     toDataURL(imageUrl, async function (dataUrl: string) {
-      const previewWithUpdatedBackground: any = await changeLayerBackgroundImage(
-        activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        dataUrl
-      )
-      const options = {
-        type: "StaticImage",
-        src: previewWithUpdatedBackground,
-        preview: previewWithUpdatedBackground,
-        original: mainImgInfo.original,
-
-        id: nanoid(),
-        metadata: {
-          generationDate: new Date().getTime(),
-          originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
-        },
-      }
-      editor.objects.removeById(mainImgInfo.id)
-      editor.objects.add(options).then(() => {
-        //@ts-ignore
-        setMainImgInfo((prev) => ({ ...prev, ...options }))
-        setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
-      })
+      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
   }
 
@@ -102,7 +79,7 @@ const BgUpload = () => {
             <div>
               <Block className={classes.uploadInputContainer}>
                 <Icons.InputContainer  height={185}/>
-                <img className={classes.stockImagesLoader} src={LoaderSpinner} />
+                <img className={classes.bgUploadLoader} src={LoaderSpinner} />
               </Block>
             </div>
           )}
@@ -122,7 +99,7 @@ const BgUpload = () => {
               </DropZone>
             )}
 
-            {bgUploadPreview.showPreview && bgUploadPreview.url && !bgUploading && (
+            {bgUploadPreview.showPreview && bgUploadPreview.url &&  !bgUploading && (
               <Scrollbars style={{ height: "400px" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
