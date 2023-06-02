@@ -47,37 +47,8 @@ const ContextMenu = () => {
     return <></>
   }
 
-  if (contextMenuRequest?.target?.type === "Background") {
-    return (
-      <div // @ts-ignore
-        onContextMenu={(e: Event) => e.preventDefault()}
-        className={classes.contextMenuSection}
-        style={{
-          top: `${contextMenuRequest.top}px`,
-          left: `${contextMenuRequest.left}px`,
-        }}
-      >
-        <ContextMenuItem
-          disabled={true}
-          onClick={() => DuplicateFunc({ editor, activeObject })}
-          icon="Duplicate"
-          label="Copy"
-        >
-          <Duplicate size={24} />
-        </ContextMenuItem>
-        <ContextMenuItem onClick={() => PasteFunc({ editor })} icon="Paste" label="Paste">
-          <Paste size={24} />
-        </ContextMenuItem>
-        <ContextMenuItem
-          disabled={true}
-          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo })}
-          icon="Delete"
-          label="Delete"
-        >
-          <Delete size={24} />
-        </ContextMenuItem>
-      </div>
-    )
+  if (contextMenuRequest?.target?.type === "Background" || activeObject.name == "Initial Frame") {
+    return <></>
   }
   return (
     <div className={classes.mainContextMenu}>
