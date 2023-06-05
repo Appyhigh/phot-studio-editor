@@ -15,9 +15,8 @@ import PathFill from "./PathFill"
 import CanvasFill from "./CanvasFill"
 import TextEffects from "./TextEffects"
 import BgRemover from "./BgRemover/BgRemover"
-import ImagineAi from "./ImagineAi";
 import CommonPanel from "./CommonPanel"
-
+import ImagineAI from "./ImagineAI/ImagineAI"
 export default {
   StaticText: TextProperties,
   Text: Text,
@@ -36,6 +35,6 @@ export default {
   CanvasFill: CanvasFill,
   TextEffects: TextEffects,
   BgRemover:BgRemover,
-  ImagineAi:ImagineAi,
+  ImagineAI:ImagineAI,
   CommonPanel:CommonPanel
 }

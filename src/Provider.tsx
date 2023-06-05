@@ -16,6 +16,7 @@ import { CustomTheme } from "./theme"
 import MainImageContext from "./contexts/MainImageContext"
 import AuthWrapper from "./hooks/useAuth"
 import ImagesContext from "./contexts/ImagesCountContext"
+import TextToArtContext from "./contexts/TextToArtContext"
 
 const engine = new Styletron()
 
@@ -41,27 +42,47 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   })
 
   const [imagesCt, setImagesCt] = useState(0)
-  
+
+  const [textToArtInputInfo, setTextToArtInputInfo] = useState({
+    prompt: "",
+    style: [],
+    images_generation_ct: 0,
+    uploaded_img: {},
+    image_wt: 0,
+    negative_prompt: [],
+    cfg_scale: 0,
+    aspect_ratio: { x: "", y: "" },
+  })
+
+  const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({
+    resultSectionVisible: false,
+    resultImages:[]
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
         <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
-            <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
-              <DesignEditorProvider>
-                <TimerProvider>
-                  <AppProvider>
-                    <ScenifyProvider>
-                      <StyletronProvider value={engine}>
-                        <BaseProvider theme={CustomTheme}>
-                          <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                        </BaseProvider>
-                      </StyletronProvider>
-                    </ScenifyProvider>
-                  </AppProvider>
-                </TimerProvider>
-              </DesignEditorProvider>
-            </MainImageContext.Provider>
+            <TextToArtContext.Provider
+              value={{ textToArtInputInfo, setTextToArtInputInfo, textToArtpanelInfo, setTextToArtPanelInfo }}
+            >
+              <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
+                <DesignEditorProvider>
+                  <TimerProvider>
+                    <AppProvider>
+                      <ScenifyProvider>
+                        <StyletronProvider value={engine}>
+                          <BaseProvider theme={CustomTheme}>
+                            <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                          </BaseProvider>
+                        </StyletronProvider>
+                      </ScenifyProvider>
+                    </AppProvider>
+                  </TimerProvider>
+                </DesignEditorProvider>
+              </MainImageContext.Provider>
+            </TextToArtContext.Provider>
           </LoaderContext.Provider>
         </ImagesContext.Provider>
       </ReduxProvier>

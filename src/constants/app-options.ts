@@ -42,12 +42,12 @@ export const BASE_ITEMS = [
     label: "Remove Background",
     name: "BgRemover",
   },
-  // {
-  //   id: "imagineai",
-  //   icon: "ImagineAi",
-  //   label: "Imagine AI",
-  //   name: "CommonPanel",
-  // },
+  {
+    id: "imagineai",
+    icon: "ImagineAi",
+    label: "Imagine AI",
+    name: "ImagineAI",
+  },
   // {
   //   id: "objectremover",
   //   icon: "CircleIcon",
@@ -148,4 +148,5 @@ export enum PanelType {
   IMAGES = "Images",
   UPLOADS = "Uploads",
   BACKGROUND_REMOVER = "BgRemover",
+  IMAGINE_AI="ImagineAI"
 }
