@@ -63,7 +63,7 @@ const BgRemover = () => {
     [editor]
   )
 
-  const discardSampleImageHandler = (id: string) => {
+  const discardSampleImageHandler = () => {
     setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
     setPanelInfo((prev: any) => ({
       ...prev,
@@ -72,7 +72,6 @@ const BgRemover = () => {
       trySampleImg: true,
       uploadSection: true,
     }))
-    editor.objects.removeById(id)
   }
 
   useEffect(() => {
@@ -168,7 +167,7 @@ const BgRemover = () => {
       {panelInfo.bgOptions && (
         <>
           {" "}
-          <Block className="mt-4">
+          <Block className="mt-2">
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
               <Block
                 className={clsx(

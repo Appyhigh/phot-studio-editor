@@ -11,6 +11,7 @@ import { nanoid } from "nanoid"
 import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -21,7 +22,7 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
   const editor = useEditor()
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-
+  const { setImagesCt } = useContext(ImagesContext)
   return (
     <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -68,7 +69,12 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
       {uploadType === LOCAL_SAMPLE_IMG ? (
         <button
           onClick={() => {
-            editor.objects.add(upload)
+            let latest_ct = 0
+            setImagesCt((prev: any) => {
+              latest_ct = prev + 1
+              return prev + 1
+            })
+            editor.objects.add({ ...upload, name: latest_ct.toString() })
             discardHandler()
           }}
           className={clsx(classes.removeBgBtn)}
@@ -87,7 +93,12 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
       ) : (
         <button
           disabled={panelInfo.bgRemoverBtnActive ? false : true}
-          onClick={() =>
+          onClick={() => {
+            let latest_ct = 0
+            setImagesCt((prev: any) => {
+              latest_ct = prev + 1
+              return prev + 1
+            })
             RemoveBGFunc(
               editor,
               setLoaderPopup,
@@ -98,9 +109,11 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
               virtualMaskImageRef,
               virtualCanvasSrcImageRef,
               virtualCanvasMaskImageRef,
-              virtualCanvasResultImageRef
+              virtualCanvasResultImageRef,
+              0,
+              (latest_ct = latest_ct)
             )
-          }
+          }}
           className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
         >
           Remove Background

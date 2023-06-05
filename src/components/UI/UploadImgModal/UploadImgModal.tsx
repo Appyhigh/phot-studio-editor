@@ -13,6 +13,7 @@ import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
 import clsx from "clsx"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const inputNextFile = React.useRef<HTMLInputElement>(null)
@@ -43,7 +44,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       setRejectedFileUpload(true)
       setImageLoading(false)
 
-      return;
+      return
     }
     const imageUrl = await getBucketImageUrlFromFile(file)
     if (imageUrl) setImageLoading(false)
@@ -114,6 +115,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       preview: preview,
       original: preview,
       type: inputType,
+      name:activeOb.name,
       metadata: { generationDate: new Date().getTime() },
     }
     // to replace the object removing the previous active object first
@@ -132,14 +134,21 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       close()
     }, 100)
   }
+  const { setImagesCt } = useContext(ImagesContext)
 
   const addImage = () => {
+    let latest_ct = 0
+    setImagesCt((prev: any) => {
+      latest_ct = prev + 1
+      return prev + 1
+    })
     const upload = {
       id: nanoid(),
       src: addImgInfo.url,
       preview: addImgInfo.url,
       metadata: { generationDate: new Date().getTime() },
       type: "StaticImage",
+      name: latest_ct.toString(),
     }
     editor.objects.add(upload).then(() => {
       handleClose()
@@ -198,18 +207,18 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
             </DropZone>
           </>
         )}
-         {imageLoading && !rejectedFileUpload && (
-        <Block
-          className={clsx("d-flex justify-content-center flex-column pointer p-relative mt-6", classes.uploadInput)}
-        >
-          <Block className={classes.uploadInputContainer}>
-            <Icons.InputContainer  width={514} height={319}/>
+        {imageLoading && !rejectedFileUpload && (
+          <Block
+            className={clsx("d-flex justify-content-center flex-column pointer p-relative mt-6", classes.uploadInput)}
+          >
+            <Block className={classes.uploadInputContainer}>
+              <Icons.InputContainer width={514} height={319} />
+            </Block>
+            <div className={classes.loadingSpinner}>
+              {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+            </div>
           </Block>
-          <div className={classes.loadingSpinner}>
-            {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
-          </div>
-        </Block>
-      )}
+        )}
       </div>
       {!imageLoading && addImgInfo.showPreview && addImgInfo.url && (
         <div className="d-flex justify-content-center align-items-center flex-column">
@@ -243,8 +252,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
           }}
         />
       )}
-
-     
     </Modal>
   )
 }

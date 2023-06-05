@@ -161,7 +161,7 @@
 }
 @media screen and (min-width: 1220px) {
   .bgUploadSection {
-    margin: 20px 0px 4px 25px;
+    margin: 5px 0px 4px 10px;
     width: 310px;
   }
   .uploadInput {

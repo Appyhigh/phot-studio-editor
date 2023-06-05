@@ -5,7 +5,7 @@ export const HandleBgChangeOption = async (
   mainImgInfo: any,
   setMainImgInfo: any,
   bg: string,
-  changeLayer: any
+  changeLayer: any,
 ) => {
   const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
   const previewWithUpdatedBackground: any = await changeLayer(
@@ -19,6 +19,7 @@ export const HandleBgChangeOption = async (
     src: previewWithUpdatedBackground,
     preview: previewWithUpdatedBackground,
     original: mainImgInfo.original,
+    name:mainImgInfo.name,
     id: nanoid(),
     metadata: {
       generationDate: new Date().getTime(),

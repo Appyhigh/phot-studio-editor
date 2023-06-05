@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
-import { useActiveObject, useEditor, useFrame, useObjects } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { ILayer } from "@layerhub-io/types"
@@ -8,7 +8,7 @@ import getSelectionType from "~/utils/get-selection-type"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import ObjectLayer from "./ObjectLayer/ObjectLayer"
-import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
+import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import TextLayer from "./TextLayer/TextLayer"
@@ -16,7 +16,6 @@ import BgLayer from "./BgLayer/BgLayer"
 import GroupIcon from "~/components/Icons/GroupIcon"
 import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
 import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
-import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 
 interface ToolboxState {
   toolbox: string
@@ -43,8 +42,6 @@ const LayerPanel = () => {
   const [showSingleLayer, setShowSingleLayer] = useState(false)
   const rightPanelRef = useRef()
   const [activeSingleLayer, setActiveSingleLayer] = useState()
- 
-
   const [layerState, setLayerState] = useState<layerProps>({
     isOpenSlider: false,
     bgLayer: false,
@@ -89,12 +86,12 @@ const LayerPanel = () => {
 
   const [bgUrl, setBgUrl] = useState<any>("")
 
-// not allowed to select bg image so that it does not detached
+  // not allowed to select bg image so that it does not detached
 
   useEffect(() => {
     if (activeObject) {
-      if(activeObject?.type==="BackgroundImage") {
-        editor.objects.deselect();
+      if (activeObject?.type === "BackgroundImage") {
+        editor.objects.deselect()
         editor.objects.select("frame")
       }
     }
@@ -341,17 +338,26 @@ const LayerPanel = () => {
                                         </div>
                                       ) : (
                                         <img
+                                          className="m-1"
                                           src={object.preview ?? object.src}
                                           style={{
                                             borderRadius: "4px",
-                                            width: layerState.isOpenSlider ? "40px" : "60px",
-                                            height: layerState.isOpenSlider ? "40px" : "60px",
+                                            width: layerState.isOpenSlider ? "50px" : "60px",
+                                            height: layerState.isOpenSlider ? "50px" : "60px",
                                           }}
                                           alt="nn"
-                                          className="mx-1 my-1"
                                         />
                                       )}
-                                      {layerState.isOpenSlider && <Block>{object.name}</Block>}
+                                      {layerState.isOpenSlider &&
+                                        (object.text || object.name === "StaticText" ? (
+                                          <Block>
+                                            {object?.text?.length > 20
+                                              ? object?.text?.substring(0, 20) + "..."
+                                              : object?.text}
+                                          </Block>
+                                        ) : (
+                                          <Block className="ml-2">{"Image " + object.name}</Block>
+                                        ))}{" "}
                                     </Block>
                                   </Block>
                                 )
@@ -374,12 +380,12 @@ const LayerPanel = () => {
                               $style={{
                                 fontSize: "14px",
                                 backgroundColor: check_group(obj.id)
-                                  ? "rgb(245,246,247)"
+                                  ? "#F1F1F5"
                                   : activeObject?.id == obj.id
-                                  ? "rgb(245,246,247)"
+                                  ? "#F1F1F5"
                                   : "#fff",
                                 ":hover": {
-                                  background: "rgb(245,246,247)",
+                                  background: "#F1F1F5",
                                 },
                               }}
                               onClick={() => {
@@ -450,16 +456,22 @@ const LayerPanel = () => {
                               ) : (
                                 <img
                                   src={obj.preview ?? obj.src}
-                                  style={{
-                                    borderRadius: "4px",
-                                    width: layerState.isOpenSlider ? "40px" : "60px",
-                                    height: layerState.isOpenSlider ? "40px" : "60px",
-                                  }}
                                   alt="nn"
-                                  className="mx-1 my-1"
+                                  className={clsx(
+                                    classes.bgImage,
+                                    layerState.isOpenSlider && classes.bgCloseImage,
+                                    classes.bgRemovedImg
+                                  )}
                                 />
                               )}
-                              {layerState.isOpenSlider && <Block>{obj.name}</Block>}
+                              {layerState.isOpenSlider &&
+                                (obj.text || obj.name === "StaticText" ? (
+                                  <Block>
+                                    {obj?.text?.length > 20 ? obj?.text?.substring(0, 20) + "..." : obj?.text}
+                                  </Block>
+                                ) : (
+                                  <Block>{"Image " + obj.name}</Block>
+                                ))}
                             </Block>
                           </div>
                         )
@@ -471,7 +483,7 @@ const LayerPanel = () => {
                     fontSize: "14px",
                     backgroundColor: "#fff",
                     ":hover": {
-                      background: "rgb(245,246,247)",
+                      background: "#F1F1F5",
                     },
                   }}
                   onClick={() => {
@@ -489,19 +501,16 @@ const LayerPanel = () => {
                       src={bgUrl}
                       alt="nn"
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "60px",
-                        height: layerState.isOpenSlider ? "40px" : "60px",
+                        border: "1px solid #92929D",
                       }}
-                      className={clsx(classes.bgImage, "mx-1 my-1")}
+                      className={clsx(classes.bgImage, layerState.isOpenSlider && classes.bgCloseImage)}
                     />
                   ) : (
                     <div
                       style={{
-                        width: layerState.isOpenSlider ? "40px" : "60px",
-                        height: layerState.isOpenSlider ? "40px" : "60px",
                         backgroundColor: bgUrl,
                       }}
-                      className={clsx(classes.bgImage)}
+                      className={clsx(classes.bgImage, layerState.isOpenSlider && classes.bgCloseImage)}
                     >
                       &nbsp;
                     </div>

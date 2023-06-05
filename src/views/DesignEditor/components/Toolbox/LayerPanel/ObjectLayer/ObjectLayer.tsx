@@ -13,6 +13,7 @@ import MainImageContext from "~/contexts/MainImageContext"
 import { nanoid } from "nanoid"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -44,6 +45,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const activeObject: any = useActiveObject()
   const { setLoaderPopup } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
+  const { setImagesCt } = useContext(ImagesContext)
+
 
   const handleChangeBg = useCallback(
     async (each: any) => {
@@ -200,7 +203,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
         <div className={classes.otherToolsWrapper}>
           <div
-            onClick={() =>
+            onClick={() => {
+              let latest_ct = 0
+              setImagesCt((prev: any) => {
+                latest_ct = prev + 1
+                return prev + 1
+              })
               RemoveBGFunc(
                 editor,
                 setLoaderPopup,
@@ -212,9 +220,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                 virtualCanvasSrcImageRef,
                 virtualCanvasMaskImageRef,
                 virtualCanvasResultImageRef,
-                activeObject
+                activeObject,
+                (latest_ct = latest_ct)
               )
-            }
+            }}
             className={clsx(
               classes.otherToolsBox,
               "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
