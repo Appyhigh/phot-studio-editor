@@ -351,7 +351,9 @@ const LayerPanel = () => {
                                       {layerState.isOpenSlider &&
                                         (object.text || object.name === "StaticText" ? (
                                           <Block>
-                                            {object?.text?.length > 30 ? object?.text?.substring(0, 30) + "..." : object?.text}
+                                            {object?.text?.length > 20
+                                              ? object?.text?.substring(0, 20) + "..."
+                                              : object?.text}
                                           </Block>
                                         ) : (
                                           <Block className="ml-2">{"Image " + object.name}</Block>
@@ -465,7 +467,7 @@ const LayerPanel = () => {
                               {layerState.isOpenSlider &&
                                 (obj.text || obj.name === "StaticText" ? (
                                   <Block>
-                                    {obj?.text?.length > 30 ? obj?.text?.substring(0, 30) + "..." : obj?.text}
+                                    {obj?.text?.length > 20 ? obj?.text?.substring(0, 20) + "..." : obj?.text}
                                   </Block>
                                 ) : (
                                   <Block>{"Image " + obj.name}</Block>
