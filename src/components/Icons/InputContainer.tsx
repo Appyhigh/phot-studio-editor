@@ -1,4 +1,4 @@
-function InputContainer({ height, width }: { height?: number; width?: number }) {
+function InputContainer({ height, width }: { height?: any; width?: number }) {
   return (
     <svg
       width={width ? width : "100%"}

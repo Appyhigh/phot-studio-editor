@@ -206,8 +206,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             onClick={() => {
               let latest_ct = 0
               setImagesCt((prev: any) => {
-                latest_ct = prev + 1
-                return prev + 1
+                latest_ct = prev 
+                return prev 
               })
               RemoveBGFunc(
                 editor,
