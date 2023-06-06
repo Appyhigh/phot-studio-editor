@@ -73,16 +73,15 @@ const BgUpload = () => {
 
       {bgChoice === 0 ? (
         <>
-       
           <Scrollbars style={{ height: "250px" }}>
-          {bgUploading && bgChoice === 0 && (
-            <div>
-              <Block className={classes.uploadInputContainer}>
-                <Icons.InputContainer  height={185}/>
-                <img className={classes.bgUploadLoader} src={LoaderSpinner} />
-              </Block>
-            </div>
-          )}
+            {bgUploading && bgChoice === 0 && (
+              <div>
+                <Block className={classes.uploadInputContainer}>
+                  <Icons.InputContainer height={185} />
+                  <img className={classes.bgUploadLoader} src={LoaderSpinner} />
+                </Block>
+              </div>
+            )}
             {!bgUploadPreview.showPreview && !bgUploading && (
               <DropZone handleDropFiles={handleDropFiles}>
                 <div className={classes.uploadInput}>
@@ -99,8 +98,8 @@ const BgUpload = () => {
               </DropZone>
             )}
 
-            {bgUploadPreview.showPreview && bgUploadPreview.url &&  !bgUploading && (
-              <Scrollbars style={{ height: "350px" }}>
+            {bgUploadPreview.showPreview && bgUploadPreview.url && !bgUploading && (
+              <Scrollbars style={{ height: "300px" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
                   discardHandler={() => {

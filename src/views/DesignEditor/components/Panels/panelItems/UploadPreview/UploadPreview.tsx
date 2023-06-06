@@ -32,7 +32,7 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
       <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
       <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
       <Block className={clsx(classes.uploadPreviewContainer, uploadType === MAIN_IMG_Bg && classes.mainImgBg)}>
-        <Icons.InputContainer />
+        <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} />
       </Block>
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
         {uploadType === LOCAL_SAMPLE_IMG && upload ? (
