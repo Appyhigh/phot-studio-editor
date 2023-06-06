@@ -79,31 +79,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
-    const previewWithUpdatedBackground: any = await changeLayerFill(
-      inputImg,
-      BG,
-      activeObject?.width * activeObject?.scaleX,
-      activeObject?.height * activeObject?.scaleY
-    )
-    const options = {
-      type: "StaticImage",
-      src: previewWithUpdatedBackground,
-      preview: previewWithUpdatedBackground,
-      original: activeObject.original,
-      name: activeObject.name,
-      id: nanoid(),
-      metadata: {
-        generationDate: new Date().getTime(),
-        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-      },
-    }
-    editor.objects.removeById(activeObject.id)
-    editor.objects.add(options).then(() => {
-      //@ts-ignore
-      editor.objects.position("top", activeObject.top)
-      editor.objects.position("left", activeObject.left)
-      setLoaderPopup(false)
-    })
+    HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill, activeObject, inputImg)
+    setLoaderPopup(false)
   }
 
   const removeBackgroundBeforeChangingColor = async (each: any) => {
