@@ -77,6 +77,7 @@ import Flip from "./Flip"
 import PopupCloseIcon from "./PopupCloseIcon"
 import GoogleIcon from "./GoogleIcon"
 import CirclePlus from "./CirclePlus"
+import Cross from "./Cross"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -157,6 +158,7 @@ class Icons {
   static ColorPlus = ColorPlus
   static Flip =Flip
   static CirclePlus=CirclePlus
+  static Cross=Cross
 }
 
 export default Icons

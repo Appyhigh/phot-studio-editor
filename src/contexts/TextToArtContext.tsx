@@ -11,6 +11,7 @@ const TextToArtContext = React.createContext({
     negative_prompt: "",
     cfg_scale: 0,
     aspect_ratio: { x: 1, y: 2 },
+    showclearTooltip:false
   },
   textToArtpanelInfo: {
     resultSectionVisible: false,

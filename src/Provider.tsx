@@ -53,6 +53,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     negative_prompt: "",
     cfg_scale: 1,
     aspect_ratio: { x:1, y: 2},
+    showclearTooltip:false
   })
 
   const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({

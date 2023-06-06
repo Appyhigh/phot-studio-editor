@@ -1,5 +1,5 @@
 import { Block } from "baseui/block"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import TextToArtContext from "~/contexts/TextToArtContext"
 import classes from "./style.module.css"
 import clsx from "clsx"
@@ -22,11 +22,35 @@ const ImagineAI = () => {
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [imagesLoading, setImagesLoading] = useState(false)
   const editor = useEditor()
+  const leftPanelRef = useRef()
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      // If the clearFiled is open and the clicked target is not within the clearfield,
+      // then close the clearfield
+      // @ts-ignore
+      if (leftPanelRef.current && !leftPanelRef.current.contains(e.target)) {
+        setTextToArtInputInfo((prev: any) => ({
+          ...prev,
+          showclearTooltip: false,
+        }))
+      }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutside)
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [textToArtInputInfo.showclearTooltip])
+
   return (
     <Scrollable>
-      <Block className={clsx(classes.section, "d-flex flex-1 flex-column mb-5")}>
+      <div className={clsx(classes.section, "d-flex flex-1 flex-column mb-5")}>
         {!textToArtpanelInfo.resultSectionVisible && (
-          <>
+          //  @ts-ignore
+          <div className={classes.inputPanel}>
             <div className={classes.imageGenerationCt}>
               <div className={classes.artSubHeading}>How many images you want to generate?</div>
               <div className="d-flex justify-content-start flex-row">
@@ -108,7 +132,8 @@ const ImagineAI = () => {
               />
             </div>
             <button
-              className={classes.generateBtn}
+              className={clsx(classes.generateBtn, textToArtInputInfo.showclearTooltip && classes.disabledGenBtn)}
+              disabled={textToArtInputInfo.showclearTooltip ? true : false}
               onClick={() => {
                 setImagesLoading(true)
                 setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
@@ -126,7 +151,7 @@ const ImagineAI = () => {
                     resultImages: [...prev.resultImages, ...generatedImages],
                   }))
                   setImagesLoading(false)
-                }, 3000)
+                }, 1000)
               }}
             >
               Generate
@@ -134,13 +159,50 @@ const ImagineAI = () => {
             <p className={classes.creditsPara}>
               <span>1 credit</span> will be used if you want to generate 3 more outputs
             </p>
-          </>
+            {textToArtInputInfo.showclearTooltip && (
+              // @ts-ignore
+              <div className={classes.clearFieldBtn} ref={leftPanelRef}>
+                <div
+                  className="pointer"
+                  onClick={() => {
+                    setTextToArtInputInfo((prev: any) => ({
+                      ...prev,
+                      prompt: "",
+                      style: [],
+                      images_generation_ct: 2,
+                      uploaded_img: "",
+                      image_wt: 1,
+                      negative_prompt_visible: false,
+                      negative_prompt: "",
+                      cfg_scale: 1,
+                      aspect_ratio: { x: 1, y: 2 },
+                      showclearTooltip: false,
+                    }))
+                  }}
+                >
+                  Clear all fields
+                </div>{" "}
+                <div
+                  className="pl-2 pointer"
+                  onClick={() => {
+                    setTextToArtInputInfo((prev: any) => ({
+                      ...prev,
+                      showclearTooltip: false,
+                    }))
+                  }}
+                >
+                  <Icons.Cross />
+                </div>
+              </div>
+            )}
+          </div>
         )}
         {textToArtpanelInfo.resultSectionVisible && (
           <div className={classes.resultSection}>
             <Block
               onClick={() => {
-                setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
+                setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true }))
+                setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
               }}
               $style={{ cursor: "pointer", display: "flex" }}
               className={classes.chevronRightIcon}
@@ -198,7 +260,7 @@ const ImagineAI = () => {
                   }))
 
                   setImagesLoading(false)
-                }, 3000)
+                }, 1000)
               }}
             >
               Regenerate
@@ -212,7 +274,7 @@ const ImagineAI = () => {
             </div>
           </div>
         )}
-      </Block>
+      </div>
     </Scrollable>
   )
 }
