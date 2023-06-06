@@ -97,22 +97,23 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
             let latest_ct = 0
             setImagesCt((prev: any) => {
               latest_ct = prev + 1
+              RemoveBGFunc(
+                editor,
+                setLoaderPopup,
+                setPanelInfo,
+                mainImgInfo,
+                setMainImgInfo,
+                virtualSrcImageRef,
+                virtualMaskImageRef,
+                virtualCanvasSrcImageRef,
+                virtualCanvasMaskImageRef,
+                virtualCanvasResultImageRef,
+                0,
+                (latest_ct = latest_ct)
+              )
               return prev + 1
             })
-            RemoveBGFunc(
-              editor,
-              setLoaderPopup,
-              setPanelInfo,
-              mainImgInfo,
-              setMainImgInfo,
-              virtualSrcImageRef,
-              virtualMaskImageRef,
-              virtualCanvasSrcImageRef,
-              virtualCanvasMaskImageRef,
-              virtualCanvasResultImageRef,
-              0,
-              (latest_ct = latest_ct)
-            )
+           
           }}
           className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
         >

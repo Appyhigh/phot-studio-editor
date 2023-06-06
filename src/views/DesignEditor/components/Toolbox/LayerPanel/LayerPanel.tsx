@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
@@ -16,6 +16,7 @@ import BgLayer from "./BgLayer/BgLayer"
 import GroupIcon from "~/components/Icons/GroupIcon"
 import SingleLayerIcon from "~/components/Icons/SingleLayerIcon"
 import SingleLayerExport from "~/views/DesignEditor/SingleLayerExport/SingleLayerExport"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 interface ToolboxState {
   toolbox: string
@@ -64,6 +65,7 @@ const LayerPanel = () => {
   const [layerObjects, setLayerObjects] = React.useState<any[]>([])
   const [activeLayerPanel, setActiveLayerPanel] = useState<any>(null)
   const [selectedSingleId, setSelectedSingleId] = useState("")
+  const { setImagesCt } = useContext(ImagesContext)
 
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
@@ -121,6 +123,29 @@ const LayerPanel = () => {
       setLayerObjects(objects)
     }
   }, [objects])
+
+  useEffect(() => {
+    if (editor) {
+      editor.on("history:changed", () => {
+        const currentScene = editor?.scene?.exportToJSON()
+        let images = 0
+        currentScene?.layers?.map((el) => {
+          if (el.type === "StaticImage") {
+            // @ts-ignore
+            if (images < parseInt(el.name)) {
+              // @ts-ignore
+              images = parseInt(el.name)
+            }
+          }
+        })
+        let latest_ct = images
+        setImagesCt((prev: any) => {
+          latest_ct = images
+          return latest_ct;
+        })
+      })
+    }
+  }, [editor])
 
   React.useEffect(() => {
     let watcher = async () => {

@@ -1,17 +1,12 @@
-function TextIcon({size}:{size:any}){
-    return <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clipPath="url(#clip0_2270_67831)">
-        <path d="M12 5.25V18.75" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M5.25 8.25V5.25H18.75V8.25" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M9 18.75H15" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    </g>
-    <defs>
-    <clipPath id="clip0_2270_67831">
-    <rect width="24" height="24" fill="white"/>
-    </clipPath>
-    </defs>
+function TextIcon({ size }: { size: any }) {
+  return (
+    <svg width="21" height="22" viewBox="0 0 21 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M3 3.5V5C3 5.82969 2.32969 6.5 1.5 6.5C0.670312 6.5 0 5.82969 0 5V2.75C0 1.50781 1.00781 0.5 2.25 0.5H10.5H18.75C19.9922 0.5 21 1.50781 21 2.75V5C21 5.82969 20.3297 6.5 19.5 6.5C18.6703 6.5 18 5.82969 18 5V3.5H12V18.5H14.25C15.0797 18.5 15.75 19.1703 15.75 20C15.75 20.8297 15.0797 21.5 14.25 21.5H6.75C5.92031 21.5 5.25 20.8297 5.25 20C5.25 19.1703 5.92031 18.5 6.75 18.5H9V3.5H3Z"
+        fill="black"
+      />
     </svg>
-    
+  )
 }
 
-export default TextIcon;
+export default TextIcon
