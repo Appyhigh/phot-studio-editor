@@ -257,7 +257,7 @@ const LayerPanel = () => {
                       const grp_id = obj.id
                       if (obj?.objects) {
                         return (
-                          <div key={idx}>
+                          <div key={idx} className={"mb-1"} >
                             {selectedSingleId === grp_id && (
                               <SingleLayerExport
                                 isOpenSlider={layerState.isOpenSlider}
