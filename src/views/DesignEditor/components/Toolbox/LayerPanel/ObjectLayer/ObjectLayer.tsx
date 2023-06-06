@@ -47,7 +47,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
 
-
   const handleChangeBg = useCallback(
     async (each: any) => {
       let inputImage
@@ -80,7 +79,31 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
-    HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill)
+    const previewWithUpdatedBackground: any = await changeLayerFill(
+      inputImg,
+      BG,
+      activeObject?.width * activeObject?.scaleX,
+      activeObject?.height * activeObject?.scaleY
+    )
+    const options = {
+      type: "StaticImage",
+      src: previewWithUpdatedBackground,
+      preview: previewWithUpdatedBackground,
+      original: activeObject.original,
+      name: activeObject.name,
+      id: nanoid(),
+      metadata: {
+        generationDate: new Date().getTime(),
+        originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+      },
+    }
+    editor.objects.removeById(activeObject.id)
+    editor.objects.add(options).then(() => {
+      //@ts-ignore
+      editor.objects.position("top", activeObject.top)
+      editor.objects.position("left", activeObject.left)
+      setLoaderPopup(false)
+    })
   }
 
   const removeBackgroundBeforeChangingColor = async (each: any) => {
