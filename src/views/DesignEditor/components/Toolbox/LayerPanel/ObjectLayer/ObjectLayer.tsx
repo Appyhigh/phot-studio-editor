@@ -47,7 +47,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
 
-
   const handleChangeBg = useCallback(
     async (each: any) => {
       let inputImage
@@ -80,7 +79,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
-    HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill)
+    HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill, activeObject, inputImg)
+    setLoaderPopup(false)
   }
 
   const removeBackgroundBeforeChangingColor = async (each: any) => {
