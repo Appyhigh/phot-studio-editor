@@ -90,9 +90,10 @@ const LayerPanel = () => {
 
   useEffect(() => {
     if (activeObject) {
-      if (activeObject?.type === "BackgroundImage") {
+      // to resolve the delete frame issue and bg de attachement
+      if (activeObject?.type === "BackgroundImage" || activeObject?.id === "frame") {
         editor.objects.deselect()
-        editor.objects.select("frame")
+        editor.objects.select("dummy")
       }
     }
   }, [activeObject])
@@ -243,8 +244,8 @@ const LayerPanel = () => {
             >
               <Block className="p-1">
                 {editor &&
-                  editor.scene
-                    .exportToJSON()
+                  editor?.scene
+                    ?.exportToJSON()
                     .layers.filter((el) => {
                       return (
                         el.metadata?.type !== backgroundLayerType &&
@@ -257,7 +258,7 @@ const LayerPanel = () => {
                       const grp_id = obj.id
                       if (obj?.objects) {
                         return (
-                          <div key={idx} className={"mb-1"} >
+                          <div key={idx} className={"mb-1"}>
                             {selectedSingleId === grp_id && (
                               <SingleLayerExport
                                 isOpenSlider={layerState.isOpenSlider}
