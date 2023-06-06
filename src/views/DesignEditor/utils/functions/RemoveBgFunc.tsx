@@ -18,9 +18,7 @@ export const RemoveBGFunc = async (
   upload?: any
 ) => {
   try {
-    if (activeObject && activeObject?.metadata?.originalLayerPreview) {
-      console.log("first");
-      
+    if (activeObject && activeObject?.metadata?.originalLayerPreview) {      
       const options = {
         type: "StaticImage",
         src: activeObject?.metadata?.originalLayerPreview,

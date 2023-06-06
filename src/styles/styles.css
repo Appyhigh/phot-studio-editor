@@ -338,7 +338,7 @@ input[type="number"] {
 .mt-5 {
   margin-top: 2.5rem;
 }
-.mt-6{
+.mt-6 {
   margin-top: 5rem;
 }
 
@@ -723,6 +723,9 @@ ul {
   box-sizing: border-box;
 }
 
+.aspect-ratio-slider .swiper-slide {
+  width: 64px !important;
+}
 .swiper-button-next::after,
 .swiper-button-prev::after {
   display: none;
@@ -752,6 +755,13 @@ ul {
   background-image: url("/src/views/Public/images/chevron-right.svg");
   background-repeat: no-repeat;
   background-position: center;
+}
+.aspect-ratio-slider .swiper-button-prev {
+  display: none;
+}
+
+.aspect-ratio-slider .swiper-button-next {
+  display: none;
 }
 
 .swiper-wrapper {

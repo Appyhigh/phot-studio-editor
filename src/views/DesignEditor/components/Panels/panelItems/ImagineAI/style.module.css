@@ -1,0 +1,228 @@
+.section {
+  margin-bottom: 20px;
+}
+.artSubHeading {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #333b4f;
+}
+.imageGenerationCt {
+  padding: 20px 0px 24px 14px;
+}
+
+.ctBox {
+  border: 1px solid #b6b6b6;
+  border-radius: 25px;
+  width: 48px;
+  height: 35px;
+  font-weight: 400;
+  color: #b6b6b6;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 6px 4px 0px;
+}
+.selectedCtBox {
+  background: #333b4f;
+  border: 1px solid #333b4f;
+  color: #fff;
+}
+.paraText {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #999999;
+}
+
+.negativePromptSection {
+  padding: 24px 18px 24px 14px;
+}
+.negativeInputPrompt {
+  width: 270px;
+  height: 48px;
+  margin-top: 6px;
+  border: 1px solid #dddce7;
+  border-radius: 12px;
+}
+
+.negativeInputPrompt::placeholder {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: #92929d;
+}
+.negativeInputPrompt {
+  padding: 15px 0px 15px 18px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+.sliderMark {
+  width: 275px;
+}
+.sliderMark p {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #999999;
+  margin-top: 4px;
+}
+.cfgScaleSection {
+  padding: 0px 0px 24px 14px;
+}
+.aspectRatioSection {
+  padding: 0px 0px 24px 20px;
+}
+
+.generateBtn {
+  width: 275px;
+  height: 50px;
+  background: #6729f3;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  margin: 5px 0px 0px 14px;
+  text-align: center;
+  color: #fafafb;
+}
+.creditsPara {
+  margin: 5px 20px 0px 20px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-size: 12px;
+  line-height: 20px;
+  color: #44444f;
+}
+.creditsPara span {
+  font-weight: 700;
+}
+.chevronRightIcon {
+  cursor: pointer;
+  display: flex;
+  width: 49.5px;
+  height: 51px;
+  background: #eeeeee;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 14px 0px 12px 18px;
+}
+
+.resultSection {
+  margin-bottom: 70px;
+}
+
+.resultImages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0px 12px 0px 14px;
+  gap: 6px 8px;
+}
+.regenerateBtn {
+  width: 275px;
+}
+.buyMorePara a {
+  text-decoration-line: underline;
+  font-weight: 500;
+  font-size: 11px;
+  margin-left: 20px;
+  color: #6729f3;
+}
+.skeletonBox {
+  background: #ebebeb;
+  border-radius: 10px;
+  width: 132px;
+  height: 132px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.skeletonBox img {
+  width: 80px;
+  height: 80px;
+}
+
+.disabledBtn {
+  background: #f1f1f5;
+  border-radius: 8px;
+  cursor: not-allowed;
+  color: #92929d;
+}
+.eachImg img {
+  width: 132px;
+  height: 132px;
+}
+
+.currentActiveImg {
+  width: 132px;
+  height: 132px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #7bc0ff, #ac31ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.currentActiveImg img {
+  width: 128px;
+  height: 128px;
+}
+@media screen and (min-width: 1220px) {
+  .uploadInputContainer {
+    width: 320px;
+    height: 170px;
+  }
+  .bgUploadLoader {
+    margin-left: 70px;
+  }
+
+  .imageGenerationCt {
+    padding: 20px 0px 24px 24px;
+  }
+
+  .negativePromptSection {
+    padding: 24px 24px 24px 20px;
+  }
+  .uploadImageSection {
+    padding-left: 20px;
+  }
+  .negativeInputPrompt {
+    width: 316px;
+  }
+
+  .cfgScaleSection {
+    padding: 0px 0px 24px 20px;
+  }
+
+  .sliderMark {
+    width: 300px;
+  }
+
+  .eachImg img {
+    width: 158px;
+    height: 158px;
+  }
+  .generateBtn {
+    width: 310px;
+    margin: 5px 0px 0px 20px;
+  }
+  .resultImages {
+    margin: 0px 12px 0px 20px;
+    gap: 3px 0px;
+  }
+  .currentActiveImg {
+    width: 158px;
+    height: 158px;
+  }
+  .skeletonBox {
+    width: 158px;
+    height: 158px;
+  }
+  .currentActiveImg img {
+    width: 154px;
+    height: 154px;
+  }
+  .regenerateBtn {
+    width: 320px;
+  }
+}

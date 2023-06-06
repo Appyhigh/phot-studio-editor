@@ -1,0 +1,30 @@
+.ctBox {
+  /* Dark 4 */
+
+  border: 1px solid #b6b6b6;
+  border-radius: 35px;
+  border-radius: 25px;
+  width: 64px;
+  height: 35px;
+  font-weight: 400;
+  color: #b6b6b6;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 6px 0px 0px;
+  /* identical to box height */
+}
+.selectedCtBox {
+  background: #333b4f;
+  border: 1px solid #333b4f;
+  color: #fff;
+}
+
+.shapes {
+  margin: 2px 4px 4px 0px;
+  border: 1.5px solid #b6b6b6;
+  border-radius: 2px;
+}
+
+.selectedShape{
+    border: 2px solid #fff;
+}

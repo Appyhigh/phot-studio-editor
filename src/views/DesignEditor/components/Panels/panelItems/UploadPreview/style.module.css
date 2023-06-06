@@ -13,7 +13,7 @@
   width: 140px;
   height: 140px;
   border-radius: 4px;
-  top: 40px;
+  top: 30px;
 }
 .mainBgUploadedImg {
   top: 40px;
@@ -52,6 +52,9 @@
   margin-left: 10px;
 }
 
+.textToArtTrashIcon{
+  right: 25px;
+}
 @media screen and (min-width: 1220px) {
   .uploadPreviewContainer {
     width: 320px;
@@ -83,4 +86,11 @@
   .mainImgBgBtn {
     margin-left: 20px;
   }
+  
+
+.textToArtTrashIcon{
+  right: 30px;
+
+}
+
 }
