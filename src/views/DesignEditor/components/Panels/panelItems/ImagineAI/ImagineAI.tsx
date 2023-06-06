@@ -29,7 +29,7 @@ const ImagineAI = () => {
       // If the clearFiled is open and the clicked target is not within the clearfield,
       // then close the clearfield
       // @ts-ignore
-      if (leftPanelRef.current && !leftPanelRef.current.contains(e.target)) {
+      if (leftPanelRef?.current && !leftPanelRef?.current?.contains(e.target)) {
         setTextToArtInputInfo((prev: any) => ({
           ...prev,
           showclearTooltip: false,
