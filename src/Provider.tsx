@@ -48,10 +48,10 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     style: [],
     images_generation_ct: 2,
     uploaded_img: "",
-    image_wt: 1,
+    image_wt: 40,
     negative_prompt_visible:false,
     negative_prompt: "",
-    cfg_scale: 1,
+    cfg_scale: 40,
     aspect_ratio: { x:1, y: 2},
     showclearTooltip:false
   })

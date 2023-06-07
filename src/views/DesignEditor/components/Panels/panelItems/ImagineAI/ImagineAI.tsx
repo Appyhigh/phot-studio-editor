@@ -65,50 +65,45 @@ const ImagineAI = () => {
 
   return (
     <Scrollable>
-
-      {!textToArtpanelInfo.resultSectionVisible&&
-        
-          <Block className="d-flex flex-1 flex-column">
-  
-         {/* Prompt */}
-         <Block className={classes.imagineItemContainer}>
-          <Block className={classes.imagineItemHeading}>Prompt</Block>
-          <Block className={classes.imagineItemDesc}>
-            What do you want to see, you can use a single word or complete sentence.
+      {!textToArtpanelInfo.resultSectionVisible && (
+        <Block className="d-flex flex-1 flex-column">
+          {/* Prompt */}
+          <Block className={classes.imagineItemContainer}>
+            <Block className={classes.imagineItemHeading}>Prompt</Block>
+            <Block className={classes.imagineItemDesc}>
+              What do you want to see, you can use a single word or complete sentence.
+            </Block>
+            <textarea
+              className={classes.promptInput}
+              placeholder="Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"
+              onChange={(e) => {
+                setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
+              }}
+            ></textarea>
           </Block>
-          <textarea
-            className={classes.promptInput}
-            placeholder="Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"
-            onChange={(e) => {
-              setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
-            }}
-          ></textarea>
-        </Block>
-        {/* Select a Style */}
-        <Block className={classes.imagineItemContainer}>
-          <Block className={classes.imagineItemHeading}>Select a Style</Block>
-          <button className={classes.selectStyleInput} onClick={() => setSelectStyleDisplay(true)}>
-            Select style
-            <ArrowOpen size={14} />
-          </button>
-          <StyleSwiper
-            styleImage={styleImage}
-            setStyleImage={setStyleImage}
-            textToArtInputInfo={textToArtInputInfo}
-            setTextToArtInputInfo={setTextToArtInputInfo}
-          />
-        </Block>
-       
-      
-           {/* Select a Style popup */}
-      { selectStyleDisplay && (
-        <div ref={selectStyleRef}>
-          <SelectStyle />
-        </div>
-      )}
-    </Block>
+          {/* Select a Style */}
+          <Block className={classes.imagineItemContainer}>
+            <Block className={classes.imagineItemHeading}>Select a Style</Block>
+            <button className={classes.selectStyleInput} onClick={() => setSelectStyleDisplay(true)}>
+              Select style
+              <ArrowOpen size={14} />
+            </button>
+            <StyleSwiper
+              styleImage={styleImage}
+              setStyleImage={setStyleImage}
+              textToArtInputInfo={textToArtInputInfo}
+              setTextToArtInputInfo={setTextToArtInputInfo}
+            />
+          </Block>
 
-      }
+          {/* Select a Style popup */}
+          {selectStyleDisplay && (
+            <div ref={selectStyleRef}>
+              <SelectStyle />
+            </div>
+          )}
+        </Block>
+      )}
       <div className={clsx(classes.section, "d-flex flex-1 flex-column mb-5")}>
         {!textToArtpanelInfo.resultSectionVisible && (
           //  @ts-ignore
@@ -204,7 +199,7 @@ const ImagineAI = () => {
                   let generatedImages = []
                   for (let i = 0; i < textToArtInputInfo.images_generation_ct; i++) {
                     generatedImages.push(
-                      "https://ai-image-editor-webapp.s3.us-east-2.wasabisys.com/background_generator/input_image/2023-06-05/059585a9-d6ca-4d0f-9d20-96e59e0d5d5c.png"
+                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=350"
                     )
                   }
                   setTextToArtPanelInfo((prev: any) => ({
@@ -227,16 +222,15 @@ const ImagineAI = () => {
                 <div
                   className="pointer"
                   onClick={() => {
+                    setStyleImage((prev: any) => ({ ...prev, styleImage: new Set<string>() }))
                     setTextToArtInputInfo((prev: any) => ({
                       ...prev,
                       prompt: "",
                       style: [],
                       images_generation_ct: 2,
                       uploaded_img: "",
-                      image_wt: 1,
                       negative_prompt_visible: false,
                       negative_prompt: "",
-                      cfg_scale: 1,
                       aspect_ratio: { x: 1, y: 2 },
                       showclearTooltip: false,
                     }))
@@ -285,6 +279,8 @@ const ImagineAI = () => {
                         let latest_ct = 0
                         setImagesCt((prev: any) => {
                           latest_ct = prev + 1
+                          console.log(each)
+
                           AddObjectFunc(each, editor, 0, 0, 0, (latest_ct = latest_ct))
                           return prev + 1
                         })
@@ -311,7 +307,7 @@ const ImagineAI = () => {
                   let generatedImages = []
                   for (let i = 0; i < textToArtInputInfo.images_generation_ct; i++) {
                     generatedImages.push(
-                      "https://ai-image-editor-webapp.s3.us-east-2.wasabisys.com/background_generator/input_image/2023-06-05/059585a9-d6ca-4d0f-9d20-96e59e0d5d5c.png"
+                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=350"
                     )
                   }
                   setTextToArtPanelInfo((prev: any) => ({
@@ -338,7 +334,6 @@ const ImagineAI = () => {
         )}
       </div>
     </Scrollable>
-
   )
 }
 
