@@ -6,24 +6,25 @@ import TextToArtContext from "~/contexts/TextToArtContext"
 import classes from "./style.module.css"
 import ArrowOpen from "~/components/Icons/ArrowOpen"
 import SelectStyle from "~/components/UI/SelectStyle/SelectStyle"
+import StyleSwiper from "~/components/UI/SelectStyle/StyleSwiper"
 
 const ImagineAI = () => {
-  const { textToArtInputInfo, textToArtpanelInfo } = useContext(TextToArtContext)
+  const { textToArtInputInfo, setTextToArtInputInfo } = useContext(TextToArtContext)
+  const { styleImage, setStyleImage } = useContext(TextToArtContext)
   const [selectStyleDisplay, setSelectStyleDisplay] = useState(false)
   const selectStyleRef = useRef<HTMLDivElement>(null)
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (selectStyleRef.current && !selectStyleRef.current.contains(event.target as Node)) {
-      setSelectStyleDisplay(false)
-    }
-  }
-
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (selectStyleRef.current && !selectStyleRef.current.contains(event.target as Node)) {
+        setSelectStyleDisplay(false)
+      }
+    }
     document.addEventListener("mousedown", handleClickOutside)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [handleClickOutside])
+  }, [])
 
   return (
     <Block className="d-flex flex-1 flex-column">
@@ -37,18 +38,24 @@ const ImagineAI = () => {
           <textarea
             className={classes.promptInput}
             placeholder="Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"
+            onChange={(e) => {
+              setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
+            }}
           ></textarea>
         </Block>
         {/* Select a Style */}
         <Block className={classes.imagineItemContainer}>
           <Block className={classes.imagineItemHeading}>Select a Style</Block>
-          <button
-            className={classes.selectStyleInput}
-            onClick={() => (selectStyleDisplay ? setSelectStyleDisplay(false) : setSelectStyleDisplay(true))}
-          >
+          <button className={classes.selectStyleInput} onClick={() => setSelectStyleDisplay(true)}>
             Select style
             <ArrowOpen size={14} />
           </button>
+          <StyleSwiper
+            styleImage={styleImage}
+            setStyleImage={setStyleImage}
+            textToArtInputInfo={textToArtInputInfo}
+            setTextToArtInputInfo={setTextToArtInputInfo}
+          />
         </Block>
       </Scrollable>
       {/* Select a Style popup */}

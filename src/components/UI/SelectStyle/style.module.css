@@ -42,10 +42,6 @@
 }
 
 .selectStyleImages {
-  margin: 0.5rem 0;
-}
-
-.sampleImgSection {
   margin: 10px 20px 20px 12px;
   display: grid;
   gap: 8px;
@@ -116,4 +112,24 @@
   color: #696974;
   text-align: center;
   margin: 0.25rem;
+}
+
+.selectedIcon {
+  position: absolute;
+  top: auto;
+  left: auto;
+  z-index: 5;
+}
+
+.stylesLoader {
+  display: block;
+  position: absolute;
+  top: 0rem;
+  left: 5rem;
+}
+
+.cross {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.5rem;
 }

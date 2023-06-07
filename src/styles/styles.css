@@ -338,7 +338,7 @@ input[type="number"] {
 .mt-5 {
   margin-top: 2.5rem;
 }
-.mt-6{
+.mt-6 {
   margin-top: 5rem;
 }
 
@@ -807,9 +807,9 @@ ul {
   display: block;
 }
 @media screen and (min-width: 1216px) {
-  .swiper-slide {
-    width: 96px;
-  }
+  /* .swiper-slide {
+     width: 96px; 
+  } */
   .swiper-button-prev {
     left: 0px;
     top: 60px;

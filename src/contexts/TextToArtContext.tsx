@@ -13,7 +13,7 @@ const TextToArtContext = React.createContext({
   },
   textToArtpanelInfo: {
     resultSectionVisible: false,
-    resultImages:[]
+    resultImages: [],
   },
   setTextToArtInputInfo: (item: any) => {
     console.log("Dummy Initializer for ", item)
@@ -21,6 +21,10 @@ const TextToArtContext = React.createContext({
   setTextToArtPanelInfo: (item: any) => {
     console.log("Dummy Initializer for ", item)
   },
+  styleImage: new Set<string>(),
+  setStyleImage: (styleImage: any) => {
+    console.log("Dummy Initializer for ", styleImage)
+  },
 })
 
-export default TextToArtContext;
+export default TextToArtContext

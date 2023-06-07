@@ -1,135 +1,44 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { useState } from "react"
+import { useCallback, useContext, useRef, useState } from "react"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { Block } from "baseui/block"
 import SearchIcon from "~/components/Icons/SearchIcon"
+import { selectStyleApi } from "~/services/selectStyleApi"
+import usePagination from "~/hooks/usePagination"
+import TextToArtContext from "~/contexts/TextToArtContext"
+import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import { HandleStyleImageClick } from "~/views/DesignEditor/utils/functions/HandleStyleImageClick"
 
 const SelectStyle = (props: any) => {
-  const [selectedImg, setSelectedImg] = useState(-1)
-  const [res, setRes] = useState([
-    {
-      name: "Ink",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Ink.webp",
-      is_premium: false,
-      placeholder_text: "Ink art",
+  const { search, setSearch }: any = useState()
+  const [page, setPage] = useState(1)
+  const { res, more, loading, result } = usePagination("style", selectStyleApi, search, page)
+  const { styleImage, setStyleImage } = useContext(TextToArtContext)
+  const { textToArtInputInfo, setTextToArtInputInfo } = useContext(TextToArtContext)
+
+  const observer = useRef<any>()
+
+  const lastElementRef = useCallback(
+    (element?: any) => {
+      if (observer.current) observer.current.disconnect()
+
+      if (!more) return
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && more) setPage((prev) => prev + 1)
+      })
+
+      if (element) observer.current.observe(element)
     },
-    {
-      name: "Tempera",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Tempera.webp",
-      is_premium: false,
-      placeholder_text: "Tempera art",
-    },
-    {
-      name: "Encaustic",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Encaustic.webp",
-      is_premium: false,
-      placeholder_text: "Encaustic art",
-    },
-    {
-      name: "Glass Art",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Glass Art.webp",
-      is_premium: true,
-      placeholder_text: "Glass art",
-    },
-    {
-      name: "Acrylic Paint",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Acrylic Paint.webp",
-      is_premium: false,
-      placeholder_text: "Acrylic Paint",
-    },
-    {
-      name: "Charcoal",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Charcoal.webp",
-      is_premium: false,
-      placeholder_text: "Charcoal art",
-    },
-    {
-      name: "Digital",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Digital.webp",
-      is_premium: false,
-      placeholder_text: "Digital art",
-    },
-    {
-      name: "Watercolor",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Watercolor.webp",
-      is_premium: true,
-      placeholder_text: "Watercolor art",
-    },
-    {
-      name: "Oil Painting",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Oil Painting.webp",
-      is_premium: false,
-      placeholder_text: "Oil Painting",
-    },
-    {
-      name: "Clay Modelling",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Clay Modelling.webp",
-      is_premium: false,
-      placeholder_text: "Clay Modelling",
-    },
-    {
-      name: "Silverpoint",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Silverpoint.webp",
-      is_premium: false,
-      placeholder_text: "Silverpoint art",
-    },
-    {
-      name: "Color Pencils",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Color Pencils.webp",
-      is_premium: false,
-      placeholder_text: "Color Pencils art",
-    },
-    {
-      name: "Bronze Art",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Bronze Art.webp",
-      is_premium: false,
-      placeholder_text: "Bronze art",
-    },
-    {
-      name: "Graphite",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Graphite.webp",
-      is_premium: false,
-      placeholder_text: "Graphite art",
-    },
-    {
-      name: "Chalk",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Chalk.webp",
-      is_premium: true,
-      placeholder_text: "Chalk art",
-    },
-    {
-      name: "Wood Art",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Wood Art.webp",
-      is_premium: false,
-      placeholder_text: "Wood art",
-    },
-    {
-      name: "Collage Art",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Collage Art.webp",
-      is_premium: false,
-      placeholder_text: "Collage art",
-    },
-    {
-      name: "Ink And Pen",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Ink And Pen.webp",
-      is_premium: false,
-      placeholder_text: "Ink And Pen art",
-    },
-    {
-      name: "Pastels",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Pastels.webp",
-      is_premium: false,
-      placeholder_text: "Pastels art",
-    },
-    {
-      name: "Gouache Paint",
-      image_link: "https://stable-diffusion-app.apyhi.com/studio_assets/Art Mediums/Gouache Paint.webp",
-      is_premium: false,
-      placeholder_text: "Gouache Paint",
-    },
-  ])
+    [more]
+  )
+
+  const searchImages = () => {
+    console.log("context", styleImage)
+  }
+
   return (
     <div className={classes.selectStyleContainer}>
       <Block className={classes.selectStyleHeading}>Style</Block>
@@ -137,26 +46,44 @@ const SelectStyle = (props: any) => {
         <div className={classes.searchIcon}>
           <SearchIcon color={"#92929D"} />
         </div>
-        <input className={classes.textInput} placeholder="Search" />
+        <input
+          className={classes.textInput}
+          placeholder="Search"
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              searchImages()
+            }
+          }}
+        />
       </div>
-      <Block className={classes.selectStyleImages}>
-        <Scrollbars style={{ height: props?.height ? props.height : "30rem" }}>
-          <div className={classes.sampleImgSection}>
-            {res.map((image: any, index: any) => {
-              return (
+      <Scrollbars style={{ height: props?.height ? props.height : "30rem", margin: "0.5rem 0" }}>
+        <Block className={classes.selectStyleImages}>
+          {result.map((image: any, index: any) => {
+            const isSelected = styleImage.has(image)
+            return (
+              <div ref={index === result.length - 1 ? lastElementRef : undefined} key={index}>
                 <ImageItem
-                  key={index}
-                  idx={image.name}
-                  selectedImage={selectedImg}
-                  onClick={() => {}}
+                  idx={index}
+                  selectedImage={isSelected}
+                  onClick={() =>
+                    HandleStyleImageClick(
+                      styleImage,
+                      setStyleImage,
+                      textToArtInputInfo,
+                      setTextToArtInputInfo,
+                      index,
+                      image
+                    )
+                  }
                   preview={image.image_link}
                   name={image.name}
                 />
-              )
-            })}
-          </div>
-        </Scrollbars>
-      </Block>
+              </div>
+            )
+          })}
+        </Block>
+        {loading && <img className={classes.stylesLoader} src={LoaderSpinner} />}
+      </Scrollbars>
     </div>
   )
 }
@@ -171,7 +98,7 @@ const ImageItem = ({
   idx: number
   preview: any
   onClick?: (option: any) => void
-  selectedImage: number
+  selectedImage: any
   name: string
 }) => {
   return (
@@ -179,7 +106,7 @@ const ImageItem = ({
       <div onClick={onClick} className={clsx("pointer p-relative", classes.imageItemSection, "flex-center")}>
         <div className={clsx("p-absolute", classes.imageItem)} />
         <img src={preview} className={classes.imagePreview} />
-        {selectedImage === idx && (
+        {selectedImage && (
           <div className={classes.selectedIcon}>
             <Icons.Selection size={"24"} />
           </div>
