@@ -42,7 +42,7 @@
 }
 
 .selectStyleImages {
-  margin: 10px 20px 20px 12px;
+  margin: 0.25rem 0.6rem 0.25rem 0.2rem;
   display: grid;
   gap: 8px;
   grid-template-columns: 1fr 1fr 1fr;
@@ -118,6 +118,13 @@
   position: absolute;
   top: auto;
   left: auto;
+  z-index: 5;
+}
+
+.premiumIcon {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
   z-index: 5;
 }
 

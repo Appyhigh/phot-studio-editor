@@ -10,6 +10,7 @@ import usePagination from "~/hooks/usePagination"
 import TextToArtContext from "~/contexts/TextToArtContext"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import { HandleStyleImageClick } from "~/views/DesignEditor/utils/functions/HandleStyleImageClick"
+import Premium from "~/components/Icons/Premium"
 
 const SelectStyle = (props: any) => {
   const [search, setSearch] = useState("")
@@ -60,7 +61,7 @@ const SelectStyle = (props: any) => {
           }}
         />
       </div>
-      <Scrollbars style={{ height: props?.height ? props.height : "30rem", margin: "0.5rem 0" }}>
+      <Scrollbars style={{ height: props?.height ? props.height : "31.5rem", margin: "0.5rem 0" }}>
         <Block className={classes.selectStyleImages}>
           {result.map((image: any, index: any) => {
             const isSelected = styleImage.has(image)
@@ -81,6 +82,7 @@ const SelectStyle = (props: any) => {
                   }
                   preview={image.image_link}
                   name={image.name}
+                  premium={image.is_premium}
                 />
               </div>
             )
@@ -98,12 +100,14 @@ const ImageItem = ({
   onClick,
   selectedImage,
   name,
+  premium,
 }: {
   idx: number
   preview: any
   onClick?: (option: any) => void
   selectedImage: any
   name: string
+  premium: boolean
 }) => {
   return (
     <div>
@@ -113,6 +117,11 @@ const ImageItem = ({
         {selectedImage && (
           <div className={classes.selectedIcon}>
             <Icons.Selection size={"24"} />
+          </div>
+        )}
+        {premium && (
+          <div className={classes.premiumIcon}>
+            <Premium size={24} />
           </div>
         )}
       </div>

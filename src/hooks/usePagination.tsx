@@ -17,8 +17,7 @@ export default function usePagination(type: string, api: any, search: string, pa
           setMore(Boolean(res.length))
         } else {
           setResult((prev: any) => [...new Set([...prev, ...res["data"]["source_studio"]])])
-          console.log("RESULT LENGTH", result.length)
-          setMore(Boolean(result.length))
+          setMore(Boolean(res["data"]["source_studio"].length))
         }
         setLoading(false)
       })
