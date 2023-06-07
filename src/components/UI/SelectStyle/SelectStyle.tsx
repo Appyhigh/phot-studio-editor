@@ -12,8 +12,9 @@ import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import { HandleStyleImageClick } from "~/views/DesignEditor/utils/functions/HandleStyleImageClick"
 
 const SelectStyle = (props: any) => {
-  const { search, setSearch }: any = useState()
+  const [search, setSearch] = useState("")
   const [page, setPage] = useState(1)
+  const { setResult } = useContext(TextToArtContext)
   const { res, more, loading, result } = usePagination("style", selectStyleApi, search, page)
   const { styleImage, setStyleImage } = useContext(TextToArtContext)
   const { textToArtInputInfo, setTextToArtInputInfo } = useContext(TextToArtContext)
@@ -36,7 +37,9 @@ const SelectStyle = (props: any) => {
   )
 
   const searchImages = () => {
-    console.log("context", styleImage)
+    selectStyleApi(search, 1).then((res) => {
+      setResult(res["data"]["source_studio"])
+    })
   }
 
   return (
@@ -49,6 +52,7 @@ const SelectStyle = (props: any) => {
         <input
           className={classes.textInput}
           placeholder="Search"
+          onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               searchImages()

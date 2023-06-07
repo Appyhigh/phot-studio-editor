@@ -25,6 +25,10 @@ const TextToArtContext = React.createContext({
   setStyleImage: (styleImage: any) => {
     console.log("Dummy Initializer for ", styleImage)
   },
+  result: [],
+  setResult: (result: any) => {
+    console.log("Dummy Initializer for ", result)
+  },
 })
 
 export default TextToArtContext

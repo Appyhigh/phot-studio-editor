@@ -61,6 +61,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   const [styleImage, setStyleImage] = useState(new Set<string>())
 
+  const [result, setResult] = useState([])
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
@@ -74,6 +76,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                 setTextToArtPanelInfo,
                 styleImage,
                 setStyleImage,
+                result,
+                setResult,
               }}
             >
               <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
