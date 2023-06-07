@@ -1,9 +1,13 @@
 import { Slider } from "baseui/slider"
 
-const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize,step }: any) => {
+const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize,step,color,height }: any) => {
   return (
     <Slider
+  
+    
+     
       overrides={{
+        
         InnerThumb: () => null,
         ThumbValue: () => null,
         TickBar: () => null,
@@ -15,17 +19,25 @@ const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize,step }:
             height: thumbSize,
             width: thumbSize,
             paddingLeft: 0,
+            backgroundColor:color?color:"#333B4F",
+            background:color?color:"#333B4F"
+
           },
         },
         Track: {
           style: {
             paddingLeft: 0,
             paddingRight: 0,
+            color:color?color:"#333B4F"
+ 
+
           },
         },
         InnerTrack: {
           style: {
-            height: "4px",
+            height:height?height: "4px",
+            backgroundColor:color?color:"#333B4F" ,
+            color:color?color:"#333B4F"
           },
         },
       }}

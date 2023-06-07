@@ -5,15 +5,13 @@ import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
 import { useContext, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
-import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
-import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg } from "~/constants/contants"
+import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 
-const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleBgAdd }: any) => {
+const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
   const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
@@ -41,13 +39,15 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
           <img
             className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
             src={mainImgUrl}
-            alt="preview"
+            alt="preview h"
           />
+        ) : uploadType === TEXT_TO_ART && textToArtImg ? (
+          <img className={classes.uploadedImg} src={textToArtImg} alt="preview" />
         ) : (
           <img
             className={classes.uploadedImg}
             src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
-            alt="preview"
+            alt="preview k"
           />
         )}
 
@@ -56,7 +56,8 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
             className={clsx(
               "p-absolute pointer",
               classes.discardBtn,
-              uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard
+              uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
+              uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
             )}
           >
             <span onClick={discardHandler}>
@@ -91,34 +92,35 @@ const UploadPreview = ({ discardHandler, uploadType, upload, mainImgUrl, handleB
           Add Background
         </button>
       ) : (
-        <button
-          disabled={panelInfo.bgRemoverBtnActive ? false : true}
-          onClick={() => {
-            let latest_ct = 0
-            setImagesCt((prev: any) => {
-              latest_ct = prev + 1
-              RemoveBGFunc(
-                editor,
-                setLoaderPopup,
-                setPanelInfo,
-                mainImgInfo,
-                setMainImgInfo,
-                virtualSrcImageRef,
-                virtualMaskImageRef,
-                virtualCanvasSrcImageRef,
-                virtualCanvasMaskImageRef,
-                virtualCanvasResultImageRef,
-                0,
-                (latest_ct = latest_ct)
-              )
-              return prev + 1
-            })
-           
-          }}
-          className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
-        >
-          Remove Background
-        </button>
+        uploadType != TEXT_TO_ART && (
+          <button
+            disabled={panelInfo.bgRemoverBtnActive ? false : true}
+            onClick={() => {
+              let latest_ct = 0
+              setImagesCt((prev: any) => {
+                latest_ct = prev + 1
+                RemoveBGFunc(
+                  editor,
+                  setLoaderPopup,
+                  setPanelInfo,
+                  mainImgInfo,
+                  setMainImgInfo,
+                  virtualSrcImageRef,
+                  virtualMaskImageRef,
+                  virtualCanvasSrcImageRef,
+                  virtualCanvasMaskImageRef,
+                  virtualCanvasResultImageRef,
+                  0,
+                  (latest_ct = latest_ct)
+                )
+                return prev + 1
+              })
+            }}
+            className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
+          >
+            Remove Background
+          </button>
+        )
       )}
     </div>
   )

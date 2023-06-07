@@ -73,12 +73,12 @@ import Blur from "./Blur"
 import Transform from "./Transform"
 import ColorPlus from "./ColorPlus"
 import GroupIcon from "./GroupIcon"
-
 import Flip from "./Flip"
-
 import PopupCloseIcon from "./PopupCloseIcon"
 import GoogleIcon from "./GoogleIcon"
-
+import CirclePlus from "./CirclePlus"
+import Cross from "./Cross"
+import ToolTipCross from "./TooltipCross"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -158,6 +158,9 @@ class Icons {
   static Transform = Transform
   static ColorPlus = ColorPlus
   static Flip =Flip
+  static CirclePlus=CirclePlus
+  static Cross=Cross
+  static ToolTipCross=ToolTipCross
 }
 
 export default Icons

@@ -1,0 +1,91 @@
+.artSubHeading {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #333b4f;
+}
+.inputFile {
+  display: none;
+}
+
+.uploadInput {
+  width: 275px;
+  height: 48px;
+  border: 1px solid #dddce7;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.uploadImgText {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+  color: #92929d;
+  margin-left: 18px;
+}
+
+.circlePlusIcon {
+  margin-right: 12px;
+}
+
+.bgUploadLoader {
+  display: block;
+  position: absolute;
+  top: 0px;
+  margin-left: 40px;
+}
+
+.uploadInputContainer {
+  width: 275px;
+  height: 170px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.imageWeightSubHeading {
+  margin: 24px 0px 6px;
+}
+
+.paraText {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+
+  color: #999999;
+}
+
+.sliderMark {
+  width: 275px;
+}
+.sliderMark p {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #999999;
+  margin-top: 4px;
+}
+.rejectedFilesError {
+  margin-left: -20px;
+  position: relative;
+  padding: 0px 20px;
+  font-size: 12px !important;
+}
+@media screen and (min-width: 1220px) {
+  .uploadInput {
+    width: 316px;
+  }
+
+  .sliderMark {
+    width: 300px;
+  }
+  .uploadInputContainer {
+    width: 320px;
+  }
+  .bgUploadLoader {
+    margin-left: 70px;
+  }
+}

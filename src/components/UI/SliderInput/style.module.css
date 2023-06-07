@@ -1,0 +1,28 @@
+
+.range[type='range'] {
+    -webkit-appearance: none !important;
+    height: 5px;
+    background: rgba(105, 178, 201, 0.27);
+    border-radius: 12px;
+}
+
+.range {
+    width: 275px;
+    height: 5px !important;
+    
+}
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    background: #6729F3;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 1220px) {
+.range{
+    width: 300px;
+}
+}
