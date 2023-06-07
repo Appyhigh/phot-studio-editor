@@ -19,7 +19,16 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
   function close() {
     setIsOpen(false)
   }
+  const [disableDeleteBtn, setDisableDeleteBtn] = useState(false)
+  useEffect(() => {
+    const bgObject = editor?.frame?.background?.canvas?._objects.filter(
+      (el: any) => el.metadata?.type === backgroundLayerType
+    )[0]
 
+    if (bgObject) {
+      setDisableDeleteBtn(true)
+    } else setDisableDeleteBtn(false)
+  }, [editor])
   const updateObjectFill = (each: any) => {
     const bgObject = editor.frame.background.canvas._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType
@@ -82,9 +91,15 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
             <div
               className={clsx(
                 classes.box,
-                " pointer d-flex justify-content-center align-items-center flex-column ml-1 pointer"
+                " d-flex justify-content-center align-items-center flex-column ml-1",
+                disableDeleteBtn&&classes.disableDeleteBtn
               )}
-              onClick={() => EraseBgFunc({ editor, frame })}
+              onClick={() => {
+               if(disableDeleteBtn){
+                return ;
+               }
+                EraseBgFunc({ editor, frame })
+              }}
             >
               <Icons.TrashIcon size={"20"} />
               <p>Delete</p>
