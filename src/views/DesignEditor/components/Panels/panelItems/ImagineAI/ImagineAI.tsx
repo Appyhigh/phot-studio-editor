@@ -199,7 +199,7 @@ const ImagineAI = () => {
                   let generatedImages = []
                   for (let i = 0; i < textToArtInputInfo.images_generation_ct; i++) {
                     generatedImages.push(
-                      "https://ai-image-editor-webapp.s3.us-east-2.wasabisys.com/background_generator/input_image/2023-06-05/059585a9-d6ca-4d0f-9d20-96e59e0d5d5c.png"
+                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=350"
                     )
                   }
                   setTextToArtPanelInfo((prev: any) => ({
@@ -279,6 +279,8 @@ const ImagineAI = () => {
                         let latest_ct = 0
                         setImagesCt((prev: any) => {
                           latest_ct = prev + 1
+                          console.log(each)
+
                           AddObjectFunc(each, editor, 0, 0, 0, (latest_ct = latest_ct))
                           return prev + 1
                         })
@@ -305,7 +307,7 @@ const ImagineAI = () => {
                   let generatedImages = []
                   for (let i = 0; i < textToArtInputInfo.images_generation_ct; i++) {
                     generatedImages.push(
-                      "https://ai-image-editor-webapp.s3.us-east-2.wasabisys.com/background_generator/input_image/2023-06-05/059585a9-d6ca-4d0f-9d20-96e59e0d5d5c.png"
+                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=350"
                     )
                   }
                   setTextToArtPanelInfo((prev: any) => ({

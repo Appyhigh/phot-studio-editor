@@ -60,14 +60,15 @@
   line-height: 1.2rem;
 }
 
-.negativeInputPrompt::placeholder ,.promptInput::placeholder {
+.negativeInputPrompt::placeholder,
+.promptInput::placeholder {
   font-weight: 400;
   font-size: 14px;
   line-height: 18px;
   color: #92929d;
 }
-.promptInput::placeholder{
-  color: #AAAAAA;
+.promptInput::placeholder {
+  color: #aaaaaa;
   line-height: 19px;
 }
 .negativeInputPrompt {
@@ -171,6 +172,7 @@
 .eachImg img {
   width: 132px;
   height: 132px;
+  border-radius: 10px;
 }
 
 .currentActiveImg {
