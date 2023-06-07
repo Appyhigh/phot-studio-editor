@@ -1,7 +1,7 @@
 function Premium({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width={size} height={size} rx="11.5" fill="black" fill-opacity="0.3" />
+      <rect width={size} height={size} rx="11.5" fill="black" fillOpacity="0.3" />
       <path
         d="M16.7515 11.0756L15.3714 15.5792L13.9561 16.3595L10.3899 16.3205L7.55716 15.4939C7.55716 15.4939 6.54957 11.9092 6.32363 11.1182L6.27566 10.9612C6.24829 10.8615 6.26375 10.7551 6.32152 10.6634L7.15642 10.3315L9.23133 11.1641L10.845 8.48189L12.2373 8.49709L13.7921 11.2139L15.8848 10.4268L16.7515 11.0756Z"
         fill="#FFD400"
