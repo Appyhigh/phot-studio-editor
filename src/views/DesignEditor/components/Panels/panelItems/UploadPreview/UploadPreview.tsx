@@ -5,9 +5,7 @@ import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
 import { useContext, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
-import { removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
 import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
@@ -32,7 +30,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
       <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
       <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
       <Block className={clsx(classes.uploadPreviewContainer, uploadType === MAIN_IMG_Bg && classes.mainImgBg)}>
-        <Icons.InputContainer />
+        <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} />
       </Block>
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
         {uploadType === LOCAL_SAMPLE_IMG && upload ? (
@@ -58,8 +56,8 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
             className={clsx(
               "p-absolute pointer",
               classes.discardBtn,
-              uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard
-              ,uploadType===TEXT_TO_ART&&classes.textToArtTrashIcon
+              uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
+              uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
             )}
           >
             <span onClick={discardHandler}>
@@ -101,22 +99,22 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
               let latest_ct = 0
               setImagesCt((prev: any) => {
                 latest_ct = prev + 1
+                RemoveBGFunc(
+                  editor,
+                  setLoaderPopup,
+                  setPanelInfo,
+                  mainImgInfo,
+                  setMainImgInfo,
+                  virtualSrcImageRef,
+                  virtualMaskImageRef,
+                  virtualCanvasSrcImageRef,
+                  virtualCanvasMaskImageRef,
+                  virtualCanvasResultImageRef,
+                  0,
+                  (latest_ct = latest_ct)
+                )
                 return prev + 1
               })
-              RemoveBGFunc(
-                editor,
-                setLoaderPopup,
-                setPanelInfo,
-                mainImgInfo,
-                setMainImgInfo,
-                virtualSrcImageRef,
-                virtualMaskImageRef,
-                virtualCanvasSrcImageRef,
-                virtualCanvasMaskImageRef,
-                virtualCanvasResultImageRef,
-                0,
-                (latest_ct = latest_ct)
-              )
             }}
             className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
           >

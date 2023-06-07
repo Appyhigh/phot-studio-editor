@@ -1,22 +1,29 @@
-import { getStockImages } from "~/services/stockApi"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
+import TextToArtContext from "~/contexts/TextToArtContext"
 import useAppContext from "~/hooks/useAppContext"
 
-export default function usePagination(search: string, page: number) {
+export default function usePagination(type: string, api: any, search: string, page: number) {
   const { res, setRes }: any = useAppContext()
+  const { result, setResult } = useContext(TextToArtContext)
   const [more, setMore] = useState(true)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
-    getStockImages(search, page)
-      .then((res) => {
-        setRes((prev: any) => [...new Set([...prev, ...res])])
-        setMore(Boolean(res.length))
+    api(search, page)
+      .then((res: any) => {
+        if (type == "stock") {
+          setRes((prev: any) => [...new Set([...prev, ...res])])
+          setMore(Boolean(res.length))
+        } else {
+          setResult((prev: any) => [...new Set([...prev, ...res["data"]["source_studio"]])])
+          console.log("RESULT LENGTH", result.length)
+          setMore(Boolean(result.length))
+        }
         setLoading(false)
       })
-      .catch((e) => console.log(e))
+      .catch((e: any) => console.log(e))
   }, [page])
 
-  return { res, more, loading }
+  return { res, more, loading, result }
 }

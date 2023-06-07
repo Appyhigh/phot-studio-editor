@@ -58,8 +58,12 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({
     resultSectionVisible: false,
-    resultImages:[]
+    resultImages: [],
   })
+
+  const [styleImage, setStyleImage] = useState(new Set<string>())
+
+  const [result, setResult] = useState([])
 
   return (
     <AuthWrapper>
@@ -67,7 +71,16 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
         <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
             <TextToArtContext.Provider
-              value={{ textToArtInputInfo, setTextToArtInputInfo, textToArtpanelInfo, setTextToArtPanelInfo }}
+              value={{
+                textToArtInputInfo,
+                setTextToArtInputInfo,
+                textToArtpanelInfo,
+                setTextToArtPanelInfo,
+                styleImage,
+                setStyleImage,
+                result,
+                setResult,
+              }}
             >
               <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
                 <DesignEditorProvider>

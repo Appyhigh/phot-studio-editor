@@ -16,15 +16,18 @@
   top: 30px;
 }
 .mainBgUploadedImg {
-  top: 40px;
+  top: 18px;
   left: 80px;
+  width: 130px;
+  height: 130px;
 }
 .discardBtn {
   top: 25px;
   right: 10px;
 }
 .mainImgBgDiscard {
-  top: 30px;
+  top: 20px;
+  right: 20px;
 }
 
 .removeBgBtn {
@@ -46,7 +49,9 @@
 }
 
 .mainImgBg {
-  margin: 20px 0px 0px 10px;
+  margin: 0px 0px 0px 10px;
+  width: 280px;
+  height: 160px;
 }
 .mainImgBgBtn {
   margin-left: 10px;
@@ -69,8 +74,8 @@
   }
 
   .mainImgBgDiscard {
-    top: 15px;
-    right: 40px;
+    top: 10px;
+    right: 36px;
   }
   .removeBgBtn {
     width: 319px;
@@ -81,10 +86,19 @@
   }
 
   .mainImgBg {
-    margin: 20px 0px 0px 20px;
+    margin: 8px 0px 0px 20px;
+    height: 175px;
   }
   .mainImgBgBtn {
-    margin-left: 20px;
+    margin: 0px 0px 0px 20px !important;
+  }
+
+  .uploadedImg {
+    width: 140px;
+    height: 140px;
+  }
+  .mainBgUploadedImg {
+    top: 12px;
   }
   
 

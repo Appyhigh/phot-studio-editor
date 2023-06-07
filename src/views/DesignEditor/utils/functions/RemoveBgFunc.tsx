@@ -25,7 +25,7 @@ export const RemoveBGFunc = async (
         preview: activeObject?.metadata?.originalLayerPreview,
         original: activeObject.original,
         id: activeObject.id,
-
+        name:activeObject?.name,
         metadata: {
           generationDate: activeObject?.metadata?.generationDate,
           originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
@@ -44,7 +44,7 @@ export const RemoveBGFunc = async (
       removeBackgroundController(
         activeObject ? activeObject?.preview : mainImgInfo.src,
         (image: string) => {
-          // Add the resultant image to the canvas
+          // Add the resultant image to the canvas          
           const options = {
             type: "StaticImage",
             src: image,

@@ -817,9 +817,9 @@ ul {
   display: block;
 }
 @media screen and (min-width: 1216px) {
-  .swiper-slide {
-    width: 96px;
-  }
+  /* .swiper-slide {
+     width: 96px; 
+  } */
   .swiper-button-prev {
     left: 0px;
     top: 60px;
