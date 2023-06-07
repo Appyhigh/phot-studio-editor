@@ -48,7 +48,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
       }}
     >
       <Swiper
-        spaceBetween={8}
+        spaceBetween={20}
         slidesPerView={"auto"}
         loop={true}
         centeredSlides={true}
