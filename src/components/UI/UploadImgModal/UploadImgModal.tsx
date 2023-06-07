@@ -1,6 +1,6 @@
 import { Modal } from "baseui/modal"
 import classes from "./style.module.css"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import UploadInput from "../UploadInput/UploadInput"
 import DropZone from "~/components/Dropzone"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
@@ -47,9 +47,22 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       return
     }
     const imageUrl = await getBucketImageUrlFromFile(file)
-    if (imageUrl) setImageLoading(false)
 
-    setAddImgInfo({ showPreview: true, url: imageUrl })
+    if (imageUrl) {
+      setImageLoading(false)
+      setAddImgInfo({ showPreview: true, url: imageUrl })
+      if (fileInputType === "add") {
+        addImage(imageUrl)
+      } else if (fileInputType === "bgupdate") {
+        updateBackground(imageUrl)
+      } else {
+        updateImage(imageUrl)
+      }
+      setTimeout(() => {
+        close()
+      }, 200)
+    }
+
     const fileInfo: any = document.getElementById("inputNextFile")
     if (fileInfo.value) fileInfo.value = ""
   }
@@ -71,7 +84,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     else inputNextFile.current?.click()
   }
 
-  const updateBackground = () => {
+  const updateBackground = (imageUrl: string) => {
     const bgObject = editor?.frame?.background?.canvas?._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType || el.metadata?.type === deviceUploadType
     )[0]
@@ -87,8 +100,8 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
     const options = {
       type: "BackgroundImage",
-      src: addImgInfo.url,
-      preview: addImgInfo.url,
+      src: imageUrl,
+      preview: imageUrl,
       metadata: { generationDate: new Date().getTime(), type: deviceUploadType },
     }
     editor.objects.add(options).then(() => {
@@ -96,26 +109,23 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         editor.objects.setAsBackgroundImage()
       }, 100)
     })
-    handleClose()
-    setTimeout(() => {
-      close()
-    }, 100)
+
   }
 
-  const updateImage = () => {
+  const updateImage = (imageUrl: string) => {
     const inputType = "StaticImage"
 
     let topPosition = activeOb?.top
     let leftPosition = activeOb?.left
     const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-    let preview = addImgInfo.url
+    let preview = imageUrl
     const upload = {
       src: preview,
       id: nanoid(),
       preview: preview,
       original: preview,
       type: inputType,
-      name:activeOb.name,
+      name: activeOb.name,
       metadata: { generationDate: new Date().getTime() },
     }
     // to replace the object removing the previous active object first
@@ -129,14 +139,11 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     setTimeout(() => {
       editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
     }, 20)
-    handleClose()
-    setTimeout(() => {
-      close()
-    }, 100)
+
   }
   const { setImagesCt } = useContext(ImagesContext)
 
-  const addImage = () => {
+  const addImage = (imageUrl: string) => {
     let latest_ct = 0
     setImagesCt((prev: any) => {
       latest_ct = prev + 1
@@ -144,14 +151,13 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     })
     const upload = {
       id: nanoid(),
-      src: addImgInfo.url,
-      preview: addImgInfo.url,
+      src: imageUrl,
+      preview: imageUrl,
       metadata: { generationDate: new Date().getTime() },
       type: "StaticImage",
       name: latest_ct.toString(),
     }
     editor.objects.add(upload).then(() => {
-      handleClose()
       setRejectedFileUpload(false)
       setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
@@ -220,31 +226,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
           </Block>
         )}
       </div>
-      {!imageLoading && addImgInfo.showPreview && addImgInfo.url && (
-        <div className="d-flex justify-content-center align-items-center flex-column">
-          <div>
-            <img className={classes.addImgPreview} src={addImgInfo.url} alt="preview" />
-          </div>
-          <div>
-            <button
-              onClick={() => {
-                if (fileInputType === "add") {
-                  addImage()
-                } else if (fileInputType === "update") {
-                  updateImage()
-                } else updateBackground()
-              }}
-              className={classes.addImgBtn}
-            >
-              {fileInputType === "add"
-                ? "Add Image"
-                : fileInputType === "bgupdate"
-                ? "Update Background"
-                : "Update Image"}
-            </button>
-          </div>
-        </div>
-      )}
+
       {rejectedFileUpload && (
         <FileError
           handleTry={() => {

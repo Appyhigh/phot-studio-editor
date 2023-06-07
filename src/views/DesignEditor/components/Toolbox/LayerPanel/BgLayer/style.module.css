@@ -11,6 +11,7 @@
     border-radius: 6px;
     width: 45%;
     height: 70px;
+    cursor: pointer;
   }
   .panelSubHeading {
     font-size: 14px;
@@ -87,6 +88,10 @@
     grid-template-columns: 1fr 1fr;
   }
   
+  .disableDeleteBtn{
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   @media screen and (min-width: 1220px) {
     .panelHeading {
       padding: 0px 0px 0px 16px;

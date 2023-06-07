@@ -6,31 +6,35 @@ export const HandleBgChangeOption = async (
   setMainImgInfo: any,
   bg: string,
   changeLayer: any,
+  activeObject?: any,
+  inputImg?: string
 ) => {
   const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
   const previewWithUpdatedBackground: any = await changeLayer(
-    activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
+    activeMainObject ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview : inputImg,
     bg,
-    activeMainObject?.width * activeMainObject?.scaleX,
-    activeMainObject?.height * activeMainObject?.scaleY
+    activeMainObject ? activeMainObject?.width * activeMainObject?.scaleX : activeObject?.width * activeObject?.scaleX,
+    activeMainObject ? activeMainObject?.height * activeMainObject?.scaleY : activeObject?.height * activeObject?.scaleY
   )
   const options = {
     type: "StaticImage",
     src: previewWithUpdatedBackground,
     preview: previewWithUpdatedBackground,
-    original: mainImgInfo.original,
-    name:mainImgInfo.name,
+    original: activeObject ? activeObject.original : mainImgInfo.original,
+    name: activeObject ? activeObject.name : mainImgInfo.name,
     id: nanoid(),
     metadata: {
       generationDate: new Date().getTime(),
-      originalLayerPreview: activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview,
+      originalLayerPreview: activeMainObject
+        ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview
+        : activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
     },
   }
-  editor.objects.removeById(mainImgInfo.id)
+  activeObject ? editor.objects.removeById(activeObject.id) : editor.objects.removeById(mainImgInfo.id)
   editor.objects.add(options).then(() => {
     //@ts-ignore
-    setMainImgInfo((prev) => ({ ...prev, ...options }))
-    editor.objects.position("top", activeMainObject.top)
-    editor.objects.position("left", activeMainObject.left)
+    setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+    editor.objects.position("top", activeMainObject ? activeMainObject.top : activeObject.top)
+    editor.objects.position("left", activeMainObject ? activeMainObject.left : activeObject.left)
   })
 }

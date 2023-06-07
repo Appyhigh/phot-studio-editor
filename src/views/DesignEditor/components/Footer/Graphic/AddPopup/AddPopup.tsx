@@ -28,7 +28,7 @@ const AddPopup = ({ handleClose, showPopup }: any) => {
         id: nanoid(),
         type: "StaticText",
         width: 500,
-        text: "Click here to edit text",
+        text: "Text",
         fontSize: 92,
         fontFamily: font.name,
         textAlign: "center",
