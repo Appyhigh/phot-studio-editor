@@ -10,10 +10,11 @@ import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
+import DropdownWrapper from "./DropdownWrapper"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -154,7 +155,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               <p>Delete</p>
             </div>{" "}
           </div>
-          {/* <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
+          <img src={activeObject?.preview} style={{ width: "200px", height: "200px" }} />
+          <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
           {ObjectLayerOption.map((each, idx) => (
             <DropdownWrapper
               key={idx}
@@ -164,7 +166,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               heading={each.name}
               handleActiveState={handleActiveState}
             />
-          ))} */}
+          ))}
         </div>
         <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
         <div className={classes.colorsWrapper}>

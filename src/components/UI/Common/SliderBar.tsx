@@ -1,40 +1,42 @@
 import { Slider } from "baseui/slider"
 
-const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize,step }: any) => {
+const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize, step }: any) => {
   return (
-    <Slider
-      overrides={{
-        InnerThumb: () => null,
-        ThumbValue: () => null,
-        TickBar: () => null,
-        Root: {
-          style: { width: width, marginRight: "10px" },
-        },
-        Thumb: {
-          style: {
-            height: thumbSize,
-            width: thumbSize,
-            paddingLeft: 0,
+    <div>
+      <Slider
+        overrides={{
+          InnerThumb: () => null,
+          ThumbValue: () => null,
+          TickBar: () => null,
+          Root: {
+            style: { width: width, marginRight: "10px" },
           },
-        },
-        Track: {
-          style: {
-            paddingLeft: 0,
-            paddingRight: 0,
+          Thumb: {
+            style: {
+              height: thumbSize,
+              width: thumbSize,
+              paddingLeft: 0,
+            },
           },
-        },
-        InnerTrack: {
-          style: {
-            height: "4px",
+          Track: {
+            style: {
+              paddingLeft: 0,
+              paddingRight: 0,
+            },
           },
-        },
-      }}
-      step={step}
-      value={[val]}
-      onChange={({ value }) => handleChange(value)}
-      min={minVal}
-      max={maxVal}
-    />
+          InnerTrack: {
+            style: {
+              height: "4px",
+            },
+          },
+        }}
+        step={step}
+        value={[val]}
+        onChange={({ value }) => handleChange(value)}
+        min={minVal}
+        max={maxVal}
+      />
+    </div>
   )
 }
 
