@@ -1,5 +1,5 @@
 import { PanelType } from "~/constants/app-options"
-import React, { createContext, useEffect, useState } from "react"
+import React, { createContext, useState } from "react"
 
 type Template = any
 interface IAppContext {
@@ -49,7 +49,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [templates, setTemplates] = useState<Template[]>([])
   const [uploads, setUploads] = useState<any[]>([])
   const [shapes, setShapes] = useState<Template[]>([])
-  const [activePanel, setActivePanel] = useState<PanelType>(PanelType.BACKGROUND_REMOVER)
+  const [activePanel, setActivePanel] = useState<PanelType>(PanelType.IMAGINE_AI)
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [res, setRes] = useState<any[]>([])

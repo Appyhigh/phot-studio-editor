@@ -22,7 +22,7 @@ const StockImages = (props: any) => {
   const { setRes } = useAppContext()
   const { search, setSearch } = useAppContext()
   const [page, setPage] = useState(1)
-  const { res, more, loading } = usePagination(search, page)
+  const { res, more, loading } = usePagination("stock", getStockImages, search, page)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
 
@@ -44,6 +44,7 @@ const StockImages = (props: any) => {
   )
 
   const { setImagesCt } = useContext(ImagesContext)
+
   const searchImages = () => {
     getStockImages(search).then((res) => {
       setRes(res)
@@ -71,9 +72,8 @@ const StockImages = (props: any) => {
         <div className={classes.sampleImgSection}>
           {res.map((image: any, index: any) => {
             return (
-              <div ref={index === res.length - 1 ? lastElementRef : undefined}>
+              <div ref={index === res.length - 1 ? lastElementRef : undefined} key={index}>
                 <ImageItem
-                  key={index}
                   idx={image.mongo_id}
                   selectedImage={selectedImg}
                   onClick={() => {
