@@ -1,5 +1,4 @@
 import { nanoid } from "nanoid"
-import { useContext } from "react"
 import { removeBackgroundController } from "~/utils/removeBackground"
 
 export const RemoveBGFunc = async (
@@ -18,21 +17,77 @@ export const RemoveBGFunc = async (
   upload?: any
 ) => {
   try {
-    if (activeObject && activeObject?.metadata?.originalLayerPreview) {      
+    if (mainImgInfo) {
+      if (mainImgInfo?.metadata?.originalLayerPreview) {
+        const options = {
+          type: "StaticImage",
+          src: mainImgInfo?.metadata?.originalLayerPreview,
+          preview: mainImgInfo?.metadata?.originalLayerPreview,
+          name: latest_ct,
+          id: nanoid(),
+          metadata: {
+            generationDate: activeObject?.metadata?.generationDate,
+            originalLayerPreview: mainImgInfo?.metadata?.originalLayerPreview ?? activeObject.preview,
+          },
+        }
+        editor.objects.add(options).then(() => {
+          editor.objects.remove(mainImgInfo.id)
+          // @ts-ignore
+          setMainImgInfo((prev) => ({ ...prev, ...options }))
+        })
+      } else {
+        setLoaderPopup(true)
+        removeBackgroundController(
+          mainImgInfo.src,
+          (image: string) => {
+            // Add the resultant image to the canvas
+            const options = {
+              type: "StaticImage",
+              src: image,
+              preview: image,
+              name: latest_ct,
+              id: nanoid(),
+              metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
+            }
+            editor.objects.add(options).then(() => {
+              // @ts-ignore
+              setPanelInfo((prev) => ({
+                ...prev,
+                bgOptions: true,
+                bgRemoverBtnActive: false,
+                uploadSection: false,
+                trySampleImg: false,
+              }))
+
+              editor.objects.removeById(mainImgInfo.id)
+              setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+              // Stop the loader
+              setLoaderPopup(false)
+            })
+          },
+          virtualSrcImageRef,
+          virtualMaskImageRef,
+          virtualCanvasSrcImageRef,
+          virtualCanvasMaskImageRef,
+          virtualCanvasResultImageRef,
+          1000,
+          1000
+        )
+      }
+    } else if (activeObject && activeObject?.metadata?.originalLayerPreview) {
       const options = {
         type: "StaticImage",
         src: activeObject?.metadata?.originalLayerPreview,
         preview: activeObject?.metadata?.originalLayerPreview,
         original: activeObject.original,
         id: activeObject.id,
-        name:activeObject?.name,
+        name: activeObject?.name,
         metadata: {
           generationDate: activeObject?.metadata?.generationDate,
           originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         },
       }
       editor.objects.add(options).then(() => {
-        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
         editor.objects.position("top", activeObject.top)
         editor.objects.position("left", activeObject.left)
         editor.objects.resize("height", activeObject.height * activeObject.scaleY)
@@ -40,11 +95,11 @@ export const RemoveBGFunc = async (
         editor.objects.remove(activeObject.id)
       })
     } else {
-      setLoaderPopup(true)      
+      setLoaderPopup(true)
       removeBackgroundController(
         activeObject ? activeObject?.preview : mainImgInfo.src,
         (image: string) => {
-          // Add the resultant image to the canvas          
+          // Add the resultant image to the canvas
           const options = {
             type: "StaticImage",
             src: image,

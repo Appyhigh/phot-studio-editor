@@ -562,6 +562,9 @@ button:focus {
   display: inline-block;
 }
 
+.px-1 {
+  padding: 0px 8px 0px 8px;
+}
 .mx-1 {
   margin-left: 8px;
   margin-right: 8px;
@@ -757,11 +760,18 @@ ul {
   background-position: center;
 }
 .aspect-ratio-slider .swiper-button-prev {
-  display: none;
+  background-color: rgba(0, 0, 0, 0.6);
+  top: 36px;
+  background-image: url("/src/views/Public/images/left-slider.svg");
+
 }
 
 .aspect-ratio-slider .swiper-button-next {
-  display: none;
+  background-color: rgba(0, 0, 0, 0.6);
+  top: 36px;
+  right: 10px;
+  background-image: url("/src/views/Public/images/right-slider.svg");
+
 }
 
 .swiper-wrapper {

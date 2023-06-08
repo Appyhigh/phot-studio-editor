@@ -1,6 +1,7 @@
 export const changeLayerFill = (base64ImageData: string, backgroundColor: string, width: number, height: number) => {
   return new Promise((resolve, reject) => {
     const image = new Image()
+    image.crossOrigin = "anonymous"
     image.onload = function () {
       const canvas = document.createElement("canvas")
       canvas.width = width
