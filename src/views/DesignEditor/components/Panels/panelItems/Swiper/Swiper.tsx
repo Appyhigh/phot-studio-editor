@@ -8,7 +8,7 @@ import Icons from "~/components/Icons"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { changeLayerBackgroundImage, changeLayerFill, changeLayerFillWithGradient } from "~/utils/updateLayerBackground"
-import { useCallback, useContext } from "react"
+import { useCallback, useContext, useState } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
@@ -19,6 +19,8 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const objects = useObjects()
+  const [isLoading, setIsLoading] = useState(false)
+
   const handleChangeBg = useCallback(
     async (each: any) => {
       if (each.color) {
@@ -27,7 +29,16 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.gradient, changeLayerFillWithGradient)
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
-          HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+          HandleBgChangeOption(
+            editor,
+            mainImgInfo,
+            setMainImgInfo,
+            dataUrl,
+            changeLayerBackgroundImage,
+            null,
+            null,
+            setIsLoading
+          )
         })
       }
     },
@@ -69,6 +80,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                     width: "96px",
                     height: "96px",
                   },
+                  pointerEvents: isLoading ? "none" : "auto",
                 }}
               >
                 {selectedBgOption.type === type && selectedBgOption.id === idx && <Icons.Selection size={"24"} />}

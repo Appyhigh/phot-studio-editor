@@ -7,9 +7,11 @@ export const HandleBgChangeOption = async (
   bg: string,
   changeLayer: any,
   activeObject?: any,
-  inputImg?: string
+  inputImg?: any,
+  setIsLoading?: any
 ) => {
   const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
+  if (setIsLoading) setIsLoading(true)
   const previewWithUpdatedBackground: any = await changeLayer(
     activeMainObject ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview : inputImg,
     bg,
@@ -37,4 +39,5 @@ export const HandleBgChangeOption = async (
     editor.objects.position("top", activeMainObject ? activeMainObject.top : activeObject.top)
     editor.objects.position("left", activeMainObject ? activeMainObject.left : activeObject.left)
   })
+  if (setIsLoading) setIsLoading(false)
 }
