@@ -100,10 +100,10 @@ const UploadInputImg = () => {
           <p className={classes.paraText}>Indicate influence of the selected image on final output.</p>
           <SliderInput
             minVal={1}
-            maxVal={100}
+            maxVal={10}
             value={textToArtInputInfo.image_wt}
             handleChange={(e: any) => {
-              setTextToArtInputInfo((prev: any) => ({ ...prev, image_wt: e }))
+              setTextToArtInputInfo((prev: any) => ({ ...prev, image_wt: e / 10 }))
             }}
           />
 

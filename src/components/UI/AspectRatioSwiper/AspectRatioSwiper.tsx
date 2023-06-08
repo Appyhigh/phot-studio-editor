@@ -6,17 +6,17 @@ import classes from "./style.module.css"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/autoplay"
-import { useSwiper } from 'swiper/react';
+import { useSwiper } from "swiper/react"
 
 import clsx from "clsx"
 
-const AspectRatioSwiper = ({ data, aspectRatioSelected,handleChange }: any) => {
+const AspectRatioSwiper = ({ data, aspectRatioSelected, handleChange }: any) => {
   const [css, theme] = useStyletron()
-  const swiper = useSwiper();
-
+  const swiper = useSwiper()
+  const values = aspectRatioSelected.split(":")
   return (
     <Block
-    className="aspect-ratio-slider"
+      className="aspect-ratio-slider"
       $style={{
         width: "270px",
         height: "40px",
@@ -34,8 +34,8 @@ const AspectRatioSwiper = ({ data, aspectRatioSelected,handleChange }: any) => {
         autoplay={false}
         navigation={true}
         modules={[Navigation, Autoplay]}
-        onReachEnd={()=>{
-           swiper?.slideNext()
+        onReachEnd={() => {
+          swiper?.slideNext()
         }}
       >
         {data.map((each: any, idx: any) => (
@@ -46,17 +46,14 @@ const AspectRatioSwiper = ({ data, aspectRatioSelected,handleChange }: any) => {
                 classes.ctBox,
                 "flex-center pointer",
                 idx === 0 && "ml-0",
-                aspectRatioSelected.x === each.x && aspectRatioSelected.y === each.y && classes.selectedCtBox
+                values[0] == each.x && values[1] == each.y && classes.selectedCtBox
               )}
               onClick={() => {
-                handleChange(each.x,each.y)
+                handleChange(each.x, each.y)
               }}
             >
               <div
-                className={clsx(
-                  classes.shapes,
-                  aspectRatioSelected.x === each.x && aspectRatioSelected.y === each.y && classes.selectedShape
-                )}
+                className={clsx(classes.shapes, values[0] == each.x && values[1] == each.y && classes.selectedShape)}
                 style={{ width: `${each.xWid + "px"}`, height: `${each.yWid + "px"}` }}
               ></div>
               {each.x + ":" + each.y}

@@ -4,14 +4,14 @@ const TextToArtContext = React.createContext({
   textToArtInputInfo: {
     prompt: "",
     style: [],
-    images_generation_ct: 2,
-    image_wt: 0,
-    uploaded_img:"",
-    negative_prompt_visible:false,
+    images_generation_ct: 1,
+    image_wt: 1.0,
+    uploaded_img: "",
+    negative_prompt_visible: false,
     negative_prompt: "",
-    cfg_scale: 0,
-    aspect_ratio: { x: 1, y: 2 },
-    showclearTooltip:false
+    cfg_scale: 7.5,
+    aspect_ratio: "1:1",
+    showclearTooltip: false,
   },
   textToArtpanelInfo: {
     resultSectionVisible: false,
