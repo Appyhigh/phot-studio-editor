@@ -47,14 +47,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         },
       }}
     >
-      <Swiper
-        spaceBetween={22}
-        slidesPerView={"auto"}
-        loop={true}
-        centeredSlides={true}
-        navigation={true}
-        modules={[Navigation, Autoplay]}
-      >
+      <Swiper spaceBetween={22} slidesPerView={"auto"} loop={true} navigation={true} modules={[Navigation, Autoplay]}>
         {data.map((each: any, idx: number) => {
           return (
             <SwiperSlide key={idx}>
