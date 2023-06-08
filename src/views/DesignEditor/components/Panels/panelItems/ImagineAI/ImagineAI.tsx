@@ -279,8 +279,6 @@ const ImagineAI = () => {
                         let latest_ct = 0
                         setImagesCt((prev: any) => {
                           latest_ct = prev + 1
-                          console.log(each)
-
                           AddObjectFunc(each, editor, 0, 0, 0, (latest_ct = latest_ct))
                           return prev + 1
                         })

@@ -95,7 +95,7 @@ const LayerPanel = () => {
       // to resolve the delete frame issue and bg de attachement
       if (activeObject?.type === "BackgroundImage" || activeObject?.id === "frame") {
         editor.objects.deselect()
-        editor.objects.select("dummy")
+        editor.objects.select("frame")
       }
     }
   }, [activeObject])
@@ -141,7 +141,7 @@ const LayerPanel = () => {
         let latest_ct = images
         setImagesCt((prev: any) => {
           latest_ct = images
-          return latest_ct;
+          return latest_ct
         })
       })
     }
@@ -253,7 +253,7 @@ const LayerPanel = () => {
             </Block>
           </Block>
         </Block>
-        <Block className="d-flex flex-column flex-1 p-relative pt-2" style={{ backgroundColor: "#FFF" }}>
+        <Block className="d-flex flex-column flex-1 p-relative pt-1" style={{ backgroundColor: "#FFF" }}>
           {layerState.objectLayer ? (
             <ObjectLayer showLayer={layerState.objectLayer} handleClose={handleCloseObjectLayer} />
           ) : layerState.textLayer ? (
@@ -267,7 +267,7 @@ const LayerPanel = () => {
               }}
               autoHide={true}
             >
-              <Block className="p-1">
+              <Block className="px-1">
                 {editor &&
                   editor?.scene
                     ?.exportToJSON()
@@ -299,6 +299,7 @@ const LayerPanel = () => {
                               $style={{
                                 fontSize: "14px",
                                 backgroundColor: "rgb(245,246,247)",
+                                marginTop: "6px",
                                 ":hover": {
                                   background: "rgb(245,246,247)",
                                 },
@@ -364,7 +365,11 @@ const LayerPanel = () => {
                                         </div>
                                       ) : (
                                         <img
-                                          className="m-1"
+                                          className={clsx(
+                                            "mx-1",
+                                            index == 0 && "mt-1",
+                                            index === obj?.objects.length - 1 && "mb-1"
+                                          )}
                                           src={object.preview ?? object.src}
                                           style={{
                                             borderRadius: "4px",

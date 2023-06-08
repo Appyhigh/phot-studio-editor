@@ -3,7 +3,7 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
-import { useContext, useRef } from "react"
+import { useContext, useEffect, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
 import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants"
@@ -21,6 +21,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
+
   return (
     <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -98,7 +99,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
             onClick={() => {
               let latest_ct = 0
               setImagesCt((prev: any) => {
-                latest_ct = prev + 1
+                latest_ct = prev + 1                
                 RemoveBGFunc(
                   editor,
                   setLoaderPopup,

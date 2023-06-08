@@ -562,6 +562,9 @@ button:focus {
   display: inline-block;
 }
 
+.px-1 {
+  padding: 0px 8px 0px 8px;
+}
 .mx-1 {
   margin-left: 8px;
   margin-right: 8px;
