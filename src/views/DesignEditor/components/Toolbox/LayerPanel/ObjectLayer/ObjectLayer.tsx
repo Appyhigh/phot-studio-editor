@@ -56,6 +56,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         inputImage = activeObject?.metadata?.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
       } else {
+
         removeBackgroundBeforeChangingColor(each)
       }
     },
@@ -79,7 +80,11 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
-    HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill, activeObject, inputImg)
+    if (activeObject?.id === mainImgInfo.id) {
+      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill, activeObject, inputImg)
+    } else {
+      HandleBgChangeOption(editor, 0, 0, BG, changeLayerFill, activeObject, inputImg)
+    }
     setLoaderPopup(false)
   }
 
@@ -89,14 +94,17 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       removeBackgroundController(
         activeObject.preview,
         async (image: string) => {
-          setPanelInfo((prev: any) => ({
-            ...prev,
-            bgOptions: true,
-            bgRemoverBtnActive: false,
-            uploadSection: false,
-            trySampleImg: false,
-            uploadPreview: false,
-          }))
+          if (activeObject?.id === mainImgInfo?.id) {
+            setPanelInfo((prev: any) => ({
+              ...prev,
+              bgOptions: true,
+              bgRemoverBtnActive: false,
+              uploadSection: false,
+              trySampleImg: false,
+              uploadPreview: false,
+            }))
+          }
+
           changeBGFillHandler(image, each.color)
         },
         virtualSrcImageRef,
@@ -206,23 +214,40 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             onClick={() => {
               let latest_ct = 0
               setImagesCt((prev: any) => {
-                latest_ct = prev 
-                return prev 
+                latest_ct = prev
+                return prev
               })
-              RemoveBGFunc(
-                editor,
-                setLoaderPopup,
-                setPanelInfo,
-                mainImgInfo,
-                setMainImgInfo,
-                virtualSrcImageRef,
-                virtualMaskImageRef,
-                virtualCanvasSrcImageRef,
-                virtualCanvasMaskImageRef,
-                virtualCanvasResultImageRef,
-                activeObject,
-                (latest_ct = latest_ct)
-              )
+              if (mainImgInfo?.id === activeObject?.id) {                                
+                RemoveBGFunc(
+                  editor,
+                  setLoaderPopup,
+                  setPanelInfo,
+                  mainImgInfo,
+                  setMainImgInfo,
+                  virtualSrcImageRef,
+                  virtualMaskImageRef,
+                  virtualCanvasSrcImageRef,
+                  virtualCanvasMaskImageRef,
+                  virtualCanvasResultImageRef,
+                  0,
+                  (latest_ct = latest_ct),
+                )
+              } else {
+                RemoveBGFunc(
+                  editor,
+                  setLoaderPopup,
+                  setPanelInfo,
+                  0,
+                  setMainImgInfo,
+                  virtualSrcImageRef,
+                  virtualMaskImageRef,
+                  virtualCanvasSrcImageRef,
+                  virtualCanvasMaskImageRef,
+                  virtualCanvasResultImageRef,
+                  activeObject,
+                  (latest_ct = latest_ct)
+                )
+              }
             }}
             className={clsx(
               classes.otherToolsBox,

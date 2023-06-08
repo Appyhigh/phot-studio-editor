@@ -55,7 +55,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         addImage(imageUrl)
       } else if (fileInputType === "bgupdate") {
         updateBackground(imageUrl)
-      } else {
+      } else {        
         updateImage(imageUrl)
       }
       setTimeout(() => {
@@ -129,7 +129,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       metadata: { generationDate: new Date().getTime() },
     }
     // to replace the object removing the previous active object first
-    if (activeOb.id === activeMainObject?.id) {
+    if (activeOb.id === mainImgInfo?.id) {      
       setMainImgInfo((prev: any) => ({ ...prev, ...upload }))
       setPanelInfo((prev: any) => ({ ...prev, uploadPreview: true, bgOptions: false, bgRemoverBtnActive: true }))
     }

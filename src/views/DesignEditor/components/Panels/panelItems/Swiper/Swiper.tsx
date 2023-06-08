@@ -8,7 +8,7 @@ import Icons from "~/components/Icons"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { changeLayerBackgroundImage, changeLayerFill, changeLayerFillWithGradient } from "~/utils/updateLayerBackground"
-import { useCallback, useContext } from "react"
+import { useCallback, useContext, useEffect } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
@@ -19,6 +19,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const objects = useObjects()
+
   const handleChangeBg = useCallback(
     async (each: any) => {
       if (each.color) {
@@ -33,7 +34,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
     },
     [mainImgInfo, handleBgChangeOption, selectedBgOption, type]
   )
-
+  
   return (
     <Block
       $style={{
@@ -78,7 +79,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                   },
                 }}
               >
-                {selectedBgOption.type === type && selectedBgOption.id === idx && <Icons.Selection size={"24"} />}
+                {selectedBgOption.type === type && (selectedBgOption.id === idx || editor.objects.findById(mainImgInfo.id)[0]?.fill===each.color)&& <Icons.Selection size={"24"} />}
               </Block>
             </SwiperSlide>
           )

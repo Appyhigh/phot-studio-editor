@@ -20,20 +20,22 @@ export const HandleBgChangeOption = async (
     type: "StaticImage",
     src: previewWithUpdatedBackground,
     preview: previewWithUpdatedBackground,
-    original: activeObject ? activeObject.original : mainImgInfo.original,
+    original: mainImgInfo.original,
     name: activeObject ? activeObject.name : mainImgInfo.name,
     id: nanoid(),
     metadata: {
       generationDate: new Date().getTime(),
-      originalLayerPreview: activeMainObject
-        ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview
-        : activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+      originalLayerPreview: mainImgInfo? (activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview):inputImg,
     },
   }
-  activeObject ? editor.objects.removeById(activeObject.id) : editor.objects.removeById(mainImgInfo.id)
+  if (mainImgInfo) {
+    editor.objects.removeById(mainImgInfo.id)
+  } else editor.objects.removeById(activeObject?.id)
   editor.objects.add(options).then(() => {
-    //@ts-ignore
-    setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+    if (mainImgInfo) {
+      //@ts-ignore
+      setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+    }
     editor.objects.position("top", activeMainObject ? activeMainObject.top : activeObject.top)
     editor.objects.position("left", activeMainObject ? activeMainObject.left : activeObject.left)
   })

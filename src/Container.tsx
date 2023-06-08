@@ -7,7 +7,7 @@ import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/useAuth"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
-import { useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 import { loadFonts } from "./utils/fonts"
@@ -28,7 +28,6 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   }
 
   const { setImagesCt } = useContext(ImagesContext)
-
   useEffect(() => {
     const containerElement = containerRef.current!
     const containerWidth = containerElement.clientWidth
@@ -207,7 +206,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           editor.objects.unsetBackgroundImage()
           const options = {
             type: "BackgroundImage",
-            // @ts-ignore 
+            // @ts-ignore
             src: layer.src,
             preview: layer.preview,
             metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
