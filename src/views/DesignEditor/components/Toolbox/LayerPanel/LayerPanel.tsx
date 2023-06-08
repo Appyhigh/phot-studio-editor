@@ -253,7 +253,7 @@ const LayerPanel = () => {
             </Block>
           </Block>
         </Block>
-        <Block className="d-flex flex-column flex-1 p-relative pt-1" style={{ backgroundColor: "#FFF" }}>
+        <Block className="d-flex flex-column flex-1 p-relative " style={{ backgroundColor: "#FFF" }}>
           {layerState.objectLayer ? (
             <ObjectLayer showLayer={layerState.objectLayer} handleClose={handleCloseObjectLayer} />
           ) : layerState.textLayer ? (
@@ -299,7 +299,7 @@ const LayerPanel = () => {
                               $style={{
                                 fontSize: "14px",
                                 backgroundColor: "rgb(245,246,247)",
-                                marginTop: "6px",
+                                marginTop: "8px",
                                 ":hover": {
                                   background: "rgb(245,246,247)",
                                 },
@@ -415,6 +415,7 @@ const LayerPanel = () => {
                                   : activeObject?.id == obj.id
                                   ? "#F1F1F5"
                                   : "#fff",
+                                  marginTop:"8px",
                                 ":hover": {
                                   background: "#F1F1F5",
                                 },
