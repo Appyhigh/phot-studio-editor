@@ -15,6 +15,7 @@ import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
+import LoaderContext from "~/contexts/LoaderContext"
 
 export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -25,6 +26,7 @@ export default function ({ uploadType, activePanel }: any) {
   const frame = useFrame()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
+  const { setLoaderPopup } = useContext(LoaderContext)
 
   let scale = 1
 
@@ -39,6 +41,7 @@ export default function ({ uploadType, activePanel }: any) {
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
   const handleDropFiles = async (files: FileList) => {
+    setLoaderPopup(true)
     const file = files[0]
     if (
       file.type === "image/jpeg" ||
@@ -51,6 +54,7 @@ export default function ({ uploadType, activePanel }: any) {
     } else {
       setRejectedFileUpload(true)
       setImageLoading(false)
+      setLoaderPopup(false)
 
       return
     }
@@ -92,7 +96,10 @@ export default function ({ uploadType, activePanel }: any) {
 
       if (uploadType === LOCAL_SAMPLE_IMG) {
         setUploads([...uploads, upload])
-        if (imageUrl) setImageLoading(false)
+        if (imageUrl) {
+          setImageLoading(false)
+          setLoaderPopup(false)
+        }
       } else {
         // @ts-ignore
         setPanelInfo((prev) => ({
@@ -105,7 +112,10 @@ export default function ({ uploadType, activePanel }: any) {
         }))
         // @ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...upload }))
-        if (imageUrl) setImageLoading(false)
+        if (imageUrl) {
+          setImageLoading(false)
+          setLoaderPopup(false)
+        }
       }
     })
   }
@@ -116,6 +126,7 @@ export default function ({ uploadType, activePanel }: any) {
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImageLoading(true)
+    setLoaderPopup(true)
     handleDropFiles(e.target.files!)
   }
 
@@ -261,18 +272,18 @@ export default function ({ uploadType, activePanel }: any) {
           </>
         </Block>
       </DropZone>
-      {imageLoading && !rejectedFileUpload && 
-      <Block
-        className={clsx("d-flex justify-content-center flex-column pointer p-relative", classes.uploadInputSection)}
-      >
-        <Block className={classes.uploadInputContainer}>
-          <Icons.InputContainer />
+      {imageLoading && !rejectedFileUpload && (
+        <Block
+          className={clsx("d-flex justify-content-center flex-column pointer p-relative", classes.uploadInputSection)}
+        >
+          <Block className={classes.uploadInputContainer}>
+            <Icons.InputContainer />
+          </Block>
+          <div className={classes.loadingSpinner}>
+            {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+          </div>
         </Block>
-        <div className={classes.loadingSpinner}>
-          {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
-        </div>
-      </Block>
-}
+      )}
     </>
   )
 }
