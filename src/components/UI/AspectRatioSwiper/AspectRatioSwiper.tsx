@@ -31,7 +31,7 @@ const AspectRatioSwiper = ({ data, aspectRatioSelected,handleChange }: any) => {
         slidesPerView={5}
         loop={true}
         centeredSlides={true}
-        autoplay={true}
+        autoplay={false}
         navigation={true}
         modules={[Navigation, Autoplay]}
         onReachEnd={()=>{
