@@ -142,6 +142,7 @@ const ImageItem = ({
     >
       <div className={clsx("p-absolute", classes.imageItem)} />
       <img src={preview} className={classes.imagePreview} />
+      {selectedImage === idx && isLoading && <img className={classes.stockImagesLoading} src={LoaderSpinner} />}
       {selectedImage === idx && (
         <div className={classes.selectedIcon}>
           <Icons.Selection size={"24"} />

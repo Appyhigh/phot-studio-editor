@@ -12,6 +12,8 @@ import { useCallback, useContext, useState } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
+import classes from "./style.module.css"
+import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
@@ -83,6 +85,10 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                   pointerEvents: isLoading ? "none" : "auto",
                 }}
               >
+                {selectedBgOption.type === type && selectedBgOption.id === idx && isLoading && (
+                  <img className={classes.stockImagesLoading} src={LoaderSpinner} />
+                )}
+
                 {selectedBgOption.type === type && selectedBgOption.id === idx && <Icons.Selection size={"24"} />}
               </Block>
             </SwiperSlide>
