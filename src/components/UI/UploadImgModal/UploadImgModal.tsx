@@ -60,7 +60,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       }
       setTimeout(() => {
         close()
-      }, 1000)
+      }, 200)
     }
 
     const fileInfo: any = document.getElementById("inputNextFile")

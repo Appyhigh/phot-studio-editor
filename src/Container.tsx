@@ -28,30 +28,6 @@ const Container = ({ children }: { children: React.ReactNode }) => {
   }
 
   const { setImagesCt } = useContext(ImagesContext)
-  const activeObject = useActiveObject()
-
-  // useEffect(() => {
-  //   if (activeObject?.id === "frame") {
-  //     document.addEventListener("keydown", (e) => {
-  //       console.log("called",e.key)
-  //       if (e.key === "Delete") {
-  //         const options = {
-  //           type: "BackgroundImage",
-  //           // @ts-ignore
-  //           src: checkboxBGUrl,
-  //           preview: checkboxBGUrl,
-  //           metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
-  //         }
-  //         // Timeout works as a fix so canvas does not get dislocated
-
-  //         editor.objects.add(options).then(() => {
-  //           editor.objects.setAsBackgroundImage()
-  //         })
-  //       }
-  //     })
-  //   }
-  // },[editor,activeObject])
-
   useEffect(() => {
     const containerElement = containerRef.current!
     const containerWidth = containerElement.clientWidth

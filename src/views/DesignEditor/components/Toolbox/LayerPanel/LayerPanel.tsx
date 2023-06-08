@@ -95,7 +95,7 @@ const LayerPanel = () => {
       // to resolve the delete frame issue and bg de attachement
       if (activeObject?.type === "BackgroundImage" || activeObject?.id === "frame") {
         editor.objects.deselect()
-        editor.objects.select("frame")
+        editor.objects.select("dummy")
       }
     }
   }, [activeObject])
