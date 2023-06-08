@@ -46,14 +46,14 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   const [textToArtInputInfo, setTextToArtInputInfo] = useState({
     prompt: "",
     style: [],
-    images_generation_ct: 2,
+    images_generation_ct: 1,
     uploaded_img: "",
-    image_wt: 40,
-    negative_prompt_visible:false,
+    image_wt: 1.0,
+    negative_prompt_visible: false,
     negative_prompt: "",
-    cfg_scale: 40,
-    aspect_ratio: { x:1, y: 2},
-    showclearTooltip:false
+    cfg_scale: 7.5,
+    aspect_ratio: "1:1",
+    showclearTooltip: false,
   })
 
   const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({
