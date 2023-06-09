@@ -17,6 +17,7 @@ import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
 import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import useAppContext from "~/hooks/useAppContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -26,7 +27,6 @@ const BgRemover = () => {
     id: 0,
   })
   const [bgDOptions, setBgDOptions] = useState(BgOptions)
-  const [sampleImages, setSampleImages] = useState([]) // State to hold the sample images
 
   const objects = useObjects()
   const activeObject = useActiveObject()
@@ -37,6 +37,7 @@ const BgRemover = () => {
     setSelectedBgOption({ type: type, id: idx })
   }
   const [imageLoading, setImageLoading] = useState(false)
+  const { bgSampleImages, setBgSampleImages } = useAppContext()
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -102,7 +103,7 @@ const BgRemover = () => {
   useEffect(() => {
     const fetchSampleImages = async () => {
       const result = await bgSampleImagesApi()
-      setSampleImages(result)
+      setBgSampleImages(result)
     }
 
     fetchSampleImages()
@@ -158,7 +159,7 @@ const BgRemover = () => {
           <Scrollable>
             <Block className="py-3">
               <Block className={classes.sampleImgSection}>
-                {sampleImages.map((image: any, index) => {
+                {bgSampleImages.map((image: any, index) => {
                   return (
                     <ImageItem
                       key={index}
