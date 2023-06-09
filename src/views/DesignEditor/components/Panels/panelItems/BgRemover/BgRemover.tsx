@@ -11,12 +11,12 @@ import clsx from "clsx"
 import BgUpload from "~/components/UI/BgUpload/BgUpload"
 import Loader from "~/components/UI/Loader/Loader"
 import LoaderContext from "~/contexts/LoaderContext"
-import { BgSampleImages } from "~/constants/bg-sample-images"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
+import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -26,6 +26,7 @@ const BgRemover = () => {
     id: 0,
   })
   const [bgDOptions, setBgDOptions] = useState(BgOptions)
+  const [sampleImages, setSampleImages] = useState([]) // State to hold the sample images
 
   const objects = useObjects()
   const activeObject = useActiveObject()
@@ -97,6 +98,15 @@ const BgRemover = () => {
     fetchCategories()
   }, [])
 
+  useEffect(() => {
+    const fetchSampleImages = async () => {
+      const result = await bgSampleImagesApi()
+      setSampleImages(result)
+    }
+
+    fetchSampleImages()
+  }, [])
+
   return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
@@ -147,14 +157,14 @@ const BgRemover = () => {
           <Scrollable>
             <Block className="py-3">
               <Block className={classes.sampleImgSection}>
-                {BgSampleImages.map((image, index) => {
+                {sampleImages.map((image: any, index) => {
                   return (
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        addObject(image.src)
+                        addObject(image.originalImage)
                       }}
-                      preview={image.src}
+                      preview={image.originalImage}
                     />
                   )
                 })}
@@ -194,21 +204,23 @@ const BgRemover = () => {
           <>
             {backgroundChoice === 0 ? (
               <Scrollable>
-              <Block className="mt-2 mb-2">
-                {bgDOptions.map((each, index) => (
-                  <Block key={index}>
-                    <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
-                      <LabelLarge> {each.heading}</LabelLarge>
+                <Block className="mt-2 mb-2">
+                  {bgDOptions.map((each, index) => (
+                    <Block key={index}>
+                      <Block
+                        className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}
+                      >
+                        <LabelLarge> {each.heading}</LabelLarge>
+                      </Block>
+                      <SwiperWrapper
+                        type={index}
+                        selectedBgOption={selectedBgOption}
+                        handleBgChangeOption={handleBgChangeOption}
+                        data={each.options}
+                      />
                     </Block>
-                    <SwiperWrapper
-                      type={index}
-                      selectedBgOption={selectedBgOption}
-                      handleBgChangeOption={handleBgChangeOption}
-                      data={each.options}
-                    />
-                  </Block>
-                ))}
-              </Block>
+                  ))}
+                </Block>
               </Scrollable>
             ) : (
               <BgUpload />
