@@ -8,7 +8,12 @@ import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
-  
+
+  useEffect(() => {
+    if (editor) {
+      editor.frame.resize({ height: 600, width: 600 })
+    }
+  }, [])
 
   useEffect(() => {
     if (editor) {
@@ -16,7 +21,6 @@ const Canvas = () => {
         editor.frame?.background?.canvas?._objects.length === 2 &&
         editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff"
       ) {
-        
         const options = {
           type: "BackgroundImage",
           src: checkboxBGUrl,
