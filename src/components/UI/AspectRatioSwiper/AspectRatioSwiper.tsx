@@ -27,14 +27,13 @@ const AspectRatioSwiper = ({ data, aspectRatioSelected, handleChange }: any) => 
       }}
     >
       <Swiper
-        spaceBetween={20}
+        spaceBetween={10}
         slidesPerView={3.5}
         loop={true}
         centeredSlides={true}
         autoplay={false}
         navigation={true}
         modules={[Navigation, Autoplay]}
-       
       >
         {data.map((each: any, idx: any) => (
           <SwiperSlide key={idx}>
