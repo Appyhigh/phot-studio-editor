@@ -53,12 +53,24 @@ const BasePannel = () => {
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
   }
+  //  time out auto save tooltip
+  // @ts-ignore
+  let timeoutId
 
   useEffect(() => {
-    if (editor) {
-      editor.on("history:changed", () => {
+    const handleHistoryChanged = () => {
+      // @ts-ignore
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
         setShowToolTip(true)
-      })
+      }, 5000)
+    }
+    if (editor) {
+      editor.on("history:changed", handleHistoryChanged)
+    }
+    return () => {
+      // @ts-ignore
+      clearTimeout(timeoutId)
     }
   }, [editor])
 
@@ -69,6 +81,7 @@ const BasePannel = () => {
       }, 1000)
     }
   }, [showTooltip])
+
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   return (
     <Block className={clsx(classes.basePannel, "d-flex align-items-center flex-row")}>
