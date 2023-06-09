@@ -31,6 +31,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   })
 
   const handleDropFiles = async (files: FileList) => {
+    setImageLoading(true)
     const file = files[0]
     if (
       file.type === "image/jpeg" ||
@@ -55,7 +56,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         addImage(imageUrl)
       } else if (fileInputType === "bgupdate") {
         updateBackground(imageUrl)
-      } else {        
+      } else {
         updateImage(imageUrl)
       }
       setTimeout(() => {
@@ -73,10 +74,12 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   }
 
   const close = () => {
-    setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
-    setRejectedFileUpload(false)
-    setImageLoading(false)
-    handleClose()
+    if (!imageLoading) {
+      setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+      setRejectedFileUpload(false)
+      setImageLoading(false)
+      handleClose()
+    }
   }
 
   const handleInputFileRefClick = () => {
@@ -109,7 +112,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         editor.objects.setAsBackgroundImage()
       }, 100)
     })
-
   }
 
   const updateImage = (imageUrl: string) => {
@@ -129,7 +131,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       metadata: { generationDate: new Date().getTime() },
     }
     // to replace the object removing the previous active object first
-    if (activeOb.id === mainImgInfo?.id) {      
+    if (activeOb.id === mainImgInfo?.id) {
       setMainImgInfo((prev: any) => ({ ...prev, ...upload }))
       setPanelInfo((prev: any) => ({ ...prev, uploadPreview: true, bgOptions: false, bgRemoverBtnActive: true }))
     }
@@ -139,7 +141,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     setTimeout(() => {
       editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
     }, 20)
-
   }
   const { setImagesCt } = useContext(ImagesContext)
 
@@ -175,6 +176,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
           style: ({ $theme }) => ({
             outline: `transparent`,
             margin: fileInputType === "add" ? "20px" : "40px 20px",
+            pointerEvents: imageLoading ? "none" : "auto",
           }),
         },
         Dialog: {

@@ -25,6 +25,7 @@ const StockImages = (props: any) => {
   const { res, more, loading } = usePagination("stock", getStockImages, search, page)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
+  const [isLoading, setIsLoading] = useState(false)
 
   const observer = useRef<any>()
 
@@ -98,13 +99,17 @@ const StockImages = (props: any) => {
                               mainImgInfo,
                               setMainImgInfo,
                               dataUrl,
-                              changeLayerBackgroundImage
+                              changeLayerBackgroundImage,
+                              null,
+                              null,
+                              setIsLoading
                             )
                           }),
                           setSelectedImg(image.mongo_id))
                     }
                   }}
                   preview={image.image_url_list[0]}
+                  isLoading={isLoading}
                 />
               </div>
             )
@@ -121,16 +126,23 @@ const ImageItem = ({
   preview,
   onClick,
   selectedImage,
+  isLoading,
 }: {
   idx: number
   preview: any
   onClick?: (option: any) => void
   selectedImage: number
+  isLoading: boolean
 }) => {
   return (
-    <div onClick={onClick} className={clsx("pointer p-relative", classes.imageItemSection, "flex-center")}>
+    <div
+      onClick={onClick}
+      className={clsx("pointer p-relative", classes.imageItemSection, "flex-center")}
+      style={{ pointerEvents: isLoading ? "none" : "auto" }}
+    >
       <div className={clsx("p-absolute", classes.imageItem)} />
       <img src={preview} className={classes.imagePreview} />
+      {selectedImage === idx && isLoading && <img className={classes.stockImagesLoading} src={LoaderSpinner} />}
       {selectedImage === idx && (
         <div className={classes.selectedIcon}>
           <Icons.Selection size={"24"} />

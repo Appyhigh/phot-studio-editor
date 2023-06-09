@@ -1,0 +1,7 @@
+.stockImagesLoading {
+  display: block;
+  position: absolute;
+  top: auto;
+  left: auto;
+  width: 120%;
+}
