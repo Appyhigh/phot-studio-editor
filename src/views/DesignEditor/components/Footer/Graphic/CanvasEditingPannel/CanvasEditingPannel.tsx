@@ -1,4 +1,4 @@
-import { useActiveObject, useEditor, useFrame, useZoomRatio } from "@layerhub-io/react"
+import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { Slider } from "baseui/slider"
 import React from "react"
 import Icons from "~/components/Icons"
@@ -12,17 +12,15 @@ interface Options {
 }
 const CanvasEditingPannel = () => {
   const zoomMin = 10
-  const zoomMax = 300
+  const zoomMax = 210
   const [options, setOptions] = React.useState<Options>({
-    zoomRatio: 20,
-    zoomRatioTemp: 20,
+    zoomRatio: 10,
+    zoomRatioTemp: 30,
   })
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
-  const frame = useFrame()
-  const activeObject = useActiveObject()
   React.useEffect(() => {
-    setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 100) })
+    setOptions({ ...options, zoomRatio: Math.round(zoomRatio * 70) })
   }, [zoomRatio])
 
   const applyZoomRatio = (type: string, e: any) => {
@@ -34,11 +32,11 @@ const CanvasEditingPannel = () => {
         let parsedValue = parseFloat(value)
 
         if (parsedValue < 0) {
-          editor.zoom.zoomToRatio(zoomMin / 100)
+          editor.zoom.zoomToRatio(zoomMin / 70)
         } else if (parsedValue > zoomMax) {
-          editor.zoom.zoomToRatio(zoomMax / 100)
+          editor.zoom.zoomToRatio(zoomMax / 70)
         } else {
-          editor.zoom.zoomToRatio(parsedValue / 100)
+          editor.zoom.zoomToRatio(parsedValue / 70)
         }
       }
     }

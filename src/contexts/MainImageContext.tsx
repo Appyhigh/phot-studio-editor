@@ -9,6 +9,8 @@ const MainImageContext = React.createContext({
     preview: "",
     original:"",
     metadata: {},
+    swiper_option_selected:false,
+    swiper_selected_Color:""
   },
   panelInfo: {
     uploadSection: true,
