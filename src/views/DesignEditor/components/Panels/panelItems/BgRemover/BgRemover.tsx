@@ -35,6 +35,7 @@ const BgRemover = () => {
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
   }
+  const [imageLoading, setImageLoading] = useState(false)
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -136,7 +137,7 @@ const BgRemover = () => {
         </Block>
       ) : (
         <>
-          <Uploads />
+          <Uploads imageLoading={imageLoading} setImageLoading={setImageLoading} />
         </>
       )}
       {panelInfo.trySampleImg && (
@@ -155,6 +156,7 @@ const BgRemover = () => {
                         addObject(image.src)
                       }}
                       preview={image.src}
+                      imageLoading={imageLoading}
                     />
                   )
                 })}
@@ -194,21 +196,23 @@ const BgRemover = () => {
           <>
             {backgroundChoice === 0 ? (
               <Scrollable>
-              <Block className="mt-2 mb-2">
-                {bgDOptions.map((each, index) => (
-                  <Block key={index}>
-                    <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
-                      <LabelLarge> {each.heading}</LabelLarge>
+                <Block className="mt-2 mb-2">
+                  {bgDOptions.map((each, index) => (
+                    <Block key={index}>
+                      <Block
+                        className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}
+                      >
+                        <LabelLarge> {each.heading}</LabelLarge>
+                      </Block>
+                      <SwiperWrapper
+                        type={index}
+                        selectedBgOption={selectedBgOption}
+                        handleBgChangeOption={handleBgChangeOption}
+                        data={each.options}
+                      />
                     </Block>
-                    <SwiperWrapper
-                      type={index}
-                      selectedBgOption={selectedBgOption}
-                      handleBgChangeOption={handleBgChangeOption}
-                      data={each.options}
-                    />
-                  </Block>
-                ))}
-              </Block>
+                  ))}
+                </Block>
               </Scrollable>
             ) : (
               <BgUpload />
@@ -221,9 +225,21 @@ const BgRemover = () => {
   )
 }
 
-const ImageItem = ({ preview, onClick }: { preview: any; onClick?: (option: any) => void }) => {
+const ImageItem = ({
+  preview,
+  onClick,
+  imageLoading,
+}: {
+  preview: any
+  onClick?: (option: any) => void
+  imageLoading: boolean
+}) => {
   return (
-    <div onClick={onClick} className={clsx("pointer p-relative", classes.imageItemSection)}>
+    <div
+      onClick={onClick}
+      className={clsx("pointer p-relative", classes.imageItemSection)}
+      style={{ pointerEvents: imageLoading ? "none" : "auto" }}
+    >
       <div className={clsx("p-absolute", classes.imageItem)} />
       <img src={preview} className={classes.imagePreview} />
     </div>

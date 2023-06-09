@@ -15,18 +15,15 @@ import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
-import LoaderContext from "~/contexts/LoaderContext"
 
-export default function ({ uploadType, activePanel }: any) {
+export default function ({ uploadType, activePanel, imageLoading, setImageLoading }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
-  const [imageLoading, setImageLoading] = useState(false)
 
   const editor = useEditor()
   const frame = useFrame()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-  const { setLoaderPopup } = useContext(LoaderContext)
 
   let scale = 1
 
@@ -41,7 +38,7 @@ export default function ({ uploadType, activePanel }: any) {
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
   const handleDropFiles = async (files: FileList) => {
-    setLoaderPopup(true)
+    setImageLoading(true)
     const file = files[0]
     if (
       file.type === "image/jpeg" ||
@@ -54,7 +51,6 @@ export default function ({ uploadType, activePanel }: any) {
     } else {
       setRejectedFileUpload(true)
       setImageLoading(false)
-      setLoaderPopup(false)
 
       return
     }
@@ -98,7 +94,6 @@ export default function ({ uploadType, activePanel }: any) {
         setUploads([...uploads, upload])
         if (imageUrl) {
           setImageLoading(false)
-          setLoaderPopup(false)
         }
       } else {
         // @ts-ignore
@@ -114,7 +109,6 @@ export default function ({ uploadType, activePanel }: any) {
         setMainImgInfo((prev) => ({ ...prev, ...upload }))
         if (imageUrl) {
           setImageLoading(false)
-          setLoaderPopup(false)
         }
       }
     })
@@ -126,7 +120,6 @@ export default function ({ uploadType, activePanel }: any) {
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setImageLoading(true)
-    setLoaderPopup(true)
     handleDropFiles(e.target.files!)
   }
 
