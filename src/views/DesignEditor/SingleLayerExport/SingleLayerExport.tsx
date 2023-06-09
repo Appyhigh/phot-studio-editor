@@ -13,7 +13,7 @@ import Duplicate from "~/components/Icons/Duplicate"
 import { useActiveObject, useContextMenuRequest, useEditor, useFrame } from "@layerhub-io/react"
 import EyeCrossed from "~/components/Icons/EyeCrossed"
 import Paste from "~/components/Icons/Paste"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import Elements from "~/components/Icons/Elements"
 import { deviceUploadType } from "~/constants/contants"
 import { DuplicateFunc } from "../utils/functions/tools/DuplicateFunc"
@@ -25,6 +25,7 @@ import { UngroupFunc } from "../utils/functions/tools/GroupUngroupFunc"
 import { InvisibleFunc, VisibleFunc } from "../utils/functions/tools/VisibilityFunc"
 import { SetCanvasBgFunc } from "../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../utils/functions/tools/DeleteFunc"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -32,6 +33,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
+  const { setImagesCt } = useContext(ImagesContext)
   const frame = useFrame()
   useEffect(() => {
     if (!show) {
@@ -47,17 +49,22 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
       >
         <ContextMenuItem
           disabled={true}
-          onClick={() =>
-            DuplicateFunc({ editor }).then(() => {
-              setTimeout(() => {
-                editor.objects.position("top", activeObject.top)
-                editor.objects.position("left", activeObject.left)
-                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                editor.objects.group()
-              }, 10)
+          onClick={() => {
+            let latest_ct = 0
+            setImagesCt((prev: any) => {
+              latest_ct = prev + 1
+              DuplicateFunc({ editor }).then(() => {
+                setTimeout(() => {
+                  editor.objects.position("top", activeObject.top)
+                  editor.objects.position("left", activeObject.left)
+                  editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                  editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                  editor.objects.group()
+                }, 10)
+              })
+              return prev + 1
             })
-          }
+          }}
           icon="Duplicate"
           label="copy"
         >
@@ -85,17 +92,22 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             className={classes.contextMenuSection}
           >
             <ContextMenuItem
-              onClick={() =>
-                DuplicateFunc({ editor, activeObject }).then(() => {
-                  setTimeout(() => {
-                    editor.objects.position("top", activeObject.top)
-                    editor.objects.position("left", activeObject.left)
-                    editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                    editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                    editor.objects.group()
-                  }, 10)
+              onClick={() => {
+                let latest_ct = 0
+                setImagesCt((prev: any) => {
+                  latest_ct = prev + 1
+                  DuplicateFunc({ editor, activeObject }).then(() => {
+                    setTimeout(() => {
+                      editor.objects.position("top", activeObject.top)
+                      editor.objects.position("left", activeObject.left)
+                      editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                      editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                      editor.objects.group()
+                    }, 10)
+                  })
+                  return prev + 1
                 })
-              }
+              }}
               icon="Duplicate"
               label="Duplicate"
             >
@@ -188,7 +200,6 @@ const ContextMenuItem = ({
   lock?: false
 }) => {
   const activeObject = useActiveObject()
-
   return (
     <div>
       <button

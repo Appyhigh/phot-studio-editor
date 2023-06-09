@@ -148,19 +148,19 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     let latest_ct = 0
     setImagesCt((prev: any) => {
       latest_ct = prev + 1
+      const upload = {
+        id: nanoid(),
+        src: imageUrl,
+        preview: imageUrl,
+        metadata: { generationDate: new Date().getTime() },
+        type: "StaticImage",
+        name: latest_ct.toString(),
+      }
+      editor.objects.add(upload).then(() => {
+        setRejectedFileUpload(false)
+        setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+      })
       return prev + 1
-    })
-    const upload = {
-      id: nanoid(),
-      src: imageUrl,
-      preview: imageUrl,
-      metadata: { generationDate: new Date().getTime() },
-      type: "StaticImage",
-      name: latest_ct.toString(),
-    }
-    editor.objects.add(upload).then(() => {
-      setRejectedFileUpload(false)
-      setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
   }
 
