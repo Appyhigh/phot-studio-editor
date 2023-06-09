@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import React, { useCallback, useContext, useState, useRef } from "react"
+import React, { useCallback, useContext, useState, useRef, useEffect } from "react"
 import Scrollable from "~/components/Scrollable"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
@@ -81,6 +81,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
     if (activeObject?.id === mainImgInfo.id) {
+      // @ts-ignore 
+      setMainImgInfo((prev)=>({...prev,swiper_option_selected:false}))
       HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill, activeObject, inputImg)
     } else {
       HandleBgChangeOption(editor, 0, 0, BG, changeLayerFill, activeObject, inputImg)
@@ -217,7 +219,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                 latest_ct = prev
                 return prev
               })
-              if (mainImgInfo?.id === activeObject?.id) {                                
+              if (mainImgInfo?.id === activeObject?.id) {
                 RemoveBGFunc(
                   editor,
                   setLoaderPopup,
@@ -230,7 +232,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                   virtualCanvasMaskImageRef,
                   virtualCanvasResultImageRef,
                   0,
-                  (latest_ct = latest_ct),
+                  (latest_ct = latest_ct)
                 )
               } else {
                 RemoveBGFunc(

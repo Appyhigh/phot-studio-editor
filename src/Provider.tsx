@@ -31,6 +31,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     url: "",
     original: "",
     metadata: {},
+    swiper_selected_option:false,
+    swiper_selected_color:""
   })
 
   const [panelInfo, setPanelInfo] = useState({

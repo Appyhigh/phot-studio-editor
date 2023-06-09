@@ -64,6 +64,9 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                 onClick={() => {
                   handleChangeBg(each)
                   handleBgChangeOption({ type, idx })
+                    // @ts-ignore 
+                    setMainImgInfo((prev)=>({...prev,swiper_option_selected:true,color:each.color?each.gradient:`url(${each.img})`}))
+                  
                 }}
                 key={idx}
                 $style={{
@@ -79,7 +82,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                   },
                 }}
               >
-                {selectedBgOption.type === type && (selectedBgOption.id === idx || editor.objects.findById(mainImgInfo.id)[0]?.fill===each.color)&& <Icons.Selection size={"24"} />}
+                {selectedBgOption.type === type && mainImgInfo.swiper_option_selected && (selectedBgOption.id === idx)&& <Icons.Selection size={"24"} />}
               </Block>
             </SwiperSlide>
           )
