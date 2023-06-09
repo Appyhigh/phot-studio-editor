@@ -56,7 +56,17 @@ const Common = ({ type }: any) => {
       <Flip type={type} />
       <ToolButton
         type={type}
-        func={() => DuplicateFunc({ editor, activeObject })}
+        func={() => {
+          DuplicateFunc({ editor, activeObject }).then(() => {
+            setTimeout(() => {
+              editor.objects.position("top", activeObject.top)
+              editor.objects.position("left", activeObject.left)
+              editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+              editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+              editor.objects.group()
+            }, 10)
+          })
+        }}
         icon={<DuplicateIcon size={22} />}
         name="Duplicate"
       />

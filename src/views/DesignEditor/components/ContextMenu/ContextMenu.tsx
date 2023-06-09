@@ -67,7 +67,21 @@ const ContextMenu = () => {
           left: `${contextMenuRequest.left}px`,
         }}
       >
-        <ContextMenuItem onClick={() => DuplicateFunc({ editor, activeObject })} icon="Duplicate" label="Duplicate">
+        <ContextMenuItem
+          onClick={() =>
+            DuplicateFunc({ editor, activeObject }).then(() => {
+              setTimeout(() => {
+                editor.objects.position("top", activeObject.top)
+                editor.objects.position("left", activeObject.left)
+                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                editor.objects.group()
+              }, 10)
+            })
+          }
+          icon="Duplicate"
+          label="Duplicate"
+        >
           <Duplicate size={24} />
         </ContextMenuItem>
         {/* <ContextMenuItem

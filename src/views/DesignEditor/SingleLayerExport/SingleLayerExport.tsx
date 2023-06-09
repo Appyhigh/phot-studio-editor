@@ -45,7 +45,22 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
         onContextMenu={(e: Event) => e.preventDefault()}
         className={clsx(classes.contextMenuSection, isOpenSlider && classes.contextMenuFull)}
       >
-        <ContextMenuItem disabled={true} onClick={() => DuplicateFunc({ editor })} icon="Duplicate" label="copy">
+        <ContextMenuItem
+          disabled={true}
+          onClick={() =>
+            DuplicateFunc({ editor }).then(() => {
+              setTimeout(() => {
+                editor.objects.position("top", activeObject.top)
+                editor.objects.position("left", activeObject.left)
+                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                editor.objects.group()
+              }, 10)
+            })
+          }
+          icon="Duplicate"
+          label="copy"
+        >
           <Duplicate size={24} />
         </ContextMenuItem>
         <ContextMenuItem onClick={() => PasteFunc({ editor })} icon="Paste" label="paste">
@@ -69,7 +84,21 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
           <div // @ts-ignore
             className={classes.contextMenuSection}
           >
-            <ContextMenuItem onClick={() => DuplicateFunc({ editor, activeObject })} icon="Duplicate" label="Duplicate">
+            <ContextMenuItem
+              onClick={() =>
+                DuplicateFunc({ editor, activeObject }).then(() => {
+                  setTimeout(() => {
+                    editor.objects.position("top", activeObject.top)
+                    editor.objects.position("left", activeObject.left)
+                    editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                    editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                    editor.objects.group()
+                  }, 10)
+                })
+              }
+              icon="Duplicate"
+              label="Duplicate"
+            >
               <Duplicate size={24} />
             </ContextMenuItem>
             <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
@@ -159,18 +188,18 @@ const ContextMenuItem = ({
   lock?: false
 }) => {
   const activeObject = useActiveObject()
-  
+
   return (
     <div>
       <button
-      // @ts-ignore
-        disabled={(activeObject?.locked && icon != "download" && icon != "Unlocked" )? true : false}
+        // @ts-ignore
+        disabled={activeObject?.locked && icon != "download" && icon != "Unlocked" ? true : false}
         onClick={onClick}
         className={clsx(
           classes.eachMenu,
           disabled && classes.disabledMenu,
           showDownloadPopup && classes.selectedDownload,
-          // @ts-ignore 
+          // @ts-ignore
           activeObject?.locked && icon != "download" && icon != "Unlocked" && classes.disabledOption
         )}
       >
@@ -178,7 +207,7 @@ const ContextMenuItem = ({
           style={{ width: "25px" }}
           className={clsx(
             "d-flex justify-content-center mr-2",
-            // @ts-ignore 
+            // @ts-ignore
             activeObject?.locked && icon != "download" && icon != "Unlocked" && classes.disabledOption
           )}
         >
