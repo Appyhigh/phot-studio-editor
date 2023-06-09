@@ -14,8 +14,8 @@ const CanvasEditingPannel = () => {
   const zoomMin = 10
   const zoomMax = 300
   const [options, setOptions] = React.useState<Options>({
-    zoomRatio: 20,
-    zoomRatioTemp: 20,
+    zoomRatio: 30,
+    zoomRatioTemp: 30,
   })
   const editor = useEditor()
   const zoomRatio: number = useZoomRatio()
