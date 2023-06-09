@@ -17,6 +17,7 @@ import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
 import ArrowOpen from "~/components/Icons/ArrowOpen"
 import SelectStyle from "~/components/UI/SelectStyle/SelectStyle"
 import StyleSwiper from "~/components/UI/SelectStyle/StyleSwiper"
+import imagineAiController from "~/utils/imagineAiController"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -63,6 +64,31 @@ const ImagineAI = () => {
     }
   }, [textToArtInputInfo.showclearTooltip])
 
+  const generateImage = () => {
+    setImagesLoading(true)
+    setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
+    imagineAiController(
+      textToArtInputInfo.prompt,
+      // textToArtInputInfo.uploaded_img,
+      textToArtInputInfo.cfg_scale,
+      textToArtInputInfo.image_wt,
+      textToArtInputInfo.negative_prompt,
+      textToArtInputInfo.images_generation_ct,
+      textToArtInputInfo.aspect_ratio,
+      textToArtInputInfo.style
+    )
+      .then((responseData) => {
+        setTextToArtPanelInfo((prev: any) => ({
+          ...prev,
+          resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
+        }))
+        setImagesLoading(false)
+      })
+      .catch((error) => {
+        console.error("Error:", error)
+      })
+  }
+
   return (
     <Scrollable>
       {!textToArtpanelInfo.resultSectionVisible && (
@@ -79,6 +105,7 @@ const ImagineAI = () => {
               onChange={(e) => {
                 setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
               }}
+              defaultValue={textToArtInputInfo.prompt}
             ></textarea>
           </Block>
           {/* Select a Style */}
@@ -131,9 +158,9 @@ const ImagineAI = () => {
                 })}
               </div>
             </div>
-            <div className={classes.uploadImageSection}>
+            {/* <div className={classes.uploadImageSection}>
               <UploadInputImg />
-            </div>
+            </div> */}
             <div className={classes.negativePromptSection}>
               <div className="d-flex flex-row">
                 <div className={clsx(classes.artSubHeading, "mb-1")}>Negative prompt </div>
@@ -164,11 +191,10 @@ const ImagineAI = () => {
               <div className={clsx(classes.artSubHeading)}>CFG Scale</div>
               <p className={classes.paraText}>Indicate how your input image effect the final output</p>
               <SliderInput
-                minVal={1}
-                maxVal={100}
-                value={textToArtInputInfo.cfg_scale}
+                minVal={1.0}
+                maxVal={14.0}
                 handleChange={(e: any) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e }))
+                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e / 2 }))
                 }}
               />
 
@@ -184,7 +210,7 @@ const ImagineAI = () => {
                 data={aspectRatio}
                 aspectRatioSelected={textToArtInputInfo.aspect_ratio}
                 handleChange={(x: number, y: number) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, aspect_ratio: { x: x, y: y } }))
+                  setTextToArtInputInfo((prev: any) => ({ ...prev, aspect_ratio: `${x}:${y}` }))
                 }}
               />
             </div>
@@ -195,23 +221,7 @@ const ImagineAI = () => {
               )}
               disabled={textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.length == 0 ? true : false}
               onClick={() => {
-                setImagesLoading(true)
-                setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
-                setTimeout(() => {
-                  // @ts-ignore
-                  let generatedImages = []
-                  for (let i = 0; i < textToArtInputInfo.images_generation_ct; i++) {
-                    generatedImages.push(
-                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=350"
-                    )
-                  }
-                  setTextToArtPanelInfo((prev: any) => ({
-                    ...prev,
-                    // @ts-ignore
-                    resultImages: [...prev.resultImages, ...generatedImages],
-                  }))
-                  setImagesLoading(false)
-                }, 1000)
+                generateImage()
               }}
             >
               Generate
@@ -230,11 +240,13 @@ const ImagineAI = () => {
                       ...prev,
                       prompt: "",
                       style: [],
-                      images_generation_ct: 2,
+                      images_generation_ct: 1,
                       uploaded_img: "",
+                      image_wt: 1.0,
                       negative_prompt_visible: false,
                       negative_prompt: "",
-                      aspect_ratio: { x: 1, y: 2 },
+                      cfg_scale: 7.5,
+                      aspect_ratio: "1:1",
                       showclearTooltip: false,
                     }))
                   }}
@@ -297,29 +309,11 @@ const ImagineAI = () => {
                   </div>
                 ))}
             </div>
-
             <button
               className={clsx(classes.generateBtn, classes.regenerateBtn, imagesLoading && classes.disabledBtn)}
               disabled={imagesLoading ? true : false}
               onClick={() => {
-                setImagesLoading(true)
-                setTimeout(() => {
-                  // @ts-ignore
-                  let generatedImages = []
-                  for (let i = 0; i < textToArtInputInfo.images_generation_ct; i++) {
-                    generatedImages.push(
-                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=350"
-                    )
-                  }
-                  setTextToArtPanelInfo((prev: any) => ({
-                    ...prev,
-                    resultSectionVisible: true,
-                    // @ts-ignore
-                    resultImages: [...prev.resultImages, ...generatedImages],
-                  }))
-
-                  setImagesLoading(false)
-                }, 1000)
+                generateImage()
               }}
             >
               Regenerate
