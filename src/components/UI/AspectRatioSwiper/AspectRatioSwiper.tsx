@@ -21,22 +21,20 @@ const AspectRatioSwiper = ({ data, aspectRatioSelected, handleChange }: any) => 
         width: "270px",
         height: "40px",
         [theme.mediaQuery.large]: {
-          width: "310px",
+          width: "320px",
           height: "40px",
         },
       }}
     >
       <Swiper
-        spaceBetween={6}
-        slidesPerView={5}
+        spaceBetween={20}
+        slidesPerView={3.5}
         loop={true}
         centeredSlides={true}
         autoplay={false}
         navigation={true}
         modules={[Navigation, Autoplay]}
-        onReachEnd={() => {
-          swiper?.slideNext()
-        }}
+       
       >
         {data.map((each: any, idx: any) => (
           <SwiperSlide key={idx}>
