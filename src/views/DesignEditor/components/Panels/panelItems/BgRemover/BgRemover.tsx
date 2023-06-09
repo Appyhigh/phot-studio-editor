@@ -36,6 +36,7 @@ const BgRemover = () => {
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
   }
+  const [imageLoading, setImageLoading] = useState(false)
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -146,7 +147,7 @@ const BgRemover = () => {
         </Block>
       ) : (
         <>
-          <Uploads />
+          <Uploads imageLoading={imageLoading} setImageLoading={setImageLoading} />
         </>
       )}
       {panelInfo.trySampleImg && (
@@ -165,6 +166,7 @@ const BgRemover = () => {
                         addObject(image.originalImage)
                       }}
                       preview={image.originalImage}
+                      imageLoading={imageLoading}
                     />
                   )
                 })}
@@ -233,9 +235,21 @@ const BgRemover = () => {
   )
 }
 
-const ImageItem = ({ preview, onClick }: { preview: any; onClick?: (option: any) => void }) => {
+const ImageItem = ({
+  preview,
+  onClick,
+  imageLoading,
+}: {
+  preview: any
+  onClick?: (option: any) => void
+  imageLoading: boolean
+}) => {
   return (
-    <div onClick={onClick} className={clsx("pointer p-relative", classes.imageItemSection)}>
+    <div
+      onClick={onClick}
+      className={clsx("pointer p-relative", classes.imageItemSection)}
+      style={{ pointerEvents: imageLoading ? "none" : "auto" }}
+    >
       <div className={clsx("p-absolute", classes.imageItem)} />
       <img src={preview} className={classes.imagePreview} />
     </div>

@@ -16,11 +16,11 @@ import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 
-export default function ({ uploadType, activePanel }: any) {
+export default function ({ uploadType, activePanel}: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
-  const [imageLoading, setImageLoading] = useState(false)
-
+ const [imageLoading,setImageLoading]=useState(false);
+ 
   const editor = useEditor()
   const frame = useFrame()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
@@ -39,6 +39,7 @@ export default function ({ uploadType, activePanel }: any) {
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
   const handleDropFiles = async (files: FileList) => {
+    setImageLoading(true)
     const file = files[0]
     if (
       file.type === "image/jpeg" ||
@@ -92,7 +93,9 @@ export default function ({ uploadType, activePanel }: any) {
 
       if (uploadType === LOCAL_SAMPLE_IMG) {
         setUploads([...uploads, upload])
-        if (imageUrl) setImageLoading(false)
+        if (imageUrl) {
+          setImageLoading(false)
+        }
       } else {
         // @ts-ignore
         setPanelInfo((prev) => ({
@@ -105,7 +108,9 @@ export default function ({ uploadType, activePanel }: any) {
         }))
         // @ts-ignore
         setMainImgInfo((prev) => ({ ...prev, ...upload }))
-        if (imageUrl) setImageLoading(false)
+        if (imageUrl) {
+          setImageLoading(false)
+        }
       }
     })
   }
@@ -261,18 +266,18 @@ export default function ({ uploadType, activePanel }: any) {
           </>
         </Block>
       </DropZone>
-      {imageLoading && !rejectedFileUpload && 
-      <Block
-        className={clsx("d-flex justify-content-center flex-column pointer p-relative", classes.uploadInputSection)}
-      >
-        <Block className={classes.uploadInputContainer}>
-          <Icons.InputContainer />
+      {imageLoading && !rejectedFileUpload && (
+        <Block
+          className={clsx("d-flex justify-content-center flex-column pointer p-relative", classes.uploadInputSection)}
+        >
+          <Block className={classes.uploadInputContainer}>
+            <Icons.InputContainer />
+          </Block>
+          <div className={classes.loadingSpinner}>
+            {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+          </div>
         </Block>
-        <div className={classes.loadingSpinner}>
-          {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
-        </div>
-      </Block>
-}
+      )}
     </>
   )
 }

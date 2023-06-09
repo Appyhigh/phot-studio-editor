@@ -46,8 +46,10 @@ const BasePannel = () => {
 
 
   const downloadBtnDisable =
-    editor?.frame?.background?.canvas?._objects?.length === 3 &&
-    editor?.frame?.background?.canvas?._objects[2]?.metadata?.type === backgroundLayerType
+    (editor?.frame?.background?.canvas?._objects?.length === 3 &&
+      editor?.frame?.background?.canvas?._objects[2]?.metadata?.type === backgroundLayerType) ||
+    (editor?.frame?.background?.canvas?._objects?.length === 2 &&
+      editor?.frame?.background?.canvas?._objects[1]?.fill==="#ffffff")
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)

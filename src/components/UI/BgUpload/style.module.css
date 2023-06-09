@@ -152,7 +152,13 @@
 .stockImgSection {
   margin-left: 1rem;
 }
-
+.stockImagesLoading {
+  display: block;
+  position: absolute;
+  top: auto;
+  left: auto;
+  width: 120%;
+}
 .uploadInputContainer {
   width: 280px;
   height: 170px;
@@ -193,8 +199,8 @@
   }
   .selectedIcon {
     position: absolute;
-    top: 40px;
-    left: 40px;
+    top: auto;
+    left: auto;
     z-index: 5;
   }
   .iconWrapper {
