@@ -55,7 +55,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         addImage(imageUrl)
       } else if (fileInputType === "bgupdate") {
         updateBackground(imageUrl)
-      } else {        
+      } else {
         updateImage(imageUrl)
       }
       setTimeout(() => {
@@ -109,7 +109,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         editor.objects.setAsBackgroundImage()
       }, 100)
     })
-
   }
 
   const updateImage = (imageUrl: string) => {
@@ -129,7 +128,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       metadata: { generationDate: new Date().getTime() },
     }
     // to replace the object removing the previous active object first
-    if (activeOb.id === mainImgInfo?.id) {      
+    if (activeOb.id === mainImgInfo?.id) {
       setMainImgInfo((prev: any) => ({ ...prev, ...upload }))
       setPanelInfo((prev: any) => ({ ...prev, uploadPreview: true, bgOptions: false, bgRemoverBtnActive: true }))
     }
@@ -139,7 +138,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     setTimeout(() => {
       editor?.objects.update({ top: topPosition + 280, left: leftPosition + 30 })
     }, 20)
-
   }
   const { setImagesCt } = useContext(ImagesContext)
 
@@ -147,19 +145,19 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     let latest_ct = 0
     setImagesCt((prev: any) => {
       latest_ct = prev + 1
+      const upload = {
+        id: nanoid(),
+        src: imageUrl,
+        preview: imageUrl,
+        metadata: { generationDate: new Date().getTime() },
+        type: "StaticImage",
+        name: latest_ct.toString(),
+      }
+      editor.objects.add(upload).then(() => {
+        setRejectedFileUpload(false)
+        setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+      })
       return prev + 1
-    })
-    const upload = {
-      id: nanoid(),
-      src: imageUrl,
-      preview: imageUrl,
-      metadata: { generationDate: new Date().getTime() },
-      type: "StaticImage",
-      name: latest_ct.toString(),
-    }
-    editor.objects.add(upload).then(() => {
-      setRejectedFileUpload(false)
-      setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
   }
 

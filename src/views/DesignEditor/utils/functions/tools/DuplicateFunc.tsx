@@ -1,8 +1,8 @@
-export const DuplicateFunc = ({ editor, activeObject }: any) => {
-  editor.objects.clone()
-  editor.objects.select("frame")
-  setTimeout(() => {
-    editor.objects.update({ name: activeObject.name })
-  }, 10)
+export const DuplicateFunc = ({ editor, activeObject,latest_ct }: any) => {
+  editor.objects.clone();
+  setTimeout(()=>{
+    editor.objects.update({ name: latest_ct})
+  },500)
+
   editor.cancelContextMenuRequest()
 }
