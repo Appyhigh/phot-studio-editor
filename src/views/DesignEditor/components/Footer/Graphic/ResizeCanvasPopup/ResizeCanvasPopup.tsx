@@ -12,9 +12,9 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 
 const ResizeCanvasPopup = ({ show }: any) => {
-  const [desiredFrame, setDesiredFrame] = useState({
-    width: 0,
-    height: 0,
+  const [desiredFrame, setDesiredFrame] = useState<any>({
+    width: "",
+    height: "",
   })
 
   const [selectedFrame, setSelectedFrame] = useState<any>({
@@ -51,6 +51,10 @@ const ResizeCanvasPopup = ({ show }: any) => {
           }, 100)
         })
       }
+      setDesiredFrame({
+        width: parseInt(size.width),
+        height: parseInt(size.height),
+      })
       editor.frame.resize({
         width: parseInt(size.width),
         height: parseInt(size.height),
@@ -75,14 +79,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
     }, 200)
   }
 
-  useEffect(() => {
-    if (frame) {
-      setDesiredFrame({
-        width: frame.width,
-        height: frame.height,
-      })
-    }
-  }, [frame])
+
 
   const handleWidth = (width: any) => {
     setActiveKey("1")
@@ -121,7 +118,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
                     type="number"
                     placeholder="Width"
                     handleChange={handleWidth}
-                    value={desiredFrame.width}
+                    value={desiredFrame.width??desiredFrame.width}
                     width="88px"
                     height="32px"
                   />
@@ -130,7 +127,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
                   type="number"
                   placeholder="Height"
                   handleChange={handleHeight}
-                  value={desiredFrame.height}
+                  value={desiredFrame.height??desiredFrame.height}
                   width="88px"
                   height="32px"
                 />
