@@ -25,6 +25,7 @@ const StockImages = (props: any) => {
   const { res, more, loading } = usePagination("stock", getStockImages, search, page)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
+  const [noImages, setNoImages] = useState(false)
 
   const observer = useRef<any>()
 
@@ -46,7 +47,11 @@ const StockImages = (props: any) => {
   const { setImagesCt } = useContext(ImagesContext)
 
   const searchImages = () => {
+    setNoImages(false)
     getStockImages(search).then((res) => {
+      if (res.length === 0) {
+        setNoImages(true)
+      }
       setRes(res)
     })
   }
@@ -111,6 +116,7 @@ const StockImages = (props: any) => {
           })}
         </div>
         {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
+        {noImages && <div className={classes.noImages}>Sorry! No results found :(</div>}
       </Scrollbars>
     </div>
   )
