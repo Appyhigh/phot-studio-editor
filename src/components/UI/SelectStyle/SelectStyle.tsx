@@ -53,7 +53,14 @@ const SelectStyle = (props: any) => {
         <input
           className={classes.textInput}
           placeholder="Search"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            if (e.target.value === "") {
+              selectStyleApi().then((res) => {
+                setResult(res["data"]["source_studio"])
+              })
+            }
+          }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               searchImages()

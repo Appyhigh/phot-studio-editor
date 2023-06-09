@@ -145,7 +145,7 @@
 }
 .stockImagesLoader {
   display: block;
-  position: absolute;
+  position: relative;
   top: 0px;
   margin-left: 5.5rem;
 }
