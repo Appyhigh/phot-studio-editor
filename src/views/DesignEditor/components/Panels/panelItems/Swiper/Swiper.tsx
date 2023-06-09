@@ -8,10 +8,12 @@ import Icons from "~/components/Icons"
 import { useStyletron } from "baseui"
 import { Block } from "baseui/block"
 import { changeLayerBackgroundImage, changeLayerFill, changeLayerFillWithGradient } from "~/utils/updateLayerBackground"
-import { useCallback, useContext, useEffect } from "react"
+import { useCallback, useContext, useState, useEffect } from "react"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
+import classes from "./style.module.css"
+import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
@@ -19,6 +21,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
   const activeObject: any = useActiveObject()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const objects = useObjects()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleChangeBg = useCallback(
     async (each: any) => {
@@ -28,13 +31,22 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.gradient, changeLayerFillWithGradient)
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
-          HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+          HandleBgChangeOption(
+            editor,
+            mainImgInfo,
+            setMainImgInfo,
+            dataUrl,
+            changeLayerBackgroundImage,
+            null,
+            null,
+            setIsLoading
+          )
         })
       }
     },
     [mainImgInfo, handleBgChangeOption, selectedBgOption, type]
   )
-  
+
   return (
     <Block
       $style={{
@@ -48,14 +60,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
         },
       }}
     >
-      <Swiper
-        spaceBetween={22}
-        slidesPerView={"auto"}
-        loop={true}
-        centeredSlides={true}
-        navigation={true}
-        modules={[Navigation, Autoplay]}
-      >
+      <Swiper spaceBetween={22} slidesPerView={"auto"} loop={true} navigation={true} modules={[Navigation, Autoplay]}>
         {data.map((each: any, idx: number) => {
           return (
             <SwiperSlide key={idx}>
@@ -77,9 +82,17 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                     width: "96px",
                     height: "96px",
                   },
+                  pointerEvents: isLoading ? "none" : "auto",
                 }}
               >
-                {selectedBgOption.type === type && (selectedBgOption.id === idx || editor.objects.findById(mainImgInfo.id)[0]?.fill===each.color)&& <Icons.Selection size={"24"} />}
+                {selectedBgOption.type === type && selectedBgOption.id === idx && isLoading && (
+                  <img className={classes.stockImagesLoading} src={LoaderSpinner} />
+                )}
+
+                {selectedBgOption.type === type &&
+                  (selectedBgOption.id === idx || editor.objects.findById(mainImgInfo.id)[0]?.fill === each.color) && (
+                    <Icons.Selection size={"24"} />
+                  )}
               </Block>
             </SwiperSlide>
           )

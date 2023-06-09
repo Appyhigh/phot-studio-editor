@@ -13,11 +13,13 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import ImagesContext from "~/contexts/ImagesCountContext"
 import SliderInput from "~/components/UI/SliderInput/SliderInput"
 import { aspectRatio } from "~/views/DesignEditor/utils/AspectRatio"
-import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
 import ArrowOpen from "~/components/Icons/ArrowOpen"
 import SelectStyle from "~/components/UI/SelectStyle/SelectStyle"
 import StyleSwiper from "~/components/UI/SelectStyle/StyleSwiper"
 import imagineAiController from "~/utils/imagineAiController"
+import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
+import { getCookie } from "~/utils/common"
+import { COOKIE_KEYS } from "~/utils/enum"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -30,6 +32,7 @@ const ImagineAI = () => {
   const { styleImage, setStyleImage } = useContext(TextToArtContext)
   const [selectStyleDisplay, setSelectStyleDisplay] = useState(false)
   const selectStyleRef = useRef<HTMLDivElement>(null)
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -65,28 +68,32 @@ const ImagineAI = () => {
   }, [textToArtInputInfo.showclearTooltip])
 
   const generateImage = () => {
-    setImagesLoading(true)
-    setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
-    imagineAiController(
-      textToArtInputInfo.prompt,
-      // textToArtInputInfo.uploaded_img,
-      textToArtInputInfo.cfg_scale,
-      textToArtInputInfo.image_wt,
-      textToArtInputInfo.negative_prompt,
-      textToArtInputInfo.images_generation_ct,
-      textToArtInputInfo.aspect_ratio,
-      textToArtInputInfo.style
-    )
-      .then((responseData) => {
-        setTextToArtPanelInfo((prev: any) => ({
-          ...prev,
-          resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
-        }))
-        setImagesLoading(false)
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-      })
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+    } else {
+      setImagesLoading(true)
+      setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
+      imagineAiController(
+        textToArtInputInfo.prompt,
+        // textToArtInputInfo.uploaded_img,
+        textToArtInputInfo.cfg_scale,
+        textToArtInputInfo.image_wt,
+        textToArtInputInfo.negative_prompt,
+        textToArtInputInfo.images_generation_ct,
+        textToArtInputInfo.aspect_ratio,
+        textToArtInputInfo.style
+      )
+        .then((responseData) => {
+          setTextToArtPanelInfo((prev: any) => ({
+            ...prev,
+            resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
+          }))
+          setImagesLoading(false)
+        })
+        .catch((error) => {
+          console.error("Error:", error)
+        })
+    }
   }
 
   return (
@@ -215,14 +222,24 @@ const ImagineAI = () => {
               />
             </div>
             <button
-              className={clsx(classes.generateBtn, textToArtInputInfo.showclearTooltip && classes.disabledGenBtn)}
-              disabled={textToArtInputInfo.showclearTooltip ? true : false}
+              className={clsx(
+                classes.generateBtn,
+                textToArtInputInfo.showclearTooltip || (textToArtInputInfo.prompt.length == 0 && classes.disabledGenBtn)
+              )}
+              disabled={textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.length == 0 ? true : false}
               onClick={() => {
                 generateImage()
               }}
             >
               Generate
             </button>
+            <LoginPopup
+              isOpen={showLoginPopup}
+              loginPopupCloseHandler={() => {
+                setShowLoginPopup(false)
+              }}
+            />
+
             <p className={classes.creditsPara}>
               <span>1 credit</span> will be used if you want to generate 3 more outputs
             </p>
