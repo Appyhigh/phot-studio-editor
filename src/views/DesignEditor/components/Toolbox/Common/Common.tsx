@@ -19,12 +19,14 @@ import { FrontFunc } from "~/views/DesignEditor/utils/functions/tools/FrontFunc"
 import { BackFunc } from "~/views/DesignEditor/utils/functions/tools/BackFunc"
 import { GroupFunc, UngroupFunc } from "~/views/DesignEditor/utils/functions/tools/GroupUngroupFunc"
 import { DeleteFunc } from "~/views/DesignEditor/utils/functions/tools/DeleteFunc"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const Common = ({ type }: any) => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
 
   const [state, setState] = React.useState({ isGroup: false, isMultiple: false })
   const activeObject = useActiveObject() as any
+  const { setImagesCt } = useContext(ImagesContext)
 
   const editor = useEditor()
 
@@ -56,7 +58,14 @@ const Common = ({ type }: any) => {
       <Flip type={type} />
       <ToolButton
         type={type}
-        func={() => DuplicateFunc({ editor, activeObject })}
+        func={() => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            DuplicateFunc({ editor, activeObject,latest_ct })
+            return prev + 1
+          })
+        }}
         icon={<DuplicateIcon size={22} />}
         name="Duplicate"
       />

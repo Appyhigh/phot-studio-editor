@@ -17,6 +17,7 @@ import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import Icons from "~/components/Icons"
+import FileError from "../Common/FileError/FileError"
 
 const BgUpload = () => {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
@@ -27,12 +28,26 @@ const BgUpload = () => {
     url: "",
   })
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
+  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
   const editor = useEditor()
   const handleDropFiles = async (files: FileList) => {
     setBgUploading(true)
     const file = files[0]
+    if (
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      file.type === "image/png" ||
+      file.type === "image/bmp" ||
+      file.type === "image/webp"
+    ) {
+      setRejectedFileUpload(false)
+    } else {
+      setRejectedFileUpload(true)
+      setBgUploading(false)
 
+      return
+    }
     const imageUrl = await getBucketImageUrlFromFile(file)
 
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
@@ -82,7 +97,7 @@ const BgUpload = () => {
                 </Block>
               </div>
             )}
-            {!bgUploadPreview.showPreview && !bgUploading && (
+            {!bgUploadPreview.showPreview && !bgUploading &&!rejectedFileUpload && (
               <DropZone handleDropFiles={handleDropFiles}>
                 <div className={classes.uploadInput}>
                   <UploadInput height={185} handleInputFileRefClick={handleInputFileRefClick} />
@@ -97,8 +112,14 @@ const BgUpload = () => {
                 </div>
               </DropZone>
             )}
+            { rejectedFileUpload && (
+                    <FileError
+                      handleTry={() => {
+                        setRejectedFileUpload(false)
+                      }}
+                    />)}
 
-            {bgUploadPreview.showPreview && bgUploadPreview.url && !bgUploading && (
+            {bgUploadPreview.showPreview &&!rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
               <Scrollbars style={{ height: "300px" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}

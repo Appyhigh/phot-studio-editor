@@ -27,6 +27,7 @@ import { UngroupFunc } from "../../utils/functions/tools/GroupUngroupFunc"
 import { SetCanvasBgFunc } from "../../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../../utils/functions/tools/DeleteFunc"
 import { EraseBgFunc } from "../../utils/functions/EraseBgFunc"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const ContextMenu = () => {
   const contextMenuRequest = useContextMenuRequest()
@@ -35,7 +36,7 @@ const ContextMenu = () => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const frame = useFrame()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
-
+  const {  setImagesCt } = useContext(ImagesContext)
   useEffect(() => {
     if (!contextMenuRequest || !contextMenuRequest.target) {
       setShowDownloadPopup(false)
@@ -67,7 +68,18 @@ const ContextMenu = () => {
           left: `${contextMenuRequest.left}px`,
         }}
       >
-        <ContextMenuItem onClick={() => DuplicateFunc({ editor, activeObject })} icon="Duplicate" label="Duplicate">
+        <ContextMenuItem
+          onClick={() => {
+            let latest_ct = 0
+            setImagesCt((prev: any) => {
+              latest_ct = prev + 1
+              DuplicateFunc({ editor, activeObject,latest_ct })
+              return prev + 1
+            })
+          }}
+          icon="Duplicate"
+          label="Duplicate"
+        >
           <Duplicate size={24} />
         </ContextMenuItem>
         {/* <ContextMenuItem
