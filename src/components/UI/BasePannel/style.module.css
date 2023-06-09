@@ -31,7 +31,21 @@
   color: #92929d;
   cursor: not-allowed;
 }
-
+.toolTip {
+  position: absolute;
+  z-index: 600;
+  left: 125px;
+}
+.toolTipText {
+  position: absolute;
+  color: #fff;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.01em;
+  padding: 8px 16px;
+  top: 8px;
+}
 @media screen and (min-width: 1220px) {
   .basePannel {
     padding: 15px 20px;
@@ -41,5 +55,11 @@
   }
   .canvasOptions {
     margin: 12px 12px 8px;
+  }
+
+  .toolTip {
+    position: absolute;
+    z-index: 600;
+    left: 150px;
   }
 }
