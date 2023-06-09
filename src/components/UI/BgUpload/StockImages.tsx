@@ -61,7 +61,12 @@ const StockImages = (props: any) => {
       <div className={classes.inputWrapper}>
         <input
           className={classes.textInput}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              searchImages()
+            }
+            setSearch(e.target.value)
+          }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               searchImages()
