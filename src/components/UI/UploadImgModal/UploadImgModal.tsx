@@ -74,11 +74,12 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   }
 
   const close = () => {
-    !imageLoading ??
-      (setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" })),
-      setRejectedFileUpload(false),
-      setImageLoading(false),
-      handleClose())
+    if (!imageLoading) {
+      setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
+      setRejectedFileUpload(false)
+      setImageLoading(false)
+      handleClose()
+    }
   }
 
   const handleInputFileRefClick = () => {
