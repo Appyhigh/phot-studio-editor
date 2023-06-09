@@ -189,8 +189,11 @@ const ImagineAI = () => {
               />
             </div>
             <button
-              className={clsx(classes.generateBtn, textToArtInputInfo.showclearTooltip && classes.disabledGenBtn)}
-              disabled={textToArtInputInfo.showclearTooltip ? true : false}
+              className={clsx(
+                classes.generateBtn,
+                textToArtInputInfo.showclearTooltip || (textToArtInputInfo.prompt.length == 0 && classes.disabledGenBtn)
+              )}
+              disabled={textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.length == 0 ? true : false}
               onClick={() => {
                 setImagesLoading(true)
                 setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
