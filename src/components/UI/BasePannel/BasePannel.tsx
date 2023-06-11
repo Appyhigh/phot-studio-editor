@@ -7,7 +7,7 @@ import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/Downlo
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel/CanvasEditingPannel"
 import { useEditor, useObjects } from "@layerhub-io/react"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
-import {  useState } from "react"
+import { useEffect, useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
@@ -16,6 +16,8 @@ const BasePannel = () => {
   const editor = useEditor()
   const [showAddPopup, setShowAddPopup] = useState(false)
   const objects = useObjects()
+
+  const [showTooltip, setShowToolTip] = useState(false)
 
   const resetHandler = () => {
     // editor.objects.clear()
@@ -44,7 +46,6 @@ const BasePannel = () => {
     }
   }
 
-
   const downloadBtnDisable =
     (editor?.frame?.background?.canvas?._objects?.length === 3 &&
       editor?.frame?.background?.canvas?._objects[2]?.metadata?.type === backgroundLayerType) ||
@@ -54,6 +55,34 @@ const BasePannel = () => {
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
   }
+  //  time out auto save tooltip
+  // @ts-ignore
+  let timeoutId
+
+  useEffect(() => {
+    const handleHistoryChanged = () => {
+      // @ts-ignore
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        setShowToolTip(true)
+      }, 5000)
+    }
+    if (editor) {
+      editor.on("history:changed", handleHistoryChanged)
+    }
+    return () => {
+      // @ts-ignore
+      clearTimeout(timeoutId)
+    }
+  }, [editor])
+
+  useEffect(() => {
+    if (showTooltip) {
+      setTimeout(() => {
+        setShowToolTip(false)
+      }, 2000)
+    }
+  }, [showTooltip])
 
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   return (
@@ -79,24 +108,31 @@ const BasePannel = () => {
             </button>
             <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
           </div>
-          <div className="ml-3"></div>
-          {/* <StatefulTooltip
-            placement={PLACEMENT.bottom}
-            showArrow={true}
-            accessibilityType={"tooltip"}
-            content={"Restore"}
-          >
-            <Block
-              className={clsx(classes.resetBtn, "pointer")}
-              onClick={() => {
-                // function is called twice because there will be shomehow 1 element left in undo
-                resetHandler()
-                resetHandler()
-              }}
-            >
+          <div></div>
+          {!showTooltip && (
+            <>
+              <Block
+                className={clsx(classes.resetBtn, "pointer")}
+                onClick={() => {
+                  setShowToolTip(true)
+                }}
+              >
+                <Icons.Save size={26} />
+              </Block>
+            </>
+          )}
+          {showTooltip && (
+            <Block className={clsx(classes.resetBtn, "pointer relative")}>
               <Icons.Save size={26} />
+              <div className={classes.toolTip}>
+                <div className="p-relative">
+                  <Icons.ToolTip />
+                  <p className={classes.toolTipText}>All changes are saved</p>
+                </div>
+              </div>
             </Block>
-          </StatefulTooltip> */}
+          )}
+
           <Block
             className="flex-center pointer p-relative resizeCanvasBtn"
             onMouseOver={() => {
@@ -108,6 +144,7 @@ const BasePannel = () => {
           </Block>
         </Block>
       </Block>
+
       <div className="flex-1"></div>
       <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
         <CanvasEditingPannel />
