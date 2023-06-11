@@ -78,7 +78,7 @@ const BasePannel = () => {
     if (showTooltip) {
       setTimeout(() => {
         setShowToolTip(false)
-      }, 1000)
+      }, 2000)
     }
   }, [showTooltip])
 
