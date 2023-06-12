@@ -5,7 +5,7 @@ export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
     setTimeout(() => {
       editor.objects.update({ name: latest_ct })
       resolve(editor.objects.update({ name: activeObject.name }))
-    }, 10)
+    }, 50)
 
     editor.cancelContextMenuRequest()
   })

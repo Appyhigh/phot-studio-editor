@@ -60,7 +60,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                   editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                   editor.objects.resize("width", activeObject.width * activeObject.scaleX)
                   editor.objects.group()
-                }, 10)
+                }, 20)
               })
               return prev + 1
             })
@@ -103,7 +103,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                       editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                       editor.objects.resize("width", activeObject.width * activeObject.scaleX)
                       editor.objects.group()
-                    }, 10)
+                    }, 20)
                   })
                   return prev + 1
                 })
