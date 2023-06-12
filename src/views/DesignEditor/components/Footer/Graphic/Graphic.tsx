@@ -15,12 +15,11 @@ const Graphic = () => {
   const { errorInfo } = useContext(ErrorContext)
 
   return (
-    <Container className="d-flex justify-content-center flex-row">
+    <Container className="d-flex justify-content-center flex-column align-items-center">
       {/* <Scenes /> */}
-      <Toolbox />
       {errorInfo.showError && (
         <Toast
-          style={{ width: "50%" }}
+          style={{ width: "60%" }}
           type="error"
           message={errorInfo.errorMsg}
           clickHandler={() => {
@@ -28,6 +27,9 @@ const Graphic = () => {
           }}
         />
       )}
+      
+      <Toolbox />
+     
       {/* <Common /> */}
     </Container>
   )

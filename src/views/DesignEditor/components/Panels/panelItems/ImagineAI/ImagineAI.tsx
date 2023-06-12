@@ -96,8 +96,8 @@ const ImagineAI = () => {
         })
         .catch((error) => {
           setImagesLoading(false)
-          // @ts-ignore 
-          setTextToArtPanelInfo((prev)=>({...prev,resultSectionVisible:false}))
+          // @ts-ignore
+          setTextToArtPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
           // @ts-ignore
           setErrorInfo((prev) => ({
             ...prev,
@@ -109,6 +109,10 @@ const ImagineAI = () => {
               generateImage()
             },
           }))
+          setTimeout(() => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+          }, 5000)
           console.error("Error:", error)
         })
     }

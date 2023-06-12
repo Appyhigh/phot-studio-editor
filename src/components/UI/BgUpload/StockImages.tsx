@@ -50,6 +50,10 @@ const StockImages = (props: any) => {
     getStockImages(search).then((res) => {
       setRes(res)
     })
+    .catch((err)=>{
+      console.log(err);
+       
+    })
   }
 
   return (

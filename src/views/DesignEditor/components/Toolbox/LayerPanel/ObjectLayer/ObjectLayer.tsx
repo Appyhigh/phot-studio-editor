@@ -14,6 +14,7 @@ import { nanoid } from "nanoid"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -27,6 +28,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [isReplacePopup, setIsReplacePopup] = useState(false)
   const [activeOb, setActiveOb] = useState<any>()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+  const { errorInfo, setErrorInfo } = useContext(ErrorContext)
 
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
@@ -56,7 +58,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         inputImage = activeObject?.metadata?.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
       } else {
-
         removeBackgroundBeforeChangingColor(each)
       }
     },
@@ -81,8 +82,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   const changeBGFillHandler = async (inputImg: string, BG: string) => {
     if (activeObject?.id === mainImgInfo.id) {
-      // @ts-ignore 
-      setMainImgInfo((prev)=>({...prev,swiper_option_selected:false}))
+      // @ts-ignore
+      setMainImgInfo((prev) => ({ ...prev, swiper_option_selected: false }))
       HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, BG, changeLayerFill, activeObject, inputImg)
     } else {
       HandleBgChangeOption(editor, 0, 0, BG, changeLayerFill, activeObject, inputImg)
@@ -93,7 +94,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const removeBackgroundBeforeChangingColor = async (each: any) => {
     try {
       setLoaderPopup(true)
-      removeBackgroundController(
+      let response = await removeBackgroundController(
         activeObject.preview,
         async (image: string) => {
           if (activeObject?.id === mainImgInfo?.id) {
@@ -106,7 +107,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               uploadPreview: false,
             }))
           }
-
           changeBGFillHandler(image, each.color)
         },
         virtualSrcImageRef,
@@ -117,8 +117,26 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         activeObject?.width * activeObject?.scaleX,
         activeObject?.height * activeObject?.scaleY
       )
+      if (response) {
+        throw new Error("Something went wrong while removing background...")
+      }
     } catch (error: any) {
       setLoaderPopup(false)
+      // @ts-ignore
+      setErrorInfo((prev) => ({
+        ...prev,
+        showError: true,
+        errorMsg: "Something went wrong while removing background...",
+        retryFn: () => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
+          removeBackgroundBeforeChangingColor(each)
+        },
+      }))
+      setTimeout(() => {
+        // @ts-ignore
+        setErrorInfo((prev) => ({ ...prev, showError: false }))
+      }, 5000)
       console.log("Something went wrong while removing background...", error.message)
     }
   }
@@ -232,7 +250,9 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                   virtualCanvasMaskImageRef,
                   virtualCanvasResultImageRef,
                   0,
-                  (latest_ct = latest_ct)
+                  (latest_ct = latest_ct),
+                  errorInfo,
+                  setErrorInfo
                 )
               } else {
                 RemoveBGFunc(
@@ -247,7 +267,9 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                   virtualCanvasMaskImageRef,
                   virtualCanvasResultImageRef,
                   activeObject,
-                  (latest_ct = latest_ct)
+                  (latest_ct = latest_ct),
+                  errorInfo,
+                  setErrorInfo
                 )
               }
             }}
