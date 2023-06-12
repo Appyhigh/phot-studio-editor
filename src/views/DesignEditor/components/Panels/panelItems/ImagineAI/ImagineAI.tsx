@@ -21,6 +21,11 @@ import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 
+import ErrorContext from "~/contexts/ErrorContext"
+
+import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
+
+
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
     useContext(TextToArtContext)
@@ -33,6 +38,7 @@ const ImagineAI = () => {
   const [selectStyleDisplay, setSelectStyleDisplay] = useState(false)
   const selectStyleRef = useRef<HTMLDivElement>(null)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -48,7 +54,7 @@ const ImagineAI = () => {
 
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
-      // If the clearFiled is open and the clicked target is not within the clearfield,
+      // If the clearField is open and the clicked target is not within the clearfield,
       // then close the clearfield
       // @ts-ignore
       if (leftPanelRef?.current && !leftPanelRef?.current?.contains(e.target)) {
@@ -75,15 +81,17 @@ const ImagineAI = () => {
       setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
       imagineAiController(
         textToArtInputInfo.prompt,
-        // textToArtInputInfo.uploaded_img,
         textToArtInputInfo.cfg_scale,
         textToArtInputInfo.image_wt,
         textToArtInputInfo.negative_prompt,
         textToArtInputInfo.images_generation_ct,
         textToArtInputInfo.aspect_ratio,
-        textToArtInputInfo.style
+        textToArtInputInfo.style,
+        textToArtInputInfo.uploaded_img,
       )
         .then((responseData) => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
           setTextToArtPanelInfo((prev: any) => ({
             ...prev,
             resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
@@ -91,6 +99,24 @@ const ImagineAI = () => {
           setImagesLoading(false)
         })
         .catch((error) => {
+          setImagesLoading(false)
+          // @ts-ignore
+          setTextToArtPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+          // @ts-ignore
+          setErrorInfo((prev) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              // @ts-ignore
+              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              generateImage()
+            },
+          }))
+          setTimeout(() => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+          }, 5000)
           console.error("Error:", error)
         })
     }
@@ -113,6 +139,7 @@ const ImagineAI = () => {
                 setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
               }}
               defaultValue={textToArtInputInfo.prompt}
+              value={textToArtInputInfo.prompt}
             ></textarea>
           </Block>
           {/* Select a Style */}
@@ -165,9 +192,9 @@ const ImagineAI = () => {
                 })}
               </div>
             </div>
-            {/* <div className={classes.uploadImageSection}>
+            <div className={classes.uploadImageSection}>
               <UploadInputImg />
-            </div> */}
+            </div>
             <div className={classes.negativePromptSection}>
               <div className="d-flex flex-row">
                 <div className={clsx(classes.artSubHeading, "mb-1")}>Negative prompt </div>
@@ -199,9 +226,10 @@ const ImagineAI = () => {
               <p className={classes.paraText}>Indicate how your input image effect the final output</p>
               <SliderInput
                 minVal={1.0}
+                value={textToArtInputInfo.cfg_scale}
                 maxVal={14.0}
                 handleChange={(e: any) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e / 2 }))
+                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e  }))
                 }}
               />
 

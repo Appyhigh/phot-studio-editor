@@ -103,7 +103,7 @@ const UploadInputImg = () => {
             maxVal={10}
             value={textToArtInputInfo.image_wt}
             handleChange={(e: any) => {
-              setTextToArtInputInfo((prev: any) => ({ ...prev, image_wt: e / 10 }))
+              setTextToArtInputInfo((prev: any) => ({ ...prev, image_wt: e }))
             }}
           />
 

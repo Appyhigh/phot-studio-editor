@@ -17,6 +17,7 @@ import MainImageContext from "./contexts/MainImageContext"
 import AuthWrapper from "./hooks/useAuth"
 import ImagesContext from "./contexts/ImagesCountContext"
 import TextToArtContext from "./contexts/TextToArtContext"
+import ErrorContext from "./contexts/ErrorContext"
 
 const engine = new Styletron()
 
@@ -31,8 +32,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     url: "",
     original: "",
     metadata: {},
-    swiper_selected_option:false,
-    swiper_selected_color:""
+    swiper_selected_option: false,
+    swiper_selected_color: "",
   })
 
   const [panelInfo, setPanelInfo] = useState({
@@ -50,7 +51,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     style: [],
     images_generation_ct: 1,
     uploaded_img: "",
-    image_wt: 1.0,
+    image_wt: 5.6,
     negative_prompt_visible: false,
     negative_prompt: "",
     cfg_scale: 7.5,
@@ -67,11 +68,20 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   const [result, setResult] = useState([])
 
+  const [errorInfo, setErrorInfo] = useState({
+    errorInfo: {
+      showError: false,
+      errorMsg: "",
+      retryFn: () => {},
+    },
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
         <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+            <ErrorContext.Provider value={{errorInfo,setErrorInfo}}>
             <TextToArtContext.Provider
               value={{
                 textToArtInputInfo,
@@ -100,6 +110,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                 </DesignEditorProvider>
               </MainImageContext.Provider>
             </TextToArtContext.Provider>
+            </ErrorContext.Provider>
           </LoaderContext.Provider>
         </ImagesContext.Provider>
       </ReduxProvier>

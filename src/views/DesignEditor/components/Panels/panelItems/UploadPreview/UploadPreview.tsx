@@ -10,6 +10,7 @@ import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -21,7 +22,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
   const { setLoaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
-
+  const { errorInfo, setErrorInfo } = useContext(ErrorContext)
   return (
     <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -99,8 +100,8 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
             onClick={() => {
               let latest_ct = 0
               setImagesCt((prev: any) => {
-                latest_ct = prev + 1                
-                RemoveBGFunc(
+                latest_ct = prev + 1
+                 RemoveBGFunc(
                   editor,
                   setLoaderPopup,
                   setPanelInfo,
@@ -112,8 +113,11 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
                   virtualCanvasMaskImageRef,
                   virtualCanvasResultImageRef,
                   0,
-                  (latest_ct = latest_ct)
+                  (latest_ct = latest_ct),
+                  errorInfo,
+                  setErrorInfo
                 )
+
                 return prev + 1
               })
             }}

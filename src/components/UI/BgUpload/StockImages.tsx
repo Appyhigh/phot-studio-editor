@@ -14,6 +14,7 @@ import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/Handl
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { toDataURL } from "~/utils/export"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const StockImages = (props: any) => {
   const editor = useEditor()
@@ -22,7 +23,9 @@ const StockImages = (props: any) => {
   const { setRes } = useAppContext()
   const { search, setSearch } = useAppContext()
   const [page, setPage] = useState(1)
-  const { res, more, loading } = usePagination("stock", getStockImages, search, page)
+  const { setErrorInfo } = useContext(ErrorContext)
+
+  const { res, more, loading } = usePagination("stock", getStockImages, search, page, setErrorInfo)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [noImages, setNoImages] = useState(false)
@@ -48,6 +51,7 @@ const StockImages = (props: any) => {
   const { setImagesCt } = useContext(ImagesContext)
 
   const searchImages = () => {
+
     setNoImages(false)
     getStockImages(search).then((res) => {
       if (res.length === 0) {
@@ -55,6 +59,38 @@ const StockImages = (props: any) => {
       }
       setRes(res)
     })
+
+ setNoImages(false)
+    getStockImages(search)
+      .then((res) => {
+        if (res) {
+           if (res.length === 0) {
+        setNoImages(true)
+      }
+      setRes(res)
+        } else {
+          throw new Error(res)
+        }
+      })
+      .catch((err) => {
+        // @ts-ignore
+        setErrorInfo((prev) => ({
+          ...prev,
+          showError: true,
+          errorMsg: err.message,
+          retryFn: () => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            searchImages()
+          },
+        }))
+        setTimeout(() => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
+        }, 5000)
+        console.log(err)
+      })
+
   }
 
   return (

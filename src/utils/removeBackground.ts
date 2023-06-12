@@ -239,7 +239,7 @@ export const removeBackgroundUsingMask = async ({
       virtualCanvasResultImageRef,
     })
   } catch (error) {
-    console.log("error in removeBackgroundUsingMask", error)
+    return error;
   }
 }
 
@@ -257,7 +257,7 @@ export const removeBackgroundController = async (
   // Get the black and white masked image
   try {
     const result_image = await removeBackgroundWithoutPromps(inputImage, "layer" || "")
-    if (result_image.output_image) {
+    if (result_image?.output_image) {
       // Get the image with removed background
       removeBackgroundUsingMask({
         sourceImage: inputImage || "",
@@ -275,10 +275,11 @@ export const removeBackgroundController = async (
         virtualCanvasResultImageRef,
         outputHandler: outputHandler,
       })
+    } else {
+      throw new Error(result_image);
     }
   } catch (error: any) {
-    console.log(error)
-    throw new Error(error)
+   return error;
   }
 }
 

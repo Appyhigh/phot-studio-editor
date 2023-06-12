@@ -5,7 +5,7 @@ const TextToArtContext = React.createContext({
     prompt: "",
     style: [],
     images_generation_ct: 1,
-    image_wt: 1.0,
+    image_wt: 5.6,
     uploaded_img: "",
     negative_prompt_visible: false,
     negative_prompt: "",
