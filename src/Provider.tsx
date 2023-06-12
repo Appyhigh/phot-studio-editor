@@ -51,7 +51,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     style: [],
     images_generation_ct: 1,
     uploaded_img: "",
-    image_wt: 1.0,
+    image_wt: 5.6,
     negative_prompt_visible: false,
     negative_prompt: "",
     cfg_scale: 7.5,

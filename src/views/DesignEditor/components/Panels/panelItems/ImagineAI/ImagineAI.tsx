@@ -20,7 +20,11 @@ import imagineAiController from "~/utils/imagineAiController"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
+
 import ErrorContext from "~/contexts/ErrorContext"
+
+import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
+
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -77,13 +81,13 @@ const ImagineAI = () => {
       setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
       imagineAiController(
         textToArtInputInfo.prompt,
-        // textToArtInputInfo.uploaded_img,
         textToArtInputInfo.cfg_scale,
         textToArtInputInfo.image_wt,
         textToArtInputInfo.negative_prompt,
         textToArtInputInfo.images_generation_ct,
         textToArtInputInfo.aspect_ratio,
-        textToArtInputInfo.style
+        textToArtInputInfo.style,
+        textToArtInputInfo.uploaded_img,
       )
         .then((responseData) => {
           // @ts-ignore
@@ -135,6 +139,7 @@ const ImagineAI = () => {
                 setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
               }}
               defaultValue={textToArtInputInfo.prompt}
+              value={textToArtInputInfo.prompt}
             ></textarea>
           </Block>
           {/* Select a Style */}
@@ -187,9 +192,9 @@ const ImagineAI = () => {
                 })}
               </div>
             </div>
-            {/* <div className={classes.uploadImageSection}>
+            <div className={classes.uploadImageSection}>
               <UploadInputImg />
-            </div> */}
+            </div>
             <div className={classes.negativePromptSection}>
               <div className="d-flex flex-row">
                 <div className={clsx(classes.artSubHeading, "mb-1")}>Negative prompt </div>
@@ -221,9 +226,10 @@ const ImagineAI = () => {
               <p className={classes.paraText}>Indicate how your input image effect the final output</p>
               <SliderInput
                 minVal={1.0}
+                value={textToArtInputInfo.cfg_scale}
                 maxVal={14.0}
                 handleChange={(e: any) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e / 2 }))
+                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e  }))
                 }}
               />
 
