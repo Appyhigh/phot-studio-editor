@@ -14,6 +14,8 @@ import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
 import clsx from "clsx"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 
 const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
   const inputNextFile = React.useRef<HTMLInputElement>(null)
@@ -24,7 +26,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
 
   const frame = useFrame()
   const editor = useEditor()
-  const activeObject = useActiveObject()
+  const activeObject: any = useActiveObject()
   const [addImgInfo, setAddImgInfo] = useState({
     showPreview: false,
     url: "",
@@ -53,7 +55,14 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       setImageLoading(false)
       setAddImgInfo({ showPreview: true, url: imageUrl })
       if (fileInputType === "add") {
-        addImage(imageUrl)
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          return prev + 1
+        })
+        await getDimensions(imageUrl, (img: any) => {
+          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, latest_ct, setRejectedFileUpload, setAddImgInfo)
+        })
       } else if (fileInputType === "bgupdate") {
         updateBackground(imageUrl)
       } else {
@@ -135,7 +144,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       setMainImgInfo((prev: any) => ({ ...prev, ...upload }))
       setPanelInfo((prev: any) => ({ ...prev, uploadPreview: true, bgOptions: false, bgRemoverBtnActive: true }))
     }
-    editor.objects.remove(activeObject?.id)
+    editor.objects.remove(activeObject.id)
     editor.objects.add(upload)
 
     setTimeout(() => {
@@ -143,26 +152,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     }, 20)
   }
   const { setImagesCt } = useContext(ImagesContext)
-
-  const addImage = (imageUrl: string) => {
-    let latest_ct = 0
-    setImagesCt((prev: any) => {
-      latest_ct = prev + 1
-      const upload = {
-        id: nanoid(),
-        src: imageUrl,
-        preview: imageUrl,
-        metadata: { generationDate: new Date().getTime() },
-        type: "StaticImage",
-        name: latest_ct.toString(),
-      }
-      editor.objects.add(upload).then(() => {
-        setRejectedFileUpload(false)
-        setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
-      })
-      return prev + 1
-    })
-  }
 
   return (
     <Modal

@@ -335,6 +335,7 @@ const LayerPanel = () => {
                                           editor.objects.select(obj.id)
                                           editor.objects.ungroup()
                                         }}
+                                        style={{ paddingTop: "0.25rem" }}
                                       >
                                         <GroupIcon />
                                       </div>
@@ -415,7 +416,7 @@ const LayerPanel = () => {
                                   : activeObject?.id == obj.id
                                   ? "#F1F1F5"
                                   : "#fff",
-                                  marginTop:"8px",
+                                marginTop: "8px",
                                 ":hover": {
                                   background: "#F1F1F5",
                                 },

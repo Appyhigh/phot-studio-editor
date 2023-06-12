@@ -11,12 +11,13 @@ import clsx from "clsx"
 import BgUpload from "~/components/UI/BgUpload/BgUpload"
 import Loader from "~/components/UI/Loader/Loader"
 import LoaderContext from "~/contexts/LoaderContext"
-import { BgSampleImages } from "~/constants/bg-sample-images"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
+import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import useAppContext from "~/hooks/useAppContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -36,6 +37,7 @@ const BgRemover = () => {
     setSelectedBgOption({ type: type, id: idx })
   }
   const [imageLoading, setImageLoading] = useState(false)
+  const { bgSampleImages, setBgSampleImages } = useAppContext()
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -98,6 +100,15 @@ const BgRemover = () => {
     fetchCategories()
   }, [])
 
+  useEffect(() => {
+    const fetchSampleImages = async () => {
+      const result = await bgSampleImagesApi()
+      setBgSampleImages(result)
+    }
+
+    fetchSampleImages()
+  }, [])
+
   return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
@@ -148,14 +159,14 @@ const BgRemover = () => {
           <Scrollable>
             <Block className="py-3">
               <Block className={classes.sampleImgSection}>
-                {BgSampleImages.map((image, index) => {
+                {bgSampleImages.map((image: any, index) => {
                   return (
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        addObject(image.src)
+                        addObject(image.originalImage)
                       }}
-                      preview={image.src}
+                      preview={image.originalImage}
                       imageLoading={imageLoading}
                     />
                   )

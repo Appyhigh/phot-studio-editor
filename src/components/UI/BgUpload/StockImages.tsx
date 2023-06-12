@@ -28,6 +28,7 @@ const StockImages = (props: any) => {
   const { res, more, loading } = usePagination("stock", getStockImages, search, page, setErrorInfo)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
+  const [noImages, setNoImages] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const observer = useRef<any>()
@@ -50,10 +51,23 @@ const StockImages = (props: any) => {
   const { setImagesCt } = useContext(ImagesContext)
 
   const searchImages = () => {
+
+    setNoImages(false)
+    getStockImages(search).then((res) => {
+      if (res.length === 0) {
+        setNoImages(true)
+      }
+      setRes(res)
+    })
+
+ setNoImages(false)
     getStockImages(search)
       .then((res) => {
         if (res) {
-          setRes(res)
+           if (res.length === 0) {
+        setNoImages(true)
+      }
+      setRes(res)
         } else {
           throw new Error(res)
         }
@@ -76,6 +90,7 @@ const StockImages = (props: any) => {
         }, 5000)
         console.log(err)
       })
+
   }
 
   return (
@@ -83,7 +98,14 @@ const StockImages = (props: any) => {
       <div className={classes.inputWrapper}>
         <input
           className={classes.textInput}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value)
+            if (e.target.value === "") {
+              getStockImages().then((res) => {
+                setRes(res)
+              })
+            }
+          }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               searchImages()
@@ -126,9 +148,10 @@ const StockImages = (props: any) => {
                               setMainImgInfo,
                               dataUrl,
                               changeLayerBackgroundImage,
+                              activeObject,
                               null,
-                              null,
-                              setIsLoading
+                              setIsLoading,
+                              true
                             )
                           }),
                           setSelectedImg(image.mongo_id))
@@ -142,6 +165,7 @@ const StockImages = (props: any) => {
           })}
         </div>
         {loading && <img className={classes.stockImagesLoader} src={LoaderSpinner} />}
+        {noImages && <div className={classes.noImages}>Sorry! No results found :(</div>}
       </Scrollbars>
     </div>
   )

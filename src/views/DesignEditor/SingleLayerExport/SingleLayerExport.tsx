@@ -53,8 +53,16 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             let latest_ct = 0
             setImagesCt((prev: any) => {
               latest_ct = prev + 1
-              DuplicateFunc({ editor, activeObject, latest_ct })
-              return prev + 1;
+              DuplicateFunc({ editor }).then(() => {
+                setTimeout(() => {
+                  editor.objects.position("top", activeObject.top)
+                  editor.objects.position("left", activeObject.left)
+                  editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                  editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                  editor.objects.group()
+                }, 20)
+              })
+              return prev + 1
             })
           }}
           icon="Duplicate"
@@ -83,14 +91,26 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
           <div // @ts-ignore
             className={classes.contextMenuSection}
           >
-            <ContextMenuItem   onClick={() => {
-            let latest_ct = 0
-            setImagesCt((prev: any) => {
-              latest_ct = prev + 1
-              DuplicateFunc({ editor, activeObject, latest_ct })
-              return prev + 1;
-            })
-          }} icon="Duplicate" label="Duplicate">
+            <ContextMenuItem
+              onClick={() => {
+                let latest_ct = 0
+                setImagesCt((prev: any) => {
+                  latest_ct = prev + 1
+                  DuplicateFunc({ editor, activeObject }).then(() => {
+                    setTimeout(() => {
+                      editor.objects.position("top", activeObject.top)
+                      editor.objects.position("left", activeObject.left)
+                      editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                      editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                      editor.objects.group()
+                    }, 20)
+                  })
+                  return prev + 1
+                })
+              }}
+              icon="Duplicate"
+              label="Duplicate"
+            >
               <Duplicate size={24} />
             </ContextMenuItem>
             <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
@@ -180,7 +200,6 @@ const ContextMenuItem = ({
   lock?: false
 }) => {
   const activeObject = useActiveObject()
-
   return (
     <div>
       <button

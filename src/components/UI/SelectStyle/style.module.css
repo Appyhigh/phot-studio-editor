@@ -130,7 +130,7 @@
 
 .stylesLoader {
   display: block;
-  position: absolute;
+  position: relative;
   top: 0rem;
   left: 5rem;
 }

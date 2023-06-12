@@ -36,7 +36,7 @@ const ContextMenu = () => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const frame = useFrame()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
-  const {  setImagesCt } = useContext(ImagesContext)
+  const { setImagesCt } = useContext(ImagesContext)
   useEffect(() => {
     if (!contextMenuRequest || !contextMenuRequest.target) {
       setShowDownloadPopup(false)
@@ -73,7 +73,15 @@ const ContextMenu = () => {
             let latest_ct = 0
             setImagesCt((prev: any) => {
               latest_ct = prev + 1
-              DuplicateFunc({ editor, activeObject,latest_ct })
+              DuplicateFunc({ editor, activeObject, latest_ct }).then(() => {
+                setTimeout(() => {
+                  editor.objects.position("top", activeObject.top)
+                  editor.objects.position("left", activeObject.left)
+                  editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                  editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                  editor.objects.group()
+                }, 20)
+              })
               return prev + 1
             })
           }}
