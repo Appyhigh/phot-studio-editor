@@ -20,6 +20,7 @@ import imagineAiController from "~/utils/imagineAiController"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -33,6 +34,7 @@ const ImagineAI = () => {
   const [selectStyleDisplay, setSelectStyleDisplay] = useState(false)
   const selectStyleRef = useRef<HTMLDivElement>(null)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -48,7 +50,7 @@ const ImagineAI = () => {
 
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
-      // If the clearFiled is open and the clicked target is not within the clearfield,
+      // If the clearField is open and the clicked target is not within the clearfield,
       // then close the clearfield
       // @ts-ignore
       if (leftPanelRef?.current && !leftPanelRef?.current?.contains(e.target)) {
@@ -84,6 +86,8 @@ const ImagineAI = () => {
         textToArtInputInfo.style
       )
         .then((responseData) => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
           setTextToArtPanelInfo((prev: any) => ({
             ...prev,
             resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
@@ -91,6 +95,18 @@ const ImagineAI = () => {
           setImagesLoading(false)
         })
         .catch((error) => {
+          setImagesLoading(false)
+          // @ts-ignore
+          setErrorInfo((prev) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              // @ts-ignore
+              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              generateImage()
+            },
+          }))
           console.error("Error:", error)
         })
     }

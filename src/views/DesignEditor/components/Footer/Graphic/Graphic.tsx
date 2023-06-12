@@ -1,19 +1,33 @@
-import React from "react"
+import React, { useContext } from "react"
 import { styled } from "baseui"
 import { Theme } from "baseui/theme"
 import Common from "./Common"
 import Scenes from "./Scenes"
 import Toolbox from "../../Toolbox"
+import ErrorContext from "~/contexts/ErrorContext"
+import Toast from "~/components/Toast/Toast"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   width: "100%",
 }))
 
 const Graphic = () => {
+  const { errorInfo } = useContext(ErrorContext)
+
   return (
     <Container className="d-flex justify-content-center flex-row">
       {/* <Scenes /> */}
       <Toolbox />
+      {errorInfo.showError && (
+        <Toast
+          style={{ width: "50%" }}
+          type="error"
+          message={errorInfo.errorMsg}
+          clickHandler={() => {
+            errorInfo.retryFn()
+          }}
+        />
+      )}
       {/* <Common /> */}
     </Container>
   )
