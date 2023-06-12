@@ -1,3 +1,4 @@
+import _ from "lodash"
 import { nanoid } from "nanoid"
 import { removeBackgroundController } from "~/utils/removeBackground"
 
@@ -14,7 +15,8 @@ export const RemoveBGFunc = async (
   virtualCanvasResultImageRef: any,
   activeObject?: any,
   latest_ct?: any,
-  upload?: any
+  errorInfo?: any,
+  setErrorInfo?: any
 ) => {
   try {
     if (mainImgInfo) {
@@ -37,33 +39,39 @@ export const RemoveBGFunc = async (
         })
       } else {
         setLoaderPopup(true)
-        removeBackgroundController(
+
+        let response = await removeBackgroundController(
           mainImgInfo.src,
           (image: string) => {
             // Add the resultant image to the canvas
-            const options = {
-              type: "StaticImage",
-              src: image,
-              preview: image,
-              name: latest_ct,
-              id: nanoid(),
-              metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
-            }
-            editor.objects.add(options).then(() => {
-              // @ts-ignore
-              setPanelInfo((prev) => ({
-                ...prev,
-                bgOptions: true,
-                bgRemoverBtnActive: false,
-                uploadSection: false,
-                trySampleImg: false,
-              }))
+            if (image) {
+              const options = {
+                type: "StaticImage",
+                src: image,
+                preview: image,
+                name: latest_ct,
+                id: nanoid(),
+                metadata: { generationDate: new Date().getTime(), originalLayerPreview: image },
+              }
+              editor.objects.add(options).then(() => {
+                // @ts-ignore
+                setPanelInfo((prev) => ({
+                  ...prev,
+                  bgOptions: true,
+                  bgRemoverBtnActive: false,
+                  uploadSection: false,
+                  trySampleImg: false,
+                }))
 
-              editor.objects.removeById(mainImgInfo.id)
-              setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-              // Stop the loader
+                editor.objects.removeById(mainImgInfo.id)
+                setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+                // Stop the loader
+                setLoaderPopup(false)
+              })
+            } else {
               setLoaderPopup(false)
-            })
+              throw new Error("Something went wrong while removing background...")
+            }
           },
           virtualSrcImageRef,
           virtualMaskImageRef,
@@ -73,6 +81,10 @@ export const RemoveBGFunc = async (
           1000,
           1000
         )
+        if (response) {
+          setLoaderPopup(false)
+          throw new Error("Something went wrong while removing background...")
+        }
       }
     } else if (activeObject && activeObject?.metadata?.originalLayerPreview) {
       const options = {
@@ -96,42 +108,47 @@ export const RemoveBGFunc = async (
       })
     } else {
       setLoaderPopup(true)
-      removeBackgroundController(
+      let response = await removeBackgroundController(
         activeObject ? activeObject?.preview : mainImgInfo.src,
         (image: string) => {
           // Add the resultant image to the canvas
-          const options = {
-            type: "StaticImage",
-            src: image,
-            preview: image,
-            id: nanoid(),
-            name: latest_ct,
-            metadata: {
-              generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
-              originalLayerPreview: image,
-            },
-          }
-          editor.objects.add(options).then(() => {
-            // @ts-ignore
-            setPanelInfo((prev) => ({
-              ...prev,
-              bgOptions: true,
-              bgRemoverBtnActive: false,
-              uploadSection: false,
-              trySampleImg: false,
-              uploadPreview: false,
-            }))
-            setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-            if (activeObject) {
-              editor.objects.removeById(activeObject.id)
-              editor.objects.position("top", activeObject.top)
-              editor.objects.position("left", activeObject.left)
-              editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-              editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-            } else editor.objects.removeById(mainImgInfo.id)
-            // Stop the loader
+          if (image) {
+            const options = {
+              type: "StaticImage",
+              src: image,
+              preview: image,
+              id: nanoid(),
+              name: latest_ct,
+              metadata: {
+                generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
+                originalLayerPreview: image,
+              },
+            }
+            editor.objects.add(options).then(() => {
+              // @ts-ignore
+              setPanelInfo((prev) => ({
+                ...prev,
+                bgOptions: true,
+                bgRemoverBtnActive: false,
+                uploadSection: false,
+                trySampleImg: false,
+                uploadPreview: false,
+              }))
+              setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+              if (activeObject) {
+                editor.objects.removeById(activeObject.id)
+                editor.objects.position("top", activeObject.top)
+                editor.objects.position("left", activeObject.left)
+                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+              } else editor.objects.removeById(mainImgInfo.id)
+              // Stop the loader
+              setLoaderPopup(false)
+            })
+          } else {
             setLoaderPopup(false)
-          })
+            throw new Error("Something went wrong while removing background...")
+          }
         },
         virtualSrcImageRef,
         virtualMaskImageRef,
@@ -141,10 +158,46 @@ export const RemoveBGFunc = async (
         activeObject ? activeObject?.width * activeObject?.scaleX : 1000,
         activeObject ? activeObject?.height * activeObject?.scaleY : 1000
       )
+      if (response) {
+        setLoaderPopup(false)
+        throw new Error("Something went wrong while removing background...")
+      }
     }
+
     // Start the loader
   } catch (error: any) {
     setLoaderPopup(false)
+    // @ts-ignore
+    setErrorInfo((prev) => ({
+      ...prev,
+      showError: true,
+      errorMsg: "Something went wrong while removing background...",
+      retryFn: () => {
+        // @ts-ignore
+        setErrorInfo((prev) => ({ ...prev, showError: false }))
+        RemoveBGFunc(
+          editor,
+          setLoaderPopup,
+          setPanelInfo,
+          mainImgInfo,
+          setMainImgInfo,
+          virtualSrcImageRef,
+          virtualMaskImageRef,
+          virtualCanvasSrcImageRef,
+          virtualCanvasMaskImageRef,
+          virtualCanvasResultImageRef,
+          activeObject,
+          latest_ct,
+          errorInfo,
+          setErrorInfo
+        )
+      },
+    }))
+    setTimeout(() => {
+      // @ts-ignore
+      setErrorInfo((prev) => ({ ...prev, showError: false }))
+    }, 5000)
     console.log("Something went wrong while removing background...", error.message)
+    return error
   }
 }

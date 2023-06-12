@@ -28,4 +28,7 @@ export const removeBackgroundWithoutPromps = (image: string | undefined, fileNam
       // return result.output_image;
       return result
     })
+    .catch((err) => {
+      return err;
+    })
 }

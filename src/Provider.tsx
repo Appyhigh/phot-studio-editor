@@ -17,6 +17,7 @@ import MainImageContext from "./contexts/MainImageContext"
 import AuthWrapper from "./hooks/useAuth"
 import ImagesContext from "./contexts/ImagesCountContext"
 import TextToArtContext from "./contexts/TextToArtContext"
+import ErrorContext from "./contexts/ErrorContext"
 
 const engine = new Styletron()
 
@@ -67,11 +68,20 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   const [result, setResult] = useState([])
 
+  const [errorInfo, setErrorInfo] = useState({
+    errorInfo: {
+      showError: false,
+      errorMsg: "",
+      retryFn: () => {},
+    },
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
         <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+            <ErrorContext.Provider value={{errorInfo,setErrorInfo}}>
             <TextToArtContext.Provider
               value={{
                 textToArtInputInfo,
@@ -100,6 +110,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                 </DesignEditorProvider>
               </MainImageContext.Provider>
             </TextToArtContext.Provider>
+            </ErrorContext.Provider>
           </LoaderContext.Provider>
         </ImagesContext.Provider>
       </ReduxProvier>
