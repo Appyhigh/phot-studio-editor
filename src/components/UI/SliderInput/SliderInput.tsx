@@ -18,10 +18,7 @@ const SliderInput = ({ value, minVal, maxVal, handleChange }: any) => {
       min={minVal}
       max={maxVal}
       value={val}
-      style={{background: `linear-gradient(to right, #6729F3 0%, #6729F3 ${
-          ((value - minVal) / (maxVal - minVal)) * 100
-        }%, #DEE2E6 ${((value - minVal) / (maxVal - minVal)) * 100}%, #DEE2E6 100%)`,
-      }}
+
       onChange={(e) => {
         handleChange(e.target.value)
         setVal(e.target.value)
