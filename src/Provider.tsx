@@ -31,8 +31,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     url: "",
     original: "",
     metadata: {},
-    swiper_selected_option:false,
-    swiper_selected_color:""
+    swiper_selected_option: false,
+    swiper_selected_color: "",
   })
 
   const [panelInfo, setPanelInfo] = useState({
@@ -50,7 +50,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     style: [],
     images_generation_ct: 1,
     uploaded_img: "",
-    image_wt: 1.0,
+    image_wt: 5.6,
     negative_prompt_visible: false,
     negative_prompt: "",
     cfg_scale: 7.5,

@@ -18,14 +18,14 @@ const imagineAiController = async (
       prompt: prompt,
       image: image,
       guidance_scale: guidance_scale,
-      image_strength: image_strength,
+      image_strength: image_strength / 10,
       negative_prompt: negative_prompt,
       num_outputs: num_outputs,
       aspect_ratio: aspect_ratio,
       studio_options: {
         style: style,
       },
-    }    
+    }
     const config = {
       headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
     }
