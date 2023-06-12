@@ -112,9 +112,10 @@ const StockImages = (props: any) => {
                               setMainImgInfo,
                               dataUrl,
                               changeLayerBackgroundImage,
+                              activeObject,
                               null,
-                              null,
-                              setIsLoading
+                              setIsLoading,
+                              true
                             )
                           }),
                           setSelectedImg(image.mongo_id))

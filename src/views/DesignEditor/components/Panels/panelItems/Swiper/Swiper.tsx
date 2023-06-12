@@ -37,9 +37,10 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
             setMainImgInfo,
             dataUrl,
             changeLayerBackgroundImage,
+            activeObject,
             null,
-            null,
-            setIsLoading
+            setIsLoading,
+            true
           )
         })
       }
