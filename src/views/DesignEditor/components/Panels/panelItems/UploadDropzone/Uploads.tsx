@@ -15,26 +15,19 @@ import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
-export default function ({ uploadType, activePanel}: any) {
+export default function ({ uploadType, activePanel }: any) {
   const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [uploads, setUploads] = React.useState<any[]>([])
- const [imageLoading,setImageLoading]=useState(false);
- 
+  const [imageLoading, setImageLoading] = useState(false)
+
   const editor = useEditor()
   const frame = useFrame()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
 
   let scale = 1
-
-  const getDimensions = async (url: any, callback: any) => {
-    const img = new Image()
-    img.src = url
-    img.onload = () => {
-      callback(img)
-    }
-  }
 
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
