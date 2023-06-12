@@ -96,6 +96,8 @@ const ImagineAI = () => {
         })
         .catch((error) => {
           setImagesLoading(false)
+          // @ts-ignore 
+          setTextToArtPanelInfo((prev)=>({...prev,resultSectionVisible:false}))
           // @ts-ignore
           setErrorInfo((prev) => ({
             ...prev,
