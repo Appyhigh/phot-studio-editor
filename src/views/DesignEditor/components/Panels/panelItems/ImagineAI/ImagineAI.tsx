@@ -200,9 +200,10 @@ const ImagineAI = () => {
               <p className={classes.paraText}>Indicate how your input image effect the final output</p>
               <SliderInput
                 minVal={1.0}
+                value={textToArtInputInfo.cfg_scale}
                 maxVal={14.0}
                 handleChange={(e: any) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e / 2 }))
+                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e  }))
                 }}
               />
 
