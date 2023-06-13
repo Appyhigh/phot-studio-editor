@@ -8,7 +8,6 @@ import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
-  
 
   useEffect(() => {
     if (editor) {
@@ -16,7 +15,6 @@ const Canvas = () => {
         editor.frame?.background?.canvas?._objects.length === 2 &&
         editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff"
       ) {
-        
         const options = {
           type: "BackgroundImage",
           src: checkboxBGUrl,
@@ -31,6 +29,20 @@ const Canvas = () => {
       }
     }
   }, [editor])
+
+  // useEffect(() => {
+  //   if (editor) {
+  //     editor.canvas.canvas.on("", (event: any) => {
+  //       var object = event.target
+  //       console.log(object)
+  //     })
+
+  //     editor.canvas.canvas.on("object:modified", (event: any) => {
+  //       var object = event.target
+  //       object.applyFilters()
+  //     })
+  //   }
+  // }, [editor])
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
