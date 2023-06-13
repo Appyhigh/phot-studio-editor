@@ -6,8 +6,26 @@ import BasePannel from "~/components/UI/BasePannel/BasePannel"
 import { Block } from "baseui/block"
 import Navbar from "~/components/UI/Common/Navbar/Navbar"
 import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
+import { fabric } from "fabric"
+import { useContext, useEffect, useRef } from "react"
+import { useActiveObject, useEditor } from "@layerhub-io/react"
 
 const GraphicEditor = () => {
+  // Initially set the canvas background as Transparent Checkbox Image
+  const editor = useEditor()
+
+  useEffect(() => {
+    if (editor) {
+      // Setup Selection Style
+      fabric.Object.prototype.transparentCorners = false
+      fabric.Object.prototype.cornerStyle = "circle"
+      fabric.Object.prototype.borderColor = "#6729F3"
+      fabric.Object.prototype.cornerColor = "#6729F3"
+      fabric.Object.prototype.cornerStrokeColor = "#FFF"
+      fabric.Object.prototype.padding = 0
+    }
+  }, [editor])
+
   return (
     <EditorContainer>
       <Navbar />

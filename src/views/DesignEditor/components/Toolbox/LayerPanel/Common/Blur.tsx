@@ -17,31 +17,42 @@ const Blur = () => {
 
   const handleBlurChange = useCallback(
     async (e: any) => {
-      const data: any = await getModifiedImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        e[0],
-        SLIDER_TYPE.BLUR
-      )
-      console.log(data)
+      // const data: any = await getModifiedImage(
+      //   activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+      //   e[0],
+      //   SLIDER_TYPE.BLUR
+      // )
+      // console.log(data)
       setBlurVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { BLUR: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
-      // editor.objects.remove(activeObject?.id)
-      // editor.objects.add({
-      //   src: data,
-      //   // id: nanoid(),
+      // // Create a new image element
+      // var imageElement = document.createElement("img")
+
+      // // Set the crossorigin attribute
+      // imageElement.setAttribute("crossorigin", "Anonymous")
+
+      // // Set the class attribute
+      // imageElement.setAttribute("class", "canvas-img")
+
+      // // Set the src attribute
+      // imageElement.setAttribute("src", data)
+      // editor.objects.update({
       //   preview: data,
-      //   original: data,
-      //   type: "StaticImage",
-      //   name: activeObject.name,
+      //   src: data,
+      //   fill: data,
+      //   metadata: {
+      //     general: { BLUR: e[0] },
+      //     originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+      //   },
+      //   _element: imageElement,
       // })
+      // console.log(activeObject)
+      var filter = new fabric.Image.filters.Blur({
+        blur: e[0] / 100,
+      })
+      editor.objects.update({
+        filters: [filter],
+      })
+      editor.objects.findById(activeObject.id)[0].applyFilters()
     },
     [objects]
   )
