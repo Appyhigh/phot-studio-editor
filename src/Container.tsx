@@ -224,6 +224,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           } else {
             editor.objects.add(layer).then(() => {
               // @ts-ignore
+              console.log("fetch from indexDB", layer)
               let filters = []
               let idx = IsFilterPresentMetadata(layer.metadata, "brightness")
               if (idx != -1) {
