@@ -22,6 +22,15 @@ const Adjust = () => {
     } else if (SLIDER_TYPE.HUE === type) {
       let index = IsFilterPresent(activeObject, "HueRotation")
       if (index != -1) defaultValue = activeObject?.filters[index]?.rotation * 100
+    } else if (SLIDER_TYPE.NOISE === type) {
+      let index = IsFilterPresent(activeObject, "Noise")
+      if (index != -1) defaultValue = activeObject?.filters[index]?.noise
+    } else if (SLIDER_TYPE.PIXELATE === type) {
+      let index = IsFilterPresent(activeObject, "Pixelate")
+      if (index != -1) defaultValue = activeObject?.filters[index]?.blocksize * 10
+    } else if (SLIDER_TYPE.VIBRANCE === type) {
+      let index = IsFilterPresent(activeObject, "Vibrance")
+      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance * 100
     }
 
     return defaultValue

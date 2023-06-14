@@ -159,8 +159,8 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       }
 
       getImagesCt.onsuccess = (event: any) => {
-        const data = event.target.result        
-        setImagesCt(data??0)
+        const data = event.target.result
+        setImagesCt(data ?? 0)
       }
       getRequest.onsuccess = (event: any) => {
         const data = event.target.result

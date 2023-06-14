@@ -1,11 +1,9 @@
-import clsx from "clsx"
-import React, { useContext, useState } from "react"
+import React, { useState } from "react"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import classes from "./style.module.css"
 import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
-import { applyLightImageEffect, getModifiedImage } from "~/utils/canvasUtils"
-import { DesignEditorContext } from "~/contexts/DesignEditor"
+import { applyLightImageEffect } from "~/utils/canvasUtils"
 import { fabric } from "fabric"
 import { IsFilterPresent } from "~/views/DesignEditor/utils/functions/FilterFunc"
 const BaseSlider = ({
@@ -71,6 +69,8 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -89,6 +89,8 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -108,6 +110,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -127,6 +130,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -182,6 +186,66 @@ const BaseSlider = ({
           originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         },
       })
+    } else if (type === SLIDER_TYPE.VIBRANCE) {
+      let index = IsFilterPresent(activeObject, "Vibrance")
+
+      if (index != -1) {
+        activeObject.filters[index]["vibrance"] = e[0] / 100
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+      } else {
+        var filter = new fabric.Image.filters.Vibrance({
+          vibration: e[0] / 100,
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
+      editor.canvas.requestRenderAll()
+    } else if (type === SLIDER_TYPE.PIXELATE) {
+      let index = IsFilterPresent(activeObject, "Pixelate")
+
+      if (index != -1) {
+        activeObject.filters[index]["blocksize"] = e[0] / 10
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+      } else {
+        var filter = new fabric.Image.filters.Pixelate({
+          blocksize: e[0] / 10,
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
+      editor.canvas.requestRenderAll()
+    } else if (SLIDER_TYPE.NOISE) {
+      let index = IsFilterPresent(activeObject, "Noise")
+
+      if (index != -1) {
+        activeObject.filters[index]["noise"] = e[0]
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+      } else {
+        var filter = new fabric.Image.filters.Noise({
+          noise: e[0],
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
+      editor.canvas.requestRenderAll()
     } else {
       setInputVal(e[0])
     }

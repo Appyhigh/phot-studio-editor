@@ -65,4 +65,28 @@ export const AdjustOptions = [
     step: 1,
     defaultValue: 50,
   },
+  {
+    name: "Vibrance",
+    minVal: 0,
+    maxVal: 100,
+    type: SLIDER_TYPE.VIBRANCE,
+    step: 1,
+    defaultValue: 50,
+  },
+  {
+    name: "Noise",
+    minVal: 0,
+    maxVal: 100,
+    type: SLIDER_TYPE.NOISE,
+    step: 1,
+    defaultValue: 50,
+  },
+  {
+    name: "Pixelate",
+    minVal: 0,
+    maxVal: 100,
+    type: SLIDER_TYPE.PIXELATE,
+    step: 1,
+    defaultValue: 50,
+  },
 ]
