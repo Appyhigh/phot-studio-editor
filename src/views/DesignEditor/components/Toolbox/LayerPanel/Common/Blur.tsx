@@ -1,10 +1,11 @@
 import { Block } from "baseui/block"
-import { useCallback, useState } from "react"
+import { useCallback, useState,useEffect } from "react"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import classes from "./style.module.css"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { getModifiedImage } from "~/utils/canvasUtils"
 import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
+import { fabric } from "fabric"
 // import { getBlurImage } from "~/utils/canvasUtils"
 
 const Blur = () => {
@@ -14,6 +15,12 @@ const Blur = () => {
   const objects = useObjects()
   const editor = useEditor()
   const activeObject: any = useActiveObject()
+
+  useEffect(()=>{
+    if(activeObject?.filters[0]?.blur){
+      setBlurVal(activeObject.filters[0].blur * 100)
+    }
+   },[activeObject])
 
   const handleBlurChange = useCallback(
     async (e: any) => {
@@ -49,9 +56,13 @@ const Blur = () => {
       var filter = new fabric.Image.filters.Blur({
         blur: e[0] / 100,
       })
-      editor.objects.update({
+
+      const options = {
         filters: [filter],
-      })
+        metadata:{BLUR:e[0]/100}
+      }
+
+       editor.objects.update(options)
       editor.objects.findById(activeObject.id)[0].applyFilters()
     },
     [objects]
@@ -65,7 +76,7 @@ const Blur = () => {
           minVal={minQuality}
           maxVal={maxQuality}
           thumbSize={"14px"}
-          val={[activeObject?.metadata?.general ? activeObject?.metadata?.general[SLIDER_TYPE.BLUR] ?? 0 : 0]}
+          val={[blurVal]}
           handleChange={handleBlurChange}
         />
       </Block>

@@ -12,6 +12,7 @@ import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 import { loadFonts } from "./utils/fonts"
 import ImagesContext from "./contexts/ImagesCountContext"
+import { fabric } from "fabric"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -222,6 +223,20 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             addText(layer)
           } else {
             editor.objects.add(layer).then(() => {
+              
+              if(layer?.metadata?.BLUR){
+                var filter = new fabric.Image.filters.Blur({
+                  blur: layer.metadata.BLUR,
+                })
+
+                const options = {
+                  filters: [filter],
+                  // metadata:{BLUR:layer.metadata.BLUR}
+                }
+                editor.objects.update(options)
+                editor.objects.findById(layer.id)[0].applyFilters()
+              }
+
               editor.objects.update({ top: layer.top, left: layer.left })
             })
           }
