@@ -1,3 +1,5 @@
+import { log } from "console"
+
 export const IsFilterPresent = (activeObject: any, type: any) => {
   if (activeObject?.filters) {
     let value = false
@@ -11,5 +13,17 @@ export const IsFilterPresent = (activeObject: any, type: any) => {
     return index
   } else {
     return -1
+  }
+}
+
+export const IsFilterPresentMetadata = (metadata, type) => {
+  if (metadata?.filters) {
+    let value = -1;
+    metadata?.filters?.map((each, idx) => {
+      if (Object.keys(metadata?.filters[idx])[0] === type) {
+        value = idx;
+      }
+    })
+    return value;
   }
 }

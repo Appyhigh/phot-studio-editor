@@ -12,6 +12,8 @@ import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 import { loadFonts } from "./utils/fonts"
 import ImagesContext from "./contexts/ImagesCountContext"
+import { IsFilterPresentMetadata } from "./views/DesignEditor/utils/functions/FilterFunc"
+import { fabric } from "fabric"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -221,7 +223,61 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             addText(layer)
           } else {
             editor.objects.add(layer).then(() => {
-              editor.objects.update({ top: layer.top, left: layer.left })
+              // @ts-ignore
+              let filters = []
+              let idx = IsFilterPresentMetadata(layer.metadata, "brightness")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.Brightness({
+                  brightness: layer?.metadata?.filters[idx].brightness,
+                })
+                filters = [...filters, filter]
+              }
+              idx = IsFilterPresentMetadata(layer.metadata, "contrast")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.Contrast({
+                  contrast: layer?.metadata?.filters[idx].contrast,
+                })
+                filters = [...filters, filter]
+              }
+              idx = IsFilterPresentMetadata(layer.metadata, "saturation")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.Saturation({
+                  saturation: layer?.metadata?.filters[idx].saturation,
+                })
+                filters = [...filters, filter]
+              }
+              idx = IsFilterPresentMetadata(layer.metadata, "rotation")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.HueRotation({
+                  rotation: layer?.metadata?.filters[idx].rotation,
+                })
+                filters = [...filters, filter]
+              }
+
+              idx = IsFilterPresentMetadata(layer.metadata, "vibrance")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.Vibrance({
+                  vibrance: layer?.metadata?.filters[idx].vibrance,
+                })
+                filters = [...filters, filter]
+              }
+              idx = IsFilterPresentMetadata(layer.metadata, "blocksize")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.Pixelate({
+                  blocksize: layer?.metadata?.filters[idx].blocksize,
+                })
+                filters = [...filters, filter]
+              }
+              idx = IsFilterPresentMetadata(layer.metadata, "noise")
+              if (idx != -1) {
+                var filter = new fabric.Image.filters.Noise({
+                  noise: layer?.metadata?.filters[idx].noise,
+                })
+                filters = [...filters, filter]
+              }
+
+              editor.objects.update({ top: layer.top, left: layer.left, filters: filters })
+              editor.objects.findById(layer.id)[0].applyFilters()
             })
           }
         }

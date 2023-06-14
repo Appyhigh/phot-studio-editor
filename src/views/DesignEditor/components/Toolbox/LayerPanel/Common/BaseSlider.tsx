@@ -57,8 +57,13 @@ const BaseSlider = ({
     } else if (type === SLIDER_TYPE.BRIGHTNESS) {
       let index = IsFilterPresent(activeObject, "Brightness")
       if (index != -1) {
-        activeObject.filters[index]["brightness"] = e[0] / 100
+        activeObject.filters[index]["brightness"] = e[0] / 100;
+      
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
         editor.canvas.requestRenderAll()
       } else {
@@ -69,8 +74,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
-
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -80,6 +84,10 @@ const BaseSlider = ({
       if (index != -1) {
         activeObject.filters[index]["contrast"] = e[0] / 100
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Contrast({
@@ -89,8 +97,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
-
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -101,6 +108,10 @@ const BaseSlider = ({
       if (index != -1) {
         activeObject.filters[index]["saturation"] = e[0] / 100
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Saturation({
@@ -110,7 +121,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -121,6 +132,10 @@ const BaseSlider = ({
       if (index != -1) {
         activeObject.filters[index]["rotation"] = e[0] / 100
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.HueRotation({
@@ -130,7 +145,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -192,16 +207,20 @@ const BaseSlider = ({
       if (index != -1) {
         activeObject.filters[index]["vibrance"] = e[0] / 100
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Vibrance({
-          vibration: e[0] / 100,
+          vibrance: e[0] / 100,
         })
         setInputVal(e[0])
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -212,16 +231,21 @@ const BaseSlider = ({
       if (index != -1) {
         activeObject.filters[index]["blocksize"] = e[0] / 10
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Pixelate({
           blocksize: e[0] / 10,
         })
+
         setInputVal(e[0])
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
@@ -232,6 +256,10 @@ const BaseSlider = ({
       if (index != -1) {
         activeObject.filters[index]["noise"] = e[0]
         editor.objects.findById(activeObject?.id)[0].applyFilters()
+        editor.objects.update({
+          // @ts-ignore
+          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+        })
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Noise({
@@ -241,7 +269,7 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata:{...activeObject.metadata,filters:[...activeObject?.filters, filter]}
+          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
       }
