@@ -7,7 +7,7 @@ import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/useAuth"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 import { loadFonts } from "./utils/fonts"
@@ -29,6 +29,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const objects = useObjects()
   const { setImagesCt } = useContext(ImagesContext)
   useEffect(() => {
     const containerElement = containerRef.current!
@@ -330,7 +331,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         saveData(data, canvasDim, images)
       })
     }
-  }, [editor])
+  }, [editor,objects])
 
   return (
     <div

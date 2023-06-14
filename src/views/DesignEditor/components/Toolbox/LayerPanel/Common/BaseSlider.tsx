@@ -254,7 +254,7 @@ const BaseSlider = ({
       let index = IsFilterPresent(activeObject, "Vibrance")
 
       if (index != -1) {
-        activeObject.filters[index]["vibrance"] = e[0] / 100
+        activeObject.filters[index]["vibrance"] = e[0]
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
 
@@ -267,7 +267,7 @@ const BaseSlider = ({
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Vibrance({
-          vibrance: e[0] / 100,
+          vibrance: e[0],
         })
         setInputVal(e[0])
         editor.objects.update({

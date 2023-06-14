@@ -85,7 +85,6 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
       })
 
       template = { ...template, layers: template.layers.filter((layer: any) => !hiddenLayersIDs.includes(layer.id)) }
-
       const image = (await editor.renderer.render(template)) as string
       const nWidth = frame.width * sizeVal
       const nHeight = frame.height * sizeVal
