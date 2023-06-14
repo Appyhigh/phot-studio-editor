@@ -6,7 +6,8 @@ import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { applyLightImageEffect, getModifiedImage } from "~/utils/canvasUtils"
 import { DesignEditorContext } from "~/contexts/DesignEditor"
-
+import { fabric } from "fabric"
+import { IsFilterPresent } from "~/views/DesignEditor/utils/functions/FilterFunc"
 const BaseSlider = ({
   name,
   minVal,
@@ -28,10 +29,6 @@ const BaseSlider = ({
   const minQuality = minVal
   const maxQuality = maxVal
   const activeObject: any = useActiveObject()
-
-  // const handleInputChange = (e: any) => {
-  //   setInputVal(e[0])
-  // }
 
   React.useEffect(() => {
     // @ts-ignore
@@ -60,73 +57,80 @@ const BaseSlider = ({
       })
       setInputVal(e[0])
     } else if (type === SLIDER_TYPE.BRIGHTNESS) {
-      const data: any = await getModifiedImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        e[0],
-        SLIDER_TYPE.BRIGHTNESS
-      )
-      console.log(data)
-      setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { BRIGHTNESS: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      let index = IsFilterPresent(activeObject, "Brightness")
+      if (index != -1) {
+        activeObject.filters[index]["brightness"] = e[0] / 100
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+        editor.canvas.requestRenderAll()
+      } else {
+        var filter = new fabric.Image.filters.Brightness({
+          brightness: e[0] / 100,
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
     } else if (type === SLIDER_TYPE.CONTRAST) {
-      const data = await getModifiedImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        e[0],
-        SLIDER_TYPE.CONTRAST
-      )
-      console.log(data)
-      setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { CONTRAST: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      let index = IsFilterPresent(activeObject, "Contrast")
+
+      if (index != -1) {
+        activeObject.filters[index]["contrast"] = e[0] / 100
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+      } else {
+        var filter = new fabric.Image.filters.Contrast({
+          contrast: e[0] / 100,
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
+      editor.canvas.requestRenderAll()
     } else if (type === SLIDER_TYPE.SATURATION) {
-      const data = await getModifiedImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        e[0],
-        SLIDER_TYPE.SATURATION
-      )
-      console.log(data)
-      setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { SATURATION: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      let index = IsFilterPresent(activeObject, "Saturation")
+
+      if (index != -1) {
+        activeObject.filters[index]["saturation"] = e[0] / 100
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+      } else {
+        var filter = new fabric.Image.filters.Saturation({
+          saturation: e[0] / 100,
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
+      editor.canvas.requestRenderAll()
     } else if (type === SLIDER_TYPE.HUE) {
-      const data = await getModifiedImage(
-        activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        e[0],
-        SLIDER_TYPE.HUE
-      )
-      console.log(data)
-      setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { HUE: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      let index = IsFilterPresent(activeObject, "HueRotation")
+
+      if (index != -1) {
+        activeObject.filters[index]["rotation"] = e[0] / 100
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+        setInputVal(e[0])
+      } else {
+        var filter = new fabric.Image.filters.HueRotation({
+          rotation: e[0] / 100,
+        })
+        setInputVal(e[0])
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+        })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      }
+      editor.canvas.requestRenderAll()
     } else if (type === SLIDER_TYPE.OPACITY) {
       setInputVal(e[0])
       editor.objects.update({ opacity: e[0] / 100 })
@@ -136,7 +140,6 @@ const BaseSlider = ({
         e[0],
         SLIDER_TYPE.HIGHLIGHT
       )
-      console.log(data)
       setInputVal(e[0])
       editor.objects.update({
         preview: data,
@@ -153,7 +156,6 @@ const BaseSlider = ({
         e[0],
         SLIDER_TYPE.LOWLIGHT
       )
-      console.log(data)
       setInputVal(e[0])
       editor.objects.update({
         preview: data,
@@ -170,7 +172,6 @@ const BaseSlider = ({
         e[0],
         SLIDER_TYPE.TEMPERATURE
       )
-      console.log(data)
       setInputVal(e[0])
       editor.objects.update({
         preview: data,

@@ -16,7 +16,7 @@ export const AdjustOptions = [
     maxVal: 100,
     percentage: true,
     type: SLIDER_TYPE.CONTRAST,
-    step: 0.5,
+    step: 1,
     defaultValue: 50,
   },
   {
@@ -25,7 +25,7 @@ export const AdjustOptions = [
     maxVal: 100,
     percentage: true,
     type: SLIDER_TYPE.SATURATION,
-    step: 0.5,
+    step: 1,
     defaultValue: 50,
   },
   {

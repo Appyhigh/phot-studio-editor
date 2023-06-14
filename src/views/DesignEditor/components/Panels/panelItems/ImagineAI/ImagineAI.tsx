@@ -138,7 +138,6 @@ const ImagineAI = () => {
               onChange={(e) => {
                 setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
               }}
-              defaultValue={textToArtInputInfo.prompt}
               value={textToArtInputInfo.prompt}
             ></textarea>
           </Block>
