@@ -16,25 +16,6 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
 
-let uppy: any
-if (typeof window !== "undefined") {
-  uppy = new Uppy({ autoProceed: false })
-  uppy.use(OneDrive, {
-    companionUrl: "https://devapi.phot.ai/companion",
-  })
-  uppy.use(Dropbox, {
-    companionUrl: "https://devapi.phot.ai/companion",
-  })
-  uppy.use(Url, {
-    companionUrl: "https://devapi.phot.ai/companion",
-  })
-  uppy.use(XHR, { endpoint: "https://devapi.phot.ai/app/api/v1/signedURL?tool=BACKGROUND_REMOVER" })
-  uppy.setOptions({
-    allowedFileTypes: ["image/*"],
-    maxFileSize: 10485760,
-  })
-}
-
 const UppyDashboard = ({
   close,
   setImageLoading,
@@ -45,10 +26,44 @@ const UppyDashboard = ({
   setPanelInfo,
   activeOb,
   activeObject,
+  id,
+  setSelectedImage,
+  uploadType,
+  uploads,
+  setUploads,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
   const frame = useFrame()
+
+  let uppy: any
+  if (typeof window !== "undefined") {
+    uppy = new Uppy({
+      id: id,
+      autoProceed: false,
+    })
+    uppy.use(OneDrive, {
+      companionUrl: "https://devapi.phot.ai/companion",
+    })
+    uppy.use(Dropbox, {
+      companionUrl: "https://devapi.phot.ai/companion",
+    })
+    uppy.use(Url, {
+      companionUrl: "https://devapi.phot.ai/companion",
+    })
+    uppy.use(XHR, {
+      endpoint: "https://devapi.phot.ai/app/api/v1/signedURL?tool=BACKGROUND_REMOVER",
+      withCredentials: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      },
+    })
+    uppy.setOptions({
+      allowedFileTypes: ["image/*"],
+      maxFileSize: 10485760,
+    })
+  }
 
   useEffect(() => {
     uppy.on("file-added", async (file: any) => {
@@ -57,25 +72,28 @@ const UppyDashboard = ({
         uppy.upload()
       } else {
         setImageLoading(true)
-        console.log("FILE INPUT TYPE", fileInputType)
         const imageUrl = file.source == "Url" ? file.remote.body.fileId : await getBucketImageUrlFromFile(file.data)
         HandleFile(
           imageUrl,
           setImageLoading,
-          setAddImgInfo,
           fileInputType,
           setImagesCt,
           editor,
           frame,
-          mainImgInfo,
-          setMainImgInfo,
-          setPanelInfo,
-          activeOb,
-          activeObject
+          setAddImgInfo ? setAddImgInfo : null,
+          mainImgInfo ? mainImgInfo : null,
+          setMainImgInfo ? setMainImgInfo : null,
+          setPanelInfo ? setPanelInfo : null,
+          activeOb ? activeOb : null,
+          activeObject ? activeObject : null,
+          setSelectedImage ? setSelectedImage : null,
+          uploadType ? uploadType : null,
+          uploads ? uploads : null,
+          setUploads ? setUploads : null
         )
         uppy.cancelAll()
         setTimeout(() => {
-          setImageLoading(false)
+          fileInputType != "panelAdd" ? setImageLoading(false) : null
           close()
         }, 200)
       }
@@ -88,22 +106,26 @@ const UppyDashboard = ({
           HandleFile(
             imageUrl,
             setImageLoading,
-            setAddImgInfo,
             fileInputType,
             setImagesCt,
             editor,
             frame,
-            mainImgInfo,
-            setMainImgInfo,
-            setPanelInfo,
-            activeOb,
-            activeObject
+            setAddImgInfo ? setAddImgInfo : null,
+            mainImgInfo ? mainImgInfo : null,
+            setMainImgInfo ? setMainImgInfo : null,
+            setPanelInfo ? setPanelInfo : null,
+            activeOb ? activeOb : null,
+            activeObject ? activeObject : null,
+            setSelectedImage ? setSelectedImage : null,
+            uploadType ? uploadType : null,
+            uploads ? uploads : null,
+            setUploads ? setUploads : null
           )
         }
       }
       uppy.cancelAll()
       setTimeout(() => {
-        setImageLoading(false)
+        fileInputType != "panelAdd" ? setImageLoading(false) : null
         close()
       }, 200)
     })
@@ -128,16 +150,19 @@ const UppyDashboard = ({
 
     const uppyUploadIcon = document.querySelector(".uppy-upload-icon")
     const uppyAddFile = document.querySelector(".uppy-Dashboard-AddFiles")
-    if (uppyAddFile != null) uppyAddFile!.insertBefore(uppyUploadIcon!, uppyAddFile!.firstChild)
+    if (fileInputType != "panelAdd")
+      if (uppyAddFile != null) uppyAddFile!.insertBefore(uppyUploadIcon!, uppyAddFile!.firstChild)
   }, [])
 
   return (
-    <div>
-      <div className="uppy-upload-icon">
-        <div className={classes.uploadIcon}>
-          <Icons.Upload size={31} />
+    <div key={id}>
+      {fileInputType != "panelAdd" ? (
+        <div className="uppy-upload-icon">
+          <div className={classes.uploadIcon}>
+            <Icons.Upload size={31} />
+          </div>
         </div>
-      </div>
+      ) : null}
       <Dashboard
         uppy={uppy}
         plugins={["Dropbox", "OneDrive", "Url"]}

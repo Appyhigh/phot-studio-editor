@@ -10,7 +10,7 @@ import Icons from "~/components/Icons"
 import clsx from "clsx"
 import UppyDashboard from "../UploadInput/UppyDashboard"
 
-const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) => {
+const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb, id }: any) => {
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
   const [imageLoading, setImageLoading] = useState(false)
@@ -47,7 +47,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         Dialog: {
           style: ({ $theme }) => ({
             backgroundColor: $theme.colors.white,
-            width: "600px",
+            width: "550px",
           }),
         },
       }}
@@ -75,6 +75,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
                 setPanelInfo={setPanelInfo}
                 activeOb={activeOb}
                 activeObject={activeObject}
+                id={id}
               />
             </div>
           </>
@@ -82,12 +83,12 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         {imageLoading && !rejectedFileUpload && (
           <Block
             className={clsx(
-              "d-flex justify-content-center align-items-center flex-column pointer p-relative mt-6 mb-2",
+              "d-flex justify-content-center align-items-center flex-column pointer p-relative p-2 m-2 mt-6 ",
               classes.uploadInput
             )}
           >
             <Block className={classes.uploadInputContainer}>
-              <Icons.InputContainer width={550} height={300} />
+              <Icons.InputContainer width={500} height={300} />
             </Block>
             <div className={classes.loadingSpinner}>
               {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}

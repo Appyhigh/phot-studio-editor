@@ -92,15 +92,11 @@
   vertical-align: middle;
 }
 
-.uploadInputWrapper {
-  padding: 0px 8px;
-}
-
 .uploadPreviewSection {
   margin-top: 0.5rem;
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .uploadInput {
@@ -113,9 +109,6 @@
 @media screen and (min-width: 1220px) {
   .panelHeading {
     padding: 0px 0px 0px 16px;
-  }
-  .uploadInputWrapper {
-    padding: 0px 24px;
   }
 }
 

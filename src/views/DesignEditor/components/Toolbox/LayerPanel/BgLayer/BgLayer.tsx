@@ -92,12 +92,12 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
               className={clsx(
                 classes.box,
                 " d-flex justify-content-center align-items-center flex-column ml-1",
-                disableDeleteBtn&&classes.disableDeleteBtn
+                disableDeleteBtn && classes.disableDeleteBtn
               )}
               onClick={() => {
-               if(disableDeleteBtn){
-                return ;
-               }
+                if (disableDeleteBtn) {
+                  return
+                }
                 EraseBgFunc({ editor, frame })
               }}
             >
@@ -155,7 +155,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
           })}
         </div>
       </div>
-      <UploadImgModal fileInputType="bgupdate" isOpen={isReplacePopup} handleClose={handleUpdatePopup} />
+      <UploadImgModal fileInputType="bgupdate" isOpen={isReplacePopup} handleClose={handleUpdatePopup} id={"BgLayer"} />
     </Scrollable>
   ) : null
 }

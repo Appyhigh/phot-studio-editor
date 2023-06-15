@@ -300,6 +300,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         fileInputType="update"
         isOpen={isReplacePopup}
         handleClose={handleUpdatePopup}
+        id={"ObjectLayer"}
       />
     </Scrollable>
   ) : null

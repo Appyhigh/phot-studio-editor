@@ -1,23 +1,20 @@
 .dropFileSection {
   padding-top: 20px;
 }
-.uploadInputWrapper {
-  padding: 0px 8px;
-}
 
 .uploadPreviewSection {
   margin-top: 0.5rem;
-  display: grid;
-  gap: 0.5rem;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .uploadInput {
   display: none;
 }
-.panelHeading{
-    font-weight: 600;
-    font-size: 16px;
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
 }
 
 .uploadInputContainer {
@@ -25,12 +22,11 @@
   height: 200px;
   position: relative;
 }
-.loadingSpinner{
+.loadingSpinner {
   display: flex;
   justify-content: center;
   position: absolute;
   left: 50px;
-
 }
 .uploadInputSection {
   border-radius: 8px;
@@ -49,8 +45,5 @@
   .uploadInputContainer {
     width: 320px;
     height: 200px;
-  }
-  .uploadInputWrapper {
-    padding: 0px 24px;
   }
 }

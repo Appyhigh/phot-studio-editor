@@ -4,7 +4,8 @@
   background: #ffffff;
   border-radius: 12px !important;
   border: none !important;
-  padding: 0.5rem;
+  padding: 0.25rem;
+  width: auto !important;
 }
 
 .uppy-Dashboard-innerWrap {
@@ -30,7 +31,7 @@
 .uppy-Dashboard-AddFiles {
   border-radius: 8px !important;
   padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
   border: 1px dashed #6729f3 !important;
 }
 
@@ -43,15 +44,40 @@
   height: 48px !important;
   border: 1px dashed rgba(63, 59, 87, 0.2) !important;
   border-radius: 50% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .uppy-DashboardTab[data-uppy-acquirer-id="MyDevice"] {
   display: none !important;
 }
-/* .uppy-Dashboard-AddFiles-list {
-  position: absolute;
-  top: 9rem;
-} */
+
+.uppy-DashboardTab {
+  border: none !important;
+  text-align: center !important;
+  width: auto !important;
+}
+
+.uppy-DashboardTab-btn {
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 5px;
+  padding: 10px 3px;
+}
+
+.uppy-DashboardTab-name {
+  margin-top: 0.5rem !important;
+}
+.uppy-Dashboard-AddFiles-list {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.uppy-Dashboard-AddFiles-list span {
+  display: flex;
+}
 
 .uppy-Dashboard-AddFiles-title {
   color: #212121;
