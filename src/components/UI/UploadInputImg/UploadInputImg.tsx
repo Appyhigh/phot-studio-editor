@@ -11,6 +11,7 @@ import SliderInput from "../SliderInput/SliderInput"
 import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/UploadPreview/UploadPreview"
 import { TEXT_TO_ART } from "~/constants/contants"
 import FileError from "../Common/FileError/FileError"
+import ImagePopUp from "./ImagePopUp"
 
 const UploadInputImg = () => {
   const [imageUploading, setImageUploading] = useState(false)
@@ -18,6 +19,8 @@ const UploadInputImg = () => {
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
   const { textToArtInputInfo, setTextToArtInputInfo } = useContext(TextToArtContext)
+  const [openModal, setOpenModal] = useState(false)
+  const [imageUrl, setImageUrl] = useState("")
 
   const handleDropFiles = async (files: FileList) => {
     const file = files[0]
@@ -35,9 +38,13 @@ const UploadInputImg = () => {
       return
     }
     const imageUrl = await getBucketImageUrlFromFile(file)
+    setImageUrl(imageUrl)
     if (imageUrl) {
       setImageUploading(false)
-      setTextToArtInputInfo((prev: any) => ({ ...prev, uploaded_img: imageUrl }))
+      setOpenModal(true)
+    } else {
+      console.log("ERROR: Could not upload image")
+      setImageUploading(false)
     }
   }
 
@@ -96,6 +103,14 @@ const UploadInputImg = () => {
               setTextToArtInputInfo((prev: any) => ({ ...prev, uploaded_img: "" }))
             }}
           />
+          <div className={clsx(classes.artSubHeading, "mt-3 mb-1")}>Selected Aspect Ratio</div>
+          <div className={classes.imageAspectRatio}>
+            <div
+              className={classes.shapes}
+              style={{ aspectRatio: `${textToArtInputInfo.aspect_ratio.split(":").join("/")}` }}
+            ></div>
+            {textToArtInputInfo.aspect_ratio}
+          </div>
           <div className={clsx(classes.artSubHeading, classes.imageWeightSubHeading)}>Image Weight </div>
           <p className={classes.paraText}>Indicate influence of the selected image on final output.</p>
           <SliderInput
@@ -123,6 +138,7 @@ const UploadInputImg = () => {
           />
         </div>
       )}
+      <ImagePopUp openModal={openModal} setOpenModal={setOpenModal} imageUrl={imageUrl} setImageUrl={setImageUrl} />
     </>
   )
 }
