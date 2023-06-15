@@ -15,6 +15,7 @@ import classes from "./style.module.css"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
+import { HandleBgUpload } from "~/views/DesignEditor/utils/functions/HandleBgUpload"
 
 const UppyDashboard = ({
   close,
@@ -31,6 +32,7 @@ const UppyDashboard = ({
   uploadType,
   uploads,
   setUploads,
+  setBgUploadPreview,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -73,36 +75,10 @@ const UppyDashboard = ({
       } else {
         setImageLoading(true)
         const imageUrl = file.source == "Url" ? file.remote.body.fileId : await getBucketImageUrlFromFile(file.data)
-        HandleFile(
-          imageUrl,
-          setImageLoading,
-          fileInputType,
-          setImagesCt,
-          editor,
-          frame,
-          setAddImgInfo ? setAddImgInfo : null,
-          mainImgInfo ? mainImgInfo : null,
-          setMainImgInfo ? setMainImgInfo : null,
-          setPanelInfo ? setPanelInfo : null,
-          activeOb ? activeOb : null,
-          activeObject ? activeObject : null,
-          setSelectedImage ? setSelectedImage : null,
-          uploadType ? uploadType : null,
-          uploads ? uploads : null,
-          setUploads ? setUploads : null
-        )
-        uppy.cancelAll()
-        setTimeout(() => {
-          fileInputType != "panelAdd" ? setImageLoading(false) : null
-          close()
-        }, 200)
-      }
-    })
-    uppy.on("upload-success", async (file: any, data: any) => {
-      if (file.source == "Dropbox" || file.source == "OneDrive") {
-        setImageLoading(true)
-        const imageUrl = data.body.baseUrl
-        if (imageUrl) {
+        if (fileInputType == "bgUpload") {
+          console.log("bgUpload")
+          HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
+        } else {
           HandleFile(
             imageUrl,
             setImageLoading,
@@ -121,6 +97,41 @@ const UppyDashboard = ({
             uploads ? uploads : null,
             setUploads ? setUploads : null
           )
+        }
+        uppy.cancelAll()
+        setTimeout(() => {
+          fileInputType != "panelAdd" ? setImageLoading(false) : null
+          close()
+        }, 200)
+      }
+    })
+    uppy.on("upload-success", async (file: any, data: any) => {
+      if (file.source == "Dropbox" || file.source == "OneDrive") {
+        setImageLoading(true)
+        const imageUrl = data.body.baseUrl
+        if (imageUrl) {
+          if (fileInputType == "bgUpload") {
+            HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
+          } else {
+            HandleFile(
+              imageUrl,
+              setImageLoading,
+              fileInputType,
+              setImagesCt,
+              editor,
+              frame,
+              setAddImgInfo ? setAddImgInfo : null,
+              mainImgInfo ? mainImgInfo : null,
+              setMainImgInfo ? setMainImgInfo : null,
+              setPanelInfo ? setPanelInfo : null,
+              activeOb ? activeOb : null,
+              activeObject ? activeObject : null,
+              setSelectedImage ? setSelectedImage : null,
+              uploadType ? uploadType : null,
+              uploads ? uploads : null,
+              setUploads ? setUploads : null
+            )
+          }
         }
       }
       uppy.cancelAll()
@@ -150,13 +161,13 @@ const UppyDashboard = ({
 
     const uppyUploadIcon = document.querySelector(".uppy-upload-icon")
     const uppyAddFile = document.querySelector(".uppy-Dashboard-AddFiles")
-    if (fileInputType != "panelAdd")
+    if (fileInputType != "panelAdd" && fileInputType != "bgUpload")
       if (uppyAddFile != null) uppyAddFile!.insertBefore(uppyUploadIcon!, uppyAddFile!.firstChild)
   }, [])
 
   return (
     <div key={id}>
-      {fileInputType != "panelAdd" ? (
+      {fileInputType != "panelAdd" && fileInputType != "bgUpload" ? (
         <div className="uppy-upload-icon">
           <div className={classes.uploadIcon}>
             <Icons.Upload size={31} />

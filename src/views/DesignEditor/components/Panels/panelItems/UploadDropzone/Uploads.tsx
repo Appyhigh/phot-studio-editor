@@ -40,7 +40,6 @@ export default function ({ uploadType, activePanel }: any) {
     setTimeout(() => {
       setRenderKey((prev) => prev + 1)
     }, 4000)
-    console.log("RENDER", renderKey)
   }, [imageLoading])
 
   return (
