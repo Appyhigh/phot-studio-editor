@@ -29,6 +29,7 @@ const StockImages = (props: any) => {
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [noImages, setNoImages] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [hitApi,setHitApi] = useState("")
 
   const observer = useRef<any>()
   console.log();
@@ -94,13 +95,12 @@ const StockImages = (props: any) => {
   }
 
   useEffect(()=>{
-    if(search.length>2){
+    if(search.length>2 && Math.abs(hitApi.length - search.length) === 3){
       searchImages()
-    }else{
-      getStockImages().then((res) => {
-        setRes(res)
-      })
-    }
+      setHitApi(search)
+    }else if(search.length===0){
+      setHitApi("")    
+    }  
   },[search])
 
 
