@@ -44,7 +44,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
             alt="preview h"
           />
         ) : uploadType === TEXT_TO_ART && textToArtImg ? (
-          <img className={classes.uploadedImg} src={textToArtImg} alt="preview" />
+          <img className={classes.uploadedImg} style={{ objectFit: "contain" }} src={textToArtImg} alt="preview" />
         ) : (
           <img
             className={classes.uploadedImg}
@@ -101,7 +101,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
               let latest_ct = 0
               setImagesCt((prev: any) => {
                 latest_ct = prev + 1
-                 RemoveBGFunc(
+                RemoveBGFunc(
                   editor,
                   setLoaderPopup,
                   setPanelInfo,

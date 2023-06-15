@@ -3,6 +3,7 @@
   font-size: 14px;
   line-height: 17px;
   color: #333b4f;
+  margin-top: 1rem;
 }
 .inputFile {
   display: none;
@@ -88,4 +89,84 @@
   .bgUploadLoader {
     margin-left: 70px;
   }
+}
+
+.imageModal {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 22px;
+}
+
+.imageModalHeading {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 106%;
+  text-align: left;
+  color: #000000;
+  margin: 1.5rem;
+  margin-right: auto;
+}
+
+.aspectRatio {
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 30rem;
+}
+
+.aspectRatioHeading {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #333b4f;
+  margin-right: 1rem;
+}
+
+.addButton {
+  padding: 0.75rem;
+  width: 30rem;
+  color: white;
+  background: #6729f3;
+  border-radius: 8px;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 147%;
+  text-align: center;
+  color: #fafafb;
+  margin-bottom: 1.5rem;
+}
+
+.imageAspectRatio {
+  background-color: #333b4f;
+  width: fit-content;
+  padding: 0.3rem 0.6rem;
+  border-radius: 25px;
+  background: #333b4f;
+  border: 1px solid #333b4f;
+  color: #fff;
+  font-size: 14px;
+  line-height: 17px;
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.shapes {
+  margin: 2px 4px 4px 0px;
+  border: 2px solid #fff;
+  border-radius: 2px;
+  height: 0.75rem;
+  width: auto;
 }
