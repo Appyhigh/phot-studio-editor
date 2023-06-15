@@ -2,8 +2,8 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
-import { useState, useCallback, useRef, useContext,useEffect } from "react"
-import { getStockImages} from "~/services/stockApi"
+import { useState, useCallback, useRef, useContext, useEffect } from "react"
+import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
@@ -29,11 +29,10 @@ const StockImages = (props: any) => {
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [noImages, setNoImages] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [hitApi,setHitApi] = useState("")
+  const [hitApi, setHitApi] = useState("")
 
   const observer = useRef<any>()
-  console.log();
-  
+
   const lastElementRef = useCallback(
     (element?: any) => {
       if (observer.current) observer.current.disconnect()
@@ -60,15 +59,15 @@ const StockImages = (props: any) => {
       setRes(res)
     })
 
- setNoImages(false)
+    setNoImages(false)
 
     getStockImages(search)
       .then((res) => {
         if (res) {
-           if (res.length === 0) {
-        setNoImages(true)
-      }
-      setRes(res)
+          if (res.length === 0) {
+            setNoImages(true)
+          }
+          setRes(res)
         } else {
           throw new Error(res)
         }
@@ -91,18 +90,16 @@ const StockImages = (props: any) => {
         }, 5000)
         console.log(err)
       })
-
   }
 
-  useEffect(()=>{
-    if(search.length>2 && Math.abs(hitApi.length - search.length) === 3){
+  useEffect(() => {
+    if (search.length > 2 && Math.abs(hitApi.length - search.length) === 3) {
       searchImages()
       setHitApi(search)
-    }else if(search.length===0){
-      setHitApi("")    
-    }  
-  },[search])
-
+    } else if (search.length === 0) {
+      setHitApi("")
+    }
+  }, [search])
 
   return (
     <div className={classes.stockImgSection}>
@@ -118,7 +115,7 @@ const StockImages = (props: any) => {
             }
           }}
           onKeyDown={(event) => {
-            if(event.key === "Enter") {
+            if (event.key === "Enter") {
               searchImages()
             }
           }}

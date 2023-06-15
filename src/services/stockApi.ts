@@ -13,21 +13,18 @@ export const getStockImages = (
 ): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      // const query = search.length > 2 ? `*${search}*` : search; 
+      // const query = search.length > 2 ? `*${search}*` : search;
       const { data } = await axios.get(`https://devapi.phot.ai/studio/api/search`, {
         params: {
-          q:search,
+          q: search,
           page: page,
           perPage: perPage,
         },
       })
-      
+
       resolve(data)
     } catch (err) {
       reject(err)
     }
   })
 }
-
-
-
