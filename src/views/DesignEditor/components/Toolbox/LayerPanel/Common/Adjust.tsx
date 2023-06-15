@@ -30,7 +30,19 @@ const Adjust = () => {
       if (index != -1) defaultValue = activeObject?.filters[index]?.blocksize * 10
     } else if (SLIDER_TYPE.VIBRANCE === type) {
       let index = IsFilterPresent(activeObject, "Vibrance")
-      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance 
+      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance
+    } else if (SLIDER_TYPE.HIGHLIGHT === type) {
+      if (activeObject?.metadata?.general?.Highlight) {
+        defaultValue = activeObject?.metadata?.general?.Highlight
+      }
+    } else if (SLIDER_TYPE.LOWLIGHT === type) {
+      if (activeObject?.metadata?.general?.Lowlight) {
+        defaultValue = activeObject?.metadata?.general?.Lowlight
+      }
+    } else if (SLIDER_TYPE.TEMPERATURE === type) {
+      if (activeObject?.metadata?.general?.Temperature) {
+        defaultValue = activeObject?.metadata?.general?.Temperature
+      }
     }
 
     return defaultValue

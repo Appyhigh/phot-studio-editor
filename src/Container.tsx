@@ -14,6 +14,9 @@ import { loadFonts } from "./utils/fonts"
 import ImagesContext from "./contexts/ImagesCountContext"
 import { IsFilterPresentMetadata } from "./views/DesignEditor/utils/functions/FilterFunc"
 import { fabric } from "fabric"
+import { applyLightImageEffect } from "./utils/canvasUtils"
+import { SLIDER_TYPE } from "./views/DesignEditor/utils/enum"
+import { UpdatedImgFunc } from "./views/DesignEditor/utils/functions/UpdatedImgFunc"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -193,6 +196,33 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     })
   }
 
+  const applyExtraFilter = async (layer: any) => {
+    if (layer?.metadata?.general?.Highlight) {
+      const data: any = await applyLightImageEffect(
+        layer?.metadata?.originalLayerPreview ?? layer.preview,
+        layer?.metadata?.general?.Highlight,
+        SLIDER_TYPE.HIGHLIGHT
+      )
+      UpdatedImgFunc(data, editor, layer, layer?.metadata?.general?.Highlight, "Highlight")
+    }
+    if (layer?.metadata?.general?.Lowlight) {
+      const data: any = await applyLightImageEffect(
+        layer?.metadata?.originalLayerPreview ?? layer.preview,
+        layer?.metadata?.general?.Lowlight,
+        SLIDER_TYPE.LOWLIGHT
+      )
+      UpdatedImgFunc(data, editor, layer, layer?.metadata?.general?.Lowlight, "Lowlight")
+    }
+    if (layer?.metadata?.general?.Temperature) {
+      const data: any = await applyLightImageEffect(
+        layer?.metadata?.originalLayerPreview ?? layer.preview,
+        layer?.metadata?.general?.Temperature,
+        SLIDER_TYPE.TEMPERATURE
+      )
+      UpdatedImgFunc(data, editor, layer, layer?.metadata?.general?.Temperature, "Temperature")
+    }
+  }
+
   const addObjects = async (layers: any, canvasDim: any) => {
     if (layers) {
       layers.map((layer: ILayer) => {
@@ -279,6 +309,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
 
               editor.objects.update({ top: layer.top, left: layer.left, filters: filters })
               editor.objects.findById(layer.id)[0].applyFilters()
+
+              if (layer?.metadata?.general) {
+                applyExtraFilter(layer)
+              }
             })
           }
         }

@@ -183,7 +183,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               <p>Delete</p>
             </div>{" "}
           </div>
-          <img src={activeObject?.preview} style={{ width: "200px", height: "200px" }} />
           <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
           {ObjectLayerOption.map((each, idx) => (
             <DropdownWrapper

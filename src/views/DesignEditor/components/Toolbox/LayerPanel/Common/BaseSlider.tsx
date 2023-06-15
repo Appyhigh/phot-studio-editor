@@ -3,9 +3,10 @@ import SliderBar from "~/components/UI/Common/SliderBar"
 import classes from "./style.module.css"
 import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
-import { applyLightImageEffect } from "~/utils/canvasUtils"
+import { applyLightImageEffect, getModifiedImage } from "~/utils/canvasUtils"
 import { fabric } from "fabric"
 import { IsFilterPresent } from "~/views/DesignEditor/utils/functions/FilterFunc"
+import { UpdatedImgFunc } from "~/views/DesignEditor/utils/functions/UpdatedImgFunc"
 const BaseSlider = ({
   name,
   minVal,
@@ -184,53 +185,30 @@ const BaseSlider = ({
       setInputVal(e[0])
       editor.objects.update({ opacity: e[0] / 100 })
     } else if (type === SLIDER_TYPE.HIGHLIGHT) {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.HIGHLIGHT
       )
+
       setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { HIGHLIGHT: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Highlight")
     } else if (type === SLIDER_TYPE.LOWLIGHT) {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.LOWLIGHT
       )
       setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { LOWLIGHT: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Lowlight")
     } else if (type === SLIDER_TYPE.TEMPERATURE) {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.TEMPERATURE
       )
-      setInputVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          general: { TEMPERATURE: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Temperature")
     } else if (type === SLIDER_TYPE.VIBRANCE) {
       let index = IsFilterPresent(activeObject, "Vibrance")
 
@@ -245,6 +223,7 @@ const BaseSlider = ({
         })
         setInputVal(e[0])
       } else {
+        // @ts-ignore
         var filter = new fabric.Image.filters.Vibrance({
           vibrance: e[0],
         })
