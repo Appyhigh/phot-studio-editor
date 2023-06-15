@@ -11,9 +11,8 @@ import FileError from "~/components/UI/Common/FileError/FileError"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import UppyDashboard from "~/components/UI/UploadInput/UppyDashboard"
 
-export default function ({ uploadType, activePanel }: any) {
+export default function ({ uploadType, activePanel, imageLoading, setImageLoading }: any) {
   const [uploads, setUploads] = React.useState<any[]>([])
-  const [imageLoading, setImageLoading] = useState(false)
 
   const editor = useEditor()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)

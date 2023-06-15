@@ -28,9 +28,6 @@ const BgRemover = () => {
   })
   const [bgDOptions, setBgDOptions] = useState(BgOptions)
 
-  const objects = useObjects()
-  const activeObject = useActiveObject()
-
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
@@ -247,12 +244,20 @@ const ImageItem = ({
 }) => {
   return (
     <div
-      onClick={onClick}
-      className={clsx("pointer p-relative", classes.imageItemSection)}
-      style={{ pointerEvents: imageLoading ? "none" : "auto" }}
+      style={{
+        cursor: imageLoading ? "not-allowed" : "pointer",
+      }}
     >
-      <div className={clsx("p-absolute", classes.imageItem)} />
-      <img src={preview} className={classes.imagePreview} />
+      <div
+        onClick={onClick}
+        className={clsx("pointer p-relative", classes.imageItemSection)}
+        style={{
+          pointerEvents: imageLoading ? "none" : "auto",
+        }}
+      >
+        <div className={clsx("p-absolute", classes.imageItem)} />
+        <img src={preview} className={classes.imagePreview} />
+      </div>
     </div>
   )
 }
