@@ -24,13 +24,11 @@ const StockImages = (props: any) => {
   const { search, setSearch } = useAppContext()
   const [page, setPage] = useState(1)
   const { setErrorInfo } = useContext(ErrorContext)
-
   const { res, more, loading } = usePagination("stock", getStockImages, search, page, setErrorInfo)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [noImages, setNoImages] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [flag,setFlag] = useState(false)
 
   const observer = useRef<any>()
   console.log();
@@ -95,22 +93,13 @@ const StockImages = (props: any) => {
 
   }
 
-  // const filterData = (search:any) => {
-  //   return res.filter((item:any) => {
-  //     const names = item.prompt.split(","); // Split the name into an array of values
-  //     return names.some((name:any) => name.toLowerCase().includes(search.toLowerCase()));
-  //   });
-  // };
-
   useEffect(()=>{
     if(search.length>2){
       searchImages()
-      setFlag(true)
-    }else if(search.length<3 && flag===true ){
-      if(search.length<1){
-        setFlag(false)
-      }
-      searchImages()
+    }else{
+      getStockImages().then((res) => {
+        setRes(res)
+      })
     }
   },[search])
 
@@ -129,7 +118,7 @@ const StockImages = (props: any) => {
             }
           }}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if(event.key === "Enter") {
               searchImages()
             }
           }}
