@@ -225,55 +225,54 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           } else {
             editor.objects.add(layer).then(() => {
               // @ts-ignore
-              console.log("fetch from indexDB", layer)
               let filters = []
-              let idx = IsFilterPresentMetadata(layer.metadata, "brightness")
+              let idx = IsFilterPresentMetadata(layer, "brightness")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.Brightness({
-                  brightness: layer?.metadata?.filters[idx].brightness,
+                  brightness: layer?.filters[idx].brightness,
                 })
                 filters = [...filters, filter]
               }
-              idx = IsFilterPresentMetadata(layer.metadata, "contrast")
+              idx = IsFilterPresentMetadata(layer, "contrast")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.Contrast({
-                  contrast: layer?.metadata?.filters[idx].contrast,
+                  contrast: layer?.filters[idx].contrast,
                 })
                 filters = [...filters, filter]
               }
-              idx = IsFilterPresentMetadata(layer.metadata, "saturation")
+              idx = IsFilterPresentMetadata(layer, "saturation")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.Saturation({
-                  saturation: layer?.metadata?.filters[idx].saturation,
+                  saturation: layer?.filters[idx].saturation,
                 })
                 filters = [...filters, filter]
               }
-              idx = IsFilterPresentMetadata(layer.metadata, "rotation")
+              idx = IsFilterPresentMetadata(layer, "rotation")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.HueRotation({
-                  rotation: layer?.metadata?.filters[idx].rotation,
+                  rotation: layer?.filters[idx].rotation,
                 })
                 filters = [...filters, filter]
               }
 
-              idx = IsFilterPresentMetadata(layer.metadata, "vibrance")
+              idx = IsFilterPresentMetadata(layer, "vibrance")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.Vibrance({
-                  vibrance: layer?.metadata?.filters[idx].vibrance,
+                  vibrance: layer?.filters[idx].vibrance,
                 })
                 filters = [...filters, filter]
               }
-              idx = IsFilterPresentMetadata(layer.metadata, "blocksize")
+              idx = IsFilterPresentMetadata(layer, "blocksize")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.Pixelate({
-                  blocksize: layer?.metadata?.filters[idx].blocksize,
+                  blocksize: layer?.filters[idx].blocksize,
                 })
                 filters = [...filters, filter]
               }
-              idx = IsFilterPresentMetadata(layer.metadata, "noise")
+              idx = IsFilterPresentMetadata(layer, "noise")
               if (idx != -1) {
                 var filter = new fabric.Image.filters.Noise({
-                  noise: layer?.metadata?.filters[idx].noise,
+                  noise: layer?.filters[idx].noise,
                 })
                 filters = [...filters, filter]
               }
@@ -311,6 +310,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         const currentScene = editor.scene.exportToJSON()
         let images = 0
         const data = currentScene.layers.filter((el) => el.id != "background")
+        const updatedData = data.map((each, _idx) => {
+          const filters = editor.objects.findById(each?.id)[0].filters
+          return { ...each, filters }
+        })
         currentScene.layers.map((el) => {
           if (el.type === "StaticImage") {
             // @ts-ignore
@@ -320,6 +323,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             }
           }
         })
+
         const bgColor = editor?.frame?.background?.canvas?._objects[1].fill
         const canvasWidth = editor?.frame?.background?.canvas?._objects[1].width
         const canvasHeight = editor?.frame?.background?.canvas?._objects[1].height
@@ -328,10 +332,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           width: canvasWidth,
           height: canvasHeight,
         }
-        saveData(data, canvasDim, images)
+        saveData(updatedData, canvasDim, images)
       })
     }
-  }, [editor,objects])
+  }, [editor])
 
   return (
     <div

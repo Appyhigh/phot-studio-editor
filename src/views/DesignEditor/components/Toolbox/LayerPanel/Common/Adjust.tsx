@@ -30,7 +30,7 @@ const Adjust = () => {
       if (index != -1) defaultValue = activeObject?.filters[index]?.blocksize * 10
     } else if (SLIDER_TYPE.VIBRANCE === type) {
       let index = IsFilterPresent(activeObject, "Vibrance")
-      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance * 100
+      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance 
     }
 
     return defaultValue

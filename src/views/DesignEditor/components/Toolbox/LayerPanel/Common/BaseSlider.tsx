@@ -40,12 +40,6 @@ const BaseSlider = ({
     }
   }, [activeObject])
 
-  useEffect(() => {
-    if (activeObject) {
-      console.log("fetch after filter", activeObject)
-    }
-  }, [activeObject])
-
   const editor = useEditor()
   const handleInputChange = async (e: any) => {
     if (type === SLIDER_TYPE.SIZE) {
@@ -72,10 +66,9 @@ const BaseSlider = ({
           // @ts-ignore
           src: base64,
           preview: base64,
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
         })
         setInputVal(e[0])
-        editor.canvas.requestRenderAll()
       } else {
         var filter = new fabric.Image.filters.Brightness({
           brightness: e[0] / 100,
@@ -84,8 +77,6 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
 
         editor.objects.findById(activeObject?.id)[0].applyFilters()
@@ -96,6 +87,7 @@ const BaseSlider = ({
           preview: base64,
         })
       }
+      editor.canvas.requestRenderAll()
     } else if (type === SLIDER_TYPE.CONTRAST) {
       let index = IsFilterPresent(activeObject, "Contrast")
 
@@ -108,7 +100,7 @@ const BaseSlider = ({
           src: base64,
           preview: base64,
           // @ts-ignore
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
         })
         setInputVal(e[0])
       } else {
@@ -120,7 +112,6 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
@@ -143,7 +134,7 @@ const BaseSlider = ({
           src: base64,
           preview: base64,
           // @ts-ignore
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
         })
         setInputVal(e[0])
       } else {
@@ -154,7 +145,6 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
@@ -167,16 +157,14 @@ const BaseSlider = ({
       editor.canvas.requestRenderAll()
     } else if (type === SLIDER_TYPE.HUE) {
       let index = IsFilterPresent(activeObject, "HueRotation")
-
       if (index != -1) {
         activeObject.filters[index]["rotation"] = e[0] / 100
         let base64 = activeObject?._filteredEl?.toDataURL()
-
         editor.objects.update({
           src: base64,
           preview: base64,
           // @ts-ignore
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
         })
         setInputVal(e[0])
       } else {
@@ -187,10 +175,9 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
-        editor.objects.findById(activeObject?.id)[0].applyFilters()
+
         let base64 = activeObject?._filteredEl?.toDataURL()
 
         editor.objects.update({
@@ -260,7 +247,7 @@ const BaseSlider = ({
 
         editor.objects.update({
           // @ts-ignore
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
           src: base64,
           preview: base64,
         })
@@ -273,7 +260,6 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
@@ -294,7 +280,7 @@ const BaseSlider = ({
 
         editor.objects.update({
           // @ts-ignore
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
           src: base64,
           preview: base64,
         })
@@ -309,7 +295,6 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
@@ -329,7 +314,7 @@ const BaseSlider = ({
 
         editor.objects.update({
           // @ts-ignore
-          metadata: { ...activeObject.metadata, filters: activeObject?.filters },
+          filters: activeObject?.filters,
           src: base64,
           preview: base64,
         })
@@ -342,7 +327,6 @@ const BaseSlider = ({
         editor.objects.update({
           // @ts-ignore
           filters: [...activeObject?.filters, filter],
-          metadata: { ...activeObject.metadata, filters: [...activeObject?.filters, filter] },
         })
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
