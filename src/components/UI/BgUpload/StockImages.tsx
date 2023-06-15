@@ -2,7 +2,7 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
-import { useState, useCallback, useRef, useContext } from "react"
+import { useState, useCallback, useRef, useContext, useEffect } from "react"
 import { getStockImages } from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
@@ -24,12 +24,12 @@ const StockImages = (props: any) => {
   const { search, setSearch } = useAppContext()
   const [page, setPage] = useState(1)
   const { setErrorInfo } = useContext(ErrorContext)
-
   const { res, more, loading } = usePagination("stock", getStockImages, search, page, setErrorInfo)
   const frame = useFrame()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [noImages, setNoImages] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [hitApi, setHitApi] = useState("")
 
   const observer = useRef<any>()
 
@@ -51,7 +51,6 @@ const StockImages = (props: any) => {
   const { setImagesCt } = useContext(ImagesContext)
 
   const searchImages = () => {
-
     setNoImages(false)
     getStockImages(search).then((res) => {
       if (res.length === 0) {
@@ -60,14 +59,15 @@ const StockImages = (props: any) => {
       setRes(res)
     })
 
- setNoImages(false)
+    setNoImages(false)
+
     getStockImages(search)
       .then((res) => {
         if (res) {
-           if (res.length === 0) {
-        setNoImages(true)
-      }
-      setRes(res)
+          if (res.length === 0) {
+            setNoImages(true)
+          }
+          setRes(res)
         } else {
           throw new Error(res)
         }
@@ -90,8 +90,16 @@ const StockImages = (props: any) => {
         }, 5000)
         console.log(err)
       })
-
   }
+
+  useEffect(() => {
+    if (search.length > 2 && Math.abs(hitApi.length - search.length) === 3) {
+      searchImages()
+      setHitApi(search)
+    } else if (search.length === 0) {
+      setHitApi("")
+    }
+  }, [search])
 
   return (
     <div className={classes.stockImgSection}>
