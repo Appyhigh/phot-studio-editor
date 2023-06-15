@@ -25,7 +25,6 @@ import ErrorContext from "~/contexts/ErrorContext"
 
 import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
 
-
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
     useContext(TextToArtContext)
@@ -87,7 +86,7 @@ const ImagineAI = () => {
         textToArtInputInfo.images_generation_ct,
         textToArtInputInfo.aspect_ratio,
         textToArtInputInfo.style,
-        textToArtInputInfo.uploaded_img,
+        textToArtInputInfo.uploaded_img
       )
         .then((responseData) => {
           // @ts-ignore
@@ -229,7 +228,7 @@ const ImagineAI = () => {
                 value={textToArtInputInfo.cfg_scale}
                 maxVal={14.0}
                 handleChange={(e: any) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e  }))
+                  setTextToArtInputInfo((prev: any) => ({ ...prev, cfg_scale: e }))
                 }}
               />
 
@@ -239,16 +238,18 @@ const ImagineAI = () => {
                 <p>Match Prompt</p>
               </div>
             </div>
-            <div className={classes.aspectRatioSection}>
-              <div className={clsx(classes.artSubHeading)}>Aspect Ratio</div>
-              <AspectRatioSwiper
-                data={aspectRatio}
-                aspectRatioSelected={textToArtInputInfo.aspect_ratio}
-                handleChange={(x: number, y: number) => {
-                  setTextToArtInputInfo((prev: any) => ({ ...prev, aspect_ratio: `${x}:${y}` }))
-                }}
-              />
-            </div>
+            {textToArtInputInfo.uploaded_img == "" && (
+              <div className={classes.aspectRatioSection}>
+                <div className={clsx(classes.artSubHeading)}>Aspect Ratio</div>
+                <AspectRatioSwiper
+                  data={aspectRatio}
+                  aspectRatioSelected={textToArtInputInfo.aspect_ratio}
+                  handleChange={(x: number, y: number) => {
+                    setTextToArtInputInfo((prev: any) => ({ ...prev, aspect_ratio: `${x}:${y}` }))
+                  }}
+                />
+              </div>
+            )}
             <button
               className={clsx(
                 classes.generateBtn,
