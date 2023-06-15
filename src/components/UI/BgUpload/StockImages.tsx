@@ -2,8 +2,8 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
-import { useState, useCallback, useRef, useContext } from "react"
-import { getStockImages } from "~/services/stockApi"
+import { useState, useCallback, useRef, useContext,useEffect } from "react"
+import { getStockImages} from "~/services/stockApi"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import useAppContext from "~/hooks/useAppContext"
@@ -30,9 +30,11 @@ const StockImages = (props: any) => {
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [noImages, setNoImages] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [flag,setFlag] = useState(false)
 
   const observer = useRef<any>()
-
+  console.log();
+  
   const lastElementRef = useCallback(
     (element?: any) => {
       if (observer.current) observer.current.disconnect()
@@ -51,7 +53,6 @@ const StockImages = (props: any) => {
   const { setImagesCt } = useContext(ImagesContext)
 
   const searchImages = () => {
-
     setNoImages(false)
     getStockImages(search).then((res) => {
       if (res.length === 0) {
@@ -61,6 +62,7 @@ const StockImages = (props: any) => {
     })
 
  setNoImages(false)
+
     getStockImages(search)
       .then((res) => {
         if (res) {
@@ -92,6 +94,26 @@ const StockImages = (props: any) => {
       })
 
   }
+
+  // const filterData = (search:any) => {
+  //   return res.filter((item:any) => {
+  //     const names = item.prompt.split(","); // Split the name into an array of values
+  //     return names.some((name:any) => name.toLowerCase().includes(search.toLowerCase()));
+  //   });
+  // };
+
+  useEffect(()=>{
+    if(search.length>2){
+      searchImages()
+      setFlag(true)
+    }else if(search.length<3 && flag===true ){
+      if(search.length<1){
+        setFlag(false)
+      }
+      searchImages()
+    }
+  },[search])
+
 
   return (
     <div className={classes.stockImgSection}>
