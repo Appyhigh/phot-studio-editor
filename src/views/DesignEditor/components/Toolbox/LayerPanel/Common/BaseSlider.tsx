@@ -63,10 +63,8 @@ const BaseSlider = ({
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
         editor.objects.update({
-          // @ts-ignore
           src: base64,
           preview: base64,
-          filters: activeObject?.filters,
         })
         setInputVal(e[0])
       } else {
@@ -99,8 +97,6 @@ const BaseSlider = ({
         editor.objects.update({
           src: base64,
           preview: base64,
-          // @ts-ignore
-          filters: activeObject?.filters,
         })
         setInputVal(e[0])
       } else {
@@ -133,8 +129,6 @@ const BaseSlider = ({
         editor.objects.update({
           src: base64,
           preview: base64,
-          // @ts-ignore
-          filters: activeObject?.filters,
         })
         setInputVal(e[0])
       } else {
@@ -163,9 +157,9 @@ const BaseSlider = ({
         editor.objects.update({
           src: base64,
           preview: base64,
-          // @ts-ignore
-          filters: activeObject?.filters,
         })
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.HueRotation({
@@ -246,8 +240,6 @@ const BaseSlider = ({
         let base64 = activeObject?._filteredEl?.toDataURL()
 
         editor.objects.update({
-          // @ts-ignore
-          filters: activeObject?.filters,
           src: base64,
           preview: base64,
         })
@@ -279,8 +271,6 @@ const BaseSlider = ({
         let base64 = activeObject?._filteredEl?.toDataURL()
 
         editor.objects.update({
-          // @ts-ignore
-          filters: activeObject?.filters,
           src: base64,
           preview: base64,
         })
@@ -313,8 +303,6 @@ const BaseSlider = ({
         let base64 = activeObject?._filteredEl?.toDataURL()
 
         editor.objects.update({
-          // @ts-ignore
-          filters: activeObject?.filters,
           src: base64,
           preview: base64,
         })
