@@ -92,10 +92,6 @@
   vertical-align: middle;
 }
 
-.uploadInputWrapper {
-  padding: 0px 8px;
-}
-
 .uploadPreviewSection {
   margin-top: 0.5rem;
   display: grid;
@@ -132,9 +128,6 @@
 @media screen and (min-width: 1220px) {
   .panelHeading {
     padding: 0px 0px 0px 16px;
-  }
-  .uploadInputWrapper {
-    padding: 0px 24px;
   }
 }
 

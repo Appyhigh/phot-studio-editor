@@ -113,7 +113,7 @@ const BgRemover = () => {
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>
-          <Block paddingTop={"20px"}>
+          <Block paddingTop={"10px"}>
             {
               <div
                 className="d-flex justify-content-start flex-row align-items-center pointer pl-2"

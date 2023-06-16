@@ -1,60 +1,32 @@
 import { Block } from "baseui/block"
-import React, { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import UploadInput from "../UploadInput/UploadInput"
-import DropZone from "~/components/Dropzone"
 import { useEditor } from "@layerhub-io/react"
 import StockImages from "./StockImages"
 import { changeLayerBackgroundImage } from "~/utils/updateLayerBackground"
 import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/UploadPreview/UploadPreview"
-import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
 import { MAIN_IMG_Bg } from "~/constants/contants"
 import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import Icons from "~/components/Icons"
 import FileError from "../Common/FileError/FileError"
+import UppyDashboard from "../UploadInput/UppyDashboard"
 
 const BgUpload = () => {
-  const inputFileRef = React.useRef<HTMLInputElement>(null)
   const [bgUploading, setBgUploading] = useState(false)
-
   const [bgUploadPreview, setBgUploadPreview] = useState({
     showPreview: false,
     url: "",
   })
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
-
   const editor = useEditor()
-  const handleDropFiles = async (files: FileList) => {
-    setBgUploading(true)
-    const file = files[0]
-    if (
-      file.type === "image/jpeg" ||
-      file.type === "image/jpg" ||
-      file.type === "image/png" ||
-      file.type === "image/bmp" ||
-      file.type === "image/webp"
-    ) {
-      setRejectedFileUpload(false)
-    } else {
-      setRejectedFileUpload(true)
-      setBgUploading(false)
-
-      return
-    }
-    const imageUrl = await getBucketImageUrlFromFile(file)
-
-    setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
-    if (imageUrl) {
-      setBgUploading(false)
-    }
-  }
+  const [bgChoice, setBgChoice] = useState(0)
+  const [renderKey, setRenderKey] = useState(0)
 
   const handleImgAdd = () => {
     const imageUrl = bgUploadPreview.url
@@ -65,15 +37,11 @@ const BgUpload = () => {
     })
   }
 
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleDropFiles(e.target.files!)
-  }
-
-  const handleInputFileRefClick = () => {
-    inputFileRef.current?.click()
-  }
-
-  const [bgChoice, setBgChoice] = useState(0)
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderKey((prev) => prev + 1)
+    }, 4000)
+  }, [bgUploading])
 
   return (
     <Block>
@@ -85,10 +53,9 @@ const BgUpload = () => {
           Stock Images
         </div>
       </div>
-
       {bgChoice === 0 ? (
         <>
-          <Scrollbars style={{ height: "250px" }}>
+          <Scrollbars style={{ height: "300px" }}>
             {bgUploading && bgChoice === 0 && (
               <div>
                 <Block className={classes.uploadInputContainer}>
@@ -97,29 +64,26 @@ const BgUpload = () => {
                 </Block>
               </div>
             )}
-            {!bgUploadPreview.showPreview && !bgUploading &&!rejectedFileUpload && (
-              <DropZone handleDropFiles={handleDropFiles}>
-                <div className={classes.uploadInput}>
-                  <UploadInput height={185} handleInputFileRefClick={handleInputFileRefClick} />
-                  <input
-                    onChange={handleFileInput}
-                    type="file"
-                    accept="image/png,image/jpeg,image/jpg,image/webp,image/bmp"
-                    id="inputBgFile"
-                    ref={inputFileRef}
-                    className={classes.inputFile}
-                  />
-                </div>
-              </DropZone>
+            {!bgUploadPreview.showPreview && !bgUploading && !rejectedFileUpload && (
+              <div key={renderKey}>
+                <UppyDashboard
+                  setImageLoading={setBgUploading}
+                  setRejectedFileUpload={setRejectedFileUpload}
+                  setBgUploadPreview={setBgUploadPreview}
+                  id={"BgUpload"}
+                  fileInputType={"bgUpload"}
+                />
+              </div>
             )}
-            { rejectedFileUpload && (
-                    <FileError
-                      handleTry={() => {
-                        setRejectedFileUpload(false)
-                      }}
-                    />)}
+            {rejectedFileUpload && (
+              <FileError
+                handleTry={() => {
+                  setRejectedFileUpload(false)
+                }}
+              />
+            )}
 
-            {bgUploadPreview.showPreview &&!rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
+            {bgUploadPreview.showPreview && !rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
               <Scrollbars style={{ height: "300px" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
