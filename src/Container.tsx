@@ -17,6 +17,7 @@ import { fabric } from "fabric"
 import { applyLightImageEffect } from "./utils/canvasUtils"
 import { SLIDER_TYPE } from "./views/DesignEditor/utils/enum"
 import { UpdatedImgFunc } from "./views/DesignEditor/utils/functions/UpdatedImgFunc"
+import { applyFilterFunc } from "./views/DesignEditor/utils/functions/tools/applyFilterFunc"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -255,60 +256,12 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           } else {
             editor.objects.add(layer).then(() => {
               // @ts-ignore
-              let filters = []
-              let idx = IsFilterPresentMetadata(layer, "brightness")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.Brightness({
-                  brightness: layer?.filters[idx].brightness,
-                })
-                filters = [...filters, filter]
-              }
-              idx = IsFilterPresentMetadata(layer, "contrast")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.Contrast({
-                  contrast: layer?.filters[idx].contrast,
-                })
-                filters = [...filters, filter]
-              }
-              idx = IsFilterPresentMetadata(layer, "saturation")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.Saturation({
-                  saturation: layer?.filters[idx].saturation,
-                })
-                filters = [...filters, filter]
-              }
-              idx = IsFilterPresentMetadata(layer, "rotation")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.HueRotation({
-                  rotation: layer?.filters[idx].rotation,
-                })
-                filters = [...filters, filter]
-              }
 
-              idx = IsFilterPresentMetadata(layer, "vibrance")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.Vibrance({
-                  vibrance: layer?.filters[idx].vibrance,
-                })
-                filters = [...filters, filter]
+              if (layer.filters) {
+                applyFilterFunc(layer, editor)
+              } else {
+                editor.objects.update({ top: layer.top, left: layer.left })
               }
-              idx = IsFilterPresentMetadata(layer, "blocksize")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.Pixelate({
-                  blocksize: layer?.filters[idx].blocksize,
-                })
-                filters = [...filters, filter]
-              }
-              idx = IsFilterPresentMetadata(layer, "noise")
-              if (idx != -1) {
-                var filter = new fabric.Image.filters.Noise({
-                  noise: layer?.filters[idx].noise,
-                })
-                filters = [...filters, filter]
-              }
-
-              editor.objects.update({ top: layer.top, left: layer.left, filters: filters })
-              editor.objects.findById(layer.id)[0].applyFilters()
 
               if (layer?.metadata?.general) {
                 applyExtraFilter(layer)
