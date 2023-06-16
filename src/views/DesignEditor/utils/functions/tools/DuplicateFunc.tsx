@@ -4,7 +4,6 @@ import { log } from "fabric/fabric-impl"
 
 export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
   return new Promise((resolve, reject) => {
-    console.log(activeObject?.metadata)
     if (activeObject?.filters?.length > 0 || activeObject?.metadata?.general) {
       const options = {
         type: "StaticImage",
