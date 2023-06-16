@@ -60,6 +60,14 @@ export const applyFilterFunc = async (layer: any, editor: any) => {
     })
     filters = [...filters, filter]
   }
+  idx = IsFilterPresentMetadata(layer, "blur")
+  if (idx != -1) {
+    var filter = new fabric.Image.filters.Blur({
+      // @ts-ignore
+      blur: layer?.filters[idx].blur,
+    })
+    filters = [...filters, filter]
+  }
 
   editor.objects.update({ top: layer.top, left: layer.left, filters: filters })
   editor.objects.findById(layer.id)[0].applyFilters()

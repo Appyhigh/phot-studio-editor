@@ -7,6 +7,7 @@ import { Block } from "baseui/block"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { applyLightImageEffect } from "~/utils/canvasUtils"
 import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
+import { UpdatedImgFunc } from "~/views/DesignEditor/utils/functions/UpdatedImgFunc"
 
 const Filter = () => {
   const activeObject: any = useActiveObject()
@@ -19,265 +20,160 @@ const Filter = () => {
   const maxQuality = 100
 
   useEffect(() => {
-    setfilterVal(activeObject?.metadata?.filter ? activeObject?.metadata?.filter[selectedFilter] : 0)
+    if (selectedFilter === "B&W") {
+      setfilterVal(activeObject?.metadata?.general?.BlackWhite ? activeObject?.metadata?.general?.BlackWhite : 0)
+    } else if (selectedFilter === "Noir") {
+      setfilterVal(activeObject?.metadata?.general?.Noir ? activeObject?.metadata?.general?.Noir : 0)
+    } else if (selectedFilter === "Fade") {
+      setfilterVal(activeObject?.metadata?.general?.Fade ? activeObject?.metadata?.general?.Fade : 0)
+    } else if (selectedFilter === "Mono") {
+      setfilterVal(activeObject?.metadata?.general?.Mono ? activeObject?.metadata?.general?.Mono : 0)
+    } else if (selectedFilter === "A2I") {
+      setfilterVal(activeObject?.metadata?.general?.A2I ? activeObject?.metadata?.general?.A2I : 0)
+    } else if (selectedFilter === "City") {
+      setfilterVal(activeObject?.metadata?.general?.City ? activeObject?.metadata?.general?.City : 0)
+    } else if (selectedFilter === "Bliss") {
+      setfilterVal(activeObject?.metadata?.general?.Bliss ? activeObject?.metadata?.general?.Bliss : 0)
+    } else if (selectedFilter === "Tonal") {
+      setfilterVal(activeObject?.metadata?.general?.Tonal ? activeObject?.metadata?.general?.Tonal : 0)
+    } else if (selectedFilter === "Vintage") {
+      setfilterVal(activeObject?.metadata?.general?.Vintage ? activeObject?.metadata?.general?.Vintage : 0)
+    } else if (selectedFilter === "HDR") {
+      setfilterVal(activeObject?.metadata?.general?.HDR ? activeObject?.metadata?.general?.HDR : 0)
+    } else if (selectedFilter === "LOMO") {
+      setfilterVal(activeObject?.metadata?.general?.LOMO ? activeObject?.metadata?.general?.LOMO : 0)
+    } else if (selectedFilter === "Matte") {
+      setfilterVal(activeObject?.metadata?.general?.Matte ? activeObject?.metadata?.general?.Matte : 0)
+    } else if (selectedFilter === "Film") {
+      setfilterVal(activeObject?.metadata?.general?.Film ? activeObject?.metadata?.general?.Film : 0)
+    } else if (selectedFilter === "Vibrant") {
+      setfilterVal(activeObject?.metadata?.general?.Vibrant ? activeObject?.metadata?.general?.Vibrant : 0)
+    } else if (selectedFilter === "Cool") {
+      setfilterVal(activeObject?.metadata?.general?.Cool ? activeObject?.metadata?.general?.Cool : 0)
+    } else setfilterVal(activeObject?.metadata?.filter ? activeObject?.metadata?.filter[selectedFilter] : 0)
   }, [selectedFilter])
 
   const handleFilterChange = async (e: any) => {
     if (selectedFilter === "B&W") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.BANDW
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { "B&W": e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "B&W")
     } else if (selectedFilter === "Noir") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.NOIR
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Noir: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Noir")
     } else if (selectedFilter === "Fade") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.FADE
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Fade: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Fade")
     } else if (selectedFilter === "Mono") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.MONO
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Mono: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Mono")
     } else if (selectedFilter === "A2I") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.A2I
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { A2I: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "A2I")
     } else if (selectedFilter === "City") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.CITY
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { City: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "City")
     } else if (selectedFilter === "Bliss") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.BLISS
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Bliss: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Bliss")
     } else if (selectedFilter === "Tonal") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.TONAL
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Tonal: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Tonal")
     } else if (selectedFilter === "Vintage") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.VINTAGE
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Vintage: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Vintage")
     } else if (selectedFilter === "HDR") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.HDR
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { HDR: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "HDR")
     } else if (selectedFilter === "LOMO") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.LOMO
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { LOMO: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "LOMO")
     } else if (selectedFilter === "Matte") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.MATTE
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Matte: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Matte")
     } else if (selectedFilter === "Film") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.FILM
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Film: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Film")
     } else if (selectedFilter === "Vibrant") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.VIBRANT
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Vibrant: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Vibrant")
     } else if (selectedFilter === "Cool") {
-      const data = await applyLightImageEffect(
+      const data: any = await applyLightImageEffect(
         activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         e[0],
         SLIDER_TYPE.COOLTONE
       )
-      console.log(data)
       setfilterVal(e[0])
-      editor.objects.update({
-        preview: data,
-        src: data,
-        fill: data,
-        metadata: {
-          filter: { Cool: e[0] },
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-      })
+      UpdatedImgFunc(data, editor, activeObject, e[0], "Cool")
     }
   }
 

@@ -87,12 +87,11 @@ export const AdjustOptions = [
   },
   {
     name: "Pixelate",
-    minVal: 0,
+    minVal: 1,
     maxVal: 20,
     percentage: false,
-
     type: SLIDER_TYPE.PIXELATE,
     step: 1,
-    defaultValue: 0,
+    defaultValue: 1,
   },
 ]

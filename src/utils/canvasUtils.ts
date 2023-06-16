@@ -165,7 +165,7 @@ export const applyLightImageEffect = (image: string, sliderValue: number, type: 
       // Draw the image onto the canvas
       context.drawImage(imageElement, 0, 0)
 
-      // Get the image data from the canvas
+      // Get the image data from the canvasFMFM
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       const data = imageData.data
 

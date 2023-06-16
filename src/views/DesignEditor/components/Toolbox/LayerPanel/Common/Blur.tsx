@@ -1,12 +1,10 @@
 import { Block } from "baseui/block"
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import classes from "./style.module.css"
 import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
-import { getModifiedImage } from "~/utils/canvasUtils"
-import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
-// import { getBlurImage } from "~/utils/canvasUtils"
-
+import { IsFilterPresent } from "~/views/DesignEditor/utils/functions/FilterFunc"
+import { fabric } from "fabric"
 const Blur = () => {
   const [blurVal, setBlurVal] = useState(1)
   const minQuality = 0
@@ -15,44 +13,38 @@ const Blur = () => {
   const editor = useEditor()
   const activeObject: any = useActiveObject()
 
+  useEffect(() => {
+    let index = IsFilterPresent(activeObject, "Blur")
+    if (index != -1) setBlurVal(activeObject?.filters[index]?.blur*100)
+  }, [activeObject])
+
   const handleBlurChange = useCallback(
     async (e: any) => {
-      // const data: any = await getModifiedImage(
-      //   activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-      //   e[0],
-      //   SLIDER_TYPE.BLUR
-      // )
-      // console.log(data)
-      setBlurVal(e[0])
-      // // Create a new image element
-      // var imageElement = document.createElement("img")
+      let index = IsFilterPresent(activeObject, "Blur")
+      if (index != -1) {
+        activeObject.filters[index]["blur"] = e[0] / 100
+        let base64 = activeObject?._filteredEl?.toDataURL()
+        editor.objects.update({
+          src: base64,
+          preview: base64,
+        })
+        setBlurVal(e[0])
+        editor.objects.findById(activeObject?.id)[0].applyFilters()
+      } else {
+        var filter = new fabric.Image.filters.Blur({
+          blur: e[0] / 100,
+        })
+        editor.objects.update({
+          // @ts-ignore
+          filters: [...activeObject?.filters, filter],
+        })
+        let base64 = activeObject?._filteredEl?.toDataURL()
 
-      // // Set the crossorigin attribute
-      // imageElement.setAttribute("crossorigin", "Anonymous")
-
-      // // Set the class attribute
-      // imageElement.setAttribute("class", "canvas-img")
-
-      // // Set the src attribute
-      // imageElement.setAttribute("src", data)
-      // editor.objects.update({
-      //   preview: data,
-      //   src: data,
-      //   fill: data,
-      //   metadata: {
-      //     general: { BLUR: e[0] },
-      //     originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-      //   },
-      //   _element: imageElement,
-      // })
-      // console.log(activeObject)
-      var filter = new fabric.Image.filters.Blur({
-        blur: e[0] / 100,
-      })
-      editor.objects.update({
-        filters: [filter],
-      })
-      editor.objects.findById(activeObject.id)[0].applyFilters()
+        editor.objects.update({
+          src: base64,
+          preview: base64,
+        })
+      }
     },
     [objects]
   )
@@ -65,7 +57,7 @@ const Blur = () => {
           minVal={minQuality}
           maxVal={maxQuality}
           thumbSize={"14px"}
-          val={[activeObject?.metadata?.general ? activeObject?.metadata?.general[SLIDER_TYPE.BLUR] ?? 0 : 0]}
+          val={blurVal}
           handleChange={handleBlurChange}
         />
       </Block>
