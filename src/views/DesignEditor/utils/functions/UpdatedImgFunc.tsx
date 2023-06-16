@@ -9,6 +9,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
   // Set the src attribute
   imageElement.setAttribute("src", data)
   if (type === "Highlight") {
+    console.log(activeObject)
     editor.objects.update({
       preview: data,
       src: data,
@@ -17,6 +18,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   } else if (type === "Lowlight") {
     editor.objects.update({
@@ -27,6 +29,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   } else if (type === "Temperature") {
     editor.objects.update({
@@ -37,6 +40,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   } else if (type === "B&W") {
     editor.objects.update({
@@ -47,6 +51,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   } else if (type === "Noir") {
     editor.objects.update({
@@ -57,6 +62,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   } else if (type === "Fade") {
     editor.objects.update({
@@ -67,6 +73,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   } else if (type === "Mono") {
     editor.objects.update({
@@ -77,9 +84,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="A2I"){
+  } else if (type === "A2I") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -88,9 +95,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="City"){
+  } else if (type === "City") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -99,9 +106,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Bliss"){
+  } else if (type === "Bliss") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -110,9 +117,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Tonal"){
+  } else if (type === "Tonal") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -121,9 +128,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Vintage"){
+  } else if (type === "Vintage") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -132,9 +139,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="HDR"){
+  } else if (type === "HDR") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -143,9 +150,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="LOMO"){
+  } else if (type === "LOMO") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -154,9 +161,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Matte"){
+  } else if (type === "Matte") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -165,9 +172,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Film"){
+  } else if (type === "Film") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -176,9 +183,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Vibrant"){
+  } else if (type === "Vibrant") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -187,9 +194,9 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
-  }
-  else if(type==="Cool"){
+  } else if (type === "Cool") {
     editor.objects.update({
       preview: data,
       src: data,
@@ -198,6 +205,7 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
         originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
       },
       _element: imageElement,
+      _originalElement: imageElement,
     })
   }
 }
