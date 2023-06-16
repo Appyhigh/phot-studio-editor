@@ -28,12 +28,26 @@ export default function ({ uploadType, activePanel }: any) {
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
 
   let scale = 1
-
-  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
+  const [uploadErrorMsg, setUploadErrorMsg] = useState("")
 
   const handleDropFiles = async (files: FileList) => {
     setImageLoading(true)
     const file = files[0]
+
+    const fileInfo: any = document.getElementById("inputFile")
+    if (fileInfo?.value) fileInfo.value = ""
+
+    if (file.size / (1024 * 1024) > 5.1) {
+      setUploadErrorMsg(
+        "File size must be under 5 MB."
+      )
+      setImageLoading(false)
+      setTimeout(() => {
+        setUploadErrorMsg("")
+      }, 5000)
+      return
+    }
+
     if (
       file.type === "image/jpeg" ||
       file.type === "image/jpg" ||
@@ -41,13 +55,16 @@ export default function ({ uploadType, activePanel }: any) {
       file.type === "image/bmp" ||
       file.type === "image/webp"
     ) {
-      setRejectedFileUpload(false)
     } else {
-      setRejectedFileUpload(true)
+      setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPEG , PNG or BMP format")
       setImageLoading(false)
+      setTimeout(() => {
+        setUploadErrorMsg("")
+      }, 5000)
 
       return
     }
+
     const imageUrl = await getBucketImageUrlFromFile(file)
 
     const isVideo = file.type.includes("video")
@@ -137,12 +154,11 @@ export default function ({ uploadType, activePanel }: any) {
         <Block className={clsx("d-flex flex-1 flex-column", classes.dropFileSection)}>
           <Block className="d-flex align-items-center flex-start">
             <Block className="pl-1">
-              {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && !rejectedFileUpload && uploads.length === 0 ? (
+              {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && uploads.length === 0 ? (
                 <Block className={classes.panelHeading}>Add Image</Block>
               ) : (
                 uploadType != LOCAL_SAMPLE_IMG &&
                 !imageLoading &&
-                !rejectedFileUpload &&
                 mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
               )}
             </Block>
@@ -150,7 +166,6 @@ export default function ({ uploadType, activePanel }: any) {
               {activePanel === "Images"
                 ? uploadType === LOCAL_SAMPLE_IMG &&
                   !imageLoading &&
-                  !rejectedFileUpload &&
                   uploads.length != 0 && (
                     <div
                       className="d-flex justify-content-start flex-row align-items-center pointer"
@@ -186,11 +201,10 @@ export default function ({ uploadType, activePanel }: any) {
                   )}
             </Block>
           </Block>
-          {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && uploads.length === 0 && !rejectedFileUpload ? (
+          {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && uploads.length === 0 ? (
             <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
           ) : (
             mainImgInfo.id == "" &&
-            !rejectedFileUpload &&
             !imageLoading &&
             uploadType !== LOCAL_SAMPLE_IMG && <UploadInput handleInputFileRefClick={handleInputFileRefClick} />
           )}
@@ -206,26 +220,12 @@ export default function ({ uploadType, activePanel }: any) {
                 className={classes.uploadInput}
               />
               {activePanel === "Images"
-                ? uploadType === LOCAL_SAMPLE_IMG &&
-                  rejectedFileUpload && (
-                    <FileError
-                      handleTry={() => {
-                        setRejectedFileUpload(false)
-                      }}
-                    />
-                  )
-                : uploadType !== LOCAL_SAMPLE_IMG &&
-                  rejectedFileUpload && (
-                    <FileError
-                      handleTry={() => {
-                        setRejectedFileUpload(false)
-                      }}
-                    />
-                  )}
+                ? uploadType === LOCAL_SAMPLE_IMG && uploadErrorMsg != "" && <FileError ErrorMsg={uploadErrorMsg} />
+                : uploadType !== LOCAL_SAMPLE_IMG && uploadErrorMsg != "" && <FileError ErrorMsg={uploadErrorMsg} />}
+
               <Block className={classes.uploadPreviewSection}>
                 {activePanel === "Images"
                   ? uploadType === LOCAL_SAMPLE_IMG &&
-                    !rejectedFileUpload &&
                     !imageLoading &&
                     uploads.length != 0 &&
                     uploads.map((upload) => (
@@ -246,7 +246,6 @@ export default function ({ uploadType, activePanel }: any) {
                       </div>
                     ))
                   : mainImgInfo.id &&
-                    !rejectedFileUpload &&
                     !imageLoading && (
                       <UploadPreview
                         uploadType={uploadType}
@@ -259,7 +258,7 @@ export default function ({ uploadType, activePanel }: any) {
           </>
         </Block>
       </DropZone>
-      {imageLoading && !rejectedFileUpload && (
+      {imageLoading && (
         <Block
           className={clsx("d-flex justify-content-center flex-column pointer p-relative", classes.uploadInputSection)}
         >
