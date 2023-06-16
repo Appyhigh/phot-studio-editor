@@ -21,7 +21,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   const inputNextFile = React.useRef<HTMLInputElement>(null)
   const inputReplaceFile = React.useRef<HTMLInputElement>(null)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
   const [imageLoading, setImageLoading] = useState(false)
 
   const frame = useFrame()
@@ -31,10 +30,26 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
     showPreview: false,
     url: "",
   })
+  const [uploadErrorMsg, setUploadErrorMsg] = useState("")
 
   const handleDropFiles = async (files: FileList) => {
     setImageLoading(true)
     const file = files[0]
+
+    const fileInfo: any = document.getElementById("inputNextFile")
+    if (fileInfo?.value) fileInfo.value = ""
+
+    if (file.size / (1024 * 1024) > 5.1) {
+      setUploadErrorMsg(
+        "File size must be under 5 MB."
+      )
+      setImageLoading(false)
+      setTimeout(() => {
+        setUploadErrorMsg("")
+      }, 5000)
+      return
+    }
+
     if (
       file.type === "image/jpeg" ||
       file.type === "image/jpg" ||
@@ -42,11 +57,12 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       file.type === "image/bmp" ||
       file.type === "image/webp"
     ) {
-      setRejectedFileUpload(false)
     } else {
-      setRejectedFileUpload(true)
+      setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPEG , PNG or BMP format")
       setImageLoading(false)
-
+      setTimeout(() => {
+        setUploadErrorMsg("")
+      }, 5000)
       return
     }
     const imageUrl = await getBucketImageUrlFromFile(file)
@@ -61,7 +77,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
           return prev + 1
         })
         await getDimensions(imageUrl, (img: any) => {
-          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, latest_ct, setRejectedFileUpload, setAddImgInfo)
+          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, latest_ct, setAddImgInfo)
         })
       } else if (fileInputType === "bgupdate") {
         updateBackground(imageUrl)
@@ -73,8 +89,8 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       }, 200)
     }
 
-    const fileInfo: any = document.getElementById("inputNextFile")
-    if (fileInfo.value) fileInfo.value = ""
+    // const fileInfo: any = document.getElementById("inputNextFile")
+    // if (fileInfo.value) fileInfo.value = ""
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,7 +101,6 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
   const close = () => {
     if (!imageLoading) {
       setAddImgInfo((prev) => ({ ...prev, showPreview: false, url: "" }))
-      setRejectedFileUpload(false)
       setImageLoading(false)
       handleClose()
     }
@@ -180,7 +195,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       isOpen={isOpen}
     >
       <div className={classes.modal}>
-        {!addImgInfo.showPreview && !imageLoading && !rejectedFileUpload && (
+        {!addImgInfo.showPreview && !imageLoading && (
           <>
             <div className={classes.modalHeader}>
               {fileInputType === "update"
@@ -191,7 +206,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
             </div>
             <DropZone handleDropFiles={handleDropFiles}>
               <div className={classes.uploadInput}>
-                <UploadInput type="modal" handleInputFileRefClick={handleInputFileRefClick} width={514} height={319} />
+                <UploadInput type="modal" handleInputFileRefClick={handleInputFileRefClick} width={514} height={270} />
                 <input
                   onChange={handleFileInput}
                   type="file"
@@ -204,7 +219,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
             </DropZone>
           </>
         )}
-        {imageLoading && !rejectedFileUpload && (
+        {imageLoading && (
           <Block
             className={clsx("d-flex justify-content-center flex-column pointer p-relative mt-6", classes.uploadInput)}
           >
@@ -218,12 +233,10 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
         )}
       </div>
 
-      {rejectedFileUpload && (
-        <FileError
-          handleTry={() => {
-            setRejectedFileUpload(false)
-          }}
-        />
+      {uploadErrorMsg != "" && (
+        <div style={{ marginTop: "65px", marginLeft: "135px" }}>
+          <FileError ErrorMsg={uploadErrorMsg} />
+        </div>
       )}
     </Modal>
   )

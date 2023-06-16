@@ -28,12 +28,27 @@ const BgUpload = () => {
     url: "",
   })
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
-  const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
-
   const editor = useEditor()
+  const [uploadErrorMsg, setUploadErrorMsg] = useState("")
+
   const handleDropFiles = async (files: FileList) => {
     setBgUploading(true)
     const file = files[0]
+
+    const fileInfo: any = document.getElementById("inputBgFile")
+    if (fileInfo?.value) fileInfo.value = ""
+
+    if (file.size / (1024 * 1024) > 5.1) {
+      setUploadErrorMsg(
+        "File size must be under 5 MB." 
+      )
+      setBgUploading(false)
+      setTimeout(() => {
+        setUploadErrorMsg("")
+      }, 5000)
+      return
+    }
+
     if (
       file.type === "image/jpeg" ||
       file.type === "image/jpg" ||
@@ -41,10 +56,13 @@ const BgUpload = () => {
       file.type === "image/bmp" ||
       file.type === "image/webp"
     ) {
-      setRejectedFileUpload(false)
     } else {
-      setRejectedFileUpload(true)
       setBgUploading(false)
+      setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPEG , PNG or BMP format")
+      // setImageLoading(false)
+      setTimeout(() => {
+        setUploadErrorMsg("")
+      }, 5000)
 
       return
     }
@@ -97,7 +115,7 @@ const BgUpload = () => {
                 </Block>
               </div>
             )}
-            {!bgUploadPreview.showPreview && !bgUploading &&!rejectedFileUpload && (
+            {!bgUploadPreview.showPreview && !bgUploading && (
               <DropZone handleDropFiles={handleDropFiles}>
                 <div className={classes.uploadInput}>
                   <UploadInput height={185} handleInputFileRefClick={handleInputFileRefClick} />
@@ -112,14 +130,14 @@ const BgUpload = () => {
                 </div>
               </DropZone>
             )}
-            { rejectedFileUpload && (
-                    <FileError
-                      handleTry={() => {
-                        setRejectedFileUpload(false)
-                      }}
-                    />)}
 
-            {bgUploadPreview.showPreview &&!rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
+            {uploadErrorMsg != "" && (
+              <div style={{ marginTop: "-160px", marginLeft: "18px" }}>
+                <FileError ErrorMsg={uploadErrorMsg} />
+              </div>
+            )}
+
+            {bgUploadPreview.showPreview && bgUploadPreview.url && !bgUploading && (
               <Scrollbars style={{ height: "300px" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
