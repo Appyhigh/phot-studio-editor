@@ -55,7 +55,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       let inputImage
 
       // If layer contains the originalImage then send it in changeLayerFill or else send the preview after removing background
-      if (activeObject?.metadata?.originalLayerPreview) {
+      if (
+        activeObject?.metadata?.originalLayerPreview &&
+        (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
+      ) {
         inputImage = activeObject?.metadata?.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
       } else {
@@ -96,7 +99,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     try {
       setLoaderPopup(true)
       let response = await removeBackgroundController(
-        activeObject.preview,
+        activeObject.metadata.originalLayerPreview,
         async (image: string) => {
           if (activeObject?.id === mainImgInfo?.id) {
             setPanelInfo((prev: any) => ({
