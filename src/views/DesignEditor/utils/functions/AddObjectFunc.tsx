@@ -26,7 +26,7 @@ export const AddObjectFunc = (
       id: nanoid(),
       src: url,
       preview: url,
-      metadata: { generationDate: new Date().getTime(), original: url },
+      metadata: { generationDate: new Date().getTime(), originalLayerPreview: url },
       scaleX: scale,
       scaleY: scale,
       name: latest_ct.toString(),

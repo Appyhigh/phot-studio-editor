@@ -86,7 +86,11 @@ export const RemoveBGFunc = async (
           throw new Error("Something went wrong while removing background...")
         }
       }
-    } else if (activeObject && activeObject?.metadata?.originalLayerPreview) {
+    } else if (
+      activeObject &&
+      activeObject?.metadata?.originalLayerPreview &&
+      (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
+    ) {
       const options = {
         type: "StaticImage",
         src: activeObject?.metadata?.originalLayerPreview,
@@ -109,11 +113,7 @@ export const RemoveBGFunc = async (
     } else {
       setLoaderPopup(true)
       let response = await removeBackgroundController(
-        activeObject
-          ? activeObject?.filters
-            ? activeObject?.metadata.original
-            : activeObject?.preview
-          : mainImgInfo.src,
+        activeObject ? activeObject?.metadata.originalLayerPreview : mainImgInfo.src,
         (image: string) => {
           // Add the resultant image to the canvas
           if (image) {
@@ -130,7 +130,7 @@ export const RemoveBGFunc = async (
             }
             editor.objects.add(options).then(() => {
               // @ts-ignore
-           
+
               if (activeObject) {
                 editor.objects.removeById(activeObject.id)
                 editor.objects.position("top", activeObject.top)
