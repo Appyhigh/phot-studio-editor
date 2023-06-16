@@ -208,6 +208,7 @@ const BaseSlider = ({
         e[0],
         SLIDER_TYPE.TEMPERATURE
       )
+      setInputVal(e[0])
       UpdatedImgFunc(data, editor, activeObject, e[0], "Temperature")
     } else if (type === SLIDER_TYPE.VIBRANCE) {
       let index = IsFilterPresent(activeObject, "Vibrance")

@@ -109,7 +109,11 @@ export const RemoveBGFunc = async (
     } else {
       setLoaderPopup(true)
       let response = await removeBackgroundController(
-        activeObject ? activeObject?.preview : mainImgInfo.src,
+        activeObject
+          ? activeObject?.filters
+            ? activeObject?.metadata.original
+            : activeObject?.preview
+          : mainImgInfo.src,
         (image: string) => {
           // Add the resultant image to the canvas
           if (image) {
@@ -126,15 +130,7 @@ export const RemoveBGFunc = async (
             }
             editor.objects.add(options).then(() => {
               // @ts-ignore
-              setPanelInfo((prev) => ({
-                ...prev,
-                bgOptions: true,
-                bgRemoverBtnActive: false,
-                uploadSection: false,
-                trySampleImg: false,
-                uploadPreview: false,
-              }))
-              setMainImgInfo((prev: any) => ({ ...prev, ...options }))
+           
               if (activeObject) {
                 editor.objects.removeById(activeObject.id)
                 editor.objects.position("top", activeObject.top)

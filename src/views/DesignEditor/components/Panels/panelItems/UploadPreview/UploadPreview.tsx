@@ -46,11 +46,14 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
         ) : uploadType === TEXT_TO_ART && textToArtImg ? (
           <img className={classes.uploadedImg} src={textToArtImg} alt="preview" />
         ) : (
-          <img
-            className={classes.uploadedImg}
-            src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
-            alt="preview k"
-          />
+          mainImgInfo.id &&
+          (mainImgInfo.url || mainImgInfo.original) && (
+            <img
+              className={classes.uploadedImg}
+              src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
+              alt="preview k"
+            />
+          )
         )}
 
         {
@@ -101,7 +104,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
               let latest_ct = 0
               setImagesCt((prev: any) => {
                 latest_ct = prev + 1
-                 RemoveBGFunc(
+                RemoveBGFunc(
                   editor,
                   setLoaderPopup,
                   setPanelInfo,

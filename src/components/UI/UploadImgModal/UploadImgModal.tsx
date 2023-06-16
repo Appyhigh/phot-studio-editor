@@ -137,7 +137,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb }: any) =
       original: preview,
       type: inputType,
       name: activeOb.name,
-      metadata: { generationDate: new Date().getTime() },
+      metadata: { generationDate: new Date().getTime(),original:preview },
     }
     // to replace the object removing the previous active object first
     if (activeOb.id === mainImgInfo?.id) {
