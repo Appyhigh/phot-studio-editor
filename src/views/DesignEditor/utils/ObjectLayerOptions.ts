@@ -1,16 +1,16 @@
 export const ObjectLayerOption = [
-  {
-    icon: "SelectionBack",
-    name: "Shadows",
-  },
-  {
-    icon: "Outline",
-    name: "Outline",
-  },
-  {
-    icon: "Reflection",
-    name: "Reflection",
-  },
+  // {
+  //   icon: "SelectionBack",
+  //   name: "Shadows",
+  // },
+  // {
+  //   icon: "Outline",
+  //   name: "Outline",
+  // },
+  // {
+  //   icon: "Reflection",
+  //   name: "Reflection",
+  // },
   {
     icon: "Blur",
     name: "Blur",
@@ -19,10 +19,10 @@ export const ObjectLayerOption = [
     icon: "Filter",
     name: "Filter",
   },
-  {
-    icon: "Texture",
-    name: "Texture",
-  },
+  // {
+  //   icon: "Texture",
+  //   name: "Texture",
+  // },
   {
     icon: "Adjust",
     name: "Adjust",

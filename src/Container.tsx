@@ -7,11 +7,13 @@ import { useAppDispatch } from "./store/store"
 import { useAuth } from "./hooks/useAuth"
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth"
 import { auth } from "./utils/firebase"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useEditor, useObjects } from "@layerhub-io/react"
 import { ILayer } from "@layerhub-io/types"
 import { backgroundLayerType, deviceUploadType } from "./constants/contants"
 import { loadFonts } from "./utils/fonts"
 import ImagesContext from "./contexts/ImagesCountContext"
+import { applyFilterFunc } from "./views/DesignEditor/utils/functions/tools/applyFilterFunc"
+import { applyExtraFilter } from "./views/DesignEditor/utils/functions/tools/applyExtraFilterFunc"
 const Container = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const { isMobile, setIsMobile } = useAppContext()
@@ -27,6 +29,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const objects = useObjects()
   const { setImagesCt } = useContext(ImagesContext)
   useEffect(() => {
     const containerElement = containerRef.current!
@@ -159,8 +162,8 @@ const Container = ({ children }: { children: React.ReactNode }) => {
       }
 
       getImagesCt.onsuccess = (event: any) => {
-        const data = event.target.result        
-        setImagesCt(data??0)
+        const data = event.target.result
+        setImagesCt(data ?? 0)
       }
       getRequest.onsuccess = (event: any) => {
         const data = event.target.result
@@ -221,7 +224,17 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             addText(layer)
           } else {
             editor.objects.add(layer).then(() => {
-              editor.objects.update({ top: layer.top, left: layer.left })
+              // @ts-ignore
+
+              if (layer.filters) {
+                applyFilterFunc(layer, editor)
+              } else {
+                editor.objects.update({ top: layer.top, left: layer.left })
+              }
+
+              if (layer?.metadata?.general) {
+                applyExtraFilter(layer, editor)
+              }
             })
           }
         }
@@ -253,6 +266,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         const currentScene = editor.scene.exportToJSON()
         let images = 0
         const data = currentScene.layers.filter((el) => el.id != "background")
+        const updatedData = data.map((each, _idx) => {
+          const filters = editor.objects.findById(each?.id)[0].filters
+          return { ...each, filters }
+        })
         currentScene.layers.map((el) => {
           if (el.type === "StaticImage") {
             // @ts-ignore
@@ -262,6 +279,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
             }
           }
         })
+
         const bgColor = editor?.frame?.background?.canvas?._objects[1].fill
         const canvasWidth = editor?.frame?.background?.canvas?._objects[1].width
         const canvasHeight = editor?.frame?.background?.canvas?._objects[1].height
@@ -270,7 +288,7 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           width: canvasWidth,
           height: canvasHeight,
         }
-        saveData(data, canvasDim, images)
+        saveData(updatedData, canvasDim, images)
       })
     }
   }, [editor])

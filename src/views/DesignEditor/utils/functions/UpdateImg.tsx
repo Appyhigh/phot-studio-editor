@@ -22,7 +22,7 @@ const UpdateImg = (
     original: preview,
     type: inputType,
     name: activeOb.name,
-    metadata: { generationDate: new Date().getTime() },
+    metadata: { generationDate: new Date().getTime(),originalLayerPreview:preview },
   }
   // to replace the object removing the previous active object first
   if (activeOb.id === mainImgInfo?.id) {

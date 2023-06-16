@@ -10,11 +10,12 @@ import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import LoaderContext from "~/contexts/LoaderContext"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundController } from "~/utils/removeBackground"
 import MainImageContext from "~/contexts/MainImageContext"
-import { nanoid } from "nanoid"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
+import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
+import DropdownWrapper from "./DropdownWrapper"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -54,7 +55,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       let inputImage
 
       // If layer contains the originalImage then send it in changeLayerFill or else send the preview after removing background
-      if (activeObject?.metadata?.originalLayerPreview) {
+      if (
+        activeObject?.metadata?.originalLayerPreview &&
+        (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
+      ) {
         inputImage = activeObject?.metadata?.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
       } else {
@@ -95,7 +99,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     try {
       setLoaderPopup(true)
       let response = await removeBackgroundController(
-        activeObject.preview,
+        activeObject.metadata.originalLayerPreview,
         async (image: string) => {
           if (activeObject?.id === mainImgInfo?.id) {
             setPanelInfo((prev: any) => ({
@@ -182,7 +186,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               <p>Delete</p>
             </div>{" "}
           </div>
-          {/* <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
+          <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
           {ObjectLayerOption.map((each, idx) => (
             <DropdownWrapper
               key={idx}
@@ -192,7 +196,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               heading={each.name}
               handleActiveState={handleActiveState}
             />
-          ))} */}
+          ))}
         </div>
         <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
         <div className={classes.colorsWrapper}>
