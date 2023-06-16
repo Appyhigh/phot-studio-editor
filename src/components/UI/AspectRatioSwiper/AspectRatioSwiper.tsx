@@ -10,7 +10,16 @@ import { useSwiper } from "swiper/react"
 
 import clsx from "clsx"
 
-const AspectRatioSwiper = ({ data, aspectRatioSelected, handleChange }: any) => {
+const AspectRatioSwiper = ({
+  data,
+  aspectRatioSelected,
+  handleChange,
+  width,
+  height,
+  slides,
+  centeredSlides,
+  spacing,
+}: any) => {
   const [css, theme] = useStyletron()
   const swiper = useSwiper()
   const values = aspectRatioSelected.split(":")
@@ -18,19 +27,15 @@ const AspectRatioSwiper = ({ data, aspectRatioSelected, handleChange }: any) => 
     <Block
       className="aspect-ratio-slider"
       $style={{
-        width: "270px",
-        height: "40px",
-        [theme.mediaQuery.large]: {
-          width: "320px",
-          height: "40px",
-        },
+        width: width ? width : "320px",
+        height: height ? height : "40px",
       }}
     >
       <Swiper
-        spaceBetween={10}
-        slidesPerView={3.5}
+        spaceBetween={spacing ? spacing : 10}
+        slidesPerView={slides ? slides : 3.5}
         loop={true}
-        centeredSlides={true}
+        centeredSlides={centeredSlides ? false : true}
         autoplay={false}
         navigation={true}
         modules={[Navigation, Autoplay]}

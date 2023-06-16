@@ -44,7 +44,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
             alt="preview h"
           />
         ) : uploadType === TEXT_TO_ART && textToArtImg ? (
-          <img className={classes.uploadedImg} src={textToArtImg} alt="preview" />
+          <img className={classes.uploadedImg} style={{ objectFit: "contain" }} src={textToArtImg} alt="preview" />
         ) : (
           mainImgInfo.id &&
           (mainImgInfo.url || mainImgInfo.original) && (

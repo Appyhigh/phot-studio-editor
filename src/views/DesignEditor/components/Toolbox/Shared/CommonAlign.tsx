@@ -9,6 +9,7 @@ import AlignTop from "~/components/Icons/AlignTop"
 import AlignMiddle from "~/components/Icons/AlignMiddle"
 import AlignBottom from "~/components/Icons/AlignBottom"
 import { ToolButton } from "./ToolButton"
+import AlignCenterIn from "~/components/Icons/AlignCenterIn"
 
 const CommonAlign = ({ type }: any) => {
   const editor = useEditor()
@@ -28,7 +29,7 @@ const CommonAlign = ({ type }: any) => {
               <AlignLeft size={24} />
             </Button>
             <Button onClick={() => editor.objects.alignCenter()} kind={KIND.tertiary} size={SIZE.mini}>
-              <AlignCenter size={24} />
+              <AlignCenterIn size={24}  />
             </Button>
             <Button onClick={() => editor.objects.alignRight()} kind={KIND.tertiary} size={SIZE.mini}>
               <AlignRight size={24} />

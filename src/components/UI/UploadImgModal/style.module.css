@@ -9,10 +9,10 @@
   display: none;
 }
 .modal {
-  padding: 57px 43px 0px;
+  /* padding: 57px 43px 0px; */
 }
 .modalHeader {
-  margin-bottom: 50px;
+  margin: 2.25rem 2.25rem 0rem 2.25rem;
 }
 .addImgPreview {
   width: 315px;

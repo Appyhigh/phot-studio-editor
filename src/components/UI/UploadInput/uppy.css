@@ -1,0 +1,107 @@
+.uppy-Dashboard-inner {
+  background-color: white !important;
+  height: auto !important;
+  background: #ffffff;
+  border-radius: 12px !important;
+  border: none !important;
+  padding: 0.25rem;
+  width: auto !important;
+}
+
+.uppy-Dashboard-innerWrap {
+  padding: 1rem;
+  position: absolute;
+}
+
+.uppy-Dashboard-title {
+  margin: 1rem auto;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.uppy-Dashboard-subtitle {
+  margin: 0.5rem auto 1rem;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.uppy-Dashboard-AddFiles {
+  border-radius: 8px !important;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+  border: 1px dashed #6729f3 !important;
+}
+
+.uppy-Dashboard-AddFiles-title {
+  font-size: 1rem !important;
+}
+
+.uppy-DashboardTab-inner {
+  width: 48px !important;
+  height: 48px !important;
+  border: 1px dashed rgba(63, 59, 87, 0.2) !important;
+  border-radius: 50% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.uppy-DashboardTab[data-uppy-acquirer-id="MyDevice"] {
+  display: none !important;
+}
+
+.uppy-DashboardTab {
+  border: none !important;
+  text-align: center !important;
+  width: auto !important;
+}
+
+.uppy-DashboardTab-btn {
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 5px;
+  padding: 10px 3px;
+}
+
+.uppy-DashboardTab-name {
+  margin-top: 0.5rem !important;
+}
+.uppy-Dashboard-AddFiles-list {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.uppy-Dashboard-AddFiles-list span {
+  display: flex;
+}
+
+.uppy-Dashboard-AddFiles-title {
+  color: #212121;
+  font-size: 18px;
+}
+
+.uppy-Dashboard-addFileContent {
+  margin-top: 0.5rem;
+  font-size: 14px;
+  color: rgba(33, 33, 33, 0.7);
+}
+
+.uppy-upload-icon {
+  margin: 0.2rem;
+}
+
+.uppy-Dashboard-browse {
+  color: #6729f3 !important;
+  text-decoration-line: #6729f3 !important;
+  text-decoration: none !important;
+}
+
+.uppy-Dashboard-browse:hover {
+  color: #6729f3 !important;
+  text-decoration-line: #6729f3 !important;
+  text-decoration: none !important;
+}

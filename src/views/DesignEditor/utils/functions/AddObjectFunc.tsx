@@ -32,8 +32,8 @@ export const AddObjectFunc = (
       name: latest_ct.toString(),
     }
     editor.objects.add(options).then(() => {
-      setRejectedFileUpload ?? setRejectedFileUpload(false)
-      setAddImgInfo ?? setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" }))
+      setRejectedFileUpload ? setRejectedFileUpload(false) : null
+      setAddImgInfo ? setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" })) : null
     })
   }
 }
