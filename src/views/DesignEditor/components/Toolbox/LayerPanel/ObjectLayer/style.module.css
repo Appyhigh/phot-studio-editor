@@ -27,6 +27,16 @@
   min-height: 42px;
   max-height: fit-content;
 }
+
+.hueWrapper{
+  border: 1px solid #92929d;
+  border-radius: 6px;
+  min-height: 30px;
+  padding: 9px 14px 5px 15px;
+  max-height: fit-content;
+  margin-top: 10px;
+}
+
 .box p ,.otherToolsBox p{
   font-weight: 500;
   font-size: 12px;
@@ -44,8 +54,9 @@
     text-align: center;
 }
 .dropdownWrapper {
-  margin: 6px 0px;
+  margin: 10px 0px;
 }
+
 .dropdownHeading {
   margin-left: 10px;
   font-weight: 500;

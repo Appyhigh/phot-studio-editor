@@ -46,7 +46,6 @@ export const AdjustOptions = [
     step: 1,
     defaultValue: 0,
   },
-  { name: "Hue", minVal: -100, maxVal: 100, percentage: false, type: SLIDER_TYPE.HUE, step: 1, defaultValue: 0 },
   {
     name: "Temperature",
     minVal: -100,
@@ -56,15 +55,7 @@ export const AdjustOptions = [
     step: 1,
     defaultValue: 0,
   },
-  {
-    name: "Opacity",
-    minVal: 0,
-    maxVal: 100,
-    percentage: false,
-    type: SLIDER_TYPE.OPACITY,
-    step: 1,
-    defaultValue: 100,
-  },
+
   {
     name: "Vibrance",
     minVal: -100,

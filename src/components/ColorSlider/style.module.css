@@ -1,0 +1,37 @@
+.range[type="range"] {
+  -webkit-appearance: none !important;
+  height: 5px;
+  background: rgba(105, 178, 201, 0.27);
+  border-radius: 12px;
+}
+
+.range {
+  width: 200px;
+  height: 5px !important;
+  margin-bottom: 15px;
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  background: #6729f3;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.baseSliderHeading {
+  font-weight: 500;
+  font-size: 12px;
+  color: #696974;
+}
+.percentageVal {
+  font-size: 12px;
+  color: #92929d;
+}
+
+@media screen and (min-width: 1220px) {
+  .range {
+    width: 200px;
+  }
+}

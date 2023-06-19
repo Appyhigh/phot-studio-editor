@@ -16,6 +16,10 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
 import DropdownWrapper from "./DropdownWrapper"
+import ColorSlider from "~/components/ColorSlider/ColorSlider"
+import BaseSlider from "../Common/BaseSlider"
+import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
+import { IsFilterPresent } from "~/views/DesignEditor/utils/functions/FilterFunc"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -67,6 +71,13 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     },
     [activeObject]
   )
+
+  let defaultValHue = 0
+  const findDefaultValHue = () => {
+    let index = IsFilterPresent(activeObject, "HueRotation")
+    if (index != -1) defaultValHue = activeObject?.filters[index]?.rotation * 100
+    return defaultValHue;
+  }
 
   const eraseHandler = () => {
     if (activeObject?.id === mainImgInfo.id) {
@@ -198,6 +209,18 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             />
           ))}
         </div>
+        <div className={classes.hueWrapper}>
+          <ColorSlider  value={findDefaultValHue()} />
+          <BaseSlider
+            name="Opacity"
+            minVal={0}
+            maxVal={100}
+            step={1}
+            percentage={false}
+            type={SLIDER_TYPE.OPACITY}
+            value={activeObject?.opacity * 100}
+          />
+        </div>
         <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
         <div className={classes.colorsWrapper}>
           {colors.map((each, idx) => {
@@ -224,6 +247,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             )
           })}
         </div>
+
         <ColorPicker
           inputColor={objectBgColor}
           isOpen={isOpen}

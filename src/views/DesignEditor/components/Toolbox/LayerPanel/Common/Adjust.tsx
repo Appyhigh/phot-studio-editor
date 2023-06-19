@@ -4,6 +4,7 @@ import classes from "./style.module.css"
 import { useActiveObject } from "@layerhub-io/react"
 import { SLIDER_TYPE } from "~/views/DesignEditor/utils/enum"
 import { IsFilterPresent } from "~/views/DesignEditor/utils/functions/FilterFunc"
+import ColorSlider from "~/components/ColorSlider/ColorSlider"
 
 const Adjust = () => {
   const activeObject: any = useActiveObject()
@@ -24,13 +25,13 @@ const Adjust = () => {
       if (index != -1) defaultValue = activeObject?.filters[index]?.rotation * 100
     } else if (SLIDER_TYPE.NOISE === type) {
       let index = IsFilterPresent(activeObject, "Noise")
-      if (index != -1) defaultValue = activeObject?.filters[index]?.noise*10
+      if (index != -1) defaultValue = activeObject?.filters[index]?.noise * 10
     } else if (SLIDER_TYPE.PIXELATE === type) {
       let index = IsFilterPresent(activeObject, "Pixelate")
-      if (index != -1) defaultValue = activeObject?.filters[index]?.blocksize 
+      if (index != -1) defaultValue = activeObject?.filters[index]?.blocksize
     } else if (SLIDER_TYPE.VIBRANCE === type) {
       let index = IsFilterPresent(activeObject, "Vibrance")
-      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance*100
+      if (index != -1) defaultValue = activeObject?.filters[index]?.vibrance * 100
     } else if (SLIDER_TYPE.HIGHLIGHT === type) {
       if (activeObject?.metadata?.general?.Highlight) {
         defaultValue = activeObject?.metadata?.general?.Highlight
