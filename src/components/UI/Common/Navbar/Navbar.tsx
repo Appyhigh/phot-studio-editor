@@ -7,6 +7,7 @@ import { useState } from "react"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { signOut } from "firebase/auth"
 import { auth } from "~/utils/firebase"
+import BaseButton from "../../Button/BaseButton"
 
 const Navbar = () => {
   // @ts-ignore
@@ -26,10 +27,28 @@ const Navbar = () => {
           <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
             <Icons.ActivityIcon size={24} />
           </Block>
-          <button className={clsx(classes.navbarBtn, classes.creditsStatusBtn)}>
-            {user && user?.credits_remaining} Credits
-          </button>
-          <button className={clsx(classes.navbarBtn, classes.upgradeBtn)}>Upgrade</button>
+          <BaseButton
+            title={`${user && user?.credits_remaining} Credits`}
+            width="120px"
+            height="38px"
+            bgColor="#F1F1F5"
+            borderRadius="10px"
+            fontSize="12px"
+            txtColor="#92929D"
+            fontFamily="poppins"
+            margin="0 0 0 17px"
+          />
+
+          <BaseButton
+            title="Upgrade"
+            bgColor="#FF974A"
+            width="120px"
+            height="38px"
+            fontFamily="poppins"
+            fontSize="12px"
+            borderRadius="10px"
+            margin="0px 0px 0px 16px"
+          />
           <Block className={clsx(classes.profileWrapper, "ml-2 pointer mt-1")}>
             {user.avatar ? (
               <img src={user.avatar} className="border-circle o-hidden" width="32px" height="32px" />
@@ -77,14 +96,18 @@ const Navbar = () => {
         </>
       ) : (
         <>
-          <button
-            onClick={() => {
+          <BaseButton
+          title="Login"
+            handleClick={() => {
               setShowLoginPopup(true)
             }}
-            className={clsx(classes.navbarBtn, classes.upgradeBtn)}
-          >
-            Login
-          </button>
+            width="80px"
+            bgColor="#FF974A"
+            height="36px"
+            fontFamily="poppins"
+            fontSize="12px"
+            borderRadius="10px"
+          />
           <LoginPopup
             isOpen={showLoginPopup}
             loginPopupCloseHandler={() => {
