@@ -164,20 +164,24 @@ const UppyDashboard = ({
       }, 200)
     })
     uppy.on("restriction-failed", (file: any, error: any) => {
-      setDisplayError(true)
       if (file.size > 10485760) {
         setUploadErrorMsg("File size must be under 10 MB.")
       } else {
         setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
       }
+      setTimeout(() => {
+        setDisplayError(true)
+      }, 250)
       uppy.cancelAll()
       setTimeout(() => {
-        setUploadErrorMsg("")
         setDisplayError(false)
+        setTimeout(() => {
+          setUploadErrorMsg("")
+        }, 500)
       }, 5000)
       return false
     })
-  }, [displayError])
+  }, [displayError, uploadErrorMsg])
 
   return (
     <div key={id}>
@@ -194,7 +198,7 @@ const UppyDashboard = ({
         }}
         disableInformer={true}
       />
-      {displayError && (
+      {uploadErrorMsg && (
         <div style={{ position: "relative", top: "-0.75rem" }}>
           <FileError ErrorMsg={uploadErrorMsg} displayError={displayError} />
         </div>
