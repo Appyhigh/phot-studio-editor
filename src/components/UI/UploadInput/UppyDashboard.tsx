@@ -43,6 +43,11 @@ const UppyDashboard = ({
     uppy = new Uppy({
       id: id,
       autoProceed: false,
+      restrictions: {
+        maxFileSize: 10485760,
+        maxNumberOfFiles: 1,
+        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+      },
     })
     uppy.use(OneDrive, {
       companionUrl: "https://devapi.phot.ai/companion",
@@ -62,7 +67,7 @@ const UppyDashboard = ({
       },
     })
     uppy.setOptions({
-      allowedFileTypes: ["image/*"],
+      allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
       maxFileSize: 10485760,
     })
   }
@@ -76,7 +81,6 @@ const UppyDashboard = ({
         setImageLoading(true)
         const imageUrl = file.source == "Url" ? file.remote.body.fileId : await getBucketImageUrlFromFile(file.data)
         if (fileInputType == "bgUpload") {
-          console.log("bgUpload")
           HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
         } else {
           HandleFile(
@@ -158,27 +162,21 @@ const UppyDashboard = ({
         close()
       }, 200)
     })
-
-    const uppyUploadIcon = document.querySelector(".uppy-upload-icon")
-    const uppyAddFile = document.querySelector(".uppy-Dashboard-AddFiles")
-    if (fileInputType != "panelAdd" && fileInputType != "bgUpload")
-      if (uppyAddFile != null) uppyAddFile!.insertBefore(uppyUploadIcon!, uppyAddFile!.firstChild)
   }, [])
 
   return (
     <div key={id}>
-      {fileInputType != "panelAdd" && fileInputType != "bgUpload" ? (
-        <div className="uppy-upload-icon">
-          <div className={classes.uploadIcon}>
-            <Icons.Upload size={31} />
-          </div>
-        </div>
-      ) : null}
       <Dashboard
         uppy={uppy}
         plugins={["Dropbox", "OneDrive", "Url"]}
         proudlyDisplayPoweredByUppy={false}
         hideUploadButton={true}
+        locale={{
+          strings: {
+            dropPasteImportFiles: "Drag and drop your image or %{browseFiles}",
+            browseFiles: "click to browse",
+          },
+        }}
       />
     </div>
   )
