@@ -48,6 +48,12 @@ export const BASE_ITEMS = [
     label: "Imagine AI",
     name: "ImagineAI",
   },
+  {
+    id: "imageupscaler",
+    icon: "ImagineAi",
+    label: "Image Upscaler",
+    name: "ImageUpscaler",
+  },
   // {
   //   id: "objectremover",
   //   icon: "CircleIcon",
