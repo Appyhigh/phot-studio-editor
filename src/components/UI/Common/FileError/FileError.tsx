@@ -1,14 +1,14 @@
+import Alert from "~/components/Icons/Alert"
 import classes from "./style.module.css"
+import { useEffect } from "react"
 
-const FileError = ({handleTry}:any) => {
+const FileError = ({ ErrorMsg }: any) => {
   return (
-    <div className={classes.errorMsgSection}>
-      <p>Wrong format file uploaded , Please upload an image in JPEG , PNG or BMP format</p>
-      <button  className={classes.tryAgainBtn} onClick={()=>{
-        handleTry()
-      }}>
-        Try Again 
-      </button>
+    <div className={classes.errorMsgSectionSize}>
+      <div>
+        <Alert size={24} />
+      </div>
+      <p>{ErrorMsg}</p>
     </div>
   )
 }

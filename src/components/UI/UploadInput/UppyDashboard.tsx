@@ -16,6 +16,7 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
 import { HandleBgUpload } from "~/views/DesignEditor/utils/functions/HandleBgUpload"
+import FileError from "../Common/FileError/FileError"
 
 const UppyDashboard = ({
   close,
@@ -37,17 +38,14 @@ const UppyDashboard = ({
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
   const frame = useFrame()
+  const [uploadErrorMsg, setUploadErrorMsg] = useState("")
+  const [displayError, setDisplayError] = useState(false)
 
   let uppy: any
   if (typeof window !== "undefined") {
     uppy = new Uppy({
       id: id,
       autoProceed: false,
-      restrictions: {
-        maxFileSize: 10485760,
-        maxNumberOfFiles: 1,
-        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
-      },
     })
     uppy.use(OneDrive, {
       companionUrl: "https://devapi.phot.ai/companion",
@@ -67,8 +65,11 @@ const UppyDashboard = ({
       },
     })
     uppy.setOptions({
-      allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
-      maxFileSize: 10485760,
+      restrictions: {
+        maxNumberOfFiles: 1,
+        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+        maxFileSize: 10485760,
+      },
     })
   }
 
@@ -162,7 +163,21 @@ const UppyDashboard = ({
         close()
       }, 200)
     })
-  }, [])
+    uppy.on("restriction-failed", (file: any, error: any) => {
+      setDisplayError(true)
+      if (file.size > 10485760) {
+        setUploadErrorMsg("File size must be under 10 MB.")
+      } else {
+        setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
+      }
+      uppy.cancelAll()
+      setTimeout(() => {
+        setUploadErrorMsg("")
+        setDisplayError(false)
+      }, 5000)
+      return false
+    })
+  }, [displayError])
 
   return (
     <div key={id}>
@@ -177,7 +192,13 @@ const UppyDashboard = ({
             browseFiles: "click to browse",
           },
         }}
+        disableInformer={true}
       />
+      {displayError && (
+        <div style={{ position: "relative", top: "-0.75rem" }}>
+          <FileError ErrorMsg={uploadErrorMsg} displayError={displayError} />
+        </div>
+      )}
     </div>
   )
 }

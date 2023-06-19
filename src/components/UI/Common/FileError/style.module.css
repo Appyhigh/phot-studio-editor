@@ -1,25 +1,26 @@
-.errorMsgSection {
+.errorMsgSectionSize {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
-  flex-direction: column;
+  gap: 6px;
+  padding: 0.8rem 0.5rem;
+  margin: 0rem 1.7rem;
+  background: #f8d7da;
+  border: 1px solid #f5c2c7;
+  border-radius: 4px;
+  opacity: 1;
+  transition: all 1s;
+  -wenkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -o-transition: all 1s;
+  -ms-transition: all 1s;
 }
 
-.errorMsgSection p {
-  text-align: center;
-  margin: 100px auto 20px;
-  color: #ff3333;
-}
-
-.tryAgainBtn{
-    width: 250px;
-    height: 48px;
-    text-align: center;
-    color: #fff;
-    font-weight: 500;
-    font-size: 18px;
-    background: #6729f3;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    margin-top: 30px;
+.errorMsgSectionSize p {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 19px;
+  color: #842029;
 }
