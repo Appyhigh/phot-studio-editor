@@ -20,6 +20,31 @@
   font-weight: 800;
 }
 
+.uppy-Dashboard-AddFiles-title {
+  color: #696974 !important;
+  font-family: "Rubik" !important;
+  font-size: 14px !important;
+  margin: 0rem !important;
+  font-weight: 400 !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center !important;
+}
+
+.uppy-Dashboard-AddFiles-title::before {
+  content: url("/src/components/Icons/upload-cloud.svg");
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.uppy-Dashboard-AddFiles-title::after {
+  content: url("src/components/Icons/line.svg") " Or " url("src/components/Icons/line.svg");
+  color: #92929d;
+  opacity: 0.7;
+  margin: 0.7rem auto -0.3rem;
+  display: block;
+}
+
 .uppy-Dashboard-subtitle {
   margin: 0.5rem auto 1rem;
   text-align: center;
@@ -30,22 +55,19 @@
 
 .uppy-Dashboard-AddFiles {
   border-radius: 8px !important;
-  padding-top: 2rem;
-  padding-bottom: 1rem;
+  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
   border: 1px dashed #6729f3 !important;
-}
-
-.uppy-Dashboard-AddFiles-title {
-  font-size: 1rem !important;
 }
 
 .uppy-DashboardTab-inner {
   width: 48px !important;
   height: 48px !important;
-  border: 1px dashed rgba(63, 59, 87, 0.2) !important;
+  border: 1px solid rgba(146, 146, 157, 0.1) !important;
   border-radius: 50% !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  box-shadow: none !important;
 }
 
 .uppy-DashboardTab[data-uppy-acquirer-id="MyDevice"] {
@@ -67,7 +89,9 @@
 }
 
 .uppy-DashboardTab-name {
-  margin-top: 0.5rem !important;
+  color: #92929d !important;
+  margin-top: 0.4rem !important;
+  font-size: 12px !important;
 }
 .uppy-Dashboard-AddFiles-list {
   flex-direction: row !important;
@@ -77,11 +101,6 @@
 
 .uppy-Dashboard-AddFiles-list span {
   display: flex;
-}
-
-.uppy-Dashboard-AddFiles-title {
-  color: #212121;
-  font-size: 18px;
 }
 
 .uppy-Dashboard-addFileContent {
@@ -96,12 +115,15 @@
 
 .uppy-Dashboard-browse {
   color: #6729f3 !important;
-  text-decoration-line: #6729f3 !important;
-  text-decoration: none !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
 }
 
 .uppy-Dashboard-browse:hover {
-  color: #6729f3 !important;
-  text-decoration-line: #6729f3 !important;
-  text-decoration: none !important;
+  text-decoration: underline !important;
+}
+
+.uppy-Dashboard-browse:focus,
+.uppy-Dashboard-browse:hover {
+  border-bottom: none !important;
 }

@@ -1,25 +1,27 @@
-.errorMsgSection {
+.errorMsgSectionSize {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
   align-items: center;
-  flex-direction: column;
+  gap: 6px;
+  padding: 0rem 0.5rem;
+  margin: 0rem 1.7rem;
+  background: #f8d7da;
+  border: 0px solid #f5c2c7;
+  border-radius: 4px;
+  opacity: 0;
+  max-height: 0rem;
+  transition: max-height 0.1s linear, opacity 0.25s linear, padding 0.25s linear;
+  -wenkit-transition: max-height 0.1s linear, opacity 0.25s linear, padding 0.25s linear;
+  -moz-transition: max-height 0.1s linear, opacity 0.25s linear, padding 0.25s linear;
+  -o-transition: max-height 0.1s linear, opacity 0.25s linear, padding 0.25s linear;
+  -ms-transition: max-height 0.1s linear, opacity 0.25s linear, padding 0.25s linear;
 }
 
-.errorMsgSection p {
-  text-align: center;
-  margin: 100px auto 20px;
-  color: #ff3333;
-}
-
-.tryAgainBtn{
-    width: 250px;
-    height: 48px;
-    text-align: center;
-    color: #fff;
-    font-weight: 500;
-    font-size: 18px;
-    background: #6729f3;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    margin-top: 30px;
+.errorMsgSectionSize p {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 19px;
+  color: #842029;
 }
