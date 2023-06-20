@@ -94,17 +94,6 @@
   padding: 0px 0px 24px 20px;
 }
 
-.generateBtn {
-  width: 275px;
-  height: 50px;
-  background: #6729f3;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 16px;
-  margin: 5px 0px 0px 14px;
-  text-align: center;
-  color: #fafafb;
-}
 .creditsPara {
   margin: 5px 20px 0px 20px;
   font-family: "Rubik";
@@ -138,9 +127,7 @@
   margin: 0px 12px 0px 14px;
   gap: 6px 8px;
 }
-.regenerateBtn {
-  width: 275px;
-}
+
 .buyMorePara a {
   text-decoration-line: underline;
   font-weight: 500;
@@ -163,12 +150,7 @@
   height: 80px;
 }
 
-.disabledBtn {
-  background: #f1f1f5;
-  border-radius: 8px;
-  cursor: not-allowed;
-  color: #92929d;
-}
+
 .eachImg img {
   width: 132px;
   height: 132px;
@@ -252,10 +234,7 @@
     width: 158px;
     height: 158px;
   }
-  .generateBtn {
-    width: 310px;
-    margin: 5px 0px 0px 20px;
-  }
+
   .resultImages {
     margin: 0px 12px 0px 20px;
     gap: 3px 0px;
@@ -272,9 +251,7 @@
     width: 154px;
     height: 154px;
   }
-  .regenerateBtn {
-    width: 320px;
-  }
+ 
   .clearFieldBtn {
     left: 200px;
   }
