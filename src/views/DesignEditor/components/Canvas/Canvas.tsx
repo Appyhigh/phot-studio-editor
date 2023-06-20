@@ -36,6 +36,20 @@ const Canvas = () => {
     }
   }, [editor])
 
+  // useEffect(() => {
+  //   if (editor) {
+  //     editor.canvas.canvas.on("", (event: any) => {
+  //       var object = event.target
+  //       console.log(object)
+  //     })
+
+  //     editor.canvas.canvas.on("object:modified", (event: any) => {
+  //       var object = event.target
+  //       object.applyFilters()
+  //     })
+  //   }
+  // }, [editor])
+
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
       {displayPlayback && <Playback />}

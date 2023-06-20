@@ -1,7 +1,7 @@
 import { Modal } from "baseui/modal"
 import classes from "./style.module.css"
 import { useContext, useState } from "react"
-import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
+import { useActiveObject } from "@layerhub-io/react"
 import MainImageContext from "~/contexts/MainImageContext"
 import FileError from "../Common/FileError/FileError"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"

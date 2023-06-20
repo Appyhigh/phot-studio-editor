@@ -108,7 +108,7 @@ const BgRemover = () => {
 
   return (
     <Block className="d-flex flex-1 flex-column">
-      {mainImgInfo.id && mainImgInfo.preview ? (
+      {(mainImgInfo.id && mainImgInfo.preview )? (
         <Block>
           <Block paddingTop={"10px"}>
             {

@@ -42,16 +42,22 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
         const ids = activeObject?._objects.map((el: any) => {
           return el?.metadata?.generationDate
         })
+
+        let latest_objects = template.layers.filter((layer: any) => {
+          const targetIds = layer?.objects?.map((el: any) => {
+            return el?.metadata?.generationDate
+          })
+          return JSON.stringify(ids) === JSON.stringify(targetIds)
+        })
+
+        const updated_object = latest_objects[0].objects.map((each: any, _idx: any) => {
+          return { ...each, src: each.preview }
+        })
+
         template = {
           ...template,
-          layers: template.layers.filter((layer: any) => {
-            const targetIds = layer?.objects?.map((el: any) => {
-              return el?.metadata?.generationDate
-            })
-            return JSON.stringify(ids) === JSON.stringify(targetIds)
-          }),
+          layers: [{ ...latest_objects[0], objects: updated_object }],
         }
-
         image = (await editor.renderer.render(template)) as string
       }
       const nWidth = activeObject.width * activeObject?.scaleX * sizeVal
@@ -65,7 +71,6 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
   const exportHandler = useCallback(async () => {
     if (editor && objects) {
       let template: any = editor.scene.exportToJSON()
-
       // Exclude the Background & Checkbox Layer
       const checkboxBGLayerIndex = template.layers.findIndex((el: any) => el?.metadata?.type === backgroundLayerType)
       const canvasBGLayerIndex = template.layers.findIndex((el: any) => el?.id === "background")
@@ -84,8 +89,15 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
         }
       })
 
-      template = { ...template, layers: template.layers.filter((layer: any) => !hiddenLayersIDs.includes(layer.id)) }
+      template = {
+        ...template,
+        layers: template.layers
+          .filter((layer: any) => !hiddenLayersIDs.includes(layer.id))
 
+          .map((each: any, _idx: any) => {
+            return { ...each, src: each.preview }
+          }),
+      }
       const image = (await editor.renderer.render(template)) as string
       const nWidth = frame.width * sizeVal
       const nHeight = frame.height * sizeVal
