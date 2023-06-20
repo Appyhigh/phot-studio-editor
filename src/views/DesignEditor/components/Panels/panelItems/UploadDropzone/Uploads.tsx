@@ -104,7 +104,7 @@ export default function ({ uploadType, activePanel }: any) {
                 }}
               >
                 <Icons.ChevronRight size="16" />{" "}
-                <Block className={clsx(classes.panelHeading, "ml-1")}>Image upscaler</Block>
+                <Block className={clsx(classes.panelHeading,classes.imgUpscalerHeading)}>Image upscaler</Block>
               </div>
             ) : (
               mainImgInfo.id &&
