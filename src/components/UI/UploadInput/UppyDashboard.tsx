@@ -165,7 +165,7 @@ const UppyDashboard = ({
     })
     uppy.on("restriction-failed", (file: any, error: any) => {
       if (file.size > 5242880) {
-        setUploadErrorMsg("File size must be under 10 MB.")
+        setUploadErrorMsg("File size must be under 5 MB.")
       } else {
         setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
       }
