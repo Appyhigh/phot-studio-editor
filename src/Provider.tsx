@@ -18,6 +18,7 @@ import AuthWrapper from "./hooks/useAuth"
 import ImagesContext from "./contexts/ImagesCountContext"
 import TextToArtContext from "./contexts/TextToArtContext"
 import ErrorContext from "./contexts/ErrorContext"
+import ImageUpScalerContext from "./contexts/ImageUpScalerContext"
 
 const engine = new Styletron()
 
@@ -76,40 +77,59 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     },
   })
 
+  const [imgScalerInfo, setImgScalerInfo] = useState({
+    id: "",
+    src: "",
+    original: "",
+    scaler: 2,
+    result:[]
+  })
+
+  const [imgScalerPanelInfo, setImgScalerPanelInfo] = useState({
+    uploadSection: true,
+    trySampleImg: true,
+    uploadPreview: false,
+    resultSectionVisible:false
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
         <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
-            <ErrorContext.Provider value={{errorInfo,setErrorInfo}}>
-            <TextToArtContext.Provider
-              value={{
-                textToArtInputInfo,
-                setTextToArtInputInfo,
-                textToArtpanelInfo,
-                setTextToArtPanelInfo,
-                styleImage,
-                setStyleImage,
-                result,
-                setResult,
-              }}
-            >
-              <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
-                <DesignEditorProvider>
-                  <TimerProvider>
-                    <AppProvider>
-                      <ScenifyProvider>
-                        <StyletronProvider value={engine}>
-                          <BaseProvider theme={CustomTheme}>
-                            <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                          </BaseProvider>
-                        </StyletronProvider>
-                      </ScenifyProvider>
-                    </AppProvider>
-                  </TimerProvider>
-                </DesignEditorProvider>
-              </MainImageContext.Provider>
-            </TextToArtContext.Provider>
+            <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
+              <ImageUpScalerContext.Provider
+                value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
+              >
+                <TextToArtContext.Provider
+                  value={{
+                    textToArtInputInfo,
+                    setTextToArtInputInfo,
+                    textToArtpanelInfo,
+                    setTextToArtPanelInfo,
+                    styleImage,
+                    setStyleImage,
+                    result,
+                    setResult,
+                  }}
+                >
+                  <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
+                    <DesignEditorProvider>
+                      <TimerProvider>
+                        <AppProvider>
+                          <ScenifyProvider>
+                            <StyletronProvider value={engine}>
+                              <BaseProvider theme={CustomTheme}>
+                                <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                              </BaseProvider>
+                            </StyletronProvider>
+                          </ScenifyProvider>
+                        </AppProvider>
+                      </TimerProvider>
+                    </DesignEditorProvider>
+                  </MainImageContext.Provider>
+                </TextToArtContext.Provider>
+              </ImageUpScalerContext.Provider>
             </ErrorContext.Provider>
           </LoaderContext.Provider>
         </ImagesContext.Provider>

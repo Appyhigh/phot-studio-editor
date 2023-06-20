@@ -16,6 +16,7 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
 import { HandleBgUpload } from "~/views/DesignEditor/utils/functions/HandleBgUpload"
+import useAppContext from "~/hooks/useAppContext"
 
 const UppyDashboard = ({
   close,
@@ -33,6 +34,9 @@ const UppyDashboard = ({
   uploads,
   setUploads,
   setBgUploadPreview,
+  imgScalerInfo,
+  setImgScalerInfo,
+  setImgScalerPanelInfo,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -66,7 +70,8 @@ const UppyDashboard = ({
       maxFileSize: 10485760,
     })
   }
-
+const activePanel= useAppContext();
+  
   useEffect(() => {
     uppy.on("file-added", async (file: any) => {
       if (file.source == "Dropbox" || file.source == "OneDrive") {
@@ -78,6 +83,12 @@ const UppyDashboard = ({
         if (fileInputType == "bgUpload") {
           console.log("bgUpload")
           HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
+        } else if (fileInputType === "ImgUpscaler") {
+          // @ts-ignore
+          setImgScalerInfo? setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+            : null
+          // @ts-ignore
+          setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else {
           HandleFile(
             imageUrl,
@@ -112,6 +123,16 @@ const UppyDashboard = ({
         if (imageUrl) {
           if (fileInputType == "bgUpload") {
             HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
+          } else if (fileInputType === "ImgUpscaler") {
+            // @ts-ignore
+            setImgScalerInfo ? setImgScalerInfo((prev) => ({ ...prev, url: imageUrl, original: imageUrl })) : null
+            //  @ts-ignore
+            setImgScalerPanelInfo((prev) => ({
+              ...prev,
+              uploadSection: false,
+              uploadPreview: true,
+              trySampleImg: false,
+            }))
           } else {
             HandleFile(
               imageUrl,
@@ -161,13 +182,13 @@ const UppyDashboard = ({
 
     const uppyUploadIcon = document.querySelector(".uppy-upload-icon")
     const uppyAddFile = document.querySelector(".uppy-Dashboard-AddFiles")
-    if (fileInputType != "panelAdd" && fileInputType != "bgUpload")
+    if (fileInputType != "panelAdd" && fileInputType != "bgUpload" && fileInputType != "ImgUpscaler")
       if (uppyAddFile != null) uppyAddFile!.insertBefore(uppyUploadIcon!, uppyAddFile!.firstChild)
-  }, [])
+  }, [activePanel])
 
   return (
     <div key={id}>
-      {fileInputType != "panelAdd" && fileInputType != "bgUpload" ? (
+      {fileInputType != "panelAdd" && fileInputType != "ImgUpscaler" && fileInputType != "bgUpload" ? (
         <div className="uppy-upload-icon">
           <div className={classes.uploadIcon}>
             <Icons.Upload size={31} />

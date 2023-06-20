@@ -6,11 +6,12 @@ import { useEditor } from "@layerhub-io/react"
 import { useContext, useEffect, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
-import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants"
+import { IMAGE_UPSCALER, LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
+import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 
 const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -23,6 +24,8 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
+  const { imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo } =
+    useContext(ImageUpScalerContext)
   return (
     <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -45,6 +48,12 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
           />
         ) : uploadType === TEXT_TO_ART && textToArtImg ? (
           <img className={classes.uploadedImg} style={{ objectFit: "contain" }} src={textToArtImg} alt="preview" />
+        ) : uploadType === IMAGE_UPSCALER && (imgScalerInfo.original || imgScalerInfo.src) ? (
+          <img
+            className={classes.uploadedImg}
+            src={imgScalerInfo.original ? imgScalerInfo.original : imgScalerInfo.src}
+            alt="preview"
+          />
         ) : (
           mainImgInfo.id &&
           (mainImgInfo.url || mainImgInfo.original) && (
@@ -97,7 +106,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
           Add Background
         </button>
       ) : (
-        uploadType != TEXT_TO_ART && (
+        uploadType != TEXT_TO_ART &&uploadType!=IMAGE_UPSCALER && (
           <button
             disabled={panelInfo.bgRemoverBtnActive ? false : true}
             onClick={() => {
