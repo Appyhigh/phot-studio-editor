@@ -18,14 +18,26 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import { img2Upscaler, img4Upscaler } from "~/utils/imgUpscaler"
 import ErrorContext from "~/contexts/ErrorContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import { getCookie } from "~/utils/common"
+import { COOKIE_KEYS } from "~/utils/enum"
+import LoginPopup from "../../../LoginPopup/LoginPopup"
+import { useAuth } from "~/hooks/useAuth"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
+  // @ts-ignore
+  const { authState } = useAuth()
+
+  const { user } = authState
+
   const [imageLoading, setImageLoading] = useState(false)
+  const [autoCallAPI, setAutoCallAPI] = useState(false)
+
   const editor = useEditor()
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const { setImagesCt } = useContext(ImagesContext)
   const leftPanelRef = useRef()
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
 
   const { bgSampleImages, setBgSampleImages } = useAppContext()
   useEffect(() => {
@@ -36,6 +48,15 @@ const ImageUpscaler = () => {
 
     fetchSampleImages()
   }, [])
+
+  useEffect(() => {
+    if (user && autoCallAPI) {
+      if (imgScalerInfo.scaler === 2) {
+        generateImg2Scaler()
+      } else img4Upscaler(imgScalerInfo.src)
+      generateImg4Scaler()
+    }
+  }, [user, autoCallAPI])
 
   const { imgScalerPanelInfo, setImgScalerInfo, setImgScalerPanelInfo, imgScalerInfo } =
     useContext(ImageUpScalerContext)
@@ -82,71 +103,85 @@ const ImageUpscaler = () => {
   const { setErrorInfo } = useContext(ErrorContext)
 
   const generateImg2Scaler = () => {
-    setImageLoading(true)
-    // @ts-ignore
-    setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+      setAutoCallAPI(true)
+    } else {
+      setImageLoading(true)
+      setAutoCallAPI(false)
+      setCurrentActiveImg(-1);
+      // @ts-ignore
+      setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
 
-    img2Upscaler(imgScalerInfo.src)
-      .then((response) => {
-        setImageLoading(false)
-        // @ts-ignore
-        setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
-      })
-      .catch((error) => {
-        setImageLoading(false)
-        // @ts-ignore
-        setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
-        // @ts-ignore
-        setErrorInfo((prev) => ({
-          ...prev,
-          showError: true,
-          errorMsg: "Some error has occurred",
-          retryFn: () => {
+      img2Upscaler(imgScalerInfo.src)
+        .then((response) => {
+          setImageLoading(false)
+          // @ts-ignore
+          setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
+        })
+        .catch((error) => {
+          setImageLoading(false)
+          // @ts-ignore
+          setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+          // @ts-ignore
+          setErrorInfo((prev) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              // @ts-ignore
+              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              generateImg2Scaler()
+            },
+          }))
+          setTimeout(() => {
             // @ts-ignore
             setErrorInfo((prev) => ({ ...prev, showError: false }))
-            generateImg2Scaler()
-          },
-        }))
-        setTimeout(() => {
-          // @ts-ignore
-          setErrorInfo((prev) => ({ ...prev, showError: false }))
-        }, 5000)
-        console.error("Error:", error)
-      })
+          }, 5000)
+          console.error("Error:", error)
+        })
+    }
   }
 
   const generateImg4Scaler = () => {
-    setImageLoading(true)
-    // @ts-ignore
-    setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+      setAutoCallAPI(true)
+    } else {
+      setCurrentActiveImg(-1);
+      setAutoCallAPI(false)
+      setImageLoading(true)
+      // @ts-ignore
+      setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
 
-    img4Upscaler(imgScalerInfo.src)
-      .then((response) => {
-        setImageLoading(false)
-        // @ts-ignore
-        setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
-      })
-      .catch((error) => {
-        setImageLoading(false)
-        // @ts-ignore
-        setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
-        // @ts-ignore
-        setErrorInfo((prev) => ({
-          ...prev,
-          showError: true,
-          errorMsg: "Some error has occurred",
-          retryFn: () => {
+      img4Upscaler(imgScalerInfo.src)
+        .then((response) => {
+          setImageLoading(false)
+          // @ts-ignore
+          setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
+        })
+        .catch((error) => {
+          setImageLoading(false)
+          // @ts-ignore
+          setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+          // @ts-ignore
+          setErrorInfo((prev) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              // @ts-ignore
+              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              generateImg2Scaler()
+            },
+          }))
+          setTimeout(() => {
             // @ts-ignore
             setErrorInfo((prev) => ({ ...prev, showError: false }))
-            generateImg2Scaler()
-          },
-        }))
-        setTimeout(() => {
-          // @ts-ignore
-          setErrorInfo((prev) => ({ ...prev, showError: false }))
-        }, 5000)
-        console.error("Error:", error)
-      })
+          }, 5000)
+          console.error("Error:", error)
+        })
+    }
   }
   const frame = useFrame()
 
@@ -209,6 +244,12 @@ const ImageUpscaler = () => {
               >
                 Generate
               </button>
+              <LoginPopup
+                isOpen={showLoginPopup}
+                loginPopupCloseHandler={() => {
+                  setShowLoginPopup(false)
+                }}
+              />
               {/* <p className={classes.freeImgText}>*1/5 free images left</p> */}
             </div>
           )}
