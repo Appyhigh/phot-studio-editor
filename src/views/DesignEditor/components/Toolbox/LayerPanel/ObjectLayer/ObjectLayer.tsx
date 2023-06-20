@@ -16,6 +16,7 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
 import DropdownWrapper from "./DropdownWrapper"
+import Loader from "~/components/UI/Loader/Loader"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -146,6 +147,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   }
 
   return showLayer ? (
+    <>
+    <Loader isOpen={setLoaderPopup}/>
     <Scrollable>
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
       <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -307,6 +310,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         id={"ObjectLayer"}
       />
     </Scrollable>
+    </>
   ) : null
 }
 

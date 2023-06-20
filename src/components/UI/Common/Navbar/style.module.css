@@ -8,23 +8,9 @@
   padding: 15px 20px;
 }
 
-.navbarBtn {
-  padding: 9px 24px;
-  font-size: 12px;
-  cursor: pointer;
-  margin-left: 12px;
-  border-radius: 10px;
-  font-weight: 500;
-  font-family: "Poppins";
-}
 .creditsStatusBtn {
   color: #000;
   background-color: #f1f1f5;
-}
-
-.upgradeBtn {
-  color: #fff;
-  background-color: #ff974a;
 }
 
 .navbarSection {

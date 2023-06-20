@@ -11,6 +11,7 @@ import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeB
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
+import BaseButton from "~/components/UI/Button/BaseButton"
 
 const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd,disableButton}: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -74,8 +75,10 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
       </Block>
 
       {uploadType === LOCAL_SAMPLE_IMG ? (
-        <button
-          onClick={() => {
+        <BaseButton
+          title="Add"
+          margin="16px 0 0 0"
+          handleClick={() => {
             let latest_ct = 0
             setImagesCt((prev: any) => {
               latest_ct = prev + 1
@@ -84,53 +87,52 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
             editor.objects.add({ ...upload, name: latest_ct.toString() })
             discardHandler()
           }}
-          className={clsx(classes.removeBgBtn)}
-        >
-          Add
-        </button>
+        />
       ) : uploadType === MAIN_IMG_Bg ? (
-        <button
-          onClick={() => {        
-            if(!disableButton){
+
+        <BaseButton
+          title="Add Background"
+          width="320px"
+          margin="0 0 0 20px"
+          handleClick={() => {
+           if(!loaderPopup){
               handleBgAdd()
             }
+
           }}
-          className={clsx(classes.removeBgBtn, uploadType === MAIN_IMG_Bg && classes.mainImgBgBtn)}
-        >
-          Add Background
-        </button>
+        />
       ) : (
         uploadType != TEXT_TO_ART && (
-          <button
-            disabled={panelInfo.bgRemoverBtnActive ? false : true}
-            onClick={() => {
-              let latest_ct = 0
-              setImagesCt((prev: any) => {
-                latest_ct = prev + 1
-                RemoveBGFunc(
-                  editor,
-                  setLoaderPopup,
-                  setPanelInfo,
-                  mainImgInfo,
-                  setMainImgInfo,
-                  virtualSrcImageRef,
-                  virtualMaskImageRef,
-                  virtualCanvasSrcImageRef,
-                  virtualCanvasMaskImageRef,
-                  virtualCanvasResultImageRef,
-                  0,
-                  (latest_ct = latest_ct),
-                  errorInfo,
-                  setErrorInfo
-                )
-
-                return prev + 1
-              })
-            }}
-            className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
-          >
-            Remove Background
-          </button>
+          <div style={{ marginTop: "6px" }}>
+            <BaseButton
+              title="Remove Background"
+              margin="16px 0 0 0"
+              disabled={panelInfo.bgRemoverBtnActive ? false : true}
+              handleClick={() => {
+                let latest_ct = 0
+                setImagesCt((prev: any) => {
+                  latest_ct = prev + 1
+                  RemoveBGFunc(
+                    editor,
+                    setLoaderPopup,
+                    setPanelInfo,
+                    mainImgInfo,
+                    setMainImgInfo,
+                    virtualSrcImageRef,
+                    virtualMaskImageRef,
+                    virtualCanvasSrcImageRef,
+                    virtualCanvasMaskImageRef,
+                    virtualCanvasResultImageRef,
+                    0,
+                    (latest_ct = latest_ct),
+                    errorInfo,
+                    setErrorInfo
+                  )
+                  return prev + 1
+                })
+              }}
+            />
+          </div>
         )
       )}
     </div>

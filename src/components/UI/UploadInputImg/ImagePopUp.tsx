@@ -7,6 +7,7 @@ import { aspectRatio } from "~/views/DesignEditor/utils/AspectRatio"
 import TextToArtContext from "~/contexts/TextToArtContext"
 import { Modal } from "baseui/modal"
 import { getCroppedImage } from "~/utils/getCroppedImage"
+import BaseButton from "../Button/BaseButton"
 
 const ImagePopUp = ({ openModal, setOpenModal, imageUrl, setImageUrl }: any) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -71,14 +72,17 @@ const ImagePopUp = ({ openModal, setOpenModal, imageUrl, setImageUrl }: any) => 
             onZoomChange={setZoom}
           />
         </div>
-        <button
-          onClick={() =>
+        <BaseButton
+          title="Add"
+          width="30rem"
+          height="50px"
+          fontFamily="rubik"
+          fontSize="16px"
+          margin="0 0 1.5rem 0"
+          handleClick={() =>
             getCroppedImage(imageUrl, croppedAreaPixels, setCroppedImage, setTextToArtInputInfo, setOpenModal)
           }
-          className={classes.addButton}
-        >
-          Add
-        </button>
+        />
       </div>
     </Modal>
   )

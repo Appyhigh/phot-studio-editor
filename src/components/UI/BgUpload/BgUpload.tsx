@@ -60,7 +60,7 @@ const BgUpload = () => {
       </div>
       {bgChoice === 0 ? (
         <>
-          <Scrollbars style={{ height: "300px" }}>
+          <Scrollbars style={{ height: "450%" }}>
             {bgUploading && bgChoice === 0 && (
               <div>
                 <Block className={classes.uploadInputContainer}>

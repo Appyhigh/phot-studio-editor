@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
+import BaseButton from "../Button/BaseButton"
 
 const BasePannel = () => {
   const editor = useEditor()
@@ -154,12 +155,20 @@ const BasePannel = () => {
           </Block>
         </StatefulTooltip> */}
         <Block className={"p-relative downloadResultBtn"}>
-          <button
+          <BaseButton
+            title="Download"
             disabled={downloadBtnDisable ? true : false}
-            className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
-          >
-            Download
-          </button>
+            fontSize="14px"
+            padding="15px"
+            marginLeft="12px"
+            borderRadius="10px"
+            fontFamily="poppins"
+            height="38px"
+            width="120px"
+            // className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
+          />
+            
+          
           {!downloadBtnDisable && <DownloadPopup />}
         </Block>
       </Block>
