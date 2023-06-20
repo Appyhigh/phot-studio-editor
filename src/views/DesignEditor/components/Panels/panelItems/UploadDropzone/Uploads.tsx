@@ -108,7 +108,7 @@ export default function ({ uploadType, activePanel }: any) {
               </div>
             ) : (
               mainImgInfo.id &&
-              !imageLoading && (
+              !imageLoading &&  uploadType!=IMAGE_UPSCALER&&  (
                 <div
                   className="d-flex justify-content-start flex-row align-items-center pointer"
                   onClick={() => {
@@ -236,7 +236,7 @@ export default function ({ uploadType, activePanel }: any) {
                 />
               ) : (
                 mainImgInfo.id &&
-                !rejectedFileUpload &&
+                !rejectedFileUpload &&uploadType!=IMAGE_UPSCALER&& uploadType!=LOCAL_SAMPLE_IMG&&
                 !imageLoading && (
                   <UploadPreview
                     uploadType={uploadType}

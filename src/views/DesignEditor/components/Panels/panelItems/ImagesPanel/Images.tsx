@@ -15,6 +15,7 @@ import useAppContext from "~/hooks/useAppContext"
 import StockImages from "~/components/UI/BgUpload/StockImages"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const Images = () => {
   const editor = useEditor()
@@ -24,6 +25,18 @@ const Images = () => {
   const [bgChoice, setBgChoice] = useState(0)
   const { setImagesCt } = useContext(ImagesContext)
   const frame = useFrame()
+
+  const addImg = async (imageUrl: string) => {
+    await getDimensions(imageUrl, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+        return prev + 1
+      })
+    })
+  }
+
   return (
     <Block className="d-flex flex-1 flex-column">
       <>
@@ -45,12 +58,7 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        let latest_ct = 0
-                        setImagesCt((prev: any) => {
-                          latest_ct = prev + 1
-                          AddObjectFunc(image.src, editor, 0, 0, frame, latest_ct)
-                          return prev + 1
-                        })
+                        addImg(image.src)
                       }}
                       preview={image.src}
                     />
@@ -61,12 +69,7 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        let latest_ct = 0
-                        setImagesCt((prev: any) => {
-                          latest_ct = prev + 1
-                          AddObjectFunc(image.src.medium, editor, 0, 0, frame, latest_ct)
-                          return prev + 1
-                        })
+                        addImg(image.src.medium)
                       }}
                       preview={image.src.small}
                     />
