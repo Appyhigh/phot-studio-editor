@@ -68,7 +68,7 @@ const UppyDashboard = ({
       restrictions: {
         maxNumberOfFiles: 1,
         allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
-        maxFileSize: 10485760,
+        maxFileSize: 5242880,
       },
     })
   }
@@ -164,7 +164,7 @@ const UppyDashboard = ({
       }, 200)
     })
     uppy.on("restriction-failed", (file: any, error: any) => {
-      if (file.size > 10485760) {
+      if (file.size > 5242880) {
         setUploadErrorMsg("File size must be under 10 MB.")
       } else {
         setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
