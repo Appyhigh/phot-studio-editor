@@ -8,15 +8,13 @@ import "./uppy.css"
 import "@uppy/core/dist/style.min.css"
 import "@uppy/dashboard/dist/style.min.css"
 import { useEffect, useContext, useState } from "react"
-import Icons from "~/components/Icons"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
-
-import classes from "./style.module.css"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
 import { HandleBgUpload } from "~/views/DesignEditor/utils/functions/HandleBgUpload"
 import useAppContext from "~/hooks/useAppContext"
+import FileError from "../Common/FileError/FileError"
 
 const UppyDashboard = ({
   close,
@@ -41,6 +39,8 @@ const UppyDashboard = ({
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
   const frame = useFrame()
+  const [uploadErrorMsg, setUploadErrorMsg] = useState("")
+  const [displayError, setDisplayError] = useState(false)
 
   let uppy: any
   if (typeof window !== "undefined") {
@@ -66,12 +66,15 @@ const UppyDashboard = ({
       },
     })
     uppy.setOptions({
-      allowedFileTypes: ["image/*"],
-      maxFileSize: 10485760,
+      restrictions: {
+        maxNumberOfFiles: 1,
+        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+        maxFileSize: 5242880,
+      },
     })
   }
-const activePanel= useAppContext();
-  
+  const activePanel = useAppContext()
+
   useEffect(() => {
     uppy.on("file-added", async (file: any) => {
       if (file.source == "Dropbox" || file.source == "OneDrive") {
@@ -81,11 +84,11 @@ const activePanel= useAppContext();
         setImageLoading(true)
         const imageUrl = file.source == "Url" ? file.remote.body.fileId : await getBucketImageUrlFromFile(file.data)
         if (fileInputType == "bgUpload") {
-          console.log("bgUpload")
           HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
         } else if (fileInputType === "ImgUpscaler") {
           // @ts-ignore
-          setImgScalerInfo? setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+          setImgScalerInfo
+            ? setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
@@ -179,28 +182,46 @@ const activePanel= useAppContext();
         close()
       }, 200)
     })
-
-    const uppyUploadIcon = document.querySelector(".uppy-upload-icon")
-    const uppyAddFile = document.querySelector(".uppy-Dashboard-AddFiles")
-    if (fileInputType != "panelAdd" && fileInputType != "bgUpload" && fileInputType != "ImgUpscaler")
-      if (uppyAddFile != null) uppyAddFile!.insertBefore(uppyUploadIcon!, uppyAddFile!.firstChild)
-  }, [activePanel])
+    uppy.on("restriction-failed", (file: any, error: any) => {
+      if (file.size > 5242880) {
+        setUploadErrorMsg("File size must be under 5 MB.")
+      } else {
+        setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
+      }
+      setTimeout(() => {
+        setDisplayError(true)
+      }, 250)
+      uppy.cancelAll()
+      setTimeout(() => {
+        setDisplayError(false)
+        setTimeout(() => {
+          setUploadErrorMsg("")
+        }, 500)
+      }, 5000)
+      return false
+    })
+  }, [displayError, uploadErrorMsg,activePanel])
 
   return (
     <div key={id}>
-      {fileInputType != "panelAdd" && fileInputType != "ImgUpscaler" && fileInputType != "bgUpload" ? (
-        <div className="uppy-upload-icon">
-          <div className={classes.uploadIcon}>
-            <Icons.Upload size={31} />
-          </div>
-        </div>
-      ) : null}
       <Dashboard
         uppy={uppy}
         plugins={["Dropbox", "OneDrive", "Url"]}
         proudlyDisplayPoweredByUppy={false}
         hideUploadButton={true}
+        locale={{
+          strings: {
+            dropPasteImportFiles: "Drag and drop your image or %{browseFiles}",
+            browseFiles: "click to browse",
+          },
+        }}
+        disableInformer={true}
       />
+      {uploadErrorMsg && (
+        <div style={{ position: "relative", top: "-0.75rem" }}>
+          <FileError ErrorMsg={uploadErrorMsg} displayError={displayError} />
+        </div>
+      )}
     </div>
   )
 }
