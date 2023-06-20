@@ -6,9 +6,9 @@ import clsx from "clsx"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useEffect, useRef, useState } from "react"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { nanoid } from "nanoid"
 import CreditsSection from "~/components/CreditsSection/CreditsSection"
 import Icons from "~/components/Icons"
@@ -17,6 +17,7 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import { img2Upscaler, img4Upscaler } from "~/utils/imgUpscaler"
 import ErrorContext from "~/contexts/ErrorContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -24,6 +25,7 @@ const ImageUpscaler = () => {
   const editor = useEditor()
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const { setImagesCt } = useContext(ImagesContext)
+  const leftPanelRef = useRef()
 
   const { bgSampleImages, setBgSampleImages } = useAppContext()
   useEffect(() => {
@@ -57,6 +59,25 @@ const ImageUpscaler = () => {
     },
     [editor]
   )
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e: any) => {
+      // If the clearField is open and the clicked target is not within the clearfield,
+      // then close the clearfield
+      // @ts-ignore
+      if (leftPanelRef?.current && !leftPanelRef?.current?.contains(e.target)) {
+        setImgScalerInfo((prev: any) => ({
+          ...prev,
+          showclearTooltip: false,
+        }))
+      }
+    }
+    document.addEventListener("mousedown", checkIfClickedOutside)
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside)
+    }
+  }, [imgScalerInfo.showclearTooltip])
 
   const { setErrorInfo } = useContext(ErrorContext)
 
@@ -127,6 +148,19 @@ const ImageUpscaler = () => {
         console.error("Error:", error)
       })
   }
+  const frame = useFrame()
+
+  const addImg = async (imageUrl: string, _idx: number) => {
+    setCurrentActiveImg(_idx)
+    await getDimensions(imageUrl, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+        return prev + 1
+      })
+    })
+  }
 
   return (
     <div className="d-flex flex-1 flex-column">
@@ -141,6 +175,8 @@ const ImageUpscaler = () => {
                   <div
                     className={clsx(classes.scaleInput, imgScalerInfo.scaler === 2 && classes.activeScale)}
                     onClick={() => {
+                      setCurrentActiveImg(-1)
+
                       // @ts-ignore
                       setImgScalerInfo((prev) => ({ ...prev, scaler: 2 }))
                     }}
@@ -150,6 +186,8 @@ const ImageUpscaler = () => {
                   <div
                     className={clsx(classes.scaleInput, imgScalerInfo.scaler === 4 && classes.activeScale)}
                     onClick={() => {
+                      setCurrentActiveImg(-1)
+
                       // @ts-ignore
                       setImgScalerInfo((prev) => ({ ...prev, scaler: 4 }))
                     }}
@@ -172,6 +210,47 @@ const ImageUpscaler = () => {
                 Generate
               </button>
               {/* <p className={classes.freeImgText}>*1/5 free images left</p> */}
+            </div>
+          )}
+          {imgScalerInfo.showclearTooltip && (
+            // @ts-ignore
+            <div className={classes.clearFieldBtn} ref={leftPanelRef}>
+              <div
+                className="pointer"
+                onClick={() => {
+                  setCurrentActiveImg(-1)
+                  setImgScalerInfo((prev: any) => ({
+                    ...prev,
+                    src: "",
+                    id: "",
+                    original: "",
+                    result: [],
+                    scale: 2,
+                    showclearTooltip: false,
+                  }))
+                  // @ts-ignore
+                  setImgScalerPanelInfo((prev) => ({
+                    ...prev,
+                    uploadSection: true,
+                    trySampleImg: true,
+                    uploadPreview: false,
+                    resultSectionVisible: false,
+                  }))
+                }}
+              >
+                Clear all fields
+              </div>{" "}
+              <div
+                className="pl-2 pointer"
+                onClick={() => {
+                  setImgScalerInfo((prev: any) => ({
+                    ...prev,
+                    showclearTooltip: false,
+                  }))
+                }}
+              >
+                <Icons.ToolTipCross />
+              </div>
             </div>
           )}
           {imgScalerPanelInfo.trySampleImg && (
@@ -206,8 +285,9 @@ const ImageUpscaler = () => {
             onClick={() => {
               // @ts-ignore
               setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+
               // @ts-ignore
-              setImgScalerInfo((prev) => ({ ...prev, result: [] }))
+              setImgScalerInfo((prev) => ({ ...prev, result: [], showclearTooltip: true }))
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
@@ -227,13 +307,7 @@ const ImageUpscaler = () => {
                       src={each}
                       alt="result-img"
                       onClick={() => {
-                        setCurrentActiveImg(_idx)
-                        let latest_ct = 0
-                        setImagesCt((prev: any) => {
-                          latest_ct = prev + 1
-                          AddObjectFunc(each, editor, 0, 0, 0, (latest_ct = latest_ct))
-                          return prev + 1
-                        })
+                        addImg(each, _idx)
                       }}
                     />
                   }

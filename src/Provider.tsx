@@ -82,7 +82,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     original: "",
     scaler: 2,
-    result:[]
+    result:[],
+    showclearTooltip: false,
   })
 
   const [imgScalerPanelInfo, setImgScalerPanelInfo] = useState({

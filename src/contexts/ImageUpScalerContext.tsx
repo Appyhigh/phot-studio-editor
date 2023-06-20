@@ -5,7 +5,8 @@ const ImageUpScalerContext = React.createContext({
     src: "",
     original: "",
     scaler: 2,
-    result:[]
+    result:[],
+    showclearTooltip: false,
   },
   imgScalerPanelInfo: {
     uploadSection: true,
@@ -13,7 +14,7 @@ const ImageUpScalerContext = React.createContext({
     uploadPreview: false,
     resultSectionVisible:false
   },
-  setImgScalerInfo: (item: any) => {
+  setImgScalerInfo:(item: any) => {
     console.log("Dummy Initializer for ", item)
   },
   setImgScalerPanelInfo: (item: any) => {

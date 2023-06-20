@@ -9,10 +9,8 @@ export const img2Upscaler = async (sourceUrl: string, fileName?: string) => {
       sourceUrl: sourceUrl,
       fileName: fileName,
     }
-
-
     const response = await axios.post(url, body)
-    return response.data
+    return response.data.data["2k"].url
   } catch (error) {
     console.error("An error occurred while sending the request:", error)
     throw error
@@ -27,9 +25,7 @@ export const img4Upscaler = async (sourceUrl: string, fileName?: string) => {
         sourceUrl: sourceUrl,
         fileName: fileName,
       }
- 
       const response = await axios.post(url, body)
-      return response.data
     } catch (error) {
       console.error("An error occurred while sending the request:", error)
       throw error
