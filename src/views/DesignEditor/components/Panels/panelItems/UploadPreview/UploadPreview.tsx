@@ -12,7 +12,7 @@ import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 
-const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd }: any) => {
+const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd,disableButton}: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
   const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
@@ -23,7 +23,6 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
-  const { loaderPopup } = useContext(LoaderContext)
 
   return (
     <div className="p-relative">
@@ -91,8 +90,8 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
         </button>
       ) : uploadType === MAIN_IMG_Bg ? (
         <button
-          onClick={() => {
-            if(!loaderPopup){
+          onClick={() => {        
+            if(!disableButton){
               handleBgAdd()
             }
           }}
