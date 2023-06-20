@@ -2,9 +2,9 @@ import { useStyletron } from "baseui"
 import { ParagraphXSmall } from "baseui/typography"
 
 interface BaseBtnProps {
-  title: string
-  bgColor: string
-  txtColor: string
+  title?: string
+  bgColor?: string
+  txtColor?: string
   hoverBgColor?: string
   marginLeft?: string
   padding?: string

@@ -131,22 +131,6 @@
   margin-right: 1rem;
 }
 
-.addButton {
-  padding: 0.75rem;
-  width: 30rem;
-  color: white;
-  background: #6729f3;
-  border-radius: 8px;
-  font-family: "Rubik";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 147%;
-  text-align: center;
-  color: #fafafb;
-  margin-bottom: 1.5rem;
-}
-
 .imageAspectRatio {
   background-color: #333b4f;
   width: fit-content;
