@@ -23,6 +23,8 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
+  const { loaderPopup } = useContext(LoaderContext)
+
   return (
     <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -90,7 +92,9 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
       ) : uploadType === MAIN_IMG_Bg ? (
         <button
           onClick={() => {
-            handleBgAdd()
+            if(!loaderPopup){
+              handleBgAdd()
+            }
           }}
           className={clsx(classes.removeBgBtn, uploadType === MAIN_IMG_Bg && classes.mainImgBgBtn)}
         >

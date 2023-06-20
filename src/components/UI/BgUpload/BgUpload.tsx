@@ -15,6 +15,7 @@ import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import Icons from "~/components/Icons"
 import FileError from "../Common/FileError/FileError"
 import UppyDashboard from "../UploadInput/UppyDashboard"
+import LoaderContext from "~/contexts/LoaderContext"
 
 const BgUpload = () => {
   const [bgUploading, setBgUploading] = useState(false)
@@ -27,14 +28,18 @@ const BgUpload = () => {
   const editor = useEditor()
   const [bgChoice, setBgChoice] = useState(0)
   const [renderKey, setRenderKey] = useState(0)
+  const {setLoaderPopup } = useContext(LoaderContext)
 
-  const handleImgAdd = () => {
+  const handleImgAdd = async() => {
+    
+    setLoaderPopup(true)
     const imageUrl = bgUploadPreview.url
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
     toDataURL(imageUrl, async function (dataUrl: string) {
-      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      await HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
       setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
     })
+      setLoaderPopup(false)
   }
 
   useEffect(() => {
