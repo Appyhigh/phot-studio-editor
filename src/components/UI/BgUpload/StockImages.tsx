@@ -166,7 +166,7 @@ const StockImages = (props: any) => {
                           setSelectedImg(image.mongo_id))
                     }
                   }}
-                  preview={image.image_url_list[0]}
+                  preview={image.thumbnails.large}
                   isLoading={isLoading}
                 />
               </div>
