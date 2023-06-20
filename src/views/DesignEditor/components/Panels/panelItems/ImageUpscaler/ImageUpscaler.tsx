@@ -15,6 +15,8 @@ import Icons from "~/components/Icons"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import { img2Upscaler, img4Upscaler } from "~/utils/imgUpscaler"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -56,6 +58,76 @@ const ImageUpscaler = () => {
     [editor]
   )
 
+  const { setErrorInfo } = useContext(ErrorContext)
+
+  const generateImg2Scaler = () => {
+    setImageLoading(true)
+    // @ts-ignore
+    setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+
+    img2Upscaler(imgScalerInfo.src)
+      .then((response) => {
+        setImageLoading(false)
+        // @ts-ignore
+        setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
+      })
+      .catch((error) => {
+        setImageLoading(false)
+        // @ts-ignore
+        setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+        // @ts-ignore
+        setErrorInfo((prev) => ({
+          ...prev,
+          showError: true,
+          errorMsg: "Some error has occurred",
+          retryFn: () => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            generateImg2Scaler()
+          },
+        }))
+        setTimeout(() => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
+        }, 5000)
+        console.error("Error:", error)
+      })
+  }
+
+  const generateImg4Scaler = () => {
+    setImageLoading(true)
+    // @ts-ignore
+    setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+
+    img4Upscaler(imgScalerInfo.src)
+      .then((response) => {
+        setImageLoading(false)
+        // @ts-ignore
+        setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
+      })
+      .catch((error) => {
+        setImageLoading(false)
+        // @ts-ignore
+        setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+        // @ts-ignore
+        setErrorInfo((prev) => ({
+          ...prev,
+          showError: true,
+          errorMsg: "Some error has occurred",
+          retryFn: () => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            generateImg2Scaler()
+          },
+        }))
+        setTimeout(() => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
+        }, 5000)
+        console.error("Error:", error)
+      })
+  }
+
   return (
     <div className="d-flex flex-1 flex-column">
       {!imgScalerPanelInfo.resultSectionVisible ? (
@@ -87,24 +159,19 @@ const ImageUpscaler = () => {
                   </div>
                 </div>
               </div>
-              <CreditsSection />
+              {/* hide for now credits related  */}
+              {/* <CreditsSection /> */}
               <button
                 className={classes.generateBtn}
                 onClick={() => {
-                  setImageLoading(true)
-                  setCurrentActiveImg(-1)
-                  setTimeout(() => {
-                    setImageLoading(false)
-                    // @ts-ignore
-                    setImgScalerInfo((prev) => ({ ...prev, result: [prev.src] }))
-                  }, 3000)
-                  // @ts-ignore
-                  setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+                  if (imgScalerInfo.scaler === 2) {
+                    generateImg2Scaler()
+                  } else generateImg4Scaler()
                 }}
               >
                 Generate
               </button>
-              <p className={classes.freeImgText}>*1/5 free images left</p>
+              {/* <p className={classes.freeImgText}>*1/5 free images left</p> */}
             </div>
           )}
           {imgScalerPanelInfo.trySampleImg && (
