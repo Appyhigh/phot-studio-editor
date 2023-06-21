@@ -27,14 +27,19 @@ const BgUpload = () => {
   const editor = useEditor()
   const [bgChoice, setBgChoice] = useState(0)
   const [renderKey, setRenderKey] = useState(0)
+  const [disableButton, setDisableButton] = useState(false)
 
-  const handleImgAdd = () => {
+  const handleImgAdd = async() => {
+    
+    setDisableButton(true)
     const imageUrl = bgUploadPreview.url
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
     toDataURL(imageUrl, async function (dataUrl: string) {
-      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      await HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
       setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+      setDisableButton(false)
     })
+      
   }
 
   useEffect(() => {
@@ -92,6 +97,7 @@ const BgUpload = () => {
                   }}
                   mainImgUrl={bgUploadPreview.url}
                   handleBgAdd={handleImgAdd}
+                  disableButton = {disableButton}
                 />
               </Scrollbars>
             )}
