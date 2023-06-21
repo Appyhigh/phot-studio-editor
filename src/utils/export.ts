@@ -1,5 +1,43 @@
 import { resizeBase64Image } from "./updateLayerBackground"
 
+export const makeDownloadToPDF = async (data: any, height?: number, width?: number) => {
+  var b64 = data
+   if (height && width) {
+     b64 = await resizeBase64Image(data, width, height)
+   }
+   b64 = b64.substr(22)
+ 
+   const bin = window.atob(b64)
+   console.log('File Size:', Math.round(bin.length / 1024), 'KB');
+   
+   const binaryString = Uint8Array.from(window.atob(b64), (c) => c.charCodeAt(0))
+ 
+   const byteArrays = []
+ 
+   for (let offset = 0; offset < binaryString.length; offset += 512) {
+     const slice = binaryString.slice(offset, offset + 512)
+     byteArrays.push(slice)
+   }
+ 
+   const pdfFile = new Blob(byteArrays, { type: "application/pdf" })
+   const pdfUrl = URL.createObjectURL(pdfFile)
+ 
+   // Create a download link
+   const downloadLink = document.createElement("a")
+   downloadLink.href = pdfUrl
+   downloadLink.download = "converted.pdf"
+ 
+   // Simulate click to trigger the download
+   document.body.appendChild(downloadLink) // Append the link to the body before click
+   downloadLink.click()
+   console.log(pdfUrl);
+   
+   // Cleanup
+   URL.revokeObjectURL(pdfUrl)
+   document.body.removeChild(downloadLink)
+ 
+ }
+
 export const makeDownloadToPNG = async (data: any, selectedType: string, height?: number, width?: number) => {
   let image = data
   if (height && width) {

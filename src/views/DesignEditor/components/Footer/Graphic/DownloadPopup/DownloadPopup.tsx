@@ -5,7 +5,7 @@ import SelectInput from "~/components/UI/Common/SelectInput/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { makeDownloadToPNG, makeDownloadToSVGHandler } from "~/utils/export"
+import { makeDownloadToPNG, makeDownloadToSVGHandler,makeDownloadToPDF } from "~/utils/export"
 import { backgroundLayerType } from "~/constants/contants"
 
 const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
@@ -101,9 +101,13 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
       const image = (await editor.renderer.render(template)) as string
       const nWidth = frame.width * sizeVal
       const nHeight = frame.height * sizeVal
-      if (selectedType != "svg") {
+      if (selectedType != "svg" && selectedType != "Pdf") {
         makeDownloadToPNG(image, selectedType, nHeight, nWidth)
-      } else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
+      
+      }else if(selectedType === "Pdf"){
+        makeDownloadToPDF(image,nWidth,nHeight)
+      }
+      else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
     }
   }, [editor, selectedType, frame, objects, sizeVal])
 
