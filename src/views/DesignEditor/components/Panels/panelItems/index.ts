@@ -17,6 +17,7 @@ import TextEffects from "./TextEffects"
 import BgRemover from "./BgRemover/BgRemover"
 import CommonPanel from "./CommonPanel"
 import ImagineAI from "./ImagineAI/ImagineAI"
+import ImageUpscaler from "./ImageUpscaler/ImageUpscaler"
 export default {
   StaticText: TextProperties,
   Text: Text,
@@ -34,7 +35,8 @@ export default {
   PathFill: PathFill,
   CanvasFill: CanvasFill,
   TextEffects: TextEffects,
-  BgRemover:BgRemover,
-  ImagineAI:ImagineAI,
-  CommonPanel:CommonPanel
+  BgRemover: BgRemover,
+  ImagineAI: ImagineAI,
+  CommonPanel: CommonPanel,
+  ImageUpscaler: ImageUpscaler,
 }

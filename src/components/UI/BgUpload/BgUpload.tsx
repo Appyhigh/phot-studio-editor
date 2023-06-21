@@ -90,8 +90,9 @@ const BgUpload = () => {
                   discardHandler={() => {
                     setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
                   }}
-                  mainImgUrl={bgUploadPreview.url}
-                  handleBgAdd={handleImgAdd}
+                  imgSrc={bgUploadPreview.url}
+                  previewHandle={handleImgAdd}
+                  btnTitle="Add Background"
                 />
               </Scrollbars>
             )}

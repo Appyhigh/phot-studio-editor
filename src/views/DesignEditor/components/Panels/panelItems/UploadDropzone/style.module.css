@@ -33,10 +33,15 @@
   margin: 0px auto 8px;
   width: 280px;
 }
-
+.imgUpscalerHeading{
+  padding: 0px 0px 0px 8px;
+}
 @media screen and (min-width: 1220px) {
   .panelHeading {
     padding: 0px 0px 0px 16px;
+  }
+  .imgUpscalerHeading{
+    padding: 0px 0px 0px 8px;
   }
   .uploadInputSection {
     width: 319px;

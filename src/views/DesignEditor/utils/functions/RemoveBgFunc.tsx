@@ -62,7 +62,7 @@ export const RemoveBGFunc = async (
                   uploadSection: false,
                   trySampleImg: false,
                 }))
-
+        
                 editor.objects.removeById(mainImgInfo.id)
                 setMainImgInfo((prev: any) => ({ ...prev, ...options }))
                 // Stop the loader
