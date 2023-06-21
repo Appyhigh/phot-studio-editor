@@ -46,6 +46,11 @@
   padding: 8px 16px;
   top: 8px;
 }
+
+.transparencyBtn {
+  margin: 10px 25px;
+}
+
 @media screen and (min-width: 1220px) {
   .basePannel {
     padding: 15px 20px;

@@ -1,7 +1,5 @@
 import { Block } from "baseui/block"
 import Icons from "../../Icons"
-import { StatefulTooltip } from "baseui/tooltip"
-import { PLACEMENT } from "baseui/toast"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/DownloadPopup/DownloadPopup"
 import CanvasEditingPannel from "~/views/DesignEditor/components/Footer/Graphic/CanvasEditingPannel/CanvasEditingPannel"
@@ -12,11 +10,14 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 import BaseButton from "../Button/BaseButton"
+import Transparency from "~/components/Icons/Transparency"
+import TransparencyPopup from "~/views/DesignEditor/components/Footer/Graphic/TransparencyPopup/TransparencyPopup"
 
 const BasePannel = () => {
   const editor = useEditor()
   const [showAddPopup, setShowAddPopup] = useState(false)
-  const objects = useObjects()
+  const [transparencyPopup, setTransparencyPopup] = useState(false)
+  const objects: any = useObjects()
 
   const [showTooltip, setShowToolTip] = useState(false)
 
@@ -51,7 +52,7 @@ const BasePannel = () => {
     (editor?.frame?.background?.canvas?._objects?.length === 3 &&
       editor?.frame?.background?.canvas?._objects[2]?.metadata?.type === backgroundLayerType) ||
     (editor?.frame?.background?.canvas?._objects?.length === 2 &&
-      editor?.frame?.background?.canvas?._objects[1]?.fill==="#ffffff")
+      editor?.frame?.background?.canvas?._objects[1]?.fill === "#ffffff")
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
@@ -143,6 +144,18 @@ const BasePannel = () => {
             <Icons.CanvasResize size={24} />
             <ResizeCanvasPopup show={showCanvasResizePopup} />
           </Block>
+          <Block
+            className={clsx(classes.transparencyBtn, "flex-center pointer p-relative resizeCanvasBtn")}
+            onMouseOver={() => {
+              setTransparencyPopup(true)
+            }}
+            onMouseLeave={() => {
+              setTransparencyPopup(false)
+            }}
+          >
+            <Transparency size={26} />
+            <TransparencyPopup showPopup={transparencyPopup} />
+          </Block>
         </Block>
       </Block>
 
@@ -167,8 +180,7 @@ const BasePannel = () => {
             width="120px"
             // className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
           />
-            
-          
+
           {!downloadBtnDisable && <DownloadPopup />}
         </Block>
       </Block>
