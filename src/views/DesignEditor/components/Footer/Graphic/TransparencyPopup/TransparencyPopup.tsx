@@ -9,9 +9,12 @@ import { Slider } from "baseui/slider"
 const TransparencyPopup = ({ showPopup }: any) => {
   const objects: any = useObjects()
   const editor = useEditor()
-  const [transparency, setTransparency] = useState(0)
+  const [transparency, setTransparency] = useState(() => {
+    const savedTransparency = localStorage.getItem("transparency")
+    return savedTransparency ? parseInt(savedTransparency, 10) : 0
+  })
 
-  const hexToRgba = (color: any, e: any) => {
+  const hexToRgba = (e: any) => {
     const hex = String(editor.frame.background.fill).replace("#", "")
     const r = parseInt(hex.substring(0, 2), 16)
     const g = parseInt(hex.substring(2, 4), 16)
@@ -21,9 +24,9 @@ const TransparencyPopup = ({ showPopup }: any) => {
     return rgba
   }
 
-  const addAlpha = (rgba: any, e: any) => {
+  const addAlpha = (e: any) => {
     const a = 1 - e / 100
-    const rgbaArr = rgba.split(",")
+    const rgbaArr = String(editor.frame.background.fill).split(",")
     rgbaArr[rgbaArr.length - 1] = a + ")"
     const newRgba = rgbaArr.join(",")
     return newRgba
@@ -34,11 +37,12 @@ const TransparencyPopup = ({ showPopup }: any) => {
     objects.map((each: any) => {
       editor.objects.update({ opacity: 1 - e / 100 }, each.id)
       if (String(editor.frame.background.fill).includes("#")) {
-        editor.frame.setBackgroundColor(hexToRgba(editor.frame.background.fill, e))
+        editor.frame.setBackgroundColor(hexToRgba(e))
       } else {
-        editor.frame.setBackgroundColor(addAlpha(editor.frame.background.fill, e))
+        editor.frame.setBackgroundColor(addAlpha(e))
       }
     })
+    localStorage.setItem("transparency", e.toString())
   }
 
   return (
