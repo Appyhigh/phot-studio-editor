@@ -5,7 +5,6 @@ import useAppContext from "~/hooks/useAppContext"
 import clsx from "clsx"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
@@ -23,6 +22,7 @@ import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
+import { imgUpscalerSample } from "~/services/imgUpscalerSample"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -39,11 +39,11 @@ const ImageUpscaler = () => {
   const leftPanelRef = useRef()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
 
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
+  const { imgUpscalerSampleImg, setImgUpscalerSampleImg } = useAppContext()
   useEffect(() => {
     const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
+      const result = await imgUpscalerSample()
+      setImgUpscalerSampleImg(result)
     }
 
     fetchSampleImages()
@@ -72,14 +72,12 @@ const ImageUpscaler = () => {
           url: url,
           metadata: { generationDate: new Date().getTime() },
         }
-        // @ts-ignore
         setImgScalerPanelInfo((prev: any) => ({
           ...prev,
           trySampleImg: false,
           uploadSection: false,
           uploadPreview: true,
         }))
-        // @ts-ignore
         setImgScalerInfo((prev: any) => ({ ...prev, src: url, id: options.id, original: url }))
       }
     },
@@ -114,8 +112,7 @@ const ImageUpscaler = () => {
       setLoadingImgCt(3)
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
-      // @ts-ignore
-      setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+      setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
 
       img2Upscaler(imgScalerInfo.src)
         .then((response) => {
@@ -130,14 +127,12 @@ const ImageUpscaler = () => {
             showError: true,
             errorMsg: "Some error has occurred",
             retryFn: () => {
-              // @ts-ignore
-              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
               generateImg2Scaler()
             },
           }))
           setTimeout(() => {
-            // @ts-ignore
-            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
           }, 5000)
           console.error("Error:", error)
         })
@@ -159,27 +154,22 @@ const ImageUpscaler = () => {
       img4Upscaler(imgScalerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          // @ts-ignore
-          setImgScalerInfo((prev) => ({ ...prev, result: [...prev.result, response] }))
+          setImgScalerInfo((prev: any) => ({ ...prev, result: [...prev.result, response] }))
         })
         .catch((error) => {
           setImageLoading(false)
-          // @ts-ignore
-          setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
-          // @ts-ignore
-          setErrorInfo((prev) => ({
+          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
+          setErrorInfo((prev: any) => ({
             ...prev,
             showError: true,
             errorMsg: "Some error has occurred",
             retryFn: () => {
-              // @ts-ignore
-              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
               generateImg4Scaler()
             },
           }))
           setTimeout(() => {
-            // @ts-ignore
-            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
           }, 5000)
           console.error("Error:", error)
         })
@@ -201,27 +191,25 @@ const ImageUpscaler = () => {
       imgBothUpscaler(imgScalerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          // @ts-ignore
-          setImgScalerInfo((prev) => ({ ...prev, result: [imgScalerInfo.src, response["2k"].url, response["4k"].url] }))
+          setImgScalerInfo((prev: any) => ({
+            ...prev,
+            result: [imgScalerInfo.src, response["2k"].url, response["4k"].url],
+          }))
         })
         .catch((error) => {
           setImageLoading(false)
-          // @ts-ignore
-          setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
-          // @ts-ignore
-          setErrorInfo((prev) => ({
+          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
+          setErrorInfo((prev: any) => ({
             ...prev,
             showError: true,
             errorMsg: "Some error has occurred",
             retryFn: () => {
-              // @ts-ignore
-              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
               generateImgBothScaler()
             },
           }))
           setTimeout(() => {
-            // @ts-ignore
-            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
           }, 5000)
           console.error("Error:", error)
         })
@@ -291,9 +279,7 @@ const ImageUpscaler = () => {
                     className={clsx(classes.scaleInput, imgScalerInfo.scaler === 2 && classes.activeScale)}
                     onClick={() => {
                       setCurrentActiveImg(-1)
-
-                      // @ts-ignore
-                      setImgScalerInfo((prev) => ({ ...prev, scaler: 2 }))
+                      setImgScalerInfo((prev: any) => ({ ...prev, scaler: 2 }))
                     }}
                   >
                     2x
@@ -302,9 +288,7 @@ const ImageUpscaler = () => {
                     className={clsx(classes.scaleInput, imgScalerInfo.scaler === 4 && classes.activeScale)}
                     onClick={() => {
                       setCurrentActiveImg(-1)
-
-                      // @ts-ignore
-                      setImgScalerInfo((prev) => ({ ...prev, scaler: 4 }))
+                      setImgScalerInfo((prev: any) => ({ ...prev, scaler: 4 }))
                     }}
                   >
                     {" "}
@@ -350,8 +334,7 @@ const ImageUpscaler = () => {
                     scale: 2,
                     showclearTooltip: false,
                   }))
-                  // @ts-ignore
-                  setImgScalerPanelInfo((prev) => ({
+                  setImgScalerPanelInfo((prev: any) => ({
                     ...prev,
                     uploadSection: true,
                     trySampleImg: true,
@@ -383,14 +366,14 @@ const ImageUpscaler = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
+                    {imgUpscalerSampleImg.map((image: any, index) => {
                       return (
                         <ImageItem
                           key={index}
                           onClick={() => {
-                            addObject(image.originalImage)
+                            addObject(image.original)
                           }}
-                          preview={image.originalImage}
+                          preview={image.thumbnail}
                           imageLoading={imageLoading}
                         />
                       )
@@ -405,11 +388,9 @@ const ImageUpscaler = () => {
         <div className={classes.resultSection}>
           <Block
             onClick={() => {
-              // @ts-ignore
-              setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+              setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
 
-              // @ts-ignore
-              setImgScalerInfo((prev) => ({ ...prev, result: [], showclearTooltip: true }))
+              setImgScalerInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
