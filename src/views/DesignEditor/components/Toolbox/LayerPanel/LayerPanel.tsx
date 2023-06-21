@@ -529,10 +529,10 @@ const LayerPanel = () => {
                     }))
                   }}
                 >
-                  {!bgUrl?.startsWith("#") ? (
+                  {!bgUrl?.startsWith("#") && !bgUrl?.startsWith("rgba") ? (
                     <img
                       src={bgUrl}
-                      alt="nn"
+                      alt="na"
                       style={{
                         border: "1px solid #92929D",
                       }}

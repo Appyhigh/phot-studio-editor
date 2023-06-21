@@ -11,18 +11,33 @@ const TransparencyPopup = ({ showPopup }: any) => {
   const editor = useEditor()
   const [transparency, setTransparency] = useState(0)
 
+  const hexToRgba = (color: any, e: any) => {
+    const hex = String(editor.frame.background.fill).replace("#", "")
+    const r = parseInt(hex.substring(0, 2), 16)
+    const g = parseInt(hex.substring(2, 4), 16)
+    const b = parseInt(hex.substring(4, 6), 16)
+    const a = 1 - e / 100
+    const rgba = "rgba(" + r + "," + g + "," + b + "," + a + ")"
+    return rgba
+  }
+
+  const addAlpha = (rgba: any, e: any) => {
+    const a = 1 - e / 100
+    const rgbaArr = rgba.split(",")
+    rgbaArr[rgbaArr.length - 1] = a + ")"
+    const newRgba = rgbaArr.join(",")
+    return newRgba
+  }
+
   const handleChange = (e: any) => {
     setTransparency(e)
     objects.map((each: any) => {
-      // console.log("OBJECT", objects)
       editor.objects.update({ opacity: 1 - e / 100 }, each.id)
-      // editor.canvas.canvas.overlayColor = "#fa6667"
-      // editor.frame.options.opacity = 0.5
-      // console.log("FRAME", editor.frame.background)
-      // editor.canvas.canvas.renderAll.bind(editor.canvas.canvas)()
-
-      // editor.frame.setBackgroundColor("rgba(255,255,255,0.5)")
-      // editor.frame.setBackgroundColor("") editor.frame.renderAll.bind(canvas))
+      if (String(editor.frame.background.fill).includes("#")) {
+        editor.frame.setBackgroundColor(hexToRgba(editor.frame.background.fill, e))
+      } else {
+        editor.frame.setBackgroundColor(addAlpha(editor.frame.background.fill, e))
+      }
     })
   }
 
