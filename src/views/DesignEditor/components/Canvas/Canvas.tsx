@@ -42,6 +42,12 @@ const Canvas = () => {
         event.stopPropagation()
       })
 
+      editor.canvas.canvas.on("after:render", () => {
+        if (Math.ceil(editor.canvas.canvas.getVpCenter().x) < 0) {
+          editor.zoom.zoomToFit()
+        }
+      })
+
       //   editor.canvas.canvas.on("object:modified", (event: any) => {
       //     var object = event.target
       //     object.applyFilters()
