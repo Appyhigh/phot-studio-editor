@@ -25,6 +25,7 @@ import ErrorContext from "~/contexts/ErrorContext"
 
 import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import BaseButton from "~/components/UI/Button/BaseButton"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -263,18 +264,19 @@ const ImagineAI = () => {
                 />
               </div>
             )}
-            <button
-              className={clsx(
-                classes.generateBtn,
-                textToArtInputInfo.showclearTooltip || (textToArtInputInfo.prompt.length == 0 && classes.disabledGenBtn)
-              )}
+    
+            <BaseButton
+              title="Generate"
+              width="310px"
+              margin= "5px 0px 0px 20px"
+              disabledBgColor="#92929d"
+              fontSize="16px"
               disabled={textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.length == 0 ? true : false}
-              onClick={() => {
+              handleClick={() => {
                 generateImage()
               }}
-            >
-              Generate
-            </button>
+              
+            />
             <LoginPopup
               isOpen={showLoginPopup}
               loginPopupCloseHandler={() => {
@@ -360,15 +362,17 @@ const ImagineAI = () => {
                   </div>
                 ))}
             </div>
-            <button
-              className={clsx(classes.generateBtn, classes.regenerateBtn, imagesLoading && classes.disabledBtn)}
+            <BaseButton
               disabled={imagesLoading ? true : false}
-              onClick={() => {
+              handleClick={() => {
                 generateImage()
               }}
+              width="319px"
+              margin="16px 0 0 20px"
+              fontSize="16px"
             >
               Regenerate
-            </button>
+            </BaseButton>
             <p className={classes.creditsPara}>
               <span>*{textToArtInputInfo.images_generation_ct} credits</span> will be used if you want to generate{" "}
               {textToArtInputInfo.images_generation_ct} more outputs

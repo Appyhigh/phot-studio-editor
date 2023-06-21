@@ -12,6 +12,7 @@ import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
+import BaseButton from "~/components/UI/Button/BaseButton"
 
 const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainImgUrl, handleBgAdd }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -120,28 +121,34 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
       </Block>
 
       {uploadType === LOCAL_SAMPLE_IMG ? (
-        <button onClick={() => addImg()} className={clsx(classes.removeBgBtn)}>
-          Add
-        </button>
+        <BaseButton
+          title="Add"
+          margin="16px 0 0 0"
+          handleClick={() => {
+            addImg()
+          }}
+        />
       ) : uploadType === MAIN_IMG_Bg ? (
-        <button
-          onClick={() => {
+        <BaseButton
+          title="Add Background"
+          width="320px"
+          margin="0 0 0 20px"
+          handleClick={() => {
             handleBgAdd()
           }}
-          className={clsx(classes.removeBgBtn, uploadType === MAIN_IMG_Bg && classes.mainImgBgBtn)}
-        >
-          Add Background
-        </button>
+        />
       ) : (
-        uploadType != TEXT_TO_ART &&
-        uploadType != IMAGE_UPSCALER && (
-          <button
-            disabled={panelInfo.bgRemoverBtnActive ? false : true}
-            onClick={() => removeBg()}
-            className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
-          >
-            Remove Background
-          </button>
+        uploadType != TEXT_TO_ART && (
+          <div style={{ marginTop: "6px" }}>
+            <BaseButton
+              title="Remove Background"
+              margin="16px 0 0 0"
+              disabled={panelInfo.bgRemoverBtnActive ? false : true}
+              handleClick={() => {
+                removeBg()
+              }}
+            />
+          </div>
         )
       )}
     </div>
