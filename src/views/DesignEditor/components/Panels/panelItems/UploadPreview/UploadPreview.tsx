@@ -95,7 +95,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
           width="320px"
           margin="0 0 0 20px"
           handleClick={() => {
-           if(!loaderPopup){
+           if(!disableButton){
               handleBgAdd()
             }
 
