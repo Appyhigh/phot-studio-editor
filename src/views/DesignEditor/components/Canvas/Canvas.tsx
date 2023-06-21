@@ -13,7 +13,8 @@ const Canvas = () => {
     if (editor) {
       if (
         editor.frame.background.canvas._objects.length <= 2 &&
-        editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff"
+        editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff" &&
+        editor.frame?.background?.canvas?._objects[2]?.metadata?.type != backgroundLayerType
       ) {
         const options = {
           type: "BackgroundImage",
@@ -21,11 +22,15 @@ const Canvas = () => {
           preview: checkboxBGUrl,
           metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
         }
-        editor.objects.add(options).then(() => {
-          editor.objects.setAsBackgroundImage().then(() => {
-            console.log("BACKGROUND IMAGE WAS ADDED")
-          })
-        })
+        setTimeout(() => {
+          if (editor.frame?.background?.canvas?._objects.length <= 2) {
+            editor.objects.add(options).then(() => {
+              editor.objects.setAsBackgroundImage().then(() => {
+                console.log("BACKGROUND IMAGE WAS ADDED")
+              })
+            })
+          }
+        }, 1000)
       }
     }
   }, [editor])
