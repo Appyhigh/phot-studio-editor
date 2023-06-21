@@ -10,12 +10,11 @@ import React, { useContext, useEffect, useRef, useState } from "react"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import { nanoid } from "nanoid"
-import CreditsSection from "~/components/CreditsSection/CreditsSection"
 import Icons from "~/components/Icons"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
-import { img2Upscaler, img4Upscaler } from "~/utils/imgUpscaler"
+import { img2Upscaler, img4Upscaler, imgBothUpscaler } from "~/utils/imgUpscaler"
 import ErrorContext from "~/contexts/ErrorContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { getCookie } from "~/utils/common"
@@ -28,12 +27,11 @@ const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
-
   const { user } = authState
 
   const [imageLoading, setImageLoading] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
-
+  const [loadingImgCt, setLoadingImgCt] = useState(0)
   const editor = useEditor()
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const { setImagesCt } = useContext(ImagesContext)
@@ -54,8 +52,8 @@ const ImageUpscaler = () => {
     if (user && autoCallAPI) {
       if (imgScalerInfo.scaler === 2) {
         generateImg2Scaler()
-      } else img4Upscaler(imgScalerInfo.src)
-      generateImg4Scaler()
+      } else generateImgBothScaler();
+      setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
 
@@ -84,8 +82,6 @@ const ImageUpscaler = () => {
 
   useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
-      // If the clearField is open and the clicked target is not within the clearfield,
-      // then close the clearfield
       // @ts-ignore
       if (leftPanelRef?.current && !leftPanelRef?.current?.contains(e.target)) {
         setImgScalerInfo((prev: any) => ({
@@ -109,6 +105,7 @@ const ImageUpscaler = () => {
       setAutoCallAPI(true)
     } else {
       setImageLoading(true)
+      setLoadingImgCt(3)
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
       // @ts-ignore
@@ -118,7 +115,7 @@ const ImageUpscaler = () => {
         .then((response) => {
           setImageLoading(false)
           // @ts-ignore
-          setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
+          setImgScalerInfo((prev) => ({ ...prev, result: [imgScalerInfo.src, response] }))
         })
         .catch((error) => {
           setImageLoading(false)
@@ -149,9 +146,10 @@ const ImageUpscaler = () => {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
-      setCurrentActiveImg(-1)
-      setAutoCallAPI(false)
+      setLoadingImgCt(1)
       setImageLoading(true)
+      setAutoCallAPI(false)
+      setCurrentActiveImg(-1)
       // @ts-ignore
       setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
 
@@ -159,7 +157,7 @@ const ImageUpscaler = () => {
         .then((response) => {
           setImageLoading(false)
           // @ts-ignore
-          setImgScalerInfo((prev) => ({ ...prev, result: [response] }))
+          setImgScalerInfo((prev) => ({ ...prev, result: [...prev.result, response] }))
         })
         .catch((error) => {
           setImageLoading(false)
@@ -173,7 +171,7 @@ const ImageUpscaler = () => {
             retryFn: () => {
               // @ts-ignore
               setErrorInfo((prev) => ({ ...prev, showError: false }))
-              generateImg2Scaler()
+              generateImg4Scaler()
             },
           }))
           setTimeout(() => {
@@ -184,6 +182,49 @@ const ImageUpscaler = () => {
         })
     }
   }
+
+  const generateImgBothScaler = () => {
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+      setAutoCallAPI(true)
+    } else {
+      setLoadingImgCt(3)
+      setCurrentActiveImg(-1)
+      setAutoCallAPI(false)
+      setImageLoading(true)
+      // @ts-ignore
+      setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
+
+      imgBothUpscaler(imgScalerInfo.src)
+        .then((response) => {
+          setImageLoading(false)
+          // @ts-ignore
+          setImgScalerInfo((prev) => ({ ...prev, result: [imgScalerInfo.src, response["2k"].url, response["4k"].url] }))
+        })
+        .catch((error) => {
+          setImageLoading(false)
+          // @ts-ignore
+          setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
+          // @ts-ignore
+          setErrorInfo((prev) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              // @ts-ignore
+              setErrorInfo((prev) => ({ ...prev, showError: false }))
+              generateImgBothScaler()
+            },
+          }))
+          setTimeout(() => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+          }, 5000)
+          console.error("Error:", error)
+        })
+    }
+  }
+
   const frame = useFrame()
 
   const addImg = async (imageUrl: string, _idx: number) => {
@@ -239,11 +280,11 @@ const ImageUpscaler = () => {
               <BaseButton
                 title=" Generate"
                 handleClick={() => {
-                  if (imgScalerInfo.scaler === 2) {
-                    generateImg2Scaler()
-                  } else generateImg4Scaler()
+                  if (imgScalerInfo.scaler === 4) {
+                    generateImgBothScaler()
+                  } else generateImg2Scaler()
                 }}
-                width="320px"
+                width="310px"
                 margin="0 0 0 20px"
               />
               <LoginPopup
@@ -345,21 +386,39 @@ const ImageUpscaler = () => {
                   className={clsx("pointer", classes.eachImg, currentActiveImg === _idx && classes.currentActiveImg)}
                   key={_idx}
                 >
-                  {
-                    <img
-                      src={each}
-                      alt="result-img"
-                      onClick={() => {
-                        addImg(each, _idx)
-                      }}
-                    />
-                  }
-                  <div className={classes.resultLabel}>{imgScalerInfo.scaler}x</div>
+                  <img
+                    src={each}
+                    alt="result-img"
+                    onClick={() => {
+                      addImg(each, _idx)
+                    }}
+                  />
+
+                  <div className={classes.resultLabel}>{_idx == 0 ? "Original" : _idx == 1 ? "2x" : "4x"}</div>
                 </div>
               )
             })}
-            {imageLoading && (
-              <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
+
+            {imageLoading &&
+              Array.from(Array(loadingImgCt).keys()).map((each, _idx) => (
+                <div className={classes.skeletonBox}>
+                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              ))}
+            {!imageLoading && imgScalerInfo.scaler === 2 && imgScalerInfo.result.length === 2 && (
+              <div className={clsx("pointer", classes.eachImg, classes.lockedImg)}>
+                <img src={imgScalerInfo.src} alt="result-img" className={classes.blurImg} onClick={() => {}} />
+
+                <div className={clsx(classes.resultLabel)}>{"4x"}</div>
+                <div
+                  className={classes.lockIcon}
+                  onClick={() => {
+                    generateImg4Scaler()
+                  }}
+                >
+                  <Icons.ImgLock />
+                </div>
+              </div>
             )}
           </div>
         </div>

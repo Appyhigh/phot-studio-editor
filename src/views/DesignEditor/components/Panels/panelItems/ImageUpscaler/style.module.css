@@ -204,8 +204,8 @@
 
 .resultLabel {
   position: absolute;
-  width: 47px;
   height: 26px;
+  padding: 0px 16px;
   background: rgba(0, 0, 0, 0.6);
   border-radius: 28px;
   color: #fff;
@@ -233,6 +233,24 @@
   align-items: center;
   flex-direction: row;
   z-index: 5;
+}
+.blurImg {
+  filter: blur(1px);
+  position: relative;
+
+}
+.lockIcon{
+  
+background: rgba(0, 0, 0, 0.6);
+border-radius: 50%;
+width: 48px;
+height: 48px;
+display: flex;
+justify-content: center;
+align-items: center;
+position: absolute;
+top: 35%;
+left: 35%;
 }
 @media screen and (min-width: 1220px) {
   .generateBtn {

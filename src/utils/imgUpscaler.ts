@@ -20,6 +20,26 @@ export const img2Upscaler = async (sourceUrl: string, fileName?: string) => {
   }
 }
 
+export const imgBothUpscaler = async (sourceUrl: string, fileName?: string) => {
+  try {
+    const url = "https://devapi.phot.ai/v1/create-enhancer-2k-4k"
+    const body = {
+      sourceUrl: sourceUrl,
+      fileName: fileName,
+    }
+    const config = {
+      headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
+    }
+    const response = await axios.post(url, body, config)
+    return response.data.data;
+  } catch (error) {
+    console.error("An error occurred while sending the request:", error)
+    throw error
+  }
+}
+
+
+
 export const img4Upscaler = async (sourceUrl: string, fileName?: string) => {
   try {
     const url = "https://devapi.phot.ai/v1/create-enhancer-4k"
