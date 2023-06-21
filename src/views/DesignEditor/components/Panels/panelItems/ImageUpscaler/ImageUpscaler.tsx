@@ -22,6 +22,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
+import UploadPreview from "../UploadPreview/UploadPreview"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -52,7 +53,7 @@ const ImageUpscaler = () => {
     if (user && autoCallAPI) {
       if (imgScalerInfo.scaler === 2) {
         generateImg2Scaler()
-      } else generateImgBothScaler();
+      } else generateImgBothScaler()
       setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
@@ -72,9 +73,14 @@ const ImageUpscaler = () => {
           metadata: { generationDate: new Date().getTime() },
         }
         // @ts-ignore
-        setImgScalerPanelInfo((prev) => ({ ...prev, trySampleImg: false, uploadSection: false, uploadPreview: true }))
+        setImgScalerPanelInfo((prev: any) => ({
+          ...prev,
+          trySampleImg: false,
+          uploadSection: false,
+          uploadPreview: true,
+        }))
         // @ts-ignore
-        setImgScalerInfo((prev) => ({ ...prev, src: url, id: options.id, original: url }))
+        setImgScalerInfo((prev: any) => ({ ...prev, src: url, id: options.id, original: url }))
       }
     },
     [editor]
@@ -114,15 +120,12 @@ const ImageUpscaler = () => {
       img2Upscaler(imgScalerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          // @ts-ignore
-          setImgScalerInfo((prev) => ({ ...prev, result: [imgScalerInfo.src, response] }))
+          setImgScalerInfo((prev: any) => ({ ...prev, result: [imgScalerInfo.src, response] }))
         })
         .catch((error) => {
           setImageLoading(false)
-          // @ts-ignore
-          setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
-          // @ts-ignore
-          setErrorInfo((prev) => ({
+          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
+          setErrorInfo((prev: any) => ({
             ...prev,
             showError: true,
             errorMsg: "Some error has occurred",
@@ -239,11 +242,46 @@ const ImageUpscaler = () => {
     })
   }
 
+  const discardHandler = () => {
+    setImgScalerPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      resultSectionVisible: false,
+    }))
+    setImgScalerInfo((prev: any) => ({
+      ...prev,
+      src: "",
+      scaler: 2,
+      original: "",
+      result: [],
+      showClearTooltip: false,
+    }))
+  }
+
   return (
     <div className="d-flex flex-1 flex-column">
       {!imgScalerPanelInfo.resultSectionVisible ? (
         <>
-          <Uploads activePanel={activePanel} uploadType={IMAGE_UPSCALER} />{" "}
+          {imgScalerInfo.src ? (
+            <Block>
+              <UploadPreview
+                discardHandler={discardHandler}
+                previewHeading={"Image upscaler"}
+                uploadType={IMAGE_UPSCALER}
+                imgSrc={imgScalerInfo.src}
+              />
+            </Block>
+          ) : (
+            <Uploads
+              activePanel={activePanel}
+              uploadType={IMAGE_UPSCALER}
+              fileInputType={"ImgUpscaler"}
+              id={"ImgUpscaler"}
+              mainHeading={"Add Image"}
+            />
+          )}
           {imgScalerPanelInfo.uploadPreview && (
             <div>
               <div className={classes.scaleSection}>
