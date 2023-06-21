@@ -22,6 +22,7 @@ import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
+import BaseButton from "~/components/UI/Button/BaseButton"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -109,7 +110,7 @@ const ImageUpscaler = () => {
     } else {
       setImageLoading(true)
       setAutoCallAPI(false)
-      setCurrentActiveImg(-1);
+      setCurrentActiveImg(-1)
       // @ts-ignore
       setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
 
@@ -148,7 +149,7 @@ const ImageUpscaler = () => {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
-      setCurrentActiveImg(-1);
+      setCurrentActiveImg(-1)
       setAutoCallAPI(false)
       setImageLoading(true)
       // @ts-ignore
@@ -234,16 +235,17 @@ const ImageUpscaler = () => {
               </div>
               {/* hide for now credits related  */}
               {/* <CreditsSection /> */}
-              <button
-                className={classes.generateBtn}
-                onClick={() => {
+
+              <BaseButton
+                title=" Generate"
+                handleClick={() => {
                   if (imgScalerInfo.scaler === 2) {
                     generateImg2Scaler()
                   } else generateImg4Scaler()
                 }}
-              >
-                Generate
-              </button>
+                width="320px"
+                margin="0 0 0 20px"
+              />
               <LoginPopup
                 isOpen={showLoginPopup}
                 loginPopupCloseHandler={() => {

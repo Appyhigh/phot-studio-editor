@@ -138,7 +138,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
           }}
         />
       ) : (
-        uploadType != TEXT_TO_ART && (
+        uploadType != TEXT_TO_ART &&  uploadType!=IMAGE_UPSCALER&&(
           <div style={{ marginTop: "6px" }}>
             <BaseButton
               title="Remove Background"
