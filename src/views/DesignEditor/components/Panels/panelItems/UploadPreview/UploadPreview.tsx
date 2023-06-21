@@ -2,8 +2,8 @@ import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
-import { useContext, useEffect, useRef } from "react"
+import { useEditor } from "@layerhub-io/react"
+import { useContext, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
 import { IMAGE_UPSCALER, LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, TEXT_TO_ART } from "~/constants/contants"
@@ -24,8 +24,71 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
-  const { imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo } =
-    useContext(ImageUpScalerContext)
+  const { imgScalerInfo } = useContext(ImageUpScalerContext)
+
+  const removeBg = () => {
+    let latest_ct = 0
+    setImagesCt((prev: any) => {
+      latest_ct = prev + 1
+      RemoveBGFunc(
+        editor,
+        setLoaderPopup,
+        setPanelInfo,
+        mainImgInfo,
+        setMainImgInfo,
+        virtualSrcImageRef,
+        virtualMaskImageRef,
+        virtualCanvasSrcImageRef,
+        virtualCanvasMaskImageRef,
+        virtualCanvasResultImageRef,
+        0,
+        (latest_ct = latest_ct),
+        errorInfo,
+        setErrorInfo
+      )
+
+      return prev + 1
+    })
+  }
+
+  const addImg = () => {
+    let latest_ct = 0
+    setImagesCt((prev: any) => {
+      latest_ct = prev + 1
+      return prev + 1
+    })
+    editor.objects.add({ ...upload, name: latest_ct.toString() })
+    discardHandler()
+  }
+
+  const previewImg = () =>
+    uploadType === LOCAL_SAMPLE_IMG && upload ? (
+      <img className={classes.uploadedImg} src={upload.preview ? upload.preview : upload.src} alt="preview" />
+    ) : uploadType === MAIN_IMG_Bg && mainImgUrl ? (
+      <img
+        className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
+        src={mainImgUrl}
+        alt="preview"
+      />
+    ) : uploadType === TEXT_TO_ART && textToArtImg ? (
+      <img className={classes.uploadedImg} style={{ objectFit: "contain" }} src={textToArtImg} alt="preview" />
+    ) : uploadType === IMAGE_UPSCALER && (imgScalerInfo.original || imgScalerInfo.src) ? (
+      <img
+        className={classes.uploadedImg}
+        src={imgScalerInfo.original ? imgScalerInfo.original : imgScalerInfo.src}
+        alt="preview"
+      />
+    ) : (
+      mainImgInfo.id &&
+      (mainImgInfo.url || mainImgInfo.original) && (
+        <img
+          className={classes.uploadedImg}
+          src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
+          alt="preview k"
+        />
+      )
+    )
+
   return (
     <div className="p-relative">
       <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -38,32 +101,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
         <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} />
       </Block>
       <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
-        {uploadType === LOCAL_SAMPLE_IMG && upload ? (
-          <img className={classes.uploadedImg} src={upload.preview ? upload.preview : upload.src} alt="preview" />
-        ) : uploadType === MAIN_IMG_Bg && mainImgUrl ? (
-          <img
-            className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
-            src={mainImgUrl}
-            alt="preview h"
-          />
-        ) : uploadType === TEXT_TO_ART && textToArtImg ? (
-          <img className={classes.uploadedImg} style={{ objectFit: "contain" }} src={textToArtImg} alt="preview" />
-        ) : uploadType === IMAGE_UPSCALER && (imgScalerInfo.original || imgScalerInfo.src) ? (
-          <img
-            className={classes.uploadedImg}
-            src={imgScalerInfo.original ? imgScalerInfo.original : imgScalerInfo.src}
-            alt="preview"
-          />
-        ) : (
-          mainImgInfo.id &&
-          (mainImgInfo.url || mainImgInfo.original) && (
-            <img
-              className={classes.uploadedImg}
-              src={mainImgInfo.original ? mainImgInfo.original : mainImgInfo.url}
-              alt="preview k"
-            />
-          )
-        )}
+        {previewImg()}
 
         {
           <Block
@@ -82,18 +120,7 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
       </Block>
 
       {uploadType === LOCAL_SAMPLE_IMG ? (
-        <button
-          onClick={() => {
-            let latest_ct = 0
-            setImagesCt((prev: any) => {
-              latest_ct = prev + 1
-              return prev + 1
-            })
-            editor.objects.add({ ...upload, name: latest_ct.toString() })
-            discardHandler()
-          }}
-          className={clsx(classes.removeBgBtn)}
-        >
+        <button onClick={() => addImg()} className={clsx(classes.removeBgBtn)}>
           Add
         </button>
       ) : uploadType === MAIN_IMG_Bg ? (
@@ -106,33 +133,11 @@ const UploadPreview = ({ discardHandler, uploadType, textToArtImg, upload, mainI
           Add Background
         </button>
       ) : (
-        uploadType != TEXT_TO_ART &&uploadType!=IMAGE_UPSCALER && (
+        uploadType != TEXT_TO_ART &&
+        uploadType != IMAGE_UPSCALER && (
           <button
             disabled={panelInfo.bgRemoverBtnActive ? false : true}
-            onClick={() => {
-              let latest_ct = 0
-              setImagesCt((prev: any) => {
-                latest_ct = prev + 1
-                RemoveBGFunc(
-                  editor,
-                  setLoaderPopup,
-                  setPanelInfo,
-                  mainImgInfo,
-                  setMainImgInfo,
-                  virtualSrcImageRef,
-                  virtualMaskImageRef,
-                  virtualCanvasSrcImageRef,
-                  virtualCanvasMaskImageRef,
-                  virtualCanvasResultImageRef,
-                  0,
-                  (latest_ct = latest_ct),
-                  errorInfo,
-                  setErrorInfo
-                )
-
-                return prev + 1
-              })
-            }}
+            onClick={() => removeBg()}
             className={clsx(classes.removeBgBtn, !panelInfo.bgRemoverBtnActive && classes.disabledBtn)}
           >
             Remove Background

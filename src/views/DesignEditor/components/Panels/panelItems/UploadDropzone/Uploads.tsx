@@ -18,11 +18,12 @@ export default function ({ uploadType, activePanel }: any) {
 
   const editor = useEditor()
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
-  const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
-  const { imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo } =
-    useContext(ImageUpScalerContext)
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+  const { imgScalerInfo, setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
   const [renderKey, setRenderKey] = useState(0)
+
+  // discard handler for Bg Remover
 
   const discardHandler = (id: string) => {
     setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
@@ -38,7 +39,8 @@ export default function ({ uploadType, activePanel }: any) {
     editor.objects.removeById(id)
   }
 
-  const discardImgUpScalerHandler = (id: string) => {
+  // discard handler for Img UpScaler
+  const discardImgUpScalerHandler = (id?: string) => {
     setImgScalerInfo((prev: any) => ({ ...prev, id: "", src: "", original: "" }))
     // @ts-ignore
     setImgScalerPanelInfo((prev) => ({
@@ -55,153 +57,139 @@ export default function ({ uploadType, activePanel }: any) {
     }, 4000)
   }, [imageLoading])
 
+  const Heading = (uploadType: any, imageLoading: any, rejectedFileUpload: any) =>
+    uploadType === LOCAL_SAMPLE_IMG && !imageLoading && !rejectedFileUpload && uploads.length === 0 ? (
+      <Block className={classes.panelHeading}>Add Image</Block>
+    ) : uploadType === IMAGE_UPSCALER && !imageLoading && !rejectedFileUpload && imgScalerInfo.src === "" ? (
+      <Block className={classes.panelHeading}>Add Image</Block>
+    ) : uploadType === IMAGE_UPSCALER && !imageLoading && !rejectedFileUpload && imgScalerInfo.src === "" ? (
+      <Block className={classes.panelHeading}>Add Image</Block>
+    ) : (
+      uploadType != LOCAL_SAMPLE_IMG &&
+      uploadType != IMAGE_UPSCALER &&
+      !imageLoading &&
+      !rejectedFileUpload &&
+      mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
+    )
+
+  const previewHeading = () =>
+    uploadType === LOCAL_SAMPLE_IMG ? (
+      !imageLoading &&
+      !rejectedFileUpload &&
+      uploads.length != 0 && (
+        <div
+          className="d-flex justify-content-start flex-row align-items-center pointer"
+          onClick={() => {
+            setUploads([])
+          }}
+        >
+          <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
+        </div>
+      )
+    ) : imgScalerInfo.src && !imageLoading && uploadType === IMAGE_UPSCALER ? (
+      <div
+        className="d-flex justify-content-start flex-row align-items-center pointer"
+        onClick={() => {
+          discardImgUpScalerHandler()
+        }}
+      >
+        <Icons.ChevronRight size="16" />{" "}
+        <Block className={clsx(classes.panelHeading, classes.imgUpscalerHeading)}>Image upscaler</Block>
+      </div>
+    ) : (
+      mainImgInfo.id &&
+      !imageLoading &&
+      uploadType != IMAGE_UPSCALER && (
+        <div
+          className="d-flex justify-content-start flex-row align-items-center pointer"
+          onClick={() => {
+            //when right icon with Image is clicked set upload to intital state
+            setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+            // @ts-ignore
+            setPanelInfo((prev) => ({
+              ...prev,
+              trySampleImg: true,
+              bgOptions: false,
+              uploadSection: true,
+              bgRemoveBtnActive: false,
+            }))
+          }}
+        >
+          <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
+        </div>
+      )
+    )
+  const UppyDashBoard = () =>
+    uploadType === LOCAL_SAMPLE_IMG && !imageLoading && uploads.length === 0 && !rejectedFileUpload ? (
+      <div key={renderKey}>
+        <UppyDashboard
+          setImageLoading={setImageLoading}
+          fileInputType={"panelAdd"}
+          mainImgInfo={mainImgInfo}
+          setMainImgInfo={setMainImgInfo}
+          setPanelInfo={setPanelInfo}
+          id={"Image"}
+          setSelectedImage={setSelectedImage}
+          uploadType={uploadType}
+          uploads={uploads}
+          setUploads={setUploads}
+        />
+      </div>
+    ) : imgScalerInfo.src === "" && uploadType === IMAGE_UPSCALER && !rejectedFileUpload && !imageLoading ? (
+      <div key={renderKey}>
+        <UppyDashboard
+          setImageLoading={setImageLoading}
+          fileInputType={"ImgUpscaler"}
+          imgScalerInfo={imgScalerInfo}
+          setImgScalerInfo={setImgScalerInfo}
+          setImgScalerPanelInfo={setImgScalerPanelInfo}
+          id={"ImgUpscaler"}
+          setSelectedImage={setSelectedImage}
+          uploadType={uploadType}
+          uploads={uploads}
+          setUploads={setUploads}
+        />
+      </div>
+    ) : (
+      mainImgInfo.id == "" &&
+      uploadType != IMAGE_UPSCALER &&
+      !rejectedFileUpload &&
+      !imageLoading &&
+      uploadType !== LOCAL_SAMPLE_IMG && (
+        <div key={renderKey}>
+          <UppyDashboard
+            setImageLoading={setImageLoading}
+            fileInputType={"panelAdd"}
+            mainImgInfo={mainImgInfo}
+            setMainImgInfo={setMainImgInfo}
+            setPanelInfo={setPanelInfo}
+            id={"BgImage"}
+            setSelectedImage={setSelectedImage}
+            uploadType={uploadType}
+            uploads={uploads}
+            setUploads={setUploads}
+          />
+        </div>
+      )
+    )
+
   return (
     <>
       <Block className={"mt-3"}>
         <Block className="d-flex align-items-center flex-start">
-          <Block className="pl-1">
-            {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && !rejectedFileUpload && uploads.length === 0 ? (
-              <Block className={classes.panelHeading}>Add Image</Block>
-            ) : uploadType === IMAGE_UPSCALER && !imageLoading && !rejectedFileUpload && imgScalerInfo.src === "" ? (
-              <Block className={classes.panelHeading}>Add Image</Block>
-            ) : (
-              uploadType != LOCAL_SAMPLE_IMG &&
-              uploadType != IMAGE_UPSCALER &&
-              !imageLoading &&
-              !rejectedFileUpload &&
-              mainImgInfo.id === "" && <Block className={classes.panelHeading}>Add Image</Block>
-            )}
-          </Block>
-          <Block>
-            {activePanel === "Images" ? (
-              uploadType === LOCAL_SAMPLE_IMG &&
-              !imageLoading &&
-              !rejectedFileUpload &&
-              uploads.length != 0 && (
-                <div
-                  className="d-flex justify-content-start flex-row align-items-center pointer"
-                  onClick={() => {
-                    //when right icon with Image is clicked set upload to intital state
-                    setUploads([])
-                  }}
-                >
-                  <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
-                </div>
-              )
-            ) : imgScalerInfo.src && !imageLoading && uploadType === IMAGE_UPSCALER ? (
-              <div
-                className="d-flex justify-content-start flex-row align-items-center pointer"
-                onClick={() => {
-                  //when right icon with Image is clicked set upload to intital state
-                  setImgScalerInfo((prev: any) => ({ ...prev, id: "",src:"",original:"" }))
-                  // @ts-ignore
-                  setImgScalerPanelInfo((prev) => ({
-                    ...prev,
-                    trySampleImg: true,
-                    uploadPreview: false,
-                    uploadSection: true,
-                  }))
-                }}
-              >
-                <Icons.ChevronRight size="16" />{" "}
-                <Block className={clsx(classes.panelHeading,classes.imgUpscalerHeading)}>Image upscaler</Block>
-              </div>
-            ) : (
-              mainImgInfo.id &&
-              !imageLoading &&  uploadType!=IMAGE_UPSCALER&&  (
-                <div
-                  className="d-flex justify-content-start flex-row align-items-center pointer"
-                  onClick={() => {
-                    //when right icon with Image is clicked set upload to intital state
-                    setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-                    // @ts-ignore
-                    setPanelInfo((prev) => ({
-                      ...prev,
-                      trySampleImg: true,
-                      bgOptions: false,
-                      uploadSection: true,
-                      bgRemoveBtnActive: false,
-                    }))
-                  }}
-                >
-                  <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading, "ml-1")}>Image</Block>
-                </div>
-              )
-            )}
-          </Block>
+          <Block className="pl-1">{Heading(uploadType, imageLoading, rejectedFileUpload)}</Block>
+          <Block>{previewHeading()}</Block>
         </Block>
-        {uploadType === LOCAL_SAMPLE_IMG && !imageLoading && uploads.length === 0 && !rejectedFileUpload ? (
-          <div key={renderKey}>
-            <UppyDashboard
-              setImageLoading={setImageLoading}
-              fileInputType={"panelAdd"}
-              mainImgInfo={mainImgInfo}
-              setMainImgInfo={setMainImgInfo}
-              setPanelInfo={setPanelInfo}
-              id={"Image"}
-              setSelectedImage={setSelectedImage}
-              uploadType={uploadType}
-              uploads={uploads}
-              setUploads={setUploads}
-            />
-          </div>
-        ) : imgScalerInfo.src === "" && uploadType === IMAGE_UPSCALER && !rejectedFileUpload && !imageLoading ? (
-          <div key={renderKey}>
-            <UppyDashboard
-              setImageLoading={setImageLoading}
-              fileInputType={"ImgUpscaler"}
-              imgScalerInfo={imgScalerInfo}
-              setImgScalerInfo={setImgScalerInfo}
-              setImgScalerPanelInfo={setImgScalerPanelInfo}
-              id={"ImgUpscaler"}
-              setSelectedImage={setSelectedImage}
-              uploadType={uploadType}
-              uploads={uploads}
-              setUploads={setUploads}
-            />
-          </div>
-        ) : (
-          mainImgInfo.id == "" &&
-          uploadType != IMAGE_UPSCALER &&
-          !rejectedFileUpload &&
-          !imageLoading &&
-          uploadType !== LOCAL_SAMPLE_IMG && (
-            <div key={renderKey}>
-              <UppyDashboard
-                setImageLoading={setImageLoading}
-                fileInputType={"panelAdd"}
-                mainImgInfo={mainImgInfo}
-                setMainImgInfo={setMainImgInfo}
-                setPanelInfo={setPanelInfo}
-                id={"BgImage"}
-                setSelectedImage={setSelectedImage}
-                uploadType={uploadType}
-                uploads={uploads}
-                setUploads={setUploads}
-              />
-            </div>
-          )
-        )}
-
+        {UppyDashBoard()}
         <>
           <Block className={classes.uploadInputWrapper}>
-            {activePanel === "Images"
-              ? uploadType === LOCAL_SAMPLE_IMG &&
-                rejectedFileUpload && (
-                  <FileError
-                    handleTry={() => {
-                      setRejectedFileUpload(false)
-                    }}
-                  />
-                )
-              : uploadType !== LOCAL_SAMPLE_IMG &&
-                rejectedFileUpload && (
-                  <FileError
-                    handleTry={() => {
-                      setRejectedFileUpload(false)
-                    }}
-                  />
-                )}
+            {rejectedFileUpload && (
+              <FileError
+                handleTry={() => {
+                  setRejectedFileUpload(false)
+                }}
+              />
+            )}
             <Block className={classes.uploadPreviewSection}>
               {activePanel === "Images" ? (
                 uploadType === LOCAL_SAMPLE_IMG &&
@@ -236,7 +224,9 @@ export default function ({ uploadType, activePanel }: any) {
                 />
               ) : (
                 mainImgInfo.id &&
-                !rejectedFileUpload &&uploadType!=IMAGE_UPSCALER&& uploadType!=LOCAL_SAMPLE_IMG&&
+                !rejectedFileUpload &&
+                uploadType != IMAGE_UPSCALER &&
+                uploadType != LOCAL_SAMPLE_IMG &&
                 !imageLoading && (
                   <UploadPreview
                     uploadType={uploadType}
