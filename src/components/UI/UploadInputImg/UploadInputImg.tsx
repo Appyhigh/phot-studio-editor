@@ -57,12 +57,6 @@ const UploadInputImg = () => {
     inputImageRef.current?.click()
   }
 
-  useEffect(() => {
-    {
-      console.log("UPLOAD PREVIEW", textToArtInputInfo.uploaded_img)
-    }
-  }, [textToArtInputInfo.uploaded_img])
-
   return (
     <>
       {!textToArtInputInfo.uploaded_img && !imageUploading && !rejectedFileUpload && (
