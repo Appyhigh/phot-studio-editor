@@ -70,19 +70,32 @@ const ContextMenu = () => {
       >
         <ContextMenuItem
           onClick={() => {
-            let latest_ct = 0
-            setImagesCt((prev: any) => {
-              latest_ct = prev + 1
-              DuplicateFunc({ editor, activeObject, latest_ct }).then(() => {
+            if (activeObject?._objects) {
+              editor.objects.clone()
+
               setTimeout(() => {
                 editor.objects.position("top", activeObject.top)
                 editor.objects.position("left", activeObject.left)
                 editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                 editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                }, 20)
+                editor.objects.group()
+              },100)
+
+            } else {
+              let latest_ct = 0
+              setImagesCt((prev: any) => {
+                latest_ct = prev + 1
+                DuplicateFunc({ editor, activeObject, latest_ct }).then(() => {
+                  setTimeout(() => {
+                    editor.objects.position("top", activeObject.top)
+                    editor.objects.position("left", activeObject.left)
+                    editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                    editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                  }, 20)
+                })
+                return prev + 1
               })
-              return prev + 1
-            })
+            }
           }}
           icon="Duplicate"
           label="Duplicate"
