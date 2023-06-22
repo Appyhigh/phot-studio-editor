@@ -6,8 +6,8 @@ export const imgColorizerController = async (sourceUrl?: string, fileName?: stri
     try {
       const url = "https://devapi.phot.ai/v1/color-restoration-2k"
       const body = {
-        sourceUrl: "https://images.pexels.com/photos/4423849/pexels-photo-4423849.jpeg",
-        fileName: "",
+        sourceUrl: sourceUrl,
+        fileName: fileName,
       }
       const config = {
         headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },

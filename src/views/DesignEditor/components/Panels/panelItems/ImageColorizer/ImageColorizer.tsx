@@ -19,7 +19,10 @@ import BaseButton from "~/components/UI/Button/BaseButton"
 import NoneIcon from "~/components/Icons/NoneIcon"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { imgColorizerController } from "~/utils/imgColorizerController"
-import { error } from "console"
+import { getCookie } from "~/utils/common"
+import { COOKIE_KEYS } from "~/utils/enum"
+import ErrorContext from "~/contexts/ErrorContext"
+import LoginPopup from "../../../LoginPopup/LoginPopup"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
@@ -28,53 +31,56 @@ const ImageColorizer = () => {
   const { bgSampleImages, setBgSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
-
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const { setErrorInfo } = useContext(ErrorContext)
 
   // @ts-ignore
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerpanelInfo, setImgColorizerpanelInfo } =
     useContext(ImageColorizerContext)
 
-    const generateImg2Scaler = () => {
-        if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-          setShowLoginPopup(true)
-          setAutoCallAPI(true)
-        } else {
-          setImageLoading(true)
-          setLoadingImgCt(3)
-          setAutoCallAPI(false)
-          setCurrentActiveImg(-1)
-          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
-    
-          img2Upscaler(imgScalerInfo.src)
-            .then((response) => {
-              setImageLoading(false)
-              setImgScalerInfo((prev: any) => ({ ...prev, result: [imgScalerInfo.src, response] }))
-            })
-            .catch((error) => {
-              setImageLoading(false)
-              setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-              setErrorInfo((prev: any) => ({
-                ...prev,
-                showError: true,
-                errorMsg: "Some error has occurred",
-                retryFn: () => {
-                  setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-                  generateImg2Scaler()
-                },
-              }))
-              setTimeout(() => {
-                setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              }, 5000)
-              console.error("Error:", error)
-            })
-        }
-      }
-    
-  useEffect(() => {
-    imgColorizerController().then((response)=>console.log(response)
-    ).catch((error)=>{console.log("errer");
-    })
-  }, [])
+  const generateImgColorizer = () => {
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+      setAutoCallAPI(true)
+    } else {
+      setImageLoading(true)
+      setAutoCallAPI(false)
+      setCurrentActiveImg(-1)
+      setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
+      setImgColorizerpanelInfo((prev: any) => ({
+        ...prev,
+        resultOption: true,
+        uploadPreview: false,
+        tryFilters: false,
+        trySampleImg: false,
+        uploadSection: false,
+      }))
+
+      imgColorizerController(ImgColorizerInfo.src)
+        .then((response) => {
+          setImageLoading(false)
+          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [ImgColorizerInfo.src, response] }))
+        })
+        .catch((error) => {
+          setImageLoading(false)
+          setImgColorizerpanelInfo((prev: any) => ({ ...prev, resultOption: false }))
+          setErrorInfo((prev: any) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+              generateImgColorizer()
+            },
+          }))
+          setTimeout(() => {
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+          }, 5000)
+          console.error("Error:", error)
+        })
+    }
+  }
 
   const addObject = useCallback(
     (url: string) => {
@@ -160,20 +166,15 @@ const ImageColorizer = () => {
           )}
 
           {ImgColorizerpanelInfo.uploadPreview && (
-            <div
-              style={{
-                margin: "26px 20px 20px 20px",
-                fontFamily: "rubik",
-                fontSize: "12px",
-                color: "#000",
-                width: "310px",
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", margin: "0 0px 20px 0" }}>
+            <div className={classes.walletContainer}>
+              <div className={classes.coinLinks}>
                 <p>Pay 0 Coins to Generate</p>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                  <p>Wallet: 48 Coins</p>
-                  <p>Buy More</p>
+                <div className={classes.flexCenter}>
+                  <div style={{ display: "flex", gap: "4px", color: "rgba(0, 0, 0, 0.70)" }}>
+                    <p>Wallet:</p>
+                    <p style={{ color: "#A855FE" }}>48 Coins</p>
+                  </div>
+                  <p style={{ color: "#A855FE" }}>Buy More</p>
                 </div>
               </div>
               <BaseButton
@@ -181,15 +182,13 @@ const ImageColorizer = () => {
                 fontFamily="rubik"
                 fontSize="16px"
                 handleClick={() => {
-                  setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
-                  setImgColorizerpanelInfo((prev: any) => ({
-                    ...prev,
-                    tryFilters: false,
-                    resultOption: true,
-                    trySampleImg: false,
-                    uploadSection: false,
-                    uploadPreview: false,
-                  }))
+                  generateImgColorizer()
+                }}
+              />
+              <LoginPopup
+                isOpen={showLoginPopup}
+                loginPopupCloseHandler={() => {
+                  setShowLoginPopup(false)
                 }}
               />
             </div>
@@ -226,7 +225,7 @@ const ImageColorizer = () => {
         <div className={classes.resultSection}>
           <Block
             onClick={() => {
-              setImgColorizerInfo((prev: any) => ({ ...prev, id: "" }))
+              setImgColorizerInfo((prev: any) => ({ ...prev, id: "", resultImages: [] }))
               setImgColorizerpanelInfo((prev: any) => ({
                 ...prev,
                 tryFilters: false,
@@ -242,37 +241,33 @@ const ImageColorizer = () => {
           >
             <Icons.ChevronRight fill="#000" size={"20"} />
           </Block>
+
           <div className={classes.resultImages}>
-            <div className={clsx("pointer", classes.eachImg)}>
-              <img
-                src={ImgColorizerInfo.original}
-                alt="result-img"
-                onClick={() => {
-                  addImg(ImgColorizerInfo.original, -1)
-                }}
-              />
+            {ImgColorizerInfo?.resultImages?.map((each, _idx) => {
+              return (
+                <div
+                  className={clsx("pointer", classes.eachImg, currentActiveImg === _idx && classes.currentActiveImg)}
+                  key={_idx}
+                >
+                  <img
+                    src={each}
+                    alt="result-img"
+                    onClick={() => {
+                      addImg(each, _idx)
+                    }}
+                  />
 
-              <div className={classes.resultLabel}> Original</div>
-            </div>
-            =
-            <div className={classes.skeletonBox}>
-              {<img className={classes.imagesLoader} src={LoaderSpinner} />}
-              <div className={classes.resultLabel}> Original</div>
-            </div>
+                  <div className={classes.resultLabel}>{_idx == 0 ? "Original" : _idx == 1 ? "Result" : "Result"}</div>
+                </div>
+              )
+            })}
+            {imageLoading &&
+              Array.from(Array(2).keys()).map((each, idx) => (
+                <div className={classes.skeletonBox} key={idx}>
+                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              ))}
           </div>
-
-          {/* <div className={classes.filtersBox}>
-            <p>Filters</p>
-            <div className={classes.resultFilters}>
-              <div className={clsx("pointer", classes.eachFilter)}>
-                <NoneIcon size={100}/>
-              </div>
-              {Array.from({ length: 8 }, (_, i) =>
-              (<div className={clsx("pointer", classes.eachFilter)}>
-              <img src={ImgColorizerInfo.original} alt="result-img" style={{marginBottom:"12px"}} />
-            </div>))}
-            </div>
-          </div> */}
         </div>
       )}
     </Block>
