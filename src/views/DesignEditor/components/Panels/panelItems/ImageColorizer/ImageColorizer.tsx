@@ -167,17 +167,8 @@ const ImageColorizer = () => {
 
           {ImgColorizerpanelInfo.uploadPreview && (
             <div className={classes.walletContainer}>
-              <div className={classes.coinLinks}>
-                <p>Pay 0 Coins to Generate</p>
-                <div className={classes.flexCenter}>
-                  <div style={{ display: "flex", gap: "4px", color: "rgba(0, 0, 0, 0.70)" }}>
-                    <p>Wallet:</p>
-                    <p style={{ color: "#A855FE" }}>48 Coins</p>
-                  </div>
-                  <p style={{ color: "#A855FE" }}>Buy More</p>
-                </div>
-              </div>
               <BaseButton
+                width="100%"
                 title=" Colorize"
                 fontFamily="rubik"
                 fontSize="16px"

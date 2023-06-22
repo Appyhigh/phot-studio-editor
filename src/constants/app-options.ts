@@ -86,7 +86,7 @@ export const BASE_ITEMS = [
   // },
   {
     id: "imagecolorizer",
-    icon: "CircleIcon",
+    icon: "ImagineAi",
     label: "Image Colorizer",
     name: "ImageColorizer",
   },
@@ -154,7 +154,7 @@ export enum PanelType {
   IMAGES = "Images",
   UPLOADS = "Uploads",
   BACKGROUND_REMOVER = "BgRemover",
-  IMAGINE_AI="ImagineAI",
-  IMAGE_UPSCALER="ImageUpscaler",
-  IMAGE_COLORIZER = "ImageColorizer"
+  IMAGINE_AI = "ImagineAI",
+  IMAGE_UPSCALER = "ImageUpscaler",
+  IMAGE_COLORIZER = "ImageColorizer",
 }
