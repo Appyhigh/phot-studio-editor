@@ -80,6 +80,7 @@ import CirclePlus from "./CirclePlus"
 import Cross from "./Cross"
 import ToolTipCross from "./TooltipCross"
 import ToolTip from "./Tooltip"
+import ImgLock from "./ImgLock"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -163,6 +164,7 @@ class Icons {
   static Cross=Cross
   static ToolTipCross=ToolTipCross
   static ToolTip=ToolTip
+  static ImgLock=ImgLock
 }
 
 export default Icons

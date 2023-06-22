@@ -8,14 +8,12 @@ import "./uppy.css"
 import "@uppy/core/dist/style.min.css"
 import "@uppy/dashboard/dist/style.min.css"
 import { useEffect, useContext, useState } from "react"
-import Icons from "~/components/Icons"
 import { getBucketImageUrlFromFile } from "~/utils/removeBackground"
-
-import classes from "./style.module.css"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
 import { HandleBgUpload } from "~/views/DesignEditor/utils/functions/HandleBgUpload"
+import useAppContext from "~/hooks/useAppContext"
 import FileError from "../Common/FileError/FileError"
 
 const UppyDashboard = ({
@@ -34,6 +32,9 @@ const UppyDashboard = ({
   uploads,
   setUploads,
   setBgUploadPreview,
+  imgScalerInfo,
+  setImgScalerInfo,
+  setImgScalerPanelInfo,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -72,6 +73,7 @@ const UppyDashboard = ({
       },
     })
   }
+  const activePanel = useAppContext()
 
   useEffect(() => {
     uppy.on("file-added", async (file: any) => {
@@ -83,6 +85,13 @@ const UppyDashboard = ({
         const imageUrl = file.source == "Url" ? file.remote.body.fileId : await getBucketImageUrlFromFile(file.data)
         if (fileInputType == "bgUpload") {
           HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
+        } else if (fileInputType === "ImgUpscaler") {
+          // @ts-ignore
+          setImgScalerInfo
+            ? setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+            : null
+          // @ts-ignore
+          setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else {
           HandleFile(
             imageUrl,
@@ -117,6 +126,16 @@ const UppyDashboard = ({
         if (imageUrl) {
           if (fileInputType == "bgUpload") {
             HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
+          } else if (fileInputType === "ImgUpscaler") {
+            // @ts-ignore
+            setImgScalerInfo ? setImgScalerInfo((prev) => ({ ...prev, url: imageUrl, original: imageUrl })) : null
+            //  @ts-ignore
+            setImgScalerPanelInfo((prev) => ({
+              ...prev,
+              uploadSection: false,
+              uploadPreview: true,
+              trySampleImg: false,
+            }))
           } else {
             HandleFile(
               imageUrl,
@@ -181,7 +200,7 @@ const UppyDashboard = ({
       }, 5000)
       return false
     })
-  }, [displayError, uploadErrorMsg])
+  }, [displayError, uploadErrorMsg,activePanel])
 
   return (
     <div key={id}>

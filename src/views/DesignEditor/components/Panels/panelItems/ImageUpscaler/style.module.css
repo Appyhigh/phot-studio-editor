@@ -1,0 +1,293 @@
+.tryImgHeading {
+  padding: 0 12px;
+  font-weight: 600;
+  font-size: 16;
+  margin-left: 10px;
+}
+.sampleImgSection {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.imageItemSection {
+  background: #f8f8fb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.imageItem {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.006) 8.1%,
+    rgba(0, 0, 0, 0.022) 15.5%,
+    rgba(0, 0, 0, 0.047) 22.5%,
+    rgba(0, 0, 0, 0.079) 29%,
+    rgba(0, 0, 0, 0.117) 35.3%,
+    rgba(0, 0, 0, 0.158) 41.2%,
+    rgba(0, 0, 0, 0.203) 47.1%,
+    rgba(0, 0, 0, 0.247) 52.9%,
+    rgba(0, 0, 0, 0.292) 58.8%,
+    rgba(0, 0, 0, 0.333) 64.7%,
+    rgba(0, 0, 0, 0.371) 71%,
+    rgba(0, 0, 0, 0.403) 77.5%,
+    rgba(0, 0, 0, 0.428) 84.5%,
+    rgba(0, 0, 0, 0.444) 91.9%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  height: 100%;
+  width: 100%;
+}
+
+.imageItem:hover {
+  opacity: 1;
+}
+.imageItemSection::before:hover {
+  opacity: 1;
+}
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  vertical-align: middle;
+}
+.scaleSection {
+  margin: 12px 0px 20px 0px;
+}
+.scaleBox {
+  width: 144px;
+  height: 47px;
+  border: 1px solid #92929d;
+  border-radius: 40px;
+  margin: 8px 0px 0px 14px;
+  display: flex;
+  align-items: center;
+}
+
+.scaleInput {
+  width: 68px;
+  height: 39px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  font-family: "Rubik";
+  font-weight: 600;
+  font-size: 16px;
+  color: #000000;
+  cursor: pointer;
+}
+.activeScale {
+  background: #6729f3;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  color: #fff;
+  margin: 0px 4px;
+}
+
+.generateBtn {
+  width: 270px;
+  height: 52px;
+  text-align: center;
+  color: #fff;
+  font-weight: 500;
+  font-size: 18px;
+  background: #6729f3;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  margin: 15px 0px 8px 14px;
+}
+.freeImgText {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #44444f;
+  margin-left: 14px;
+}
+.chevronRightIcon {
+  cursor: pointer;
+  display: flex;
+  width: 49.5px;
+  height: 51px;
+  background: #eeeeee;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 14px 0px 12px 18px;
+}
+
+.resultSection {
+  margin-bottom: 70px;
+}
+
+.resultImages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0px 12px 0px 14px;
+  gap: 6px 8px;
+}
+
+.resultSection {
+  margin-bottom: 70px;
+}
+.resultImages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0px 12px 0px 14px;
+  gap: 6px 8px;
+}
+.regenerateBtn {
+  width: 275px;
+}
+.buyMorePara a {
+  text-decoration-line: underline;
+  font-weight: 500;
+  font-size: 11px;
+  margin-left: 20px;
+  color: #6729f3;
+}
+.skeletonBox {
+  background: #ebebeb;
+  border-radius: 10px;
+  width: 132px;
+  height: 132px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.skeletonBox img {
+  width: 80px;
+  height: 80px;
+}
+
+.disabledBtn {
+  background: #f1f1f5;
+  border-radius: 8px;
+  cursor: not-allowed;
+  color: #92929d;
+}
+.eachImg {
+  position: relative;
+}
+.eachImg img {
+  width: 132px;
+  height: 132px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.currentActiveImg {
+  width: 132px;
+  height: 132px;
+  border-radius: 10px;
+  background: linear-gradient(45deg, #7bc0ff, #ac31ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.currentActiveImg img {
+  width: 128px;
+  height: 128px;
+}
+
+.resultLabel {
+  position: absolute;
+  height: 26px;
+  padding: 0px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 28px;
+  color: #fff;
+  font-weight: 500;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.clearFieldBtn {
+  width: 143px;
+  height: 36px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 40px;
+  font-weight: 500;
+  font-size: 12px;
+  color: #ffffff;
+  position: fixed;
+  bottom: 100px;
+  left: 170px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  z-index: 5;
+}
+.blurImg {
+  filter: blur(2px);
+  position: relative;
+}
+.lockIcon {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 35%;
+  left: 35%;
+}
+@media screen and (min-width: 1220px) {
+  .generateBtn {
+    width: 319px;
+    margin: 17px 0px 8px 20px;
+  }
+
+  .tryImgHeading {
+    padding: 0px 20px;
+  }
+
+  .scaleSection {
+    margin: 20px 0px 20px 0px;
+  }
+  .freeImgText {
+    margin-left: 20px;
+  }
+  .eachImg img {
+    width: 158px;
+    height: 158px;
+  }
+
+  .resultImages {
+    margin: 0px 12px 0px 20px;
+    gap: 3px 0px;
+  }
+  .currentActiveImg {
+    width: 158px;
+    height: 158px;
+  }
+  .skeletonBox {
+    width: 158px;
+    height: 158px;
+  }
+  .currentActiveImg img {
+    width: 154px;
+    height: 154px;
+  }
+  .clearFieldBtn {
+    left: 200px;
+  }
+}

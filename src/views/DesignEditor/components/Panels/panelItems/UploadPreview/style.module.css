@@ -4,6 +4,20 @@
   position: relative;
 }
 
+.uploadPreviewSection {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.localImg {
+  margin-left: 10px;
+}
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
+}
+
 .uploadPreview {
   border-radius: 8px;
   width: 280px;
@@ -25,6 +39,7 @@
   top: 25px;
   right: 10px;
 }
+
 .mainImgBgDiscard {
   top: 20px;
   right: 20px;
@@ -57,7 +72,7 @@
   margin-left: 10px;
 }
 
-.textToArtTrashIcon{
+.textToArtTrashIcon {
   right: 25px;
 }
 @media screen and (min-width: 1220px) {
@@ -72,25 +87,27 @@
     top: 15px;
     right: 12px;
   }
-
+  .localImg {
+    margin-left: 20px;
+  }
   .mainImgBgDiscard {
     top: 10px;
-    right: 36px;
+    right: 15px;
   }
   .removeBgBtn {
     width: 319px;
     margin-top: 20px;
   }
   .mainBgUploadedImg {
-    left: 110px;
+    left: 95px;
   }
 
   .mainImgBg {
-    margin: 8px 0px 0px 20px;
+    margin: 0px;
     height: 175px;
   }
   .mainImgBgBtn {
-    margin: 0px 0px 0px 20px !important;
+    margin: 0px 0px 0px 12px !important;
   }
 
   .uploadedImg {
@@ -100,11 +117,8 @@
   .mainBgUploadedImg {
     top: 12px;
   }
-  
 
-.textToArtTrashIcon{
-  right: 30px;
-
-}
-
+  .textToArtTrashIcon {
+    right: 30px;
+  }
 }
