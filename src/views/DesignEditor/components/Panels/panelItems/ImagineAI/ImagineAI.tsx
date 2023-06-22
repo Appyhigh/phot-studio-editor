@@ -127,12 +127,9 @@ const ImagineAI = () => {
 
   const addImgToCanvas = async (imageUrl: string) => {
     await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
-      })
+     
+        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, null,null,setImagesCt)
+       
     })
   }
 

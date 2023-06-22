@@ -221,12 +221,7 @@ const ImageUpscaler = () => {
   const addImg = async (imageUrl: string, _idx: number) => {
     setCurrentActiveImg(_idx)
     await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
-      })
+      AddObjectFunc(imageUrl, editor, img.width, img.height, frame, null, null, setImagesCt)
     })
   }
 
@@ -420,7 +415,7 @@ const ImageUpscaler = () => {
 
             {imageLoading &&
               Array.from(Array(loadingImgCt).keys()).map((each, _idx) => (
-                <div className={classes.skeletonBox}>
+                <div className={classes.skeletonBox} key={_idx}>
                   {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
                 </div>
               ))}

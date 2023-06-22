@@ -74,12 +74,11 @@ const ContextMenu = () => {
             setImagesCt((prev: any) => {
               latest_ct = prev + 1
               DuplicateFunc({ editor, activeObject, latest_ct }).then(() => {
-                setTimeout(() => {
-                  editor.objects.position("top", activeObject.top)
-                  editor.objects.position("left", activeObject.left)
-                  editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                  editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                  editor.objects.group()
+              setTimeout(() => {
+                editor.objects.position("top", activeObject.top)
+                editor.objects.position("left", activeObject.left)
+                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
                 }, 20)
               })
               return prev + 1

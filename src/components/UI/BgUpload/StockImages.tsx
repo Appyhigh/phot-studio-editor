@@ -135,11 +135,7 @@ const StockImages = (props: any) => {
                   selectedImage={selectedImg}
                   onClick={() => {
                     {
-                      let latest_ct = 0
-                      setImagesCt((prev: any) => {
-                        latest_ct = prev + 1
-                        return prev + 1
-                      })
+                     
                       props.imageAs == "foreground"
                         ? AddObjectFunc(
                             image.image_url_list[0],
@@ -147,7 +143,9 @@ const StockImages = (props: any) => {
                             image.width,
                             image.height,
                             frame,
-                            (latest_ct = latest_ct)
+                            null,
+                            null,
+                            setImagesCt
                           )
                         : (toDataURL(image.image_url_list[0], async function (dataUrl: string) {
                             HandleBgChangeOption(

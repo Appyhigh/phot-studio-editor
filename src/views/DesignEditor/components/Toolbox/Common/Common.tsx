@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Block } from "baseui/block"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import DeleteIcon from "~/components/Icons/Delete"
@@ -28,6 +28,7 @@ const Common = ({ type }: any) => {
   const activeObject = useActiveObject() as any
   const { setImagesCt } = useContext(ImagesContext)
 
+  
   const editor = useEditor()
 
   React.useEffect(() => {
@@ -63,12 +64,11 @@ const Common = ({ type }: any) => {
           setImagesCt((prev: any) => {
             latest_ct = prev + 1
             DuplicateFunc({ editor, activeObject, latest_ct }).then(() => {
-              setTimeout(() => {
-                editor.objects.position("top", activeObject.top)
-                editor.objects.position("left", activeObject.left)
-                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                editor.objects.group()
+            setTimeout(() => {
+              editor.objects.position("top", activeObject.top)
+              editor.objects.position("left", activeObject.left)
+              editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+              editor.objects.resize("width", activeObject.width * activeObject.scaleX)
               }, 20)
             })
             return prev + 1

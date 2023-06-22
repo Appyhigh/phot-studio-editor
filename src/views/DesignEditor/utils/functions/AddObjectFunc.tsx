@@ -6,10 +6,15 @@ export const AddObjectFunc = (
   width?: number,
   height?: number,
   frame?: any,
-  latest_ct?: any,
   setRejectedFileUpload?: any,
-  setAddImgInfo?: any
+  setAddImgInfo?: any,
+  setImagesCt?: any
 ) => {
+  let latest_ct = 0
+  setImagesCt((prev: any) => {
+    latest_ct = prev + 1
+    return prev + 1
+  })
   let scale = 1
   if (width && height && frame) {
     if (width > frame.width || height > frame.height) {
@@ -25,6 +30,7 @@ export const AddObjectFunc = (
       type: "StaticImage",
       id: nanoid(),
       src: url,
+
       preview: url,
       metadata: { generationDate: new Date().getTime(), originalLayerPreview: url },
       scaleX: scale,

@@ -27,22 +27,9 @@ const HandleFile = async (
     setAddImgInfo ? setAddImgInfo({ showPreview: true, url: imageUrl }) : null
     if (fileInputType === "add") {
       console.log("ADD IMAGE")
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        return prev + 1
-      })
+
       await getDimensions(imageUrl, (img: any) => {
-        AddObjectFunc(
-          imageUrl,
-          editor,
-          img.width,
-          img.height,
-          frame,
-          latest_ct,
-          null,
-          setAddImgInfo ? setAddImgInfo : null
-        )
+        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, null, null, setImagesCt)
       })
     } else if (fileInputType === "bgupdate") {
       UpdateBg(imageUrl, editor, frame)

@@ -50,19 +50,16 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
         <ContextMenuItem
           disabled={true}
           onClick={() => {
-            let latest_ct = 0
-            setImagesCt((prev: any) => {
-              latest_ct = prev + 1
-              DuplicateFunc({ editor }).then(() => {
-                setTimeout(() => {
-                  editor.objects.position("top", activeObject.top)
-                  editor.objects.position("left", activeObject.left)
-                  editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                  editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+            DuplicateFunc({ editor, activeObject, setImagesCt }).then(() => {
+              setTimeout(() => {
+                editor.objects.position("top", activeObject.top)
+                editor.objects.position("left", activeObject.left)
+                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                if (activeObject?._objects?.length > 1) {
                   editor.objects.group()
-                }, 20)
-              })
-              return prev + 1
+                }
+              }, 50)
             })
           }}
           icon="Duplicate"
@@ -97,13 +94,12 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 setImagesCt((prev: any) => {
                   latest_ct = prev + 1
                   DuplicateFunc({ editor, activeObject }).then(() => {
-                    setTimeout(() => {
-                      editor.objects.position("top", activeObject.top)
-                      editor.objects.position("left", activeObject.left)
-                      editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                      editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                      editor.objects.group()
-                    }, 20)
+                  setTimeout(() => {
+                    editor.objects.position("top", activeObject.top)
+                    editor.objects.position("left", activeObject.left)
+                    editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                    editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                  }, 20)
                   })
                   return prev + 1
                 })

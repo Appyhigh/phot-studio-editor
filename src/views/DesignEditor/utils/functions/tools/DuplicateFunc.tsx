@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid"
 import { applyExtraFilter } from "./applyExtraFilterFunc"
-import { log } from "fabric/fabric-impl"
 
 export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
   return new Promise((resolve, reject) => {
@@ -30,7 +29,6 @@ export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
       editor.objects.select("frame")
       setTimeout(() => {
         editor.objects.update({ name: latest_ct })
-        resolve(editor.objects.update({ name: activeObject.name }))
       }, 50)
     }
 
