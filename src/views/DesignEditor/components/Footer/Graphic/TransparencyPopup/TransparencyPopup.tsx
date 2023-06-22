@@ -6,7 +6,8 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { Slider } from "baseui/slider"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
-import { backgroundLayerType, deviceUploadType } from "~/constants/contants"
+import { backgroundLayerType, checkboxBGUrl, deviceUploadType } from "~/constants/contants"
+import { EraseBgFunc } from "~/views/DesignEditor/utils/functions/EraseBgFunc"
 
 const TransparencyPopup = ({ showPopup }: any) => {
   const objects: any = useObjects()
@@ -133,7 +134,7 @@ const TransparencyPopup = ({ showPopup }: any) => {
     "#886F65",
     "#D9D9D9",
     "#FFCFB4",
-    "#E59230",
+    "#FFFFFF",
     "#FFFFFF",
   ]
 
@@ -228,17 +229,22 @@ const TransparencyPopup = ({ showPopup }: any) => {
                     onClick={() => {
                       if (idx === colors.length - 1) {
                         setIsOpen(true)
+                      } else if (idx === colors.length - 2) {
+                        EraseBgFunc({ editor, frame })
                       } else {
                         setBGColor(each)
                         updateObjectFill(each)
                       }
                     }}
-                    style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
+                    style={{
+                      background: idx !== colors.length - 2 ? each : `url(${checkboxBGUrl})`,
+                      backgroundSize: "cover",
+                      border: idx == colors.length - 1 ? "1px solid #92929D" : "",
+                    }}
                   >
                     {idx === colors.length - 1 && (
                       <div>
-                        {" "}
-                        <Icons.ColorPlus />{" "}
+                        <Icons.ColorPlus />
                       </div>
                     )}
                   </div>
