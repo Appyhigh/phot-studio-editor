@@ -123,6 +123,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
           handleClose={close}
           type="background"
           handleColor={(each: any) => {
+            setBGColor(each)
             updateObjectFill(each)
           }}
         />
