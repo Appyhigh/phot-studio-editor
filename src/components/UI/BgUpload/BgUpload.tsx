@@ -55,7 +55,7 @@ const BgUpload = () => {
       </div>
       {bgChoice === 0 ? (
         <>
-          <Scrollbars style={{ height: "300px" }}>
+          <Scrollbars style={{ height: "450%" }}>
             {bgUploading && bgChoice === 0 && (
               <div>
                 <Block className={classes.uploadInputContainer}>
@@ -90,8 +90,9 @@ const BgUpload = () => {
                   discardHandler={() => {
                     setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
                   }}
-                  mainImgUrl={bgUploadPreview.url}
-                  handleBgAdd={handleImgAdd}
+                  imgSrc={bgUploadPreview.url}
+                  previewHandle={handleImgAdd}
+                  btnTitle="Add Background"
                 />
               </Scrollbars>
             )}

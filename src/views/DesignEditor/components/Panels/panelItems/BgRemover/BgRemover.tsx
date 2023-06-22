@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import { useActiveObject, useEditor, useObjects } from "@layerhub-io/react"
+import { useEditor } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
@@ -12,12 +12,12 @@ import BgUpload from "~/components/UI/BgUpload/BgUpload"
 import Loader from "~/components/UI/Loader/Loader"
 import LoaderContext from "~/contexts/LoaderContext"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import Icons from "~/components/Icons"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
 import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
 import useAppContext from "~/hooks/useAppContext"
+import { REMOVE_BACKGROUND } from "~/constants/contants"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -108,44 +108,25 @@ const BgRemover = () => {
 
   return (
     <Block className="d-flex flex-1 flex-column">
-      {(mainImgInfo.id && mainImgInfo.preview )? (
+      {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>
-          <Block paddingTop={"10px"}>
-            {
-              <div
-                className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
-                onClick={() => {
-                  //when right icon with Image is clicked set upload to intital state
-                  setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-                  setPanelInfo((prev: any) => ({
-                    ...prev,
-                    uploadPreview: false,
-                    bgOptions: false,
-                    uploadSection: true,
-                    trySampleImg: true,
-                    bgRemoveBtnActive: false,
-                  }))
-                }}
-              >
-                <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>Image</Block>
-              </div>
-            }
-          </Block>
-          <Block className={classes.uploadInputWrapper}>
-            <div
-              className={clsx(
-                classes.uploadPreviewSection,
-
-                "d-flex align-items-center pointer"
-              )}
-            >
-              <UploadPreview discardHandler={discardSampleImageHandler} />
-            </div>
-          </Block>
+          <UploadPreview
+            previewHeading={"Image"}
+            discardHandler={discardSampleImageHandler}
+            imgSrc={mainImgInfo.original}
+            btnTitle={"Remove Background"}
+            uploadType={REMOVE_BACKGROUND}
+          />
         </Block>
       ) : (
         <>
-          <Uploads imageLoading={imageLoading} setImageLoading={setImageLoading} />
+          <Uploads
+            fileInputType={"panelAdd"}
+            id={"Image"}
+            mainHeading={"Add Image"}
+            imageLoading={imageLoading}
+            setImageLoading={setImageLoading}
+          />
         </>
       )}
       {panelInfo.trySampleImg && (

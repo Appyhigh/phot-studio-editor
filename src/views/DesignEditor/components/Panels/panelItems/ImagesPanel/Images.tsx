@@ -7,7 +7,6 @@ import clsx from "clsx"
 import Loader from "~/components/UI/Loader/Loader"
 import LoaderContext from "~/contexts/LoaderContext"
 import { BgSampleImages } from "~/constants/bg-sample-images"
-import { nanoid } from "nanoid"
 import { images } from "~/constants/mock-data"
 import Uploads from "../UploadDropzone/Uploads"
 import { LOCAL_SAMPLE_IMG } from "~/constants/contants"
@@ -15,9 +14,12 @@ import useAppContext from "~/hooks/useAppContext"
 import StockImages from "~/components/UI/BgUpload/StockImages"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import UploadPreview from "../UploadPreview/UploadPreview"
 
 const Images = () => {
   const editor = useEditor()
+  const [uploads, setUploads] = React.useState<any[]>([])
   const { loaderPopup } = useContext(LoaderContext)
   const { activePanel } = useAppContext()
 
@@ -25,15 +27,60 @@ const Images = () => {
   const { setImagesCt } = useContext(ImagesContext)
   const [imageLoading, setImageLoading] = useState(false)
   const frame = useFrame()
+
+  const addImg = async (imageUrl: string) => {
+    await getDimensions(imageUrl, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+        return prev + 1
+      })
+    })
+  }
+
   return (
     <Block className="d-flex flex-1 flex-column">
       <>
-        <Uploads
-          activePanel={activePanel}
-          uploadType={LOCAL_SAMPLE_IMG}
-          imageLoading={imageLoading}
-          setImageLoading={setImageLoading}
-        />{" "}
+        {uploads.length != 0 ? (
+          uploads.map((upload) => (
+            <div key={upload.id} className="d-flex align-items-center pointer">
+              <UploadPreview
+                previewHeading={"Image"}
+                uploadType={LOCAL_SAMPLE_IMG}
+                imgSrc={upload.preview}
+                upload={upload}
+                discardHandler={() => {
+                  setUploads([])
+                }}
+                previewHandle={() => {
+                  let latest_ct = 0
+                  setImagesCt((prev: any) => {
+                    latest_ct = prev + 1
+                    return prev + 1
+                  })
+                  editor.objects.add({ ...upload, name: latest_ct.toString() })
+                  setUploads([])
+                }}
+                btnTitle={"Add"}
+              />
+            </div>
+          ))
+        ) : (
+          <Uploads
+            activePanel={activePanel}
+            uploadType={LOCAL_SAMPLE_IMG}
+            mainHeading={"Add Image"}
+            previewHeading={"Image"}
+            uploads={uploads}
+            setUploads={setUploads}
+            fileInputType={"panelAdd"}
+            id="Image"
+            imageLoading={imageLoading}
+            setImageLoading={setImageLoading}
+          />
+        )}
+
         <div className={clsx(classes.bgUploadSection, "d-flex  flex-row")}>
           <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
             Sample Images
@@ -63,12 +110,7 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        let latest_ct = 0
-                        setImagesCt((prev: any) => {
-                          latest_ct = prev + 1
-                          AddObjectFunc(image.src, editor, 0, 0, frame, latest_ct)
-                          return prev + 1
-                        })
+                        addImg(image.src)
                       }}
                       preview={image.src}
                       imageLoading={imageLoading}
@@ -80,12 +122,7 @@ const Images = () => {
                     <ImageItem
                       key={index}
                       onClick={() => {
-                        let latest_ct = 0
-                        setImagesCt((prev: any) => {
-                          latest_ct = prev + 1
-                          AddObjectFunc(image.src.medium, editor, 0, 0, frame, latest_ct)
-                          return prev + 1
-                        })
+                        addImg(image.src.medium)
                       }}
                       preview={image.src.small}
                       imageLoading={imageLoading}

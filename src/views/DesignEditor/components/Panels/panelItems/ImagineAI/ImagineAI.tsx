@@ -8,7 +8,7 @@ import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import ToggleBtn from "~/components/UI/ToggleBtn/ToggleBtn"
 import Scrollable from "~/components/Scrollable"
 import AspectRatioSwiper from "~/components/UI/AspectRatioSwiper/AspectRatioSwiper"
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useFrame } from "@layerhub-io/react"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import SliderInput from "~/components/UI/SliderInput/SliderInput"
@@ -24,6 +24,8 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import ErrorContext from "~/contexts/ErrorContext"
 
 import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import BaseButton from "~/components/UI/Button/BaseButton"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -119,6 +121,19 @@ const ImagineAI = () => {
           console.error("Error:", error)
         })
     }
+  }
+
+  const frame = useFrame()
+
+  const addImgToCanvas = async (imageUrl: string) => {
+    await getDimensions(imageUrl, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+        return prev + 1
+      })
+    })
   }
 
   return (
@@ -249,18 +264,19 @@ const ImagineAI = () => {
                 />
               </div>
             )}
-            <button
-              className={clsx(
-                classes.generateBtn,
-                textToArtInputInfo.showclearTooltip || (textToArtInputInfo.prompt.length == 0 && classes.disabledGenBtn)
-              )}
+    
+            <BaseButton
+              title="Generate"
+              width="310px"
+              margin= "5px 0px 0px 20px"
+              disabledBgColor="#92929d"
+              fontSize="16px"
               disabled={textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.length == 0 ? true : false}
-              onClick={() => {
+              handleClick={() => {
                 generateImage()
               }}
-            >
-              Generate
-            </button>
+              
+            />
             <LoginPopup
               isOpen={showLoginPopup}
               loginPopupCloseHandler={() => {
@@ -333,12 +349,7 @@ const ImagineAI = () => {
                       src={each}
                       onClick={() => {
                         setCurrentActiveImg(idx)
-                        let latest_ct = 0
-                        setImagesCt((prev: any) => {
-                          latest_ct = prev + 1
-                          AddObjectFunc(each, editor, 0, 0, 0, (latest_ct = latest_ct))
-                          return prev + 1
-                        })
+                        addImgToCanvas(each)
                       }}
                     />
                   }
@@ -351,15 +362,17 @@ const ImagineAI = () => {
                   </div>
                 ))}
             </div>
-            <button
-              className={clsx(classes.generateBtn, classes.regenerateBtn, imagesLoading && classes.disabledBtn)}
+            <BaseButton
               disabled={imagesLoading ? true : false}
-              onClick={() => {
+              handleClick={() => {
                 generateImage()
               }}
+              width="319px"
+              margin="16px 0 0 20px"
+              fontSize="16px"
             >
               Regenerate
-            </button>
+            </BaseButton>
             <p className={classes.creditsPara}>
               <span>*{textToArtInputInfo.images_generation_ct} credits</span> will be used if you want to generate{" "}
               {textToArtInputInfo.images_generation_ct} more outputs

@@ -9,7 +9,6 @@ export const UpdatedImgFunc = (data: string, editor: any, activeObject: any, inp
   // Set the src attribute
   imageElement.setAttribute("src", data)
   if (type === "Highlight") {
-    console.log(activeObject)
     editor.objects.update({
       preview: data,
       src: data,

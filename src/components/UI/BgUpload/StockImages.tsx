@@ -125,7 +125,7 @@ const StockImages = (props: any) => {
           <Icons.SearchIcon />
         </button>
       </div>
-      <Scrollbars style={{ height: props?.height ? props.height : "300px", marginTop: "10px" }}>
+      <Scrollbars style={{ height: props?.height ? props.height : "300%", marginTop: "10px" }}>
         <div className={classes.sampleImgSection}>
           {res.map((image: any, index: any) => {
             return (
