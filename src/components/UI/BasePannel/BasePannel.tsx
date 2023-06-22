@@ -160,7 +160,6 @@ const BasePannel = () => {
             disabled={downloadBtnDisable ? true : false}
             fontSize="14px"
             padding="15px"
-            marginLeft="12px"
             borderRadius="10px"
             fontFamily="poppins"
             height="38px"
