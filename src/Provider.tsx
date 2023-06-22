@@ -19,6 +19,7 @@ import ImagesContext from "./contexts/ImagesCountContext"
 import TextToArtContext from "./contexts/TextToArtContext"
 import ErrorContext from "./contexts/ErrorContext"
 import ImageUpScalerContext from "./contexts/ImageUpScalerContext"
+import ImageColorizerContext from "./contexts/ImageColorizerContext"
 
 const engine = new Styletron()
 
@@ -93,12 +94,29 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     resultSectionVisible:false
   })
 
+  const [ImgColorizerInfo, setImgColorizerInfo] = useState({
+    type: "",
+    id: "",
+    src: "",
+    original:"",
+    resultImages: []
+  })
+
+  const [ImgColorizerpanelInfo, setImgColorizerpanelInfo] = useState({
+    uploadSection: true,
+    trySampleImg: true,
+    uploadPreview: false,
+    resultOption:false,
+    tryFilters:false,
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
         <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
             <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
+            <ImageColorizerContext.Provider value={{ImgColorizerInfo, setImgColorizerInfo,ImgColorizerpanelInfo, setImgColorizerpanelInfo}}>
               <ImageUpScalerContext.Provider
                 value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
               >
@@ -131,6 +149,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                   </MainImageContext.Provider>
                 </TextToArtContext.Provider>
               </ImageUpScalerContext.Provider>
+              </ImageColorizerContext.Provider>
             </ErrorContext.Provider>
           </LoaderContext.Provider>
         </ImagesContext.Provider>

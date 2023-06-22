@@ -6,7 +6,7 @@ import { useEditor } from "@layerhub-io/react"
 import { useContext, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
-import { LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, REMOVE_BACKGROUND, TEXT_TO_ART } from "~/constants/contants"
+import { IMAGE_COLORIZER, LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, REMOVE_BACKGROUND, TEXT_TO_ART } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
@@ -53,7 +53,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
   return (
     <div>
       <Block paddingTop={"10px"}>
-        {uploadType != MAIN_IMG_Bg && (
+        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER &&  (
           <div
             className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
             onClick={() => {
@@ -62,6 +62,17 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
           >
             <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>{previewHeading}</Block>
           </div>
+        )}
+        {uploadType === IMAGE_COLORIZER && (
+          <Block
+          onClick={() => {
+            discardHandler()
+          }}
+          $style={{ cursor: "pointer", display: "flex" }}
+          className={classes.chevronRightIcon}
+        >
+          <Icons.ChevronRight fill="#000" size={"20"} />
+        </Block>
         )}
       </Block>
       <Block className={classes.uploadInputWrapper}>

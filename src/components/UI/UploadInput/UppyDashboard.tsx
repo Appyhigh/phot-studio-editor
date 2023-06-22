@@ -35,6 +35,10 @@ const UppyDashboard = ({
   imgScalerInfo,
   setImgScalerInfo,
   setImgScalerPanelInfo,
+  ImgColorizerInfo,
+  setImgColorizerInfo,
+  ImgColorizerpanelInfo,
+  setImgColorizerpanelInfo,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -86,12 +90,23 @@ const UppyDashboard = ({
         if (fileInputType == "bgUpload") {
           HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
         } else if (fileInputType === "ImgUpscaler") {
-          // @ts-ignore
+          
           setImgScalerInfo
+          // @ts-ignore
             ? setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+        } else if (fileInputType === "ImgColorizer") {
+          setImgColorizerInfo
+            ? // @ts-ignore
+              setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, resultImages: [] }))
+            : null
+      
+          // @ts-ignore
+          setImgColorizerpanelInfo((prev) => ({
+            ...prev, uploadSection: false, trySampleImg: false, uploadPreview: true, resultOption: false, tryFilters: false,}))
+            
         } else {
           HandleFile(
             imageUrl,
@@ -109,7 +124,11 @@ const UppyDashboard = ({
             setSelectedImage ? setSelectedImage : null,
             uploadType ? uploadType : null,
             uploads ? uploads : null,
-            setUploads ? setUploads : null
+            setUploads ? setUploads : null,
+            ImgColorizerInfo ? ImgColorizerInfo : null,
+            setImgColorizerInfo ? setImgColorizerInfo : null,
+            ImgColorizerpanelInfo ? ImgColorizerpanelInfo : null,
+            setImgColorizerpanelInfo ? setImgColorizerpanelInfo : null
           )
         }
         uppy.cancelAll()
@@ -136,7 +155,15 @@ const UppyDashboard = ({
               uploadPreview: true,
               trySampleImg: false,
             }))
-          } else {
+          } else if (fileInputType === "ImgColorizer") {
+            setImgColorizerInfo
+              ? // @ts-ignore
+                setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl }))
+              : null
+            // @ts-ignore
+            setImgScalerPanelInfo((prev) => ({
+              ...prev, uploadSection: false, trySampleImg: false, uploadPreview: true, resultOption: false, tryFilters: false,}))
+          }else {
             HandleFile(
               imageUrl,
               setImageLoading,
@@ -153,7 +180,11 @@ const UppyDashboard = ({
               setSelectedImage ? setSelectedImage : null,
               uploadType ? uploadType : null,
               uploads ? uploads : null,
-              setUploads ? setUploads : null
+              setUploads ? setUploads : null,
+              ImgColorizerInfo ? ImgColorizerInfo : null,
+              setImgColorizerInfo ? setImgColorizerInfo : null,
+              ImgColorizerpanelInfo ? ImgColorizerpanelInfo : null,
+              setImgColorizerpanelInfo ? setImgColorizerpanelInfo : null
             )
           }
         }
@@ -200,7 +231,7 @@ const UppyDashboard = ({
       }, 5000)
       return false
     })
-  }, [displayError, uploadErrorMsg,activePanel])
+  }, [displayError, uploadErrorMsg, activePanel])
 
   return (
     <div key={id}>

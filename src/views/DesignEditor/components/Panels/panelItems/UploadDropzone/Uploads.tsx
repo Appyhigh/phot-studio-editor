@@ -7,6 +7,7 @@ import MainImageContext from "~/contexts/MainImageContext"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import UppyDashboard from "~/components/UI/UploadInput/UppyDashboard"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
+import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 
 export default function ({
   uploadType,
@@ -21,6 +22,9 @@ export default function ({
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const { imgScalerInfo, setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
+  // @ts-ignore
+  const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerpanelInfo, setImgColorizerpanelInfo } =
+    useContext(ImageColorizerContext)
   const [renderKey, setRenderKey] = useState(0)
 
 
@@ -55,6 +59,10 @@ export default function ({
               uploadType={uploadType}
               uploads={uploads}
               setUploads={setUploads}
+              ImgColorizerInfo={ImgColorizerInfo}
+              setImgColorizerInfo={setImgColorizerInfo}
+              ImgColorizerpanelInfo={ImgColorizerpanelInfo}
+              setImgColorizerpanelInfo={setImgColorizerpanelInfo}
             />
           </div>
         )}

@@ -18,6 +18,7 @@ import BgRemover from "./BgRemover/BgRemover"
 import CommonPanel from "./CommonPanel"
 import ImagineAI from "./ImagineAI/ImagineAI"
 import ImageUpscaler from "./ImageUpscaler/ImageUpscaler"
+import ImageColorizer from "./ImageColorizer/ImageColorizer"
 export default {
   StaticText: TextProperties,
   Text: Text,
@@ -39,4 +40,5 @@ export default {
   ImagineAI: ImagineAI,
   CommonPanel: CommonPanel,
   ImageUpscaler: ImageUpscaler,
+  ImageColorizer:ImageColorizer,
 }
