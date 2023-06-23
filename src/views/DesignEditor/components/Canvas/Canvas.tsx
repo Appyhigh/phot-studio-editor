@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { Canvas as LayerhubCanvas, useEditor } from "@layerhub-io/react"
+import { Canvas as LayerhubCanvas, useActiveObject, useEditor } from "@layerhub-io/react"
 import Playback from "../Playback"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import ContextMenu from "../ContextMenu"
@@ -11,15 +11,10 @@ const Canvas = () => {
 
   useEffect(() => {
     if (editor) {
-      editor.frame.resize({ height: 600, width: 600 })
-    }
-  }, [])
-
-  useEffect(() => {
-    if (editor) {
       if (
-        editor.frame?.background?.canvas?._objects.length === 2 &&
-        editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff"
+        editor.frame.background.canvas._objects.length <= 2 &&
+        editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff" &&
+        editor.frame?.background?.canvas?._objects[2]?.metadata?.type != backgroundLayerType
       ) {
         const options = {
           type: "BackgroundImage",
@@ -27,28 +22,38 @@ const Canvas = () => {
           preview: checkboxBGUrl,
           metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
         }
-        // Timeout works as a fix so canvas does not get dislocated
-
-        editor.objects.add(options).then(() => {
-          editor.objects.setAsBackgroundImage()
-        })
+        setTimeout(() => {
+          if (editor.frame?.background?.canvas?._objects.length <= 2) {
+            editor.objects.add(options).then(() => {
+              editor.objects.setAsBackgroundImage().then(() => {
+                console.log("BACKGROUND IMAGE WAS ADDED")
+              })
+            })
+          }
+        }, 1000)
       }
     }
   }, [editor])
 
-  // useEffect(() => {
-  //   if (editor) {
-  //     editor.canvas.canvas.on("", (event: any) => {
-  //       var object = event.target
-  //       console.log(object)
-  //     })
+  useEffect(() => {
+    if (editor) {
+      editor.canvas.canvas.on("mouse:dblclick", (event: any) => {
+        event.preventDefault()
+        event.stopPropagation()
+      })
 
-  //     editor.canvas.canvas.on("object:modified", (event: any) => {
-  //       var object = event.target
-  //       object.applyFilters()
-  //     })
-  //   }
-  // }, [editor])
+      editor.canvas.canvas.on("after:render", () => {
+        if (Math.ceil(editor.canvas.canvas.getVpCenter().x) < 0) {
+          editor.zoom.zoomToFit()
+        }
+      })
+
+      //   editor.canvas.canvas.on("object:modified", (event: any) => {
+      //     var object = event.target
+      //     object.applyFilters()
+      //   })
+    }
+  }, [editor])
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>

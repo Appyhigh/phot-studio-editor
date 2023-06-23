@@ -149,7 +149,8 @@ const StockImages = (props: any) => {
                             frame,
                             (latest_ct = latest_ct)
                           )
-                        : (toDataURL(image.image_url_list[0], async function (dataUrl: string) {
+                        : (setIsLoading(true),
+                          toDataURL(image.image_url_list[0], async function (dataUrl: string) {
                             HandleBgChangeOption(
                               editor,
                               mainImgInfo,
@@ -165,7 +166,7 @@ const StockImages = (props: any) => {
                           setSelectedImg(image.mongo_id))
                     }
                   }}
-                  preview={image.image_url_list[0]}
+                  preview={image.thumbnails.large}
                   isLoading={isLoading}
                 />
               </div>

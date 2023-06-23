@@ -25,6 +25,7 @@ const Images = () => {
 
   const [bgChoice, setBgChoice] = useState(0)
   const { setImagesCt } = useContext(ImagesContext)
+  const [imageLoading, setImageLoading] = useState(false)
   const frame = useFrame()
 
   const addImg = async (imageUrl: string) => {
@@ -75,6 +76,8 @@ const Images = () => {
             setUploads={setUploads}
             fileInputType={"panelAdd"}
             id="Image"
+            imageLoading={imageLoading}
+            setImageLoading={setImageLoading}
           />
         )}
 
@@ -82,8 +85,20 @@ const Images = () => {
           <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
             Sample Images
           </div>
-          <div className={clsx(classes.tabs, bgChoice === 1 && classes.selectedChoice)} onClick={() => setBgChoice(1)}>
-            Stock Images
+          <div
+            className={clsx(classes.tabs, bgChoice === 1 && classes.selectedChoice)}
+            style={{
+              cursor: imageLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            <div
+              style={{
+                pointerEvents: imageLoading ? "none" : "auto",
+              }}
+              onClick={() => setBgChoice(1)}
+            >
+              Stock Images
+            </div>
           </div>
         </div>
         {bgChoice === 0 ? (
@@ -98,6 +113,7 @@ const Images = () => {
                         addImg(image.src)
                       }}
                       preview={image.src}
+                      imageLoading={imageLoading}
                     />
                   )
                 })}
@@ -109,6 +125,7 @@ const Images = () => {
                         addImg(image.src.medium)
                       }}
                       preview={image.src.small}
+                      imageLoading={imageLoading}
                     />
                   )
                 })}
@@ -124,11 +141,31 @@ const Images = () => {
   )
 }
 
-const ImageItem = ({ preview, onClick }: { preview: any; onClick?: (option: any) => void }) => {
+const ImageItem = ({
+  preview,
+  onClick,
+  imageLoading,
+}: {
+  preview: any
+  onClick?: (option: any) => void
+  imageLoading: any
+}) => {
   return (
-    <div onClick={onClick} className={clsx("pointer p-relative", classes.imageItemSection)}>
-      <div className={clsx("p-absolute", classes.imageItem)} />
-      <img src={preview} className={classes.imagePreview} />
+    <div
+      style={{
+        cursor: imageLoading ? "not-allowed" : "pointer",
+      }}
+    >
+      <div
+        onClick={onClick}
+        className={clsx("pointer p-relative", classes.imageItemSection)}
+        style={{
+          pointerEvents: imageLoading ? "none" : "auto",
+        }}
+      >
+        <div className={clsx("p-absolute", classes.imageItem)} />
+        <img src={preview} className={classes.imagePreview} />
+      </div>
     </div>
   )
 }

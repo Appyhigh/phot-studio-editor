@@ -26,9 +26,18 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
   const handleChangeBg = useCallback(
     async (each: any) => {
       if (each.color) {
-        HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.color, changeLayerFill)
+        HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.color, changeLayerFill, null, null, setIsLoading)
       } else if (each.gradient) {
-        HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, each.gradient, changeLayerFillWithGradient)
+        HandleBgChangeOption(
+          editor,
+          mainImgInfo,
+          setMainImgInfo,
+          each.gradient,
+          changeLayerFillWithGradient,
+          null,
+          null,
+          setIsLoading
+        )
       } else if (each.img) {
         toDataURL(each.img, async function (dataUrl: string) {
           HandleBgChangeOption(
@@ -68,6 +77,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
               <Block
                 className="pointer flex-center p-relative"
                 onClick={() => {
+                  setIsLoading(true)
                   handleChangeBg(each)
                   handleBgChangeOption({ type, idx })
                   // @ts-ignore

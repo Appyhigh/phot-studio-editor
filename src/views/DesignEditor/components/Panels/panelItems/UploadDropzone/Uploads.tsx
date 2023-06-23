@@ -15,21 +15,19 @@ export default function ({
   id,
   uploads,
   setUploads,
+  imageLoading,
+  setImageLoading,
 }: any) {
-  const [imageLoading, setImageLoading] = useState(false)
-
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const { imgScalerInfo, setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const [renderKey, setRenderKey] = useState(0)
-
 
   useEffect(() => {
     setTimeout(() => {
       setRenderKey((prev) => prev + 1)
     }, 4000)
   }, [imageLoading])
-
 
   return (
     <>
