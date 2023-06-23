@@ -21,6 +21,10 @@ export const HandleBgChangeOption = async (
   ).catch((err: any) => {
     if (setIsLoading) setIsLoading(false)
   })
+  var imageElement = document.createElement("img")
+  imageElement.setAttribute("crossorigin", "Anonymous")
+  imageElement.setAttribute("class", "canvas-img")
+  imageElement.setAttribute("src", previewWithUpdatedBackground)
   const options = {
     type: "StaticImage",
     src: previewWithUpdatedBackground,
@@ -34,19 +38,17 @@ export const HandleBgChangeOption = async (
         ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview
         : inputImg,
     },
+    _element: imageElement,
+    _originalElement: imageElement,
   }
-  editor.objects.add(options).then(() => {
-    if (mainImgInfo) {
-      //@ts-ignore
-      setMainImgInfo((prev: any) => ({ ...prev, ...options }))
-    }
-    editor.objects.position("top", activeMainObject ? activeMainObject.top : activeObject.top)
-    editor.objects.position("left", activeMainObject ? activeMainObject.left : activeObject.left)
-  })
-  if (isImage) {
-    editor.objects.removeById(mainImgInfo.id)
-    editor.objects.removeById(activeObject.id)
+
+  editor.objects.update(options)
+  if (mainImgInfo) {
+    setMainImgInfo((prev: any) => ({ ...prev, ...options }))
   }
+  editor.objects.position("top", activeMainObject ? activeMainObject.top : activeObject.top)
+  editor.objects.position("left", activeMainObject ? activeMainObject.left : activeObject.left)
+
   mainImgInfo ? editor.objects.removeById(mainImgInfo.id) : editor.objects.removeById(activeObject?.id)
   if (setIsLoading) setIsLoading(false)
 }
