@@ -36,7 +36,7 @@ const ImageColorizer = () => {
   const { setErrorInfo } = useContext(ErrorContext)
 
   // @ts-ignore
-  const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerpanelInfo, setImgColorizerpanelInfo } =
+  const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
 
   const generateImgColorizer = () => {
@@ -48,7 +48,7 @@ const ImageColorizer = () => {
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
       setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
-      setImgColorizerpanelInfo((prev: any) => ({
+      setImgColorizerPanelInfo((prev: any) => ({
         ...prev,
         resultOption: true,
         uploadPreview: false,
@@ -64,7 +64,7 @@ const ImageColorizer = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setImgColorizerpanelInfo((prev: any) => ({ ...prev, resultOption: false }))
+          setImgColorizerPanelInfo((prev: any) => ({ ...prev, resultOption: false }))
           setErrorInfo((prev: any) => ({
             ...prev,
             showError: true,
@@ -85,7 +85,7 @@ const ImageColorizer = () => {
   const addObject = useCallback(
     (url: string) => {
       // @ts-ignore
-      setImgColorizerpanelInfo((prev) => ({ ...prev, colorizeBtnActive: true }))
+      setImgColorizerPanelInfo((prev) => ({ ...prev, colorizeBtnActive: true }))
 
       if (editor) {
         const options = {
@@ -96,7 +96,7 @@ const ImageColorizer = () => {
           original: url,
           metadata: { generationDate: new Date().getTime() },
         }
-        setImgColorizerpanelInfo((prev: any) => ({
+        setImgColorizerPanelInfo((prev: any) => ({
           ...prev,
           uploadPreview: true,
           tryFilters: false,
@@ -112,7 +112,7 @@ const ImageColorizer = () => {
 
   const discardSampleImageHandler = () => {
     setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
-    setImgColorizerpanelInfo((prev: any) => ({
+    setImgColorizerPanelInfo((prev: any) => ({
       ...prev,
       tryFilters: false,
       resultOption: false,
@@ -145,7 +145,7 @@ const ImageColorizer = () => {
 
   return (
     <Block className="d-flex flex-1 flex-column">
-      {!ImgColorizerpanelInfo.resultOption && (
+      {!ImgColorizerPanelInfo.resultOption && (
         <>
           {ImgColorizerInfo.src ? (
             <Block>
@@ -162,10 +162,12 @@ const ImageColorizer = () => {
               fileInputType={"ImgColorizer"}
               id={"ImgColorizer"}
               mainHeading={"Add Image"}
+              imageLoading={imageLoading}
+              setImageLoading={setImageLoading}
             />
           )}
 
-          {ImgColorizerpanelInfo.uploadPreview && (
+          {ImgColorizerPanelInfo.uploadPreview && (
             <div className={classes.walletContainer}>
               <BaseButton
                 width="100%"
@@ -185,7 +187,7 @@ const ImageColorizer = () => {
             </div>
           )}
 
-          {ImgColorizerpanelInfo.trySampleImg && (
+          {ImgColorizerPanelInfo.trySampleImg && (
             <>
               <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
                 Try Sample Images
@@ -201,7 +203,7 @@ const ImageColorizer = () => {
                             addObject(image.originalImage)
                           }}
                           imageLoading={imageLoading}
-                          preview={image.originalImage}
+                          preview={image.thumbnail}
                         />
                       )
                     })}
@@ -212,12 +214,12 @@ const ImageColorizer = () => {
           )}
         </>
       )}
-      {ImgColorizerpanelInfo.resultOption && (
+      {ImgColorizerPanelInfo.resultOption && (
         <div className={classes.resultSection}>
           <Block
             onClick={() => {
               setImgColorizerInfo((prev: any) => ({ ...prev, id: "", resultImages: [] }))
-              setImgColorizerpanelInfo((prev: any) => ({
+              setImgColorizerPanelInfo((prev: any) => ({
                 ...prev,
                 tryFilters: false,
                 resultOption: false,

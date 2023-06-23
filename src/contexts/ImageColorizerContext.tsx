@@ -5,15 +5,15 @@ const ImageColorizerContext = React.createContext({
     type: "",
     id: "",
     src: "",
-    original:"",
-    resultImages: []
+    original: "",
+    resultImages: [],
   },
-  ImgColorizerpanelInfo: {
+  ImgColorizerPanelInfo: {
     uploadSection: true,
     trySampleImg: true,
     uploadPreview: false,
-    resultOption:false,
-    tryFilters:false,
+    resultOption: false,
+    tryFilters: false,
   },
   setImgColorizerInfo: (item: any) => {
     console.log("Dummy Initializer for ", item)

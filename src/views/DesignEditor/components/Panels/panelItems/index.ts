@@ -19,6 +19,7 @@ import CommonPanel from "./CommonPanel"
 import ImagineAI from "./ImagineAI/ImagineAI"
 import ImageUpscaler from "./ImageUpscaler/ImageUpscaler"
 import ImageColorizer from "./ImageColorizer/ImageColorizer"
+import PhotoEditor from "./PhotoEditor/PhotoEditor"
 export default {
   StaticText: TextProperties,
   Text: Text,
@@ -40,5 +41,6 @@ export default {
   ImagineAI: ImagineAI,
   CommonPanel: CommonPanel,
   ImageUpscaler: ImageUpscaler,
-  ImageColorizer:ImageColorizer,
+  ImageColorizer: ImageColorizer,
+  PhotoEditor: PhotoEditor,
 }

@@ -1,0 +1,40 @@
+.itemContainer {
+  margin: 1.5rem 1.5rem 0px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+}
+
+.itemHeading {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  color: #171725;
+}
+
+.itemDesc {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: #92929d;
+}
+
+.promptInput {
+  resize: none;
+  box-sizing: border-box;
+  padding: 0.75rem;
+  width: 100%;
+  height: 9rem;
+  border: 1px solid rgba(93, 93, 93, 0.2);
+  border-radius: 0.75rem;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.2rem;
+}

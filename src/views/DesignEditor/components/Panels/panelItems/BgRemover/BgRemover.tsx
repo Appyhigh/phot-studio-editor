@@ -144,7 +144,7 @@ const BgRemover = () => {
                       onClick={() => {
                         addObject(image.originalImage)
                       }}
-                      preview={image.originalImage}
+                      preview={image.thumbnail}
                       imageLoading={imageLoading}
                     />
                   )
