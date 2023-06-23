@@ -119,7 +119,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     resultImages: [],
   })
 
-  const [ImgColorizerpanelInfo, setImgColorizerpanelInfo] = useState({
+  const [ImgColorizerPanelInfo, setImgColorizerPanelInfo] = useState({
     uploadSection: true,
     trySampleImg: true,
     uploadPreview: false,
@@ -134,7 +134,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
           <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
             <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
               <ImageColorizerContext.Provider
-                value={{ ImgColorizerInfo, setImgColorizerInfo, ImgColorizerpanelInfo, setImgColorizerpanelInfo }}
+                value={{ ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo }}
               >
                 <ImageUpScalerContext.Provider
                   value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
