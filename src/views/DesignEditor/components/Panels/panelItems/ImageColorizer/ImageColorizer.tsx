@@ -150,6 +150,9 @@ const ImageColorizer = () => {
 
   useEffect(() => {
     fetchSampleImages()
+    return (()=>{
+      clearTimeout(ErrortimeOut)
+    })
   }, [])
 
 

@@ -126,6 +126,10 @@ const BgRemover = () => {
 
   useEffect(() => {
     fetchSampleImages()
+
+    return (()=>{
+      clearTimeout(ErrortimeOut)
+    })
   }, [])
 
 

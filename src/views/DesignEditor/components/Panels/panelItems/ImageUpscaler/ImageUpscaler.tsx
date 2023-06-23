@@ -70,6 +70,10 @@ const ImageUpscaler = () => {
 
   useEffect(() => {
     fetchSampleImages()
+
+    return (()=>{
+      clearTimeout(ErrortimeOut)
+    })
   }, [])
 
   useEffect(() => {
