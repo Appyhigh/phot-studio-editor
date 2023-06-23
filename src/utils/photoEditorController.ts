@@ -7,7 +7,10 @@ const photoEditorController = async (input_image_link: string, prompt: string) =
     const url = "https://devapi.phot.ai/app/api/v3/user_activity/edit-photo"
     const regex = /\/([^/]+)$/
     const match = regex.exec(input_image_link)
-    const value = match ? match[1] : null
+    let value = match ? match[1] : null
+    if (value) {
+      value = value.replace(/[^.\w]/gi, "")
+    }
     const body = {
       input_image_link: input_image_link,
       prompt: prompt,
