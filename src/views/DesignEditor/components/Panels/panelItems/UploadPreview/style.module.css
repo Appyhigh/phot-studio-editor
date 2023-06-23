@@ -44,6 +44,17 @@
   top: 20px;
   right: 20px;
 }
+.chevronRightIcon {
+  cursor: pointer;
+  display: flex;
+  width: 49.5px;
+  height: 51px;
+  background: #eeeeee;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 14px 0px 12px 18px;
+}
 
 .removeBgBtn {
   width: 270px;

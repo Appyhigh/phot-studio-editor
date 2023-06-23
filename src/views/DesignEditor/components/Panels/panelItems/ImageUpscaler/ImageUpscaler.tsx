@@ -60,6 +60,7 @@ const ImageUpscaler = () => {
 
   const { imgScalerPanelInfo, setImgScalerInfo, setImgScalerPanelInfo, imgScalerInfo } =
     useContext(ImageUpScalerContext)
+    
   const addObject = React.useCallback(
     (url: string) => {
       if (editor) {

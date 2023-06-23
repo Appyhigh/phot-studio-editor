@@ -84,12 +84,12 @@ export const BASE_ITEMS = [
   //   label: "Object Replacer",
   //   name: "CommonPanel",
   // },
-  // {
-  //   id: "imagecolorizer",
-  //   icon: "CircleIcon",
-  //   label: "Image Colorizer",
-  //   name: "CommonPanel",
-  // },
+  {
+    id: "imagecolorizer",
+    icon: "ImagineAi",
+    label: "Image Colorizer",
+    name: "ImageColorizer",
+  },
   // {
   //   id: "passportphotomaker",
   //   icon: "CircleIcon",
@@ -154,6 +154,7 @@ export enum PanelType {
   IMAGES = "Images",
   UPLOADS = "Uploads",
   BACKGROUND_REMOVER = "BgRemover",
-  IMAGINE_AI="ImagineAI",
-  IMAGE_UPSCALER="ImageUpscaler"
+  IMAGINE_AI = "ImagineAI",
+  IMAGE_UPSCALER = "ImageUpscaler",
+  IMAGE_COLORIZER = "ImageColorizer",
 }

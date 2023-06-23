@@ -1,0 +1,289 @@
+.section {
+  margin: 0 0 0 20px;
+  width: 324px;
+}
+.resultSection {
+  margin-bottom: 70px;
+}
+
+.chevronRightIcon {
+  cursor: pointer;
+  display: flex;
+  width: 49.5px;
+  height: 51px;
+  background: #eeeeee;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 14px 0px 12px 18px;
+}
+.resultImages {
+  margin: 0px 8px 0px 20px;
+  gap: 3px 0px;
+}
+.resultImages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0px 12px 0px 20px;
+  gap: 0px 0px;
+}
+.resultImages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0px 12px 0px 14px;
+  gap: 6px 8px;
+}
+
+.resultFilters {
+  display: grid;
+  grid-template-columns: 0.5fr 0.5fr 0.5fr;
+  grid-template-rows: 0.5fr 0.5fr 0.5fr;
+  margin: 12px 0px 0px 0px;
+  gap: 0px 0px;
+}
+
+.resultLabel {
+  position: absolute;
+  height: 26px;
+  padding: 0px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 28px;
+  color: #fff;
+  font-weight: 500;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.eachImg img {
+  width: 158px;
+  height: 158px;
+}
+.eachImg {
+  position: relative;
+}
+
+.eachImg img {
+  width: 158px;
+  height: 158px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+.eachFilter img {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.currentActiveImg {
+  width: 158px;
+  height: 158px;
+  border-radius: 4px;
+  background: linear-gradient(45deg, #7bc0ff, #ac31ff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid var(--secondary, #6729f3);
+}
+.currentActiveImg > img {
+  width: 153px;
+  height: 153px;
+  border-radius: 4px;
+}
+.skeletonBox {
+  width: 158px;
+  height: 158px;
+}
+.skeletonBox {
+  background: #ebebeb;
+  border-radius: 4px;
+  width: 158px;
+  height: 158px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.skeletonBox img {
+  width: 80px;
+  height: 80px;
+}
+
+.FilterskeletonBox {
+  background: #ebebeb;
+  border-radius: 4px;
+  width: 100px;
+  height: 100px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.FilterskeletonBox img {
+  width: 80px;
+  height: 80px;
+}
+
+.tryImgHeading {
+  padding: 0 12px;
+  font-weight: 600;
+  font-size: 16;
+  margin-left: 10px;
+}
+.sampleImgSection {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.bgOptionsSection {
+  margin: 0px 20px;
+  border: 1px solid #f1f1f5;
+  border-radius: 4px;
+}
+
+.tabSection {
+  width: 50%;
+  text-align: center;
+  padding: 11px 0px;
+  cursor: pointer;
+  color: #696974;
+  background-color: #fff;
+}
+
+.leftOption {
+  border-radius: 4px 0px 0px 4px;
+}
+
+.rightOption {
+  border-radius: 0px 4px 4px 0px;
+}
+
+.selectedBgChoice {
+  color: #fff;
+  background-color: #171725;
+}
+
+.bgOptionHeading {
+  margin: 20px 0px 14px 0px;
+  padding: 0px 20px;
+}
+.imageItemSection {
+  background: #f8f8fb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.imageItem {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0.006) 8.1%,
+    rgba(0, 0, 0, 0.022) 15.5%,
+    rgba(0, 0, 0, 0.047) 22.5%,
+    rgba(0, 0, 0, 0.079) 29%,
+    rgba(0, 0, 0, 0.117) 35.3%,
+    rgba(0, 0, 0, 0.158) 41.2%,
+    rgba(0, 0, 0, 0.203) 47.1%,
+    rgba(0, 0, 0, 0.247) 52.9%,
+    rgba(0, 0, 0, 0.292) 58.8%,
+    rgba(0, 0, 0, 0.333) 64.7%,
+    rgba(0, 0, 0, 0.371) 71%,
+    rgba(0, 0, 0, 0.403) 77.5%,
+    rgba(0, 0, 0, 0.428) 84.5%,
+    rgba(0, 0, 0, 0.444) 91.9%,
+    rgba(0, 0, 0, 0.45) 100%
+  );
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  height: 100%;
+  width: 100%;
+}
+
+.filtersBox {
+  width: 322px;
+  height: 353px;
+  margin: 22px 0px 0px 18px;
+  color: var(--black, #171725);
+  font-size: 14px;
+  font-family: Rubik;
+  font-weight: 500;
+}
+
+.imageItem:hover {
+  opacity: 1;
+}
+.imageItemSection::before:hover {
+  opacity: 1;
+}
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  vertical-align: middle;
+}
+
+.uploadPreviewSection {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.uploadInput {
+  display: none;
+}
+.panelHeading {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.walletContainer {
+  margin: 20px 20px 20px 20px;
+  width: 320px;
+}
+
+.flexCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 1220px) {
+  .panelHeading {
+    padding: 0px 0px 0px 16px;
+  }
+}
+
+@media screen and (min-width: 1220px) {
+  .uploadPreviewContainer {
+    width: 320px;
+    height: 200px;
+  }
+  .uploadPreview {
+    width: 319px;
+  }
+  .discardBtn {
+    top: 70px;
+    right: 38px;
+  }
+  .removeBgBtn {
+    width: 319px;
+    margin-top: 20px;
+  }
+}
+
+@media screen and (min-width: 1220px) {
+  .tryImgHeading {
+    padding: 0px 20px;
+  }
+}
