@@ -60,7 +60,7 @@ const ImageUpscaler = () => {
 
   const { imgScalerPanelInfo, setImgScalerInfo, setImgScalerPanelInfo, imgScalerInfo } =
     useContext(ImageUpScalerContext)
-    
+
   const addObject = React.useCallback(
     (url: string) => {
       if (editor) {
@@ -367,7 +367,7 @@ const ImageUpscaler = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {imgUpscalerSampleImg.map((image: any, index) => {
+                    {imgUpscalerSampleImg?.map((image: any, index) => {
                       return (
                         <ImageItem
                           key={index}
