@@ -1,4 +1,4 @@
-import { IMAGE_UPSCALER } from "~/constants/contants"
+import { IMAGE_UPSCALER, TOOL_NAMES, SAMPLE_IMAGES } from "~/constants/contants"
 import Uploads from "../UploadDropzone/Uploads"
 import classes from "./style.module.css"
 import useAppContext from "~/hooks/useAppContext"
@@ -22,7 +22,7 @@ import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import { imgUpscalerSample } from "~/services/imgUpscalerSample"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -38,14 +38,37 @@ const ImageUpscaler = () => {
   const { setImagesCt } = useContext(ImagesContext)
   const leftPanelRef = useRef()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const { SampleImages, setSampleImages } = useAppContext()
+  const {errorInfo,setErrorInfo} = useContext(ErrorContext)
 
-  const { imgUpscalerSampleImg, setImgUpscalerSampleImg } = useAppContext()
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await imgUpscalerSample()
-      setImgUpscalerSampleImg(result)
+  let ErrortimeOut:any = 0;
+
+  const fetchSampleImages = async () => {
+    try {
+      const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
+      setSampleImages((prev: any) => ({ ...prev, ImageUpscalar: [...result] }))
+    } catch (error) {
+      setErrorInfo((prev: any) => ({
+        ...prev,
+        showError: true,
+        errorMsg: `Failed to load Sample Images for ${TOOL_NAMES.imageUpscalar} panel`,
+        retryFn: () => {
+          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+          if (ErrortimeOut) {
+            clearTimeout(ErrortimeOut)
+          }
+          fetchSampleImages()
+        },
+      }))
+
+      ErrortimeOut = setTimeout(() => {
+        setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+      }, 5000)
+      console.error("Error:", error)
     }
+  }
 
+  useEffect(() => {
     fetchSampleImages()
   }, [])
 
@@ -101,8 +124,6 @@ const ImageUpscaler = () => {
       document.removeEventListener("mousedown", checkIfClickedOutside)
     }
   }, [imgScalerInfo.showclearTooltip])
-
-  const { setErrorInfo } = useContext(ErrorContext)
 
   const generateImg2Scaler = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
@@ -367,7 +388,7 @@ const ImageUpscaler = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {imgUpscalerSampleImg?.map((image: any, index) => {
+                    {SampleImages.ImageUpscalar?.map((image: any, index: any) => {
                       return (
                         <ImageItem
                           key={index}

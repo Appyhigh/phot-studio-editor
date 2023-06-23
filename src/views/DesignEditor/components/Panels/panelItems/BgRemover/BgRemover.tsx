@@ -15,9 +15,10 @@ import UploadPreview from "../UploadPreview/UploadPreview"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
 import useAppContext from "~/hooks/useAppContext"
-import { REMOVE_BACKGROUND } from "~/constants/contants"
+import { REMOVE_BACKGROUND,TOOL_NAMES,SAMPLE_IMAGES } from "~/constants/contants"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -34,7 +35,9 @@ const BgRemover = () => {
     setSelectedBgOption({ type: type, id: idx })
   }
   const [imageLoading, setImageLoading] = useState(false)
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
+  const { SampleImages,setSampleImages } = useAppContext()
+  const { setErrorInfo } = useContext(ErrorContext)
+  let ErrortimeOut:any ;
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -97,14 +100,34 @@ const BgRemover = () => {
     fetchCategories()
   }, [])
 
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
+  const fetchSampleImages = async () => {
+    try{
+      const result = await SampleImagesApi(SAMPLE_IMAGES.bgRemover)
+      setSampleImages((prev:any)=>({...prev,BgRemover:[...result]}))
+    }catch(error){
+      setErrorInfo((prev: any) => ({
+        ...prev,
+        showError: true,
+        errorMsg: `Failed to load Sample Images for  ${TOOL_NAMES.bgRemover} panel`,
+        retryFn: () => {
+          if(ErrortimeOut){
+            clearTimeout(ErrortimeOut)
+          }
+          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+          fetchSampleImages()
+        },
+      }))
+      ErrortimeOut = setTimeout(() => {
+        setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+      }, 5000)
+      console.error("Error:", error)
     }
+  }
 
+  useEffect(() => {
     fetchSampleImages()
   }, [])
+
 
   return (
     <Block className="d-flex flex-1 flex-column">
@@ -137,7 +160,7 @@ const BgRemover = () => {
           <Scrollable>
             <Block className="py-3">
               <Block className={classes.sampleImgSection}>
-                {bgSampleImages.map((image: any, index) => {
+                {SampleImages.BgRemover?.map((image: any, index:any) => {
                   return (
                     <ImageItem
                       key={index}

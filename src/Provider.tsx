@@ -74,6 +74,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     errorInfo: {
       showError: false,
       errorMsg: "",
+      timer:0,
       retryFn: () => {},
     },
   })

@@ -1,5 +1,5 @@
 import { Block } from "baseui/block"
-import { IMAGE_COLORIZER } from "~/constants/contants"
+import { IMAGE_COLORIZER, TOOL_NAMES, SAMPLE_IMAGES } from "~/constants/contants"
 import classes from "./style.module.css"
 import Uploads from "../UploadDropzone/Uploads"
 import Scrollable from "~/components/Scrollable"
@@ -8,7 +8,7 @@ import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
 import { useActiveObject, useEditor, useObjects, useFrame } from "@layerhub-io/react"
 import { useCallback, useContext, useEffect, useState } from "react"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -28,13 +28,13 @@ const ImageColorizer = () => {
   const { activePanel } = useAppContext()
   const editor = useEditor()
   const { setImagesCt } = useContext(ImagesContext)
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
+  const { SampleImages, setSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
-  const { setErrorInfo } = useContext(ErrorContext)
-
+  const { errorInfo,setErrorInfo } = useContext(ErrorContext)
+  let ErrortimeOut: any = 0;
   // @ts-ignore
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerpanelInfo, setImgColorizerpanelInfo } =
     useContext(ImageColorizerContext)
@@ -122,13 +122,37 @@ const ImageColorizer = () => {
     }))
   }
 
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
+
+
+  const fetchSampleImages = async () => {
+    try {
+      const result = await SampleImagesApi(SAMPLE_IMAGES.bgRemover)
+      setSampleImages((prev: any) => ({ ...prev, ImageColorizer: [...result] }))
+    } catch (error) {
+      setErrorInfo((prev: any) => ({
+        ...prev,
+        showError: true,
+        errorMsg: `Failed to load Sample Images for ${TOOL_NAMES.imageColorizer} panel`,
+        retryFn: () => {
+          if (ErrortimeOut) {
+            clearTimeout(ErrortimeOut)
+          }
+          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+          fetchSampleImages()
+        },
+      }))
+      ErrortimeOut = setTimeout(() => {
+        setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+      }, 5000)
+      console.error("Error:", error)
     }
+  }
+
+  useEffect(() => {
     fetchSampleImages()
   }, [])
+
+
 
   const frame = useFrame()
   const addImg = async (imageUrl: string, _idx: number) => {
@@ -193,7 +217,7 @@ const ImageColorizer = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
+                    {SampleImages.ImageColorizer?.map((image: any, index: any) => {
                       return (
                         <ImageItem
                           key={index}

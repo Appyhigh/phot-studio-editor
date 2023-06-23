@@ -25,6 +25,8 @@ interface IAppContext {
   setBgSampleImages: (bgSampleImages: any[]) => void
   imgUpscalerSampleImg: any[]
   setImgUpscalerSampleImg: (imgUpscalerSampleImg: any[]) => void
+  SampleImages: any
+  setSampleImages: any
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -50,6 +52,8 @@ export const AppContext = createContext<IAppContext>({
   setBgSampleImages: () => {},
   imgUpscalerSampleImg: [],
   setImgUpscalerSampleImg: () => {},
+  SampleImages:{Images:[],BgRemover:[],ImageUpscalar:[],ImageColorizer:[]},
+  setSampleImages: () => {}
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -64,6 +68,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [search, setSearch] = useState<string>("")
   const [bgSampleImages, setBgSampleImages] = useState<any[]>([])
   const [imgUpscalerSampleImg, setImgUpscalerSampleImg] = useState<any[]>([])
+  const [SampleImages, setSampleImages] = useState({Images:[],bgRemover:[],ImageUpscalar:[],ImageColorizer:[]})
   const context = {
     isMobile,
     setIsMobile,
@@ -87,6 +92,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setBgSampleImages,
     imgUpscalerSampleImg,
     setImgUpscalerSampleImg,
+    SampleImages,
+    setSampleImages
   }
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>
 }

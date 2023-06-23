@@ -19,10 +19,24 @@ export const defaultTextOptions: TextOptions = {
 
 export const checkboxBGUrl = "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473"
 export const backgroundLayerType = "CHECKBOX_BACKGROUND"
-export const deviceUploadType="DEVICE_UPLOAD"
-export const LOCAL_SAMPLE_IMG="local_sample_img"
-export const MAIN_IMG_Bg="main_img_bg"
-export const TEXT_TO_ART="text_to_art"
-export const IMAGE_UPSCALER="ImageUpscaler"
-export const REMOVE_BACKGROUND="remove_bg"
+export const deviceUploadType = "DEVICE_UPLOAD"
+export const LOCAL_SAMPLE_IMG = "local_sample_img"
+export const MAIN_IMG_Bg = "main_img_bg"
+export const TEXT_TO_ART = "text_to_art"
+export const IMAGE_UPSCALER = "ImageUpscaler"
+export const REMOVE_BACKGROUND = "remove_bg"
 export const IMAGE_COLORIZER = "ImageColorizer"
+export const TOOL_NAMES = {
+  Image: "Image",
+  bgRemover: "Remove Background",
+  imagineAi: "Imagine AI",
+  imageUpscalar: "Image Upscaler",
+  imageColorizer: "Image Colorizer",
+}
+export const SAMPLE_IMAGES = {
+  Image: "",
+  bgRemover: "STUDIO_BACKGROUND_REMOVER",
+  imagineAi: "",
+  imageUpscalar: "UPSCALER",
+  imageColorizer: "",
+}
