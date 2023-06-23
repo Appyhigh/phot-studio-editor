@@ -20,11 +20,7 @@ const HandleFile = async (
   setSelectedImage?: any,
   uploadType?: any,
   uploads?: any,
-  setUploads?: any,
-  ImgColorizerInfo?: any,
-  setImgColorizerInfo?: any,
-  ImgColorizerpanelInfo?: any,
-  setImgColorizerpanelInfo?: any
+  setUploads?: any
 ) => {
   setImageLoading(true)
   if (imageUrl) {
