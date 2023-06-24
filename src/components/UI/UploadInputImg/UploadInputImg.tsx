@@ -3,7 +3,7 @@ import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import { Block } from "baseui/block"
 import clsx from "clsx"
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import TextToArtContext from "~/contexts/TextToArtContext"
 import DropZone from "~/components/Dropzone"
 import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
@@ -95,10 +95,9 @@ const UploadInputImg = () => {
       {textToArtInputInfo.uploaded_img != "" && (
         <>
           <div className={clsx(classes.artSubHeading, "mb-1")}>Add an image </div>
-
           <UploadPreview
             uploadType={TEXT_TO_ART}
-            textToArtImg={textToArtInputInfo.uploaded_img}
+            imgSrc={textToArtInputInfo.uploaded_img}
             discardHandler={() => {
               setTextToArtInputInfo((prev: any) => ({ ...prev, uploaded_img: "" }))
             }}

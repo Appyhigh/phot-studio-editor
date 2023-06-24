@@ -54,6 +54,12 @@ export const BASE_ITEMS = [
     label: "Image Upscaler",
     name: "ImageUpscaler",
   },
+  {
+    id: "photoeditor",
+    icon: "ImagineAi",
+    label: "Photo Editor",
+    name: "PhotoEditor",
+  },
   // {
   //   id: "objectremover",
   //   icon: "CircleIcon",
@@ -157,4 +163,5 @@ export enum PanelType {
   IMAGINE_AI = "ImagineAI",
   IMAGE_UPSCALER = "ImageUpscaler",
   IMAGE_COLORIZER = "ImageColorizer",
+  PHOTO_EDITOR = "PhotoEditor",
 }

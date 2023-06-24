@@ -22,7 +22,7 @@ import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import { imgUpscalerSample } from "~/services/imgUpscalerSample"
+import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -39,13 +39,13 @@ const ImageUpscaler = () => {
   const leftPanelRef = useRef()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
 
-  const { imgUpscalerSampleImg, setImgUpscalerSampleImg } = useAppContext()
+  const { bgSampleImages, setBgSampleImages } = useAppContext()
+
   useEffect(() => {
     const fetchSampleImages = async () => {
-      const result = await imgUpscalerSample()
-      setImgUpscalerSampleImg(result)
+      const result = await bgSampleImagesApi()
+      setBgSampleImages(result)
     }
-
     fetchSampleImages()
   }, [])
 
@@ -269,6 +269,8 @@ const ImageUpscaler = () => {
               fileInputType={"ImgUpscaler"}
               id={"ImgUpscaler"}
               mainHeading={"Add Image"}
+              imageLoading={imageLoading}
+              setImageLoading={setImageLoading}
             />
           )}
           {imgScalerPanelInfo.uploadPreview && (
@@ -367,12 +369,12 @@ const ImageUpscaler = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {imgUpscalerSampleImg?.map((image: any, index) => {
+                    {bgSampleImages.map((image: any, index) => {
                       return (
                         <ImageItem
                           key={index}
                           onClick={() => {
-                            addObject(image.original)
+                            addObject(image.originalImage)
                           }}
                           preview={image.thumbnail}
                           imageLoading={imageLoading}

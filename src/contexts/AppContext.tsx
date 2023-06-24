@@ -23,8 +23,6 @@ interface IAppContext {
   setSearch: (search: string) => void
   bgSampleImages: any[]
   setBgSampleImages: (bgSampleImages: any[]) => void
-  imgUpscalerSampleImg: any[]
-  setImgUpscalerSampleImg: (imgUpscalerSampleImg: any[]) => void
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -48,8 +46,6 @@ export const AppContext = createContext<IAppContext>({
   setSearch: () => {},
   bgSampleImages: [],
   setBgSampleImages: () => {},
-  imgUpscalerSampleImg: [],
-  setImgUpscalerSampleImg: () => {},
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -63,7 +59,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [res, setRes] = useState<any[]>([])
   const [search, setSearch] = useState<string>("")
   const [bgSampleImages, setBgSampleImages] = useState<any[]>([])
-  const [imgUpscalerSampleImg, setImgUpscalerSampleImg] = useState<any[]>([])
   const context = {
     isMobile,
     setIsMobile,
@@ -85,8 +80,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setSearch,
     bgSampleImages,
     setBgSampleImages,
-    imgUpscalerSampleImg,
-    setImgUpscalerSampleImg,
   }
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>
 }

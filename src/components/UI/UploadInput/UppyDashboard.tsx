@@ -15,15 +15,16 @@ import HandleFile from "~/views/DesignEditor/utils/functions/HandleFile"
 import { HandleBgUpload } from "~/views/DesignEditor/utils/functions/HandleBgUpload"
 import useAppContext from "~/hooks/useAppContext"
 import FileError from "../Common/FileError/FileError"
+import PhotoEditorContext from "~/contexts/PhotoEditorContext"
+import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
+import ImageColorizerContext from "~/contexts/ImageColorizerContext"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const UppyDashboard = ({
   close,
   setImageLoading,
   setAddImgInfo,
   fileInputType,
-  mainImgInfo,
-  setMainImgInfo,
-  setPanelInfo,
   activeOb,
   activeObject,
   id,
@@ -32,19 +33,16 @@ const UppyDashboard = ({
   uploads,
   setUploads,
   setBgUploadPreview,
-  imgScalerInfo,
-  setImgScalerInfo,
-  setImgScalerPanelInfo,
-  ImgColorizerInfo,
-  setImgColorizerInfo,
-  ImgColorizerpanelInfo,
-  setImgColorizerpanelInfo,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
   const frame = useFrame()
   const [uploadErrorMsg, setUploadErrorMsg] = useState("")
   const [displayError, setDisplayError] = useState(false)
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+  const { setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
+  const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
+  const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
 
   let uppy: any
   if (typeof window !== "undefined") {
@@ -82,31 +80,52 @@ const UppyDashboard = ({
   useEffect(() => {
     uppy.on("file-added", async (file: any) => {
       if (file.source == "Dropbox" || file.source == "OneDrive") {
-        setImageLoading(true)
+        setImageLoading ? setImageLoading(true) : null
         uppy.upload()
       } else {
-        setImageLoading(true)
+        setImageLoading ? setImageLoading(true) : null
         const imageUrl = file.source == "Url" ? file.remote.body.fileId : await getBucketImageUrlFromFile(file.data)
         if (fileInputType == "bgUpload") {
           HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
         } else if (fileInputType === "ImgUpscaler") {
-          
           setImgScalerInfo
-          // @ts-ignore
-            ? setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+            ? // @ts-ignore
+              setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+        } else if (fileInputType == "photoEditor") {
+          setPhotoEditorInfo
+            ? setPhotoEditorInfo((prev: any) => ({
+                ...prev,
+                src: imageUrl,
+                original: imageUrl,
+                result: [],
+              }))
+            : null
+          setPhotoEditorPanelInfo
+            ? setPhotoEditorPanelInfo((prev: any) => ({
+                ...prev,
+                uploadSection: false,
+                uploadPreview: true,
+                trySampleImg: false,
+              }))
+            : null
         } else if (fileInputType === "ImgColorizer") {
           setImgColorizerInfo
             ? // @ts-ignore
               setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, resultImages: [] }))
             : null
-      
+
           // @ts-ignore
-          setImgColorizerpanelInfo((prev) => ({
-            ...prev, uploadSection: false, trySampleImg: false, uploadPreview: true, resultOption: false, tryFilters: false,}))
-            
+          setImgColorizerPanelInfo((prev) => ({
+            ...prev,
+            uploadSection: false,
+            trySampleImg: false,
+            uploadPreview: true,
+            resultOption: false,
+            tryFilters: false,
+          }))
         } else {
           HandleFile(
             imageUrl,
@@ -117,30 +136,26 @@ const UppyDashboard = ({
             frame,
             setAddImgInfo ? setAddImgInfo : null,
             mainImgInfo ? mainImgInfo : null,
-            setMainImgInfo ? setMainImgInfo : null,
-            setPanelInfo ? setPanelInfo : null,
+            setMainImgInfo,
+            setPanelInfo,
             activeOb ? activeOb : null,
             activeObject ? activeObject : null,
             setSelectedImage ? setSelectedImage : null,
             uploadType ? uploadType : null,
             uploads ? uploads : null,
-            setUploads ? setUploads : null,
-            ImgColorizerInfo ? ImgColorizerInfo : null,
-            setImgColorizerInfo ? setImgColorizerInfo : null,
-            ImgColorizerpanelInfo ? ImgColorizerpanelInfo : null,
-            setImgColorizerpanelInfo ? setImgColorizerpanelInfo : null
+            setUploads ? setUploads : null
           )
         }
         uppy.cancelAll()
         setTimeout(() => {
-          fileInputType != "panelAdd" ? setImageLoading(false) : null
+          fileInputType != "panelAdd" ? (setImageLoading ? setImageLoading(false) : null) : null
           close()
         }, 200)
       }
     })
     uppy.on("upload-success", async (file: any, data: any) => {
       if (file.source == "Dropbox" || file.source == "OneDrive") {
-        setImageLoading(true)
+        setImageLoading ? setImageLoading(true) : null
         const imageUrl = data.body.baseUrl
         if (imageUrl) {
           if (fileInputType == "bgUpload") {
@@ -161,9 +176,32 @@ const UppyDashboard = ({
                 setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl }))
               : null
             // @ts-ignore
-            setImgScalerPanelInfo((prev) => ({
-              ...prev, uploadSection: false, trySampleImg: false, uploadPreview: true, resultOption: false, tryFilters: false,}))
-          }else {
+            setImgColorizerPanelInfo((prev) => ({
+              ...prev,
+              uploadSection: false,
+              trySampleImg: false,
+              uploadPreview: true,
+              resultOption: false,
+              tryFilters: false,
+            }))
+          } else if (fileInputType == "photoEditor") {
+            setPhotoEditorInfo
+              ? setPhotoEditorInfo((prev: any) => ({
+                  ...prev,
+                  src: imageUrl,
+                  original: imageUrl,
+                  result: [],
+                }))
+              : null
+            setPhotoEditorPanelInfo
+              ? setPhotoEditorPanelInfo((prev: any) => ({
+                  ...prev,
+                  uploadSection: false,
+                  uploadPreview: true,
+                  trySampleImg: false,
+                }))
+              : null
+          } else {
             HandleFile(
               imageUrl,
               setImageLoading,
@@ -173,18 +211,14 @@ const UppyDashboard = ({
               frame,
               setAddImgInfo ? setAddImgInfo : null,
               mainImgInfo ? mainImgInfo : null,
-              setMainImgInfo ? setMainImgInfo : null,
-              setPanelInfo ? setPanelInfo : null,
+              setMainImgInfo,
+              setPanelInfo,
               activeOb ? activeOb : null,
               activeObject ? activeObject : null,
               setSelectedImage ? setSelectedImage : null,
               uploadType ? uploadType : null,
               uploads ? uploads : null,
-              setUploads ? setUploads : null,
-              ImgColorizerInfo ? ImgColorizerInfo : null,
-              setImgColorizerInfo ? setImgColorizerInfo : null,
-              ImgColorizerpanelInfo ? ImgColorizerpanelInfo : null,
-              setImgColorizerpanelInfo ? setImgColorizerpanelInfo : null
+              setUploads ? setUploads : null
             )
           }
         }
@@ -200,7 +234,7 @@ const UppyDashboard = ({
       console.log("error message:", error)
       uppy.cancelAll()
       setTimeout(() => {
-        setImageLoading(false)
+        setImageLoading ? setImageLoading(true) : null
         close()
       }, 200)
     })
@@ -209,7 +243,7 @@ const UppyDashboard = ({
       console.log("error message:", error)
       uppy.cancelAll()
       setTimeout(() => {
-        setImageLoading(false)
+        setImageLoading ? setImageLoading(true) : null
         close()
       }, 200)
     })
