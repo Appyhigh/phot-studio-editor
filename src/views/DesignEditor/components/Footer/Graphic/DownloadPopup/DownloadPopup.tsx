@@ -5,7 +5,13 @@ import SelectInput from "~/components/UI/Common/SelectInput/SelectInput"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { makeDownloadToPNG, makeDownloadToSVGHandler, makeDownloadToPDF } from "~/utils/export"
+import {
+  makeDownloadToPNG,
+  makeDownloadToSVGHandler,
+  makeDownloadToPDF,
+  toDataURL,
+  getBase64ImageData,
+} from "~/utils/export"
 import { backgroundLayerType } from "~/constants/contants"
 
 const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
@@ -60,16 +66,20 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
         }
         image = (await editor.renderer.render(template)) as string
       }
+
       const nWidth = activeObject.width * activeObject?.scaleX * sizeVal
       const nHeight = activeObject.height * activeObject?.scaleY * sizeVal
 
-      if (selectedType != "svg" && selectedType !== "Pdf") {
-        makeDownloadToPNG(image, selectedType, nHeight, nWidth)
+      if (!image.startsWith("data")) {
+        // @ts-ignore
+        image = await getBase64ImageData(image)
+      }
+
+      if (selectedType === "svg") {
+        makeDownloadToSVG(image, { width: nWidth, height: nHeight })
       } else if (selectedType === "Pdf") {
         makeDownloadToPDF(image, nWidth, nHeight)
-      } else {
-        makeDownloadToSVG(image, { width: nWidth, height: nHeight })
-      }
+      } else makeDownloadToPNG(image, selectedType, nHeight, nWidth)
     }
   }, [editor, selectedType, activeObject, objects, sizeVal])
 
@@ -106,11 +116,11 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
       const image = (await editor.renderer.render(template)) as string
       const nWidth = frame.width * sizeVal
       const nHeight = frame.height * sizeVal
-      if (selectedType != "svg" && selectedType != "Pdf") {
-        makeDownloadToPNG(image, selectedType, nHeight, nWidth)
+      if (selectedType === "svg") {
+        makeDownloadToSVG(image, { width: nWidth, height: nHeight })
       } else if (selectedType === "Pdf") {
         makeDownloadToPDF(image, nWidth, nHeight)
-      } else makeDownloadToSVG(image, { width: nWidth, height: nHeight })
+      } else makeDownloadToPNG(image, selectedType, nHeight, nWidth)
     }
   }, [editor, selectedType, frame, objects, sizeVal])
 
@@ -138,31 +148,33 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
             <div className={clsx("pb-1", classes.subHeading)}>File Type</div>
             <SelectInput handleChange={handleTypeChange} selectedType={selectedType} typeOfDownload={typeOfDownload} />
           </Block>
-          <Block className="mb-1">
-            <div className={clsx("mb-0", classes.subHeading)}>Size</div>
-            <SliderBar
-              step={0.05}
-              width={typeOfDownload === "single-layer" ? "210px" : "424px"}
-              minVal={minSize}
-              maxVal={maxSize}
-              thumbSize={"14px"}
-              val={[sizeVal]}
-              handleChange={handleSizeChange}
-            />
-            <div className={classes.subHeading}>
-              <span>
-                {" "}
-                {typeOfDownload === "single-layer"
-                  ? `${(activeObject?.width * activeObject?.scaleX * sizeVal).toFixed(0)} * ${(
-                      activeObject?.height *
-                      activeObject?.scaleY *
-                      sizeVal
-                    ).toFixed(0)}`
-                  : `${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}
-                px
-              </span>
-            </div>
-          </Block>
+          {selectedType !== "Pdf" && (
+            <Block className="mb-1">
+              <div className={clsx("mb-0", classes.subHeading)}>Size</div>
+              <SliderBar
+                step={0.05}
+                width={typeOfDownload === "single-layer" ? "210px" : "424px"}
+                minVal={minSize}
+                maxVal={maxSize}
+                thumbSize={"14px"}
+                val={[sizeVal]}
+                handleChange={handleSizeChange}
+              />
+              <div className={classes.subHeading}>
+                <span>
+                  {" "}
+                  {typeOfDownload === "single-layer"
+                    ? `${(activeObject?.width * activeObject?.scaleX * sizeVal).toFixed(0)} * ${(
+                        activeObject?.height *
+                        activeObject?.scaleY *
+                        sizeVal
+                      ).toFixed(0)}`
+                    : `${frame?.width * sizeVal} * ${frame?.height * sizeVal}`}
+                  px
+                </span>
+              </div>
+            </Block>
+          )}
           {(selectedType === "jpg" || selectedType === "jpeg") && (
             <Block className="mb-1 mt-1">
               {/* <div className={clsx("mb-0", classes.subHeading)}>Quality</div>
