@@ -26,6 +26,7 @@ import { InvisibleFunc, VisibleFunc } from "../utils/functions/tools/VisibilityF
 import { SetCanvasBgFunc } from "../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../utils/functions/tools/DeleteFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -34,6 +35,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
   const { setImagesCt } = useContext(ImagesContext)
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const frame = useFrame()
   useEffect(() => {
     if (!show) {
@@ -75,7 +77,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
         </ContextMenuItem>
         <ContextMenuItem
           disabled={true}
-          onClick={() => DeleteFunc({ editor, activeObject })}
+          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
           icon="Delete"
           label="delete"
         >
@@ -113,7 +115,11 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             >
               <Duplicate size={24} />
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
+            <ContextMenuItem
+              onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
+              icon="Delete"
+              label="Delete"
+            >
               <Delete size={24} />
             </ContextMenuItem>
             <ContextMenuItem onClick={() => FrontFunc({ editor, activeObject })} icon="Forward" label="Bring forward">
