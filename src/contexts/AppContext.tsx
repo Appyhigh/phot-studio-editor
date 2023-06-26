@@ -52,7 +52,7 @@ export const AppContext = createContext<IAppContext>({
   setBgSampleImages: () => {},
   imgUpscalerSampleImg: [],
   setImgUpscalerSampleImg: () => {},
-  SampleImages:{Images:[],BgRemover:[],ImageUpscalar:[],ImageColorizer:[]},
+  SampleImages:{Images:[],BgRemover:[],ImageUpscalar:[],ImageColorizer:[],PhotoEditor:[]},
   setSampleImages: () => {}
 })
 

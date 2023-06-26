@@ -33,6 +33,7 @@ export const TOOL_NAMES = {
   imagineAi: "Imagine AI",
   imageUpscalar: "Image Upscaler",
   imageColorizer: "Image Colorizer",
+  photoEditor: "Photo Editor"
 }
 export const SAMPLE_IMAGES = {
   Image: "",
@@ -40,4 +41,5 @@ export const SAMPLE_IMAGES = {
   imagineAi: "",
   imageUpscalar: "UPSCALER",
   imageColorizer: "",
+  photoEditor:""
 }

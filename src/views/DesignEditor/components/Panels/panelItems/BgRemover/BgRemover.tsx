@@ -102,7 +102,7 @@ const BgRemover = () => {
 
   const fetchSampleImages = async () => {
     try{
-      const result = await SampleImagesApi(SAMPLE_IMAGES.bgRemover)
+      const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
       setSampleImages((prev:any)=>({...prev,BgRemover:[...result]}))
     }catch(error){
       setErrorInfo((prev: any) => ({

@@ -1,4 +1,4 @@
-import { PHOTO_EDITOR } from "~/constants/contants"
+import { PHOTO_EDITOR, SAMPLE_IMAGES, TOOL_NAMES } from "~/constants/contants"
 import Uploads from "../UploadDropzone/Uploads"
 import classes from "./style.module.css"
 import useAppContext from "~/hooks/useAppContext"
@@ -23,14 +23,14 @@ import UploadPreview from "../UploadPreview/UploadPreview"
 import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import Prompt from "~/components/Prompt/Prompt"
 import photoEditorController from "~/utils/photoEditorController"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
 
 const PhotoEditor = () => {
   const { activePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
   const { user } = authState
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
+  const { SampleImages, setSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const editor = useEditor()
@@ -41,13 +41,39 @@ const PhotoEditor = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { photoEditorInfo, setPhotoEditorInfo, photoEditorPanelInfo, setPhotoEditorPanelInfo } =
     useContext(PhotoEditorContext)
+  let ErrortimeOut:any ;
+
+
+
+    const fetchSampleImages = async () => {
+      try{
+        const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
+        setSampleImages((prev:any)=>({...prev,PhotoEditor:[...result]}))
+      }catch(error){
+        setErrorInfo((prev: any) => ({
+          ...prev,
+          showError: true,
+          errorMsg: `Failed to load Sample Images for  ${TOOL_NAMES.photoEditor} panel`,
+          retryFn: () => {
+            if(ErrortimeOut){
+              clearTimeout(ErrortimeOut)
+            }
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+            fetchSampleImages()
+          },
+        }))
+        ErrortimeOut = setTimeout(() => {
+          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+        }, 5000)
+        console.error("Error:", error)
+      }
+    }
 
   useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
-    }
     fetchSampleImages()
+    return (()=>{
+      clearTimeout(ErrortimeOut)
+    })
   }, [])
 
   useEffect(() => {
@@ -252,7 +278,7 @@ const PhotoEditor = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
+                    {SampleImages.PhotoEditor?.map((image: any, index:any) => {
                       return (
                         <ImageItem
                           key={index}

@@ -126,7 +126,7 @@ const ImageColorizer = () => {
 
   const fetchSampleImages = async () => {
     try {
-      const result = await SampleImagesApi(SAMPLE_IMAGES.bgRemover)
+      const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
       setSampleImages((prev: any) => ({ ...prev, ImageColorizer: [...result] }))
     } catch (error) {
       setErrorInfo((prev: any) => ({
