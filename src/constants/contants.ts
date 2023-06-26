@@ -24,6 +24,7 @@ export const LOCAL_SAMPLE_IMG = "local_sample_img"
 export const MAIN_IMG_Bg = "main_img_bg"
 export const TEXT_TO_ART = "text_to_art"
 export const IMAGE_UPSCALER = "ImageUpscaler"
+export const PHOTO_EDITOR = "PhotoEditor"
 export const REMOVE_BACKGROUND = "remove_bg"
 export const IMAGE_COLORIZER = "ImageColorizer"
 export const TOOL_NAMES = {

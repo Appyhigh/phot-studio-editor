@@ -68,7 +68,7 @@ const SelectInput = ({ handleChange, selectedType, typeOfDownload }: any) => {
             Svg
             <div className="ml-auto">{selectedType === "svg" && <SelectedFormat />}</div>
           </div>
-          {/* <div
+          <div
             onClick={() => {
               handleChange("Pdf")
               setShowMenu(false)
@@ -77,7 +77,7 @@ const SelectInput = ({ handleChange, selectedType, typeOfDownload }: any) => {
           >
             Pdf
             <div className="ml-auto">{selectedType === "Pdf" && <SelectedFormat />}</div>
-          </div> */}
+          </div>
         </div>
       )}
     </div>

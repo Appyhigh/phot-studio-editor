@@ -26,6 +26,8 @@ import ErrorContext from "~/contexts/ErrorContext"
 import UploadInputImg from "~/components/UI/UploadInputImg/UploadInputImg"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import BaseButton from "~/components/UI/Button/BaseButton"
+import Prompt from "~/components/Prompt/Prompt"
+import ImagesCount from "~/components/ImagesCount/ImagesCount"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -141,20 +143,11 @@ const ImagineAI = () => {
       {!textToArtpanelInfo.resultSectionVisible && (
         <Block className="d-flex flex-1 flex-column">
           {/* Prompt */}
-          <Block className={classes.imagineItemContainer}>
-            <Block className={classes.imagineItemHeading}>Prompt</Block>
-            <Block className={classes.imagineItemDesc}>
-              What do you want to see, you can use a single word or complete sentence.
-            </Block>
-            <textarea
-              className={classes.promptInput}
-              placeholder="Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"
-              onChange={(e) => {
-                setTextToArtInputInfo({ ...textToArtInputInfo, prompt: e.target.value })
-              }}
-              value={textToArtInputInfo.prompt}
-            ></textarea>
-          </Block>
+          <Prompt
+            stateInfo={textToArtInputInfo}
+            setStateInfo={setTextToArtInputInfo}
+            placeholder={"Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"}
+          />
           {/* Select a Style */}
           <Block className={classes.imagineItemContainer}>
             <Block className={classes.imagineItemHeading}>Select a Style</Block>
@@ -162,12 +155,14 @@ const ImagineAI = () => {
               Select style
               <ArrowOpen size={14} />
             </button>
-            <StyleSwiper
-              styleImage={styleImage}
-              setStyleImage={setStyleImage}
-              textToArtInputInfo={textToArtInputInfo}
-              setTextToArtInputInfo={setTextToArtInputInfo}
-            />
+            {styleImage.size != 0 && (
+              <StyleSwiper
+                styleImage={styleImage}
+                setStyleImage={setStyleImage}
+                textToArtInputInfo={textToArtInputInfo}
+                setTextToArtInputInfo={setTextToArtInputInfo}
+              />
+            )}
           </Block>
 
           {/* Select a Style popup */}
@@ -182,29 +177,7 @@ const ImagineAI = () => {
         {!textToArtpanelInfo.resultSectionVisible && (
           //  @ts-ignore
           <div className={classes.inputPanel}>
-            <div className={classes.imageGenerationCt}>
-              <div className={classes.artSubHeading}>How many images you want to generate?</div>
-              <div className="d-flex justify-content-start flex-row">
-                {[1, 2, 3, 4].map((each, idx) => {
-                  return (
-                    <div
-                      key={idx}
-                      className={clsx(
-                        classes.ctBox,
-                        "flex-center pointer",
-                        idx === 0 && "ml-0",
-                        textToArtInputInfo.images_generation_ct === each && classes.selectedCtBox
-                      )}
-                      onClick={() => {
-                        setTextToArtInputInfo((prev: any) => ({ ...prev, images_generation_ct: each }))
-                      }}
-                    >
-                      {each}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
+            <ImagesCount stateInfo={textToArtInputInfo} setStateInfo={setTextToArtInputInfo} />
             <div className={classes.uploadImageSection}>
               <UploadInputImg />
             </div>
@@ -264,18 +237,17 @@ const ImagineAI = () => {
                 />
               </div>
             )}
-    
+
             <BaseButton
               title="Generate"
               width="310px"
-              margin= "5px 0px 0px 20px"
+              margin="5px 0px 0px 20px"
               disabledBgColor="#92929d"
               fontSize="16px"
               disabled={textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.length == 0 ? true : false}
               handleClick={() => {
                 generateImage()
               }}
-              
             />
             <LoginPopup
               isOpen={showLoginPopup}

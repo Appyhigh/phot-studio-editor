@@ -294,6 +294,8 @@ const ImageUpscaler = () => {
               fileInputType={"ImgUpscaler"}
               id={"ImgUpscaler"}
               mainHeading={"Add Image"}
+              imageLoading={imageLoading}
+              setImageLoading={setImageLoading}
             />
           )}
           {imgScalerPanelInfo.uploadPreview && (
@@ -397,7 +399,7 @@ const ImageUpscaler = () => {
                         <ImageItem
                           key={index}
                           onClick={() => {
-                            addObject(image.original)
+                            addObject(image.originalImage)
                           }}
                           preview={image.thumbnail}
                           imageLoading={imageLoading}

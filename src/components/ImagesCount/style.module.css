@@ -1,0 +1,34 @@
+.itemContainer {
+  margin: 1.5rem 1.5rem 0px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+}
+
+.itemHeading {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1rem;
+  color: #171725;
+}
+
+.ctBox {
+  border: 1px solid #b6b6b6;
+  border-radius: 25px;
+  width: 48px;
+  height: 35px;
+  font-weight: 400;
+  color: #b6b6b6;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 6px 4px 0px;
+}
+
+.selectedCtBox {
+  background: #333b4f;
+  border: 1px solid #333b4f;
+  color: #fff;
+}
