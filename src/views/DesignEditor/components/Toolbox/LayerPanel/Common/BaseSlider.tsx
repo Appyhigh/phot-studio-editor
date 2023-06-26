@@ -48,7 +48,7 @@ const BaseSlider = ({
       setInputVal(e[0])
     } else if (type === SLIDER_TYPE.LINE_HEIGHT) {
       editor.objects.update({
-        [type]: e[0] / 10,
+        [type]: (e[0] / 100) * 1 + 0.5,
       })
       setInputVal(e[0])
     } else if (type === SLIDER_TYPE.LETTER_SPACING) {

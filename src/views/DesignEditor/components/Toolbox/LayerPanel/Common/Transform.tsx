@@ -17,9 +17,11 @@ const Transform = () => {
                 ? 100
                 : activeObject.fontSize / 4
               : each.type == "lineHeight" && activeObject && activeObject.lineHeight
-              ? activeObject.lineHeight > 100
+              ? activeObject.lineHeight > 1.5
                 ? 100
-                : activeObject.lineHeight
+                : activeObject.lineHeight <= 0.5
+                ? 1
+                : activeObject.lineHeight * 100 - 50
               : each.type == "letterSpacing" && activeObject && activeObject.charSpacing
               ? activeObject.charSpacing > 100
                 ? 100
