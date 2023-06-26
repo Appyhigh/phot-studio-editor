@@ -219,7 +219,12 @@ export default function () {
         flexDirection: "column",
         borderRadius: "8px",
         height: "58px",
+        width: "max-content",
         padding: "6px 12px",
+        position: "absolute",
+        left: "auto",
+        right: "5%",
+        zIndex: "20",
       }}
     >
       <Block display={"flex"} gridGap="0.5rem" alignItems={"center"}>
