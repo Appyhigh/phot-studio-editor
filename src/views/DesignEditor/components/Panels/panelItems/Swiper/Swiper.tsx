@@ -13,7 +13,6 @@ import { toDataURL } from "~/utils/export"
 import MainImageContext from "~/contexts/MainImageContext"
 import { HandleBgChangeOption } from "~/views/DesignEditor/utils/functions/HandleBgChangeFunc"
 import classes from "./style.module.css"
-import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 
 const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: any) => {
   const editor = useEditor()
@@ -73,7 +72,12 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
       <Swiper spaceBetween={22} slidesPerView={"auto"} loop={true} navigation={true} modules={[Navigation, Autoplay]}>
         {data.map((each: any, idx: number) => {
           return (
-            <SwiperSlide key={idx}>
+            <SwiperSlide
+              key={idx}
+              style={{
+                cursor: isLoading ? "not-allowed" : "pointer",
+              }}
+            >
               <Block
                 className="pointer flex-center p-relative"
                 onClick={() => {
@@ -105,9 +109,6 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
                 {selectedBgOption.type === type &&
                   mainImgInfo.swiper_option_selected &&
                   selectedBgOption.id === idx && <Icons.Selection size={"24"} />}
-                {selectedBgOption.type === type && selectedBgOption.id === idx && isLoading && (
-                  <img className={classes.stockImagesLoading} src={LoaderSpinner} />
-                )}
               </Block>
             </SwiperSlide>
           )
