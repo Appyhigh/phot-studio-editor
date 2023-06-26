@@ -13,9 +13,9 @@ const Transform = () => {
           {...each}
           value={
             each.type == "size" && activeObject && activeObject.fontSize
-              ? activeObject.fontSize > 100
+              ? activeObject.fontSize > 400
                 ? 100
-                : activeObject.fontSize
+                : activeObject.fontSize / 4
               : each.type == "lineHeight" && activeObject && activeObject.lineHeight
               ? activeObject.lineHeight > 100
                 ? 100
