@@ -12,13 +12,19 @@ const Transform = () => {
         <BaseSlider
           {...each}
           value={
-            each.type == "size"
-              ? activeObject.fontSize
-              : each.type == "lineHeight"
-              ? activeObject.lineHeight
-              : each.type == "letterSpacing"
-              ? activeObject.charSpacing
-              : null
+            each.type == "size" && activeObject && activeObject.fontSize
+              ? activeObject.fontSize > 100
+                ? 100
+                : activeObject.fontSize
+              : each.type == "lineHeight" && activeObject && activeObject.lineHeight
+              ? activeObject.lineHeight > 100
+                ? 100
+                : activeObject.lineHeight
+              : each.type == "letterSpacing" && activeObject && activeObject.charSpacing
+              ? activeObject.charSpacing > 100
+                ? 100
+                : activeObject.charSpacing
+              : 0
           }
           key={idx}
         />
