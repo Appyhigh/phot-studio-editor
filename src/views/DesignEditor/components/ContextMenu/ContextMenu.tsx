@@ -79,7 +79,7 @@ const ContextMenu = () => {
                   editor.objects.position("left", activeObject.left)
                   editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                   editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                  editor.objects.group()
+                  if (activeObject._objects) editor.objects.group()
                 }, 20)
               })
               return prev + 1

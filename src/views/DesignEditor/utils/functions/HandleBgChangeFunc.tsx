@@ -14,7 +14,9 @@ export const HandleBgChangeOption = async (
   if (setIsLoading) setIsLoading(true)
   const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
   const previewWithUpdatedBackground: any = await changeLayer(
-    activeMainObject ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview : inputImg,
+    activeMainObject
+      ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview ?? inputImg
+      : inputImg,
     bg,
     activeMainObject ? activeMainObject?.width : activeObject?.width,
     activeMainObject ? activeMainObject?.height : activeObject?.height
@@ -46,17 +48,5 @@ export const HandleBgChangeOption = async (
   if (mainImgInfo) {
     setMainImgInfo((prev: any) => ({ ...prev, ...options }))
   }
-  // editor.objects.position("top", activeMainObject ? activeMainObject.top : activeObject.top)
-  // editor.objects.position("left", activeMainObject ? activeMainObject.left : activeObject.left)
-  // editor.objects.resize(
-  //   "height",
-  //   activeMainObject ? activeMainObject.height * activeMainObject.scaleY : activeObject.height * activeObject.scaleY
-  // )
-  // editor.objects.resize(
-  //   "width",
-  //   activeMainObject ? activeMainObject.width * activeMainObject.scaleX : activeObject.width * activeObject.scaleX
-  // )
-
-  // mainImgInfo ? editor.objects.removeById(mainImgInfo.id) : editor.objects.removeById(activeObject?.id)
   if (setIsLoading) setIsLoading(false)
 }
