@@ -7,7 +7,7 @@ const useObjects = () => {
 
   useEffect(() => {
     if (canvas) {
-      console.log('workArea: ', canvas.getObjects())
+      // console.log('workArea: ', canvas.getObjects())
       canvas.on('object:added', onChanged)
       canvas.on('object:removed', onChanged)
 
