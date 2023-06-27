@@ -26,6 +26,7 @@ import { InvisibleFunc, VisibleFunc } from "../utils/functions/tools/VisibilityF
 import { SetCanvasBgFunc } from "../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../utils/functions/tools/DeleteFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const contextMenuRequest = useContextMenuRequest()
@@ -34,12 +35,17 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
   const activeObject: any = useActiveObject()
   const [showDownloadPopup, setShowDownloadPopup] = useState(false)
   const { setImagesCt } = useContext(ImagesContext)
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const frame = useFrame()
   useEffect(() => {
     if (!show) {
       setShowDownloadPopup(false)
     }
   }, [show])
+
+  useEffect(() => {
+    editor.cancelContextMenuRequest()
+  }, [])
 
   if (activeObject?.type === "Background" && show) {
     return (
@@ -59,7 +65,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                   editor.objects.position("left", activeObject.left)
                   editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                   editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                  editor.objects.group()
+                  if (activeObject._objects) editor.objects.group()
                 }, 20)
               })
               return prev + 1
@@ -75,7 +81,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
         </ContextMenuItem>
         <ContextMenuItem
           disabled={true}
-          onClick={() => DeleteFunc({ editor, activeObject })}
+          onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
           icon="Delete"
           label="delete"
         >
@@ -102,7 +108,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                       editor.objects.position("left", activeObject.left)
                       editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                       editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                      editor.objects.group()
+                      if (activeObject._objects) editor.objects.group()
                     }, 20)
                   })
                   return prev + 1
@@ -113,7 +119,11 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
             >
               <Duplicate size={24} />
             </ContextMenuItem>
-            <ContextMenuItem onClick={() => DeleteFunc({ editor, activeObject })} icon="Delete" label="Delete">
+            <ContextMenuItem
+              onClick={() => DeleteFunc({ editor, activeObject, mainImgInfo, setMainImgInfo, setPanelInfo })}
+              icon="Delete"
+              label="Delete"
+            >
               <Delete size={24} />
             </ContextMenuItem>
             <ContextMenuItem onClick={() => FrontFunc({ editor, activeObject })} icon="Forward" label="Bring forward">
@@ -157,26 +167,27 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 <Elements size={24} />
               </ContextMenuItem>
             )}
-            { activeObject?.type === "StaticImage" && 
-            <div className="p-relative">
-              <ContextMenuItem
-                onClick={() => {
-                  setShowDownloadPopup(true)
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="download"
-                label="Download"
-                showDownloadPopup={showDownloadPopup}
-              >
-                <DownloadIcon />
-              </ContextMenuItem>
-              {showDownloadPopup && show && (
-                <DownloadPopup
-                  typeOfDownload="single-layer"
-                  typeGroup={activeObject?.type === "group" ? true : false}
-                />
-              )}
-            </div>}
+            {activeObject?.type === "StaticImage" && (
+              <div className="p-relative">
+                <ContextMenuItem
+                  onClick={() => {
+                    setShowDownloadPopup(true)
+                    editor.cancelContextMenuRequest()
+                  }}
+                  icon="download"
+                  label="Download"
+                  showDownloadPopup={showDownloadPopup}
+                >
+                  <DownloadIcon />
+                </ContextMenuItem>
+                {showDownloadPopup && show && (
+                  <DownloadPopup
+                    typeOfDownload="single-layer"
+                    typeGroup={activeObject?.type === "group" ? true : false}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -44,11 +44,11 @@ const BaseSlider = ({
   const editor = useEditor()
   const handleInputChange = async (e: any) => {
     if (type === SLIDER_TYPE.SIZE) {
-      editor.objects.update({ fontSize: e[0] })
+      editor.objects.update({ fontSize: e[0] * 4 })
       setInputVal(e[0])
     } else if (type === SLIDER_TYPE.LINE_HEIGHT) {
       editor.objects.update({
-        [type]: e[0] / 10,
+        [type]: (e[0] / 100) * 1 + 0.5,
       })
       setInputVal(e[0])
     } else if (type === SLIDER_TYPE.LETTER_SPACING) {
@@ -214,7 +214,7 @@ const BaseSlider = ({
       let index = IsFilterPresent(activeObject, "Vibrance")
 
       if (index != -1) {
-        activeObject.filters[index]["vibrance"] = e[0]/100
+        activeObject.filters[index]["vibrance"] = e[0] / 100
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
 
@@ -226,7 +226,7 @@ const BaseSlider = ({
       } else {
         // @ts-ignore
         var filter = new fabric.Image.filters.Vibrance({
-          vibrance: e[0]/100,
+          vibrance: e[0] / 100,
         })
         setInputVal(e[0])
         editor.objects.update({
@@ -246,7 +246,7 @@ const BaseSlider = ({
       let index = IsFilterPresent(activeObject, "Pixelate")
 
       if (index != -1) {
-        activeObject.filters[index]["blocksize"] = e[0] 
+        activeObject.filters[index]["blocksize"] = e[0]
         editor.objects.findById(activeObject?.id)[0].applyFilters()
         let base64 = activeObject?._filteredEl?.toDataURL()
 
@@ -258,7 +258,7 @@ const BaseSlider = ({
         setInputVal(e[0])
       } else {
         var filter = new fabric.Image.filters.Pixelate({
-          blocksize: e[0] ,
+          blocksize: e[0],
         })
 
         setInputVal(e[0])
@@ -279,7 +279,7 @@ const BaseSlider = ({
       let index = IsFilterPresent(activeObject, "Noise")
 
       if (index != -1) {
-        activeObject.filters[index]["noise"] = e[0]*10
+        activeObject.filters[index]["noise"] = e[0] * 10
         let base64 = activeObject?._filteredEl?.toDataURL()
 
         editor.objects.update({
@@ -288,10 +288,9 @@ const BaseSlider = ({
         })
         setInputVal(e[0])
         editor.objects.findById(activeObject?.id)[0].applyFilters()
-
       } else {
         var filter = new fabric.Image.filters.Noise({
-          noise: e[0]*10,
+          noise: e[0] * 10,
         })
         setInputVal(e[0])
         editor.objects.update({
@@ -318,7 +317,7 @@ const BaseSlider = ({
         <div className={classes.baseSliderHeading}>{name}</div>
         <div className="flex-1"></div>
         <div className={classes.percentageVal}>
-          {inputVal}
+          {Math.round(inputVal)}
           {percentage && "%"}
         </div>
       </div>
