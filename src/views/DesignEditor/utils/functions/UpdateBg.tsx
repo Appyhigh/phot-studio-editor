@@ -20,10 +20,8 @@ const UpdateBg = (imageUrl: string, editor: any, frame: any) => {
   }
 
   if (bgObject) {
-    console.log("THIS")
     editor.objects.update(options, bgObject.id)
   } else {
-    console.log("THAT")
     editor.objects.add(options).then(() => {
       setTimeout(() => {
         editor.objects.setAsBackgroundImage()
