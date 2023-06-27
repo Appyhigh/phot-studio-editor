@@ -1,5 +1,5 @@
-import { FC, createContext, useState } from 'react'
-import { fabric } from 'fabric'
+import { FC, createContext, useState } from "react"
+import { fabric } from "fabric"
 
 interface CanvasContext {
   zoomRatio: number

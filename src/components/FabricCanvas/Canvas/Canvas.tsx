@@ -86,13 +86,16 @@ function Canvas({ width, height }: any) {
     })
   }, [])
 
-  const { canvas } = fabricEditor
+  const { canvas, objects} = fabricEditor
+  // brush points 
   useEffect(() => {
     const points = canvas?.freeDrawingBrush._points
-    console.log(canvas?.freeDrawingBrush)
+    // console.log(canvas?.freeDrawingBrush._points)
     const coordinates = points?.map((point: any) => ({ x: point.x, y: point.y }))
-    console.log(coordinates)
-  }, [canvas])
+    // console.log(coordinates)
+    // console.log(objects)
+  
+  }, [canvas,objects])
   return (
     <div className="editor-canvas flex justify-center" id="cont" ref={containerRef}>
       <canvas id="canvas"></canvas>

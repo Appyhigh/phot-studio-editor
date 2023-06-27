@@ -12,10 +12,29 @@ function Editor() {
 
   const { fabricEditor } = useFabricEditor()
 
-  const { canvas } = fabricEditor
+  const { canvas, objects } = fabricEditor
 
   return (
     <div className={classes.editor}>
+      <div className="d-flex flex-row">
+        <h3
+          className="px-1"
+          onClick={() => {
+            if (objects.length >= 2) {
+              canvas.undo()
+            }
+          }}
+        >
+          Undo
+        </h3>{" "}
+        <h3
+          onClick={() => {
+            canvas.redo()
+          }}
+        >
+          Redo
+        </h3>
+      </div>
       <ul className={classes.resize_list}>
         <li
           onClick={() => {
@@ -50,7 +69,7 @@ function Editor() {
               width: 800 * scale,
               height: 600 * scale,
             })
-                      //@ts-ignore
+            //@ts-ignore
             canvas.setHeight(800 * scale).setWidth(600 * scale)
             // setDimension({ width: 800, height: 600 })
           }}

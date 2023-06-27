@@ -22,6 +22,7 @@ import ImageUpScalerContext from "./contexts/ImageUpScalerContext"
 import ImageColorizerContext from "./contexts/ImageColorizerContext"
 import PhotoEditorContext from "./contexts/PhotoEditorContext"
 import { CanvasProvider } from "./components/FabricCanvas/Canvas"
+import 'fabric-history';
 
 const engine = new Styletron()
 
