@@ -29,7 +29,7 @@ function Canvas({ width, height }: any) {
       height: initialHeigh,
       width: initialWidth,
       isDrawingMode: true,
-      freeDrawingCursor: "none",
+      freeDrawingCursor: "default",
     })
 
     const containerWidth = 600
@@ -75,57 +75,8 @@ function Canvas({ width, height }: any) {
     // canvas.add(workArea)
     // workArea.center()
 
-    // var cursor = new fabric.StaticCanvas('cursor', {
-    //   height: initialHeigh,
-    //   width: initialWidth,
-    // })
-
-    // cursor.setDimensions({
-    //   width: cursor.getWidth() * scale,
-    //   height: cursor.getHeight() * scale,
-    // })
-
     canvas.freeDrawingBrush.width = 20
     canvas.freeDrawingBrush.color = "rgba(58, 190, 231,0.6)"
-
-    var cursorOpacity = 0.5
-    var mousecursor = new fabric.Circle({
-      left: -100,
-      top: -100,
-      radius: canvas.freeDrawingBrush.width / 2,
-      fill: "rgba(58, 190, 231" + 0.6 + ")",
-      stroke: "black",
-      originX: "center",
-      originY: "center",
-    })
-
-    canvas.add(mousecursor)
-
-    canvas.on("mouse:move", function (evt: any) {
-      // @ts-ignore
-      var mouse = this.getPointer(evt.e)
-      // @ts-ignore
-      mousecursor
-        ?.set({
-          top: mouse.y,
-          left: mouse.x,
-        })
-        .setCoords()
-        .canvas.renderAll()
-    })
-
-    canvas.on("mouse:out", function () {
-      // put circle off screen
-      // @ts-ignore
-
-      mousecursor
-        .set({
-          top: -100,
-          left: -100,
-        })
-        .setCoords()
-        .canvas.renderAll()
-    })
 
     setFabricEditor({
       ...fabricEditor,
@@ -139,7 +90,7 @@ function Canvas({ width, height }: any) {
   useEffect(() => {
     const points = canvas?.freeDrawingBrush._points
     console.log(canvas?.freeDrawingBrush)
-    const coordinates = points?.map((point:any) => ({ x: point.x, y: point.y }))
+    const coordinates = points?.map((point: any) => ({ x: point.x, y: point.y }))
     console.log(coordinates)
   }, [canvas])
   return (
