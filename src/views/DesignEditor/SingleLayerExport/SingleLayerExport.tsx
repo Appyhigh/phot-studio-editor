@@ -43,6 +43,10 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
     }
   }, [show])
 
+  useEffect(() => {
+    editor.cancelContextMenuRequest()
+  }, [])
+
   if (activeObject?.type === "Background" && show) {
     return (
       <div // @ts-ignore
@@ -163,26 +167,27 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 <Elements size={24} />
               </ContextMenuItem>
             )}
-            { activeObject?.type === "StaticImage" && 
-            <div className="p-relative">
-              <ContextMenuItem
-                onClick={() => {
-                  setShowDownloadPopup(true)
-                  editor.cancelContextMenuRequest()
-                }}
-                icon="download"
-                label="Download"
-                showDownloadPopup={showDownloadPopup}
-              >
-                <DownloadIcon />
-              </ContextMenuItem>
-              {showDownloadPopup && show && (
-                <DownloadPopup
-                  typeOfDownload="single-layer"
-                  typeGroup={activeObject?.type === "group" ? true : false}
-                />
-              )}
-            </div>}
+            {activeObject?.type === "StaticImage" && (
+              <div className="p-relative">
+                <ContextMenuItem
+                  onClick={() => {
+                    setShowDownloadPopup(true)
+                    editor.cancelContextMenuRequest()
+                  }}
+                  icon="download"
+                  label="Download"
+                  showDownloadPopup={showDownloadPopup}
+                >
+                  <DownloadIcon />
+                </ContextMenuItem>
+                {showDownloadPopup && show && (
+                  <DownloadPopup
+                    typeOfDownload="single-layer"
+                    typeGroup={activeObject?.type === "group" ? true : false}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

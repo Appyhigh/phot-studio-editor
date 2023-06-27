@@ -2,7 +2,6 @@ import { useActiveObject, useContextMenuRequest, useEditor, useFrame } from "@la
 import { useContext, useEffect, useState } from "react"
 import Delete from "~/components/Icons/Delete"
 import Duplicate from "~/components/Icons/Duplicate"
-import Paste from "~/components/Icons/Paste"
 import Unlocked from "~/components/Icons/Unlocked"
 import MainImageContext from "~/contexts/MainImageContext"
 import classes from "./style.module.css"
@@ -18,7 +17,6 @@ import DownloadPopup from "../Footer/Graphic/DownloadPopup/DownloadPopup"
 import Elements from "~/components/Icons/Elements"
 import ContextMenuItem from "./ContextMenuItem"
 import { DuplicateFunc } from "../../utils/functions/tools/DuplicateFunc"
-import { PasteFunc } from "../../utils/functions/tools/PasteFunc"
 import { FrontFunc } from "../../utils/functions/tools/FrontFunc"
 import { BackFunc } from "../../utils/functions/tools/BackFunc"
 import { LockFunc, UnlockFunc } from "../../utils/functions/tools/LockUnlockFunc"
@@ -26,7 +24,6 @@ import { InvisibleFunc, VisibleFunc } from "../../utils/functions/tools/Visibili
 import { UngroupFunc } from "../../utils/functions/tools/GroupUngroupFunc"
 import { SetCanvasBgFunc } from "../../utils/functions/SetCanvasBgFunc"
 import { DeleteFunc } from "../../utils/functions/tools/DeleteFunc"
-import { EraseBgFunc } from "../../utils/functions/EraseBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 
 const ContextMenu = () => {
@@ -42,6 +39,30 @@ const ContextMenu = () => {
       setShowDownloadPopup(false)
     }
   }, [contextMenuRequest])
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      const contextMenuSection = document.querySelector(`.${classes.contextMenuSection}`)
+      const downloadPopup = document.querySelector(`downloadPopup`)
+      const selectInputFormatSection = document.querySelector(`.${classes.selectInputFormatSection}`)
+      const eachOption = document.querySelector(`.${classes.eachOption}`)
+      if (
+        !contextMenuSection!.contains(event.target) ||
+        !downloadPopup!.contains(event.target) ||
+        !selectInputFormatSection!.contains(event.target) ||
+        !eachOption!.contains(event.target)
+      ) {
+        editor.cancelContextMenuRequest()
+      }
+    }
+
+    document.addEventListener("click", handleClickOutside)
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside)
+    }
+  }, [])
+
   // const handleAsComponentHandler = async () => {
   //   if (editor) {
   //     const component: any = await editor.scene.exportAsComponent()
