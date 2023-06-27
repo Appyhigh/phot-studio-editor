@@ -1,8 +1,8 @@
 export const ObjectLayerOption = [
-  // {
-  //   icon: "SelectionBack",
-  //   name: "Shadows",
-  // },
+  {
+    icon: "SelectionBack",
+    name: "Shadows",
+  },
   // {
   //   icon: "Outline",
   //   name: "Outline",
