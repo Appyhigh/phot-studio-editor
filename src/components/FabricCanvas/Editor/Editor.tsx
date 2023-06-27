@@ -20,7 +20,7 @@ function Editor() {
         <h3
           className="px-1"
           onClick={() => {
-            if (objects.length >= 2) {
+            if (objects?.length >= 2) {
               canvas.undo()
             }
           }}

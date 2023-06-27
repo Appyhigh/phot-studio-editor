@@ -19,7 +19,7 @@ function Canvas({ width, height }: any) {
   const [brushSize, setBrushSize] = useState(10)
 
   const [brushOn, setBrushOn] = useState(false)
-
+  const [bgSet, setBg] = useState(false)
   const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
   const base64CursorString = btoa(cursor)
 
@@ -30,6 +30,7 @@ function Canvas({ width, height }: any) {
   useContainerHandler()
   // useGrid()
   useObjects()
+
   useEffect(() => {
     const initialHeigh = width
     const initialWidth = height
@@ -73,14 +74,8 @@ function Canvas({ width, height }: any) {
 
     // set background of image
     fabric.Image.fromURL("https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473", (img) => {
-      img.set({ type: "backgroundImage" })
-      canvas?.add(img)
-      img.scale(1)
-      img.lockMovementX = true
-      img.sendToBack()
-      img.selectable = false
-      img.lockMovementY = true
-      img.center()
+      canvas.backgroundImage = img
+      canvas.renderAll()
     })
 
     // canvas.add(workArea)
@@ -129,6 +124,48 @@ function Canvas({ width, height }: any) {
           className={clsx(classes.btn, !brushOn && classes.activeBrush)}
         >
           brush off
+        </div>
+      </div>
+      <div className={classes.toggleBtn}>
+        <div
+          className={clsx(classes.btn, bgSet && classes.activeBrush)}
+          onClick={() => {
+            setBg(true)
+            setTimeout(() => {
+              canvas.backgroundImage = null
+              canvas.renderAll()
+
+              fabric.Image.fromURL(
+                "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+                (img) => {
+                  canvas.backgroundImage = img
+                  canvas.renderAll()
+                }
+              )
+
+              canvas.renderAll()
+            }, 50)
+          }}
+        >
+          set Bg
+        </div>
+        <div
+          onClick={() => {
+            setBg(false)
+            setTimeout(() => {
+              canvas.backgroundImage = null
+              canvas.renderAll()
+              fabric.Image.fromURL("https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473", (img) => {
+                canvas.backgroundImage = img
+                canvas.renderAll()
+              })
+
+              canvas.renderAll()
+            }, 50)
+          }}
+          className={clsx(classes.btn, !bgSet && classes.activeBrush)}
+        >
+          Remove Bg
         </div>
       </div>
       <input
