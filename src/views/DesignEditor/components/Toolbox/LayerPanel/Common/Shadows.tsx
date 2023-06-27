@@ -23,6 +23,7 @@ const Shadows = () => {
               setSelectedFilter(each.name)
               activeObject.set(each.shadowObj)
               editor.canvas.requestRenderAll()
+              editor.history.save()
             }}
             key={idx}
             style={each.style}
