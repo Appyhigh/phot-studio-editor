@@ -116,7 +116,7 @@ function Canvas({ width, height }: any) {
 
     canvas.on("mouse:out", function () {
       // put circle off screen
-            // @ts-ignore 
+      // @ts-ignore
 
       mousecursor
         .set({
@@ -129,6 +129,7 @@ function Canvas({ width, height }: any) {
 
     setFabricEditor({
       ...fabricEditor,
+      //@ts-ignore
       canvas: canvas,
       // workArea: workArea,
     })

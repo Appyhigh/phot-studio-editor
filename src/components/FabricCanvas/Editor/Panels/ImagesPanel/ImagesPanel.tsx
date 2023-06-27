@@ -21,7 +21,6 @@ const ImageItem = ({ src }: { src: any }) => {
   const { fabricEditor: {canvas} } = useEditor()
 
   const handleAddObject = useCallback(() => {
-    console.log("add object: ", src.small)
     addImage({
       type: "image",
       src: src.small,

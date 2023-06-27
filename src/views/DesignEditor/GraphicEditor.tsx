@@ -3,21 +3,17 @@ import Canvas from "./components/Canvas"
 import Footer from "./components/Footer"
 import EditorContainer from "./components/EditorContainer"
 import BasePannel from "~/components/UI/BasePannel/BasePannel"
-import { Block } from "baseui/block"
 import Navbar from "~/components/UI/Common/Navbar/Navbar"
 import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 import { fabric } from "fabric"
-import { useContext, useEffect, useRef, useState } from "react"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import { useEffect, useState } from "react"
+import { useEditor } from "@layerhub-io/react"
 import useAppContext from "~/hooks/useAppContext"
 import { OBJECT_REMOVER } from "~/constants/contants"
-import Editor from "~/components/FabricCanvas/Editor"
 import FabricCanvasModal from "~/components/FabricCanvas/FabricCanvasModal/FabricCanvasModal"
-
 const GraphicEditor = () => {
   // Initially set the canvas background as Transparent Checkbox Image
   const editor = useEditor()
-
   useEffect(() => {
     if (editor) {
       // Setup Selection Style
@@ -31,13 +27,13 @@ const GraphicEditor = () => {
   }, [editor])
 
   const { activePanel } = useAppContext()
-  console.log(activePanel)
   const [isopen, setIsOpen] = useState(false)
   useEffect(() => {
     if (activePanel === OBJECT_REMOVER) {
       setIsOpen(true)
     }
   }, [activePanel])
+
   return (
     <EditorContainer>
       <Navbar />

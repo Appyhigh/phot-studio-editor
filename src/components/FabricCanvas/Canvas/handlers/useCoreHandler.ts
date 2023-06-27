@@ -14,10 +14,11 @@ function useCoreHandler() {
       const element = CanvasObjects[type].render(textOptions)
       //@ts-ignore
       const workarea = canvas.getObjects().find((obj) => obj.id === "workarea")
+      //@ts-ignore
       canvas.add(element)
       element.center()
-
       element.clipPath = workarea
+      //@ts-ignore
       canvas.renderAll()
     },
     [canvas]
@@ -25,36 +26,38 @@ function useCoreHandler() {
 
   const addImage = useCallback(
     (options: any) => {
-      if(canvas){
+      if (canvas) {
         const { type, ...imageOptions } = options
         //@ts-ignore
         const element = CanvasObjects[type].render(imageOptions)
-  
+        //@ts-ignore
         const workarea = canvas?.getObjects().find((obj: any) => obj.id === "workarea")
         // Create a fabric.Image from URL
         fabric.Image.fromURL(imageOptions.src, (img: fabric.Image) => {
           // Set additional options for the image object
           img.set({ type: "image", ...imageOptions })
-  
+
           // Add the image object to the canvas
+          //@ts-ignore
           canvas.add(img)
           img.center()
-  
+
           img.clipPath = workarea
+          //@ts-ignore
           canvas.renderAll()
           setFabricEditor({ ...fabricEditor, canvas: canvas })
         })
-      }
-      else {
+      } else {
         console.log("empty canvas")
       }
-    
     },
     [canvas]
   )
 
   const removeObject = useCallback(() => {
     if (canvas && activeObject) {
+      //@ts-ignore
+
       canvas.remove(activeObject)
     }
   }, [canvas, activeObject])
@@ -63,8 +66,11 @@ function useCoreHandler() {
   const setProperty = useCallback(
     (property: any, value: any) => {
       if (activeObject) {
+        //@ts-ignore
         activeObject.set(property, value)
+        //@ts-ignore
         activeObject.setCoords()
+        //@ts-ignore
         canvas.requestRenderAll()
       }
     },
@@ -72,6 +78,7 @@ function useCoreHandler() {
   )
 
   const exportJSON = useCallback(() => {
+    //@ts-ignore
     const json = canvas.toJSON(propertiesToInclude)
     return json
   }, [canvas])
@@ -79,7 +86,9 @@ function useCoreHandler() {
   const loadJSON = useCallback(
     (json: any) => {
       if (canvas) {
+        //@ts-ignore
         canvas.loadFromJSON(json, () => {
+          //@ts-ignore
           canvas.requestRenderAll()
         })
       }
@@ -93,6 +102,7 @@ function useCoreHandler() {
       const workarea = canvas.getObjects().find((object) => object.id === "workarea")
       if (workarea) {
         workarea.set("fill", color)
+        //@ts-ignore
         canvas.requestRenderAll()
       }
     },

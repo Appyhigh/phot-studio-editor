@@ -21,6 +21,7 @@ const PanelsList = () => {
   const { activePanel } = useAppContext()
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
+  //@ts-ignore
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
 
   return (
@@ -52,7 +53,7 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   return (
     <Block
       id="EditorPanelList"
-      className={clsx(classes.panelListItem, "flex-center-column",activePanel!==name&&classes.inActivePanel)}
+      className={clsx(classes.panelListItem, "flex-center-column", activePanel !== name && classes.inActivePanel)}
       onClick={() => {
         setIsSidebarOpen(true)
         setActivePanel(name)

@@ -24,11 +24,12 @@ function Editor() {
             const scaleX = containerWidth / 500
             const scaleY = containerHeight / 400
             const scale = Math.min(scaleX, scaleY)
-
+            //@ts-ignore
             canvas.setDimensions({
               width: 500 * scale,
               height: 400 * scale,
             })
+            //@ts-ignore
             canvas.setHeight(400 * scale).setWidth(500 * scale)
             // canvas.setWidth(400);
             // canvas.setHeight(800);
@@ -43,11 +44,13 @@ function Editor() {
             const scaleX = containerWidth / 800
             const scaleY = containerHeight / 600
             const scale = Math.min(scaleX, scaleY)
+            //@ts-ignore
 
             canvas.setDimensions({
               width: 800 * scale,
               height: 600 * scale,
             })
+                      //@ts-ignore
             canvas.setHeight(800 * scale).setWidth(600 * scale)
             // setDimension({ width: 800, height: 600 })
           }}
@@ -61,11 +64,14 @@ function Editor() {
             const scaleX = containerWidth / 400
             const scaleY = containerHeight / 800
             const scale = Math.min(scaleX, scaleY)
+            //@ts-ignore
 
             canvas.setDimensions({
               width: 400 * scale,
               height: 800 * scale,
             })
+            //@ts-ignore
+
             canvas.setHeight(400 * scale).setWidth(800 * scale)
           }}
         >
