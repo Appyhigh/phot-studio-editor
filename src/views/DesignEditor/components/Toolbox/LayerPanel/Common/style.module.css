@@ -11,6 +11,12 @@
   border-radius: 5px;
 }
 
+.shadowOption {
+  width: 48px;
+  height: 48px;
+  background: white;
+  border-radius: 5px;
+}
 .filterName {
   font-weight: 400;
   font-size: 12px;

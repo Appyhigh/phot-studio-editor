@@ -225,7 +225,6 @@ const Container = ({ children }: { children: React.ReactNode }) => {
           } else {
             editor.objects.add(layer).then(() => {
               // @ts-ignore
-
               if (layer.filters) {
                 applyFilterFunc(layer, editor)
               } else {
@@ -266,9 +265,10 @@ const Container = ({ children }: { children: React.ReactNode }) => {
         const currentScene = editor.scene.exportToJSON()
         let images = 0
         const data = currentScene.layers.filter((el) => el.id != "background")
-        const updatedData = data.map((each, _idx) => {
-          const filters = editor.objects.findById(each?.id)[0].filters
-          return { ...each, filters }
+        const updatedData = data.map((each: any, _idx) => {
+          const filters = editor.objects.findById(each.id)[0].filters
+          const shadow = editor.objects.findById(each.id)[0].shadow
+          return { ...each, filters, shadow }
         })
         currentScene.layers.map((el) => {
           if (el.type === "StaticImage") {
