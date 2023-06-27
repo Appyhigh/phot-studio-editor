@@ -317,7 +317,7 @@ const BaseSlider = ({
         <div className={classes.baseSliderHeading}>{name}</div>
         <div className="flex-1"></div>
         <div className={classes.percentageVal}>
-          {inputVal}
+          {Math.round(inputVal)}
           {percentage && "%"}
         </div>
       </div>
