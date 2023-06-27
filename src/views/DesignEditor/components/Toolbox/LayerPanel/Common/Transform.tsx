@@ -23,9 +23,9 @@ const Transform = () => {
                 ? 1
                 : activeObject.lineHeight * 100 - 50
               : each.type == "letterSpacing" && activeObject && activeObject.charSpacing
-              ? activeObject.charSpacing > 100
+              ? activeObject.charSpacing > 1000
                 ? 100
-                : activeObject.charSpacing
+                : activeObject.charSpacing / 10
               : 0
           }
           key={idx}
