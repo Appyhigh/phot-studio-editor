@@ -6,30 +6,36 @@ import { useActiveObject } from "@layerhub-io/react"
 const Transform = () => {
   const activeObject: any = useActiveObject()
 
+  const getValue = (each: any) => {
+    if (each.type === "size" && activeObject && activeObject.fontSize) {
+      if (activeObject.fontSize > 400) {
+        return 100
+      } else {
+        return activeObject.fontSize / 4
+      }
+    } else if (each.type === "lineHeight" && activeObject && activeObject.lineHeight) {
+      if (activeObject.lineHeight > 1.5) {
+        return 100
+      } else if (activeObject.lineHeight <= 0.5) {
+        return 1
+      } else {
+        return activeObject.lineHeight * 100 - 50
+      }
+    } else if (each.type === "letterSpacing" && activeObject && activeObject.charSpacing) {
+      if (activeObject.charSpacing > 1000) {
+        return 100
+      } else {
+        return activeObject.charSpacing / 10
+      }
+    } else {
+      return 0
+    }
+  }
+
   return (
     <div className={classes.adjustState}>
       {TransformOptions.map((each, idx) => (
-        <BaseSlider
-          {...each}
-          value={
-            each.type == "size" && activeObject && activeObject.fontSize
-              ? activeObject.fontSize > 400
-                ? 100
-                : activeObject.fontSize / 4
-              : each.type == "lineHeight" && activeObject && activeObject.lineHeight
-              ? activeObject.lineHeight > 1.5
-                ? 100
-                : activeObject.lineHeight <= 0.5
-                ? 1
-                : activeObject.lineHeight * 100 - 50
-              : each.type == "letterSpacing" && activeObject && activeObject.charSpacing
-              ? activeObject.charSpacing > 1000
-                ? 100
-                : activeObject.charSpacing / 10
-              : 0
-          }
-          key={idx}
-        />
+        <BaseSlider {...each} value={getValue(each)} key={idx} />
       ))}
     </div>
   )
