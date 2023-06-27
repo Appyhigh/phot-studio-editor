@@ -7,8 +7,12 @@ import { Block } from "baseui/block"
 import Navbar from "~/components/UI/Common/Navbar/Navbar"
 import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 import { fabric } from "fabric"
-import { useContext, useEffect, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
+import useAppContext from "~/hooks/useAppContext"
+import { OBJECT_REMOVER } from "~/constants/contants"
+import Editor from "~/components/FabricCanvas/Editor"
+import FabricCanvasModal from "~/components/FabricCanvas/FabricCanvasModal/FabricCanvasModal"
 
 const GraphicEditor = () => {
   // Initially set the canvas background as Transparent Checkbox Image
@@ -26,22 +30,38 @@ const GraphicEditor = () => {
     }
   }, [editor])
 
+  const { activePanel } = useAppContext()
+  console.log(activePanel)
+  const [isopen, setIsOpen] = useState(false)
+  useEffect(() => {
+    if (activePanel === OBJECT_REMOVER) {
+      setIsOpen(true)
+    }
+  }, [activePanel])
   return (
     <EditorContainer>
       <Navbar />
       <div className="d-flex flex-1">
         <Panels />
-        <div className="flex-1 d-flex flex-column p-relative">
-          {/* <Toolbox /> */}
-          <BasePannel />
-          <div className="flex-1 d-flex flex-row p-relative">
-            <div className="flex-1 d-flex flex-column p-relative">
-              <Canvas />
-              <Footer />
+        {
+          <div className="flex-1 d-flex flex-column p-relative">
+            {/* <Toolbox /> */}
+            <BasePannel />
+            <div className="flex-1 d-flex flex-row p-relative">
+              <div className="flex-1 d-flex flex-column p-relative">
+                <Canvas />
+                <Footer />
+              </div>
+              <LayerPanel />
             </div>
-            <LayerPanel />
           </div>
-        </div>
+        }
+        <FabricCanvasModal
+          isOpen={isopen}
+          handleClose={() => {
+            setIsOpen(false)
+          }}
+        />
       </div>
     </EditorContainer>
   )
