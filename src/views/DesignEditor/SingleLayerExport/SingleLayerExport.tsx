@@ -163,6 +163,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                 <Elements size={24} />
               </ContextMenuItem>
             )}
+            { activeObject?.type === "StaticImage" && 
             <div className="p-relative">
               <ContextMenuItem
                 onClick={() => {
@@ -181,7 +182,7 @@ const SingleLayerExport = ({ isOpenSlider, activeOb, show }: any) => {
                   typeGroup={activeObject?.type === "group" ? true : false}
                 />
               )}
-            </div>
+            </div>}
           </div>
         </div>
       </div>

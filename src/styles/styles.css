@@ -645,8 +645,8 @@ ul {
 /* download popup  */
 .download-wrapper {
   display: none;
-  min-width: 298px;
-  min-height: 260px;
+  min-width: 310px;
+  min-height: 350px;
   top: 10px;
   right: 2px;
   position: absolute;
@@ -661,8 +661,8 @@ ul {
   z-index: 500;
 }
 .downloadPopup {
-  min-width: 298px;
-  min-height: 260px;
+  min-width: 450px;
+  min-height: 300px;
 }
 
 .downloadResultBtn:hover .download-wrapper {
