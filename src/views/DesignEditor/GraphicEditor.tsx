@@ -30,7 +30,7 @@ const GraphicEditor = () => {
   const { activePanel, setActivePanel } = useAppContext()
   const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
-    if (!Object.values(PanelType).includes(activePanel)) {
+    if (activePanel && !Object.values(PanelType).includes(activePanel)) {
       setIsOpen(true)
     } else {
       setIsOpen(false)
