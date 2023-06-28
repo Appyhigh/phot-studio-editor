@@ -2,8 +2,11 @@ import { Modal, SIZE } from "baseui/modal"
 import Editor from "../Editor"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
+import useAppContext from "~/hooks/useAppContext"
+import PhotoshootEditor from "../Editor/PhotoshootEditor"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
+  const { activePanel } = useAppContext()
   return (
     <Modal
       animate
@@ -34,7 +37,8 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      <Editor handleClose={handleClose} />
+      {activePanel === ("ProductPhotoshoot" as any) && <PhotoshootEditor handleClose={handleClose} />}
+      {/* <Editor handleClose={handleClose} /> */}
     </Modal>
   )
 }
