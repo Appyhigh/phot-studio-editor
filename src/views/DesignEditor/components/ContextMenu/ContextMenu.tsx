@@ -47,10 +47,10 @@ const ContextMenu = () => {
       const selectInputFormatSection = document.querySelector(`.${classes.selectInputFormatSection}`)
       const eachOption = document.querySelector(`.${classes.eachOption}`)
       if (
-        !contextMenuSection!.contains(event.target) ||
-        !downloadPopup!.contains(event.target) ||
-        !selectInputFormatSection!.contains(event.target) ||
-        !eachOption!.contains(event.target)
+        (contextMenuSection && !contextMenuSection!.contains(event.target)) ||
+        (downloadPopup && !downloadPopup!.contains(event.target)) ||
+        (selectInputFormatSection && !selectInputFormatSection!.contains(event.target)) ||
+        (eachOption && !eachOption!.contains(event.target))
       ) {
         editor.cancelContextMenuRequest()
       }
