@@ -15,10 +15,8 @@ import UploadPreview from "../UploadPreview/UploadPreview"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { getStockImages } from "~/services/stockApi"
-import { SampleImagesApi } from "~/services/SampleImagesApi"
-import useAppContext from "~/hooks/useAppContext"
-import { REMOVE_BACKGROUND,TOOL_NAMES,SAMPLE_IMAGES } from "~/constants/contants"
-import ErrorContext from "~/contexts/ErrorContext"
+import { REMOVE_BACKGROUND } from "~/constants/contants"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -35,9 +33,7 @@ const BgRemover = () => {
     setSelectedBgOption({ type: type, id: idx })
   }
   const [imageLoading, setImageLoading] = useState(false)
-  const { SampleImages,setSampleImages } = useAppContext()
-  const { setErrorInfo } = useContext(ErrorContext)
-  let ErrortimeOut:any ;
+  const { sampleImages } = useContext(SampleImagesContext)
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -100,39 +96,6 @@ const BgRemover = () => {
     fetchCategories()
   }, [])
 
-  const fetchSampleImages = async () => {
-    try{
-      const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
-      setSampleImages((prev:any)=>({...prev,BgRemover:[...result]}))
-    }catch(error){
-      setErrorInfo((prev: any) => ({
-        ...prev,
-        showError: true,
-        errorMsg: `Failed to load Sample Images for  ${TOOL_NAMES.bgRemover} panel`,
-        retryFn: () => {
-          if(ErrortimeOut){
-            clearTimeout(ErrortimeOut)
-          }
-          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          fetchSampleImages()
-        },
-      }))
-      ErrortimeOut = setTimeout(() => {
-        setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-      }, 5000)
-      console.error("Error:", error)
-    }
-  }
-
-  useEffect(() => {
-    fetchSampleImages()
-
-    return (()=>{
-      clearTimeout(ErrortimeOut)
-    })
-  }, [])
-
-
   return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
@@ -164,18 +127,19 @@ const BgRemover = () => {
           <Scrollable>
             <Block className="py-3">
               <Block className={classes.sampleImgSection}>
-                {SampleImages.BgRemover?.map((image: any, index:any) => {
-                  return (
-                    <ImageItem
-                      key={index}
-                      onClick={() => {
-                        addObject(image.originalImage)
-                      }}
-                      preview={image.thumbnail}
-                      imageLoading={imageLoading}
-                    />
-                  )
-                })}
+                {sampleImages.bgRemover &&
+                  sampleImages.bgRemover.map((image: any, index: any) => {
+                    return (
+                      <ImageItem
+                        key={index}
+                        onClick={() => {
+                          addObject(image.originalImage)
+                        }}
+                        preview={image.thumbnail}
+                        imageLoading={imageLoading}
+                      />
+                    )
+                  })}
               </Block>
             </Block>
           </Scrollable>

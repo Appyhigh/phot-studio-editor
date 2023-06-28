@@ -1,4 +1,4 @@
-import { IMAGE_UPSCALER, TOOL_NAMES, SAMPLE_IMAGES } from "~/constants/contants"
+import { IMAGE_UPSCALER } from "~/constants/contants"
 import Uploads from "../UploadDropzone/Uploads"
 import classes from "./style.module.css"
 import useAppContext from "~/hooks/useAppContext"
@@ -22,14 +22,13 @@ import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import { SampleImagesApi } from "~/services/SampleImagesApi"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
   const { user } = authState
-
   const [imageLoading, setImageLoading] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [loadingImgCt, setLoadingImgCt] = useState(0)
@@ -38,43 +37,8 @@ const ImageUpscaler = () => {
   const { setImagesCt } = useContext(ImagesContext)
   const leftPanelRef = useRef()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-  const { SampleImages, setSampleImages } = useAppContext()
-  const {errorInfo,setErrorInfo} = useContext(ErrorContext)
-
-  let ErrortimeOut:any = 0;
-
-  const fetchSampleImages = async () => {
-    try {
-      const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
-      setSampleImages((prev: any) => ({ ...prev, ImageUpscalar: [...result] }))
-    } catch (error) {
-      setErrorInfo((prev: any) => ({
-        ...prev,
-        showError: true,
-        errorMsg: `Failed to load Sample Images for ${TOOL_NAMES.imageUpscalar} panel`,
-        retryFn: () => {
-          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          if (ErrortimeOut) {
-            clearTimeout(ErrortimeOut)
-          }
-          fetchSampleImages()
-        },
-      }))
-
-      ErrortimeOut = setTimeout(() => {
-        setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-      }, 5000)
-      console.error("Error:", error)
-    }
-  }
-
-  useEffect(() => {
-    fetchSampleImages()
-
-    return (()=>{
-      clearTimeout(ErrortimeOut)
-    })
-  }, [])
+  const { sampleImages } = useContext(SampleImagesContext)
+  const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -394,18 +358,19 @@ const ImageUpscaler = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {SampleImages.ImageUpscalar?.map((image: any, index: any) => {
-                      return (
-                        <ImageItem
-                          key={index}
-                          onClick={() => {
-                            addObject(image.originalImage)
-                          }}
-                          preview={image.thumbnail}
-                          imageLoading={imageLoading}
-                        />
-                      )
-                    })}
+                    {sampleImages.imageUpscaler &&
+                      sampleImages.imageUpscaler.map((image: any, index: any) => {
+                        return (
+                          <ImageItem
+                            key={index}
+                            onClick={() => {
+                              addObject(image.originalImage)
+                            }}
+                            preview={image.thumbnail}
+                            imageLoading={imageLoading}
+                          />
+                        )
+                      })}
                   </Block>
                 </Block>
               </Scrollable>

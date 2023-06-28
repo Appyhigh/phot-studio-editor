@@ -1,14 +1,13 @@
 import { Block } from "baseui/block"
-import { IMAGE_COLORIZER, TOOL_NAMES, SAMPLE_IMAGES } from "~/constants/contants"
+import { IMAGE_COLORIZER } from "~/constants/contants"
 import classes from "./style.module.css"
 import Uploads from "../UploadDropzone/Uploads"
 import Scrollable from "~/components/Scrollable"
 import useAppContext from "~/hooks/useAppContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
-import { useActiveObject, useEditor, useObjects, useFrame } from "@layerhub-io/react"
-import { useCallback, useContext, useEffect, useState } from "react"
-import { SampleImagesApi } from "~/services/SampleImagesApi"
+import { useEditor, useFrame } from "@layerhub-io/react"
+import { useCallback, useContext, useState } from "react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -16,26 +15,24 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import BaseButton from "~/components/UI/Button/BaseButton"
-import NoneIcon from "~/components/Icons/NoneIcon"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { imgColorizerController } from "~/utils/imgColorizerController"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 import ErrorContext from "~/contexts/ErrorContext"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
   const editor = useEditor()
   const { setImagesCt } = useContext(ImagesContext)
-  const { SampleImages, setSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
-  const { errorInfo,setErrorInfo } = useContext(ErrorContext)
-  let ErrortimeOut: any = 0;
-  // @ts-ignore
+  const { sampleImages } = useContext(SampleImagesContext)
+  const { setErrorInfo } = useContext(ErrorContext)
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
 
@@ -122,41 +119,6 @@ const ImageColorizer = () => {
     }))
   }
 
-
-
-  const fetchSampleImages = async () => {
-    try {
-      const result = await SampleImagesApi(SAMPLE_IMAGES.imageUpscalar)
-      setSampleImages((prev: any) => ({ ...prev, ImageColorizer: [...result] }))
-    } catch (error) {
-      setErrorInfo((prev: any) => ({
-        ...prev,
-        showError: true,
-        errorMsg: `Failed to load Sample Images for ${TOOL_NAMES.imageColorizer} panel`,
-        retryFn: () => {
-          if (ErrortimeOut) {
-            clearTimeout(ErrortimeOut)
-          }
-          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          fetchSampleImages()
-        },
-      }))
-      ErrortimeOut = setTimeout(() => {
-        setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-      }, 5000)
-      console.error("Error:", error)
-    }
-  }
-
-  useEffect(() => {
-    fetchSampleImages()
-    return (()=>{
-      clearTimeout(ErrortimeOut)
-    })
-  }, [])
-
-
-
   const frame = useFrame()
   const addImg = async (imageUrl: string, _idx: number) => {
     setCurrentActiveImg(_idx)
@@ -222,18 +184,19 @@ const ImageColorizer = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {SampleImages.ImageColorizer?.map((image: any, index: any) => {
-                      return (
-                        <ImageItem
-                          key={index}
-                          onClick={() => {
-                            addObject(image.originalImage)
-                          }}
-                          imageLoading={imageLoading}
-                          preview={image.thumbnail}
-                        />
-                      )
-                    })}
+                    {sampleImages.imageColorizer &&
+                      sampleImages.imageColorizer.map((image: any, index: any) => {
+                        return (
+                          <ImageItem
+                            key={index}
+                            onClick={() => {
+                              addObject(image.originalImage)
+                            }}
+                            imageLoading={imageLoading}
+                            preview={image.thumbnail}
+                          />
+                        )
+                      })}
                   </Block>
                 </Block>
               </Scrollable>
