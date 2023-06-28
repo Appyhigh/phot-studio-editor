@@ -15,7 +15,7 @@
 .images {
   max-width: 300px !important;
 }
-.three {
+.canvasStyling {
   flex: 1;
   display: flex;
   align-items: center;

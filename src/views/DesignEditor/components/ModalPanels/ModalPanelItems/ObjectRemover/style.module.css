@@ -1,0 +1,12 @@
+.heading {
+  display: flex;
+  flex-direction: row;
+  color: #44444f;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 24px 0px 24px 20px;
+}
+
+.arrowIcon {
+  margin-right: 12px;
+}
