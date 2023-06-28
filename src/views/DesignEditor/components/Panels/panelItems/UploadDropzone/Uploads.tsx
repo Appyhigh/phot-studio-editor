@@ -15,6 +15,7 @@ export default function ({
   setUploads,
   imageLoading,
   setImageLoading,
+  imgUpload,setImgUpload
 }: any) {
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const [renderKey, setRenderKey] = useState(0)
@@ -43,6 +44,8 @@ export default function ({
               uploadType={uploadType}
               uploads={uploads}
               setUploads={setUploads}
+              imgUpload={imgUpload}
+              setImgUpload={setImgUpload}
             />
           </div>
         )}

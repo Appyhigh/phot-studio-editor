@@ -1,0 +1,23 @@
+.tryImages {
+  margin: 0px 0px 12px 20px;
+}
+.tryImages p {
+  color: #44444f;
+  font-size: 14px;
+  margin-left: 6px;
+}
+
+.sampleImg {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.eachImg {
+  margin: 12px 7px 8px;
+}
+
+.eachImg img {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+}
