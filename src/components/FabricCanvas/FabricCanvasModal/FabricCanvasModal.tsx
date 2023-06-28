@@ -19,6 +19,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
         Close: {
           style: ({ $theme }) => ({
             outline: `transparent`,
+            display: "none",
           }),
         },
         Dialog: {
@@ -33,7 +34,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      <Editor />
+      <Editor handleClose={handleClose} />
     </Modal>
   )
 }

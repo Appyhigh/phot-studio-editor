@@ -3,13 +3,15 @@ import useFabricEditor from "src/hooks/useFabricEditor"
 import CanvasArea from "./CanvasArea/CanvasArea"
 import ImagesPanel from "./Panels/ImagesPanel/ImagesPanel"
 import classes from "./style.module.css"
+import ModalBasePanel from "./Panels/ModalBasePanel/ModalBasePanel"
 import PointerIcon from "~/components/Icons/PointerIcon"
 
-function Editor() {
+function Editor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
     width: 800,
     height: 800,
   })
+  const [isDoneBtnDisabled, setIsDoneBtnDisabled] = useState(false)
 
   const { fabricEditor } = useFabricEditor()
 
@@ -18,6 +20,7 @@ function Editor() {
   return (
     <div>
       <div className={classes.editor}>
+        <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={isDoneBtnDisabled} />
         <div className="d-flex flex-row">
           <h3
             className="px-1"
