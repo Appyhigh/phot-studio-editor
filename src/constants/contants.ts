@@ -27,19 +27,20 @@ export const IMAGE_UPSCALER = "ImageUpscaler"
 export const PHOTO_EDITOR = "PhotoEditor"
 export const REMOVE_BACKGROUND = "remove_bg"
 export const IMAGE_COLORIZER = "ImageColorizer"
+
 export const TOOL_NAMES = {
   Image: "Image",
   bgRemover: "Remove Background",
   imagineAi: "Imagine AI",
   imageUpscalar: "Image Upscaler",
   imageColorizer: "Image Colorizer",
-  photoEditor: "Photo Editor"
+  photoEditor: "Photo Editor",
 }
-export const SAMPLE_IMAGES = {
+export const SAMPLE_IMAGES: any = {
   Image: "",
   bgRemover: "STUDIO_BACKGROUND_REMOVER",
   imagineAi: "",
-  imageUpscalar: "UPSCALER",
+  imageUpscaler: "UPSCALER",
   imageColorizer: "",
-  photoEditor:""
+  photoEditor: "",
 }
