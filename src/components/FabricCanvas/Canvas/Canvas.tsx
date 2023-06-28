@@ -106,7 +106,7 @@ function Canvas({ width, height }: any) {
 
   return (
     <div className="editor-canvas flex justify-center" id="cont" ref={containerRef}>
-      <div className={classes.toggleBtn}>
+      {/* <div className={classes.toggleBtn}>
         <div
           className={clsx(classes.btn, brushOn && classes.activeBrush)}
           onClick={() => {
@@ -125,8 +125,8 @@ function Canvas({ width, height }: any) {
         >
           brush off
         </div>
-      </div>
-      <div className={classes.toggleBtn}>
+      </div> */}
+      {/* <div className={classes.toggleBtn}>
         <div
           className={clsx(classes.btn, bgSet && classes.activeBrush)}
           onClick={() => {
@@ -167,7 +167,7 @@ function Canvas({ width, height }: any) {
         >
           Remove Bg
         </div>
-      </div>
+      </div> */}
       <input
         type="range"
         min={5}
