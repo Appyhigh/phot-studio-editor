@@ -16,7 +16,7 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import Accordian from "~/components/Accordian/Accordian"
+import Accordian from "~/components/UI/Accordian/Accordian"
 
 const Images = () => {
   const editor = useEditor()

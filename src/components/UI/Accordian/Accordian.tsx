@@ -1,7 +1,7 @@
 import { useState } from "react"
-import Icons from "../Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import Icons from "~/components/Icons"
 
 const Accordian = ({ label, heading, children, isDone }: any) => {
   const [isOpen, setIsOpen] = useState(false)
