@@ -108,7 +108,7 @@ const SwiperWrapper = ({ type, data, handleBgChangeOption, selectedBgOption }: a
               >
                 {selectedBgOption.type === type &&
                   mainImgInfo.swiper_option_selected &&
-                  selectedBgOption.id === idx && <Icons.Selection size={"24"} />}
+                  selectedBgOption.id === idx && <Icons.Selection size={"32"} />}
               </Block>
             </SwiperSlide>
           )

@@ -205,7 +205,7 @@ const ImageItem = ({
       <img src={preview} className={classes.imagePreview} />
       {selectedImage === idx && (
         <div className={classes.selectedIcon}>
-          <Icons.Selection size={"24"} />
+          <Icons.Selection size={"32"} />
         </div>
       )}
     </div>
