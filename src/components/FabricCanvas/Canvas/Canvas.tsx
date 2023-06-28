@@ -105,7 +105,7 @@ function Canvas({ width, height }: any) {
   }, [canvas, objects])
 
   return (
-    <div className="editor-canvas flex justify-center" id="cont" ref={containerRef}>
+    <div className="editor-canvas flex justify-center p-4" id="cont" ref={containerRef}>
       {/* <div className={classes.toggleBtn}>
         <div
           className={clsx(classes.btn, brushOn && classes.activeBrush)}
@@ -168,7 +168,7 @@ function Canvas({ width, height }: any) {
           Remove Bg
         </div>
       </div> */}
-      <input
+      {/* <input
         type="range"
         min={5}
         max={75}
@@ -180,7 +180,7 @@ function Canvas({ width, height }: any) {
           }, auto`),
             (canvas.freeDrawingBrush.width = brushSize)
         }}
-      />
+      /> */}
       <canvas id="canvas"></canvas>
     </div>
   )
