@@ -33,9 +33,6 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
-        <Icons.SliderBtn size={106} width="50" />
-      </div>
       <Editor />
     </Modal>
   )

@@ -36,3 +36,9 @@
 .resize_list li {
   margin: 4px 12px;
 }
+
+.chevronIcon {
+  position: absolute;
+  left: -2.25rem;
+  z-index: 1000;
+}
