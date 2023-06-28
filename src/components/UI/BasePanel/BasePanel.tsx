@@ -13,7 +13,7 @@ import BaseButton from "../Button/BaseButton"
 import Transparency from "~/components/Icons/Transparency"
 import TransparencyPopup from "~/views/DesignEditor/components/Footer/Graphic/TransparencyPopup/TransparencyPopup"
 
-const BasePannel = () => {
+const BasePanel = () => {
   const editor = useEditor()
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [transparencyPopup, setTransparencyPopup] = useState(false)
@@ -88,12 +88,12 @@ const BasePannel = () => {
 
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   return (
-    <Block className={clsx(classes.basePannel, "d-flex align-items-center flex-row")}>
+    <Block className={clsx(classes.basePanel, "d-flex align-items-center flex-row")}>
       <Block className="d-flex justify-content-start align-items-center">
         <Block className="flex-center">
           <div className="p-relative addPopupBtn">
             <button
-              className={classes.basePannelBtn}
+              className={classes.basePanelBtn}
               onMouseOver={() => {
                 setShowAddPopup(true)
               }}
@@ -187,4 +187,4 @@ const BasePannel = () => {
   )
 }
 
-export default BasePannel
+export default BasePanel

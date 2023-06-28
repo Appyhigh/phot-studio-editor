@@ -1,0 +1,28 @@
+.basePanel {
+  height: 55px;
+  background: #fff;
+  box-shadow: inset 0px -1px 0px #e2e2ea;
+  padding: 15px 0px;
+  border-left: 2px solid #e2e2ea;
+  border-top-right-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.basePanelBtn {
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 12px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-family: "Poppins";
+  color: #fff;
+  padding: 9px 15px;
+  background-color: #6729f3;
+}
+
+.canvasOptions {
+  margin: 10px 0.75rem;
+}
