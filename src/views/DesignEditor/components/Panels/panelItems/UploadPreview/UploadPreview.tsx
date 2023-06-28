@@ -13,7 +13,15 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import BaseButton from "~/components/UI/Button/BaseButton"
 
-const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btnTitle, previewHandle }: any) => {
+const UploadPreview = ({
+  discardHandler,
+  uploadType,
+  previewHeading,
+  imgSrc,
+  btnTitle,
+  previewHandle,
+  uploading,
+}: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
   const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
@@ -53,7 +61,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
   return (
     <div>
       <Block paddingTop={"10px"}>
-        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER &&  (
+        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER && (
           <div
             className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
             onClick={() => {
@@ -65,14 +73,14 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
         )}
         {uploadType === IMAGE_COLORIZER && (
           <Block
-          onClick={() => {
-            discardHandler()
-          }}
-          $style={{ cursor: "pointer", display: "flex" }}
-          className={classes.chevronRightIcon}
-        >
-          <Icons.ChevronRight fill="#000" size={"20"} />
-        </Block>
+            onClick={() => {
+              discardHandler()
+            }}
+            $style={{ cursor: "pointer", display: "flex" }}
+            className={classes.chevronRightIcon}
+          >
+            <Icons.ChevronRight fill="#000" size={"20"} />
+          </Block>
         )}
       </Block>
       <Block className={classes.uploadInputWrapper}>
@@ -125,7 +133,9 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                 handleClick={() => {
                   if (uploadType === REMOVE_BACKGROUND) {
                     removeBg()
-                  } else previewHandle()
+                  } else {
+                    !uploading && previewHandle()
+                  }
                 }}
               />
             )}
