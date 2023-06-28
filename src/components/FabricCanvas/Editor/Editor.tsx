@@ -5,18 +5,20 @@ import ImagesPanel from "./Panels/ImagesPanel/ImagesPanel"
 import classes from "./style.module.css"
 import { Block } from "baseui/block"
 import ModalPanelItem from "~/views/DesignEditor/components/ModalPanels/ModalPanelItem/ModalPanelItem"
-import BasePannel from "~/components/UI/BasePannel/BasePannel"
 import clsx from "clsx"
+import ModalBasePanel from "./Panels/ModalBasePanel/ModalBasePanel"
+import PointerIcon from "~/components/Icons/PointerIcon"
 
-function Editor() {
+function Editor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
     width: 800,
     height: 800,
   })
+  const [isDoneBtnDisabled, setIsDoneBtnDisabled] = useState(false)
 
   const { fabricEditor } = useFabricEditor()
 
-  const { canvas, objects } = fabricEditor
+  const { canvas, objects }: any = fabricEditor
 
   return (
     // <div className={classes.editor}>
@@ -112,14 +114,21 @@ function Editor() {
     //     </div>
     //   </div>
     // </div>
-    <div className={"d-flex flex-column"}>
-      <div className="d-flex">
+    <div className={"d-flex flex-column "}>
+      <div className="d-flex flex-1">
         <ModalPanelItem />
-        {
+
+        <div className="flex-1 d-flex flex-column p-relative">
+          <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={isDoneBtnDisabled} />
+
           <div className={clsx(classes.canvasStyling)}>
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
-        }
+        </div>
+
+        <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
+          <PointerIcon />
+        </div>
       </div>
     </div>
   )

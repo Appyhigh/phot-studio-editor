@@ -2,7 +2,7 @@ import Panels from "./components/Panels"
 import Canvas from "./components/Canvas"
 import Footer from "./components/Footer"
 import EditorContainer from "./components/EditorContainer"
-import BasePannel from "~/components/UI/BasePannel/BasePannel"
+import BasePanel from "~/components/UI/BasePanel/BasePanel"
 import Navbar from "~/components/UI/Common/Navbar/Navbar"
 import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 import { fabric } from "fabric"
@@ -30,7 +30,7 @@ const GraphicEditor = () => {
   const { activePanel, setActivePanel } = useAppContext()
   const [isOpen, setIsOpen] = useState(false)
   useEffect(() => {
-    if (!Object.values(PanelType).includes(activePanel)) {
+    if (activePanel && !Object.values(PanelType).includes(activePanel)) {
       setIsOpen(true)
     } else {
       setIsOpen(false)
@@ -45,7 +45,7 @@ const GraphicEditor = () => {
         {
           <div className="flex-1 d-flex flex-column p-relative">
             {/* <Toolbox /> */}
-            <BasePannel />
+            <BasePanel />
             <div className="flex-1 d-flex flex-row p-relative">
               <div className="flex-1 d-flex flex-column p-relative">
                 <Canvas />
