@@ -16,6 +16,7 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import UploadPreview from "../UploadPreview/UploadPreview"
+import Accordian from "~/components/UI/Accordian/Accordian"
 
 const Images = () => {
   const editor = useEditor()
@@ -39,8 +40,11 @@ const Images = () => {
     })
   }
 
+  const accordinanContent = () => <h3>Children</h3>
   return (
     <Block className="d-flex flex-1 flex-column">
+      {/* accordian demo  */}
+      {/* <Accordian label={1} isDone={true} heading={"Upload/choose image"} children={accordinanContent()} /> */}
       <>
         {uploads.length != 0 ? (
           uploads.map((upload) => (

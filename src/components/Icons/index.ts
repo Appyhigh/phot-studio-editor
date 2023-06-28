@@ -82,6 +82,7 @@ import ToolTipCross from "./TooltipCross"
 import ToolTip from "./Tooltip"
 import ImgLock from "./ImgLock"
 import NoneIcon from "./NoneIcon"
+import TickIcon from "./TickIcon"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -167,6 +168,7 @@ class Icons {
   static ToolTip=ToolTip
   static ImgLock=ImgLock
   static NoneIcon= NoneIcon
+  static TickIcon=TickIcon
 }
 
 export default Icons

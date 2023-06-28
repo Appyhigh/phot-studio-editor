@@ -1,0 +1,38 @@
+.accordianMain {
+  padding: 30px 20px 28px;
+  color: #44444f;
+  font-size: 16px;
+}
+.heading {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.label {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #92929d;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.tickIcon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #6729f3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.iconOpen {
+  transform: rotate(-180deg);
+}
