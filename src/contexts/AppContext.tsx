@@ -21,12 +21,6 @@ interface IAppContext {
   setRes: (res: any[]) => void
   search: string
   setSearch: (search: string) => void
-  bgSampleImages: any[]
-  setBgSampleImages: (bgSampleImages: any[]) => void
-  imgUpscalerSampleImg: any[]
-  setImgUpscalerSampleImg: (imgUpscalerSampleImg: any[]) => void
-  SampleImages: any
-  setSampleImages: any
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -48,12 +42,6 @@ export const AppContext = createContext<IAppContext>({
   setRes: () => {},
   search: "",
   setSearch: () => {},
-  bgSampleImages: [],
-  setBgSampleImages: () => {},
-  imgUpscalerSampleImg: [],
-  setImgUpscalerSampleImg: () => {},
-  SampleImages:{Images:[],BgRemover:[],ImageUpscalar:[],ImageColorizer:[],PhotoEditor:[]},
-  setSampleImages: () => {}
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -66,9 +54,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [res, setRes] = useState<any[]>([])
   const [search, setSearch] = useState<string>("")
-  const [bgSampleImages, setBgSampleImages] = useState<any[]>([])
-  const [imgUpscalerSampleImg, setImgUpscalerSampleImg] = useState<any[]>([])
-  const [SampleImages, setSampleImages] = useState({Images:[],bgRemover:[],ImageUpscalar:[],ImageColorizer:[]})
   const context = {
     isMobile,
     setIsMobile,
@@ -88,12 +73,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setRes,
     search,
     setSearch,
-    bgSampleImages,
-    setBgSampleImages,
-    imgUpscalerSampleImg,
-    setImgUpscalerSampleImg,
-    SampleImages,
-    setSampleImages
   }
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>
 }

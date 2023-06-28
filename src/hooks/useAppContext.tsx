@@ -21,12 +21,6 @@ const useAppContext = () => {
     setRes,
     search,
     setSearch,
-    bgSampleImages,
-    setBgSampleImages,
-    imgUpscalerSampleImg,
-    setImgUpscalerSampleImg,
-    SampleImages,
-    setSampleImages
   } = useContext(AppContext)
   return {
     isMobile,
@@ -47,12 +41,6 @@ const useAppContext = () => {
     setRes,
     search,
     setSearch,
-    bgSampleImages,
-    setBgSampleImages,
-    imgUpscalerSampleImg,
-    setImgUpscalerSampleImg,
-    SampleImages,
-    setSampleImages
   }
 }
 
