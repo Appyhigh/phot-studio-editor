@@ -1,0 +1,6 @@
+.chevronIcon {
+  position: absolute;
+  rotate: 180deg;
+  left: -2rem;
+  z-index: 1000;
+}
