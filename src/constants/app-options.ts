@@ -102,6 +102,12 @@ export const BASE_ITEMS = [
     label: "Object Remover",
     name: "ObjectRemover",
   },
+  {
+    id: "productPhotoshoot",
+    icon: "ImagineAi",
+    label: "Product Photoshoot",
+    name: "ProductPhotoshoot",
+  },
   // {
   //   id: "passportphotomaker",
   //   icon: "CircleIcon",
