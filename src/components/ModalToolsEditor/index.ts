@@ -1,7 +1,6 @@
+import ObjectRemoverEditor from "./ObjectRemoverEditor/ObjectRemoverEditor"
 import ProductPhotoShoot from "./ProductPhotoShoot/ProductPhotoShoot"
-import ObjectRemover from "./ObjectRemover/ObjectRemover"
-
 export default {
+  ObjectRemover: ObjectRemoverEditor,
   ProductPhotoShoot: ProductPhotoShoot,
-  ObjectRemover: ObjectRemover,
 }

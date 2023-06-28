@@ -20,8 +20,6 @@ import ImagineAI from "./ImagineAI/ImagineAI"
 import ImageUpscaler from "./ImageUpscaler/ImageUpscaler"
 import ImageColorizer from "./ImageColorizer/ImageColorizer"
 import PhotoEditor from "./PhotoEditor/PhotoEditor"
-import ObjectRemover from "./ObjectRemover/ObjectRemover"
-import ProductPhotoShoot from "./ProductPhotoShoot/ProductPhotoShoot"
 export default {
   StaticText: TextProperties,
   Text: Text,
@@ -45,6 +43,4 @@ export default {
   ImageUpscaler: ImageUpscaler,
   ImageColorizer: ImageColorizer,
   PhotoEditor: PhotoEditor,
-  ObjectRemover:ObjectRemover,
-  ProductPhotoShoot:ProductPhotoShoot
 }

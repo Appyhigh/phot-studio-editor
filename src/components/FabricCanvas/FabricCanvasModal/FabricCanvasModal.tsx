@@ -1,9 +1,12 @@
 import { Modal, SIZE } from "baseui/modal"
-import Editor from "../Editor"
-import classes from "./style.module.css"
-import Icons from "~/components/Icons"
-
+import ObjectRemoverEditor from "../../ModalToolsEditor/ObjectRemoverEditor/ObjectRemoverEditor"
+import useAppContext from "~/hooks/useAppContext"
+import ModalToolItems from "../../ModalToolsEditor"
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
+  const { activePanel } = useAppContext()
+
+  // @ts-ignore
+  const Component = ModalToolItems[activePanel]
   return (
     <Modal
       animate
@@ -34,7 +37,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      <Editor handleClose={handleClose} />
+      {Component && <Component />}
     </Modal>
   )
 }

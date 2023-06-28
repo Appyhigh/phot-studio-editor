@@ -9,7 +9,6 @@ import { fabric } from "fabric"
 import { useEffect, useState } from "react"
 import { useEditor } from "@layerhub-io/react"
 import useAppContext from "~/hooks/useAppContext"
-import { OBJECT_REMOVER } from "~/constants/contants"
 import FabricCanvasModal from "~/components/FabricCanvas/FabricCanvasModal/FabricCanvasModal"
 import { PanelType } from "~/constants/app-options"
 const GraphicEditor = () => {

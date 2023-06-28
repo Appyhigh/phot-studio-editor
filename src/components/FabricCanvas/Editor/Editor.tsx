@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
 import CanvasArea from "./CanvasArea/CanvasArea"
-import ImagesPanel from "./Panels/ImagesPanel/ImagesPanel"
 import classes from "./style.module.css"
-import { Block } from "baseui/block"
-import ModalPanelItem from "~/views/DesignEditor/components/ModalPanels/ModalPanelItem/ModalPanelItem"
 import clsx from "clsx"
 import ModalBasePanel from "./Panels/ModalBasePanel/ModalBasePanel"
 import PointerIcon from "~/components/Icons/PointerIcon"
+import ObjectRemoverEditor from "../../ModalToolsEditor/ObjectRemoverEditor/ObjectRemoverEditor"
 
 function Editor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -116,16 +114,14 @@ function Editor({ handleClose }: any) {
     // </div>
     <div className={"d-flex flex-column "}>
       <div className="d-flex flex-1">
-        <ModalPanelItem />
+        <ObjectRemoverEditor />
 
         <div className="flex-1 d-flex flex-column p-relative">
           <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={isDoneBtnDisabled} />
-
           <div className={clsx(classes.canvasStyling)}>
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
         </div>
-
         <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
           <PointerIcon />
         </div>
