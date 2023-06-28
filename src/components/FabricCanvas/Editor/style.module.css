@@ -1,6 +1,8 @@
 .editor {
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
   background: #ecf0f1;
@@ -9,9 +11,8 @@
 .two {
   display: flex;
   flex-direction: row;
-
 }
-.images{
+.images {
   max-width: 300px !important;
 }
 .three {
