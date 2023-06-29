@@ -3,19 +3,17 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import Icons from "~/components/Icons"
 
-const Accordian = ({ label, heading, children, isDone ,isopen ,isPrev}: any) => {
-  const [isOpen, setIsOpen] = useState(isopen)
-
+const Accordian = ({ label, heading, children, isOpen, isComplete, handleClick }: any) => {
   return (
     <div className={classes.accordianMain}>
       <div
         className={classes.heading}
         onClick={() => {
-          setIsOpen(!isOpen)
+          handleClick()
         }}
       >
         <div className="d-flex flex-row align-items-center">
-          {(isDone||(isOpen&&isPrev)) ? (
+          {(isOpen || isComplete) ? (
             <div>
               <div className={classes.tickIcon}>
                 <Icons.TickIcon />
@@ -29,11 +27,11 @@ const Accordian = ({ label, heading, children, isDone ,isopen ,isPrev}: any) => 
         </div>
 
         <div className="flex-1"></div>
-        <div className={clsx(isPrev && isOpen ? classes.iconOpen : "")}>
+        <div className={clsx(isOpen ? classes.iconOpen : "")}>
           <Icons.ChevronDown size="12" />
         </div>
       </div>
-      {isOpen &&isPrev && children}
+      {isOpen&&children}
     </div>
   )
 }

@@ -27,6 +27,12 @@ const ObjectRemover = () => {
   const [resultLoading, setResultLoading] = useState(false)
 
   const [steps, setSteps] = useState({
+    firstStep: true,
+    secondStep: false,
+    thirdStep: false,
+  })
+
+  const [stepsComplete, setStepsComplete] = useState({
     firstStep: false,
     secondStep: false,
     thirdStep: false,
@@ -96,7 +102,8 @@ const ObjectRemover = () => {
           disabled={imgUpload.src ? false : true}
           width="315px"
           handleClick={() => {
-            setSteps((prev)=>({...prev,firstStep:true}))
+            setSteps((prev) => ({ ...prev, firstStep: false, secondStep: true, thirdStep: false }))
+            setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: true, thirdStep: false }))
           }}
         />
       </div>
@@ -127,7 +134,9 @@ const ObjectRemover = () => {
           height="38px"
           margin={"8px 8px 4px 4px"}
           width="155px"
-          handleClick={() => {}}
+          handleClick={() => {
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+          }}
           fontSize="14px"
           fontWeight="500"
         />
@@ -139,30 +148,48 @@ const ObjectRemover = () => {
           width="155px"
           fontSize="14px"
           fontWeight="500"
-          handleClick={() => {}}
+          handleClick={() => {
+            setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
+            setStepsComplete((prev) => ({ ...prev, secondStep: true, thirdStep: true }))
+          }}
         />
       </div>
     </>
   )
 
   const outputResult = () => (
-    <div className={classes.resultImages}>
-      <div className={clsx("pointer p-relative", classes.eachImg)}>
-        {<img src={imgUpload.src} onClick={() => {}} />}
-
-        <div className={classes.resultLabel}>{"Original"}</div>
-      </div>
-
-      {resultLoading ? (
-        <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
-      ) : (
+    <>
+      {" "}
+      <div className={classes.resultImages}>
         <div className={clsx("pointer p-relative", classes.eachImg)}>
           {<img src={imgUpload.src} onClick={() => {}} />}
 
-          <div className={classes.resultLabel}>{"Result"}</div>
+          <div className={classes.resultLabel}>{"Original"}</div>
         </div>
+
+        {resultLoading ? (
+          <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
+        ) : (
+          <div className={clsx("pointer p-relative", classes.eachImg)}>
+            {<img src={imgUpload.src} onClick={() => {}} />}
+
+            <div className={classes.resultLabel}>{"Result"}</div>
+          </div>
+        )}
+      </div>
+      {stepsComplete.firstStep && stepsComplete.secondStep && stepsComplete.thirdStep && (
+        <BaseButton
+          borderRadius="10px"
+          title={"Remove more objects"}
+          height="38px"
+          margin={"20px 4px 4px 30px"}
+          width="300px"
+          fontSize="14px"
+          fontWeight="500"
+          handleClick={() => {}}
+        />
       )}
-    </div>
+    </>
   )
 
   return (
@@ -175,25 +202,56 @@ const ObjectRemover = () => {
       </div>
       <div className={classes.line}></div>
 
-      <Accordian isPrev={true} label={1} heading={"Upload / choose image"} isDone={steps.firstStep}  isopen={true} children={upload()} />
-      <Accordian  isPrev={steps.firstStep} label={2} heading={"Brush over the image"} isDone={steps.secondStep}   children={Brush()} />
-      <Accordian isPrev={steps.secondStep} label={3} heading={"Output"} 
-      isopen={false}
-      isDone={
-        (steps.thirdStep?true:false)
-      } children={outputResult()} />
+      <Accordian
+        label={1}
+        isOpen={steps.firstStep}
+        isComplete={stepsComplete.firstStep}
+        heading={"Upload / choose image"}
+        children={upload()}
+        handleClick={() => {
+          if (stepsComplete.firstStep && !steps.firstStep) {
+            setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
+          } else if (steps.firstStep) {
+            setSteps((prev) => ({ ...prev, firstStep: false }))
+          } else {
+            {
+            }
+          }
+        }}
+      />
+      <Accordian
+        label={2}
+        isOpen={steps.secondStep}
+        isComplete={stepsComplete.secondStep}
+        heading={"Brush over the image"}
+        children={Brush()}
+        handleClick={() => {
+          if (stepsComplete.secondStep && !steps.secondStep) {
+            setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
+          } else if (steps.secondStep) {
+            setSteps((prev) => ({ ...prev, secondStep: false }))
+          } else {
+          }
+        }}
+      />
+      <Accordian
+        isOpen={steps.thirdStep}
+        isComplete={steps.thirdStep}
+        label={3}
+        heading={"Output"}
+        handleClick={() => {
+          if (stepsComplete.thirdStep && !steps.thirdStep) {
+            setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
 
-      <BaseButton
-          borderRadius="10px"
-          title={"Remove more objects"}
-          height="38px"
-          margin={"20px 4px 4px 30px"}
-          width="300px"
-          fontSize="14px"
-          fontWeight="500"
-          handleClick={() => {}}
-        />
-
+          } else if (steps.thirdStep) {
+            setSteps((prev) => ({ ...prev, thirdStep: false }))
+            setStepsComplete((prev)=>({...prev,thirdStep:true}))
+          }
+        }}
+        children={outputResult()}
+      />
     </div>
   )
 }
