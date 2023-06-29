@@ -826,6 +826,10 @@ ul {
 .eachLayerSec:hover .threeDotsIcon {
   display: block;
 }
+
+.editor-canvas {
+  flex: 1;
+}
 @media screen and (min-width: 1216px) {
   /* .swiper-slide {
      width: 96px; 

@@ -96,6 +96,12 @@ export const BASE_ITEMS = [
     label: "Image Colorizer",
     name: "ImageColorizer",
   },
+  {
+    id: "objectremover",
+    icon: "ImagineAi",
+    label: "Object Remover",
+    name: "ObjectRemover",
+  },
   // {
   //   id: "passportphotomaker",
   //   icon: "CircleIcon",
