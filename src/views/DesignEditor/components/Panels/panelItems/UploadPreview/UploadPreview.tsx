@@ -108,7 +108,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                 alt="preview"
               />
 
-              {uploadType!=MODAL_IMG_UPLOAD&&
+              {uploadType != MODAL_IMG_UPLOAD && (
                 <Block
                   className={clsx(
                     "p-absolute pointer",
@@ -121,7 +121,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                     <Icons.Trash size={"32"} />
                   </span>
                 </Block>
-              }
+              )}
             </Block>
 
             {btnTitle && (

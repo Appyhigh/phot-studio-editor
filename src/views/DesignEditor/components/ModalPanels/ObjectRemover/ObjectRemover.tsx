@@ -11,6 +11,11 @@ import Accordian from "~/components/UI/Accordian/Accordian"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg"
+import { sampleImg } from "~/constants/sample-images"
+import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
+import { fabric } from "fabric"
+import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const ObjectRemover = () => {
   const [imgUpload, setImgUpload] = React.useState<any>({
@@ -19,13 +24,12 @@ const ObjectRemover = () => {
   })
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
-  const { canvas, objects } = fabricEditor
-
   const [brushSize, setBrushSize] = useState(10)
+  const { canvas, objects } = fabricEditor
 
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
-
+  const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [steps, setSteps] = useState({
     firstStep: true,
     secondStep: false,
@@ -33,7 +37,7 @@ const ObjectRemover = () => {
   })
 
   const [stepsComplete, setStepsComplete] = useState({
-    firstStep: false,
+    firstStep: true,
     secondStep: false,
     thirdStep: false,
   })
@@ -51,6 +55,13 @@ const ObjectRemover = () => {
       (canvas.freeDrawingBrush.width = brushSize)
   }
 
+  const handleBgImg = async (imgSrc: string) => {
+    await getDimensions(imgSrc, (img: any) => {
+      
+      setBgImgFabricCanvas(imgSrc, canvas, img)
+    })
+  }
+
   const upload = () => (
     <>
       {imgUpload.preview ? (
@@ -58,63 +69,78 @@ const ObjectRemover = () => {
           <UploadPreview
             discardHandler={() => {
               setImgUpload({ src: "", preview: "" })
+              setSelectedSampleImg(-1)
             }}
             previewHandle={() => {
               setImgUpload({ src: "", preview: "" })
+              setSelectedSampleImg(-1)
             }}
             imgSrc={imgUpload.src}
             uploadType={MODAL_IMG_UPLOAD}
           />
+          <div className={clsx("p-relative pointer", classes.discardBtn)}>
+            <span
+              onClick={() => {
+                setImgUpload({ src: "", preview: "" })
+              }}
+            >
+              <Icons.Trash size={"32"} />
+            </span>
+          </div>
         </Block>
       ) : (
-        <Uploads
-          imageLoading={imageLoading}
-          setImageLoading={setImageLoading}
-          imgUpload={imgUpload}
-          setImgUpload={setImgUpload}
-          fileInputType={"modalUpload"}
-          uploadType={MODAL_IMG_UPLOAD}
-          id={"modalUpload"}
-        />
-      )}
-      <div className={classes.tryImages}>
-        <div>
-          <p>or try one of these for free</p>
-          <div className={classes.sampleImg}>
-            {Array.from(Array(5).keys()).map((each, idx) => {
-              return (
-                <div key={idx} className={clsx(classes.eachsampleImg, idx == 0 && classes.firstImg)}>
-                  <img
-                    src={
-                      "https://images.pexels.com/photos/3493777/pexels-photo-3493777.jpeg?auto=compress&cs=tinysrgb&h=130"
-                    }
-                    key={idx}
-                  />
-                </div>
-              )
-            })}
-          </div>
+        <div className={classes.uploadWrapper}>
+          <Uploads
+            imageLoading={imageLoading}
+            setImageLoading={setImageLoading}
+            imgUpload={imgUpload}
+            setImgUpload={setImgUpload}
+            fileInputType={"modalUpload"}
+            uploadType={MODAL_IMG_UPLOAD}
+            id={"modalUpload"}
+          />
         </div>
-        <BaseButton
-          borderRadius="10px"
-          title={"Continue"}
-          margin={"8px 0 0 4px"}
-          disabled={imgUpload.src ? false : true}
-          width="315px"
-          handleClick={() => {
-            setSteps((prev) => ({ ...prev, firstStep: false, secondStep: true, thirdStep: false }))
-            setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: true, thirdStep: false }))
-          }}
-        />
+      )}
+      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+      <div className={classes.sampleImages}>
+        {sampleImg.map((image, index) => (
+          <div
+            key={index}
+            className={clsx(classes.sampleImage, "flex-center")}
+            style={{ backgroundImage: `url(${image})` }}
+            onClick={() => {
+              setSelectedSampleImg(index)
+              setImgUpload({
+                src: image,
+                preview: image,
+              })
+            }}
+          >
+            {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+          </div>
+        ))}
       </div>
+      <BaseButton
+        borderRadius="10px"
+        title={"Continue"}
+        margin={"8px 0 0 4px"}
+        disabled={imgUpload.src ? false : true}
+        width="315px"
+        handleClick={() => {
+          // @ts-ignore
+          canvas.isDrawingMode = true
+          handleBgImg(imgUpload.src)
+          setSteps((prev) => ({ ...prev, firstStep: false, secondStep: true, thirdStep: false }))
+          setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: true, thirdStep: false }))
+        }}
+      />
     </>
   )
 
   const Brush = () => (
     <>
-      <Block>
-        <UploadPreview imgSrc={imgUpload.src} uploadType={MODAL_IMG_UPLOAD} />
-      </Block>
+      <UploadPreview imgSrc={imgUpload.src} uploadType={MODAL_IMG_UPLOAD} />
+
       <div className={classes.brushInput}>
         <p>Brush</p>
         <SliderBar
@@ -135,6 +161,12 @@ const ObjectRemover = () => {
           margin={"8px 8px 4px 4px"}
           width="155px"
           handleClick={() => {
+            canvas.getObjects().forEach(function (obj) {
+              if (obj.type === "path") {
+                canvas.remove(obj)
+              }
+            })
+            canvas.clearHistory()
             setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           }}
           fontSize="14px"
@@ -149,6 +181,12 @@ const ObjectRemover = () => {
           fontSize="14px"
           fontWeight="500"
           handleClick={() => {
+            // @ts-ignore
+            canvas.isDrawingMode = false
+            canvas.clearHistory()
+            canvas.getObjects().forEach(function (obj) {
+              obj.selectable = false
+            })
             setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
             setStepsComplete((prev) => ({ ...prev, secondStep: true, thirdStep: true }))
           }}
@@ -244,10 +282,9 @@ const ObjectRemover = () => {
         handleClick={() => {
           if (stepsComplete.thirdStep && !steps.thirdStep) {
             setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
-
           } else if (steps.thirdStep) {
             setSteps((prev) => ({ ...prev, thirdStep: false }))
-            setStepsComplete((prev)=>({...prev,thirdStep:true}))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           }
         }}
         children={outputResult()}

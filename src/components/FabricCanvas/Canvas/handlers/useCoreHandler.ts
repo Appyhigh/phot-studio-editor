@@ -33,10 +33,11 @@ function useCoreHandler() {
         //@ts-ignore
         const workarea = canvas?.getObjects().find((obj: any) => obj.id === "workarea")
         // Create a fabric.Image from URL
+        imageOptions.src.crossOrigin="anonymous"
         fabric.Image.fromURL(imageOptions.src, (img: fabric.Image) => {
           // Set additional options for the image object
           img.set({ type: "image", ...imageOptions })
-
+             img.crossOrigin="anonymous"
           // Add the image object to the canvas
           //@ts-ignore
           canvas.add(img)

@@ -6,6 +6,7 @@ import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/Ad
 import { useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
+import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 
 const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
@@ -13,6 +14,14 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
+  }
+
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
+
+  const { canvas, objects } = fabricEditor
+
+  const handleAddCanvas = () => {
+    console.log(canvas.toDataURL())
   }
   return (
     <div>
@@ -48,10 +57,22 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
-          <Block className={classes.canvasOptions} onClick={() => {}}>
+          <Block
+            className={classes.canvasOptions}
+            onClick={() => {
+              if (objects?.length >= 3) {
+                canvas.undo()
+              }
+            }}
+          >
             <Icons.Undo size={22} />
           </Block>
-          <Block className={classes.canvasOptions} onClick={() => {}}>
+          <Block
+            className={classes.canvasOptions}
+            onClick={() => {
+              canvas.redo()
+            }}
+          >
             <Icons.Redo size={22} />
           </Block>
           <BaseButton
@@ -64,7 +85,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
-            handleClick={!isDoneBtnDisabled ? handleClose : null}
+            handleClick={!isDoneBtnDisabled ? handleAddCanvas : null}
           />
         </Block>
       </Block>

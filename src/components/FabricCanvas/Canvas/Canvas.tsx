@@ -11,7 +11,6 @@ import {
   useGuidelinesHandler,
   useObjects,
 } from "../../../components/FabricCanvas/Canvas/handlers"
-import clsx from "clsx"
 
 function Canvas({ width, height }: any) {
   const containerRef = useContainerHandler()
@@ -38,7 +37,7 @@ function Canvas({ width, height }: any) {
     const canvas = new fabric.Canvas("canvas", {
       height: initialHeigh,
       width: initialWidth,
-      isDrawingMode:true,
+      isDrawingMode: false,
       freeDrawingCursor: `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${
         brushSize / 2
       }, auto`,
@@ -73,9 +72,13 @@ function Canvas({ width, height }: any) {
     // })
 
     // set background of image
+
     fabric.Image.fromURL("https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473", (img) => {
+      img.crossOrigin = "anonymous"
       canvas.backgroundImage = img
       canvas.renderAll()
+      canvas.add(img)
+      img.selectable = false
     })
 
     // canvas.add(workArea)
@@ -105,7 +108,15 @@ function Canvas({ width, height }: any) {
   }, [canvas, objects])
 
   return (
-    <div className="editor-canvas flex justify-center" id="cont" ref={containerRef}>
+    <div
+      style={{
+        width: "600px",
+        height: "600px",
+      }}
+      className="editor-canvas d-flex justify-center"
+      id="cont"
+      ref={containerRef}
+    >
       {/* <div className={classes.toggleBtn}>
         <div
           className={clsx(classes.btn, brushOn && classes.activeBrush)}
