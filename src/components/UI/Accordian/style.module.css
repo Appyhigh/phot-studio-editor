@@ -1,5 +1,5 @@
 .accordianMain {
-  padding: 30px 20px 28px;
+  padding: 28px 20px 0px;
   color: #44444f;
   font-size: 16px;
 }
@@ -21,7 +21,6 @@
   align-items: center;
   margin-right: 12px;
 }
-
 .tickIcon {
   width: 26px;
   height: 26px;
@@ -32,7 +31,6 @@
   align-items: center;
   margin-right: 12px;
 }
-
 .iconOpen {
   transform: rotate(-180deg);
 }

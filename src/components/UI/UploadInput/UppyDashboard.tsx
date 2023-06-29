@@ -33,6 +33,8 @@ const UppyDashboard = ({
   uploads,
   setUploads,
   setBgUploadPreview,
+  imgUpload,
+  setImgUpload,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -94,6 +96,8 @@ const UppyDashboard = ({
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+        } else if (fileInputType === "modalUpload") {
+          setImgUpload({ src: imageUrl, preview: imageUrl })
         } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
@@ -184,6 +188,8 @@ const UppyDashboard = ({
               resultOption: false,
               tryFilters: false,
             }))
+          } else if (fileInputType === "modalUpload") {
+            setImgUpload({ src: imageUrl, preview: imageUrl })
           } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({

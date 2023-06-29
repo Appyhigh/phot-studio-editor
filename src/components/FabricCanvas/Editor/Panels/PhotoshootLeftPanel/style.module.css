@@ -1,47 +1,3 @@
-.editor {
-  height: 100%;
-  width: 100%;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  background: #ecf0f1;
-  flex: 1;
-}
-.two {
-  display: flex;
-  flex-direction: row;
-}
-.images {
-  max-width: 300px !important;
-}
-.three {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.resize_list {
-  list-style: none;
-  font-size: 20px;
-  display: flex;
-  flex-direction: row;
-}
-.editor-canvas {
-  flex: 1;
-}
-
-.resize_list li {
-  margin: 4px 12px;
-}
-
-.chevronIcon {
-  position: absolute;
-  left: -2.25rem;
-  z-index: 1000;
-}
-
 .leftPanel {
   background-color: #fff;
   border-top-left-radius: 20px;
@@ -140,6 +96,7 @@
 }
 
 .resizeLabel {
+  padding: 1rem 0rem;
   color: #92929d;
   font-size: 0.75rem;
   font-family: Poppins;
@@ -190,4 +147,14 @@
 
 .arrowIcon {
   cursor: pointer;
+}
+
+.uploadWrapper {
+  margin: -1.5rem 0rem 0rem;
+}
+
+.discardBtn {
+  bottom: 12rem;
+  left: 18.25rem;
+  z-index: 10;
 }
