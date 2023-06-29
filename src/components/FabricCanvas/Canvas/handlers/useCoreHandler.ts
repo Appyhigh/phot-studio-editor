@@ -6,7 +6,7 @@ import { fabric } from "fabric"
 function useCoreHandler() {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
-  const { canvas, activeObject, workArea } = fabricEditor // Add objects to canvas
+  const { canvas, activeObject, workArea }: any = fabricEditor // Add objects to canvas
   const addText = useCallback(
     (options: any) => {
       const { type, ...textOptions } = options
@@ -27,15 +27,25 @@ function useCoreHandler() {
   const addImage = useCallback(
     (options: any) => {
       if (canvas) {
-        const { type, ...imageOptions } = options
+        let { type, ...imageOptions }: any = options
         //@ts-ignore
         const element = CanvasObjects[type].render(imageOptions)
-        //@ts-ignore
         const workarea = canvas?.getObjects().find((obj: any) => obj.id === "workarea")
         // Create a fabric.Image from URL
         fabric.Image.fromURL(imageOptions.src, (img: fabric.Image) => {
           // Set additional options for the image object
-          img.set({ type: "image", ...imageOptions })
+          const canvasSize = getCanvasSize()
+          let scale = 1
+          if (img.width && img.height && canvasSize) {
+            if (img.width > canvasSize.width || img.height > canvasSize.height) {
+              if (img.width / canvasSize.width > img.height / canvasSize.height) {
+                scale = canvasSize.width / img.width
+              } else {
+                scale = canvasSize.height / img.height
+              }
+            }
+          }
+          img.set({ type: "image", ...imageOptions, scaleX: scale, scaleY: scale })
 
           // Add the image object to the canvas
           //@ts-ignore
@@ -108,6 +118,15 @@ function useCoreHandler() {
     },
     [canvas]
   )
+
+  const getCanvasSize = useCallback(() => {
+    if (canvas) {
+      const width = canvas.width
+      const height = canvas.height
+      return { width, height }
+    }
+    return { width: 0, height: 0 }
+  }, [canvas])
 
   return { exportJSON, loadJSON, setCanvasBackgroundColor, addText, removeObject, setProperty, addImage }
 }
