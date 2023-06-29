@@ -3,19 +3,17 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import Icons from "~/components/Icons"
 
-const Accordian = ({ label, heading, children, isDone }: any) => {
-  const [isOpen, setIsOpen] = useState(false)
-
+const Accordian = ({ label, heading, children, isOpen, isComplete, handleClick }: any) => {
   return (
     <div className={classes.accordianMain}>
       <div
         className={classes.heading}
         onClick={() => {
-          setIsOpen(!isOpen)
+          handleClick()
         }}
       >
         <div className="d-flex flex-row align-items-center">
-          {isDone ? (
+          {isOpen || isComplete ? (
             <div>
               <div className={classes.tickIcon}>
                 <Icons.TickIcon />

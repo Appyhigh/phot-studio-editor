@@ -16,7 +16,20 @@ import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/Upl
 import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
 
 const PhotoshootLeftPanel = ({ handleClose }: any) => {
-  const [done, setDone] = useState({ 1: false, 2: false, 3: false, 4: false })
+  const [steps, setSteps] = useState({
+    1: true,
+    2: false,
+    3: false,
+    4: false,
+  })
+
+  const [stepsComplete, setStepsComplete] = useState({
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+  })
+
   const sampleImages = [
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
@@ -99,7 +112,7 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
     })
   }
 
-  const UploadImage = ({ setDone }: any) => {
+  const UploadImage = () => {
     return (
       <>
         {imgUpload.preview ? (
@@ -167,9 +180,9 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
           fontWeight="600"
           handleClick={() => {
             if (imgUpload.src) {
-              console.log("IMG", imgUpload.src)
+              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
               handleAddObject(imgUpload.src)
-              setDone((prev: any) => ({ ...prev, 1: true }))
             }
           }}
           disabled={!imgUpload.src}
@@ -178,7 +191,7 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
     )
   }
 
-  const ResizeImage = ({ setDone }: any) => {
+  const ResizeImage = () => {
     return (
       <>
         {imgUpload.src && <UploadPreview imgSrc={imgUpload.src} uploadType={MODAL_IMG_UPLOAD} />}
@@ -195,7 +208,8 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
             bgColor="#F1F1F5"
             txtColor="#44444F"
             handleClick={() => {
-              setDone((prev: any) => ({ ...prev, 2: true }))
+              setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
             }}
           />
           <BaseButton
@@ -208,14 +222,15 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
             fontWeight="600"
             // disabled={true}
             handleClick={() => {
-              setDone((prev: any) => ({ ...prev, 2: true }))
+              setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
             }}
           />
         </div>
       </>
     )
   }
-  const SelectBackground = ({ setDone }: any) => {
+  const SelectBackground = () => {
     return (
       <div className={classes.selectBg}>
         {showPrompt ? (
@@ -287,7 +302,8 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
           fontFamily="Poppins"
           fontWeight="600"
           handleClick={() => {
-            setDone((prev: any) => ({ ...prev, 3: true }))
+            setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
+            setStepsComplete((prev) => ({ ...prev, 3: true, 4: false }))
           }}
           // disabled={}
         />
@@ -295,7 +311,7 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
     )
   }
 
-  const SelectOutput = ({ setDone }: any) => {
+  const SelectOutput = () => {
     return (
       <>
         <div className={classes.resultImages}>
@@ -315,13 +331,11 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
             </div>
           ))}
           {imagesLoading &&
-            Array.from(
-              Array([1, 2, 3, 4]).map((each, idx) => (
-                <div className={classes.skeletonBox} key={idx}>
-                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}
-                </div>
-              ))
-            )}
+            Array.from(Array(4).keys()).map((each, idx) => (
+              <div className={classes.skeletonBox} key={idx}>
+                {<img className={classes.imagesLoader} src={LoaderSpinner} />}
+              </div>
+            ))}
         </div>
         <BaseButton
           title="Generate 4 more"
@@ -332,9 +346,7 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
           fontFamily="Poppins"
           fontWeight="600"
           disabled={imagesLoading ? true : false}
-          handleClick={() => {
-            setDone((prev: any) => ({ ...prev, 3: true }))
-          }}
+          // handleClick={() => {}}
         />
       </>
     )
@@ -354,26 +366,65 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
         <Accordian
           label={"1"}
           heading={"Upload / choose image"}
-          isDone={done[1]}
-          children={<UploadImage setDone={setDone} />}
+          isOpen={steps[1]}
+          isComplete={stepsComplete[1]}
+          children={<UploadImage />}
+          handleClick={() => {
+            if (stepsComplete[1] && !steps[1]) {
+              setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 4: false }))
+            } else if (steps[1]) {
+              setSteps((prev) => ({ ...prev, 1: false }))
+            } else {
+            }
+          }}
         />
         <Accordian
           label={"2"}
           heading={"Resize your image"}
-          isDone={done[2]}
-          children={<ResizeImage setDone={setDone} />}
+          isOpen={steps[2]}
+          isComplete={stepsComplete[2]}
+          children={<ResizeImage />}
+          handleClick={() => {
+            if (stepsComplete[2] && !steps[2]) {
+              setSteps((prev) => ({ ...prev, 2: true, 1: false, 3: false, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 4: false }))
+            } else if (steps[2]) {
+              setSteps((prev) => ({ ...prev, 2: false }))
+            } else {
+            }
+          }}
         />
         <Accordian
           label={"3"}
           heading={"Select background"}
-          isDone={done[3]}
-          children={<SelectBackground setDone={setDone} />}
+          isOpen={steps[3]}
+          isComplete={steps[3]}
+          children={<SelectBackground />}
+          handleClick={() => {
+            if (stepsComplete[3] && !steps[3]) {
+              setSteps((prev) => ({ ...prev, 3: true, 1: false, 2: false, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 4: false }))
+            } else if (steps[3]) {
+              setSteps((prev) => ({ ...prev, 3: false }))
+            } else {
+            }
+          }}
         />
         <Accordian
           label={"4"}
           heading={"Select output"}
-          isDone={done[4]}
-          children={<SelectOutput setDone={setDone} />}
+          isOpen={steps[4]}
+          isComplete={steps[4]}
+          children={<SelectOutput />}
+          handleClick={() => {
+            if (stepsComplete[4] && !steps[4]) {
+              setSteps((prev) => ({ ...prev, 4: true, 1: false, 2: false, 3: false }))
+            } else if (steps[4]) {
+              setSteps((prev) => ({ ...prev, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 4: true }))
+            }
+          }}
         />
       </div>
       {/* </Scrollable>  */}
