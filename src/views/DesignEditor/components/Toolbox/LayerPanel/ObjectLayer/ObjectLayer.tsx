@@ -55,12 +55,17 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     async (each: any) => {
       let inputImage
 
+      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
+
       // If layer contains the originalImage then send it in changeLayerFill or else send the preview after removing background
       if (
         activeObject?.metadata?.originalLayerPreview &&
         (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
       ) {
         inputImage = activeObject?.metadata?.originalLayerPreview
+        changeBGFillHandler(inputImage, each.color)
+      } else if ((activeMainObject && activeMainObject.metadata.originalLayerPreview) || activeMainObject.preview) {
+        inputImage = activeMainObject.metadata.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
       } else {
         removeBackgroundBeforeChangingColor(each)
@@ -148,147 +153,150 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   return showLayer ? (
     <>
-    <Loader isOpen={setLoaderPopup}/>
-    <Scrollable>
-      <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
-      <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
+      <Loader isOpen={setLoaderPopup} />
+      <Scrollable>
+        <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
+        <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
 
-      <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
-      <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
-      <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
-      <div className={classes.objectLayerSection}>
-        <div
-          className="d-flex justify-content-start flex-row align-items-center pointer mt-1"
-          onClick={() => {
-            handleClose()
-          }}
-        >
-          <Icons.ChevronRight size="16" /> <div className={clsx(classes.panelHeading, "ml-1")}>Object</div>
-        </div>
-        <div>
-          <div className={clsx(classes.layerSubSection, "flex-center mt-3")}>
-            <div
-              className={clsx(classes.box, "d-flex justify-content-center align-items-center flex-column mr-1 pointer")}
-              onClick={() => {
-                setActiveOb(activeObject)
-                setIsReplacePopup(true)
-              }}
-            >
-              <Icons.Image />
-              <p>Replace</p>
-            </div>
-            <div
-              className={clsx(
-                classes.box,
-                " pointer d-flex justify-content-center align-items-center flex-column ml-1"
-              )}
-              // @ts-ignore
-              onClick={() => eraseHandler()}
-            >
-              <Icons.TrashIcon size={"20"} />
-              <p>Delete</p>
-            </div>{" "}
+        <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
+        <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
+        <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
+        <div className={classes.objectLayerSection}>
+          <div
+            className="d-flex justify-content-start flex-row align-items-center pointer mt-1"
+            onClick={() => {
+              handleClose()
+            }}
+          >
+            <Icons.ChevronRight size="16" /> <div className={clsx(classes.panelHeading, "ml-1")}>Object</div>
           </div>
-          <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
-          {ObjectLayerOption.map((each, idx) => (
-            <DropdownWrapper
-              key={idx}
-              icon={each.icon}
-              activeState={activeState}
-              idx={idx}
-              heading={each.name}
-              handleActiveState={handleActiveState}
-            />
-          ))}
-        </div>
-        <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
-        <div className={classes.colorsWrapper}>
-          {colors.map((each, idx) => {
-            return (
+          <div>
+            <div className={clsx(classes.layerSubSection, "flex-center mt-3")}>
               <div
-                key={idx}
-                style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
-                className={clsx(classes.colorOption, "flex-center")}
+                className={clsx(
+                  classes.box,
+                  "d-flex justify-content-center align-items-center flex-column mr-1 pointer"
+                )}
                 onClick={() => {
-                  if (idx === colors.length - 1) {
-                    setIsOpen(true)
-                  } else {
-                    handleChangeBg({ color: each })
-                  }
+                  setActiveOb(activeObject)
+                  setIsReplacePopup(true)
                 }}
               >
-                {idx === colors.length - 1 && (
-                  <div>
-                    {" "}
-                    <Icons.ColorPlus />{" "}
-                  </div>
-                )}
+                <Icons.Image />
+                <p>Replace</p>
               </div>
-            )
-          })}
-        </div>
-        <ColorPicker
-          inputColor={objectBgColor}
-          isOpen={isOpen}
-          handleClose={close}
-          type="object"
-          handleChangeBg={handleChangeBg}
-        />
-
-        <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
-        <div className={classes.otherToolsWrapper}>
-          <div
-            onClick={() => {
-              let latest_ct = 0
-              setImagesCt((prev: any) => {
-                latest_ct = prev
-                return prev
-              })
-              if (mainImgInfo?.id === activeObject?.id) {
-                RemoveBGFunc(
-                  editor,
-                  setLoaderPopup,
-                  setPanelInfo,
-                  mainImgInfo,
-                  setMainImgInfo,
-                  virtualSrcImageRef,
-                  virtualMaskImageRef,
-                  virtualCanvasSrcImageRef,
-                  virtualCanvasMaskImageRef,
-                  virtualCanvasResultImageRef,
-                  0,
-                  (latest_ct = latest_ct),
-                  errorInfo,
-                  setErrorInfo
-                )
-              } else {
-                RemoveBGFunc(
-                  editor,
-                  setLoaderPopup,
-                  setPanelInfo,
-                  0,
-                  setMainImgInfo,
-                  virtualSrcImageRef,
-                  virtualMaskImageRef,
-                  virtualCanvasSrcImageRef,
-                  virtualCanvasMaskImageRef,
-                  virtualCanvasResultImageRef,
-                  activeObject,
-                  (latest_ct = latest_ct),
-                  errorInfo,
-                  setErrorInfo
-                )
-              }
-            }}
-            className={clsx(
-              classes.otherToolsBox,
-              "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
-            )}
-          >
-            <Icons.Image />
-            <p>Remove Background</p>
+              <div
+                className={clsx(
+                  classes.box,
+                  " pointer d-flex justify-content-center align-items-center flex-column ml-1"
+                )}
+                // @ts-ignore
+                onClick={() => eraseHandler()}
+              >
+                <Icons.TrashIcon size={"20"} />
+                <p>Delete</p>
+              </div>{" "}
+            </div>
+            <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
+            {ObjectLayerOption.map((each, idx) => (
+              <DropdownWrapper
+                key={idx}
+                icon={each.icon}
+                activeState={activeState}
+                idx={idx}
+                heading={each.name}
+                handleActiveState={handleActiveState}
+              />
+            ))}
           </div>
-          {/* {[1, 2, 3].map((each, idx) => (
+          <div className={clsx(classes.panelSubHeading, "my-2")}>Colors</div>
+          <div className={classes.colorsWrapper}>
+            {colors.map((each, idx) => {
+              return (
+                <div
+                  key={idx}
+                  style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
+                  className={clsx(classes.colorOption, "flex-center")}
+                  onClick={() => {
+                    if (idx === colors.length - 1) {
+                      setIsOpen(true)
+                    } else {
+                      handleChangeBg({ color: each })
+                    }
+                  }}
+                >
+                  {idx === colors.length - 1 && (
+                    <div>
+                      {" "}
+                      <Icons.ColorPlus />{" "}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+          <ColorPicker
+            inputColor={objectBgColor}
+            isOpen={isOpen}
+            handleClose={close}
+            type="object"
+            handleChangeBg={handleChangeBg}
+          />
+
+          <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
+          <div className={classes.otherToolsWrapper}>
+            <div
+              onClick={() => {
+                let latest_ct = 0
+                setImagesCt((prev: any) => {
+                  latest_ct = prev
+                  return prev
+                })
+                if (mainImgInfo?.id === activeObject?.id) {
+                  RemoveBGFunc(
+                    editor,
+                    setLoaderPopup,
+                    setPanelInfo,
+                    mainImgInfo,
+                    setMainImgInfo,
+                    virtualSrcImageRef,
+                    virtualMaskImageRef,
+                    virtualCanvasSrcImageRef,
+                    virtualCanvasMaskImageRef,
+                    virtualCanvasResultImageRef,
+                    0,
+                    (latest_ct = latest_ct),
+                    errorInfo,
+                    setErrorInfo
+                  )
+                } else {
+                  RemoveBGFunc(
+                    editor,
+                    setLoaderPopup,
+                    setPanelInfo,
+                    0,
+                    setMainImgInfo,
+                    virtualSrcImageRef,
+                    virtualMaskImageRef,
+                    virtualCanvasSrcImageRef,
+                    virtualCanvasMaskImageRef,
+                    virtualCanvasResultImageRef,
+                    activeObject,
+                    (latest_ct = latest_ct),
+                    errorInfo,
+                    setErrorInfo
+                  )
+                }
+              }}
+              className={clsx(
+                classes.otherToolsBox,
+                "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
+              )}
+            >
+              <Icons.Image />
+              <p>Remove Background</p>
+            </div>
+            {/* {[1, 2, 3].map((each, idx) => (
             <div
               key={idx}
               className={clsx(
@@ -300,16 +308,16 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
               <p>Tool</p>
             </div>
           ))} */}
+          </div>
         </div>
-      </div>
-      <UploadImgModal
-        activeOb={activeOb}
-        fileInputType="update"
-        isOpen={isReplacePopup}
-        handleClose={handleUpdatePopup}
-        id={"ObjectLayer"}
-      />
-    </Scrollable>
+        <UploadImgModal
+          activeOb={activeOb}
+          fileInputType="update"
+          isOpen={isReplacePopup}
+          handleClose={handleUpdatePopup}
+          id={"ObjectLayer"}
+        />
+      </Scrollable>
     </>
   ) : null
 }
