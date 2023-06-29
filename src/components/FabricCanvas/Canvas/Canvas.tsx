@@ -38,7 +38,7 @@ function Canvas({ width, height }: any) {
     const canvas = new fabric.Canvas("canvas", {
       height: initialHeigh,
       width: initialWidth,
-      isDrawingMode: brushOn,
+      isDrawingMode:true,
       freeDrawingCursor: `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${
         brushSize / 2
       }, auto`,
@@ -168,7 +168,7 @@ function Canvas({ width, height }: any) {
           Remove Bg
         </div>
       </div> */}
-      <input
+      {/* <input
         type="range"
         min={5}
         max={75}
@@ -180,7 +180,7 @@ function Canvas({ width, height }: any) {
           }, auto`),
             (canvas.freeDrawingBrush.width = brushSize)
         }}
-      />
+      /> */}
       <canvas id="canvas"></canvas>
     </div>
   )

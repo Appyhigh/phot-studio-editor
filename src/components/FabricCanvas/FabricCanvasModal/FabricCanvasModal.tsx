@@ -27,7 +27,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
         },
         Dialog: {
           style: ({ $theme }) => ({
-            backgroundColor: $theme.colors.white,
+            backgroundColor: "#F1F1F5",
             width: "100%",
             height: "100%",
             margin: "1rem 2rem",
