@@ -100,7 +100,6 @@ const PhotoEditor = () => {
             ...prev,
             result: [
               ...photoEditorInfo.result,
-              ...(photoEditorInfo.result.length === 0 ? [photoEditorInfo.src] : []),
               ...response,
             ],
           }))
@@ -190,7 +189,7 @@ const PhotoEditor = () => {
                 margin="25px 0px 0px 20px"
                 disabledBgColor="#92929d"
                 fontSize="16px"
-                disabled={(photoEditorInfo.showclearTooltip || (photoEditorInfo.prompt).trim().length == 0) ? true : false}
+                disabled={photoEditorInfo.showclearTooltip || photoEditorInfo.prompt.trim().length == 0 ? true : false}
                 handleClick={() => {
                   generateImage()
                 }}
@@ -282,31 +281,36 @@ const PhotoEditor = () => {
           </Block>
 
           <div className={classes.resultImages}>
+            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
+              <img
+                src={photoEditorInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  addImg(photoEditorInfo.src, 0)
+                }}
+              />
+
+              <div className={classes.resultLabel}>{"Original"}</div>
+            </div>
             {photoEditorInfo.result.map((each, idx) => {
               return (
                 <div
-                  className={clsx("pointer", classes.eachImg, currentActiveImg === idx && classes.currentActiveImg)}
+                  className={clsx("pointer", classes.eachImg, currentActiveImg === idx + 1 && classes.currentActiveImg)}
                   key={idx}
                 >
                   <img
                     src={each}
                     alt="result-img"
                     onClick={() => {
-                      addImg(each, idx)
+                      addImg(each, idx + 1)
                     }}
                   />
-                  <div className={classes.resultLabel}>{idx == 0 ? "Original" : "Result"}</div>
+                  <div className={classes.resultLabel}>{"Result"}</div>
                 </div>
               )
             })}
             {imageLoading &&
-              Array.from(
-                Array(
-                  photoEditorInfo.result.length == 0
-                    ? photoEditorInfo.images_generation_ct + 1
-                    : photoEditorInfo.images_generation_ct
-                ).keys()
-              ).map((each, idx) => (
+              Array.from(Array(photoEditorInfo.images_generation_ct).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
                   {<img className={classes.imagesLoader} src={LoaderSpinner} />}
                 </div>
