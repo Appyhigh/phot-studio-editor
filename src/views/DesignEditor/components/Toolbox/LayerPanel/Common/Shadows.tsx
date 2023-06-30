@@ -63,15 +63,14 @@ const Shadows = () => {
     return alpha
 }
 
-  function handleHexToRgba(hex: any,alpha?:any) {
-
+  function handleHexToRgba(hex: any) {
     try{
       if (!isValidHex(hex)){
          return}   
      const chunkSize = Math.floor((hex.length - 1) / 3)
      const hexArr = getChunksFromString(hex.slice(1), chunkSize)
      const [r, g, b, a] = hexArr.map(convertHexUnitTo256)
-     return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, alpha)})`
+     return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, 1)})`
      }catch(error){
          console.log(error)
      }
@@ -99,17 +98,24 @@ const Shadows = () => {
   }
 
   const handleRgbaOpacity = (rgba:any,opacity:any) =>{
-    const rgbaValues = rgba
+    try{
+      const rgbaValues = rgba
       .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
       .split(",")
       .map((value: any) => parseFloat(value.trim()))
       let r = rgbaValues[0],g=rgbaValues[1],b=rgbaValues[2],a=opacity/100
       return `rgba(${r}, ${g}, ${b}, ${a})`
+    }catch(error){
+      console.log(error);
+      
+
+    }
+   
   }
 
   useEffect(()=>{   
 const out = handleRgbaOpacity(color,shadowColorOpacity)
-setShadowValues((prevValues) => ({
+setShadowValues((prevValues:any) => ({
   ...prevValues,
   color:out,
 }))
@@ -126,15 +132,19 @@ setShadowValues((prevValues) => ({
 
 useEffect(()=>{
 const HexToRgba = handleHexToRgba(shadowColorHex)
-setShadowValues((prevValues:any) => ({
-  ...prevValues,
-  color:HexToRgba,
-}))
-const rgbaValues = color
-      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-      .split(",")
-      .map((value: any) => parseFloat(value.trim()))
-      setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
+
+if(isValidHex(shadowColorHex)){
+  setShadowValues((prevValues:any) => ({
+    ...prevValues,
+    color:HexToRgba,
+  }))
+  const rgbaValues = color
+        .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+        .split(",")
+        .map((value: any) => parseFloat(value.trim()))
+        setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
+}
+
 },[shadowColorHex])
 
   useEffect(() => {
