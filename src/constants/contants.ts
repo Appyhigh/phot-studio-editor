@@ -43,6 +43,6 @@ export const SAMPLE_IMAGES: any = {
   bgRemover: "STUDIO_BACKGROUND_REMOVER",
   imagineAi: "",
   imageUpscaler: "UPSCALER",
-  imageColorizer: "",
-  photoEditor: "",
+  imageColorizer: "STUDIO_COLORISER",
+  photoEditor: "STUDIO_PHOTO_EDITOR",
 }
