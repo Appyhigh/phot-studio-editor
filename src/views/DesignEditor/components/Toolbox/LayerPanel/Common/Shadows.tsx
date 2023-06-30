@@ -11,7 +11,7 @@ const Shadows = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>()
   const [selectedOption, setSelectedOption] = useState<string>("Samples")
   const [shadowColorHex, setShadowColorHex] = useState("#00000")
-  const [shadowColorOpacity, setShadowColorOpacity] = useState(100)
+  const [shadowColorOpacity, setShadowColorOpacity] = useState(25)
   const [isOpen, setIsOpen] = useState(false)
   const [shadowValues, setShadowValues] = useState({
     color: "#000000",
@@ -37,45 +37,47 @@ const Shadows = () => {
     editor.history.save()
     setShadowValues((prevValues) => ({
       ...prevValues,
-      color:shadowObj.shadow.color,
-      x:shadowObj.shadow.offsetX,
-      y:shadowObj.shadow.offsetY,
-      blur:shadowObj.shadow.blur,
+      color: shadowObj.shadow.color,
+      x: shadowObj.shadow.offsetX,
+      y: shadowObj.shadow.offsetY,
+      blur: shadowObj.shadow.blur,
     }))
     const RgbaToHex = handleRgbaToHex(shadowObj.shadow.color)
-    setShadowColorHex(RgbaToHex) 
+    setShadowColorHex(RgbaToHex)
     const rgbaValues = color
-    .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-    .split(",")
-    .map((value: any) => parseFloat(value.trim()))
+      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+      .split(",")
+      .map((value: any) => parseFloat(value.trim()))
     setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
   }
 
-  const isValidHex = (hex:any) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex)
-  const getChunksFromString = (st:any, chunkSize:any) => st.match(new RegExp(`.{${chunkSize}}`, "g"))
-  const convertHexUnitTo256 = (hexStr:any) => parseInt(hexStr.repeat(2 / hexStr.length), 16)
+  const isValidHex = (hex: any) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex)
+  const getChunksFromString = (st: any, chunkSize: any) => st.match(new RegExp(`.{${chunkSize}}`, "g"))
+  const convertHexUnitTo256 = (hexStr: any) => parseInt(hexStr.repeat(2 / hexStr.length), 16)
 
-  const getAlphafloat = (a:any, alpha:any) => {
-    if (typeof a !== "undefined") {return a / 255}
-    if ((typeof alpha !== "number") || alpha <0 || alpha >1){
+  const getAlphafloat = (a: any, alpha: any) => {
+    if (typeof a !== "undefined") {
+      return a / 255
+    }
+    if (typeof alpha !== "number" || alpha < 0 || alpha > 1) {
       return 1
     }
     return alpha
-}
-
-  function handleHexToRgba(hex: any) {
-    try{
-      if (!isValidHex(hex)){
-         return}   
-     const chunkSize = Math.floor((hex.length - 1) / 3)
-     const hexArr = getChunksFromString(hex.slice(1), chunkSize)
-     const [r, g, b, a] = hexArr.map(convertHexUnitTo256)
-     return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, 1)})`
-     }catch(error){
-         console.log(error)
-     }
   }
 
+  function handleHexToRgba(hex: any) {
+    try {
+      if (!isValidHex(hex)) {
+        return
+      }
+      const chunkSize = Math.floor((hex.length - 1) / 3)
+      const hexArr = getChunksFromString(hex.slice(1), chunkSize)
+      const [r, g, b, a] = hexArr.map(convertHexUnitTo256)
+      return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, 1)})`
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   function handleRgbaToHex(rgba: any) {
     if (rgba.startsWith("#")) {
@@ -97,30 +99,29 @@ const Shadows = () => {
     return "#" + r + g + b + a
   }
 
-  const handleRgbaOpacity = (rgba:any,opacity:any) =>{
-    try{
+  const handleRgbaOpacity = (rgba: any, opacity: any) => {
+    try {
       const rgbaValues = rgba
-      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-      .split(",")
-      .map((value: any) => parseFloat(value.trim()))
-      let r = rgbaValues[0],g=rgbaValues[1],b=rgbaValues[2],a=opacity/100
+        .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+        .split(",")
+        .map((value: any) => parseFloat(value.trim()))
+      let r = rgbaValues[0],
+        g = rgbaValues[1],
+        b = rgbaValues[2],
+        a = opacity / 100
       return `rgba(${r}, ${g}, ${b}, ${a})`
-    }catch(error){
-      console.log(error);
-      
-
+    } catch (error) {
+      console.log(error)
     }
-   
   }
 
-  useEffect(()=>{   
-const out = handleRgbaOpacity(color,shadowColorOpacity)
-setShadowValues((prevValues:any) => ({
-  ...prevValues,
-  color:out,
-}))
-  },[shadowColorOpacity])
-
+  useEffect(() => {
+    const out = handleRgbaOpacity(color, shadowColorOpacity)
+    setShadowValues((prevValues: any) => ({
+      ...prevValues,
+      color: out,
+    }))
+  }, [shadowColorOpacity])
 
   useEffect(() => {
     if (selectedOption === "Manual") {
@@ -130,22 +131,21 @@ setShadowValues((prevValues:any) => ({
     }
   }, [shadowValues])
 
-useEffect(()=>{
-const HexToRgba = handleHexToRgba(shadowColorHex)
+  useEffect(() => {
+    const HexToRgba = handleHexToRgba(shadowColorHex)
 
-if(isValidHex(shadowColorHex)){
-  setShadowValues((prevValues:any) => ({
-    ...prevValues,
-    color:HexToRgba,
-  }))
-  const rgbaValues = color
+    if (isValidHex(shadowColorHex)) {
+      setShadowValues((prevValues: any) => ({
+        ...prevValues,
+        color: HexToRgba,
+      }))
+      const rgbaValues = color
         .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
         .split(",")
         .map((value: any) => parseFloat(value.trim()))
-        setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
-}
-
-},[shadowColorHex])
+      setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
+    }
+  }, [shadowColorHex])
 
   useEffect(() => {
     if (activeObject?.shadow) {
@@ -153,7 +153,7 @@ if(isValidHex(shadowColorHex)){
       setSelectedFilter(activeObject?.shadow?._id)
       setShadowValues((prevValues) => ({
         ...prevValues,
-        color:activeObject.shadow.color,
+        color: activeObject.shadow.color,
         x: activeObject.shadow?.offsetX,
         y: activeObject.shadow.offsetY,
         blur: activeObject.shadow.blur,
@@ -161,13 +161,12 @@ if(isValidHex(shadowColorHex)){
       setShadowColorHex(RgbToHex)
 
       const rgbaValues = color
-      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-      .split(",")
-      .map((value: any) => parseFloat(value.trim()))
+        .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+        .split(",")
+        .map((value: any) => parseFloat(value.trim()))
       setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
-    }  
+    }
   }, [])
-  
 
   return (
     <div className={classes.filterState}>
@@ -176,7 +175,7 @@ if(isValidHex(shadowColorHex)){
         setInputColor={setShadowColorHex}
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
-        handleChangeBg={()=>setIsOpen(false)}
+        handleChangeBg={() => setIsOpen(false)}
       />
       <div className={classes.filterOptions}>
         <div
@@ -242,7 +241,7 @@ if(isValidHex(shadowColorHex)){
           </div>
 
           <div className={classes.ShadowsColorPicker}>
-            <div onClick={() => setIsOpen(true)} style={{ width: "18px", height: "18px", backgroundColor: color}}>
+            <div onClick={() => setIsOpen(true)} style={{ width: "18px", height: "18px", backgroundColor: color }}>
               {" "}
             </div>
             <input
@@ -251,11 +250,13 @@ if(isValidHex(shadowColorHex)){
               name="color"
               className={classes.ColorInput}
               value={shadowColorHex}
-              onChange={(e:any)=>{setShadowColorHex(e.target.value)}}
+              onChange={(e: any) => {
+                setShadowColorHex(e.target.value)
+              }}
             ></input>
             <input
               type="number"
-              max="99"
+              max="100"
               className={classes.PercentageInput}
               value={shadowColorOpacity}
               onChange={(e: any) => setShadowColorOpacity(e.target.value)}
