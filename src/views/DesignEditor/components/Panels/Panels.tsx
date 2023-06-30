@@ -13,6 +13,8 @@ import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { SampleImagesApi } from "~/services/SampleImagesApi"
 import { SAMPLE_IMAGES, TOOL_NAMES } from "~/constants/contants"
 import ErrorContext from "~/contexts/ErrorContext"
+import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
+import { getStockImages } from "~/services/stockApi"
 
 const Panels = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
@@ -38,7 +40,34 @@ const Panels = () => {
           return prev
         }, {})
 
-        setSampleImages((prev: any) => ({ ...prev, ...updatedSampleImages }))
+        console.log("updatedSampleImages", updatedSampleImages)
+        setSampleImages((prev: any) => ({
+          ...prev,
+          ...updatedSampleImages,
+          bgRemoverBgOptions: BgOptions,
+        }))
+
+        const categories = ["Nature", "Flowers", "Textures"]
+        const addCategoryOptions = async (category: any) => {
+          const res = await getStockImages(category)
+          const newOptions = res.map((image: any) => ({ img: image.image_url_list[0] }))
+
+          setSampleImages((prev: any) => {
+            return {
+              ...prev,
+              bgRemoverBgOptions: [
+                ...prev.bgRemoverBgOptions,
+                {
+                  heading: category,
+                  options: newOptions,
+                },
+              ],
+            }
+          })
+        }
+        categories.forEach((category) => {
+          addCategoryOptions(category)
+        })
       })
       .catch((error) => {
         setErrorInfo((prev: any) => ({

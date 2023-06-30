@@ -137,6 +137,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     imageUpscaler: [],
     photoEditor: [],
     imageColorizer: [],
+    bgRemoverBgOptions: [],
   })
 
   return (

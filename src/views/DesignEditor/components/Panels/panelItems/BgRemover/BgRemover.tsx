@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useEditor } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
-import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
 import { LabelLarge } from "baseui/typography"
 import classes from "./style.module.css"
 import clsx from "clsx"
@@ -14,7 +13,6 @@ import LoaderContext from "~/contexts/LoaderContext"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
-import { getStockImages } from "~/services/stockApi"
 import { REMOVE_BACKGROUND } from "~/constants/contants"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 
@@ -25,7 +23,6 @@ const BgRemover = () => {
     type: -1,
     id: 0,
   })
-  const [bgDOptions, setBgDOptions] = useState(BgOptions)
 
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
@@ -72,37 +69,6 @@ const BgRemover = () => {
       uploadSection: true,
     }))
   }
-
-  useEffect(() => {
-    const addCategoryOptions = async (category: any) => {
-      const res = await getStockImages(category)
-      const newOptions = res.map((image: any) => ({ img: image.image_url_list[0] }))
-
-      setBgDOptions((prevOptions) => {
-        const categoryExists = prevOptions.some((option) => option.heading === category)
-
-        if (categoryExists) {
-          return prevOptions
-        }
-
-        return [
-          ...prevOptions,
-          {
-            heading: category,
-            options: newOptions,
-          },
-        ]
-      })
-    }
-
-    const fetchCategories = async () => {
-      await addCategoryOptions("Nature")
-      await addCategoryOptions("Flowers")
-      await addCategoryOptions("Textures")
-    }
-
-    fetchCategories()
-  }, [])
 
   return (
     <Block className="d-flex flex-1 flex-column">
@@ -185,7 +151,7 @@ const BgRemover = () => {
             {backgroundChoice === 0 ? (
               <Scrollable>
                 <Block className="mt-2 mb-2">
-                  {bgDOptions.map((each, index) => (
+                  {sampleImages.bgRemoverBgOptions.map((each: any, index: number) => (
                     <Block key={index}>
                       <Block
                         className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}
