@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { shadowOptions } from "~/views/DesignEditor/utils/ShadowOptions"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
-import { error } from "console"
+
 const Shadows = () => {
   const activeObject: any = useActiveObject()
   const editor = useEditor()
@@ -30,7 +30,7 @@ const Shadows = () => {
     }))
   }
 
-  const applyShadows = async (filterName: any, shadowObj: any) => {
+  const applyShadows = (filterName: any, shadowObj: any) => {
     setSelectedFilter(filterName)
     activeObject.set(shadowObj)
     editor.canvas.requestRenderAll()
