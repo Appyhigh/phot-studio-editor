@@ -11,6 +11,7 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
@@ -29,14 +30,16 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
 
   const { canvas, objects } = fabricEditor
 
-  const handleAddCanvas = () => {
-    let latest_ct = 0
-    setImagesCt((prev: any) => {
-      latest_ct = prev + 1
-      return prev + 1
+  const handleAddCanvas = async () => {
+    await getDimensions(objectRemoverInfo.result, (imgSrc: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        return prev + 1
+      })
+      AddObjectFunc(objectRemoverInfo.result, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+      handleClose()
     })
-    AddObjectFunc(objectRemoverInfo.result, editor, 0, 0, frame, latest_ct)
-    handleClose()
   }
   return (
     <div>
