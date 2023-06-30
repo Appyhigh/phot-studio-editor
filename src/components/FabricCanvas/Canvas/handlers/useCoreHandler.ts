@@ -128,7 +128,38 @@ function useCoreHandler() {
     return { width: 0, height: 0 }
   }, [canvas])
 
-  return { exportJSON, loadJSON, setCanvasBackgroundColor, addText, removeObject, setProperty, addImage }
+  const setBackgroundImage = useCallback(
+    (imageURL: any) => {
+      if (canvas) {
+        fabric.Image.fromURL(imageURL, (img: any) => {
+          const background = canvas.backgroundImage
+          if (background) {
+            // If a background image already exists, remove it
+            canvas.remove(background)
+          }
+
+          img.set({
+            scaleX: canvas.width / img.width,
+            scaleY: canvas.height / img.height,
+          })
+          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
+        })
+      }
+    },
+    [canvas]
+  )
+
+  return {
+    exportJSON,
+    loadJSON,
+    setCanvasBackgroundColor,
+    addText,
+    removeObject,
+    setProperty,
+    addImage,
+    getCanvasSize,
+    setBackgroundImage,
+  }
 }
 
 export default useCoreHandler
