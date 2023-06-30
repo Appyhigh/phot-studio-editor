@@ -99,7 +99,7 @@ const ImageUpscaler = () => {
       setAutoCallAPI(true)
     } else {
       setImageLoading(true)
-      setLoadingImgCt(3)
+      setLoadingImgCt(2)
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
       setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
@@ -107,7 +107,7 @@ const ImageUpscaler = () => {
       img2Upscaler(imgScalerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          setImgScalerInfo((prev: any) => ({ ...prev, result: [imgScalerInfo.src, response] }))
+          setImgScalerInfo((prev: any) => ({ ...prev, result: [response] }))
         })
         .catch((error) => {
           setImageLoading(false)
@@ -171,7 +171,7 @@ const ImageUpscaler = () => {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
-      setLoadingImgCt(3)
+      setLoadingImgCt(2)
       setCurrentActiveImg(-1)
       setAutoCallAPI(false)
       setImageLoading(true)
@@ -183,7 +183,7 @@ const ImageUpscaler = () => {
           setImageLoading(false)
           setImgScalerInfo((prev: any) => ({
             ...prev,
-            result: [imgScalerInfo.src, response["2k"].url, response["4k"].url],
+            result: [response["2k"].url, response["4k"].url],
           }))
         })
         .catch((error) => {
@@ -258,8 +258,6 @@ const ImageUpscaler = () => {
               fileInputType={"ImgUpscaler"}
               id={"ImgUpscaler"}
               mainHeading={"Add Image"}
-              imageLoading={imageLoading}
-              setImageLoading={setImageLoading}
             />
           )}
           {imgScalerPanelInfo.uploadPreview && (
@@ -356,7 +354,7 @@ const ImageUpscaler = () => {
                 Try Sample Images
               </Block>
               <Scrollable>
-                <Block className="py-3">
+                <Block className="py-3 mb-2">
                   <Block className={classes.sampleImgSection}>
                     {sampleImages.imageUpscaler &&
                       sampleImages.imageUpscaler.map((image: any, index: any) => {
@@ -382,7 +380,6 @@ const ImageUpscaler = () => {
           <Block
             onClick={() => {
               setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-
               setImgScalerInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
             }}
             $style={{ cursor: "pointer", display: "flex" }}
@@ -392,6 +389,17 @@ const ImageUpscaler = () => {
           </Block>
 
           <div className={classes.resultImages}>
+            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
+              <img
+                src={imgScalerInfo.src}
+                alt="result-img"
+                onClick={() => {
+                  addImg(imgScalerInfo.src, 2)
+                }}
+              />
+
+              <div className={classes.resultLabel}>{"Original"}</div>
+            </div>
             {imgScalerInfo.result.map((each, _idx) => {
               return (
                 <div
@@ -405,21 +413,20 @@ const ImageUpscaler = () => {
                       addImg(each, _idx)
                     }}
                   />
-
-                  <div className={classes.resultLabel}>{_idx == 0 ? "Original" : _idx == 1 ? "2x" : "4x"}</div>
+                  <div className={classes.resultLabel}>{_idx == 0 ? "2x" : "4x"}</div>
                 </div>
               )
             })}
 
             {imageLoading &&
               Array.from(Array(loadingImgCt).keys()).map((each, _idx) => (
-                <div className={classes.skeletonBox}>
+                <div className={classes.skeletonBox} key={_idx}>
                   {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
                 </div>
               ))}
-            {!imageLoading && imgScalerInfo.scaler === 2 && imgScalerInfo.result.length === 2 && (
+            {!imageLoading && imgScalerInfo.scaler === 2 && imgScalerInfo.result.length === 1 && (
               <div className={clsx("pointer", classes.eachImg, classes.lockedImg)}>
-                <img src={imgScalerInfo.src} alt="result-img" className={classes.blurImg} onClick={() => {}} />
+                <img src={imgScalerInfo.src} alt="result-img" className={classes.blurImg} />
 
                 <div className={clsx(classes.resultLabel)}>{"4x"}</div>
                 <div

@@ -99,7 +99,7 @@ const BgRemover = () => {
             Try Sample Images
           </Block>
           <Scrollable>
-            <Block className="py-3">
+            <Block className="py-3 mb-2">
               <Block className={classes.sampleImgSection}>
                 {sampleImages.bgRemover &&
                   sampleImages.bgRemover.map((image: any, index: any) => {

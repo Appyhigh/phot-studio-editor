@@ -107,7 +107,7 @@ const Images = () => {
         </div>
         {bgChoice === 0 ? (
           <Scrollable>
-            <Block className="py-3 mt-2">
+            <Block className="py-3 mt-2 mb-2">
               <Block className={classes.sampleImgSection}>
                 {BgSampleImages.map((image, index) => {
                   return (

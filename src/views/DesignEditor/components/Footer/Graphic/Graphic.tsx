@@ -1,8 +1,10 @@
+
+import { useContext } from "react"
+
 import React, { useContext, useEffect } from "react"
+
 import { styled } from "baseui"
 import { Theme } from "baseui/theme"
-import Common from "./Common"
-import Scenes from "./Scenes"
 import Toolbox from "../../Toolbox"
 import ErrorContext from "~/contexts/ErrorContext"
 import Toast from "~/components/Toast/Toast"
@@ -27,9 +29,9 @@ const Graphic = () => {
           }}
         />
       )}
-      
+
       <Toolbox />
-     
+
       {/* <Common /> */}
     </Container>
   )
