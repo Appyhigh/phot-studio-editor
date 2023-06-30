@@ -162,8 +162,6 @@ const ImageColorizer = () => {
               fileInputType={"ImgColorizer"}
               id={"ImgColorizer"}
               mainHeading={"Add Image"}
-              imageLoading={imageLoading}
-              setImageLoading={setImageLoading}
             />
           )}
 

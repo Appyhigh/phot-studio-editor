@@ -269,8 +269,6 @@ const ImageUpscaler = () => {
               fileInputType={"ImgUpscaler"}
               id={"ImgUpscaler"}
               mainHeading={"Add Image"}
-              imageLoading={imageLoading}
-              setImageLoading={setImageLoading}
             />
           )}
           {imgScalerPanelInfo.uploadPreview && (
@@ -423,7 +421,7 @@ const ImageUpscaler = () => {
 
             {imageLoading &&
               Array.from(Array(loadingImgCt).keys()).map((each, _idx) => (
-                <div className={classes.skeletonBox}>
+                <div className={classes.skeletonBox} key={_idx}>
                   {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
                 </div>
               ))}
@@ -453,16 +451,19 @@ const ImageItem = ({
   preview,
   onClick,
   imageLoading,
+  index
 }: {
   preview: any
   onClick?: (option: any) => void
   imageLoading: boolean
+  index:any
 }) => {
   return (
     <div
       onClick={onClick}
       className={clsx("pointer p-relative", classes.imageItemSection)}
       style={{ pointerEvents: imageLoading ? "none" : "auto" }}
+      key={index}
     >
       <div className={clsx("p-absolute", classes.imageItem)} />
       <img src={preview} className={classes.imagePreview} />

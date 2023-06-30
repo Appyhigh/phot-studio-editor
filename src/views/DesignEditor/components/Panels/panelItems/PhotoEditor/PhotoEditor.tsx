@@ -175,8 +175,6 @@ const PhotoEditor = () => {
               fileInputType={"photoEditor"}
               id={"PhotoEditor"}
               mainHeading={"Add Image"}
-              imageLoading={imageLoading}
-              setImageLoading={setImageLoading}
             />
           )}
           {photoEditorPanelInfo.uploadPreview && (
@@ -257,6 +255,7 @@ const PhotoEditor = () => {
                         <ImageItem
                           key={index}
                           onClick={() => {
+                            console.log(image)
                             addObject(image.originalImage)
                           }}
                           preview={image.thumbnail}
