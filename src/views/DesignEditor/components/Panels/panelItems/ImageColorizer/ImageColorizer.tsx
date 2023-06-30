@@ -47,7 +47,6 @@ const ImageColorizer = () => {
       setImageLoading(true)
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
-      setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
       setImgColorizerPanelInfo((prev: any) => ({
         ...prev,
         resultOption: true,
@@ -60,7 +59,7 @@ const ImageColorizer = () => {
       imgColorizerController(ImgColorizerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [ImgColorizerInfo.src, response] }))
+          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [ response] }))
         })
         .catch((error) => {
           setImageLoading(false)
@@ -216,7 +215,7 @@ const ImageColorizer = () => {
         <div className={classes.resultSection}>
           <Block
             onClick={() => {
-              setImgColorizerInfo((prev: any) => ({ ...prev, id: "", resultImages: [] }))
+              setImgColorizerInfo((prev: any) => ({ ...prev, id: "",src:"", resultImages: [] }))
               setImgColorizerPanelInfo((prev: any) => ({
                 ...prev,
                 tryFilters: false,
@@ -234,7 +233,18 @@ const ImageColorizer = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            {ImgColorizerInfo?.resultImages?.map((each, _idx) => {
+          <div className={clsx("pointer", classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
+              <img
+                src={ImgColorizerInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  addImg(ImgColorizerInfo.src, 1)
+                }}
+              />
+
+              <div className={classes.resultLabel}>{"Original"}</div>
+            </div>
+            { !imageLoading&& ImgColorizerInfo?.resultImages?.map((each, _idx) => {
               return (
                 <div
                   className={clsx("pointer", classes.eachImg, currentActiveImg === _idx && classes.currentActiveImg)}
@@ -248,12 +258,12 @@ const ImageColorizer = () => {
                     }}
                   />
 
-                  <div className={classes.resultLabel}>{_idx == 0 ? "Original" : _idx == 1 ? "Result" : "Result"}</div>
+                  <div className={classes.resultLabel}>{"Result"}</div>
                 </div>
               )
             })}
             {imageLoading &&
-              Array.from(Array(2).keys()).map((each, idx) => (
+              Array.from(Array(1).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
                   {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
                 </div>
