@@ -78,13 +78,21 @@ const BgRemover = () => {
       const res = await getStockImages(category)
       const newOptions = res.map((image: any) => ({ img: image.image_url_list[0] }))
 
-      setBgDOptions((prevOptions) => [
-        ...prevOptions,
-        {
-          heading: category,
-          options: newOptions,
-        },
-      ])
+      setBgDOptions((prevOptions) => {
+        const categoryExists = prevOptions.some((option) => option.heading === category)
+
+        if (categoryExists) {
+          return prevOptions
+        }
+
+        return [
+          ...prevOptions,
+          {
+            heading: category,
+            options: newOptions,
+          },
+        ]
+      })
     }
 
     const fetchCategories = async () => {
