@@ -172,6 +172,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           height="38px"
           margin={"8px 8px 4px 4px"}
           width="155px"
+          disabled={canvas?.getObjects().length>=2?false:true}
           handleClick={() => {
             // @ts-ignore
             canvas?.getObjects().forEach((obj: any) => {
@@ -195,6 +196,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           width="155px"
           fontSize="14px"
           fontWeight="500"
+          disabled={canvas?.getObjects().length>=2?false:true}
           handleClick={() => {
             handleBgImg(objectRemoverInfo.src)
             handleBrushToolTip(false)
@@ -228,7 +230,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         {resultLoading ? (
           <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
         ) : (
-          <div className={clsx("pointer p-relative", classes.eachImg)}>
+          <div className={clsx("pointer p-relative", classes.eachImg,classes.currentActiveImg)}>
             {<img src={objectRemoverInfo.src} onClick={() => {}} />}
 
             <div className={classes.resultLabel}>{"Result"}</div>

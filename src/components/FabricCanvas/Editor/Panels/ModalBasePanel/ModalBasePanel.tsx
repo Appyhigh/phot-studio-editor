@@ -75,7 +75,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
           <Block
             className={classes.canvasOptions}
             onClick={() => {
-              if (objects?.length >= 3) {
+              if (objects?.length >= 2) {
                 canvas.undo()
               }
             }}
