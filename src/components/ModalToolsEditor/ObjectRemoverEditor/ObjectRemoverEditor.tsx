@@ -13,21 +13,33 @@ function ObjectRemoverEditor({ handleClose }: any) {
     height: 800,
   })
   const [isDoneBtnDisabled, setIsDoneBtnDisabled] = useState(false)
+  const [brushTooltipShow, setBrushToolTip] = useState(false)
 
   const { fabricEditor } = useFabricEditor()
 
   const { canvas, objects }: any = fabricEditor
 
+  const changeBrushToolTip = (value: boolean) => {
+    setBrushToolTip(value)
+  }
+
   return (
     <div className={"d-flex flex-column "}>
       <div className="d-flex">
         <div>
-          <ObjectRemoverPanel />
+          <ObjectRemoverPanel handleBrushToolTip={changeBrushToolTip} />
         </div>
         <div className="flex-1 d-flex flex-column p-relative">
           <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={isDoneBtnDisabled} />
           <div className={clsx(classes.canvasStyling)}>
-            <CanvasArea width={dimension.width} height={dimension.height} />
+            <CanvasArea
+              brushTooltipShow={brushTooltipShow}
+              width={dimension.width}
+              height={dimension.height}
+              handleBrush={() => {
+                setBrushToolTip(false)
+              }}
+            />
           </div>
         </div>
         <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>

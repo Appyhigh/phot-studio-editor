@@ -12,12 +12,10 @@ import SliderBar from "~/components/UI/Common/SliderBar"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg"
 import { sampleImg } from "~/constants/sample-images"
-import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
-import { fabric } from "fabric"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
-const ObjectRemover = () => {
+const ObjectRemover = ({handleBrushToolTip}:any) => {
   const [imgUpload, setImgUpload] = React.useState<any>({
     src: "",
     preview: "",
@@ -57,7 +55,6 @@ const ObjectRemover = () => {
 
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
-      
       setBgImgFabricCanvas(imgSrc, canvas, img)
     })
   }
@@ -74,6 +71,7 @@ const ObjectRemover = () => {
             previewHandle={() => {
               setImgUpload({ src: "", preview: "" })
               setSelectedSampleImg(-1)
+              setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
             }}
             imgSrc={imgUpload.src}
             uploadType={MODAL_IMG_UPLOAD}
@@ -126,7 +124,10 @@ const ObjectRemover = () => {
         margin={"8px 0 0 4px"}
         disabled={imgUpload.src ? false : true}
         width="315px"
+        height="38px"
+        fontSize="14px"
         handleClick={() => {
+          handleBrushToolTip(true)
           // @ts-ignore
           canvas.isDrawingMode = true
           handleBgImg(imgUpload.src)
@@ -161,12 +162,12 @@ const ObjectRemover = () => {
           margin={"8px 8px 4px 4px"}
           width="155px"
           handleClick={() => {
-            canvas.getObjects().forEach(function (obj) {
+            canvas?.getObjects().forEach( (obj:any)=> {
               if (obj.type === "path") {
                 canvas.remove(obj)
               }
             })
-            canvas.clearHistory()
+            canvas?.clearHistory()
             setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           }}
           fontSize="14px"
@@ -181,10 +182,11 @@ const ObjectRemover = () => {
           fontSize="14px"
           fontWeight="500"
           handleClick={() => {
+            handleBrushToolTip(false)
             // @ts-ignore
             canvas.isDrawingMode = false
             canvas.clearHistory()
-            canvas.getObjects().forEach(function (obj) {
+            canvas.getObjects().forEach( (obj:any)=> {
               obj.selectable = false
             })
             setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
@@ -220,11 +222,23 @@ const ObjectRemover = () => {
           borderRadius="10px"
           title={"Remove more objects"}
           height="38px"
-          margin={"20px 4px 4px 30px"}
-          width="300px"
-          fontSize="14px"
+          margin={"20px 4px 4px 0px"}
+          width="320px"
+          fontSize="16px"
           fontWeight="500"
-          handleClick={() => {}}
+          handleClick={() => {
+            setSteps({
+              firstStep: true,
+              secondStep: false,
+              thirdStep: false,
+            })
+            setImgUpload((prev:any)=>({...prev,src:"",preview:""}))
+            setStepsComplete({
+              firstStep: true,
+              secondStep: false,
+              thirdStep: false,
+            })
+          }}
         />
       )}
     </>
