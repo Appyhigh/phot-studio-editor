@@ -52,7 +52,7 @@ const ContextMenu = () => {
         !selectInputFormatSection!?.contains(event.target) ||
         !eachOption!?.contains(event.target)
       ) {
-        editor.cancelContextMenuRequest()
+        editor?.cancelContextMenuRequest()
       }
     }
 

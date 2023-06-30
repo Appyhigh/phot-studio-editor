@@ -59,6 +59,7 @@ const BaseButton = ({
         fontFamily:fontFamily?fontFamily:""
       })} ${''}`}
     
+      disabled={disabled}
       style={{
        backgroundColor: disabled ? disabledBgColor ? disabledBgColor : "#f1f1f5":"",
         color: disabled ?disabledBgColor? "#fff" :"#92929d" : "",

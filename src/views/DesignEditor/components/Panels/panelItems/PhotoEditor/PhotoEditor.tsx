@@ -190,7 +190,7 @@ const PhotoEditor = () => {
                 margin="25px 0px 0px 20px"
                 disabledBgColor="#92929d"
                 fontSize="16px"
-                disabled={photoEditorInfo.showclearTooltip || photoEditorInfo.prompt.length == 0 ? true : false}
+                disabled={(photoEditorInfo.showclearTooltip || (photoEditorInfo.prompt).trim().length == 0) ? true : false}
                 handleClick={() => {
                   generateImage()
                 }}
@@ -255,7 +255,6 @@ const PhotoEditor = () => {
                         <ImageItem
                           key={index}
                           onClick={() => {
-                            console.log(image)
                             addObject(image.originalImage)
                           }}
                           preview={image.thumbnail}
