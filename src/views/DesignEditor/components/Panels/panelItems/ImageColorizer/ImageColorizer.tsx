@@ -6,9 +6,8 @@ import Scrollable from "~/components/Scrollable"
 import useAppContext from "~/hooks/useAppContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
-import { useActiveObject, useEditor, useObjects, useFrame } from "@layerhub-io/react"
-import { useCallback, useContext, useEffect, useState } from "react"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import { useEditor, useFrame } from "@layerhub-io/react"
+import { useCallback, useContext, useState } from "react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -16,26 +15,24 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import BaseButton from "~/components/UI/Button/BaseButton"
-import NoneIcon from "~/components/Icons/NoneIcon"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { imgColorizerController } from "~/utils/imgColorizerController"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 import ErrorContext from "~/contexts/ErrorContext"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
   const editor = useEditor()
   const { setImagesCt } = useContext(ImagesContext)
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const { sampleImages } = useContext(SampleImagesContext)
   const { setErrorInfo } = useContext(ErrorContext)
-
-  // @ts-ignore
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
 
@@ -122,14 +119,6 @@ const ImageColorizer = () => {
     }))
   }
 
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
-    }
-    fetchSampleImages()
-  }, [])
-
   const frame = useFrame()
   const addImg = async (imageUrl: string, _idx: number) => {
     setCurrentActiveImg(_idx)
@@ -195,18 +184,19 @@ const ImageColorizer = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
-                      return (
-                        <ImageItem
-                          key={index}
-                          onClick={() => {
-                            addObject(image.originalImage)
-                          }}
-                          imageLoading={imageLoading}
-                          preview={image.thumbnail}
-                        />
-                      )
-                    })}
+                    {sampleImages.imageColorizer &&
+                      sampleImages.imageColorizer.map((image: any, index: any) => {
+                        return (
+                          <ImageItem
+                            key={index}
+                            onClick={() => {
+                              addObject(image.originalImage)
+                            }}
+                            imageLoading={imageLoading}
+                            preview={image.thumbnail}
+                          />
+                        )
+                      })}
                   </Block>
                 </Block>
               </Scrollable>

@@ -5,9 +5,8 @@ import useAppContext from "~/hooks/useAppContext"
 import clsx from "clsx"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
-import React, { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import ImagesContext from "~/contexts/ImagesCountContext"
@@ -23,14 +22,13 @@ import UploadPreview from "../UploadPreview/UploadPreview"
 import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import Prompt from "~/components/Prompt/Prompt"
 import photoEditorController from "~/utils/photoEditorController"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const PhotoEditor = () => {
   const { activePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
   const { user } = authState
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const editor = useEditor()
@@ -41,14 +39,7 @@ const PhotoEditor = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { photoEditorInfo, setPhotoEditorInfo, photoEditorPanelInfo, setPhotoEditorPanelInfo } =
     useContext(PhotoEditorContext)
-
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
-    }
-    fetchSampleImages()
-  }, [])
+  const { sampleImages } = useContext(SampleImagesContext)
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -252,18 +243,19 @@ const PhotoEditor = () => {
               <Scrollable>
                 <Block className="py-3">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
-                      return (
-                        <ImageItem
-                          key={index}
-                          onClick={() => {
-                            addObject(image.originalImage)
-                          }}
-                          preview={image.thumbnail}
-                          imageLoading={imageLoading}
-                        />
-                      )
-                    })}
+                    {sampleImages.photoEditor &&
+                      sampleImages.photoEditor.map((image: any, index: any) => {
+                        return (
+                          <ImageItem
+                            key={index}
+                            onClick={() => {
+                              addObject(image.originalImage)
+                            }}
+                            preview={image.thumbnail}
+                            imageLoading={imageLoading}
+                          />
+                        )
+                      })}
                   </Block>
                 </Block>
               </Scrollable>
