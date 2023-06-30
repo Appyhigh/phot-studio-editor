@@ -365,7 +365,7 @@ const ImageUpscaler = () => {
                 Try Sample Images
               </Block>
               <Scrollable>
-                <Block className="py-3">
+                <Block className="py-3 mb-2">
                   <Block className={classes.sampleImgSection}>
                     {bgSampleImages.map((image: any, index) => {
                       return (
