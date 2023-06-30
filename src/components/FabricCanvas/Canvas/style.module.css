@@ -1,0 +1,28 @@
+.toggleBtn {
+  height: 30px;
+  border-radius: 16px;
+  color:"#fff";
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  margin-bottom: 10px;
+}
+.btn{
+    height: 39px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    font-family: "Rubik";
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+    cursor: pointer;
+}
+
+.activeBrush{
+    background-color: blue;
+}

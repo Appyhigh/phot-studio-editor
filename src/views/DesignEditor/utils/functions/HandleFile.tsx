@@ -26,7 +26,6 @@ const HandleFile = async (
   if (imageUrl) {
     setAddImgInfo ? setAddImgInfo({ showPreview: true, url: imageUrl }) : null
     if (fileInputType === "add") {
-      console.log("ADD IMAGE")
       let latest_ct = 0
       setImagesCt((prev: any) => {
         latest_ct = prev + 1
@@ -72,7 +71,9 @@ const HandleFile = async (
         )
       })
     } else {
-      UpdateImg(imageUrl, editor, mainImgInfo, setMainImgInfo, setPanelInfo, activeOb, activeObject)
+      await getDimensions(imageUrl, (img: any) => {
+        UpdateImg(imageUrl, editor, mainImgInfo, setMainImgInfo, setPanelInfo, activeOb, img.width, img.height, frame)
+      })
     }
     setTimeout(() => {
       fileInputType != "panelAdd" ? setImageLoading(false) : null

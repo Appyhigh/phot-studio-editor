@@ -42,6 +42,7 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb, id }: an
             outline: `transparent`,
             margin: fileInputType === "add" ? "20px" : "40px 20px",
             pointerEvents: imageLoading ? "none" : "auto",
+            display: imageLoading ? 'none' : 'block'
           }),
         },
         Dialog: {

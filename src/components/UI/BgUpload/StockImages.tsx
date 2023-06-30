@@ -197,11 +197,12 @@ const ImageItem = ({
     <div
       onClick={onClick}
       className={clsx("pointer p-relative", classes.imageItemSection, "flex-center")}
-      style={{ pointerEvents: isLoading ? "none" : "auto" }}
+      style={{
+        cursor: isLoading ? "not-allowed" : "pointer",
+      }}
     >
-      <div className={clsx("p-absolute", classes.imageItem)} />
+      <div className={clsx("p-absolute", classes.imageItem)} style={{ pointerEvents: isLoading ? "none" : "auto" }} />
       <img src={preview} className={classes.imagePreview} />
-      {selectedImage === idx && isLoading && <img className={classes.stockImagesLoading} src={LoaderSpinner} />}
       {selectedImage === idx && (
         <div className={classes.selectedIcon}>
           <Icons.Selection size={"24"} />

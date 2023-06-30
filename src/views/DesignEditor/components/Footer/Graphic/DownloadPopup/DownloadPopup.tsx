@@ -228,6 +228,7 @@ const DownloadPopup = ({ typeOfDownload, typeGroup }: any) => {
                     } else {
                       exportHandler()
                     }
+                    editor.cancelContextMenuRequest()
                   }}
                 >
                   Download

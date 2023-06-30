@@ -1,0 +1,43 @@
+.editor {
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  background: #ecf0f1;
+  flex: 1;
+}
+.two {
+  display: flex;
+  flex-direction: row;
+}
+.images {
+  max-width: 300px !important;
+}
+.three {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.resize_list {
+  list-style: none;
+  font-size: 20px;
+  display: flex;
+  flex-direction: row;
+}
+.editor-canvas {
+  flex: 1;
+}
+
+.resize_list li {
+  margin: 4px 12px;
+}
+
+.chevronIcon {
+  position: absolute;
+  left: -2.25rem;
+  z-index: 1000;
+}

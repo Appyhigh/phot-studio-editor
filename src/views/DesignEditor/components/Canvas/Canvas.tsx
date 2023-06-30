@@ -1,13 +1,15 @@
-import { useEffect } from "react"
+import { useContext, useEffect } from "react"
 import { Canvas as LayerhubCanvas, useActiveObject, useEditor } from "@layerhub-io/react"
 import Playback from "../Playback"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import ContextMenu from "../ContextMenu"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
+import MainImageContext from "~/contexts/MainImageContext"
 
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
+  const { setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
 
   useEffect(() => {
     if (editor) {
@@ -45,6 +47,20 @@ const Canvas = () => {
       editor.canvas.canvas.on("after:render", () => {
         if (Math.ceil(editor.canvas.canvas.getVpCenter().x) < 0) {
           editor.zoom.zoomToFit()
+        }
+      })
+
+      window.addEventListener("keydown", function (event) {
+        if (event.key == "Delete" || event.key == "Backspace") {
+          setPanelInfo((prev: any) => ({
+            ...prev,
+            uploadSection: true,
+            trySampleImg: true,
+            uploadPreview: false,
+            bgOptions: false,
+            bgRemoverBtnActive: false,
+          }))
+          if (setMainImgInfo) setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
         }
       })
 

@@ -7,6 +7,8 @@ import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useContext, useEffect } from "react"
+import useAppContext from "~/hooks/useAppContext"
+import { PanelType } from "~/constants/app-options"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { SampleImagesApi } from "~/services/SampleImagesApi"
 import { SAMPLE_IMAGES, TOOL_NAMES } from "~/constants/contants"
@@ -15,6 +17,14 @@ import ErrorContext from "~/contexts/ErrorContext"
 const Panels = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isSidebarOpen = useIsSidebarOpen()
+  const { activePanel } = useAppContext()
+
+  useEffect(() => {
+    if (!activePanel || !Object.values(PanelType).includes(activePanel)) {
+      setIsSidebarOpen(false)
+    }
+  }, [activePanel])
+
   const { setSampleImages } = useContext(SampleImagesContext)
   const { setErrorInfo } = useContext(ErrorContext)
   let ErrortimeOut: any
@@ -65,20 +75,22 @@ const Panels = () => {
         <Block
           className={clsx("m-auto pointer p-absolute", classes.sliderBtnWrapper, isSidebarOpen && classes.sliderOpen)}
         >
-          <Block
-            className={clsx("p-relative", classes.sliderBtn)}
-            onClick={() => {
-              setIsSidebarOpen(!isSidebarOpen)
-            }}
-          >
-            <div>
-              <Icons.SliderBtn size={106} />
-            </div>
+          {activePanel && Object.values(PanelType).includes(activePanel) && (
+            <Block
+              className={clsx("p-relative", classes.sliderBtn)}
+              onClick={() => {
+                setIsSidebarOpen(!isSidebarOpen)
+              }}
+            >
+              <div>
+                <Icons.SliderBtn size={106} />
+              </div>
 
-            <Block className={clsx("p-absolute", classes.sliderIcon, isSidebarOpen && classes.sliderIconTransform)}>
-              <Icons.SliderIcon size={15} />
+              <Block className={clsx("p-absolute", classes.sliderIcon, isSidebarOpen && classes.sliderIconTransform)}>
+                <Icons.SliderIcon size={15} />
+              </Block>
             </Block>
-          </Block>
+          )}
         </Block>
       </Block>
     </>

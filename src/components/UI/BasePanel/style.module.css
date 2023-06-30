@@ -1,4 +1,4 @@
-.basePannel {
+.basePanel {
   height: 55px;
   background: #fff;
   box-shadow: inset 0px -1px 0px #e2e2ea;
@@ -6,7 +6,7 @@
   border-left: 2px solid #e2e2ea;
 }
 
-.basePannelBtn {
+.basePanelBtn {
   font-size: 14px;
   cursor: pointer;
   margin-left: 12px;
@@ -52,7 +52,7 @@
 }
 
 @media screen and (min-width: 1220px) {
-  .basePannel {
+  .basePanel {
     padding: 15px 20px;
   }
   .resetBtn {
