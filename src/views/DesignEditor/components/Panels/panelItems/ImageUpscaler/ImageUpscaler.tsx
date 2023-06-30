@@ -22,14 +22,13 @@ import LoginPopup from "../../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
   const { user } = authState
-
   const [imageLoading, setImageLoading] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [loadingImgCt, setLoadingImgCt] = useState(0)
@@ -38,16 +37,8 @@ const ImageUpscaler = () => {
   const { setImagesCt } = useContext(ImagesContext)
   const leftPanelRef = useRef()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
-
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
-    }
-    fetchSampleImages()
-  }, [])
+  const { sampleImages } = useContext(SampleImagesContext)
+  const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -101,8 +92,6 @@ const ImageUpscaler = () => {
       document.removeEventListener("mousedown", checkIfClickedOutside)
     }
   }, [imgScalerInfo.showclearTooltip])
-
-  const { setErrorInfo } = useContext(ErrorContext)
 
   const generateImg2Scaler = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
@@ -367,18 +356,19 @@ const ImageUpscaler = () => {
               <Scrollable>
                 <Block className="py-3 mb-2">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
-                      return (
-                        <ImageItem
-                          key={index}
-                          onClick={() => {
-                            addObject(image.originalImage)
-                          }}
-                          preview={image.thumbnail}
-                          imageLoading={imageLoading}
-                        />
-                      )
-                    })}
+                    {sampleImages.imageUpscaler &&
+                      sampleImages.imageUpscaler.map((image: any, index: any) => {
+                        return (
+                          <ImageItem
+                            key={index}
+                            onClick={() => {
+                              addObject(image.originalImage)
+                            }}
+                            preview={image.thumbnail}
+                            imageLoading={imageLoading}
+                          />
+                        )
+                      })}
                   </Block>
                 </Block>
               </Scrollable>
