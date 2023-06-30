@@ -19,6 +19,8 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import MainImageContext from "~/contexts/MainImageContext"
+import { OBJECT_REMOVER } from "~/constants/contants"
+import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 
 const UppyDashboard = ({
   close,
@@ -33,8 +35,6 @@ const UppyDashboard = ({
   uploads,
   setUploads,
   setBgUploadPreview,
-  imgUpload,
-  setImgUpload,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -45,7 +45,7 @@ const UppyDashboard = ({
   const { setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
-
+  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   let uppy: any
   if (typeof window !== "undefined") {
     uppy = new Uppy({
@@ -96,8 +96,8 @@ const UppyDashboard = ({
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
-        } else if (fileInputType === "modalUpload") {
-          setImgUpload({ src: imageUrl, preview: imageUrl })
+        } else if (uploadType === OBJECT_REMOVER) {
+          setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
         } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
@@ -188,8 +188,8 @@ const UppyDashboard = ({
               resultOption: false,
               tryFilters: false,
             }))
-          } else if (fileInputType === "modalUpload") {
-            setImgUpload({ src: imageUrl, preview: imageUrl })
+          } else if (uploadType === OBJECT_REMOVER) {
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
           } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({

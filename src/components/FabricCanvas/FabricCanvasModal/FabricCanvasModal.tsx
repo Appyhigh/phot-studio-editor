@@ -1,5 +1,4 @@
 import { Modal, SIZE } from "baseui/modal"
-import ObjectRemoverEditor from "../../ModalToolsEditor/ObjectRemoverEditor/ObjectRemoverEditor"
 import useAppContext from "~/hooks/useAppContext"
 import ModalToolItems from "../../ModalToolsEditor"
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
@@ -37,7 +36,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      {Component && <Component />}
+      {Component && <Component handleClose={handleClose}  />}
     </Modal>
   )
 }

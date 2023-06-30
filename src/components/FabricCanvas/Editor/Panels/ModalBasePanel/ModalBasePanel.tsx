@@ -3,25 +3,40 @@ import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
+import { useEditor, useFrame } from "@layerhub-io/react"
+import ImagesContext from "~/contexts/ImagesCountContext"
 
 const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
+  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
+  const editor = useEditor()
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
   }
+  const frame = useFrame()
+
+  const { setImagesCt } = useContext(ImagesContext)
 
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
   const { canvas, objects } = fabricEditor
 
   const handleAddCanvas = () => {
-    console.log(canvas.toDataURL())
+    let latest_ct = 0
+    setImagesCt((prev: any) => {
+      latest_ct = prev + 1
+      return prev + 1
+    })
+    AddObjectFunc(objectRemoverInfo.result, editor, 0, 0, frame, latest_ct)
+    handleClose()
   }
   return (
     <div>
@@ -77,7 +92,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
           </Block>
           <BaseButton
             title="Done"
-            disabled={isDoneBtnDisabled ? true : false}
+            disabled={objectRemoverInfo.result ? false : true}
             fontSize="0.75rem"
             padding="15px"
             borderRadius="10px"

@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
-import React, { useState } from "react"
-import { MODAL_IMG_UPLOAD } from "~/constants/contants"
+import React, { useContext, useEffect, useState } from "react"
+import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
@@ -14,14 +14,11 @@ import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg
 import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 
-const ObjectRemover = ({handleBrushToolTip}:any) => {
-  const [imgUpload, setImgUpload] = React.useState<any>({
-    src: "",
-    preview: "",
-  })
+const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
-
+  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const [brushSize, setBrushSize] = useState(10)
   const { canvas, objects } = fabricEditor
 
@@ -59,27 +56,46 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
     })
   }
 
+ 
+
+  useEffect(() => {
+    if (steps.secondStep) {
+      handleBrushToolTip(true)
+      if (canvas) {
+        // @ts-ignore
+        canvas.isDrawingMode = true
+      }
+    } else {
+      handleBrushToolTip(false)
+      if (canvas) {
+        // @ts-ignore
+
+        canvas.isDrawingMode = false
+      }
+    }
+  }, [steps.secondStep])
+
   const upload = () => (
     <>
-      {imgUpload.preview ? (
+      {objectRemoverInfo.preview ? (
         <Block>
           <UploadPreview
             discardHandler={() => {
-              setImgUpload({ src: "", preview: "" })
+              setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
             }}
             previewHandle={() => {
-              setImgUpload({ src: "", preview: "" })
+              setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
               setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
             }}
-            imgSrc={imgUpload.src}
-            uploadType={MODAL_IMG_UPLOAD}
+            imgSrc={objectRemoverInfo.src}
+            uploadType={OBJECT_REMOVER}
           />
           <div className={clsx("p-relative pointer", classes.discardBtn)}>
             <span
               onClick={() => {
-                setImgUpload({ src: "", preview: "" })
+                setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               }}
             >
               <Icons.Trash size={"32"} />
@@ -91,11 +107,9 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
           <Uploads
             imageLoading={imageLoading}
             setImageLoading={setImageLoading}
-            imgUpload={imgUpload}
-            setImgUpload={setImgUpload}
-            fileInputType={"modalUpload"}
-            uploadType={MODAL_IMG_UPLOAD}
-            id={"modalUpload"}
+            fileInputType={"ObjectRemover"}
+            uploadType={OBJECT_REMOVER}
+            id={"ObjectRemover"}
           />
         </div>
       )}
@@ -108,10 +122,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
             style={{ backgroundImage: `url(${image})` }}
             onClick={() => {
               setSelectedSampleImg(index)
-              setImgUpload({
-                src: image,
-                preview: image,
-              })
+              setObjectRemoverInfo((prev: any) => ({ ...prev, src: image, preview: image }))
             }}
           >
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
@@ -122,7 +133,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
         borderRadius="10px"
         title={"Continue"}
         margin={"8px 0 0 4px"}
-        disabled={imgUpload.src ? false : true}
+        disabled={objectRemoverInfo.src ? false : true}
         width="315px"
         height="38px"
         fontSize="14px"
@@ -130,7 +141,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
           handleBrushToolTip(true)
           // @ts-ignore
           canvas.isDrawingMode = true
-          handleBgImg(imgUpload.src)
+          handleBgImg(objectRemoverInfo.src)
           setSteps((prev) => ({ ...prev, firstStep: false, secondStep: true, thirdStep: false }))
           setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: true, thirdStep: false }))
         }}
@@ -140,7 +151,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
 
   const Brush = () => (
     <>
-      <UploadPreview imgSrc={imgUpload.src} uploadType={MODAL_IMG_UPLOAD} />
+      <UploadPreview imgSrc={objectRemoverInfo.src} uploadType={MODAL_IMG_UPLOAD} />
 
       <div className={classes.brushInput}>
         <p>Brush</p>
@@ -162,11 +173,14 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
           margin={"8px 8px 4px 4px"}
           width="155px"
           handleClick={() => {
-            canvas?.getObjects().forEach( (obj:any)=> {
+            // @ts-ignore
+            canvas?.getObjects().forEach((obj: any) => {
               if (obj.type === "path") {
+                // @ts-ignore
                 canvas.remove(obj)
               }
             })
+            // @ts-ignore
             canvas?.clearHistory()
             setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           }}
@@ -182,15 +196,19 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
           fontSize="14px"
           fontWeight="500"
           handleClick={() => {
+            handleBgImg(objectRemoverInfo.src)
             handleBrushToolTip(false)
             // @ts-ignore
             canvas.isDrawingMode = false
+            // @ts-ignore
             canvas.clearHistory()
-            canvas.getObjects().forEach( (obj:any)=> {
+            // @ts-ignore
+            canvas.getObjects().forEach((obj: any) => {
               obj.selectable = false
             })
             setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
             setStepsComplete((prev) => ({ ...prev, secondStep: true, thirdStep: true }))
+            setObjectRemoverInfo((prev:any)=>({...prev,result:objectRemoverInfo.src}))
           }}
         />
       </div>
@@ -202,7 +220,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
       {" "}
       <div className={classes.resultImages}>
         <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={imgUpload.src} onClick={() => {}} />}
+          {<img src={objectRemoverInfo.src} onClick={() => {}} />}
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
@@ -211,7 +229,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
           <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
         ) : (
           <div className={clsx("pointer p-relative", classes.eachImg)}>
-            {<img src={imgUpload.src} onClick={() => {}} />}
+            {<img src={objectRemoverInfo.src} onClick={() => {}} />}
 
             <div className={classes.resultLabel}>{"Result"}</div>
           </div>
@@ -232,7 +250,7 @@ const ObjectRemover = ({handleBrushToolTip}:any) => {
               secondStep: false,
               thirdStep: false,
             })
-            setImgUpload((prev:any)=>({...prev,src:"",preview:""}))
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
             setStepsComplete({
               firstStep: true,
               secondStep: false,

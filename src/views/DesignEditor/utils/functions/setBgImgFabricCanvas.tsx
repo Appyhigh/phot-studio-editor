@@ -1,10 +1,10 @@
 import { fabric } from "fabric"
 
 export const setBgImgFabricCanvas = async (imgSrc: any, canvas: any, result: any) => {
+  canvas.clear()
+  canvas.renderAll()
   setTimeout(() => {
     canvas.backgroundImage = null
-    result.crossOrigin="anonymous"
-    canvas.renderAll()
     let width = result.width
     let height = result.height
     let canvasWidth = 600
@@ -13,9 +13,9 @@ export const setBgImgFabricCanvas = async (imgSrc: any, canvas: any, result: any
      
     fabric.Image.fromURL(imgSrc, (img) => {
       // img.set({ type: "backgroundImage" })
-      img.crossOrigin="anonymous"
       canvas.backgroundImage = img
       img.center()
+      img.selectable=false
       if (width >= canvasWidth || height >= canvasHeight) {
         if (width / canvasWidth > height / canvasHeight) {
           scale = canvasWidth / width

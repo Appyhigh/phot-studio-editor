@@ -11,6 +11,7 @@ import {
   LOCAL_SAMPLE_IMG,
   MAIN_IMG_Bg,
   MODAL_IMG_UPLOAD,
+  OBJECT_REMOVER,
   REMOVE_BACKGROUND,
   TEXT_TO_ART,
 } from "~/constants/contants"
@@ -60,7 +61,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
   return (
     <div>
       <Block paddingTop={"10px"}>
-        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER && uploadType != MODAL_IMG_UPLOAD && (
+        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER &&  uploadType != MODAL_IMG_UPLOAD&& uploadType != OBJECT_REMOVER && (
           <div
             className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
             onClick={() => {
@@ -108,7 +109,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                 alt="preview"
               />
 
-              {uploadType != MODAL_IMG_UPLOAD && (
+              {uploadType != MODAL_IMG_UPLOAD &&uploadType!=OBJECT_REMOVER && (
                 <Block
                   className={clsx(
                     "p-absolute pointer",
