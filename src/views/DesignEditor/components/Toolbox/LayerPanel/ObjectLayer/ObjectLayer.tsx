@@ -55,17 +55,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     async (each: any) => {
       let inputImage
 
-      const activeMainObject = editor.objects.findById(mainImgInfo.id)[0]
-
       // If layer contains the originalImage then send it in changeLayerFill or else send the preview after removing background
       if (
         activeObject?.metadata?.originalLayerPreview &&
         (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
       ) {
         inputImage = activeObject?.metadata?.originalLayerPreview
-        changeBGFillHandler(inputImage, each.color)
-      } else if ((activeMainObject && activeMainObject.metadata.originalLayerPreview) || activeMainObject.preview) {
-        inputImage = activeMainObject.metadata.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
       } else {
         removeBackgroundBeforeChangingColor(each)
