@@ -167,7 +167,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const UploadImage = () => {
     return (
       <>
-        {productPhotoshootInfo.preview ? (
+        {productPhotoshootInfo.src ? (
           <div>
             <UploadPreview
               discardHandler={() => {
