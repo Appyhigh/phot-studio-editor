@@ -16,6 +16,8 @@ import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/Upl
 import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
+import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundController } from "~/utils/removeBackground"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -33,6 +35,8 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   })
 
   const sampleImages = [
+    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
+    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
@@ -104,58 +108,53 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     }
   }, [productPhotoshootInfo.src])
 
+  const { setCanvasLoader } = useContext(CanvasLoaderContext)
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
   const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
-  const { setCanvasLoader } = useContext(CanvasLoaderContext)
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     console.log("HANDLE")
     setCanvasLoader(true)
     try {
       console.log("1")
-      // getDimensions(imageUrl, (img: any) => {
-      console.log("2")
-      // let response = await removeBackgroundController(
-      //   imageUrl,
-      //   (image: string) => {
-      //     console.log("3")
-      //     if (image) {
-      addImage({
-        type: "image",
-        src: imageUrl,
+      await getDimensions(imageUrl, async (img: any) => {
+        console.log("2")
+        let response = await removeBackgroundController(
+          imageUrl,
+          (image: string) => {
+            console.log("3")
+            if (image) {
+              addImage({
+                type: "image",
+                src: image,
+              })
+              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+              setProductPhotoshootInfo((prev: any) => ({ ...prev, preview: productPhotoshootInfo.src, tooltip: true }))
+              setCanvasLoader(false)
+            } else {
+              setCanvasLoader(false)
+              throw new Error("Something went wrong while removing background...")
+            }
+          },
+          virtualSrcImageRef,
+          virtualMaskImageRef,
+          virtualCanvasSrcImageRef,
+          virtualCanvasMaskImageRef,
+          virtualCanvasResultImageRef,
+          img.width,
+          img.height
+        )
+        if (response) {
+          setCanvasLoader(false)
+          throw new Error("Something went wrong while removing background...")
+        }
       })
-      //     setLoaderPopup(false)
-      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
-      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-      setCanvasLoader(false)
-      //   } else {
-      //     setLoaderPopup(false)
-      //     throw new Error("Something went wrong while removing background...")
-      //   }
-      // },
-      // virtualSrcImageRef,
-      // virtualMaskImageRef,
-      // virtualCanvasSrcImageRef,
-      // virtualCanvasMaskImageRef,
-      // virtualCanvasResultImageRef,
-      // 1000,
-      // 1000
-      // img.width,
-      // img.height
-      // )
-      // console.log("4")
-      // if (response) {
-      //   setLoaderPopup(false)
-      //   console.log("RESPONSE", response)
-      //   throw new Error("Something went wrong while removing background...")
-      // }
-      // })
     } catch (error: any) {
       setCanvasLoader(false)
-      console.log("ERROR OCCURED", error)
       throw error
     }
   }
@@ -244,7 +243,6 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             if (productPhotoshootInfo.src) {
               handleRemoveBgAndAddObject(productPhotoshootInfo.src)
-              setProductPhotoshootInfo((prev: any) => ({ ...prev, preview: productPhotoshootInfo.src, tooltip: true }))
             }
           }}
           disabled={!productPhotoshootInfo.src}
@@ -435,6 +433,12 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       <div className={classes.headingDivider}></div>
       {/* <Scrollable> */}
       <div className="d-flex flex-1 flex-column">
+        <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
+        <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
+
+        <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
+        <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
+        <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
         <Accordian
           label={"1"}
           heading={"Upload / choose image"}
