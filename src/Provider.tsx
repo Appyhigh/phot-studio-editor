@@ -133,6 +133,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   const [productPhotoshootInfo, setProductPhotoshootInfo] = useState({
     src: "",
     preview: "",
+    tooltip: false,
     result: [],
   })
 

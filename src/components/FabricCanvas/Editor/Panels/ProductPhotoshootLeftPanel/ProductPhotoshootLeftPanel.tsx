@@ -14,8 +14,6 @@ import Uploads from "~/views/DesignEditor/components/Panels/panelItems/UploadDro
 import clsx from "clsx"
 import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/UploadPreview/UploadPreview"
 import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
-import { removeBackgroundController } from "~/utils/removeBackground"
-import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import LoaderContext from "~/contexts/LoaderContext"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 
@@ -231,7 +229,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             if (productPhotoshootInfo.src) {
               handleRemoveBgAndAddObject(productPhotoshootInfo.src)
-              setProductPhotoshootInfo((prev: any) => ({ ...prev, preview: productPhotoshootInfo.src }))
+              setProductPhotoshootInfo((prev: any) => ({ ...prev, preview: productPhotoshootInfo.src, tooltip: true }))
             }
           }}
           disabled={!productPhotoshootInfo.src}
@@ -275,6 +273,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             handleClick={() => {
               setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
+              setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
             }}
           />
         </div>

@@ -8,6 +8,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import ProductPhotoshootLeftPanel from "./Panels/ProductPhotoshootLeftPanel/ProductPhotoshootLeftPanel"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
+import Resize from "~/components/Icons/Resize"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -29,6 +30,22 @@ function ProductPhotoshootEditor({ handleClose }: any) {
         <div className={classes.editor}>
           <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={productPhotoshootInfo.result} />
           <div className={classes.three}>
+            {productPhotoshootInfo.tooltip && (
+              <div className={classes.toolTip}>
+                <div className={classes.resizeIcon}>
+                  <Resize />
+                </div>
+                <p>Click on image to resize & drag to canvas</p>
+                <div
+                  className={classes.toolTipBtn}
+                  onClick={() => {
+                    setProductPhotoshootInfo({ ...productPhotoshootInfo, tooltip: false })
+                  }}
+                >
+                  Got it
+                </div>
+              </div>
+            )}
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
         </div>

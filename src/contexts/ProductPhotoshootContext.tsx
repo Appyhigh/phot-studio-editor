@@ -4,6 +4,7 @@ const ProductPhotoshootContext = createContext({
   productPhotoshootInfo: {
     src: "",
     preview: "",
+    tooltip: false,
     result: [],
   },
   setProductPhotoshootInfo: (item: any) => {
