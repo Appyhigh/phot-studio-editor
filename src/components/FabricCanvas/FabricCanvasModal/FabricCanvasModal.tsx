@@ -3,7 +3,7 @@ import Editor from "../Editor"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import useAppContext from "~/hooks/useAppContext"
-import PhotoshootEditor from "../Editor/PhotoshootEditor"
+import ProductPhotoshootEditor from "../Editor/ProductPhotoshootEditor"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
@@ -37,7 +37,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      {activePanel === ("ProductPhotoshoot" as any) && <PhotoshootEditor handleClose={handleClose} />}
+      {activePanel === ("ProductPhotoshoot" as any) && <ProductPhotoshootEditor handleClose={handleClose} />}
       {/* <Editor handleClose={handleClose} /> */}
     </Modal>
   )

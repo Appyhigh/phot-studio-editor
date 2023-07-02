@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { MODAL_IMG_UPLOAD } from "~/constants/contants"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
@@ -14,8 +14,12 @@ import Uploads from "~/views/DesignEditor/components/Panels/panelItems/UploadDro
 import clsx from "clsx"
 import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/UploadPreview/UploadPreview"
 import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
+import { removeBackgroundController } from "~/utils/removeBackground"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import LoaderContext from "~/contexts/LoaderContext"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 
-const PhotoshootLeftPanel = ({ handleClose }: any) => {
+const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
     1: true,
     2: false,
@@ -37,10 +41,11 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
   ]
-  const [imgUpload, setImgUpload] = useState<any>({
-    src: "",
-    preview: "",
-  })
+  // const [imgUpload, setProductPhotoshootInfo] = useState<any>({
+  //   src: "",
+  //   preview: "",
+  // })
+  const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
   const [showPrompt, setShowPrompt] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState("Mood")
@@ -96,42 +101,89 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
   ]
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [imagesLoading, setImagesLoading] = useState(false)
-  const { addImage } = useCoreHandler()
+  const { addImage, setBackgroundImage } = useCoreHandler()
 
   useEffect(() => {
-    if (!imgUpload.src) {
+    if (!productPhotoshootInfo.src) {
       setSelectedSampleImg(-1)
     }
-  }, [imgUpload.src])
+  }, [productPhotoshootInfo.src])
 
-  const handleAddObject = (imageUrl: any) => {
-    console.log("IMG URL", imageUrl)
-    addImage({
-      type: "image",
-      src: imageUrl,
-    })
+  const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
+  const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
+  const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
+  const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
+  const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
+  const { loaderPopup, setLoaderPopup } = useContext(LoaderContext)
+
+  const handleRemoveBgAndAddObject = async (imageUrl: any) => {
+    console.log("HANDLE")
+    setLoaderPopup(true)
+    try {
+      console.log("1")
+      // getDimensions(imageUrl, (img: any) => {
+      console.log("2")
+      // let response = await removeBackgroundController(
+      //   imageUrl,
+      //   (image: string) => {
+      //     console.log("3")
+      //     if (image) {
+      addImage({
+        type: "image",
+        src: imageUrl,
+      })
+      //     setLoaderPopup(false)
+      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
+      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+      //   } else {
+      //     setLoaderPopup(false)
+      //     throw new Error("Something went wrong while removing background...")
+      //   }
+      // },
+      // virtualSrcImageRef,
+      // virtualMaskImageRef,
+      // virtualCanvasSrcImageRef,
+      // virtualCanvasMaskImageRef,
+      // virtualCanvasResultImageRef,
+      // 1000,
+      // 1000
+      // img.width,
+      // img.height
+      // )
+      // console.log("4")
+      // if (response) {
+      //   setLoaderPopup(false)
+      //   console.log("RESPONSE", response)
+      //   throw new Error("Something went wrong while removing background...")
+      // }
+      // })
+    } catch (error: any) {
+      setLoaderPopup(false)
+      console.log("ERROR OCCURED", error)
+      throw error
+    }
   }
 
   const UploadImage = () => {
     return (
       <>
-        {imgUpload.preview ? (
+        {productPhotoshootInfo.preview ? (
           <div>
             <UploadPreview
               discardHandler={() => {
-                setImgUpload({ src: "", preview: "" })
+                setProductPhotoshootInfo({ src: "", preview: "" })
               }}
               previewHandle={() => {
-                setImgUpload({ src: "", preview: "" })
+                setProductPhotoshootInfo({ src: "", preview: "" })
               }}
-              imgSrc={imgUpload.src}
+              imgSrc={productPhotoshootInfo.src}
               uploadType={MODAL_IMG_UPLOAD}
             />
             <div className={clsx("p-relative pointer", classes.discardBtn)}>
               <span
                 onClick={() => {
                   console.log("THIS")
-                  setImgUpload({ src: "", preview: "" })
+                  setProductPhotoshootInfo({ src: "", preview: "" })
                 }}
               >
                 <Icons.Trash size={"32"} />
@@ -143,10 +195,9 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
             <Uploads
               imageLoading={imageLoading}
               setImageLoading={setImageLoading}
-              imgUpload={imgUpload}
-              setImgUpload={setImgUpload}
+              imgUpload={productPhotoshootInfo}
+              setImgUpload={setProductPhotoshootInfo}
               fileInputType={"modalUpload"}
-              uploadType={"a"}
               id={"modalUpload"}
             />
           </div>
@@ -160,9 +211,8 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
               style={{ backgroundImage: `url(${image})` }}
               onClick={() => {
                 setSelectedSampleImg(index)
-                setImgUpload({
+                setProductPhotoshootInfo({
                   src: image,
-                  preview: image,
                 })
               }}
             >
@@ -179,13 +229,12 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
           fontFamily="Poppins"
           fontWeight="600"
           handleClick={() => {
-            if (imgUpload.src) {
-              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-              handleAddObject(imgUpload.src)
+            if (productPhotoshootInfo.src) {
+              handleRemoveBgAndAddObject(productPhotoshootInfo.src)
+              setProductPhotoshootInfo((prev: any) => ({ ...prev, preview: productPhotoshootInfo.src }))
             }
           }}
-          disabled={!imgUpload.src}
+          disabled={!productPhotoshootInfo.src}
         />
       </>
     )
@@ -194,7 +243,9 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
   const ResizeImage = () => {
     return (
       <>
-        {imgUpload.src && <UploadPreview imgSrc={imgUpload.src} uploadType={MODAL_IMG_UPLOAD} />}
+        {productPhotoshootInfo.src && (
+          <UploadPreview imgSrc={productPhotoshootInfo.src} uploadType={MODAL_IMG_UPLOAD} />
+        )}
         <div className={classes.resizeLabel}>*The output will depend on the size of the input images.</div>
         <div className={classes.resizeButtons}>
           <BaseButton
@@ -304,6 +355,7 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
             setStepsComplete((prev) => ({ ...prev, 3: true, 4: false }))
+            setProductPhotoshootInfo((prev: any) => ({ ...prev, result: resultImages }))
           }}
           // disabled={}
         />
@@ -315,21 +367,22 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
     return (
       <>
         <div className={classes.resultImages}>
-          {resultImages.map((each, idx) => (
-            <div
-              className={clsx("pointer", classes.eachImg, idx === currentActiveImg && classes.currentActiveImg)}
-              key={idx}
-            >
-              {
-                <img
-                  src={each}
-                  onClick={() => {
-                    setCurrentActiveImg(idx)
-                  }}
-                />
-              }
-            </div>
-          ))}
+          {productPhotoshootInfo.result &&
+            productPhotoshootInfo.result.map((each, idx) => (
+              <div
+                className={clsx("pointer", classes.eachImg, idx === currentActiveImg && classes.currentActiveImg)}
+                key={idx}
+              >
+                {
+                  <img
+                    src={each}
+                    onClick={() => {
+                      setCurrentActiveImg(idx)
+                    }}
+                  />
+                }
+              </div>
+            ))}
           {imagesLoading &&
             Array.from(Array(4).keys()).map((each, idx) => (
               <div className={classes.skeletonBox} key={idx}>
@@ -363,6 +416,13 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
       <div className={classes.headingDivider}></div>
       {/* <Scrollable> */}
       <div className="d-flex flex-1 flex-column">
+        <button
+          onClick={() => {
+            console.log(productPhotoshootInfo)
+          }}
+        >
+          CLICK
+        </button>
         <Accordian
           label={"1"}
           heading={"Upload / choose image"}
@@ -432,4 +492,4 @@ const PhotoshootLeftPanel = ({ handleClose }: any) => {
   )
 }
 
-export default PhotoshootLeftPanel
+export default ProductPhotoshootLeftPanel

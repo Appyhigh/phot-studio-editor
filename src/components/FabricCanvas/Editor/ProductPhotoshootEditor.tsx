@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
 import CanvasArea from "./CanvasArea/CanvasArea"
 import classes from "./style.module.css"
@@ -6,27 +6,28 @@ import ModalBasePanel from "./Panels/ModalBasePanel/ModalBasePanel"
 import PointerIcon from "~/components/Icons/PointerIcon"
 import "swiper/css"
 import "swiper/css/navigation"
-import PhotoshootLeftPanel from "./Panels/PhotoshootLeftPanel/PhotoshootLeftPanel"
+import ProductPhotoshootLeftPanel from "./Panels/ProductPhotoshootLeftPanel/ProductPhotoshootLeftPanel"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 
-function Editor({ handleClose }: any) {
+function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
     width: 800,
     height: 800,
   })
-  const [isDoneBtnDisabled, setIsDoneBtnDisabled] = useState(false)
 
   const { fabricEditor } = useFabricEditor()
 
   const { canvas, objects }: any = fabricEditor
+  const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
 
   return (
     <div>
       <div className={"d-flex flex-row"}>
-        <PhotoshootLeftPanel handleClose={handleClose} />
+        <ProductPhotoshootLeftPanel handleClose={handleClose} />
         {/* <ImagesPanel /> */}
 
         <div className={classes.editor}>
-          <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={isDoneBtnDisabled} />
+          <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={productPhotoshootInfo.result} />
           <div className={classes.three}>
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
@@ -40,4 +41,4 @@ function Editor({ handleClose }: any) {
   )
 }
 
-export default Editor
+export default ProductPhotoshootEditor

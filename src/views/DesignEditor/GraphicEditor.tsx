@@ -6,12 +6,13 @@ import BasePanel from "~/components/UI/BasePanel/BasePanel"
 import Navbar from "~/components/UI/Common/Navbar/Navbar"
 import LayerPanel from "./components/Toolbox/LayerPanel/LayerPanel"
 import { fabric } from "fabric"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useEditor } from "@layerhub-io/react"
 import useAppContext from "~/hooks/useAppContext"
 import { OBJECT_REMOVER } from "~/constants/contants"
 import FabricCanvasModal from "~/components/FabricCanvas/FabricCanvasModal/FabricCanvasModal"
 import { PanelType } from "~/constants/app-options"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 const GraphicEditor = () => {
   // Initially set the canvas background as Transparent Checkbox Image
   const editor = useEditor()
@@ -36,6 +37,7 @@ const GraphicEditor = () => {
       setIsOpen(false)
     }
   }, [activePanel])
+  const { setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
 
   return (
     <EditorContainer>
@@ -60,6 +62,7 @@ const GraphicEditor = () => {
           handleClose={() => {
             setIsOpen(false)
             setActivePanel(null as any)
+            setProductPhotoshootInfo({ src: "", preview: "", result: [] })
           }}
         />
       </div>
