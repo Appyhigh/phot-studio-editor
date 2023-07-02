@@ -97,7 +97,7 @@ const UppyDashboard = ({
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else if (fileInputType === "modalUpload") {
-          setImgUpload({ src: imageUrl, preview: imageUrl })
+          setImgUpload({ src: imageUrl })
         } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
