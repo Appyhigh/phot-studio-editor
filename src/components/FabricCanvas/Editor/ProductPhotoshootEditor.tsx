@@ -13,6 +13,7 @@ import { useEditor, useFrame } from "@layerhub-io/react"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -27,6 +28,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { setImagesCt } = useContext(ImagesContext)
   const frame = useFrame()
+  const { canvasLoader } = useContext(CanvasLoaderContext)
 
   const handleDone = async () => {
     await getDimensions(productPhotoshootInfo.finalImage, (img: any) => {
@@ -41,10 +43,13 @@ function ProductPhotoshootEditor({ handleClose }: any) {
   }
 
   return (
-    <div>
-      <div className={"d-flex flex-row"}>
+    <div
+      style={{
+        cursor: canvasLoader ? "not-allowed" : "pointer",
+      }}
+    >
+      <div className={"d-flex flex-row"} style={{ pointerEvents: canvasLoader ? "none" : "auto" }}>
         <ProductPhotoshootLeftPanel handleClose={handleClose} />
-        {/* <ImagesPanel /> */}
 
         <div className={classes.editor}>
           <ModalBasePanel handleDone={handleDone} isDoneBtnDisabled={!productPhotoshootInfo.finalImage} />

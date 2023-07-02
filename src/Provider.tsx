@@ -24,6 +24,7 @@ import PhotoEditorContext from "./contexts/PhotoEditorContext"
 import { CanvasProvider } from "./components/FabricCanvas/Canvas"
 import "fabric-history"
 import ProductPhotoshootContext from "./contexts/ProductPhotoshootContext"
+import CanvasLoaderContext from "./contexts/CanvasLoaderContext"
 
 const engine = new Styletron()
 
@@ -130,6 +131,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     tryFilters: false,
   })
 
+  const [canvasLoader, setCanvasLoader] = useState(false)
+
   const [productPhotoshootInfo, setProductPhotoshootInfo] = useState({
     src: "",
     preview: "",
@@ -145,48 +148,50 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
           <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
             <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
               <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
-                <ProductPhotoshootContext.Provider value={{ productPhotoshootInfo, setProductPhotoshootInfo }}>
-                  <ImageColorizerContext.Provider
-                    value={{ ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo }}
-                  >
-                    <ImageUpScalerContext.Provider
-                      value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
+                <CanvasLoaderContext.Provider value={{ canvasLoader, setCanvasLoader }}>
+                  <ProductPhotoshootContext.Provider value={{ productPhotoshootInfo, setProductPhotoshootInfo }}>
+                    <ImageColorizerContext.Provider
+                      value={{ ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo }}
                     >
-                      <PhotoEditorContext.Provider
-                        value={{ photoEditorInfo, setPhotoEditorInfo, photoEditorPanelInfo, setPhotoEditorPanelInfo }}
+                      <ImageUpScalerContext.Provider
+                        value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
                       >
-                        <TextToArtContext.Provider
-                          value={{
-                            textToArtInputInfo,
-                            setTextToArtInputInfo,
-                            textToArtpanelInfo,
-                            setTextToArtPanelInfo,
-                            styleImage,
-                            setStyleImage,
-                            result,
-                            setResult,
-                          }}
+                        <PhotoEditorContext.Provider
+                          value={{ photoEditorInfo, setPhotoEditorInfo, photoEditorPanelInfo, setPhotoEditorPanelInfo }}
                         >
-                          <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
-                            <DesignEditorProvider>
-                              <TimerProvider>
-                                <AppProvider>
-                                  <ScenifyProvider>
-                                    <StyletronProvider value={engine}>
-                                      <BaseProvider theme={CustomTheme}>
-                                        <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                                      </BaseProvider>
-                                    </StyletronProvider>
-                                  </ScenifyProvider>
-                                </AppProvider>
-                              </TimerProvider>
-                            </DesignEditorProvider>
-                          </MainImageContext.Provider>
-                        </TextToArtContext.Provider>
-                      </PhotoEditorContext.Provider>
-                    </ImageUpScalerContext.Provider>
-                  </ImageColorizerContext.Provider>
-                </ProductPhotoshootContext.Provider>
+                          <TextToArtContext.Provider
+                            value={{
+                              textToArtInputInfo,
+                              setTextToArtInputInfo,
+                              textToArtpanelInfo,
+                              setTextToArtPanelInfo,
+                              styleImage,
+                              setStyleImage,
+                              result,
+                              setResult,
+                            }}
+                          >
+                            <MainImageContext.Provider value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}>
+                              <DesignEditorProvider>
+                                <TimerProvider>
+                                  <AppProvider>
+                                    <ScenifyProvider>
+                                      <StyletronProvider value={engine}>
+                                        <BaseProvider theme={CustomTheme}>
+                                          <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                                        </BaseProvider>
+                                      </StyletronProvider>
+                                    </ScenifyProvider>
+                                  </AppProvider>
+                                </TimerProvider>
+                              </DesignEditorProvider>
+                            </MainImageContext.Provider>
+                          </TextToArtContext.Provider>
+                        </PhotoEditorContext.Provider>
+                      </ImageUpScalerContext.Provider>
+                    </ImageColorizerContext.Provider>
+                  </ProductPhotoshootContext.Provider>
+                </CanvasLoaderContext.Provider>
               </ErrorContext.Provider>
             </LoaderContext.Provider>
           </ImagesContext.Provider>

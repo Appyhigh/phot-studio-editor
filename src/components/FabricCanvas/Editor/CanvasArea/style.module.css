@@ -3,3 +3,17 @@
   justify-content: center;
   align-items: center;
 }
+
+.loaderContainer {
+  position: absolute;
+  top: 55%;
+  left: 57.5%;
+  transform: translate(0%, -50%);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 1.25rem;
+  box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.5);
+}

@@ -14,8 +14,8 @@ import Uploads from "~/views/DesignEditor/components/Panels/panelItems/UploadDro
 import clsx from "clsx"
 import UploadPreview from "~/views/DesignEditor/components/Panels/panelItems/UploadPreview/UploadPreview"
 import { useCoreHandler } from "~/components/FabricCanvas/Canvas/handlers"
-import LoaderContext from "~/contexts/LoaderContext"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -95,7 +95,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     "https://cdn.pixabay.com/photo/2011/12/13/14/31/earth-11015_1280.jpg",
   ]
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
-  const [imagesLoading, setImagesLoading] = useState(false)
+  const [resultLoading, setResultLoading] = useState(false)
   const { addImage, setBackgroundImage, clearCanvas } = useCoreHandler()
 
   useEffect(() => {
@@ -109,11 +109,11 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
-  const { loaderPopup, setLoaderPopup } = useContext(LoaderContext)
+  const { setCanvasLoader } = useContext(CanvasLoaderContext)
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     console.log("HANDLE")
-    setLoaderPopup(true)
+    setCanvasLoader(true)
     try {
       console.log("1")
       // getDimensions(imageUrl, (img: any) => {
@@ -130,6 +130,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       //     setLoaderPopup(false)
       setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
       setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+      setCanvasLoader(false)
       //   } else {
       //     setLoaderPopup(false)
       //     throw new Error("Something went wrong while removing background...")
@@ -153,10 +154,26 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       // }
       // })
     } catch (error: any) {
-      setLoaderPopup(false)
+      setCanvasLoader(false)
       console.log("ERROR OCCURED", error)
       throw error
     }
+  }
+
+  const generateResult = () => {
+    setResultLoading(true)
+    setCanvasLoader(true)
+    setTimeout(() => {
+      clearCanvas()
+      setProductPhotoshootInfo((prev: any) => ({
+        ...prev,
+        result: [...prev.result, ...resultImages],
+        finalImage: resultImages[0],
+      }))
+      setBackgroundImage(resultImages[0])
+      setResultLoading(false)
+      setCanvasLoader(false)
+    }, 2000)
   }
 
   const UploadImage = () => {
@@ -352,9 +369,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
             setStepsComplete((prev) => ({ ...prev, 3: true, 4: false }))
-            clearCanvas()
-            setProductPhotoshootInfo((prev: any) => ({ ...prev, result: resultImages, finalImage: resultImages[0] }))
-            setBackgroundImage(resultImages[0])
+            generateResult()
           }}
           // disabled={}
         />
@@ -385,7 +400,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
                 }
               </div>
             ))}
-          {imagesLoading &&
+          {resultLoading &&
             Array.from(Array(4).keys()).map((each, idx) => (
               <div className={classes.skeletonBox} key={idx}>
                 {<img className={classes.imagesLoader} src={LoaderSpinner} />}
@@ -400,8 +415,10 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           fontSize="0.75rem"
           fontFamily="Poppins"
           fontWeight="600"
-          disabled={imagesLoading ? true : false}
-          // handleClick={() => {}}
+          disabled={resultLoading ? true : false}
+          handleClick={() => {
+            !resultLoading && generateResult()
+          }}
         />
       </>
     )
