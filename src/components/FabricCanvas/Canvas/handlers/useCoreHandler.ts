@@ -50,6 +50,7 @@ function useCoreHandler() {
           // Add the image object to the canvas
           //@ts-ignore
           canvas.add(img)
+          canvas.setActiveObject(img)
           img.center()
 
           img.clipPath = workarea
