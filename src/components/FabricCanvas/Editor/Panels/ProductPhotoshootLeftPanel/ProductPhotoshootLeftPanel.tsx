@@ -414,13 +414,6 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       <div className={classes.headingDivider}></div>
       {/* <Scrollable> */}
       <div className="d-flex flex-1 flex-column">
-        <button
-          onClick={() => {
-            console.log(productPhotoshootInfo)
-          }}
-        >
-          CLICK
-        </button>
         <Accordian
           label={"1"}
           heading={"Upload / choose image"}
