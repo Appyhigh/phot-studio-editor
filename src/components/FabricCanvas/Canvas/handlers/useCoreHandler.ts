@@ -72,6 +72,12 @@ function useCoreHandler() {
     }
   }, [canvas, activeObject])
 
+  const clearCanvas = useCallback(() => {
+    if (canvas) {
+      canvas.clear()
+    }
+  }, [canvas])
+
   // Update properties, optional set metadata if present
   const setProperty = useCallback(
     (property: any, value: any) => {
@@ -155,6 +161,7 @@ function useCoreHandler() {
     setCanvasBackgroundColor,
     addText,
     removeObject,
+    clearCanvas,
     setProperty,
     addImage,
     getCanvasSize,
