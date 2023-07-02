@@ -198,19 +198,23 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         )}
         <div className={classes.sampleImagesLabel}>or try one of these for free</div>
         <div className={classes.sampleImages}>
-          {sampleImages.map((image, index) => (
-            <div
-              key={index}
-              className={clsx(classes.sampleImage, "flex-center")}
-              style={{ backgroundImage: `url(${image})` }}
-              onClick={() => {
-                setSelectedSampleImg(index)
-                setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image }))
-              }}
-            >
-              {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-            </div>
-          ))}
+          <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+            {sampleImages.map((image, index) => (
+              <SwiperSlide key={index} style={{ width: "auto" }}>
+                <div
+                  key={index}
+                  className={clsx(classes.sampleImage, "flex-center")}
+                  style={{ backgroundImage: `url(${image})` }}
+                  onClick={() => {
+                    setSelectedSampleImg(index)
+                    setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image }))
+                  }}
+                >
+                  {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
         <BaseButton
           title="Continue"
