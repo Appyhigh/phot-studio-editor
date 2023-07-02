@@ -62,7 +62,7 @@ const GraphicEditor = () => {
           handleClose={() => {
             setIsOpen(false)
             setActivePanel(null as any)
-            setProductPhotoshootInfo({ src: "", preview: "", result: [] })
+            setProductPhotoshootInfo({ src: "", preview: "", result: [], tooltip: false, finalImage: "" })
           }}
         />
       </div>

@@ -9,6 +9,10 @@ import "swiper/css/navigation"
 import ProductPhotoshootLeftPanel from "./Panels/ProductPhotoshootLeftPanel/ProductPhotoshootLeftPanel"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import Resize from "~/components/Icons/Resize"
+import { useEditor, useFrame } from "@layerhub-io/react"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import ImagesContext from "~/contexts/ImagesCountContext"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -19,7 +23,22 @@ function ProductPhotoshootEditor({ handleClose }: any) {
   const { fabricEditor } = useFabricEditor()
 
   const { canvas, objects }: any = fabricEditor
+  const editor = useEditor()
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
+  const { setImagesCt } = useContext(ImagesContext)
+  const frame = useFrame()
+
+  const handleDone = async () => {
+    await getDimensions(productPhotoshootInfo.finalImage, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(productPhotoshootInfo.finalImage, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+        return prev + 1
+      })
+    })
+    handleClose()
+  }
 
   return (
     <div>
@@ -28,7 +47,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
         {/* <ImagesPanel /> */}
 
         <div className={classes.editor}>
-          <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={productPhotoshootInfo.result} />
+          <ModalBasePanel handleDone={handleDone} isDoneBtnDisabled={!productPhotoshootInfo.finalImage} />
           <div className={classes.three}>
             {productPhotoshootInfo.tooltip && (
               <div className={classes.toolTip}>

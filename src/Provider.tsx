@@ -135,6 +135,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     preview: "",
     tooltip: false,
     result: [],
+    finalImage: "",
   })
 
   return (

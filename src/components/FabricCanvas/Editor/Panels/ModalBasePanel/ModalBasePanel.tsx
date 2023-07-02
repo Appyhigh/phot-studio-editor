@@ -7,7 +7,7 @@ import { useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
 
-const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
+const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
 
@@ -64,7 +64,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
-            handleClick={!isDoneBtnDisabled ? handleClose : null}
+            handleClick={!isDoneBtnDisabled ? handleDone : null}
           />
         </Block>
       </Block>

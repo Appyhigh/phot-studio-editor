@@ -39,16 +39,13 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
     "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
   ]
-  // const [imgUpload, setProductPhotoshootInfo] = useState<any>({
-  //   src: "",
-  //   preview: "",
-  // })
+
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
   const [showPrompt, setShowPrompt] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState("Mood")
   const [selectedImg, setSelectedImg] = useState(-1)
-  const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
+  const [selectedSampleImg, setSelectedSampleImg] = useState(0)
   const categories: any = {
     Mood: [
       { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
@@ -92,14 +89,14 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     ],
   }
   const resultImages = [
-    "https://sepetjian.files.wordpress.com/2011/10/nasa1r3107_1000x1000.jpg",
-    "https://sepetjian.files.wordpress.com/2011/10/nasa1r3107_1000x1000.jpg",
-    "https://sepetjian.files.wordpress.com/2011/10/nasa1r3107_1000x1000.jpg",
-    "https://sepetjian.files.wordpress.com/2011/10/nasa1r3107_1000x1000.jpg",
+    "https://cdn.pixabay.com/photo/2011/12/13/14/28/earth-11008_1280.jpg",
+    "https://cdn.pixabay.com/photo/2016/11/29/13/14/full-moon-1869760_1280.jpg",
+    "https://cdn.pixabay.com/photo/2011/12/13/14/30/mars-11012_1280.jpg",
+    "https://cdn.pixabay.com/photo/2011/12/13/14/31/earth-11015_1280.jpg",
   ]
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [imagesLoading, setImagesLoading] = useState(false)
-  const { addImage, setBackgroundImage } = useCoreHandler()
+  const { addImage, setBackgroundImage, clearCanvas } = useCoreHandler()
 
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
@@ -169,10 +166,10 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           <div>
             <UploadPreview
               discardHandler={() => {
-                setProductPhotoshootInfo({ src: "", preview: "" })
+                setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               }}
               previewHandle={() => {
-                setProductPhotoshootInfo({ src: "", preview: "" })
+                setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               }}
               imgSrc={productPhotoshootInfo.src}
               uploadType={MODAL_IMG_UPLOAD}
@@ -180,8 +177,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             <div className={clsx("p-relative pointer", classes.discardBtn)}>
               <span
                 onClick={() => {
-                  console.log("THIS")
-                  setProductPhotoshootInfo({ src: "", preview: "" })
+                  setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
                 }}
               >
                 <Icons.Trash size={"32"} />
@@ -209,9 +205,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
               style={{ backgroundImage: `url(${image})` }}
               onClick={() => {
                 setSelectedSampleImg(index)
-                setProductPhotoshootInfo({
-                  src: image,
-                })
+                setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image }))
               }}
             >
               {selectedSampleImg == index && <Icons.Selection size={"24"} />}
@@ -354,7 +348,9 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
             setStepsComplete((prev) => ({ ...prev, 3: true, 4: false }))
-            setProductPhotoshootInfo((prev: any) => ({ ...prev, result: resultImages }))
+            clearCanvas()
+            setProductPhotoshootInfo((prev: any) => ({ ...prev, result: resultImages, finalImage: resultImages[0] }))
+            setBackgroundImage(resultImages[0])
           }}
           // disabled={}
         />
@@ -377,6 +373,9 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
                     src={each}
                     onClick={() => {
                       setCurrentActiveImg(idx)
+                      clearCanvas()
+                      setBackgroundImage(each)
+                      setProductPhotoshootInfo((prev: any) => ({ ...prev, finalImage: each }))
                     }}
                   />
                 }

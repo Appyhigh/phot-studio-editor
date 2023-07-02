@@ -6,6 +6,7 @@ const ProductPhotoshootContext = createContext({
     preview: "",
     tooltip: false,
     result: [],
+    finalImage: "",
   },
   setProductPhotoshootInfo: (item: any) => {
     console.log("Dummy Intializer for ", item)
