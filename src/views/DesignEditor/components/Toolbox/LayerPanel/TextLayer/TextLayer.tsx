@@ -47,6 +47,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
 
   useEffect(() => {
     if (activeObject) {
+      // @ts-ignore
       setTextConent({ text: activeObject?.text, id: activeObject?.id })
     }
   }, [activeObject])
@@ -158,7 +159,12 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
             })}
           </div>
 
-          <ColorPicker inputColor={textColor} isOpen={isOpen} handleClose={close} type="text" />
+          <ColorPicker
+            inputColor={textColor}
+            isOpen={isOpen}
+            handleClose={close}
+            handleChangeColor={(color: any) => editor.objects.update({ fill: color })}
+          />
 
           <div className={clsx(classes.panelSubHeading, "my-2")}>Modifiers</div>
           {TextLayerOption.map((each, idx) => {

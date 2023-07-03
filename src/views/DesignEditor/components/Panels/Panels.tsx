@@ -40,7 +40,6 @@ const Panels = () => {
           return prev
         }, {})
 
-        console.log("updatedSampleImages", updatedSampleImages)
         setSampleImages((prev: any) => ({
           ...prev,
           ...updatedSampleImages,

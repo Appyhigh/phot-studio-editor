@@ -27,7 +27,6 @@ const Shadows = () => {
       ...prevValues,
       [name]: value,
     }))
-
   }
 
   useEffect(() => {
@@ -148,10 +147,10 @@ const Shadows = () => {
       setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
     }
   }
-  
-  useEffect(()=>{
-  handleChangeColorHex(shadowColorHex)
-  },[shadowColorHex])
+
+  useEffect(() => {
+    handleChangeColorHex(shadowColorHex)
+  }, [shadowColorHex])
 
   useEffect(() => {
     if (activeObject?.shadow) {
@@ -181,7 +180,9 @@ const Shadows = () => {
         setInputColor={setShadowColorHex}
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
-        handleChangeBg={() => setIsOpen(false)}
+        handleChangeColor={(color:any) => {
+          setShadowColorHex(color)
+          setIsOpen(false)}}
       />
       <div className={classes.filterOptions}>
         <div
