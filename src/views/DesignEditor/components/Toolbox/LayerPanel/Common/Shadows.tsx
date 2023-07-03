@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { shadowOptions } from "~/views/DesignEditor/utils/ShadowOptions"
 import ColorPicker from "~/components/UI/ColorPicker/ColorPicker"
-import { error } from "console"
 const Shadows = () => {
   const activeObject: any = useActiveObject()
   const editor = useEditor()
@@ -23,12 +22,23 @@ const Shadows = () => {
   const { color, x, y, blur } = shadowValues
 
   const handleInputChange = (e: any) => {
+    console.log(e.target.value);
+    
     const { name, value } = e.target
     setShadowValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }))
+
   }
+
+  useEffect(() => {
+    if (selectedOption === "Manual") {
+      activeObject.set({ shadow: { color: color, offsetX: x, offsetY: y, blur: blur, _id: "none" } })
+      editor.canvas.requestRenderAll()
+      editor.history.save()
+    }
+  }, [shadowValues])
 
   const applyShadows = async (filterName: any, shadowObj: any) => {
     setSelectedFilter(filterName)
@@ -37,45 +47,46 @@ const Shadows = () => {
     editor.history.save()
     setShadowValues((prevValues) => ({
       ...prevValues,
-      color:shadowObj.shadow.color,
-      x:shadowObj.shadow.offsetX,
-      y:shadowObj.shadow.offsetY,
-      blur:shadowObj.shadow.blur,
+      color: shadowObj.shadow.color,
+      x: shadowObj.shadow.offsetX,
+      y: shadowObj.shadow.offsetY,
+      blur: shadowObj.shadow.blur,
     }))
     const RgbaToHex = handleRgbaToHex(shadowObj.shadow.color)
-    setShadowColorHex(RgbaToHex) 
+    setShadowColorHex(RgbaToHex)
     const rgbaValues = color
-    .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-    .split(",")
-    .map((value: any) => parseFloat(value.trim()))
+      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+      .split(",")
+      .map((value: any) => parseFloat(value.trim()))
     setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
   }
 
-  const isValidHex = (hex:any) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex)
-  const getChunksFromString = (st:any, chunkSize:any) => st.match(new RegExp(`.{${chunkSize}}`, "g"))
-  const convertHexUnitTo256 = (hexStr:any) => parseInt(hexStr.repeat(2 / hexStr.length), 16)
-
-  const getAlphafloat = (a:any, alpha:any) => {
-    if (typeof a !== "undefined") {return a / 255}
-    if ((typeof alpha !== "number") || alpha <0 || alpha >1){
+  const isValidHex = (hex: any) => /^#([A-Fa-f0-9]{3,4}){1,2}$/.test(hex)
+  const getChunksFromString = (st: any, chunkSize: any) => st.match(new RegExp(`.{${chunkSize}}`, "g"))
+  const convertHexUnitTo256 = (hexStr: any) => parseInt(hexStr.repeat(2 / hexStr.length), 16)
+  const getAlphafloat = (a: any, alpha: any) => {
+    if (typeof a !== "undefined") {
+      return a / 255
+    }
+    if (typeof alpha !== "number" || alpha < 0 || alpha > 1) {
       return 1
     }
     return alpha
-}
-
-  function handleHexToRgba(hex: any) {
-    try{
-      if (!isValidHex(hex)){
-         return}   
-     const chunkSize = Math.floor((hex.length - 1) / 3)
-     const hexArr = getChunksFromString(hex.slice(1), chunkSize)
-     const [r, g, b, a] = hexArr.map(convertHexUnitTo256)
-     return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, 1)})`
-     }catch(error){
-         console.log(error)
-     }
   }
 
+  function handleHexToRgba(hex: any) {
+    try {
+      if (!isValidHex(hex)) {
+        return
+      }
+      const chunkSize = Math.floor((hex.length - 1) / 3)
+      const hexArr = getChunksFromString(hex.slice(1), chunkSize)
+      const [r, g, b, a] = hexArr.map(convertHexUnitTo256)
+      return `rgba(${r}, ${g}, ${b}, ${getAlphafloat(a, 1)})`
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   function handleRgbaToHex(rgba: any) {
     if (rgba.startsWith("#")) {
@@ -97,55 +108,50 @@ const Shadows = () => {
     return "#" + r + g + b + a
   }
 
-  const handleRgbaOpacity = (rgba:any,opacity:any) =>{
-    try{
+  const handleRgbaOpacity = (rgba: any, opacity: any) => {
+    try {
       const rgbaValues = rgba
-      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-      .split(",")
-      .map((value: any) => parseFloat(value.trim()))
-      let r = rgbaValues[0],g=rgbaValues[1],b=rgbaValues[2],a=opacity/100
-      return `rgba(${r}, ${g}, ${b}, ${a})`
-    }catch(error){
-      console.log(error);
-      
-
-    }
-   
-  }
-
-  useEffect(()=>{   
-const out = handleRgbaOpacity(color,shadowColorOpacity)
-setShadowValues((prevValues:any) => ({
-  ...prevValues,
-  color:out,
-}))
-  },[shadowColorOpacity])
-
-
-  useEffect(() => {
-    if (selectedOption === "Manual") {
-      activeObject.set({ shadow: { color: color, offsetX: x, offsetY: y, blur: blur, _id: "none" } })
-      editor.canvas.requestRenderAll()
-      editor.history.save()
-    }
-  }, [shadowValues])
-
-useEffect(()=>{
-const HexToRgba = handleHexToRgba(shadowColorHex)
-
-if(isValidHex(shadowColorHex)){
-  setShadowValues((prevValues:any) => ({
-    ...prevValues,
-    color:HexToRgba,
-  }))
-  const rgbaValues = color
         .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
         .split(",")
         .map((value: any) => parseFloat(value.trim()))
-        setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
-}
+      let r = rgbaValues[0],
+        g = rgbaValues[1],
+        b = rgbaValues[2],
+        a = opacity / 100
+      return `rgba(${r}, ${g}, ${b}, ${a})`
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-},[shadowColorHex])
+  const handleOpacityChange = (e: any) => {
+    setShadowColorOpacity(e.target.value)
+    const changeOpacity = handleRgbaOpacity(color, e.target.value)
+    setShadowValues((prevValues: any) => ({
+      ...prevValues,
+      color: changeOpacity,
+    }))
+    const RgbaToHex = handleRgbaToHex(changeOpacity)
+    setShadowColorHex(RgbaToHex)
+  }
+
+  const handleChangeColorHex = (e: any) => {
+    console.log("call the fun");
+    
+    setShadowColorHex(e.target.value)
+    const HexToRgba = handleHexToRgba(e.target.value)
+    if (isValidHex(e.target.value)) {
+      setShadowValues((prevValues: any) => ({
+        ...prevValues,
+        color: HexToRgba,
+      }))
+      const rgbaValues = color
+        .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+        .split(",")
+        .map((value: any) => parseFloat(value.trim()))
+      setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
+    }
+  }
 
   useEffect(() => {
     if (activeObject?.shadow) {
@@ -153,7 +159,7 @@ if(isValidHex(shadowColorHex)){
       setSelectedFilter(activeObject?.shadow?._id)
       setShadowValues((prevValues) => ({
         ...prevValues,
-        color:activeObject.shadow.color,
+        color: activeObject.shadow.color,
         x: activeObject.shadow?.offsetX,
         y: activeObject.shadow.offsetY,
         blur: activeObject.shadow.blur,
@@ -161,13 +167,12 @@ if(isValidHex(shadowColorHex)){
       setShadowColorHex(RgbToHex)
 
       const rgbaValues = color
-      .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
-      .split(",")
-      .map((value: any) => parseFloat(value.trim()))
+        .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
+        .split(",")
+        .map((value: any) => parseFloat(value.trim()))
       setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
-    }  
+    }
   }, [])
-  
 
   return (
     <div className={classes.filterState}>
@@ -176,7 +181,7 @@ if(isValidHex(shadowColorHex)){
         setInputColor={setShadowColorHex}
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
-        handleChangeBg={()=>setIsOpen(false)}
+        handleChangeBg={() => setIsOpen(false)}
       />
       <div className={classes.filterOptions}>
         <div
@@ -242,7 +247,10 @@ if(isValidHex(shadowColorHex)){
           </div>
 
           <div className={classes.ShadowsColorPicker}>
-            <div onClick={() => setIsOpen(true)} style={{ width: "18px", height: "18px", backgroundColor: color}}>
+            <div
+              onClick={() => setIsOpen(true)}
+              style={{ width: "18px", height: "18px", backgroundColor: shadowColorHex }}
+            >
               {" "}
             </div>
             <input
@@ -251,14 +259,16 @@ if(isValidHex(shadowColorHex)){
               name="color"
               className={classes.ColorInput}
               value={shadowColorHex}
-              onChange={(e:any)=>{setShadowColorHex(e.target.value)}}
+              onChange={(e: any) => {
+                handleChangeColorHex(e)
+              }}
             ></input>
             <input
               type="number"
               max="99"
               className={classes.PercentageInput}
               value={shadowColorOpacity}
-              onChange={(e: any) => setShadowColorOpacity(e.target.value)}
+              onChange={(e: any) => handleOpacityChange(e)}
             />
             %
           </div>

@@ -97,7 +97,7 @@ const ColorPicker = ({ isOpen, handleClose, inputColor,setInputColor, type, hand
                 className={classes.colorPickerInputField}
                 onChange={(e) => {
                   setColor(e.target.value)
-                  setInputColor(color)
+                  setInputColor(e.target.value)
                 }}
                 value={color}
               />
