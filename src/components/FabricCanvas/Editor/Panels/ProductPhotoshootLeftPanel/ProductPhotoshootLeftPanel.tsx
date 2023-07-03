@@ -265,6 +265,8 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             handleClick={() => {
               setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
+              setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
+              canvas.discardActiveObject().renderAll()
             }}
           />
           <BaseButton
