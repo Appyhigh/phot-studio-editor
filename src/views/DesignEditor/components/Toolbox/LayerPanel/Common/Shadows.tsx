@@ -22,8 +22,6 @@ const Shadows = () => {
   const { color, x, y, blur } = shadowValues
 
   const handleInputChange = (e: any) => {
-    console.log(e.target.value);
-    
     const { name, value } = e.target
     setShadowValues((prevValues) => ({
       ...prevValues,
@@ -40,7 +38,7 @@ const Shadows = () => {
     }
   }, [shadowValues])
 
-  const applyShadows = async (filterName: any, shadowObj: any) => {
+  const applyShadows = (filterName: any, shadowObj: any) => {
     setSelectedFilter(filterName)
     activeObject.set(shadowObj)
     editor.canvas.requestRenderAll()
