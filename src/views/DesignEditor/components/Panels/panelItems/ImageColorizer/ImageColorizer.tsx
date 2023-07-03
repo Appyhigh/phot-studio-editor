@@ -6,9 +6,8 @@ import Scrollable from "~/components/Scrollable"
 import useAppContext from "~/hooks/useAppContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
-import { useActiveObject, useEditor, useObjects, useFrame } from "@layerhub-io/react"
-import { useCallback, useContext, useEffect, useState } from "react"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
+import { useEditor, useFrame } from "@layerhub-io/react"
+import { useCallback, useContext, useState } from "react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -16,26 +15,24 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import BaseButton from "~/components/UI/Button/BaseButton"
-import NoneIcon from "~/components/Icons/NoneIcon"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { imgColorizerController } from "~/utils/imgColorizerController"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 import ErrorContext from "~/contexts/ErrorContext"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
   const editor = useEditor()
   const { setImagesCt } = useContext(ImagesContext)
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
   const [imageLoading, setImageLoading] = useState(false)
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const { sampleImages } = useContext(SampleImagesContext)
   const { setErrorInfo } = useContext(ErrorContext)
-
-  // @ts-ignore
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
 
@@ -47,7 +44,6 @@ const ImageColorizer = () => {
       setImageLoading(true)
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
-      setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
       setImgColorizerPanelInfo((prev: any) => ({
         ...prev,
         resultOption: true,
@@ -60,7 +56,7 @@ const ImageColorizer = () => {
       imgColorizerController(ImgColorizerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [ImgColorizerInfo.src, response] }))
+          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [ response] }))
         })
         .catch((error) => {
           setImageLoading(false)
@@ -122,14 +118,6 @@ const ImageColorizer = () => {
     }))
   }
 
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
-    }
-    fetchSampleImages()
-  }, [])
-
   const frame = useFrame()
   const addImg = async (imageUrl: string, _idx: number) => {
     setCurrentActiveImg(_idx)
@@ -162,8 +150,6 @@ const ImageColorizer = () => {
               fileInputType={"ImgColorizer"}
               id={"ImgColorizer"}
               mainHeading={"Add Image"}
-              imageLoading={imageLoading}
-              setImageLoading={setImageLoading}
             />
           )}
 
@@ -193,20 +179,21 @@ const ImageColorizer = () => {
                 Try Sample Images
               </Block>
               <Scrollable>
-                <Block className="py-3">
+                <Block className="py-3 mb-2">
                   <Block className={classes.sampleImgSection}>
-                    {bgSampleImages.map((image: any, index) => {
-                      return (
-                        <ImageItem
-                          key={index}
-                          onClick={() => {
-                            addObject(image.originalImage)
-                          }}
-                          imageLoading={imageLoading}
-                          preview={image.thumbnail}
-                        />
-                      )
-                    })}
+                    {sampleImages.imageColorizer &&
+                      sampleImages.imageColorizer.map((image: any, index: any) => {
+                        return (
+                          <ImageItem
+                            key={index}
+                            onClick={() => {
+                              addObject(image.originalImage)
+                            }}
+                            imageLoading={imageLoading}
+                            preview={image.thumbnail}
+                          />
+                        )
+                      })}
                   </Block>
                 </Block>
               </Scrollable>
@@ -218,7 +205,7 @@ const ImageColorizer = () => {
         <div className={classes.resultSection}>
           <Block
             onClick={() => {
-              setImgColorizerInfo((prev: any) => ({ ...prev, id: "", resultImages: [] }))
+              setImgColorizerInfo((prev: any) => ({ ...prev, id: "",src:"", resultImages: [] }))
               setImgColorizerPanelInfo((prev: any) => ({
                 ...prev,
                 tryFilters: false,
@@ -236,7 +223,18 @@ const ImageColorizer = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            {ImgColorizerInfo?.resultImages?.map((each, _idx) => {
+          <div className={clsx("pointer", classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
+              <img
+                src={ImgColorizerInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  addImg(ImgColorizerInfo.src, 1)
+                }}
+              />
+
+              <div className={classes.resultLabel}>{"Original"}</div>
+            </div>
+            { !imageLoading&& ImgColorizerInfo?.resultImages?.map((each, _idx) => {
               return (
                 <div
                   className={clsx("pointer", classes.eachImg, currentActiveImg === _idx && classes.currentActiveImg)}
@@ -250,12 +248,12 @@ const ImageColorizer = () => {
                     }}
                   />
 
-                  <div className={classes.resultLabel}>{_idx == 0 ? "Original" : _idx == 1 ? "Result" : "Result"}</div>
+                  <div className={classes.resultLabel}>{"Result"}</div>
                 </div>
               )
             })}
             {imageLoading &&
-              Array.from(Array(2).keys()).map((each, idx) => (
+              Array.from(Array(1).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
                   {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
                 </div>
