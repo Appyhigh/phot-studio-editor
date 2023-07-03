@@ -73,6 +73,19 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const { fabricEditor } = useFabricEditor()
   const { canvas, activeObject }: any = fabricEditor
 
+  useEffect(() => {
+    if (!imageMoved) {
+      if (canvas) {
+        canvas.on("object:scaling", (e: any) => {
+          setImageMoved(true)
+        })
+        canvas.on("object:moving", (e: any) => {
+          setImageMoved(true)
+        })
+      }
+    }
+  }, [canvas])
+
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)
     try {
@@ -261,7 +274,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             fontSize="0.75rem"
             fontFamily="Poppins"
             fontWeight="600"
-            // disabled={!imageMoved}
+            disabled={!imageMoved}
             handleClick={() => {
               setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
@@ -270,7 +283,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             }}
           />
         </div>
-        {/* {imageMoved && <div className={classes.resizeNote}>Clicking Continue will save the changes automatically.</div>} */}
+        {imageMoved && <div className={classes.resizeNote}>Clicking Continue will save the changes automatically.</div>}
       </>
     )
   }
