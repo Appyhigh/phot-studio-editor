@@ -5,6 +5,8 @@ const ProductPhotoshootContext = createContext({
     src: "",
     preview: "",
     tooltip: false,
+    input_image: "",
+    prompt: "",
     result: [],
     finalImage: "",
   },
