@@ -23,6 +23,7 @@ import useFabricEditor from "~/hooks/useFabricEditor"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
+import ErrorContext from "~/contexts/ErrorContext"
 
 const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -72,6 +73,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
   const { fabricEditor } = useFabricEditor()
   const { canvas, activeObject }: any = fabricEditor
+  const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
     if (!imageMoved) {
@@ -122,12 +124,36 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         )
         if (response) {
           setCanvasLoader(false)
-          throw new Error("Something went wrong while removing background...")
+          setErrorInfo((prev: any) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Something went wrong while removing background...",
+            retryFn: () => {
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+              handleRemoveBgAndAddObject(imageUrl)
+            },
+          }))
+          setTimeout(() => {
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+          }, 5000)
         }
       })
     } catch (error: any) {
       setCanvasLoader(false)
-      throw error
+      setErrorInfo((prev: any) => ({
+        ...prev,
+        showError: true,
+        errorMsg: "Something went wrong while removing background...",
+        retryFn: () => {
+          // @ts-ignore
+          setErrorInfo((prev) => ({ ...prev, showError: false }))
+          handleRemoveBgAndAddObject(imageUrl)
+        },
+      }))
+      setTimeout(() => {
+        // @ts-ignore
+        setErrorInfo((prev) => ({ ...prev, showError: false }))
+      }, 5000)
     }
   }
 
@@ -162,9 +188,21 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         setCanvasLoader(false)
       })
       .catch((error) => {
-        console.log("error", error)
         setResultLoading(false)
         setCanvasLoader(false)
+        setErrorInfo((prev: any) => ({
+          ...prev,
+          showError: true,
+          errorMsg: "Some error has occurred",
+          retryFn: () => {
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+            generateResult()
+          },
+        }))
+        setTimeout(() => {
+          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+        }, 5000)
+        console.log("error", error)
       })
   }
 
@@ -351,7 +389,6 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       <div className="d-flex flex-1 flex-column">
         <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
         <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
-
         <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
         <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
         <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
