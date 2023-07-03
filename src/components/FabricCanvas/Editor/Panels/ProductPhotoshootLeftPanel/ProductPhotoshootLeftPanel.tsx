@@ -18,6 +18,11 @@ import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS, removeBackgroundController } from "~/utils/removeBackground"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import productPhotoshootController from "~/utils/productPhotoshootController"
+import useFabricEditor from "~/hooks/useFabricEditor"
+import { COOKIE_KEYS } from "~/utils/enum"
+import { getCookie } from "~/utils/common"
+import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 
 const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -46,58 +51,9 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
 
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
-  const [showPrompt, setShowPrompt] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState("Mood")
-  const [selectedImg, setSelectedImg] = useState(-1)
   const [selectedSampleImg, setSelectedSampleImg] = useState(0)
-  const categories: any = {
-    Mood: [
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-    ],
-    Colors: [
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Red" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Green" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Blue" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Orange" },
-    ],
-    Nature: [
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-    ],
-    Texture: [
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-    ],
-  }
-  const resultImages = [
-    "https://cdn.pixabay.com/photo/2011/12/13/14/28/earth-11008_1280.jpg",
-    "https://cdn.pixabay.com/photo/2016/11/29/13/14/full-moon-1869760_1280.jpg",
-    "https://cdn.pixabay.com/photo/2011/12/13/14/30/mars-11012_1280.jpg",
-    "https://cdn.pixabay.com/photo/2011/12/13/14/31/earth-11015_1280.jpg",
-  ]
+  const [imageMoved, setImageMoved] = useState(false)
+
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [resultLoading, setResultLoading] = useState(false)
   const { addImage, setBackgroundImage, clearCanvas } = useCoreHandler()
@@ -114,18 +70,16 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
+  const { fabricEditor } = useFabricEditor()
+  const { canvas, activeObject }: any = fabricEditor
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
-    console.log("HANDLE")
     setCanvasLoader(true)
     try {
-      console.log("1")
       await getDimensions(imageUrl, async (img: any) => {
-        console.log("2")
         let response = await removeBackgroundController(
           imageUrl,
           (image: string) => {
-            console.log("3")
             if (image) {
               addImage({
                 type: "image",
@@ -133,7 +87,11 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
               })
               setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-              setProductPhotoshootInfo((prev: any) => ({ ...prev, preview: productPhotoshootInfo.src, tooltip: true }))
+              setProductPhotoshootInfo((prev: any) => ({
+                ...prev,
+                preview: productPhotoshootInfo.src,
+                tooltip: true,
+              }))
               setCanvasLoader(false)
             } else {
               setCanvasLoader(false)
@@ -159,20 +117,41 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     }
   }
 
+  const getCurrentCanvasBase64Image = () => {
+    if (canvas) {
+      const dataURL = canvas.toDataURL({
+        width: canvas.width,
+        height: canvas.height,
+        left: 0,
+        top: 0,
+        format: "png",
+      })
+
+      return dataURL
+    }
+    return undefined
+  }
+
   const generateResult = () => {
     setResultLoading(true)
     setCanvasLoader(true)
-    setTimeout(() => {
-      clearCanvas()
-      setProductPhotoshootInfo((prev: any) => ({
-        ...prev,
-        result: [...prev.result, ...resultImages],
-        finalImage: resultImages[0],
-      }))
-      setBackgroundImage(resultImages[0])
-      setResultLoading(false)
-      setCanvasLoader(false)
-    }, 2000)
+    productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
+      .then((response) => {
+        clearCanvas()
+        setProductPhotoshootInfo((prev: any) => ({
+          ...prev,
+          result: [...prev.result, ...response],
+          finalImage: response[0],
+        }))
+        setBackgroundImage(response[0])
+        setResultLoading(false)
+        setCanvasLoader(false)
+      })
+      .catch((error) => {
+        console.log("error", error)
+        setResultLoading(false)
+        setCanvasLoader(false)
+      })
   }
 
   const UploadImage = () => {
@@ -193,7 +172,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             <div className={clsx("p-relative pointer", classes.discardBtn)}>
               <span
                 onClick={() => {
-                  setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
+                  setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "" }))
                 }}
               >
                 <Icons.Trash size={"32"} />
@@ -282,96 +261,17 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             fontSize="0.75rem"
             fontFamily="Poppins"
             fontWeight="600"
-            // disabled={true}
+            // disabled={!imageMoved}
             handleClick={() => {
               setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
               setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
+              canvas.discardActiveObject().renderAll()
             }}
           />
         </div>
+        {/* {imageMoved && <div className={classes.resizeNote}>Clicking Continue will save the changes automatically.</div>} */}
       </>
-    )
-  }
-  const SelectBackground = () => {
-    return (
-      <div className={classes.selectBg}>
-        {showPrompt ? (
-          <>
-            <div className={classes.inputSection}>
-              <Prompt />
-            </div>
-            <div className={classes.defaultBgLabel} onClick={() => setShowPrompt(false)}>
-              Select default backgrounds.
-            </div>
-          </>
-        ) : (
-          <>
-            <Swiper spaceBetween={5} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-              {Object.keys(categories).map((each: any, index) => (
-                <SwiperSlide key={index}>
-                  <div
-                    className={classes.bgTab}
-                    style={{
-                      background: selectedCategory == each ? "#6729f3" : "#fff",
-                      color: selectedCategory == each ? "#fafafb" : "#92929D",
-                    }}
-                    onClick={() => {
-                      setSelectedCategory(each)
-                    }}
-                  >
-                    {each}
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-
-            <Swiper spaceBetween={20} slidesPerView={"auto"} navigation={true} modules={[Navigation]} className="mt-2">
-              {categories[selectedCategory].map((each: any, index: any) => (
-                <SwiperSlide key={index}>
-                  <img
-                    className="pointer"
-                    style={{
-                      width: "6rem",
-                      height: "4rem",
-                      background: "#FFFFFF",
-                      borderRadius: "8px",
-                    }}
-                    src={each.image}
-                    onClick={() => {
-                      setSelectedImg(index)
-                    }}
-                  />
-                  <div className={classes.imageLabel}>{each.label}</div>
-                  {selectedImg == index && (
-                    <div className={classes.selected}>
-                      <Icons.Selection size={"28"} />
-                    </div>
-                  )}
-                </SwiperSlide>
-              ))}
-            </Swiper>
-            <div className={classes.promptLabel} onClick={() => setShowPrompt(true)}>
-              Want a more customized background? <span>Generate with a prompt.</span>
-            </div>
-          </>
-        )}
-        <BaseButton
-          title="Continue"
-          borderRadius="10px"
-          width="20.25rem"
-          height="2.375rem"
-          fontSize="0.75rem"
-          fontFamily="Poppins"
-          fontWeight="600"
-          handleClick={() => {
-            setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
-            setStepsComplete((prev) => ({ ...prev, 3: true, 4: false }))
-            generateResult()
-          }}
-          // disabled={}
-        />
-      </div>
     )
   }
 
@@ -423,6 +323,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   }
 
   return (
+    // <Scrollable>
     <div className={classes.leftPanel}>
       <div className={classes.heading}>
         <div className={classes.arrowIcon} onClick={handleClose}>
@@ -431,7 +332,6 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         Product Photoshoot
       </div>
       <div className={classes.headingDivider}></div>
-      {/* <Scrollable> */}
       <div className="d-flex flex-1 flex-column">
         <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
         <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -448,7 +348,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             if (stepsComplete[1] && !steps[1]) {
               setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 4: false }))
+              // setStepsComplete((prev) => ({ ...prev, 4: false }))
             } else if (steps[1]) {
               setSteps((prev) => ({ ...prev, 1: false }))
             } else {
@@ -464,7 +364,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           handleClick={() => {
             if (stepsComplete[2] && !steps[2]) {
               setSteps((prev) => ({ ...prev, 2: true, 1: false, 3: false, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 4: false }))
+              // setStepsComplete((prev) => ({ ...prev, 4: false }))
             } else if (steps[2]) {
               setSteps((prev) => ({ ...prev, 2: false }))
             } else {
@@ -475,12 +375,14 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           label={"3"}
           heading={"Select background"}
           isOpen={steps[3]}
-          isComplete={steps[3]}
-          children={<SelectBackground />}
+          isComplete={stepsComplete[3]}
+          children={
+            <SelectBackground setSteps={setSteps} setStepsComplete={setStepsComplete} generateResult={generateResult} />
+          }
           handleClick={() => {
             if (stepsComplete[3] && !steps[3]) {
               setSteps((prev) => ({ ...prev, 3: true, 1: false, 2: false, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 4: false }))
+              // setStepsComplete((prev) => ({ ...prev, 4: false }))
             } else if (steps[3]) {
               setSteps((prev) => ({ ...prev, 3: false }))
             } else {
@@ -491,7 +393,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           label={"4"}
           heading={"Select output"}
           isOpen={steps[4]}
-          isComplete={steps[4]}
+          isComplete={stepsComplete[4]}
           children={<SelectOutput />}
           handleClick={() => {
             if (stepsComplete[4] && !steps[4]) {
@@ -503,9 +405,153 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           }}
         />
       </div>
-      {/* </Scrollable>  */}
     </div>
+    // </Scrollable>
   )
 }
 
+const SelectBackground = ({ setSteps, setStepsComplete, generateResult }: any) => {
+  const [showPrompt, setShowPrompt] = useState(false)
+  const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
+  const [selectedImg, setSelectedImg] = useState(-1)
+  const [selectedCategory, setSelectedCategory] = useState("Mood")
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
+
+  const categories: any = {
+    Mood: [
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+    ],
+    Colors: [
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Red" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Green" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Blue" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Orange" },
+    ],
+    Nature: [
+      {
+        image:
+          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+        label: "Tree",
+      },
+      {
+        image:
+          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+        label: "Tree",
+      },
+      {
+        image:
+          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+        label: "Tree",
+      },
+      {
+        image:
+          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+        label: "Tree",
+      },
+    ],
+    Texture: [
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+    ],
+  }
+  return (
+    <div className={classes.selectBg}>
+      {showPrompt ? (
+        <>
+          <div className={classes.inputSection}>
+            <Prompt stateInfo={productPhotoshootInfo} setStateInfo={setProductPhotoshootInfo} />
+          </div>
+          <div className={classes.defaultBgLabel} onClick={() => setShowPrompt(false)}>
+            Select default backgrounds.
+          </div>
+        </>
+      ) : (
+        <>
+          <Swiper spaceBetween={5} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+            {Object.keys(categories).map((each: any, index) => (
+              <SwiperSlide key={index}>
+                <div
+                  className={classes.bgTab}
+                  style={{
+                    background: selectedCategory == each ? "#6729f3" : "#fff",
+                    color: selectedCategory == each ? "#fafafb" : "#92929D",
+                  }}
+                  onClick={() => {
+                    setSelectedCategory(each)
+                  }}
+                >
+                  {each}
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <Swiper spaceBetween={20} slidesPerView={"auto"} navigation={true} modules={[Navigation]} className="mt-2">
+            {categories[selectedCategory].map((each: any, index: any) => (
+              <SwiperSlide key={index}>
+                <img
+                  className="pointer"
+                  style={{
+                    width: "6rem",
+                    height: "4rem",
+                    background: "#FFFFFF",
+                    borderRadius: "8px",
+                  }}
+                  src={each.image}
+                  onClick={() => {
+                    setSelectedImg(index)
+                  }}
+                />
+                <div className={classes.imageLabel}>{each.label}</div>
+                {selectedImg == index && (
+                  <div className={classes.selected}>
+                    <Icons.Selection size={"28"} />
+                  </div>
+                )}
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div className={classes.promptLabel} onClick={() => setShowPrompt(true)}>
+            Want a more customized background? <span>Generate with a prompt.</span>
+          </div>
+          {/* {productPhotoshootInfo.result.length > 0 && (
+            <div className={classes.prevOutputNote}>Your previous output will not be discarded.</div>
+          )} */}
+        </>
+      )}
+      <BaseButton
+        title="Continue"
+        borderRadius="10px"
+        width="20.25rem"
+        height="2.375rem"
+        fontSize="0.75rem"
+        fontFamily="Poppins"
+        fontWeight="600"
+        handleClick={() => {
+          if (productPhotoshootInfo.prompt.length > 0) {
+            if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+              setShowLoginPopup(true)
+            } else {
+              setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
+              setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
+              generateResult()
+            }
+          }
+        }}
+        disabled={productPhotoshootInfo.prompt.length == 0}
+      />
+      <LoginPopup
+        isOpen={showLoginPopup}
+        loginPopupCloseHandler={() => {
+          setShowLoginPopup(false)
+        }}
+      />
+    </div>
+  )
+}
 export default ProductPhotoshootLeftPanel
