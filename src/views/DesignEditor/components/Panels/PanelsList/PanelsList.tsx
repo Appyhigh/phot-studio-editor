@@ -47,10 +47,6 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   const { setActivePanel } = useAppContext()
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
-
-  console.log(activePanel);
-  
-
   // @ts-ignore
   const Icon = Icons[icon]
   return (

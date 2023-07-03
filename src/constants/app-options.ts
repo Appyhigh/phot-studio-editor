@@ -45,7 +45,7 @@ export const BASE_ITEMS = [
   {
     id: "imagineai",
     icon: "ImagineAi",
-    label: "Imagine AI",
+    label: "Text to Art",
     name: "ImagineAI",
   },
   {

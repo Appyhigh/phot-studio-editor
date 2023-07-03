@@ -39,8 +39,6 @@ const Panels = () => {
           prev[key] = results[index]
           return prev
         }, {})
-
-        console.log("updatedSampleImages", updatedSampleImages)
         setSampleImages((prev: any) => ({
           ...prev,
           ...updatedSampleImages,
