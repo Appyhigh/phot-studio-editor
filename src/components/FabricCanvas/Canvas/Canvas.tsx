@@ -73,10 +73,16 @@ function Canvas({ width, height }: any) {
     // })
 
     // set background of image
-    fabric.Image.fromURL("https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473", (img) => {
-      canvas.backgroundImage = img
-      canvas.renderAll()
-    })
+    fabric.Image.fromURL(
+      "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473",
+      (img) => {
+        canvas.backgroundImage = img
+        canvas.renderAll()
+      },
+      {
+        crossOrigin: "anonymous",
+      }
+    )
 
     // canvas.add(workArea)
     // workArea.center()

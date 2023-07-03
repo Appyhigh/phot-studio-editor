@@ -32,32 +32,38 @@ function useCoreHandler() {
         const element = CanvasObjects[type].render(imageOptions)
         const workarea = canvas?.getObjects().find((obj: any) => obj.id === "workarea")
         // Create a fabric.Image from URL
-        fabric.Image.fromURL(imageOptions.src, (img: fabric.Image) => {
-          // Set additional options for the image object
-          const canvasSize = getCanvasSize()
-          let scale = 1
-          if (img.width && img.height && canvasSize) {
-            if (img.width > canvasSize.width || img.height > canvasSize.height) {
-              if (img.width / canvasSize.width > img.height / canvasSize.height) {
-                scale = canvasSize.width / img.width
-              } else {
-                scale = canvasSize.height / img.height
+        fabric.Image.fromURL(
+          imageOptions.src,
+          (img: fabric.Image) => {
+            // Set additional options for the image object
+            const canvasSize = getCanvasSize()
+            let scale = 1
+            if (img.width && img.height && canvasSize) {
+              if (img.width > canvasSize.width || img.height > canvasSize.height) {
+                if (img.width / canvasSize.width > img.height / canvasSize.height) {
+                  scale = canvasSize.width / img.width
+                } else {
+                  scale = canvasSize.height / img.height
+                }
               }
             }
+            img.set({ type: "image", ...imageOptions, scaleX: scale, scaleY: scale })
+
+            // Add the image object to the canvas
+            //@ts-ignore
+            canvas.add(img)
+            canvas.setActiveObject(img)
+            img.center()
+
+            img.clipPath = workarea
+            //@ts-ignore
+            canvas.renderAll()
+            setFabricEditor({ ...fabricEditor, canvas: canvas })
+          },
+          {
+            crossOrigin: "anonymous",
           }
-          img.set({ type: "image", ...imageOptions, scaleX: scale, scaleY: scale })
-
-          // Add the image object to the canvas
-          //@ts-ignore
-          canvas.add(img)
-          canvas.setActiveObject(img)
-          img.center()
-
-          img.clipPath = workarea
-          //@ts-ignore
-          canvas.renderAll()
-          setFabricEditor({ ...fabricEditor, canvas: canvas })
-        })
+        )
       } else {
         console.log("empty canvas")
       }
@@ -138,19 +144,25 @@ function useCoreHandler() {
   const setBackgroundImage = useCallback(
     (imageURL: any) => {
       if (canvas) {
-        fabric.Image.fromURL(imageURL, (img: any) => {
-          const background = canvas.backgroundImage
-          if (background) {
-            // If a background image already exists, remove it
-            canvas.remove(background)
-          }
+        fabric.Image.fromURL(
+          imageURL,
+          (img: any) => {
+            const background = canvas.backgroundImage
+            if (background) {
+              // If a background image already exists, remove it
+              canvas.remove(background)
+            }
 
-          img.set({
-            scaleX: canvas.width / img.width,
-            scaleY: canvas.height / img.height,
-          })
-          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
-        })
+            img.set({
+              scaleX: canvas.width / img.width,
+              scaleY: canvas.height / img.height,
+            })
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
+          },
+          {
+            crossOrigin: "anonymous",
+          }
+        )
       }
     },
     [canvas]
