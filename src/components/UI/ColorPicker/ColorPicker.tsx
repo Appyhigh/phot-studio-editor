@@ -10,7 +10,7 @@ import { Button } from "baseui/button"
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
-const ColorPicker = ({ isOpen, handleClose, inputColor,setInputColor, type, handleChangeBg, handleColor }: any) => {
+const ColorPicker = ({ isOpen, handleClose, inputColor,setInputColor, type, handleChangeColor}: any) => {
   const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
   const editor = useEditor()
@@ -21,15 +21,17 @@ const ColorPicker = ({ isOpen, handleClose, inputColor,setInputColor, type, hand
   const updateObjectFill = throttle((color: string) => {
     if (activeObject) {
       if (type === "object") {
-        handleChangeBg({ color: color })
+        handleChangeColor({ color: color })
       } else if (type === "text") editor.objects.update({ fill: color })
       else if (type === "background") {
-        handleColor(color)
+        handleChangeColor(color)
+      }else{
+        setInputColor(color)
       }
     }
 
     setColor(color)
-    setInputColor(color)
+    
     close()
   }, 1000)
 
@@ -87,8 +89,6 @@ const ColorPicker = ({ isOpen, handleClose, inputColor,setInputColor, type, hand
               <HexColorPicker
                 onChange={(color) => {
                   setColor(color)
-                  setInputColor(color)
-                  
                 }}
               />
             </div>
@@ -97,7 +97,6 @@ const ColorPicker = ({ isOpen, handleClose, inputColor,setInputColor, type, hand
                 className={classes.colorPickerInputField}
                 onChange={(e) => {
                   setColor(e.target.value)
-                  setInputColor(e.target.value)
                 }}
                 value={color}
               />

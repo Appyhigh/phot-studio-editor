@@ -232,7 +232,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           isOpen={isOpen}
           handleClose={close}
           type="object"
-          handleChangeBg={handleChangeBg}
+          handleChangeColor={handleChangeBg}
         />
 
         <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>

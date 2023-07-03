@@ -135,12 +135,10 @@ const Shadows = () => {
     setShadowColorHex(RgbaToHex)
   }
 
-  const handleChangeColorHex = (e: any) => {
-    console.log("call the fun");
-    
-    setShadowColorHex(e.target.value)
-    const HexToRgba = handleHexToRgba(e.target.value)
-    if (isValidHex(e.target.value)) {
+  const handleChangeColorHex = (colorValue: any) => {
+    setShadowColorHex(colorValue)
+    const HexToRgba = handleHexToRgba(colorValue)
+    if (isValidHex(colorValue)) {
       setShadowValues((prevValues: any) => ({
         ...prevValues,
         color: HexToRgba,
@@ -152,6 +150,10 @@ const Shadows = () => {
       setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
     }
   }
+  
+  useEffect(()=>{
+  handleChangeColorHex(shadowColorHex)
+  },[shadowColorHex])
 
   useEffect(() => {
     if (activeObject?.shadow) {
@@ -260,7 +262,7 @@ const Shadows = () => {
               className={classes.ColorInput}
               value={shadowColorHex}
               onChange={(e: any) => {
-                handleChangeColorHex(e)
+                handleChangeColorHex(e.target.value)
               }}
             ></input>
             <input
