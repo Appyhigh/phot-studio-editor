@@ -2,6 +2,8 @@
   background-color: #fff;
   border-top-left-radius: 20px;
   width: 24rem;
+  height: 45rem;
+  overflow-y: auto;
 }
 
 .heading {

@@ -58,6 +58,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [resultLoading, setResultLoading] = useState(false)
   const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
 
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
@@ -173,37 +174,45 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   }
 
   const generateResult = () => {
-    setResultLoading(true)
-    setCanvasLoader(true)
-    productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
-      .then((response) => {
-        clearCanvas()
-        setProductPhotoshootInfo((prev: any) => ({
-          ...prev,
-          result: [...prev.result, ...response],
-          finalImage: response[0],
-        }))
-        setBackgroundImage(response[0])
-        setResultLoading(false)
-        setCanvasLoader(false)
-      })
-      .catch((error) => {
-        setResultLoading(false)
-        setCanvasLoader(false)
-        setErrorInfo((prev: any) => ({
-          ...prev,
-          showError: true,
-          errorMsg: "Some error has occurred",
-          retryFn: () => {
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+    } else {
+      setResultLoading(true)
+      setCanvasLoader(true)
+      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
+        .then((response) => {
+          clearCanvas()
+          setProductPhotoshootInfo((prev: any) => ({
+            ...prev,
+            result: [...prev.result, ...response],
+            finalImage: response[0],
+          }))
+          setBackgroundImage(response[0])
+          setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
+          setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
+          setResultLoading(false)
+          setCanvasLoader(false)
+        })
+        .catch((error) => {
+          setResultLoading(false)
+          setCanvasLoader(false)
+          setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
+          setStepsComplete((prev: any) => ({ ...prev, 3: false, 4: false }))
+          setErrorInfo((prev: any) => ({
+            ...prev,
+            showError: true,
+            errorMsg: "Some error has occurred",
+            retryFn: () => {
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+              generateResult()
+            },
+          }))
+          setTimeout(() => {
             setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-            generateResult()
-          },
-        }))
-        setTimeout(() => {
-          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-        }, 5000)
-        console.log("error", error)
-      })
+          }, 5000)
+          console.log("error", error)
+        })
+    }
   }
 
   const UploadImage = () => {
@@ -359,19 +368,21 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
               </div>
             ))}
         </div>
-        <BaseButton
-          title="Generate 4 more"
-          borderRadius="10px"
-          width="20.25rem"
-          height="2.375rem"
-          fontSize="0.75rem"
-          fontFamily="Poppins"
-          fontWeight="600"
-          disabled={resultLoading ? true : false}
-          handleClick={() => {
-            !resultLoading && generateResult()
-          }}
-        />
+        <div className="pb-2">
+          <BaseButton
+            title="Generate 4 more"
+            borderRadius="10px"
+            width="20.25rem"
+            height="2.375rem"
+            fontSize="0.75rem"
+            fontFamily="Poppins"
+            fontWeight="600"
+            disabled={resultLoading ? true : false}
+            handleClick={() => {
+              !resultLoading && generateResult()
+            }}
+          />
+        </div>
       </>
     )
   }
@@ -457,18 +468,23 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             }
           }}
         />
+        <LoginPopup
+          isOpen={showLoginPopup}
+          loginPopupCloseHandler={() => {
+            setShowLoginPopup(false)
+          }}
+        />
       </div>
     </div>
     // </Scrollable>
   )
 }
 
-const SelectBackground = ({ setSteps, setStepsComplete, generateResult }: any) => {
+const SelectBackground = ({ generateResult }: any) => {
   const [showPrompt, setShowPrompt] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
   const [selectedCategory, setSelectedCategory] = useState("Mood")
-  const [showLoginPopup, setShowLoginPopup] = useState(false)
 
   const categories: any = {
     Mood: [
@@ -591,22 +607,10 @@ const SelectBackground = ({ setSteps, setStepsComplete, generateResult }: any) =
         fontWeight="600"
         handleClick={() => {
           if (productPhotoshootInfo.prompt.length > 0) {
-            if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-              setShowLoginPopup(true)
-            } else {
-              setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
-              setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
-              generateResult()
-            }
+            generateResult()
           }
         }}
         disabled={productPhotoshootInfo.prompt.length == 0}
-      />
-      <LoginPopup
-        isOpen={showLoginPopup}
-        loginPopupCloseHandler={() => {
-          setShowLoginPopup(false)
-        }}
       />
     </div>
   )
