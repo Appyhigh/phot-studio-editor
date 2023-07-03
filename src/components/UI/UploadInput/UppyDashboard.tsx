@@ -161,10 +161,9 @@ const UppyDashboard = ({
           if (fileInputType == "bgUpload") {
             HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
           } else if (fileInputType === "ImgUpscaler") {
-            // @ts-ignore
-            setImgScalerInfo ? setImgScalerInfo((prev) => ({ ...prev, url: imageUrl, original: imageUrl })) : null
-            //  @ts-ignore
-            setImgScalerPanelInfo((prev) => ({
+            setImgScalerInfo &&
+              setImgScalerInfo((prev: any) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+            setImgScalerPanelInfo((prev: any) => ({
               ...prev,
               uploadSection: false,
               uploadPreview: true,
