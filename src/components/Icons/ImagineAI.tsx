@@ -1,9 +1,9 @@
-function ImagineAi({ size }: { size: any }) {
+function ImagineAi({ size,color }: { size: any,color:any }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-    <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="#6729F3"/>
+    <svg width="28" height="28" viewBox="0 0 28 28" fill={color} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill={color}/>
     <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" fill="url(#pattern0)"/>
-    <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" stroke="#6729F3"/>
+    <rect x="0.5" y="0.5" width="27" height="27" rx="13.5" stroke={color}/>
     <defs>
     <pattern id="pattern0" patternContentUnits="objectBoundingBox" width="1" height="1">
     <use xlinkHref="#image0_6084_1717" transform="scale(0.00208333)"/>

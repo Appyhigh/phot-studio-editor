@@ -19,7 +19,7 @@
   transition: all 1s;
 }
 .panelListItemEach {
-  font-weight: 400;
+  font-weight: 500;
   color: #92929d;
   width: 90px;
 }
@@ -35,9 +35,13 @@
   align-items: center;
   background: linear-gradient(85.66deg, #3e5387 11.38%, #542670 97.9%);
   border-radius: 6px;
+  /* opacity: 0.5; */
+  font-weight: 500;
+  
 }
-.inActivePanel{
-  opacity: 0.5;
+.inActivePanel {
+  background: #9BA6B0;
+  opacity: 0.6;
 }
 @media screen and (min-width: 1220px) {
   .panelListSection {
@@ -45,5 +49,6 @@
   }
   .panelListItemEach {
     width: 90px;
+    font-weight: 500;
   }
 }
