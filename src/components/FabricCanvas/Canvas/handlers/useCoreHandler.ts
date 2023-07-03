@@ -167,6 +167,20 @@ function useCoreHandler() {
     },
     [canvas]
   )
+  const removeBackground = useCallback(() => {
+    if (canvas) {
+      fabric.Image.fromURL(
+        "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473",
+        (img) => {
+          canvas.backgroundImage = img
+          canvas.renderAll()
+        },
+        {
+          crossOrigin: "anonymous",
+        }
+      )
+    }
+  }, [canvas])
 
   return {
     exportJSON,
@@ -179,6 +193,7 @@ function useCoreHandler() {
     addImage,
     getCanvasSize,
     setBackgroundImage,
+    removeBackground,
   }
 }
 

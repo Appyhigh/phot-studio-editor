@@ -56,7 +56,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
 
   const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [resultLoading, setResultLoading] = useState(false)
-  const { addImage, setBackgroundImage, clearCanvas } = useCoreHandler()
+  const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
 
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
@@ -94,6 +94,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           imageUrl,
           (image: string) => {
             if (image) {
+              removeBackground()
               addImage({
                 type: "image",
                 src: image,
