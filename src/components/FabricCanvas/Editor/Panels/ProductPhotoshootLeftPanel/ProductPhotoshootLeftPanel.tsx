@@ -519,6 +519,10 @@ const SelectBackground = ({ setSteps, setStepsComplete, generateResult }: any) =
                   src={each.image}
                   onClick={() => {
                     setSelectedImg(index)
+                    setProductPhotoshootInfo((prev: any) => ({
+                      ...prev,
+                      prompt: each.label,
+                    }))
                   }}
                 />
                 <div className={classes.imageLabel}>{each.label}</div>
