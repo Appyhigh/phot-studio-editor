@@ -103,7 +103,7 @@ const BgUpload = () => {
           </Scrollbars>
         </>
       ) : (
-        <StockImages height="165px" />
+        <StockImages height="240px" />
       )}
     </Block>
   )
