@@ -195,7 +195,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           clearCanvas()
           setProductPhotoshootInfo((prev: any) => ({
             ...prev,
-            result: [...prev.result, ...response],
+            result: [...response, ...prev.result],
             finalImage: response[0],
             tooltip: true,
           }))
@@ -356,6 +356,12 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     return (
       <>
         <div className={classes.resultImages}>
+          {resultLoading &&
+            Array.from(Array(4).keys()).map((each, idx) => (
+              <div className={classes.skeletonBox} key={idx}>
+                {<img className={classes.imagesLoader} src={LoaderSpinner} />}
+              </div>
+            ))}
           {productPhotoshootInfo.result &&
             productPhotoshootInfo.result.map((each, idx) => (
               <div
@@ -373,12 +379,6 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
                     }}
                   />
                 }
-              </div>
-            ))}
-          {resultLoading &&
-            Array.from(Array(4).keys()).map((each, idx) => (
-              <div className={classes.skeletonBox} key={idx}>
-                {<img className={classes.imagesLoader} src={LoaderSpinner} />}
               </div>
             ))}
         </div>
