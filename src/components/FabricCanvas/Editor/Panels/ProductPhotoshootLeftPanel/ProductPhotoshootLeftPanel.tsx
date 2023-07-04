@@ -453,10 +453,10 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           label={"2"}
           heading={"Resize your image"}
           isOpen={steps[2]}
-          isComplete={stepsComplete[2]}
+          isComplete={stepsComplete[2] || productPhotoshootInfo.preview}
           children={<ResizeImage />}
           handleClick={() => {
-            if (stepsComplete[2] && !steps[2]) {
+            if ((stepsComplete[2] || productPhotoshootInfo.preview) && !steps[2]) {
               setSteps((prev) => ({ ...prev, 2: true, 1: false, 3: false, 4: false }))
               // setStepsComplete((prev) => ({ ...prev, 4: false }))
             } else if (steps[2]) {
@@ -469,12 +469,12 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           label={"3"}
           heading={"Select background"}
           isOpen={steps[3]}
-          isComplete={stepsComplete[3]}
+          isComplete={stepsComplete[3] || productPhotoshootInfo.prompt}
           children={
             <SelectBackground setSteps={setSteps} setStepsComplete={setStepsComplete} generateResult={generateResult} />
           }
           handleClick={() => {
-            if (stepsComplete[3] && !steps[3]) {
+            if ((stepsComplete[3] || productPhotoshootInfo.prompt) && !steps[3]) {
               setSteps((prev) => ({ ...prev, 3: true, 1: false, 2: false, 4: false }))
               // setStepsComplete((prev) => ({ ...prev, 4: false }))
             } else if (steps[3]) {
@@ -487,10 +487,10 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           label={"4"}
           heading={"Select output"}
           isOpen={steps[4]}
-          isComplete={stepsComplete[4]}
+          isComplete={stepsComplete[4] || productPhotoshootInfo.finalImage}
           children={<SelectOutput />}
           handleClick={() => {
-            if (stepsComplete[4] && !steps[4]) {
+            if ((stepsComplete[4] || productPhotoshootInfo.finalImage) && !steps[4]) {
               setSteps((prev) => ({ ...prev, 4: true, 1: false, 2: false, 3: false }))
             } else if (steps[4]) {
               setSteps((prev) => ({ ...prev, 4: false }))
