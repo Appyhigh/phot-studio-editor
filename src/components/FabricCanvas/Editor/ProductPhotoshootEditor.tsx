@@ -60,18 +60,26 @@ function ProductPhotoshootEditor({ handleClose }: any) {
                   <Resize />
                 </div>
                 {productPhotoshootInfo.result.length > 0 ? (
-                  <p>Not getting desired output? Try resizing your image</p>
+                  <>
+                    <p>Not getting desired output? Try resizing your image</p>
+                    <div
+                      className={classes.toolTipBtn}
+                      onClick={() => {
+                        setProductPhotoshootInfo({
+                          ...productPhotoshootInfo,
+                          input_image: "",
+                          prompt: "",
+                          result: [],
+                          finalImage: "",
+                        })
+                      }}
+                    >
+                      Resize
+                    </div>
+                  </>
                 ) : (
                   <p>Click on image to resize & drag to canvas</p>
                 )}
-                <div
-                  className={classes.toolTipBtn}
-                  onClick={() => {
-                    setProductPhotoshootInfo({ ...productPhotoshootInfo, tooltip: false })
-                  }}
-                >
-                  Resize
-                </div>
               </div>
             )}
             <CanvasArea width={dimension.width} height={dimension.height} />

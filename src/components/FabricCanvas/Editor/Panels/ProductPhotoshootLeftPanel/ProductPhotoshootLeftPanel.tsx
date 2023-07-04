@@ -90,7 +90,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
   }, [canvas])
 
   useEffect(() => {
-    if (productPhotoshootInfo.tooltip) {
+    if (productPhotoshootInfo.tooltip && productPhotoshootInfo.result.length == 0) {
       setTimeout(() => {
         setProductPhotoshootInfo((prev: any) => ({
           ...prev,
@@ -197,6 +197,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             ...prev,
             result: [...prev.result, ...response],
             finalImage: response[0],
+            tooltip: true,
           }))
           setBackgroundImage(response[0])
           setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
@@ -230,7 +231,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     return (
       <>
         {productPhotoshootInfo.src ? (
-          <div>
+          <div className="pb-2">
             <UploadPreview
               discardHandler={() => {
                 setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
