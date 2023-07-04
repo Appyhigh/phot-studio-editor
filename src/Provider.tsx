@@ -137,11 +137,12 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     preview: "",
     tooltip: false,
-    input_image: "",
     prompt: "",
     result: [],
     finalImage: "",
     again: false,
+    prevObjects: [],
+    addPreview: "",
   })
 
   return (

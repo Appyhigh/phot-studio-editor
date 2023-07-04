@@ -47,13 +47,13 @@ function useCoreHandler() {
                 }
               }
             }
-            img.set({ type: "image", ...imageOptions, scaleX: scale, scaleY: scale })
+            img.set({ type: "image", scaleX: scale, scaleY: scale, ...imageOptions })
 
             // Add the image object to the canvas
             //@ts-ignore
             canvas.add(img)
             canvas.setActiveObject(img)
-            img.center()
+            imageOptions.left ?? img.center()
 
             img.clipPath = workarea
             //@ts-ignore

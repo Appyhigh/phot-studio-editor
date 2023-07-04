@@ -106,15 +106,32 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
       setProductPhotoshootInfo((prev: any) => ({
         ...prev,
-        input_image: "",
         prompt: "",
         result: [],
         finalImage: "",
         again: false,
       }))
       removeBackground()
+      productPhotoshootInfo.prevObjects.forEach((obj: any) => {
+        addImage({ ...obj })
+      })
     }
   }, [productPhotoshootInfo.again])
+
+  useEffect(() => {
+    if (canvas) {
+      if (steps[2]) {
+        canvas.getObjects().forEach((obj: any) => {
+          obj.set("selectable", true)
+        })
+      } else {
+        canvas.discardActiveObject().renderAll()
+        canvas.getObjects().forEach((obj: any) => {
+          obj.set("selectable", false)
+        })
+      }
+    }
+  }, [steps[2], canvas])
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)
@@ -206,18 +223,19 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     } else {
       setResultLoading(true)
       setCanvasLoader(true)
+      setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
+      setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
       productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
         .then((response) => {
-          clearCanvas()
           setProductPhotoshootInfo((prev: any) => ({
             ...prev,
+            prevObjects: canvas.getObjects(),
             result: [...response, ...prev.result],
             finalImage: response[0],
             tooltip: true,
           }))
+          clearCanvas()
           setBackgroundImage(response[0])
-          setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
-          setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
           setResultLoading(false)
           setCanvasLoader(false)
         })
@@ -311,7 +329,10 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
           fontFamily="Poppins"
           fontWeight="600"
           handleClick={() => {
-            if (productPhotoshootInfo.src) {
+            if (productPhotoshootInfo.preview && productPhotoshootInfo.src) {
+              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
+              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+            } else if (productPhotoshootInfo.src) {
               handleRemoveBgAndAddObject(productPhotoshootInfo.src)
             }
           }}

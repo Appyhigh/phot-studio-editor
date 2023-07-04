@@ -65,12 +65,12 @@ const GraphicEditor = () => {
             setProductPhotoshootInfo({
               src: "",
               preview: "",
-              input_image: "",
               prompt: "",
               result: [],
               tooltip: false,
               finalImage: "",
               again: false,
+              prevObjects: [],
             })
           }}
         />
