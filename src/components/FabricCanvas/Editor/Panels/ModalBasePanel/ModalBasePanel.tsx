@@ -3,7 +3,7 @@ import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
@@ -12,6 +12,8 @@ import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import useAppContext from "~/hooks/useAppContext"
+import { OBJECT_REMOVER } from "~/constants/contants"
 
 const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
@@ -29,7 +31,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
   const { canvas, objects } = fabricEditor
-
+  const { activePanel } = useAppContext()
   const handleAddCanvas = async () => {
     await getDimensions(objectRemoverInfo.result, (imgSrc: any) => {
       let latest_ct = 0
@@ -41,37 +43,47 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
       handleClose()
     })
   }
+
+  useEffect(() => {
+    console.log(activePanel)
+  }, [activePanel])
+
   return (
     <div>
       <Block className={clsx(classes.basePanel)}>
-        <div className="p-relative addPopupBtn">
-          <button
-            className={classes.basePanelBtn}
-            onMouseOver={() => {
-              setShowAddPopup(true)
-            }}
-          >
-            <span className="d-flex align-items-center">
-              <span className="pr-1">
-                <Icons.Plus size={16} />
-              </span>
-              Add
-              <span className="pl-3">
-                <Icons.ArrowDown size={14} />
-              </span>
-            </span>
-          </button>
-          <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
-        </div>
-        <Block
-          className="flex-center pointer p-relative resizeCanvasBtn"
-          onMouseOver={() => {
-            setCanvasResizePopup(true)
-          }}
-        >
-          <Icons.CanvasResize size={24} />
-          <ResizeCanvasPopup show={showCanvasResizePopup} />
-        </Block>
+        {/* @ts-ignore  */}
+        {activePanel != OBJECT_REMOVER  && (
+          <>
+            <div className="p-relative addPopupBtn">
+              <button
+                className={classes.basePanelBtn}
+                onMouseOver={() => {
+                  setShowAddPopup(true)
+                }}
+              >
+                <span className="d-flex align-items-center">
+                  <span className="pr-1">
+                    <Icons.Plus size={16} />
+                  </span>
+                  Add
+                  <span className="pl-3">
+                    <Icons.ArrowDown size={14} />
+                  </span>
+                </span>
+              </button>
+              <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
+            </div>
+            <Block
+              className="flex-center pointer p-relative resizeCanvasBtn"
+              onMouseOver={() => {
+                setCanvasResizePopup(true)
+              }}
+            >
+              <Icons.CanvasResize size={24} />
+              <ResizeCanvasPopup show={showCanvasResizePopup} />
+            </Block>
+          </>
+        )}
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">

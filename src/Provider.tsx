@@ -134,6 +134,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     preview: "",
     result: "",
+    mask_img:"",
+    file_name:""
   })
 
   return (

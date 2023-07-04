@@ -72,7 +72,7 @@ const UppyDashboard = ({
     uppy.setOptions({
       restrictions: {
         maxNumberOfFiles: 1,
-        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+        allowedFileTypes: [".png", ".jpg", ".jpeg", ".bmp", ".webp"],
         maxFileSize: 5242880,
       },
     })
@@ -97,7 +97,7 @@ const UppyDashboard = ({
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else if (uploadType === OBJECT_REMOVER) {
-          setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
+          setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl ,file_name:file.name}))
         } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
@@ -189,7 +189,8 @@ const UppyDashboard = ({
               tryFilters: false,
             }))
           } else if (uploadType === OBJECT_REMOVER) {
-            setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
+            
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name:file.name }))
           } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({
