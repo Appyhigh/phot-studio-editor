@@ -234,8 +234,9 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             inputColor={objectBgColor}
             isOpen={isOpen}
             handleClose={close}
-            type="object"
-            handleChangeBg={handleChangeBg}
+            handleChangeColor={(color: any) => {
+              handleChangeBg({ color })
+            }}
           />
 
           <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>

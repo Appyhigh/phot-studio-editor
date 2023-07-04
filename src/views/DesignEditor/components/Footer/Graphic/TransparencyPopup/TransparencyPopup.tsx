@@ -255,8 +255,7 @@ const TransparencyPopup = ({ showPopup }: any) => {
               inputColor={bgColor}
               isOpen={isOpen}
               handleClose={close}
-              type="background"
-              handleColor={(each: any) => {
+              handleChangeColor={(each: any) => {
                 setBGColor(each)
                 updateObjectFill(each)
               }}
