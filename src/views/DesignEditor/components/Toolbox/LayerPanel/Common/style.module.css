@@ -4,6 +4,54 @@
   padding: 8px 0px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 }
+.ShadowSelect {
+  width: 104px;
+  height: 40px;
+  background: #f1f1f5;
+  border-radius: 5px;
+}
+
+.inputContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.inputValues {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.inputValues label {
+  color: #92929d;
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.inputValues input {
+  width: 40px;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  outline: none;
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.inputValues input:hover {
+  border: none;
+}
+
 .filterOption {
   width: 48px;
   height: 48px;
@@ -17,6 +65,45 @@
   background: white;
   border-radius: 5px;
 }
+.ShadowsColorPicker {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+.PercentageInput {
+  width: 22px;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  outline: none;
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.ColorInput {
+  width: 100px;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  outline: none;
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
 .filterName {
   font-weight: 400;
   font-size: 12px;
