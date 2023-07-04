@@ -97,7 +97,7 @@ const UppyDashboard = ({
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else if (fileInputType === "modalUpload") {
-          setImgUpload({ src: imageUrl })
+          setImgUpload((prev: any) => ({ ...prev, src: imageUrl }))
         } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
@@ -189,7 +189,7 @@ const UppyDashboard = ({
               tryFilters: false,
             }))
           } else if (fileInputType === "modalUpload") {
-            setImgUpload({ src: imageUrl, preview: imageUrl })
+            setImgUpload((prev: any) => ({ ...prev, src: imageUrl }))
           } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({
