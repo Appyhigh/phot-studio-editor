@@ -230,15 +230,17 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
               imgSrc={productPhotoshootInfo.src}
               uploadType={MODAL_IMG_UPLOAD}
             />
-            <div className={clsx("p-relative pointer", classes.discardBtn)}>
-              <span
-                onClick={() => {
-                  setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "" }))
-                }}
-              >
-                <Icons.Trash size={"32"} />
-              </span>
-            </div>
+            {!productPhotoshootInfo.preview && (
+              <div className={clsx("p-relative pointer", classes.discardBtn)}>
+                <span
+                  onClick={() => {
+                    setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "" }))
+                  }}
+                >
+                  <Icons.Trash size={"32"} />
+                </span>
+              </div>
+            )}
           </div>
         ) : (
           <div className={classes.uploadWrapper}>

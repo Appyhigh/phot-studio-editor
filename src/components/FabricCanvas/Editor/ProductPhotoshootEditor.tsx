@@ -59,14 +59,18 @@ function ProductPhotoshootEditor({ handleClose }: any) {
                 <div className={classes.resizeIcon}>
                   <Resize />
                 </div>
-                <p>Click on image to resize & drag to canvas</p>
+                {productPhotoshootInfo.result.length > 0 ? (
+                  <p>Not getting desired output? Try resizing your image</p>
+                ) : (
+                  <p>Click on image to resize & drag to canvas</p>
+                )}
                 <div
                   className={classes.toolTipBtn}
                   onClick={() => {
                     setProductPhotoshootInfo({ ...productPhotoshootInfo, tooltip: false })
                   }}
                 >
-                  Got it
+                  Resize
                 </div>
               </div>
             )}
