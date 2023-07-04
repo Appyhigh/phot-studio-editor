@@ -99,7 +99,7 @@ export const BASE_ITEMS = [
   },
   {
     id: "productPhotoshoot",
-    icon: "ImagineAi",
+    icon: "ProductPhotoshoot",
     label: "Product Photoshoot",
     name: "ProductPhotoshoot",
   },

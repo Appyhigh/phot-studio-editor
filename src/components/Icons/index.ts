@@ -88,6 +88,7 @@ import PhotoEditor from "./PhotoEditor"
 import ObjectRemover from "./ObjectRemover"
 import ImageColorizer from "./ImageColorizer"
 import ObjectReplacer from "./ObjectReplacer"
+import ProductPhotoshoot from "./ProductPhotoshoot"
 import ArrowLeft from "./ArrowLeft"
 class Icons {
   static GoogleIcon = GoogleIcon
@@ -180,6 +181,7 @@ class Icons {
   static ObjectRemover = ObjectRemover
   static ImageColorizer = ImageColorizer
   static ObjectReplacer = ObjectReplacer
+  static ProductPhotoshoot = ProductPhotoshoot
   static ArrowLeft = ArrowLeft
 }
 
