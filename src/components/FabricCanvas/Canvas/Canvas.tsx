@@ -100,19 +100,20 @@ function Canvas({ width, height }: any) {
   const { canvas, objects } = fabricEditor
   // brush points
 
-  useEffect(() => {
-    const points = canvas?.freeDrawingBrush._points
-    // console.log(canvas?.freeDrawingBrush._points)
-    const coordinates = points?.map((point: any) => ({ x: point.x, y: point.y }))
-    // console.log(coordinates)
-    // console.log(objects)
-  }, [canvas, objects])
+  // useEffect(() => {
+  //   const points = canvas?.freeDrawingBrush._points
+  //   // console.log("points",canvas?.freeDrawingBrush._points)
+  //   const coordinates = points?.map((point: any) => ({ x: point.x, y: point.y }))
+  //   console.log(coordinates)
+  //   console.log(objects)
+  // }, [canvas, objects])
 
   return (
     <div
       style={{
         width: "600px",
-        height: "600px",
+        height: "740px",
+
       }}
       className="editor-canvas d-flex justify-center"
       id="cont"

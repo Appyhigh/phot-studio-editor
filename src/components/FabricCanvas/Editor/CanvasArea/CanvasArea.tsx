@@ -2,10 +2,18 @@ import useAppContext from "~/hooks/useAppContext"
 import Canvas from "../../../FabricCanvas/Canvas"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
+import { useEffect } from "react"
 
-function CanvasArea({ width, height,brushTooltipShow ,handleBrush}: any) {
+function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   const { activePanel } = useAppContext()
-  // @ts-ignore 
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleBrush()
+    }, 5000)
+  }, [brushTooltipShow])
+
+  // @ts-ignore
   return (
     <div className={classes.cavasarea}>
       {brushTooltipShow && (
@@ -14,11 +22,6 @@ function CanvasArea({ width, height,brushTooltipShow ,handleBrush}: any) {
             <Icons.Brush />
           </div>
           <p>Brush over the image</p>
-          <div className={classes.gotItBtn}
-          onClick={()=>{
-            handleBrush()
-          }}
-          >Got it</div>
         </div>
       )}
       <Canvas width={width} height={height} />

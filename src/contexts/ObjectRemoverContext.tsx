@@ -5,6 +5,8 @@ const ObjectRemoverContext = React.createContext({
     src: "",
     preview: "",
     result: "",
+    mask_img:"",
+    file_name:""
   },
   setObjectRemoverInfo: (item: any) => {
     console.log("Dummy Intializer for ", item)
