@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useEditor } from "@layerhub-io/react"
 import Uploads from "../UploadDropzone/Uploads"
 import SwiperWrapper from "../Swiper/Swiper"
-import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
 import { LabelLarge } from "baseui/typography"
 import classes from "./style.module.css"
 import clsx from "clsx"
@@ -14,10 +13,8 @@ import LoaderContext from "~/contexts/LoaderContext"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
-import { getStockImages } from "~/services/stockApi"
-import { bgSampleImagesApi } from "~/services/bgSampleImagesApi"
-import useAppContext from "~/hooks/useAppContext"
 import { REMOVE_BACKGROUND } from "~/constants/contants"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -26,7 +23,6 @@ const BgRemover = () => {
     type: -1,
     id: 0,
   })
-  const [bgDOptions, setBgDOptions] = useState(BgOptions)
 
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
@@ -34,7 +30,7 @@ const BgRemover = () => {
     setSelectedBgOption({ type: type, id: idx })
   }
   const [imageLoading, setImageLoading] = useState(false)
-  const { bgSampleImages, setBgSampleImages } = useAppContext()
+  const { sampleImages } = useContext(SampleImagesContext)
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -74,38 +70,6 @@ const BgRemover = () => {
     }))
   }
 
-  useEffect(() => {
-    const addCategoryOptions = async (category: any) => {
-      const res = await getStockImages(category)
-      const newOptions = res.map((image: any) => ({ img: image.image_url_list[0] }))
-
-      setBgDOptions((prevOptions) => [
-        ...prevOptions,
-        {
-          heading: category,
-          options: newOptions,
-        },
-      ])
-    }
-
-    const fetchCategories = async () => {
-      await addCategoryOptions("Nature")
-      await addCategoryOptions("Flowers")
-      await addCategoryOptions("Textures")
-    }
-
-    fetchCategories()
-  }, [])
-
-  useEffect(() => {
-    const fetchSampleImages = async () => {
-      const result = await bgSampleImagesApi()
-      setBgSampleImages(result)
-    }
-
-    fetchSampleImages()
-  }, [])
-
   return (
     <Block className="d-flex flex-1 flex-column">
       {mainImgInfo.id && mainImgInfo.preview ? (
@@ -135,20 +99,21 @@ const BgRemover = () => {
             Try Sample Images
           </Block>
           <Scrollable>
-            <Block className="py-3">
+            <Block className="py-3 mb-2">
               <Block className={classes.sampleImgSection}>
-                {bgSampleImages.map((image: any, index) => {
-                  return (
-                    <ImageItem
-                      key={index}
-                      onClick={() => {
-                        addObject(image.originalImage)
-                      }}
-                      preview={image.thumbnail}
-                      imageLoading={imageLoading}
-                    />
-                  )
-                })}
+                {sampleImages.bgRemover &&
+                  sampleImages.bgRemover.map((image: any, index: any) => {
+                    return (
+                      <ImageItem
+                        key={index}
+                        onClick={() => {
+                          addObject(image.originalImage)
+                        }}
+                        preview={image.thumbnail}
+                        imageLoading={imageLoading}
+                      />
+                    )
+                  })}
               </Block>
             </Block>
           </Scrollable>
@@ -186,7 +151,7 @@ const BgRemover = () => {
             {backgroundChoice === 0 ? (
               <Scrollable>
                 <Block className="mt-2 mb-2">
-                  {bgDOptions.map((each, index) => (
+                  {sampleImages.bgRemoverBgOptions.map((each: any, index: number) => (
                     <Block key={index}>
                       <Block
                         className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}

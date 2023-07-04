@@ -14,14 +14,13 @@ export default function ({
   id,
   uploads,
   setUploads,
-  imageLoading,
-  setImageLoading,
+
   imgUpload,
   setImgUpload,
 }: any) {
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
   const [renderKey, setRenderKey] = useState(0)
-
+  const [imageLoading, setImageLoading] = useState(false)
   useEffect(() => {
     setTimeout(() => {
       setRenderKey((prev) => prev + 1)

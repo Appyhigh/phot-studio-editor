@@ -6,9 +6,9 @@ function TickIcon() {
           id="Vector"
           d="M2.75 8.75L6.25 12.25L13.25 4.75"
           stroke="white"
-          stroke-width="1.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
     </svg>

@@ -83,6 +83,11 @@ import ToolTip from "./Tooltip"
 import ImgLock from "./ImgLock"
 import NoneIcon from "./NoneIcon"
 import TickIcon from "./TickIcon"
+import ImageUpscaler from "./ImageUpscaler"
+import PhotoEditor from "./PhotoEditor"
+import ObjectRemover from "./ObjectRemover"
+import ImageColorizer from "./ImageColorizer"
+import ObjectReplacer from "./ObjectReplacer"
 import ArrowLeft from "./ArrowLeft"
 class Icons {
   static GoogleIcon = GoogleIcon
@@ -170,6 +175,11 @@ class Icons {
   static ImgLock = ImgLock
   static NoneIcon = NoneIcon
   static TickIcon = TickIcon
+  static ImageUpscaler = ImageUpscaler
+  static PhotoEditor = PhotoEditor
+  static ObjectRemover = ObjectRemover
+  static ImageColorizer = ImageColorizer
+  static ObjectReplacer = ObjectReplacer
   static ArrowLeft = ArrowLeft
 }
 
