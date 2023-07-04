@@ -141,6 +141,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     prompt: "",
     result: [],
     finalImage: "",
+    again: false,
   })
 
   return (

@@ -98,7 +98,23 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         }))
       }, 3000)
     }
-  }, [productPhotoshootInfo.tooltip])
+  }, [productPhotoshootInfo.tooltip, productPhotoshootInfo.result])
+
+  useEffect(() => {
+    if (productPhotoshootInfo.again) {
+      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
+      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+      setProductPhotoshootInfo((prev: any) => ({
+        ...prev,
+        input_image: "",
+        prompt: "",
+        result: [],
+        finalImage: "",
+        again: false,
+      }))
+      removeBackground()
+    }
+  }, [productPhotoshootInfo.again])
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)

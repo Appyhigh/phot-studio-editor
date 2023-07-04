@@ -9,6 +9,7 @@ const ProductPhotoshootContext = createContext({
     prompt: "",
     result: [],
     finalImage: "",
+    again: false,
   },
   setProductPhotoshootInfo: (item: any) => {
     console.log("Dummy Intializer for ", item)

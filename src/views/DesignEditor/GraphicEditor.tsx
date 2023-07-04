@@ -70,6 +70,7 @@ const GraphicEditor = () => {
               result: [],
               tooltip: false,
               finalImage: "",
+              again: false,
             })
           }}
         />

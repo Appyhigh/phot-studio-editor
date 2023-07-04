@@ -67,10 +67,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
                       onClick={() => {
                         setProductPhotoshootInfo({
                           ...productPhotoshootInfo,
-                          input_image: "",
-                          prompt: "",
-                          result: [],
-                          finalImage: "",
+                          again: true,
                         })
                       }}
                     >
