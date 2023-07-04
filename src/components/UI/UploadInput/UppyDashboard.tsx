@@ -19,6 +19,7 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import MainImageContext from "~/contexts/MainImageContext"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 
 const UppyDashboard = ({
   close,
@@ -45,6 +46,7 @@ const UppyDashboard = ({
   const { setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
+  const { setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
 
   let uppy: any
   if (typeof window !== "undefined") {
@@ -130,6 +132,12 @@ const UppyDashboard = ({
             resultOption: false,
             tryFilters: false,
           }))
+        } else if (fileInputType === "productAdd") {
+          setProductPhotoshootInfo((prev: any) => ({
+            ...prev,
+            addPreview: imageUrl,
+          }))
+          close()
         } else {
           HandleFile(
             imageUrl,
@@ -207,6 +215,12 @@ const UppyDashboard = ({
                   trySampleImg: false,
                 }))
               : null
+          } else if (fileInputType === "productAdd") {
+            setProductPhotoshootInfo((prev: any) => ({
+              ...prev,
+              addPreview: imageUrl,
+            }))
+            close()
           } else {
             HandleFile(
               imageUrl,

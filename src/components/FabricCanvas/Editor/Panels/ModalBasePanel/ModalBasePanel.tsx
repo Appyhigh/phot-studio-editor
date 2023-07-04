@@ -3,39 +3,65 @@ import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
+import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
+import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/ProductPreview/ProductPreview"
+import useAppContext from "~/hooks/useAppContext"
 
 const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
+  const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
+  const { activePanel } = useAppContext()
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
   }
+
+  const closeProductPreview = () => {
+    setProductPhotoshootInfo((prev: any) => ({
+      ...prev,
+      addPreview: "",
+    }))
+  }
+
   return (
     <div>
       <Block className={clsx(classes.basePanel)}>
-        <div className="p-relative addPopupBtn">
-          <button
-            className={classes.basePanelBtn}
-            onMouseOver={() => {
-              setShowAddPopup(true)
-            }}
-          >
-            <span className="d-flex align-items-center">
-              <span className="pr-1">
-                <Icons.Plus size={16} />
+        {activePanel == ("ProductPhotoshoot" as any) && (
+          <div className="p-relative addPopupBtn">
+            <button
+              className={classes.basePanelBtn}
+              onClick={() => {
+                setShowAddPopup(true)
+              }}
+            >
+              <span className="d-flex align-items-center">
+                <span className="pr-1">
+                  <Icons.Plus size={16} />
+                </span>
+                Add
+                <span className="pl-3">
+                  <Icons.ArrowDown size={14} />
+                </span>
               </span>
-              Add
-              <span className="pl-3">
-                <Icons.ArrowDown size={14} />
-              </span>
-            </span>
-          </button>
-          <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
-        </div>
+            </button>
+            <UploadImgModal
+              fileInputType="productAdd"
+              isOpen={showAddPopup}
+              handleClose={handleCloseAddPopup}
+              id={"ProductAddPopup"}
+            />
+            <ProductPreview
+              isOpen={productPhotoshootInfo.addPreview}
+              onClose={closeProductPreview}
+              imageUrl={productPhotoshootInfo.addPreview}
+            />
+          </div>
+        )}
         <Block
           className="flex-center pointer p-relative resizeCanvasBtn"
           onMouseOver={() => {
