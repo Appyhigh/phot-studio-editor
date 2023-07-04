@@ -51,9 +51,18 @@ const Canvas = () => {
         }
       })
 
+      //   editor.canvas.canvas.on("object:modified", (event: any) => {
+      //     var object = event.target
+      //     object.applyFilters()
+      //   })
+    }
+  }, [editor])
+
+  useEffect(() => {
+    if (editor) {
       window.addEventListener("keydown", function (event) {
         if (event.key == "Delete" || event.key == "Backspace") {
-          if (mainImgInfo && activeObject.id === mainImgInfo.id) {
+          if (mainImgInfo && editor.canvas.canvas.getActiveObject()?.id === mainImgInfo.id) {
             setPanelInfo((prev: any) => ({
               ...prev,
               uploadSection: true,
@@ -63,16 +72,12 @@ const Canvas = () => {
               bgRemoverBtnActive: false,
             }))
             if (setMainImgInfo) setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+            editor.objects.removeById(editor.canvas.canvas.getActiveObject()?.id as string)
           }
         }
       })
-
-      //   editor.canvas.canvas.on("object:modified", (event: any) => {
-      //     var object = event.target
-      //     object.applyFilters()
-      //   })
     }
-  }, [editor])
+  }, [editor, mainImgInfo, activeObject])
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
