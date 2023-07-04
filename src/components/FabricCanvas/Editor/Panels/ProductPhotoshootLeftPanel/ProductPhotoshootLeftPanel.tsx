@@ -89,6 +89,17 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     }
   }, [canvas])
 
+  useEffect(() => {
+    if (productPhotoshootInfo.tooltip) {
+      setTimeout(() => {
+        setProductPhotoshootInfo((prev: any) => ({
+          ...prev,
+          tooltip: false,
+        }))
+      }, 3000)
+    }
+  }, [productPhotoshootInfo.tooltip])
+
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)
     try {
