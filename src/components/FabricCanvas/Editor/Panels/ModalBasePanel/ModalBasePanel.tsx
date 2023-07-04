@@ -2,7 +2,6 @@ import { Block } from "baseui/block"
 import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
-import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
 import { useContext, useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
@@ -16,36 +15,45 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { activePanel } = useAppContext()
+  const [showPreview, setShowPreview] = useState(false)
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
+    setShowPreview(true)
   }
 
   const closeProductPreview = () => {
-    setProductPhotoshootInfo((prev: any) => ({
-      ...prev,
-      addPreview: "",
-    }))
+    setShowPreview(false)
   }
 
   return (
     <div>
       <Block className={clsx(classes.basePanel)}>
         {activePanel == ("ProductPhotoshoot" as any) && (
-          <div className="p-relative addPopupBtn">
+          <div
+            className="p-relative addPopupBtn"
+            style={{
+              cursor: productPhotoshootInfo.result.length == 0 ? "not-allowed" : "",
+            }}
+          >
             <button
               className={classes.basePanelBtn}
+              style={{
+                backgroundColor: productPhotoshootInfo.result.length == 0 ? "#6729f3" : "#F1F1F5",
+                color: productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D",
+                pointerEvents: productPhotoshootInfo.result.length == 0 ? "auto" : "none",
+              }}
               onClick={() => {
                 setShowAddPopup(true)
               }}
             >
               <span className="d-flex align-items-center">
                 <span className="pr-1">
-                  <Icons.Plus size={16} />
+                  <Icons.Plus size={16} color={productPhotoshootInfo.result.length == 0 ? "#FAFAFB" : "#92929D"} />
                 </span>
                 Add
                 <span className="pl-3">
-                  <Icons.ArrowDown size={14} />
+                  <Icons.ArrowDown size={14} color={productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D"} />
                 </span>
               </span>
             </button>
@@ -56,7 +64,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
               id={"ProductAddPopup"}
             />
             <ProductPreview
-              isOpen={productPhotoshootInfo.addPreview}
+              isOpen={productPhotoshootInfo.addPreview && showPreview}
               onClose={closeProductPreview}
               imageUrl={productPhotoshootInfo.addPreview}
             />

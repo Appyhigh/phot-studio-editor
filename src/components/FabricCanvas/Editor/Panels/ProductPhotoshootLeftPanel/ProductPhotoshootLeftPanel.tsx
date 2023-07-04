@@ -120,7 +120,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
 
   useEffect(() => {
     if (canvas) {
-      if (steps[2]) {
+      if (steps[2] && productPhotoshootInfo.result.length == 0) {
         canvas.getObjects().forEach((obj: any) => {
           obj.set("selectable", true)
         })
@@ -132,6 +132,17 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       }
     }
   }, [steps[2], canvas])
+
+  useEffect(() => {
+    if (productPhotoshootInfo.removeBg) {
+      handleRemoveBgAndAddObject(productPhotoshootInfo.addPreview)
+      setProductPhotoshootInfo((prev: any) => ({
+        ...prev,
+        removeBg: false,
+        addPreview: "",
+      }))
+    }
+  }, [productPhotoshootInfo.removeBg])
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)

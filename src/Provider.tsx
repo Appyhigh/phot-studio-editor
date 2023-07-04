@@ -143,6 +143,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     again: false,
     prevObjects: [],
     addPreview: "",
+    removeBg: false,
   })
 
   return (
