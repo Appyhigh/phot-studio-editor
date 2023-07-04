@@ -6,23 +6,15 @@ import clsx from "clsx"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import UppyDashboard from "~/components/UI/UploadInput/UppyDashboard"
 
-export default function ({
-  uploadType,
-  mainHeading,
-  fileInputType,
-  id,
-  uploads,
-  setUploads,
- 
-}: any) {
+export default function ({ uploadType, mainHeading, fileInputType, id, uploads, setUploads }: any) {
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
-  const [renderKey, setRenderKey] = useState(0)
-  const [imageLoading,setImageLoading]=useState(false)
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderKey((prev) => prev + 1)
-    }, 4000)
-  }, [imageLoading])
+  // const [renderKey, setRenderKey] = useState(0)
+  const [imageLoading, setImageLoading] = useState(false)
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setRenderKey((prev) => prev + 1)
+  //   }, 4000)
+  // }, [imageLoading])
 
   return (
     <>
@@ -33,7 +25,8 @@ export default function ({
           </Block>
         </Block>
         {!imageLoading && (
-          <div key={renderKey}>
+          // <div key={renderKey}>
+          <div>
             <UppyDashboard
               setImageLoading={setImageLoading}
               fileInputType={fileInputType}
