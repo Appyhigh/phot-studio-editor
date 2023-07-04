@@ -29,4 +29,5 @@ export const REMOVE_BACKGROUND = "remove_bg"
 export const IMAGE_COLORIZER = "ImageColorizer"
 export const OBJECT_REMOVER="ObjectRemover"
 export const MODAL_IMG_UPLOAD="ModalImgUpload"
+export const OBJECT_REPLACER="ObjectReplacer"
 

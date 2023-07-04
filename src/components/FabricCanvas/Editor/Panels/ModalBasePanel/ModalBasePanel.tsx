@@ -11,12 +11,14 @@ import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFun
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
 import ImagesContext from "~/contexts/ImagesCountContext"
+import useAppContext from "~/hooks/useAppContext"
 
 const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const editor = useEditor()
+  const {activePanel} = useAppContext()
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
@@ -41,7 +43,10 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   return (
     <div>
       <Block className={clsx(classes.basePanel)}>
-        <div className="p-relative addPopupBtn">
+        
+        {activePanel !== "ObjectReplacer" &&
+          <>
+          <div className="p-relative addPopupBtn">
           <button
             className={classes.basePanelBtn}
             onMouseOver={() => {
@@ -68,7 +73,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
         >
           <Icons.CanvasResize size={24} />
           <ResizeCanvasPopup show={showCanvasResizePopup} />
-        </Block>
+        </Block> </>}
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">

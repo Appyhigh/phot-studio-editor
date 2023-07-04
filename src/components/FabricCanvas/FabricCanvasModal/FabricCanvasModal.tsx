@@ -1,6 +1,7 @@
 import { Modal, SIZE } from "baseui/modal"
 import useAppContext from "~/hooks/useAppContext"
 import ModalToolItems from "../../ModalToolsEditor"
+import ObjectReplacerEditor from "~/components/ModalToolsEditor/ObjectReplacerEditor/ObjectReplacerEditor"
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
 
@@ -37,6 +38,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       isOpen={isOpen}
     >
       {Component && <Component handleClose={handleClose}  />}
+      {/* <ObjectReplacerEditor/> */}
     </Modal>
   )
 }

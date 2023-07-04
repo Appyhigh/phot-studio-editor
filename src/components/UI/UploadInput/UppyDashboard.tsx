@@ -19,8 +19,9 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import MainImageContext from "~/contexts/MainImageContext"
-import { OBJECT_REMOVER } from "~/constants/contants"
+import { OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
+import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 
 const UppyDashboard = ({
   close,
@@ -46,6 +47,7 @@ const UppyDashboard = ({
   const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
+  const {objectReplacerInfo, setObjectReplacerInfo} = useContext(ObjectReplacerContext) 
   let uppy: any
   if (typeof window !== "undefined") {
     uppy = new Uppy({
@@ -98,7 +100,10 @@ const UppyDashboard = ({
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else if (uploadType === OBJECT_REMOVER) {
           setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
-        } else if (fileInputType == "photoEditor") {
+        }else if(uploadType === OBJECT_REPLACER){
+          setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
+        }
+         else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
                 ...prev,
@@ -190,7 +195,10 @@ const UppyDashboard = ({
             }))
           } else if (uploadType === OBJECT_REMOVER) {
             setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
-          } else if (fileInputType == "photoEditor") {
+          }else if(uploadType === OBJECT_REPLACER){
+            setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
+          } 
+          else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({
                   ...prev,

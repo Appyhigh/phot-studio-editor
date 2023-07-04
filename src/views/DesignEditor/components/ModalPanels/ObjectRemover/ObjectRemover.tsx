@@ -172,6 +172,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           height="38px"
           margin={"8px 8px 4px 4px"}
           width="155px"
+          // @ts-ignore
           disabled={canvas?.getObjects().length>=2?false:true}
           handleClick={() => {
             // @ts-ignore
@@ -196,6 +197,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           width="155px"
           fontSize="14px"
           fontWeight="500"
+           // @ts-ignore
           disabled={canvas?.getObjects().length>=2?false:true}
           handleClick={() => {
             handleBgImg(objectRemoverInfo.src)

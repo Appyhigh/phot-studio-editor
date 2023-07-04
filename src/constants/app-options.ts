@@ -84,12 +84,7 @@ export const BASE_ITEMS = [
   //   label: "Blur BG",
   //   name: "CommonPanel",
   // },
-  // {
-  //   id: "objectreplacer",
-  //   icon: "CircleIcon",
-  //   label: "Object Replacer",
-  //   name: "CommonPanel",
-  // },
+
   {
     id: "imagecolorizer",
     icon: "ImagineAi",
@@ -101,6 +96,12 @@ export const BASE_ITEMS = [
     icon: "ImagineAi",
     label: "Object Remover",
     name: "ObjectRemover",
+  },
+  {
+    id: "objectreplacer",
+    icon: "ImagineAi",
+    label: "Object Replacer",
+    name: "ObjectReplacer",
   },
   {
     id: "productphotoshoot",
