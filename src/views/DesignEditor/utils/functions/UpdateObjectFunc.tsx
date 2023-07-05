@@ -1,9 +1,7 @@
 import { getDimensions } from "./getDimensions"
 
 export const UpdateObjectFunc = (url: string, editor: any, frame?: any) => {
-  let scale = 1
   getDimensions(url, (img: any) => {
-    console.log("scale", scale, img.width)
     var imageElement = document.createElement("img")
     imageElement.setAttribute("crossorigin", "Anonymous")
     imageElement.setAttribute("class", "canvas-img")
