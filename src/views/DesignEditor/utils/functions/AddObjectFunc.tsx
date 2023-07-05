@@ -33,6 +33,7 @@ export const AddObjectFunc = (
     }
     editor.objects.add(options).then(() => {
       setRejectedFileUpload ? setRejectedFileUpload(false) : null
+      
       setAddImgInfo ? setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" })) : null
     })
   }

@@ -19,4 +19,4 @@ function ImgLock() {
   )
 }
 
-export default ImgLock;
+export default ImgLock

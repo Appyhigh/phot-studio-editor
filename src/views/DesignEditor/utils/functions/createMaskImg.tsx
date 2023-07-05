@@ -10,23 +10,31 @@ interface PathProps {
 export const createMaskImage = ({
   canvasWidth,
   canvasHeight,
+  intrinsicHeight,
+  intrinsicWidth,
+
   pathsArray,
 }: {
   canvasWidth: number
   canvasHeight: number
+  intrinsicHeight: number
+  intrinsicWidth: number
   pathsArray: PathProps[]
 }) => {
   // point
+  const scaleX = intrinsicWidth / canvasWidth
+  const scaleY = intrinsicHeight / canvasHeight
+  console.log(intrinsicHeight, intrinsicWidth)
   const canvas = document.createElement("canvas")
-  canvas.width = canvasWidth
-  canvas.height = canvasHeight
+  canvas.width = canvasWidth*scaleX
+  canvas.height = canvasHeight*scaleY
   const ctx = canvas.getContext("2d")
 
   if (ctx) {
     ctx.lineCap = "round"
 
     ctx.lineJoin = "round"
-
+    ctx.scale(scaleX, scaleY)
     // Black background
     ctx.fillStyle = "black"
     ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -47,5 +55,6 @@ export const createMaskImage = ({
   }
 
   const dataURL = canvas.toDataURL("image/jpeg")
+  // console.log(dataURL)
   return dataURL
 }

@@ -86,6 +86,11 @@ import TickIcon from "./TickIcon"
 import ArrowLeft from "./ArrowLeft"
 import Brush from "./Brush"
 import Retry from "./Retry"
+import ImageUpscaler from "./ImageUpscaler"
+import PhotoEditor from "./PhotoEditor"
+import ObjectRemover from "./ObjectRemover"
+import ImageColorizer from "./ImageColorizer"
+import ObjectReplacer from "./ObjectReplacer"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -175,6 +180,11 @@ class Icons {
   static ArrowLeft=ArrowLeft
   static Brush=Brush
   static Retry=Retry
+  static ImageUpscaler = ImageUpscaler
+  static PhotoEditor = PhotoEditor
+  static ObjectRemover = ObjectRemover
+  static ImageColorizer = ImageColorizer
+  static ObjectReplacer = ObjectReplacer
 }
 
 export default Icons

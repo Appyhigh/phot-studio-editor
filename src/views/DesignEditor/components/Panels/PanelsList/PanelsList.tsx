@@ -47,24 +47,23 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   const { setActivePanel } = useAppContext()
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
-
   // @ts-ignore
   const Icon = Icons[icon]
   return (
     <Block
       id="EditorPanelList"
-      className={clsx(classes.panelListItem, "flex-center-column", activePanel !== name && classes.inActivePanel)}
+      className={clsx(classes.panelListItem, "flex-center-column")}
       onClick={() => {
         setIsSidebarOpen(true)
         setActivePanel(name)
       }}
     >
       {name === "Images" ? (
-        <div className={classes.imagesIcon}>
-          <Icon size={24} />
+        <div className={clsx(classes.imagesIcon,activePanel !== name && classes.inActivePanel)}  >
+          <Icon size={24} color={activePanel !== name ? "#9BA6B0" :"#4E19C6"} />
         </div>
       ) : (
-        <Icon size={24} />
+        <Icon size={24} color={activePanel !== name ? "#9BA6B0" :"#4E19C6"} />
       )}
 
       <Block

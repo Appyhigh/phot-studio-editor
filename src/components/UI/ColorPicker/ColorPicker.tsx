@@ -1,7 +1,7 @@
 import { Modal } from "baseui/modal"
 import classes from "./style.module.css"
-import React, { useCallback } from "react"
-import { useActiveObject, useEditor } from "@layerhub-io/react"
+import React from "react"
+import { useActiveObject } from "@layerhub-io/react"
 import { throttle } from "lodash"
 import { Block } from "baseui/block"
 import { HexColorPicker } from "react-colorful"
@@ -10,24 +10,15 @@ import { Button } from "baseui/button"
 const DEFAULT_COLORS = ["#531EFF", "#ff9800", "#ffee58", "#66bb6a", "#26a69a"]
 
 const DOCUMENT_COLORS = ["#E15241", "#F09D38", "#FBEB60", "#67AC5B", "#4994EB"]
-const ColorPicker = ({ isOpen, handleClose, inputColor, type, handleChangeBg, handleColor }: any) => {
+const ColorPicker = ({ isOpen, handleClose, inputColor, handleChangeColor }: any) => {
   const [color, setColor] = React.useState(inputColor)
   const activeObject = useActiveObject()
-  const editor = useEditor()
 
   const close = () => {
     handleClose()
   }
   const updateObjectFill = throttle((color: string) => {
-    if (activeObject) {
-      if (type === "object") {
-        handleChangeBg({ color: color })
-      } else if (type === "text") editor.objects.update({ fill: color })
-      else if (type === "background") {
-        handleColor(color)
-      }
-    }
-
+    handleChangeColor(color)
     setColor(color)
     close()
   }, 1000)

@@ -45,18 +45,18 @@ export const BASE_ITEMS = [
   {
     id: "imagineai",
     icon: "ImagineAi",
-    label: "Imagine AI",
+    label: "Text to Art",
     name: "ImagineAI",
   },
   {
     id: "imageupscaler",
-    icon: "ImagineAi",
+    icon: "ImageUpscaler",
     label: "Image Upscaler",
     name: "ImageUpscaler",
   },
   {
     id: "photoeditor",
-    icon: "ImagineAi",
+    icon: "PhotoEditor",
     label: "Photo Editor",
     name: "PhotoEditor",
   },
@@ -87,13 +87,13 @@ export const BASE_ITEMS = [
 
   {
     id: "imagecolorizer",
-    icon: "ImagineAi",
+    icon: "ImageColorizer",
     label: "Image Colorizer",
     name: "ImageColorizer",
   },
   {
     id: "objectremover",
-    icon: "ImagineAi",
+    icon: "ObjectRemover",
     label: "Object Remover",
     name: "ObjectRemover",
   },
@@ -108,6 +108,11 @@ export const BASE_ITEMS = [
     icon: "ImagineAi",
     label: "Product PhotoShoot",
     name: "ProductPhotoShoot",
+  },{
+    id: "objectreplacer",
+    icon: "ObjectReplacer",
+    label: "Object Replacer",
+    name: "CommonPanel",
   },
   // {
   //   id: "passportphotomaker",
