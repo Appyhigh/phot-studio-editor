@@ -273,6 +273,27 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     }
   }
 
+  const resetCanvas = () => {
+    canvas.getObjects().forEach((obj: any) => {
+      canvas.remove(obj)
+    })
+    setSteps((prev: any) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: false }))
+    setProductPhotoshootInfo((prev: any) => ({
+      ...prev,
+      src: "",
+      preview: "",
+      tooltip: false,
+      prompt: "",
+      result: [],
+      finalImage: "",
+      again: false,
+      prevObjects: [],
+      addPreview: "",
+      removeBg: false,
+    }))
+  }
+
   const UploadImage = () => {
     return (
       <>
@@ -450,6 +471,22 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     )
   }
 
+  const ResetHeading = () => {
+    return (
+      <div className="d-flex flex-row">
+        Upload / choose image
+        <div
+          onClick={() => {
+            resetCanvas()
+          }}
+          className={classes.resetButton}
+        >
+          RESET
+        </div>
+      </div>
+    )
+  }
+
   return (
     // <Scrollable>
     <div className={classes.leftPanel}>
@@ -468,6 +505,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
         <Accordian
           label={"1"}
+          // heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
           heading={"Upload / choose image"}
           isOpen={steps[1]}
           isComplete={stepsComplete[1]}
