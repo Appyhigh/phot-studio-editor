@@ -107,9 +107,9 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     } else {
       setResultLoading(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-      objectRemoverController(objectRemoverInfo.src, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
+      objectRemoverController(objectRemoverInfo.preview, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
         .then((response) => {
-          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0] ,src:response[0]}))
+          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0] ,preview:response[0]}))
           setResultLoading(false)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
@@ -244,7 +244,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
   const Brush = () => (
     <>
-      <UploadPreview imgSrc={objectRemoverInfo.src} uploadType={MODAL_IMG_UPLOAD} />
+      <UploadPreview imgSrc={objectRemoverInfo.preview} uploadType={MODAL_IMG_UPLOAD} />
 
       <div className={classes.brushInput}>
         <p>Brush</p>
@@ -379,7 +379,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             fontSize="16px"
             fontWeight="500"
             handleClick={() => {
-              setObjectRemoverInfo((prev: any) => ({ ...prev, src: prev.result }))
+              setObjectRemoverInfo((prev: any) => ({ ...prev, preview: prev.result }))
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false }))
             }}
           />
