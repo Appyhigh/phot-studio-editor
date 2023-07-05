@@ -125,8 +125,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectReplacerInfo.src, objectReplacerInfo.mask_img, objectReplacerInfo.file_name, objectReplacerInfo.prompt)
         .then((response) => {
-          console.log("response0",response);
-          
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
@@ -328,7 +326,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             // @ts-ignore
             canvas.isDrawingMode = false
             // @ts-ignore
-            canvas.clearHistory()
+            // canvas.clearHistory()
             // @ts-ignore
             canvas.getObjects().forEach((obj: any) => {
               obj.selectable = false
@@ -345,7 +343,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               ...prev,
               secondStep: true,
               thirdStep: true,
-              fourthStep: false,
+              fourthStep: true,
               fifthStep: false,
             }))
            
@@ -374,7 +372,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           fontWeight="500"
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
-            handleBgImg(objectReplacerInfo.src)
+            // handleBgImg(objectReplacerInfo.src)
             setSteps((prev) => ({
               ...prev,
               firstStep: false,
@@ -397,62 +395,62 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     </>
   )
 
-  const GenerateImages = () => (
-    <>
-      <div className={classes.promptSection}>
-        <div className={classes.itemContainer}>
-          <div className={classes.itemHeading}>How many images you want to generate?</div>
-          <div className="d-flex justify-content-start flex-row">
-            {[1, 2, 3, 4].map((each, idx) => {
-              return (
-                <div
-                  key={idx}
-                  className={clsx(
-                    classes.ctBox,
-                    "flex-center pointer",
-                    idx === 0 && "ml-0",
-                    imgGenerationCt === each && classes.selectedCtBox
-                  )}
-                  onClick={() => {
-                    setImgGenerationCt(each)
-                  }}
-                >
-                  {each}
-                </div>
-              )
-            })}
-          </div>
-        </div>
+  // const GenerateImages = () => (
+  //   <>
+  //     <div className={classes.promptSection}>
+  //       <div className={classes.itemContainer}>
+  //         <div className={classes.itemHeading}>How many images you want to generate?</div>
+  //         <div className="d-flex justify-content-start flex-row">
+  //           {[1, 2, 3, 4].map((each, idx) => {
+  //             return (
+  //               <div
+  //                 key={idx}
+  //                 className={clsx(
+  //                   classes.ctBox,
+  //                   "flex-center pointer",
+  //                   idx === 0 && "ml-0",
+  //                   imgGenerationCt === each && classes.selectedCtBox
+  //                 )}
+  //                 onClick={() => {
+  //                   setImgGenerationCt(each)
+  //                 }}
+  //               >
+  //                 {each}
+  //               </div>
+  //             )
+  //           })}
+  //         </div>
+  //       </div>
 
-        <BaseButton
-          borderRadius="10px"
-          title={"Continue"}
-          height="38px"
-          margin={"8px 4px 4px 0px"}
-          fontSize="14px"
-          fontWeight="500"
-          handleClick={() => {
-            handleBgImg(objectReplacerInfo.src)
-            setSteps((prev) => ({
-              ...prev,
-              firstStep: false,
-              secondStep: false,
-              thirdStep: false,
-              fourthStep: false,
-              fifthStep: true,
-            }))
-            setStepsComplete((prev) => ({
-              ...prev,
-              secondStep: true,
-              thirdStep: true,
-              fourthStep: true,
-              fifthStep: true,
-            }))
-          }}
-        />
-      </div>
-    </>
-  )
+  //       <BaseButton
+  //         borderRadius="10px"
+  //         title={"Continue"}
+  //         height="38px"
+  //         margin={"8px 4px 4px 0px"}
+  //         fontSize="14px"
+  //         fontWeight="500"
+  //         handleClick={() => {
+  //           handleBgImg(objectReplacerInfo.src)
+  //           setSteps((prev) => ({
+  //             ...prev,
+  //             firstStep: false,
+  //             secondStep: false,
+  //             thirdStep: false,
+  //             fourthStep: false,
+  //             fifthStep: true,
+  //           }))
+  //           setStepsComplete((prev) => ({
+  //             ...prev,
+  //             secondStep: true,
+  //             thirdStep: true,
+  //             fourthStep: true,
+  //             fifthStep: true,
+  //           }))
+  //         }}
+  //       />
+  //     </div>
+  //   </>
+  // )
 
   const outputResult = () => (
     <>

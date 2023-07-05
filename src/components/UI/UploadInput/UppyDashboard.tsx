@@ -114,7 +114,6 @@ const UppyDashboard = ({
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
         } else if (uploadType === OBJECT_REMOVER) {
-          console.log(file)
           setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
           setDimension(imageUrl)
         }else if(uploadType === OBJECT_REPLACER){

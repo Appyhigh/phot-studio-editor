@@ -22,7 +22,7 @@ export const objectRemoverController = async (
     const config = {
       headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
     }
-    console.log(body);
+
     
     //@ts-ignore
     const order = await axios.post("https://devapi.phot.ai/app/api/v1/user_activity/object-replacer-v2", body, config)

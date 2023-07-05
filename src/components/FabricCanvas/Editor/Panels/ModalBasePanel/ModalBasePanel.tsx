@@ -32,7 +32,6 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
   const { canvas, objects } = fabricEditor
-  const { activePanel } = useAppContext()
   // let width = canvas?.getWidth()
   // let height = canvas?.getHeight()
 
