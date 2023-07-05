@@ -23,6 +23,7 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import Prompt from "~/components/Prompt/Prompt"
 import photoEditorController from "~/utils/photoEditorController"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 
 const PhotoEditor = () => {
   const { activePanel } = useAppContext()
@@ -86,13 +87,11 @@ const PhotoEditor = () => {
       setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
       photoEditorController(photoEditorInfo.src, photoEditorInfo.prompt)
         .then((response) => {
+          addImg(response[0], 1)
           setImageLoading(false)
           setPhotoEditorInfo((prev: any) => ({
             ...prev,
-            result: [
-              ...photoEditorInfo.result,
-              ...response,
-            ],
+            result: [...photoEditorInfo.result, ...response],
           }))
         })
         .catch((error) => {
@@ -116,15 +115,19 @@ const PhotoEditor = () => {
   }
 
   const addImg = async (imageUrl: string, _idx: number) => {
-    setCurrentActiveImg(_idx)
-    await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
+    if (currentActiveImg == -1) {
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+          return prev + 1
+        })
       })
-    })
+    } else {
+      UpdateObjectFunc(imageUrl, editor, frame)
+    }
+    setCurrentActiveImg(_idx)
   }
 
   const discardHandler = () => {
