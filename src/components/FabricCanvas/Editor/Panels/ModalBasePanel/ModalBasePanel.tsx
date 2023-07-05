@@ -44,9 +44,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
     })
   }
 
-  useEffect(() => {
-    console.log(activePanel)
-  }, [activePanel])
+
 
   return (
     <div>

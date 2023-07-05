@@ -238,7 +238,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
   useEffect(() => {
     if (steps.thirdStep) {
-      console.log("mask",objectRemoverInfo.mask_img)
       getOutputImg()
     }
   }, [steps.thirdStep])
@@ -311,13 +310,15 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               canvasWidth: canvas.getWidth(),
               // @ts-ignore
               canvasHeight: canvas.getHeight(),
+              intrinsicHeight: objectRemoverInfo.height,
+              intrinsicWidth: objectRemoverInfo.width,
               pathsArray: paths,
             })
             setObjectRemoverInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
             // @ts-ignore
             canvas.isDrawingMode = false
             // @ts-ignore
-            canvas.clearHistory()
+            // canvas.clearHistory()
             // @ts-ignore
             canvas.getObjects().forEach((obj: any) => {
               obj.selectable = false
