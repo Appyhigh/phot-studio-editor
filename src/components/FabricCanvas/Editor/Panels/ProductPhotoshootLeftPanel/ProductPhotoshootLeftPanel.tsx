@@ -154,6 +154,7 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
             if (image) {
               removeBackground()
               addImage({
+                imageType: productPhotoshootInfo.removeBg ? "object" : "product",
                 type: "image",
                 src: image,
               })
