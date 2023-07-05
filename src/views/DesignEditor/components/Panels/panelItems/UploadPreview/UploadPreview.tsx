@@ -6,7 +6,15 @@ import { useEditor } from "@layerhub-io/react"
 import { useContext, useRef } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
-import { IMAGE_COLORIZER, LOCAL_SAMPLE_IMG, MAIN_IMG_Bg, REMOVE_BACKGROUND, TEXT_TO_ART } from "~/constants/contants"
+import {
+  IMAGE_COLORIZER,
+  LOCAL_SAMPLE_IMG,
+  MAIN_IMG_Bg,
+  MODAL_IMG_UPLOAD,
+  OBJECT_REMOVER,
+  REMOVE_BACKGROUND,
+  TEXT_TO_ART,
+} from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
@@ -61,7 +69,9 @@ const UploadPreview = ({
   return (
     <div>
       <Block paddingTop={"10px"}>
-        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER && (
+
+        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER &&  uploadType != MODAL_IMG_UPLOAD&& uploadType != OBJECT_REMOVER && (
+
           <div
             className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
             onClick={() => {
@@ -109,7 +119,7 @@ const UploadPreview = ({
                 alt="preview"
               />
 
-              {
+              {uploadType != MODAL_IMG_UPLOAD &&uploadType!=OBJECT_REMOVER && (
                 <Block
                   className={clsx(
                     "p-absolute pointer",
@@ -122,7 +132,7 @@ const UploadPreview = ({
                     <Icons.Trash size={"32"} />
                   </span>
                 </Block>
-              }
+              )}
             </Block>
 
             {btnTitle && (

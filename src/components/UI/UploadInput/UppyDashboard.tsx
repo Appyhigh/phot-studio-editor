@@ -19,6 +19,9 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import MainImageContext from "~/contexts/MainImageContext"
+import { OBJECT_REMOVER } from "~/constants/contants"
+import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const UppyDashboard = ({
   close,
@@ -43,8 +46,16 @@ const UppyDashboard = ({
   const { setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
+  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
+
+  const setDimension = async (img: string) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+    })
+  }
 
   let uppy: any
+
   if (typeof window !== "undefined") {
     uppy = new Uppy({
       id: id,
@@ -70,7 +81,7 @@ const UppyDashboard = ({
     uppy.setOptions({
       restrictions: {
         maxNumberOfFiles: 1,
-        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+        allowedFileTypes: [".png", ".jpg", ".jpeg", ".bmp", ".webp"],
         maxFileSize: 5242880,
       },
     })
@@ -94,6 +105,10 @@ const UppyDashboard = ({
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+        } else if (uploadType === OBJECT_REMOVER) {
+          console.log(file)
+          setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
+          setDimension(imageUrl)
         } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
@@ -183,6 +198,9 @@ const UppyDashboard = ({
               resultOption: false,
               tryFilters: false,
             }))
+          } else if (uploadType === OBJECT_REMOVER) {
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
+            setDimension(imageUrl)
           } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({

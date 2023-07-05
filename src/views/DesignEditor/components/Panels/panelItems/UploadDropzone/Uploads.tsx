@@ -5,39 +5,58 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import UppyDashboard from "~/components/UI/UploadInput/UppyDashboard"
+import { MODAL_IMG_UPLOAD } from "~/constants/contants"
 
-export default function ({ uploadType, mainHeading, fileInputType, id, uploads, setUploads }: any) {
+
+export default function ({
+  uploadType,
+  mainHeading,
+  fileInputType,
+  id,
+  uploads,
+  setUploads,
+  imgUpload,
+  setImgUpload,
+}: any) {
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
-  // const [renderKey, setRenderKey] = useState(0)
+//   const [renderKey, setRenderKey] = useState(0)
   const [imageLoading, setImageLoading] = useState(false)
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setRenderKey((prev) => prev + 1)
-  //   }, 4000)
-  // }, [imageLoading])
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setRenderKey((prev) => prev + 1)
+//     }, 4000)
+//   }, [imageLoading])
+
 
   return (
     <>
-      <Block className={"mt-3"}>
+      <Block className={clsx(uploadType != MODAL_IMG_UPLOAD && "mt-3")}>
         <Block className="d-flex align-items-center flex-start">
           <Block className="pl-1">
             <Block className={classes.panelHeading}>{mainHeading}</Block>
           </Block>
         </Block>
-        {!imageLoading && (
+
+        <div>
+  {!imageLoading && (
           // <div key={renderKey}>
           <div>
             <UppyDashboard
-              setImageLoading={setImageLoading}
-              fileInputType={fileInputType}
-              id={id}
-              setSelectedImage={setSelectedImage}
-              uploadType={uploadType}
-              uploads={uploads}
-              setUploads={setUploads}
-            />
+                setImageLoading={setImageLoading}
+                fileInputType={fileInputType}
+                id={id}
+                setSelectedImage={setSelectedImage}
+                uploadType={uploadType}
+                uploads={uploads}
+                setUploads={setUploads}
+                imgUpload={imgUpload}
+                setImgUpload={setImgUpload}
+              />
           </div>
         )}
+
+</div>
+
       </Block>
       {imageLoading && (
         <Block
