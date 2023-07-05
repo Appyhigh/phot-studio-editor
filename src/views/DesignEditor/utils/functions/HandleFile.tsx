@@ -46,7 +46,6 @@ const HandleFile = async (
     } else if (fileInputType === "bgupdate") {
       UpdateBg(imageUrl, editor, frame)
     } else if (fileInputType == "panelAdd") {
-      console.log("PANEL ADD")
       let latest_ct = 0
       setImagesCt((prev: any) => {
         latest_ct = prev + 1
