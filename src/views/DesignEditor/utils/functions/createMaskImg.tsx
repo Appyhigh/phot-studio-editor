@@ -27,8 +27,8 @@ console.log(canvasHeight,canvasWidth,intrinsicHeight,intrinsicWidth);
   const scaleX = intrinsicWidth / canvasWidth
   const scaleY = intrinsicHeight / canvasHeight
   const canvas = document.createElement("canvas")
-  canvas.width = canvasWidth*scaleX
-  canvas.height = canvasHeight*scaleY
+  canvas.width = canvasWidth * scaleX
+  canvas.height = canvasHeight * scaleY
   const ctx = canvas.getContext("2d")
 
   if (ctx) {

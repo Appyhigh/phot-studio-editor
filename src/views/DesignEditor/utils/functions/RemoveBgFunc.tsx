@@ -21,6 +21,10 @@ export const RemoveBGFunc = async (
   try {
     if (mainImgInfo) {
       if (mainImgInfo?.metadata?.originalLayerPreview) {
+        var imageElement = document.createElement("img")
+        imageElement.setAttribute("crossorigin", "Anonymous")
+        imageElement.setAttribute("class", "canvas-img")
+        imageElement.setAttribute("src", mainImgInfo?.metadata?.originalLayerPreview)
         const options = {
           type: "StaticImage",
           src: mainImgInfo?.metadata?.originalLayerPreview,
@@ -31,15 +35,13 @@ export const RemoveBGFunc = async (
             generationDate: activeObject?.metadata?.generationDate,
             originalLayerPreview: mainImgInfo?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
+          _element: imageElement,
+          _originalElement: imageElement,
         }
-        editor.objects.add(options).then(() => {
-          editor.objects.remove(mainImgInfo.id)
-          // @ts-ignore
-          setMainImgInfo((prev) => ({ ...prev, ...options }))
-        })
+        editor.objects.update(options)
+        setMainImgInfo((prev: any) => ({ ...prev, ...options }))
       } else {
         setLoaderPopup(true)
-
         let response = await removeBackgroundController(
           mainImgInfo.src,
           (image: string) => {
@@ -62,7 +64,7 @@ export const RemoveBGFunc = async (
                   uploadSection: false,
                   trySampleImg: false,
                 }))
-        
+
                 editor.objects.removeById(mainImgInfo.id)
                 setMainImgInfo((prev: any) => ({ ...prev, ...options }))
                 // Stop the loader
@@ -91,6 +93,10 @@ export const RemoveBGFunc = async (
       activeObject?.metadata?.originalLayerPreview &&
       (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
     ) {
+      var imageElement = document.createElement("img")
+      imageElement.setAttribute("crossorigin", "Anonymous")
+      imageElement.setAttribute("class", "canvas-img")
+      imageElement.setAttribute("src", activeObject?.metadata?.originalLayerPreview)
       const options = {
         type: "StaticImage",
         src: activeObject?.metadata?.originalLayerPreview,
@@ -102,14 +108,10 @@ export const RemoveBGFunc = async (
           generationDate: activeObject?.metadata?.generationDate,
           originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
         },
+        _element: imageElement,
+        _originalElement: imageElement,
       }
-      editor.objects.add(options).then(() => {
-        editor.objects.position("top", activeObject.top)
-        editor.objects.position("left", activeObject.left)
-        editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-        editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-        editor.objects.remove(activeObject.id)
-      })
+      editor.objects.update(options)
     } else {
       setLoaderPopup(true)
       let response = await removeBackgroundController(
@@ -117,6 +119,10 @@ export const RemoveBGFunc = async (
         (image: string) => {
           // Add the resultant image to the canvas
           if (image) {
+            var imageElement = document.createElement("img")
+            imageElement.setAttribute("crossorigin", "Anonymous")
+            imageElement.setAttribute("class", "canvas-img")
+            imageElement.setAttribute("src", image)
             const options = {
               type: "StaticImage",
               src: image,
@@ -127,20 +133,12 @@ export const RemoveBGFunc = async (
                 generationDate: activeObject?.metadata?.generationDate ?? new Date().getTime(),
                 originalLayerPreview: image,
               },
+              _element: imageElement,
+              _originalElement: imageElement,
             }
-            editor.objects.add(options).then(() => {
-              // @ts-ignore
-
-              if (activeObject) {
-                editor.objects.removeById(activeObject.id)
-                editor.objects.position("top", activeObject.top)
-                editor.objects.position("left", activeObject.left)
-                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-              } else editor.objects.removeById(mainImgInfo.id)
-              // Stop the loader
-              setLoaderPopup(false)
-            })
+            editor.objects.update(options)
+            // Stop the loader
+            setLoaderPopup(false)
           } else {
             setLoaderPopup(false)
             throw new Error("Something went wrong while removing background...")

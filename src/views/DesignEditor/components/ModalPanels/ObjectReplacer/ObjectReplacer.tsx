@@ -41,6 +41,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     error: false,
     errorMsg: "",
   })
+  const setDimensionOfSampleImg=async()=>{
+    await getDimensions((objectReplacerInfo.preview),(imgSrc:any)=>{
+     setObjectReplacerInfo((prev:any)=>({...prev,width:imgSrc.width,height:imgSrc.height}))
+    })
+  }
   const { user } = authState
   const [steps, setSteps] = useState({
     firstStep: true,
@@ -58,6 +63,10 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     fifthStep: false,
   })
 
+
+  
+
+  
 
   const handleBrushSizeChange = (e: any) => {
     const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
@@ -211,6 +220,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             style={{ backgroundImage: `url(${image})` }}
             onClick={() => {
               setSelectedSampleImg(index)
+              setDimensionOfSampleImg()
               setObjectReplacerInfo((prev: any) => ({ ...prev, src: image, preview: image, file_name:"pexels-photo-3493777.jpeg"}))
             }}
           >   

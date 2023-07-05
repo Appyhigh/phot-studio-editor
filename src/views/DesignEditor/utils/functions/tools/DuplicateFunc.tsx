@@ -30,7 +30,12 @@ export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
       editor.objects.select("frame")
       setTimeout(() => {
         editor.objects.update({ name: latest_ct })
-        resolve(editor.objects.update({ name: activeObject.name }))
+        resolve(
+          editor.objects.update(
+            { name: activeObject.name, metadata: activeObject.metadata },
+            editor.objects.list()[editor.objects.list().length - 1].id
+          )
+        )
       }, 50)
     }
 

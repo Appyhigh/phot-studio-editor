@@ -10,12 +10,10 @@ export const objectRemoverController = async (
 ) => {
   try {
     // @ts-ignore
-    // console.log( mask_img)
     const body = {
       input_image_link: imgLink,
       mask_image: mask_img,
-      file_name: svgExtensionToJPEG(file_name ? file_name : ''),
-      prompt:prompt
+      file_name: svgExtensionToJPEG(file_name ? file_name : ""),
       // op: 'DUMMY',
     }
  
