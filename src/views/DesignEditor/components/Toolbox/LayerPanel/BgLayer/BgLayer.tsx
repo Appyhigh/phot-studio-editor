@@ -121,8 +121,7 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
           inputColor={bgColor}
           isOpen={isOpen}
           handleClose={close}
-          type="background"
-          handleColor={(each: any) => {
+          handleChangeColor={(each: any) => {
             setBGColor(each)
             updateObjectFill(each)
           }}
