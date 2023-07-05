@@ -71,7 +71,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       // @ts-ignore
       (canvas.freeDrawingBrush.width = brushSize)
   }
-
+  
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
       setBgImgFabricCanvas(imgSrc, canvas, img)
@@ -105,10 +105,15 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   }, [user, autoCallAPI])
   
   useEffect(() => {
-    if (steps.fifthStep) {
-      getOutputImg()
+    setIsError((prev) => ({
+      ...prev,
+      error: false,
+      errorMsg: "",
+    }))
+    if (steps.fourthStep) {
+      getOutputImg()      
     }
-  }, [steps.fifthStep])
+  }, [steps.fourthStep])
 
   const getOutputImg = () => {
 
@@ -120,6 +125,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectReplacerInfo.src, objectReplacerInfo.mask_img, objectReplacerInfo.file_name, objectReplacerInfo.prompt)
         .then((response) => {
+          console.log("response0",response);
+          
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
@@ -204,9 +211,9 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             style={{ backgroundImage: `url(${image})` }}
             onClick={() => {
               setSelectedSampleImg(index)
-              setObjectReplacerInfo((prev: any) => ({ ...prev, src: image, preview: image }))
+              setObjectReplacerInfo((prev: any) => ({ ...prev, src: image, preview: image, file_name:"pexels-photo-3493777.jpeg"}))
             }}
-          >
+          >   
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
           </div>
         ))}
@@ -312,6 +319,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               canvasWidth: canvas.getWidth(),
               // @ts-ignore
               canvasHeight: canvas.getHeight(),
+              intrinsicHeight: objectReplacerInfo.height,
+              intrinsicWidth: objectReplacerInfo.width,
               pathsArray: paths,
             })
              setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr  }))
@@ -460,15 +469,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         ) : isError.error ? (
           <div
             className={classes.skeletonBox}
-            onClick={() => {
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
-            }}
+            // onClick={() => {
+            //   setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+            //   getOutputImg()
+            // }}
           >
             {
               <div className={classes.retry}>
-                <Icons.Retry />
-                <p>Retry</p>
+                <Icons.RetryImg />
               </div>
             }{" "}
           </div>
@@ -483,18 +491,18 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         stepsComplete.secondStep &&
         stepsComplete.thirdStep &&
         !resultLoading &&
-        !isError.error && (
+        isError.error && (
           <BaseButton
             borderRadius="10px"
-            title={"Remove more objects"}
+            title={"Retry"}
             height="38px"
             margin={"20px 4px 4px 0px"}
             width="320px"
             fontSize="16px"
             fontWeight="500"
             handleClick={() => {
-              setObjectReplacerInfo((prev: any) => ({ ...prev, src: prev.result }))
-              setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false }))
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
             }}
           />
         )}
@@ -534,7 +542,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               fourthStep: false,
               fifthStep: false,
             }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false, fifthStep: false }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false, fifthStep: false,secondStep:false }))
           } else if (steps.firstStep) {
             setSteps((prev) => ({ ...prev, firstStep: false }))
           } else {
@@ -589,7 +597,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           }
         }}
       />
-      <Accordian
+      {/* <Accordian
         label={4}
         isOpen={steps.fourthStep}
         isComplete={stepsComplete.fourthStep}
@@ -604,24 +612,25 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           } else {
           }
         }}
-      />
+      /> */}
       <Accordian
-        isOpen={steps.fifthStep}
-        isComplete={steps.fifthStep}
-        label={5}
+        isOpen={steps.fourthStep}
+        isComplete={steps.fourthStep}
+        label={4}
         heading={"Final output"}
         handleClick={() => {
-          if (stepsComplete.fifthStep && !steps.fifthStep) {
-            setSteps((prev) => ({ ...prev, fifthStep: true, firstStep: false, secondStep: false, fourthStep: false }))
-          } else if (steps.fifthStep) {
-            setSteps((prev) => ({ ...prev, fifthStep: false }))
-            setStepsComplete((prev) => ({ ...prev, fifthStep: true }))
+          if (stepsComplete.fourthStep && !steps.fourthStep) {
+            setSteps((prev) => ({ ...prev, fourthStep: true, thirdStep: false, firstStep: false,secondStep:false, fifthStep: false }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true, fifthStep: false }))
+          } else if (steps.fourthStep) {
+            setSteps((prev) => ({ ...prev, fourthStep: false }))
+            setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
           }
         }}
         children={outputResult()}
       />
       {isError.error && (
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative",margin:"0px 0px 0px -7px" }}>
           <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
         </div>
       )}

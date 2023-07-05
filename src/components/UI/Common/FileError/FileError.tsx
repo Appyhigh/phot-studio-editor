@@ -17,7 +17,7 @@ const FileError = ({ ErrorMsg, displayError }: any) => {
     }
   }, [displayError])
   return (
-    <div id="this" className={classes.errorMsgSectionSize}>
+    <div id="this" className={classes.errorMsgSectionSize} >
       <div>
         <Alert size={24} />
       </div>

@@ -108,11 +108,6 @@ export const BASE_ITEMS = [
     icon: "ImagineAi",
     label: "Product PhotoShoot",
     name: "ProductPhotoShoot",
-  },{
-    id: "objectreplacer",
-    icon: "ObjectReplacer",
-    label: "Object Replacer",
-    name: "CommonPanel",
   },
   // {
   //   id: "passportphotomaker",

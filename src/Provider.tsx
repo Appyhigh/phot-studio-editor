@@ -160,6 +160,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     preview: "",
     result: "",
+    width:0,
+    height:0
   })
 
   return (

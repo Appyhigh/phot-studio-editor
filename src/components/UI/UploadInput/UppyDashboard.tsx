@@ -56,6 +56,12 @@ const UppyDashboard = ({
     })
   }
 
+  const setDimensionReplacer = async (img: string) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+    })
+  }
+
   let uppy: any
 
   if (typeof window !== "undefined") {
@@ -112,7 +118,8 @@ const UppyDashboard = ({
           setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
           setDimension(imageUrl)
         }else if(uploadType === OBJECT_REPLACER){
-          setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
+          setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name: file.name }))
+          setDimensionReplacer(imageUrl)
         }
          else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
@@ -208,7 +215,8 @@ const UppyDashboard = ({
             setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
             setDimension(imageUrl)
           }else if(uploadType === OBJECT_REPLACER){
-            setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl }))
+            setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name: file.name }))
+            setDimensionReplacer(imageUrl)
           } 
           else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo

@@ -9,6 +9,8 @@ const ObjectReplacerContext = React.createContext({
     src: "",
     preview: "",
     result: "",
+    width:0,
+    height:0
   },
   setObjectReplacerInfo: (item: any) => {
     console.log("Dummy Intializer for ", item)
