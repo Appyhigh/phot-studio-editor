@@ -36,6 +36,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+    // @ts-ignore
   const { authState } = useAuth()
   const [isError, setIsError] = useState({
     error: false,

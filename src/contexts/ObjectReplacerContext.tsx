@@ -3,9 +3,9 @@ import React from "react"
 const ObjectReplacerContext = React.createContext({
   objectReplacerInfo: {
     inputImage:"",
-    fileName:"",
+    file_name:"",
     prompt:"",
-    maskImage:"",
+    mask_img:"",
     src: "",
     preview: "",
     result: "",

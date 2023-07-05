@@ -15,20 +15,33 @@ import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
-import CreditsSection from "~/components/CreditsSection/CreditsSection"
-import ImagesCount from "~/components/ImagesCount/ImagesCount"
+import { createMaskImage } from "~/views/DesignEditor/utils/functions/createMaskImg"
+import { getCookie } from "~/utils/common"
+import { objectRemoverController } from "~/utils/objectRemoverController"
+import { COOKIE_KEYS } from "~/utils/enum"
+import LoginPopup from "../../LoginPopup/LoginPopup"
+import { useAuth } from "~/hooks/useAuth"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
   const { objectReplacerInfo, setObjectReplacerInfo } = useContext(ObjectReplacerContext)
   const [brushSize, setBrushSize] = useState(10)
   const { canvas, objects } = fabricEditor
-
+  // @ts-ignore
+  const { authState } = useAuth()
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [promptText, setPromptText] = useState("")
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
+  const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const [isError, setIsError] = useState({
+    error: false,
+    errorMsg: "",
+  })
+  const { user } = authState
   const [steps, setSteps] = useState({
     firstStep: true,
     secondStep: false,
@@ -45,8 +58,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     fifthStep: false,
   })
 
-  console.log(objectReplacerInfo);
-  
 
   const handleBrushSizeChange = (e: any) => {
     const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
@@ -65,6 +76,66 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     await getDimensions(imgSrc, (img: any) => {
       setBgImgFabricCanvas(imgSrc, canvas, img)
     })
+  }
+
+  const extractPointsFromPath = (path: any) => {
+    const points = []
+    const pathArray = path.path
+    for (let i = 0; i < pathArray.length; i++) {
+      const point = pathArray[i]
+      if (point[0] === "M" || point[0] === "L") {
+        points.push({ x: point[1], y: point[2] })
+      } else if (point[0] === "Q") {
+        points.push({ x: point[1], y: point[2] })
+        points.push({ x: point[3], y: point[4] })
+      } else if (point[0] === "C") {
+        points.push({ x: point[1], y: point[2] })
+        points.push({ x: point[3], y: point[4] })
+        points.push({ x: point[5], y: point[6] })
+      }
+    }
+    return points
+  }
+
+  useEffect(() => {
+    if (user && autoCallAPI) {
+      getOutputImg()
+      setAutoCallAPI(false)
+    }
+  }, [user, autoCallAPI])
+  
+  useEffect(() => {
+    if (steps.fifthStep) {
+      getOutputImg()
+    }
+  }, [steps.fifthStep])
+
+  const getOutputImg = () => {
+
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+      setAutoCallAPI(true)
+    } else {
+      setResultLoading(true)
+      setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+      objectRemoverController(objectReplacerInfo.src, objectReplacerInfo.mask_img, objectReplacerInfo.file_name, objectReplacerInfo.prompt)
+        .then((response) => {
+          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
+          setResultLoading(false)
+          handleBgImg(response[0])
+          setIsError((prev) => ({ ...prev, error: false }))
+        })
+
+        .catch((error) => {         
+          setIsError((prev) => ({
+            ...prev,
+            error: true,
+            errorMsg: "Oops! unable to generate your image please try again.",
+          }))
+          setResultLoading(false)
+          console.error("Error:", error)
+        })
+    }
   }
 
   useEffect(() => {
@@ -90,6 +161,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         <Block>
           <UploadPreview
             discardHandler={() => {
+              setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
+              setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false,fourthStep:false,fifthStep:false }))
               setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
             }}
@@ -99,7 +172,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
             }}
             imgSrc={objectReplacerInfo.src}
-            uploadType={OBJECT_REMOVER}
+            uploadType={OBJECT_REPLACER}
           />
           <div className={clsx("p-relative pointer", classes.discardBtn)}>
             <span
@@ -223,8 +296,26 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           // @ts-ignore
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
-            handleBgImg(objectReplacerInfo.src)
+            // handleBgImg(objectReplacerInfo.src)
             handleBrushToolTip(false)
+            let paths: any = []
+            //  @ts-ignore
+            canvas?.getObjects().forEach((obj: any, _idx: number) => {
+              if (_idx >= 1) {
+                const updatedPoint = extractPointsFromPath(obj)
+                paths.push({ strokeWidth: obj.strokeWidth, paths: updatedPoint })
+              }
+            })
+
+            const maskStr = createMaskImage({
+              // @ts-ignore
+              canvasWidth: canvas.getWidth(),
+              // @ts-ignore
+              canvasHeight: canvas.getHeight(),
+              pathsArray: paths,
+            })
+             setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr  }))
+
             // @ts-ignore
             canvas.isDrawingMode = false
             // @ts-ignore
@@ -248,7 +339,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               fourthStep: false,
               fifthStep: false,
             }))
-            setObjectReplacerInfo((prev: any) => ({ ...prev, result: objectReplacerInfo.src }))
+           
           }}
         />
       </div>
@@ -364,46 +455,49 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
 
-        {/* {resultLoading ? (
+        {resultLoading ? (
           <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
+        ) : isError.error ? (
+          <div
+            className={classes.skeletonBox}
+            onClick={() => {
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
+            }}
+          >
+            {
+              <div className={classes.retry}>
+                <Icons.Retry />
+                <p>Retry</p>
+              </div>
+            }{" "}
+          </div>
         ) : (
           <div className={clsx("pointer p-relative", classes.eachImg, classes.currentActiveImg)}>
-            {<img src={objectReplacerInfo.src} onClick={() => {}} />}
-
+            {<img src={objectReplacerInfo.result} onClick={() => {}} />}
             <div className={classes.resultLabel}>{"Result"}</div>
           </div>
-        )} */}
-
-        <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
+        )}
       </div>
-      {stepsComplete.firstStep && stepsComplete.secondStep && stepsComplete.thirdStep && (
-        <BaseButton
-          borderRadius="10px"
-          title={"Generate 1 more"}
-          height="38px"
-          margin={"20px 4px 4px 0px"}
-          width="320px"
-          fontSize="16px"
-          fontWeight="500"
-          handleClick={() => {
-            setSteps({
-              firstStep: true,
-              secondStep: false,
-              thirdStep: false,
-              fourthStep: false,
-              fifthStep: false,
-            })
-            setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
-            setStepsComplete({
-              firstStep: true,
-              secondStep: false,
-              thirdStep: false,
-              fourthStep: false,
-              fifthStep: false,
-            })
-          }}
-        />
-      )}
+      {stepsComplete.firstStep &&
+        stepsComplete.secondStep &&
+        stepsComplete.thirdStep &&
+        !resultLoading &&
+        !isError.error && (
+          <BaseButton
+            borderRadius="10px"
+            title={"Remove more objects"}
+            height="38px"
+            margin={"20px 4px 4px 0px"}
+            width="320px"
+            fontSize="16px"
+            fontWeight="500"
+            handleClick={() => {
+              setObjectReplacerInfo((prev: any) => ({ ...prev, src: prev.result }))
+              setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false }))
+            }}
+          />
+        )}
     </>
   )
 
@@ -416,6 +510,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         <p>Object Replacer</p>
       </div>
       <div className={classes.line}></div>
+
+      <LoginPopup
+        isOpen={showLoginPopup}
+        loginPopupCloseHandler={() => {
+          setShowLoginPopup(false)
+        }}
+      />
 
       <Accordian
         label={1}
@@ -519,6 +620,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         }}
         children={outputResult()}
       />
+      {isError.error && (
+        <div style={{ position: "relative" }}>
+          <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
+        </div>
+      )}
     </div>
   )
 }

@@ -141,9 +141,9 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
 
   const [objectReplacerInfo, setObjectReplacerInfo] = useState({
     inputImage:"",
-    fileName:"",
+    file_name:"",
     prompt:"",
-    maskImage:"",
+    mask_img:"",
     src: "",
     preview: "",
     result: "",

@@ -5,7 +5,8 @@ import { COOKIE_KEYS } from "./enum"
 export const objectRemoverController = async (
   imgLink: string | undefined,
   mask_img: string | undefined,
-  file_name: string | undefined
+  file_name: string | undefined,
+  prompt?:string | undefined
 ) => {
   try {
     // @ts-ignore
