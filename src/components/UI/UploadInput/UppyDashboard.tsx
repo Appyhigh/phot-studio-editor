@@ -176,10 +176,9 @@ const UppyDashboard = ({
           if (fileInputType == "bgUpload") {
             HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
           } else if (fileInputType === "ImgUpscaler") {
-            // @ts-ignore
-            setImgScalerInfo ? setImgScalerInfo((prev) => ({ ...prev, url: imageUrl, original: imageUrl })) : null
-            //  @ts-ignore
-            setImgScalerPanelInfo((prev) => ({
+            setImgScalerInfo &&
+              setImgScalerInfo((prev: any) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+            setImgScalerPanelInfo((prev: any) => ({
               ...prev,
               uploadSection: false,
               uploadPreview: true,
@@ -265,6 +264,7 @@ const UppyDashboard = ({
         close()
       }, 200)
     })
+
     uppy.on("restriction-failed", (file: any, error: any) => {
       if (file.size > 5242880) {
         setUploadErrorMsg("File size must be under 5 MB.")
@@ -272,6 +272,23 @@ const UppyDashboard = ({
         setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
       }
       setTimeout(() => {
+        setImageLoading(false)
+        setDisplayError(true)
+      }, 250)
+      uppy.cancelAll()
+      setTimeout(() => {
+        setDisplayError(false)
+        setTimeout(() => {
+          setUploadErrorMsg("")
+        }, 500)
+      }, 5000)
+      return false
+    })
+
+    uppy.on("info-visible", () => {
+      setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
+      setTimeout(() => {
+        setImageLoading(false)
         setDisplayError(true)
       }, 250)
       uppy.cancelAll()
