@@ -50,8 +50,14 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb, id }: an
             backgroundColor: $theme.colors.white,
             width: "550px",
             position: fileInputType === "productAdd" && "absolute",
-            top: fileInputType === "productAdd" && "10.5rem",
-            left: fileInputType === "productAdd" && "31.5rem",
+            top: fileInputType === "productAdd" && "7.75rem",
+            left: fileInputType === "productAdd" && "31.25rem",
+            boxShadow: fileInputType === "productAdd" && "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
+          }),
+        },
+        DialogContainer: {
+          style: ({ $theme }) => ({
+            backgroundColor: "rgba(0,0,0,0)",
           }),
         },
       }}

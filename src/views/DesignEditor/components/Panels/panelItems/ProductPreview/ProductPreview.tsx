@@ -27,12 +27,21 @@ const ProductPreview = ({ isOpen, onClose, imageUrl }: any) => {
             backgroundColor: $theme.colors.white,
             width: "550px",
             position: "absolute",
-            top: "8.25rem",
-            left: "31.5rem",
+            top: "7.75rem",
+            left: "31.25rem",
+            boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
+          }),
+        },
+        DialogContainer: {
+          style: ({ $theme }) => ({
+            backgroundColor: "rgba(0,0,0,0)",
           }),
         },
       }}
-      onClose={onClose}
+      onClose={() => {
+        setProductPhotoshootInfo((prev: any) => ({ ...prev, addPreview: "" }))
+        onClose()
+      }}
       isOpen={isOpen}
     >
       <div className={classes.previewPanel}>
@@ -66,6 +75,7 @@ const ProductPreview = ({ isOpen, onClose, imageUrl }: any) => {
                 type: "image",
                 src: imageUrl,
               })
+              setProductPhotoshootInfo((prev: any) => ({ ...prev, addPreview: "" }))
             }}
           />
           <BaseButton
