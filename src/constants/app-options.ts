@@ -98,6 +98,11 @@ export const BASE_ITEMS = [
     name: "ObjectRemover",
   },
   {
+    id: "productphotoshoot",
+    icon: "ImagineAi",
+    label: "Product PhotoShoot",
+    name: "ProductPhotoShoot",
+  },{
     id: "objectreplacer",
     icon: "ObjectReplacer",
     label: "Object Replacer",

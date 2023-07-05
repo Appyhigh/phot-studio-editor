@@ -131,8 +131,9 @@ function useEventHandlers() {
 
   const onKeyDown = useCallback(
     (e:any) => {
-      isCtrlZ(e) && undo()
-      isCtrlShiftZ(e) && redo()
+      isCtrlZ(e) && canvas?.getObjects()?.length >= 3&& canvas?.undo()
+     
+      isCtrlShiftZ(e) && canvas?.redo()
       if (isArrow(e)) {
         e.code === 'ArrowLeft' && moveLeft()
         e.code === 'ArrowRight' && moveRight()

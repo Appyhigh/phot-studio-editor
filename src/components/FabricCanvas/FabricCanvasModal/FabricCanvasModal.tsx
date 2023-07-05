@@ -1,9 +1,11 @@
 import { Modal, SIZE } from "baseui/modal"
-import Editor from "../Editor"
-import classes from "./style.module.css"
-import Icons from "~/components/Icons"
-
+import useAppContext from "~/hooks/useAppContext"
+import ModalToolItems from "../../ModalToolsEditor"
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
+  const { activePanel } = useAppContext()
+
+  // @ts-ignore
+  const Component = ModalToolItems[activePanel]
   return (
     <Modal
       animate
@@ -24,7 +26,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
         },
         Dialog: {
           style: ({ $theme }) => ({
-            backgroundColor: $theme.colors.white,
+            backgroundColor: "#F1F1F5",
             width: "100%",
             height: "100%",
             margin: "1rem 2rem",
@@ -34,7 +36,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       onClose={handleClose}
       isOpen={isOpen}
     >
-      <Editor handleClose={handleClose} />
+      {Component && <Component handleClose={handleClose}  />}
     </Modal>
   )
 }
