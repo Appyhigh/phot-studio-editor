@@ -5,21 +5,25 @@ import { COOKIE_KEYS } from "./enum"
 export const objectRemoverController = async (
   imgLink: string | undefined,
   mask_img: string | undefined,
-  file_name: string | undefined
+  file_name: string | undefined,
+  prompt?:string | undefined
 ) => {
   try {
     // @ts-ignore
+    // console.log( mask_img)
     const body = {
       input_image_link: imgLink,
       mask_image: mask_img,
-      file_name: svgExtensionToJPEG(file_name ? file_name : ""),
+      file_name: svgExtensionToJPEG(file_name ? file_name : ''),
+      prompt:prompt
       // op: 'DUMMY',
     }
-
+ 
     const config = {
       headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
     }
 
+    
     //@ts-ignore
     const order = await axios.post("https://devapi.phot.ai/app/api/v1/user_activity/object-replacer-v2", body, config)
     const order_id = order.data.order_id

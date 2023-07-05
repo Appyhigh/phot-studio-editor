@@ -5,6 +5,7 @@ import CanvasArea from "~/components/FabricCanvas/Editor/CanvasArea/CanvasArea"
 import ModalBasePanel from "~/components/FabricCanvas/Editor/Panels/ModalBasePanel/ModalBasePanel"
 import PointerIcon from "~/components/Icons/PointerIcon"
 import classes from "./style.module.css"
+import ObjectReplacer from "~/views/DesignEditor/components/ModalPanels/ObjectReplacer/ObjectReplacer"
 function ProductPhotoShoot({ handleClose }: any) {
   const [dimension, setDimension] = useState({
     width: 800,

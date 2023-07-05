@@ -13,13 +13,14 @@ import { useEditor, useFrame } from "@layerhub-io/react"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import useAppContext from "~/hooks/useAppContext"
-import { OBJECT_REMOVER } from "~/constants/contants"
+import { OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
 
 const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const editor = useEditor()
+  const {activePanel} = useAppContext()
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
@@ -31,7 +32,6 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
   const { canvas, objects } = fabricEditor
-  const { activePanel } = useAppContext()
   // let width = canvas?.getWidth()
   // let height = canvas?.getHeight()
 
@@ -51,7 +51,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
     <div>
       <Block className={clsx(classes.basePanel)}>
         {/* @ts-ignore  */}
-        {activePanel != OBJECT_REMOVER && (
+        {(activePanel != OBJECT_REPLACER  && activePanel != OBJECT_REMOVER)  && (
           <>
             <div className="p-relative addPopupBtn">
               <button
@@ -141,7 +141,9 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
           <Block
             className={classes.canvasOptions}
             onClick={() => {
+              // @ts-ignore
               if (objects?.length >= 2) {
+                 // @ts-ignore
                 canvas.undo()
               }
             }}
@@ -151,6 +153,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
           <Block
             className={classes.canvasOptions}
             onClick={() => {
+               // @ts-ignore
               canvas.redo()
             }}
           >
@@ -166,6 +169,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
+             // @ts-ignore
             handleClick={!isDoneBtnDisabled ? handleAddCanvas : null}
           />
         </Block>

@@ -21,6 +21,7 @@ export const createMaskImage = ({
   intrinsicWidth: number
   pathsArray: PathProps[]
 }) => {
+
   // point
   const scaleX = intrinsicWidth / canvasWidth
   const scaleY = intrinsicHeight / canvasHeight
@@ -54,6 +55,5 @@ export const createMaskImage = ({
   }
 
   const dataURL = canvas.toDataURL("image/jpeg")
-  // console.log(dataURL)
   return dataURL
 }

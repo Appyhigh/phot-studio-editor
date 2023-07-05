@@ -91,6 +91,7 @@ import PhotoEditor from "./PhotoEditor"
 import ObjectRemover from "./ObjectRemover"
 import ImageColorizer from "./ImageColorizer"
 import ObjectReplacer from "./ObjectReplacer"
+import RetryImg from "./RetryImg"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -185,6 +186,7 @@ class Icons {
   static ObjectRemover = ObjectRemover
   static ImageColorizer = ImageColorizer
   static ObjectReplacer = ObjectReplacer
+  static RetryImg  = RetryImg 
 }
 
 export default Icons

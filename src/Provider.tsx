@@ -24,6 +24,7 @@ import PhotoEditorContext from "./contexts/PhotoEditorContext"
 import SampleImagesContext from "./contexts/SampleImagesContext"
 import { CanvasProvider } from "./components/FabricCanvas/Canvas"
 import ObjectRemoverContext from "./contexts/ObjectRemoverContext"
+import ObjectReplacerContext from "./contexts/ObjectReplacerContext"
 import "fabric-history"
 
 const engine = new Styletron()
@@ -151,6 +152,18 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     bgRemoverBgOptions: [],
   })
 
+  const [objectReplacerInfo, setObjectReplacerInfo] = useState({
+    inputImage:"",
+    file_name:"",
+    prompt:"",
+    mask_img:"",
+    src: "",
+    preview: "",
+    result: "",
+    width:0,
+    height:0
+  })
+
   return (
     <AuthWrapper>
       <ReduxProvier store={store}>
@@ -158,6 +171,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
           <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
             <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
               <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
+                <ObjectReplacerContext.Provider value={{objectReplacerInfo, setObjectReplacerInfo}} >
                 <ObjectRemoverContext.Provider value={{ objectRemoverInfo, setObjectRemoverInfo }}>
                   <SampleImagesContext.Provider value={{ sampleImages, setSampleImages }}>
                     <ImageColorizerContext.Provider
@@ -202,6 +216,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                     </ImageColorizerContext.Provider>
                   </SampleImagesContext.Provider>
                 </ObjectRemoverContext.Provider>
+                </ObjectReplacerContext.Provider>
               </ErrorContext.Provider>
             </LoaderContext.Provider>
           </ImagesContext.Provider>
