@@ -17,7 +17,7 @@ const Transform = () => {
       if (activeObject.lineHeight > 1.5) {
         return 100
       } else if (activeObject.lineHeight <= 0.5) {
-        return 1
+        return 0
       } else {
         return activeObject.lineHeight * 100 - 50
       }

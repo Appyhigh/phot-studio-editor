@@ -27,13 +27,16 @@ const BgUpload = () => {
   const editor = useEditor()
   const [bgChoice, setBgChoice] = useState(0)
   const [renderKey, setRenderKey] = useState(0)
+  const [uploading, setUploading] = useState(false)
 
-  const handleImgAdd = () => {
+  const handleImgAdd = async () => {
+    setUploading(true)
     const imageUrl = bgUploadPreview.url
     setBgUploadPreview((prev) => ({ ...prev, showPreview: true, url: imageUrl }))
     toDataURL(imageUrl, async function (dataUrl: string) {
-      HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
+      await HandleBgChangeOption(editor, mainImgInfo, setMainImgInfo, dataUrl, changeLayerBackgroundImage)
       setBgUploadPreview((prev) => ({ ...prev, showPreview: false, url: "" }))
+      setUploading(false)
     })
   }
 
@@ -55,7 +58,7 @@ const BgUpload = () => {
       </div>
       {bgChoice === 0 ? (
         <>
-          <Scrollbars style={{ height: "450%" }}>
+          <Scrollbars style={{ height: "650%" }}>
             {bgUploading && bgChoice === 0 && (
               <div>
                 <Block className={classes.uploadInputContainer}>
@@ -93,13 +96,14 @@ const BgUpload = () => {
                   imgSrc={bgUploadPreview.url}
                   previewHandle={handleImgAdd}
                   btnTitle="Add Background"
+                  uploading={uploading}
                 />
               </Scrollbars>
             )}
           </Scrollbars>
         </>
       ) : (
-        <StockImages height="165px" />
+        <StockImages height="240px" />
       )}
     </Block>
   )

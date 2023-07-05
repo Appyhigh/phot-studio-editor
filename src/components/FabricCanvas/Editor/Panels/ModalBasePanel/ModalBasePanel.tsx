@@ -28,10 +28,13 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   const frame = useFrame()
 
   const { setImagesCt } = useContext(ImagesContext)
-
+ 
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
   const { canvas, objects } = fabricEditor
+  const { activePanel } = useAppContext()
+  // let width = canvas?.getWidth()
+  // let height = canvas?.getHeight()
 
   const handleAddCanvas = async () => {
     await getDimensions(objectRemoverInfo.result, (imgSrc: any) => {
@@ -44,8 +47,6 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
       handleClose()
     })
   }
-
-
 
   return (
     <div>
@@ -83,6 +84,58 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
             </Block>
           </>
         )}
+
+
+   {/* img zoom in zoom out  */}
+        {/* <input
+          type="range"
+          min={1}
+          max={1.5}
+          defaultValue={0}
+          step={0.1}
+          onChange={(e) => {
+            // const zoomMin = 10
+            // const zoomMax = 240
+            // let parsedValue = parseFloat(e.target.value)
+
+            // if (parsedValue < 0) {
+            //   canvas.setZoom(zoomMin / 100)
+            // } else if (parsedValue > zoomMax) {
+            //   canvas.setZoom(zoomMax / 100)
+            // } else {
+            //   canvas.setZoom(parsedValue / 100)
+            // }
+
+            // let width=canvas.getWidth();
+            // let height=canvas.getHeight();
+
+            // console.log(width,height)
+            //  console.log(e.target.value)
+            //  let val=e.target.value;
+            // canvas.setDimensions({
+            //   width: width * val,
+            //   height: height * val,
+            // })
+            let bg=canvas.getObjects()[0];
+
+            canvas.setZoom(1);
+            canvas.setDimensions({
+              width:width,
+              height:height
+            })
+            bg.scale(1)
+            bg.center()
+            canvas.setZoom(e.target.value)
+            canvas.setDimensions({
+              width: width * e.target.value,
+              height: height * e.target.value,
+            })
+            bg.scale(e.target.value)
+            bg.center()
+
+            // canvas.setDimensions({ width: newWidth, height: newHeight });
+          }}
+        /> */}
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">

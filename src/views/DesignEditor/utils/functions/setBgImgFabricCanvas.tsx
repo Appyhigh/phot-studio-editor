@@ -30,10 +30,15 @@ export const setBgImgFabricCanvas = async (imgSrc: any, canvas: any, result: any
         canvas.add(img)
         canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
       } else {
+        canvasWidth=400;
+        canvasHeight=400;
+        scale = Math.max(canvasWidth / width, canvasHeight / height)
+        img.scale(scale)
         canvas.setDimensions({
-          width: img.width,
-          height: img.height,
+          width: width * scale,
+          height: height * scale,
         })
+
         canvas.add(img)
         canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
       }

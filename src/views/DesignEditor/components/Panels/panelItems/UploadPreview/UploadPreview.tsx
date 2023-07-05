@@ -22,7 +22,15 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import BaseButton from "~/components/UI/Button/BaseButton"
 
-const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btnTitle, previewHandle }: any) => {
+const UploadPreview = ({
+  discardHandler,
+  uploadType,
+  previewHeading,
+  imgSrc,
+  btnTitle,
+  previewHandle,
+  uploading,
+}: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
   const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
@@ -134,7 +142,9 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                 handleClick={() => {
                   if (uploadType === REMOVE_BACKGROUND) {
                     removeBg()
-                  } else previewHandle()
+                  } else {
+                    !uploading && previewHandle()
+                  }
                 }}
               />
             )}

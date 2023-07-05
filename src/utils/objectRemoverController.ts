@@ -22,7 +22,6 @@ export const objectRemoverController = async (
     const config = {
       headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
     }
-
     console.log(body);
     
     //@ts-ignore
