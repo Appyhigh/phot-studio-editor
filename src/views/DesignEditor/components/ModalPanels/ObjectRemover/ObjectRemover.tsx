@@ -109,7 +109,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectRemoverInfo.src, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
         .then((response) => {
-          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0] }))
+          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0] ,src:response[0]}))
           setResultLoading(false)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
