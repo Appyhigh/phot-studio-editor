@@ -28,6 +28,7 @@ import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimension
 import BaseButton from "~/components/UI/Button/BaseButton"
 import Prompt from "~/components/Prompt/Prompt"
 import ImagesCount from "~/components/ImagesCount/ImagesCount"
+import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -93,6 +94,8 @@ const ImagineAI = () => {
         textToArtInputInfo.uploaded_img
       )
         .then((responseData) => {
+          addImgToCanvas(responseData["data"]["image"][0])
+          setCurrentActiveImg(0)
           // @ts-ignore
           setErrorInfo((prev) => ({ ...prev, showError: false }))
           setTextToArtPanelInfo((prev: any) => ({
@@ -128,14 +131,18 @@ const ImagineAI = () => {
   const frame = useFrame()
 
   const addImgToCanvas = async (imageUrl: string) => {
-    await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
+    if (currentActiveImg == -1) {
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+          return prev + 1
+        })
       })
-    })
+    } else {
+      UpdateObjectFunc(imageUrl, editor, frame)
+    }
   }
 
   return (
@@ -244,7 +251,9 @@ const ImagineAI = () => {
               margin="5px 0px 0px 20px"
               disabledBgColor="#92929d"
               fontSize="16px"
-              disabled={(textToArtInputInfo.showclearTooltip || (textToArtInputInfo.prompt).trim().length == 0 )? true : false}
+              disabled={
+                textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.trim().length == 0 ? true : false
+              }
               handleClick={() => {
                 generateImage()
               }}
