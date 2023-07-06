@@ -12,7 +12,7 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
 
   useEffect(() => {
     setTimeout(() => {
-      handleBrush()
+      handleBrush && handleBrush()
     }, 5000)
   }, [brushTooltipShow])
 

@@ -77,7 +77,6 @@ function Canvas({ width, height }: any) {
     fabric.Image.fromURL(
       "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473",
       (img) => {
-        img.crossOrigin = "anonymous"
         canvas.backgroundImage = img
         canvas.renderAll()
         canvas.add(img)
