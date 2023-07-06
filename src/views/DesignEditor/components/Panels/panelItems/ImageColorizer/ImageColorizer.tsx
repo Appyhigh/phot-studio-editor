@@ -22,6 +22,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import ErrorContext from "~/contexts/ErrorContext"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
@@ -56,7 +57,8 @@ const ImageColorizer = () => {
       imgColorizerController(ImgColorizerInfo.src)
         .then((response) => {
           setImageLoading(false)
-          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [ response] }))
+          setImgColorizerInfo((prev: any) => ({ ...prev, resultImages: [response] }))
+          addImg(response, 0)
         })
         .catch((error) => {
           setImageLoading(false)
@@ -120,15 +122,29 @@ const ImageColorizer = () => {
 
   const frame = useFrame()
   const addImg = async (imageUrl: string, _idx: number) => {
-    setCurrentActiveImg(_idx)
-    await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
+    if (currentActiveImg == -1) {
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setImgColorizerInfo
+          )
+          return prev + 1
+        })
       })
-    })
+    } else {
+      UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
+    }
+    setCurrentActiveImg(_idx)
   }
 
   return (
@@ -205,7 +221,7 @@ const ImageColorizer = () => {
         <div className={classes.resultSection}>
           <Block
             onClick={() => {
-              setImgColorizerInfo((prev: any) => ({ ...prev, id: "",src:"", resultImages: [] }))
+              setImgColorizerInfo((prev: any) => ({ ...prev, id: "", src: "", resultImages: [] }))
               setImgColorizerPanelInfo((prev: any) => ({
                 ...prev,
                 tryFilters: false,
@@ -223,35 +239,30 @@ const ImageColorizer = () => {
           </Block>
 
           <div className={classes.resultImages}>
-          <div className={clsx("pointer", classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
-              <img
-                src={ImgColorizerInfo.src}
-                alt="orginal-img"
-                onClick={() => {
-                  addImg(ImgColorizerInfo.src, 1)
-                }}
-              />
+            <div className={clsx(classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
+              <img src={ImgColorizerInfo.src} alt="orginal-img" />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
-            { !imageLoading&& ImgColorizerInfo?.resultImages?.map((each, _idx) => {
-              return (
-                <div
-                  className={clsx("pointer", classes.eachImg, currentActiveImg === _idx && classes.currentActiveImg)}
-                  key={_idx}
-                >
-                  <img
-                    src={each}
-                    alt="result-img"
-                    onClick={() => {
-                      addImg(each, _idx)
-                    }}
-                  />
+            {!imageLoading &&
+              ImgColorizerInfo?.resultImages?.map((each, _idx) => {
+                return (
+                  <div
+                    className={clsx("pointer", classes.eachImg, currentActiveImg === _idx && classes.currentActiveImg)}
+                    key={_idx}
+                  >
+                    <img
+                      src={each}
+                      alt="result-img"
+                      onClick={() => {
+                        addImg(each, _idx)
+                      }}
+                    />
 
-                  <div className={classes.resultLabel}>{"Result"}</div>
-                </div>
-              )
-            })}
+                    <div className={classes.resultLabel}>{"Result"}</div>
+                  </div>
+                )
+              })}
             {imageLoading &&
               Array.from(Array(1).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
