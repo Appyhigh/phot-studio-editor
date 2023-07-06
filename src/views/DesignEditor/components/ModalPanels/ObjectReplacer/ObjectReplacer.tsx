@@ -324,7 +324,7 @@ return (()=>{
             // @ts-ignore
             canvas?.clearHistory()
             setStepsComplete((prev) => ({ ...prev }))
-            setStepsComplete((prev) => ({ ...prev }))
+
           }}
           fontSize="14px"
           fontWeight="500"
@@ -361,8 +361,6 @@ return (()=>{
               pathsArray: paths,
             })
             setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
-            setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
-
             // @ts-ignore
             canvas.isDrawingMode = false
             // @ts-ignore
@@ -671,14 +669,6 @@ return (()=>{
         heading={"Final output"}
         handleClick={() => {
           if (stepsComplete.fourthStep && !steps.fourthStep) {
-            setSteps((prev) => ({
-              ...prev,
-              fourthStep: true,
-              thirdStep: false,
-              firstStep: false,
-              secondStep: false,
-              fifthStep: false,
-            }))
             setSteps((prev) => ({
               ...prev,
               fourthStep: true,
