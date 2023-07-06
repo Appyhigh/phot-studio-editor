@@ -1,18 +1,15 @@
-import { useCallback, useEffect } from 'react'
-import { isArrow, isCtrlShiftZ, isCtrlZ } from '../utils/keyboard'
-import useFabricEditor from '../../../../hooks/useFabricEditor'
-import useCoreHandler from './useCoreHandler'
+import { useCallback, useEffect } from "react"
+import { isArrow, isCtrlShiftZ, isCtrlZ } from "../utils/keyboard"
+import useFabricEditor from "../../../../hooks/useFabricEditor"
 function useEventHandlers() {
-
-  const {fabricEditor, setFabricEditor} = useFabricEditor()
-  const {removeObject} = useCoreHandler()
-  const { canvas, activeObject } = fabricEditor
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
+  const { canvas, activeObject }: any = fabricEditor
   /**
    * Canvas Mouse wheel handler
    */
 
   const onMouseWheel = useCallback(
-    (event:any) => {
+    (event: any) => {
       if (canvas && event.e.ctrlKey) {
         const delta = event.e.deltaY
         let zoomRatio = canvas.getZoom()
@@ -22,7 +19,7 @@ function useEventHandlers() {
           zoomRatio += 0.04
         }
         // setZoomRatio(zoomRatio)
-        setFabricEditor({...fabricEditor, zoomRatio})
+        setFabricEditor({ ...fabricEditor, zoomRatio })
       }
       event.e.preventDefault()
       event.e.stopPropagation()
@@ -30,20 +27,27 @@ function useEventHandlers() {
     [canvas]
   )
 
-  const onDeleteKey = useCallback((event:any) => {
-    // Key codes for backspace and delete keys
-    if (canvas) {
-      canvas.remove(canvas.getActiveObject())
-    }
-  }, [canvas])
+  const onDeleteKey = useCallback(
+    (event: any) => {
+      // Key codes for backspace and delete keys
+      if (canvas) {
+        if (event.keyCode === 8 || event.keyCode === 46) {
+          if (canvas.getActiveObject().imageType != "product") {
+            canvas.remove(canvas.getActiveObject())
+          }
+        }
+      }
+    },
+    [canvas]
+  )
 
   useEffect(() => {
     if (canvas) {
-      canvas.on('mouse:wheel', onMouseWheel)
+      canvas.on("mouse:wheel", onMouseWheel)
     }
     return () => {
       if (canvas) {
-        canvas.off('mouse:wheel', onMouseWheel)
+        canvas.off("mouse:wheel", onMouseWheel)
       }
     }
   }, [canvas])
@@ -53,32 +57,29 @@ function useEventHandlers() {
    */
 
   const onSelect = useCallback(
-    ({ target }:any) => {
+    ({ target }: any) => {
       if (target) {
         if (canvas) {
-          setFabricEditor({...fabricEditor, activeObject: canvas.getActiveObject()})
+          setFabricEditor({ ...fabricEditor, activeObject: canvas.getActiveObject() })
         }
       } else {
-        setFabricEditor({...fabricEditor, activeObject: null})
+        setFabricEditor({ ...fabricEditor, activeObject: null })
       }
     },
     [canvas]
   )
 
-  
-
-
   useEffect(() => {
     if (canvas) {
-      canvas.on('selection:created', onSelect)
-      canvas.on('selection:cleared', onSelect)
-      canvas.on('selection:updated', onSelect)
+      canvas.on("selection:created", onSelect)
+      canvas.on("selection:cleared", onSelect)
+      canvas.on("selection:updated", onSelect)
     }
     return () => {
       if (canvas) {
-        canvas.off('selection:cleared', onSelect)
-        canvas.off('selection:created', onSelect)
-        canvas.off('selection:updated', onSelect)
+        canvas.off("selection:cleared", onSelect)
+        canvas.off("selection:created", onSelect)
+        canvas.off("selection:updated", onSelect)
       }
     }
   }, [canvas])
@@ -130,26 +131,25 @@ function useEventHandlers() {
   }, [activeObject, canvas])
 
   const onKeyDown = useCallback(
-    (e:any) => {
-      isCtrlZ(e) && canvas?.getObjects()?.length >= 3&& canvas?.undo()
-     
+    (e: any) => {
+      isCtrlZ(e) && canvas?.getObjects()?.length >= 3 && canvas?.undo()
+
       isCtrlShiftZ(e) && canvas?.redo()
       if (isArrow(e)) {
-        e.code === 'ArrowLeft' && moveLeft()
-        e.code === 'ArrowRight' && moveRight()
-        e.code === 'ArrowDown' && moveDown()
-        e.code === 'ArrowUp' && moveUp()
+        e.code === "ArrowLeft" && moveLeft()
+        e.code === "ArrowRight" && moveRight()
+        e.code === "ArrowDown" && moveDown()
+        e.code === "ArrowUp" && moveUp()
       }
     },
     [canvas, activeObject]
   )
   useEffect(() => {
-    document.addEventListener('keydown', onKeyDown)
-    document.addEventListener('keydown', onDeleteKey)
+    document.addEventListener("keydown", onKeyDown)
+    document.addEventListener("keydown", onDeleteKey)
     return () => {
-      document.removeEventListener('keydown', onKeyDown)
-      document.removeEventListener('keydown', onDeleteKey)
-
+      document.removeEventListener("keydown", onKeyDown)
+      document.removeEventListener("keydown", onDeleteKey)
     }
   }, [canvas, activeObject])
 }

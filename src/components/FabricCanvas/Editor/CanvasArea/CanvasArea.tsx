@@ -2,20 +2,27 @@ import useAppContext from "~/hooks/useAppContext"
 import Canvas from "../../../FabricCanvas/Canvas"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
+import LoaderSpinner from "../../../../views/Public/images/loader-spinner.svg"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   const { activePanel } = useAppContext()
+  const { canvasLoader } = useContext(CanvasLoaderContext)
 
   useEffect(() => {
     setTimeout(() => {
-      handleBrush()
+      handleBrush && handleBrush()
     }, 5000)
   }, [brushTooltipShow])
 
-  // @ts-ignore
   return (
-    <div className={classes.cavasarea}>
+    <div className={classes.canvasarea}>
+      {canvasLoader && (
+        <div className={classes.loaderContainer}>
+          <img src={LoaderSpinner} />
+        </div>
+      )}
       {brushTooltipShow && (
         <div className={classes.toolTip}>
           <div className={classes.brushIcon}>

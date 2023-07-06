@@ -11,6 +11,7 @@ import { useEditor } from "@layerhub-io/react"
 import useAppContext from "~/hooks/useAppContext"
 import FabricCanvasModal from "~/components/FabricCanvas/FabricCanvasModal/FabricCanvasModal"
 import { PanelType } from "~/constants/app-options"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 const GraphicEditor = () => {
   // Initially set the canvas background as Transparent Checkbox Image
@@ -36,6 +37,7 @@ const GraphicEditor = () => {
       setIsOpen(false)
     }
   }, [activePanel])
+  const { setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
 
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
 
@@ -61,8 +63,18 @@ const GraphicEditor = () => {
           isOpen={isOpen}
           handleClose={() => {
             setIsOpen(false)
-            setObjectRemoverInfo((prev:any) => ({ ...prev, src: "", preview: "", result: "" }))
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", result: "" }))
             setActivePanel(null as any)
+            setProductPhotoshootInfo({
+              src: "",
+              preview: "",
+              prompt: "",
+              result: [],
+              tooltip: false,
+              finalImage: "",
+              again: false,
+              prevObjects: [],
+            })
           }}
         />
       </div>

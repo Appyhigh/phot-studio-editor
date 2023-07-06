@@ -70,18 +70,20 @@ const UploadPreview = ({
   return (
     <div>
       <Block paddingTop={"10px"}>
-
-        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER &&  uploadType != MODAL_IMG_UPLOAD&& uploadType != OBJECT_REMOVER &&uploadType!=OBJECT_REPLACER && (
-
-          <div
-            className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
-            onClick={() => {
-              discardHandler()
-            }}
-          >
-            <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>{previewHeading}</Block>
-          </div>
-        )}
+        {uploadType != MAIN_IMG_Bg &&
+          uploadType !== IMAGE_COLORIZER &&
+          uploadType != MODAL_IMG_UPLOAD &&
+          uploadType != OBJECT_REMOVER &&
+          uploadType != OBJECT_REPLACER && (
+            <div
+              className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
+              onClick={() => {
+                discardHandler()
+              }}
+            >
+              <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>{previewHeading}</Block>
+            </div>
+          )}
         {uploadType === IMAGE_COLORIZER && (
           <Block
             onClick={() => {
@@ -120,7 +122,7 @@ const UploadPreview = ({
                 alt="preview"
               />
 
-              {uploadType != MODAL_IMG_UPLOAD &&uploadType!=OBJECT_REMOVER && uploadType!=OBJECT_REPLACER &&(
+              {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
                 <Block
                   className={clsx(
                     "p-absolute pointer",
