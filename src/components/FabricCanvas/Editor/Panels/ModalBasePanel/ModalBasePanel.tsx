@@ -8,6 +8,7 @@ import BaseButton from "../../../../UI/Button/BaseButton"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
+import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/ProductPreview/ProductPreview"
 import useAppContext from "~/hooks/useAppContext"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
@@ -17,6 +18,8 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
+  const { objectReplacerInfo } = useContext(ObjectReplacerContext)
+
   const { activePanel } = useAppContext()
   const [showPreview, setShowPreview] = useState(false)
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -30,6 +33,17 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const closeProductPreview = () => {
     setShowPreview(false)
   }
+  // @ts-ignore
+
+  const isDone =
+    // @ts-ignore
+    activePanel === OBJECT_REMOVER
+      ? objectRemoverInfo.result
+        ? true
+        : false
+      : objectReplacerInfo.result
+      ? true
+      : false
 
   return (
     <div>
@@ -92,7 +106,9 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
           <Block
             className={classes.canvasOptions}
             onClick={() => {
+              // @ts-ignore
               if (objects?.length >= 2) {
+                // @ts-ignore
                 canvas.undo()
               }
             }}
@@ -102,6 +118,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
           <Block
             className={classes.canvasOptions}
             onClick={() => {
+              // @ts-ignore
               canvas.redo()
             }}
           >

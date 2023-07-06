@@ -8,6 +8,7 @@ import ProductPhotoshootEditor from "../Editor/ProductPhotoshootEditor"
 import ErrorContext from "~/contexts/ErrorContext"
 import Toast from "~/components/Toast/Toast"
 import { useContext } from "react"
+import ObjectReplacerEditor from "~/components/ModalToolsEditor/ObjectReplacerEditor/ObjectReplacerEditor"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
@@ -57,6 +58,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
         />
       )}
       {Component && <Component handleClose={handleClose} />}
+      {/* <ObjectReplacerEditor/> */}
     </Modal>
   )
 }
