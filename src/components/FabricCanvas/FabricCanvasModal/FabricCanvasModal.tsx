@@ -10,9 +10,9 @@ import Toast from "~/components/Toast/Toast"
 import { useContext } from "react"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
+  const { activePanel } = useAppContext()
   // @ts-ignore
   const Component = ModalToolItems[activePanel]
-  const { activePanel } = useAppContext()
   const { errorInfo } = useContext(ErrorContext)
 
   return (
