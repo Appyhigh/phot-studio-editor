@@ -229,14 +229,8 @@ const ImageColorizer = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
-              <img
-                src={ImgColorizerInfo.src}
-                alt="orginal-img"
-                onClick={() => {
-                  addImg(ImgColorizerInfo.src, 1)
-                }}
-              />
+            <div className={clsx(classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
+              <img src={ImgColorizerInfo.src} alt="orginal-img" />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>

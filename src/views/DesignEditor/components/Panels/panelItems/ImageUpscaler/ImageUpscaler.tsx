@@ -398,14 +398,8 @@ const ImageUpscaler = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
-              <img
-                src={imgScalerInfo.src}
-                alt="result-img"
-                onClick={() => {
-                  addImg(imgScalerInfo.src, 2)
-                }}
-              />
+            <div className={clsx(classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
+              <img src={imgScalerInfo.src} alt="result-img" />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>

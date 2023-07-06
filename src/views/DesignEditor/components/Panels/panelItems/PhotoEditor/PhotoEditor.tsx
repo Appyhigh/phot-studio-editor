@@ -276,15 +276,8 @@ const PhotoEditor = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
-              <img
-                src={photoEditorInfo.src}
-                alt="orginal-img"
-                onClick={() => {
-                  addImg(photoEditorInfo.src, 0)
-                }}
-              />
-
+            <div className={clsx(classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
+              <img src={photoEditorInfo.src} alt="orginal-img" />
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
             {photoEditorInfo.result.map((each, idx) => {
