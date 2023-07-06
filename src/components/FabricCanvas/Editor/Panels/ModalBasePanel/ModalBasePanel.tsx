@@ -35,55 +35,57 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
     <div>
       <Block className={clsx(classes.basePanel)}>
         {activePanel == ("ProductPhotoshoot" as any) && (
-          <div
-            className="p-relative addPopupBtn"
-            style={{
-              cursor: productPhotoshootInfo.result.length == 0 ? "not-allowed" : "",
-            }}
-          >
-            <button
-              className={classes.basePanelBtn}
+          <>
+            <div
+              className="p-relative addPopupBtn"
               style={{
-                backgroundColor: productPhotoshootInfo.result.length == 0 ? "#6729f3" : "#F1F1F5",
-                color: productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D",
-                pointerEvents: productPhotoshootInfo.result.length == 0 ? "auto" : "none",
-              }}
-              onClick={() => {
-                setShowAddPopup(true)
+                cursor: productPhotoshootInfo.result.length == 0 ? "not-allowed" : "",
               }}
             >
-              <span className="d-flex align-items-center">
-                <span className="pr-1">
-                  <Icons.Plus size={16} color={productPhotoshootInfo.result.length == 0 ? "#FAFAFB" : "#92929D"} />
+              <button
+                className={classes.basePanelBtn}
+                style={{
+                  backgroundColor: productPhotoshootInfo.result.length == 0 ? "#6729f3" : "#F1F1F5",
+                  color: productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D",
+                  pointerEvents: productPhotoshootInfo.result.length == 0 ? "auto" : "none",
+                }}
+                onClick={() => {
+                  setShowAddPopup(true)
+                }}
+              >
+                <span className="d-flex align-items-center">
+                  <span className="pr-1">
+                    <Icons.Plus size={16} color={productPhotoshootInfo.result.length == 0 ? "#FAFAFB" : "#92929D"} />
+                  </span>
+                  Add
+                  <span className="pl-3">
+                    <Icons.ArrowDown size={14} color={productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D"} />
+                  </span>
                 </span>
-                Add
-                <span className="pl-3">
-                  <Icons.ArrowDown size={14} color={productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D"} />
-                </span>
-              </span>
-            </button>
-            <UploadImgModal
-              fileInputType="productAdd"
-              isOpen={showAddPopup}
-              handleClose={handleCloseAddPopup}
-              id={"ProductAddPopup"}
-            />
-            <ProductPreview
-              isOpen={productPhotoshootInfo.addPreview && showPreview}
-              onClose={closeProductPreview}
-              imageUrl={productPhotoshootInfo.addPreview}
-            />
-          </div>
+              </button>
+              <UploadImgModal
+                fileInputType="productAdd"
+                isOpen={showAddPopup}
+                handleClose={handleCloseAddPopup}
+                id={"ProductAddPopup"}
+              />
+              <ProductPreview
+                isOpen={productPhotoshootInfo.addPreview && showPreview}
+                onClose={closeProductPreview}
+                imageUrl={productPhotoshootInfo.addPreview}
+              />
+            </div>
+            <Block
+              className="flex-center pointer p-relative resizeCanvasBtn"
+              onMouseOver={() => {
+                setCanvasResizePopup(true)
+              }}
+            >
+              <Icons.CanvasResize size={24} />
+              <ResizeCanvasPopup show={showCanvasResizePopup} />
+            </Block>
+          </>
         )}
-        <Block
-          className="flex-center pointer p-relative resizeCanvasBtn"
-          onMouseOver={() => {
-            setCanvasResizePopup(true)
-          }}
-        >
-          <Icons.CanvasResize size={24} />
-          <ResizeCanvasPopup show={showCanvasResizePopup} />
-        </Block>
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
