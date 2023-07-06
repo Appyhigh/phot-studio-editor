@@ -7,15 +7,20 @@ import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/Re
 import BaseButton from "../../../../UI/Button/BaseButton"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
+import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/ProductPreview/ProductPreview"
 import useAppContext from "~/hooks/useAppContext"
+import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 
 const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
+  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const { activePanel } = useAppContext()
   const [showPreview, setShowPreview] = useState(false)
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
+  const { canvas, objects }: any = fabricEditor
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
@@ -82,10 +87,22 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
-          <Block className={classes.canvasOptions} onClick={() => {}}>
+          <Block
+            className={classes.canvasOptions}
+            onClick={() => {
+              if (objects?.length >= 2) {
+                canvas.undo()
+              }
+            }}
+          >
             <Icons.Undo size={22} />
           </Block>
-          <Block className={classes.canvasOptions} onClick={() => {}}>
+          <Block
+            className={classes.canvasOptions}
+            onClick={() => {
+              canvas.redo()
+            }}
+          >
             <Icons.Redo size={22} />
           </Block>
           <BaseButton
@@ -98,7 +115,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
-            handleClick={!isDoneBtnDisabled ? handleDone : null}
+            handleClick={!isDoneBtnDisabled || objectRemoverInfo.result ? handleDone : null}
           />
         </Block>
       </Block>
