@@ -11,6 +11,7 @@ import {
   LOCAL_SAMPLE_IMG,
   MAIN_IMG_Bg,
   MODAL_IMG_UPLOAD,
+  OBJECT_REMOVER,
   REMOVE_BACKGROUND,
   TEXT_TO_ART,
 } from "~/constants/contants"
@@ -20,7 +21,15 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import BaseButton from "~/components/UI/Button/BaseButton"
 
-const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btnTitle, previewHandle }: any) => {
+const UploadPreview = ({
+  discardHandler,
+  uploadType,
+  previewHeading,
+  imgSrc,
+  btnTitle,
+  previewHandle,
+  uploading,
+}: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
   const virtualMaskImageRef = useRef<HTMLImageElement | null>(null)
   const virtualCanvasSrcImageRef = useRef<HTMLCanvasElement | null>(null)
@@ -60,16 +69,19 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
   return (
     <div>
       <Block paddingTop={"10px"}>
-        {uploadType != MAIN_IMG_Bg && uploadType !== IMAGE_COLORIZER && uploadType != MODAL_IMG_UPLOAD && (
-          <div
-            className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
-            onClick={() => {
-              discardHandler()
-            }}
-          >
-            <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>{previewHeading}</Block>
-          </div>
-        )}
+        {uploadType != MAIN_IMG_Bg &&
+          uploadType !== IMAGE_COLORIZER &&
+          uploadType != MODAL_IMG_UPLOAD &&
+          uploadType != OBJECT_REMOVER && (
+            <div
+              className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
+              onClick={() => {
+                discardHandler()
+              }}
+            >
+              <Icons.ChevronRight size="16" /> <Block className={clsx(classes.panelHeading)}>{previewHeading}</Block>
+            </div>
+          )}
         {uploadType === IMAGE_COLORIZER && (
           <Block
             onClick={() => {
@@ -108,7 +120,7 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                 alt="preview"
               />
 
-              {uploadType != MODAL_IMG_UPLOAD && (
+              {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && (
                 <Block
                   className={clsx(
                     "p-absolute pointer",
@@ -132,7 +144,9 @@ const UploadPreview = ({ discardHandler, uploadType, previewHeading, imgSrc, btn
                 handleClick={() => {
                   if (uploadType === REMOVE_BACKGROUND) {
                     removeBg()
-                  } else previewHandle()
+                  } else {
+                    !uploading && previewHandle()
+                  }
                 }}
               />
             )}

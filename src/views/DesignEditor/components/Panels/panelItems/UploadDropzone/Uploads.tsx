@@ -19,13 +19,13 @@ export default function ({
   setImgUpload,
 }: any) {
   const [selectedImage, setSelectedImage] = React.useState<any>(null)
-  const [renderKey, setRenderKey] = useState(0)
+  //   const [renderKey, setRenderKey] = useState(0)
   const [imageLoading, setImageLoading] = useState(false)
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderKey((prev) => prev + 1)
-    }, 4000)
-  }, [imageLoading])
+  //   useEffect(() => {
+  //     setTimeout(() => {
+  //       setRenderKey((prev) => prev + 1)
+  //     }, 4000)
+  //   }, [imageLoading])
 
   return (
     <>
@@ -35,9 +35,11 @@ export default function ({
             <Block className={classes.panelHeading}>{mainHeading}</Block>
           </Block>
         </Block>
+
         <div>
           {!imageLoading && (
-            <div key={renderKey}>
+            // <div key={renderKey}>
+            <div>
               <UppyDashboard
                 setImageLoading={setImageLoading}
                 fileInputType={fileInputType}

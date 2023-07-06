@@ -73,8 +73,6 @@ interface PointProps {
 }
 
 export interface PathProps {
-  drawMode: boolean
-  strokeColor: string
   strokeWidth: number
   paths: PointProps[]
 }
