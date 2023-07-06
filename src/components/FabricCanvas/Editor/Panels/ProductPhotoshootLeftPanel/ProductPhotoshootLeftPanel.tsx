@@ -349,8 +349,10 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
                   className={clsx(classes.sampleImage, "flex-center")}
                   style={{ backgroundImage: `url(${image})` }}
                   onClick={() => {
-                    setSelectedSampleImg(index)
-                    setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image }))
+                    if (!productPhotoshootInfo.preview) {
+                      setSelectedSampleImg(index)
+                      setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image }))
+                    }
                   }}
                 >
                   {selectedSampleImg == index && <Icons.Selection size={"24"} />}
