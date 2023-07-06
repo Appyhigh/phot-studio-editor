@@ -23,6 +23,7 @@ import { useAuth } from "~/hooks/useAuth"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -103,9 +104,9 @@ const ImageUpscaler = () => {
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
       setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
-
       img2Upscaler(imgScalerInfo.src)
         .then((response) => {
+          addImg(response, 0)
           setImageLoading(false)
           setImgScalerInfo((prev: any) => ({ ...prev, result: [response] }))
         })
@@ -143,6 +144,7 @@ const ImageUpscaler = () => {
 
       img4Upscaler(imgScalerInfo.src)
         .then((response) => {
+          addImg(response, 1)
           setImageLoading(false)
           setImgScalerInfo((prev: any) => ({ ...prev, result: [...prev.result, response] }))
         })
@@ -180,6 +182,7 @@ const ImageUpscaler = () => {
 
       imgBothUpscaler(imgScalerInfo.src)
         .then((response) => {
+          addImg(response["4k"].url, 1)
           setImageLoading(false)
           setImgScalerInfo((prev: any) => ({
             ...prev,
@@ -209,15 +212,29 @@ const ImageUpscaler = () => {
   const frame = useFrame()
 
   const addImg = async (imageUrl: string, _idx: number) => {
-    setCurrentActiveImg(_idx)
-    await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
+    if (currentActiveImg == -1) {
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setImgScalerInfo
+          )
+          return prev + 1
+        })
       })
-    })
+    } else {
+      UpdateObjectFunc(imageUrl, editor, frame, imgScalerInfo)
+    }
+    setCurrentActiveImg(_idx)
   }
 
   const discardHandler = () => {
@@ -389,14 +406,8 @@ const ImageUpscaler = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
-              <img
-                src={imgScalerInfo.src}
-                alt="result-img"
-                onClick={() => {
-                  addImg(imgScalerInfo.src, 2)
-                }}
-              />
+            <div className={clsx(classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
+              <img src={imgScalerInfo.src} alt="result-img" />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>

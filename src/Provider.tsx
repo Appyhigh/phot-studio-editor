@@ -57,6 +57,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   const [imagesCt, setImagesCt] = useState(0)
 
   const [textToArtInputInfo, setTextToArtInputInfo] = useState({
+    id: "",
     prompt: "",
     style: [],
     images_generation_ct: 1,
@@ -104,6 +105,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
   })
 
   const [photoEditorInfo, setPhotoEditorInfo] = useState({
+    id: "",
     src: "",
     original: "",
     prompt: "",
@@ -164,6 +166,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     result: "",
     width: 0,
     height: 0,
+
   })
 
   const [canvasLoader, setCanvasLoader] = useState(false)
@@ -179,6 +182,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     prevObjects: [],
     addPreview: "",
     removeBg: false,
+
   })
 
   return (
@@ -191,6 +195,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                 <ObjectReplacerContext.Provider value={{ objectReplacerInfo, setObjectReplacerInfo }}>
                   <ObjectRemoverContext.Provider value={{ objectRemoverInfo, setObjectRemoverInfo }}>
                     <SampleImagesContext.Provider value={{ sampleImages, setSampleImages }}>
+
                       <CanvasLoaderContext.Provider value={{ canvasLoader, setCanvasLoader }}>
                         <ProductPhotoshootContext.Provider value={{ productPhotoshootInfo, setProductPhotoshootInfo }}>
                           <ImageColorizerContext.Provider
@@ -247,6 +252,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
                           </ImageColorizerContext.Provider>
                         </ProductPhotoshootContext.Provider>
                       </CanvasLoaderContext.Provider>
+
                     </SampleImagesContext.Provider>
                   </ObjectRemoverContext.Provider>
                 </ObjectReplacerContext.Provider>
