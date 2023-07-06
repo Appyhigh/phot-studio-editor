@@ -4,9 +4,11 @@ import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import { useEffect } from "react"
 
+import useFabricEditor from "src/hooks/useFabricEditor"
 function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   const { activePanel } = useAppContext()
 
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
   useEffect(() => {
     setTimeout(() => {
       handleBrush()
@@ -25,6 +27,7 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
         </div>
       )}
       <Canvas width={width} height={height} />
+    
     </div>
   )
 }

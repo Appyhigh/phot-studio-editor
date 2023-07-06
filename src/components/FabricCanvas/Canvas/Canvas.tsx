@@ -113,7 +113,7 @@ function Canvas({ width, height }: any) {
       style={{
         width: "600px",
         height: "740px",
-
+        position: fabricEditor.brushShow && 'relative'
       }}
       className="editor-canvas d-flex justify-center"
       id="cont"
@@ -195,6 +195,16 @@ function Canvas({ width, height }: any) {
         }}
       /> */}
       <canvas id="canvas"></canvas>
+      {fabricEditor.brushShow && (
+        <div className={classes.circleCon}>
+          <div
+            style={{ width: canvas?.freeDrawingBrush?.width, height: canvas?.freeDrawingBrush?.width}}
+            className={classes.circle}
+          >
+            &nbsp;
+          </div>
+        </div>
+      )}
     </div>
   )
 }

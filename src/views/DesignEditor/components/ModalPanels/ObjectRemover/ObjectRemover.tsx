@@ -153,6 +153,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   useEffect(() => {
     if (steps.secondStep) {
       handleBrushToolTip(true)
+  
       if (canvas) {
         // @ts-ignore
         canvas.isDrawingMode = true
