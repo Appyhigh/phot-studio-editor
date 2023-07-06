@@ -41,11 +41,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     error: false,
     errorMsg: "",
   })
-  const setDimensionOfSampleImg=async()=>{
-    await getDimensions((objectReplacerInfo.preview),(imgSrc:any)=>{
-     setObjectReplacerInfo((prev:any)=>({...prev,width:imgSrc.width,height:imgSrc.height}))
+
+  const setDimensionOfSampleImg = async (img: any) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
     })
   }
+
   const { user } = authState
   const [steps, setSteps] = useState({
     firstStep: true,
@@ -63,11 +65,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     fifthStep: false,
   })
 
-
-  
-
-  
-
   const handleBrushSizeChange = (e: any) => {
     const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
     const base64CursorString = btoa(cursor)
@@ -80,7 +77,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       // @ts-ignore
       (canvas.freeDrawingBrush.width = brushSize)
   }
-  
+
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
       setBgImgFabricCanvas(imgSrc, canvas, img)
@@ -112,7 +109,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
-  
+
   useEffect(() => {
     setIsError((prev) => ({
       ...prev,
@@ -120,29 +117,33 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       errorMsg: "",
     }))
     if (steps.fourthStep) {
-      getOutputImg()      
+      getOutputImg()
     }
   }, [steps.fourthStep])
 
   const getOutputImg = () => {
-
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-      objectRemoverController(objectReplacerInfo.src, objectReplacerInfo.mask_img, objectReplacerInfo.file_name, objectReplacerInfo.prompt)
+      objectRemoverController(
+        objectReplacerInfo.src,
+        objectReplacerInfo.mask_img,
+        objectReplacerInfo.file_name,
+        objectReplacerInfo.prompt
+      )
         .then((response) => {
-          console.log("response0",response);
-          
+          console.log("response0", response)
+
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
         })
 
-        .catch((error) => {         
+        .catch((error) => {
           setIsError((prev) => ({
             ...prev,
             error: true,
@@ -178,7 +179,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           <UploadPreview
             discardHandler={() => {
               setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
-              setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false,fourthStep:false,fifthStep:false }))
+              setStepsComplete((prev) => ({
+                ...prev,
+                firstStep: true,
+                secondStep: false,
+                thirdStep: false,
+                fourthStep: false,
+                fifthStep: false,
+              }))
               setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
             }}
@@ -211,8 +219,10 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div style={{marginLeft:"8px"}} className={classes.sampleImagesLabel}>or try one of these for free</div>
-      <div style={{marginLeft:"8px"}} className={classes.sampleImages}>
+      <div style={{ marginLeft: "8px" }} className={classes.sampleImagesLabel}>
+        or try one of these for free
+      </div>
+      <div style={{ marginLeft: "8px" }} className={classes.sampleImages}>
         {sampleImg.map((image, index) => (
           <div
             key={index}
@@ -220,16 +230,21 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             style={{ backgroundImage: `url(${image})` }}
             onClick={() => {
               setSelectedSampleImg(index)
-              setDimensionOfSampleImg()
-              setObjectReplacerInfo((prev: any) => ({ ...prev, src: image, preview: image, file_name:"pexels-photo-3493777.jpeg"}))
+              setDimensionOfSampleImg(image)
+              setObjectReplacerInfo((prev: any) => ({
+                ...prev,
+                src: image,
+                preview: image,
+                file_name: "pexels-photo-3493777.jpeg",
+              }))
             }}
-          >   
+          >
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
           </div>
         ))}
       </div>
       <BaseButton
-      margin="0 0px 0 8px"
+        margin="0 0px 0 8px"
         borderRadius="10px"
         title={"Continue"}
         disabled={objectReplacerInfo.src ? false : true}
@@ -297,7 +312,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             })
             // @ts-ignore
             canvas?.clearHistory()
-            setStepsComplete((prev) => ({ ...prev}))
+            setStepsComplete((prev) => ({ ...prev }))
           }}
           fontSize="14px"
           fontWeight="500"
@@ -333,7 +348,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               intrinsicWidth: objectReplacerInfo.width,
               pathsArray: paths,
             })
-             setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr  }))
+            setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
 
             // @ts-ignore
             canvas.isDrawingMode = false
@@ -358,7 +373,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               fourthStep: false,
               fifthStep: false,
             }))
-           
           }}
         />
       </div>
@@ -552,7 +566,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               fourthStep: false,
               fifthStep: false,
             }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false, fifthStep: false,secondStep:false }))
+            setStepsComplete((prev) => ({
+              ...prev,
+              thirdStep: false,
+              fourthStep: false,
+              fifthStep: false,
+              secondStep: false,
+            }))
           } else if (steps.firstStep) {
             setSteps((prev) => ({ ...prev, firstStep: false }))
           } else {
@@ -630,7 +650,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         heading={"Final output"}
         handleClick={() => {
           if (stepsComplete.fourthStep && !steps.fourthStep) {
-            setSteps((prev) => ({ ...prev, fourthStep: true, thirdStep: false, firstStep: false,secondStep:false, fifthStep: false }))
+            setSteps((prev) => ({
+              ...prev,
+              fourthStep: true,
+              thirdStep: false,
+              firstStep: false,
+              secondStep: false,
+              fifthStep: false,
+            }))
             setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true, fifthStep: false }))
           } else if (steps.fourthStep) {
             setSteps((prev) => ({ ...prev, fourthStep: false }))
@@ -640,7 +667,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         children={outputResult()}
       />
       {isError.error && (
-        <div style={{ position: "relative",margin:"0px 0px 0px -7px" }}>
+        <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
           <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
         </div>
       )}

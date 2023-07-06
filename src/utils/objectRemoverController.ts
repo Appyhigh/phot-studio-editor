@@ -14,14 +14,15 @@ export const objectRemoverController = async (
       input_image_link: imgLink,
       mask_image: mask_img,
       file_name: svgExtensionToJPEG(file_name ? file_name : ""),
+      prompt:prompt
       // op: 'DUMMY',
     }
  
+    
     const config = {
       headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
     }
 
-    console.log(body);
     
     //@ts-ignore
     const order = await axios.post("https://devapi.phot.ai/app/api/v1/user_activity/object-replacer-v2", body, config)
@@ -36,7 +37,7 @@ export const objectRemoverController = async (
     let status = response.data.order_status_code
 
     while (status == 102 || status == 103) {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 2000))
       response = await axios.get(order_url, {
         headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
         params: {

@@ -73,6 +73,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
       setBgImgFabricCanvas(imgSrc, canvas, img)
+
     })
   }
 
@@ -129,8 +130,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   }
 
 
-  const setDimensionOfSampleImg=async()=>{
-   await getDimensions((objectRemoverInfo.preview),(imgSrc:any)=>{
+  const setDimensionOfSampleImg=async(img:any)=>{
+   await getDimensions(img,(imgSrc:any)=>{
     setObjectRemoverInfo((prev:any)=>({...prev,width:imgSrc.width,height:imgSrc.height}))
    })
   }
@@ -217,8 +218,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             style={{ backgroundImage: `url(${image})` }}
             onClick={() => {
               setSelectedSampleImg(index)
-              setDimensionOfSampleImg();
-              setObjectRemoverInfo((prev: any) => ({ ...prev, src: image, preview: image }))
+              setDimensionOfSampleImg(image)
+              setObjectRemoverInfo((prev: any) => ({ ...prev, src: image, preview: image,file_name:"pexels-photo-3493777.jpeg" }))
             }}
           >
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
@@ -250,6 +251,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       getOutputImg()
     }
   }, [steps.thirdStep])
+
+
 
   const Brush = () => (
     <>
@@ -304,6 +307,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
             // handleBgImg(objectRemoverInfo.src)
+
             handleBrushToolTip(false)
             let paths: any = []
             //  @ts-ignore
