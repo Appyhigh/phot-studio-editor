@@ -499,13 +499,6 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     // <Scrollable>
     <div className={classes.leftPanel}>
       <div className={classes.heading}>
-        <button
-          onClick={() => {
-            console.log(productPhotoshootInfo)
-          }}
-        >
-          CLICK
-        </button>
         <div className={classes.arrowIcon} onClick={handleClose}>
           <Icons.ArrowLeft />
         </div>
