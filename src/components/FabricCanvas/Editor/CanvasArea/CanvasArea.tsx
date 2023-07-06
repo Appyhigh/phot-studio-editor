@@ -17,7 +17,7 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   }, [brushTooltipShow])
 
   return (
-    <div className={classes.cavasarea}>
+    <div className={classes.canvasarea}>
       {canvasLoader && (
         <div className={classes.loaderContainer}>
           <img src={LoaderSpinner} />
