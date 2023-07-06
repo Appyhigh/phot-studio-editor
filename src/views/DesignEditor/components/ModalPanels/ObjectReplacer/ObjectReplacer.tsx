@@ -23,6 +23,7 @@ import LoginPopup from "../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
+import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTransparent"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -39,7 +40,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
-    const [callAPI, setCallAPI] = useState(false)
+  const [callAPI, setCallAPI] = useState(false)
 
   const [isError, setIsError] = useState({
     error: false,
@@ -121,10 +122,9 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       errorMsg: "",
     }))
     if (steps.fourthStep) {
-      getOutputImg()      
+      getOutputImg()
     }
   }, [steps.fourthStep])
-
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
@@ -141,7 +141,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       )
         .then((response) => {
           console.log("response0", response)
-          setCallAPI(false)   
+          setCallAPI(false)
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
@@ -177,11 +177,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     }
   }, [steps.secondStep])
 
-  useEffect(()=>{
-return (()=>{
-  setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
-})
-  },[])
+  useEffect(() => {
+    return () => {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
+    }
+  }, [])
 
   const upload = () => (
     <>
@@ -213,6 +213,22 @@ return (()=>{
             <span
               onClick={() => {
                 setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
+                setBgTransparent(canvas)
+                setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
+                setStepsComplete((prev) => ({
+                  ...prev,
+                  firstStep: true,
+                  secondStep: false,
+                  thirdStep: false,
+                  fourthStep: false,
+                }))
+                setSteps((prev) => ({
+                  ...prev,
+                  firstStep: true,
+                  secondStep: false,
+                  thirdStep: false,
+                  fourthStep: false,
+                }))
               }}
             >
               <Icons.Trash size={"32"} />
@@ -324,7 +340,6 @@ return (()=>{
             // @ts-ignore
             canvas?.clearHistory()
             setStepsComplete((prev) => ({ ...prev }))
-
           }}
           fontSize="14px"
           fontWeight="500"
@@ -664,7 +679,7 @@ return (()=>{
       /> */}
       <Accordian
         isOpen={steps.fourthStep}
-        isComplete={steps.fourthStep}
+        isComplete={stepsComplete.fourthStep}
         label={4}
         heading={"Final output"}
         handleClick={() => {

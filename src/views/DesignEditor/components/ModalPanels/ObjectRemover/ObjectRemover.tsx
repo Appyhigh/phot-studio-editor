@@ -460,7 +460,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       />
       <Accordian
         isOpen={steps.thirdStep}
-        isComplete={steps.thirdStep}
+        isComplete={stepsComplete.thirdStep}
         label={3}
         heading={"Output"}
         handleClick={() => {
