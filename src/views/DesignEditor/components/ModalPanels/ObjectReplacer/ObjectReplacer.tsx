@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import React, { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
@@ -14,48 +14,57 @@ import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg
 import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
-import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
-import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTransparent"
+import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 import { createMaskImage } from "~/views/DesignEditor/utils/functions/createMaskImg"
-import { PathProps } from "~/utils/canvasUtils"
-import { objectRemoverController } from "~/utils/objectRemoverController"
-import LoginPopup from "../../LoginPopup/LoginPopup"
-import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
+import { objectRemoverController } from "~/utils/objectRemoverController"
+import { COOKIE_KEYS } from "~/utils/enum"
+import LoginPopup from "../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
-import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
-const ObjectRemover = ({ handleBrushToolTip }: any) => {
+
+const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
-  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
+  const { objectReplacerInfo, setObjectReplacerInfo } = useContext(ObjectReplacerContext)
   const [brushSize, setBrushSize] = useState(10)
   const { canvas, objects } = fabricEditor
-  const [paths, setPaths] = useState<PathProps[]>([])
+  // @ts-ignore
+  const { authState } = useAuth()
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
-  const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const [promptText, setPromptText] = useState("")
+  const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-  const [callAPI, setCallAPI] = useState(false)
-  // @ts-ignore
-  const { authState } = useAuth()
+  const [autoCallAPI, setAutoCallAPI] = useState(false)
+    const [callAPI, setCallAPI] = useState(false)
+
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
   })
-  const { user } = authState
-  const { setErrorInfo } = useContext(ErrorContext)
 
+  const setDimensionOfSampleImg = async (img: any) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+    })
+  }
+
+  const { user } = authState
   const [steps, setSteps] = useState({
     firstStep: true,
     secondStep: false,
     thirdStep: false,
+    fourthStep: false,
+    fifthStep: false,
   })
 
   const [stepsComplete, setStepsComplete] = useState({
     firstStep: true,
     secondStep: false,
     thirdStep: false,
+    fourthStep: false,
+    fifthStep: false,
   })
 
   const handleBrushSizeChange = (e: any) => {
@@ -102,6 +111,22 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
+
+  useEffect(() => {
+    setIsError((prev) => ({
+      ...prev,
+      error: false,
+      errorMsg: "",
+    }))
+ 
+    if (steps.fourthStep && callAPI) {
+      getOutputImg()
+      setCallAPI(false)
+    
+    }
+  }, [steps.fourthStep])
+
+
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
@@ -109,14 +134,19 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     } else {
       setResultLoading(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-      objectRemoverController(objectRemoverInfo.preview, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
+      objectRemoverController(
+        objectReplacerInfo.src,
+        objectReplacerInfo.mask_img,
+        objectReplacerInfo.file_name,
+        objectReplacerInfo.prompt
+      )
         .then((response) => {
-          setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
-          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
+          console.log("response0", response)
+          setCallAPI(false)   
+          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
-          setCallAPI(false)
         })
 
         .catch((error) => {
@@ -131,25 +161,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     }
   }
 
-  const setDimensionOfSampleImg = async (img: any) => {
-    await getDimensions(img, (imgSrc: any) => {
-      setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
-    })
-  }
-
-  // to get points of brush strokes
-
-  // useEffect(() => {
-  //   // @ts-ignore
-  //   const points = canvas?.freeDrawingBrush._points
-  //   // @ts-ignore
-
-  //   console.log("points", canvas?.freeDrawingBrush._points)
-  //   const coordinates = points?.map((point: any) => ({ x: point.x, y: point.y }))
-  //   console.log(coordinates)
-  //   console.log(objects)
-  // }, [canvas, objects])
-
   useEffect(() => {
     if (steps.secondStep) {
       handleBrushToolTip(true)
@@ -161,6 +172,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       handleBrushToolTip(false)
       if (canvas) {
         // @ts-ignore
+
         canvas.isDrawingMode = false
       }
     }
@@ -168,32 +180,34 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
   const upload = () => (
     <>
-      {objectRemoverInfo.preview ? (
+      {objectReplacerInfo.preview ? (
         <Block>
           <UploadPreview
             discardHandler={() => {
               setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
-              setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
-              setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
+              setStepsComplete((prev) => ({
+                ...prev,
+                firstStep: true,
+                secondStep: false,
+                thirdStep: false,
+                fourthStep: false,
+                fifthStep: false,
+              }))
+              setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
             }}
             previewHandle={() => {
-              setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
+              setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
               setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
             }}
-            imgSrc={objectRemoverInfo.src}
-            uploadType={OBJECT_REMOVER}
+            imgSrc={objectReplacerInfo.src}
+            uploadType={OBJECT_REPLACER}
           />
           <div className={clsx("p-relative pointer", classes.discardBtn)}>
             <span
               onClick={() => {
-                setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
-                setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", result: "" }))
-                setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-                setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-                setBgTransparent(canvas)
-                setCallAPI(false)
+                setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               }}
             >
               <Icons.Trash size={"32"} />
@@ -205,14 +219,16 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           <Uploads
             imageLoading={imageLoading}
             setImageLoading={setImageLoading}
-            fileInputType={"ObjectRemover"}
-            uploadType={OBJECT_REMOVER}
-            id={"ObjectRemover"}
+            fileInputType={"ObjectReplacer"}
+            uploadType={OBJECT_REPLACER}
+            id={"ObjectReplacer"}
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-      <div className={classes.sampleImages}>
+      <div style={{ marginLeft: "8px" }} className={classes.sampleImagesLabel}>
+        or try one of these for free
+      </div>
+      <div style={{ marginLeft: "8px" }} className={classes.sampleImages}>
         {sampleImg.map((image, index) => (
           <div
             key={index}
@@ -221,7 +237,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             onClick={() => {
               setSelectedSampleImg(index)
               setDimensionOfSampleImg(image)
-              setObjectRemoverInfo((prev: any) => ({
+              setObjectReplacerInfo((prev: any) => ({
                 ...prev,
                 src: image,
                 preview: image,
@@ -234,35 +250,42 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         ))}
       </div>
       <BaseButton
+        margin="0 0px 0 8px"
         borderRadius="10px"
         title={"Continue"}
-        margin={"8px 0 0 4px"}
-        disabled={objectRemoverInfo.src ? false : true}
-        width="315px"
+        disabled={objectReplacerInfo.src ? false : true}
+        width="326px"
         height="38px"
         fontSize="14px"
         handleClick={() => {
           handleBrushToolTip(true)
           // @ts-ignore
           canvas.isDrawingMode = true
-          handleBgImg(objectRemoverInfo.src)
-          setSteps((prev) => ({ ...prev, firstStep: false, secondStep: true, thirdStep: false }))
-          setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: true, thirdStep: false }))
+          handleBgImg(objectReplacerInfo.src)
+          setSteps((prev) => ({
+            ...prev,
+            firstStep: false,
+            secondStep: true,
+            thirdStep: false,
+            fourthStep: false,
+            fifthStep: false,
+          }))
+          setStepsComplete((prev) => ({
+            ...prev,
+            firstStep: true,
+            secondStep: true,
+            thirdStep: false,
+            fourthStep: false,
+            fifthStep: false,
+          }))
         }}
       />
     </>
   )
 
-  useEffect(() => {
-    if (steps.thirdStep && callAPI) {
-      getOutputImg()
-      setCallAPI(false)
-    }
-  }, [steps.thirdStep])
-
   const Brush = () => (
     <>
-      <UploadPreview imgSrc={objectRemoverInfo.preview} uploadType={MODAL_IMG_UPLOAD} />
+      <UploadPreview imgSrc={objectReplacerInfo.src} uploadType={MODAL_IMG_UPLOAD} />
 
       <div className={classes.brushInput}>
         <p>Brush</p>
@@ -284,7 +307,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           margin={"8px 8px 4px 4px"}
           width="155px"
           // @ts-ignore
-
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
             // @ts-ignore
@@ -295,7 +317,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               }
             })
             // @ts-ignore
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+            canvas?.clearHistory()
+            setStepsComplete((prev) => ({ ...prev }))
           }}
           fontSize="14px"
           fontWeight="500"
@@ -309,11 +332,9 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           fontSize="14px"
           fontWeight="500"
           // @ts-ignore
-
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
-            // handleBgImg(objectRemoverInfo.src)
-            if (!user) return setShowLoginPopup(true)
+            // handleBgImg(objectReplacerInfo.src)
             handleBrushToolTip(false)
             let paths: any = []
             //  @ts-ignore
@@ -329,22 +350,135 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               canvasWidth: canvas.getWidth(),
               // @ts-ignore
               canvasHeight: canvas.getHeight(),
-              intrinsicHeight: objectRemoverInfo.height,
-              intrinsicWidth: objectRemoverInfo.width,
+              intrinsicHeight: objectReplacerInfo.height,
+              intrinsicWidth: objectReplacerInfo.width,
               pathsArray: paths,
             })
-            setObjectRemoverInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
+            setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
+
             // @ts-ignore
             canvas.isDrawingMode = false
             // @ts-ignore
-            // canvas.clearHistory()
+            canvas.clearHistory()
             // @ts-ignore
             canvas.getObjects().forEach((obj: any) => {
               obj.selectable = false
             })
-            setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
-            setStepsComplete((prev) => ({ ...prev, secondStep: true, thirdStep: true }))
+            setSteps((prev) => ({
+              ...prev,
+              firstStep: false,
+              secondStep: false,
+              thirdStep: true,
+              fourthStep: false,
+              fifthStep: false,
+            }))
+            setStepsComplete((prev) => ({
+              ...prev,
+              secondStep: true,
+              thirdStep: true,
+              fourthStep: false,
+              fifthStep: false,
+            }))
             setCallAPI(true)
+          }}
+        />
+      </div>
+    </>
+  )
+
+  const Prompt = () => (
+    <>
+      <div className={classes.promptSection}>
+        <p className={classes.prompt}>Prompt</p>
+        <p className={classes.promptSub}>What do you want to see, you can use a single word or complete sentence.</p>
+        <textarea
+          value={promptText}
+          onChange={(e) => setPromptText(e.target.value)}
+          placeholder="Write here.."
+        ></textarea>
+        <BaseButton
+          borderRadius="10px"
+          title={"Continue"}
+          height="38px"
+          margin={"8px 4px 4px 0px"}
+          fontSize="14px"
+          fontWeight="500"
+          disabled={promptText.trim().length > 0 ? false : true}
+          handleClick={() => {
+            handleBgImg(objectReplacerInfo.src)
+            setSteps((prev) => ({
+              ...prev,
+              firstStep: false,
+              secondStep: false,
+              thirdStep: false,
+              fourthStep: true,
+              fifthStep: false,
+            }))
+            setStepsComplete((prev) => ({
+              ...prev,
+              secondStep: true,
+              thirdStep: true,
+              fourthStep: true,
+              fifthStep: false,
+            }))
+            setObjectReplacerInfo((prev: any) => ({ ...prev, prompt: promptText }))
+          }}
+        />
+      </div>
+    </>
+  )
+
+  const GenerateImages = () => (
+    <>
+      <div className={classes.promptSection}>
+        <div className={classes.itemContainer}>
+          <div className={classes.itemHeading}>How many images you want to generate?</div>
+          <div className="d-flex justify-content-start flex-row">
+            {[1, 2, 3, 4].map((each, idx) => {
+              return (
+                <div
+                  key={idx}
+                  className={clsx(
+                    classes.ctBox,
+                    "flex-center pointer",
+                    idx === 0 && "ml-0",
+                    imgGenerationCt === each && classes.selectedCtBox
+                  )}
+                  onClick={() => {
+                    setImgGenerationCt(each)
+                  }}
+                >
+                  {each}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        <BaseButton
+          borderRadius="10px"
+          title={"Continue"}
+          height="38px"
+          margin={"8px 4px 4px 0px"}
+          fontSize="14px"
+          fontWeight="500"
+          handleClick={() => {
+            handleBgImg(objectReplacerInfo.src)
+            setSteps((prev) => ({
+              ...prev,
+              firstStep: false,
+              secondStep: false,
+              thirdStep: false,
+              fourthStep: false,
+              fifthStep: true,
+            }))
+            setStepsComplete((prev) => ({
+              ...prev,
+              secondStep: true,
+              thirdStep: true,
+              fourthStep: true,
+              fifthStep: true,
+            }))
           }}
         />
       </div>
@@ -356,7 +490,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       {" "}
       <div className={classes.resultImages}>
         <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={objectRemoverInfo.src} onClick={() => {}} />}
+          {<img src={objectReplacerInfo.src} onClick={() => {}} />}
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
@@ -366,22 +500,20 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         ) : isError.error ? (
           <div
             className={classes.skeletonBox}
-            onClick={() => {
-              
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
-            }}
+            // onClick={() => {
+            //   setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+            //   getOutputImg()
+            // }}
           >
             {
               <div className={classes.retry}>
-                <Icons.Retry />
-                <p>Retry</p>
+                <Icons.RetryImg />
               </div>
             }{" "}
           </div>
         ) : (
           <div className={clsx("pointer p-relative", classes.eachImg, classes.currentActiveImg)}>
-            {<img src={objectRemoverInfo.result} onClick={() => {}} />}
+            {<img src={objectReplacerInfo.result} onClick={() => {}} />}
             <div className={classes.resultLabel}>{"Result"}</div>
           </div>
         )}
@@ -390,19 +522,18 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         stepsComplete.secondStep &&
         stepsComplete.thirdStep &&
         !resultLoading &&
-        !isError.error && (
+        isError.error && (
           <BaseButton
             borderRadius="10px"
-            title={"Remove more objects"}
+            title={"Retry"}
             height="38px"
             margin={"20px 4px 4px 0px"}
             width="320px"
             fontSize="16px"
             fontWeight="500"
             handleClick={() => {
-              setObjectRemoverInfo((prev: any) => ({ ...prev, preview: prev.result }))
-              setCallAPI(false)
-              setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false }))
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
             }}
           />
         )}
@@ -415,15 +546,17 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         <div className={classes.arrowIcon}>
           <Icons.ArrowLeft />
         </div>
-        <p>Object Remover</p>
+        <p>Object Replacer</p>
       </div>
       <div className={classes.line}></div>
+
       <LoginPopup
         isOpen={showLoginPopup}
         loginPopupCloseHandler={() => {
           setShowLoginPopup(false)
         }}
       />
+
       <Accordian
         label={1}
         isOpen={steps.firstStep}
@@ -432,8 +565,21 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         children={upload()}
         handleClick={() => {
           if (stepsComplete.firstStep && !steps.firstStep) {
-            setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
+            setSteps((prev) => ({
+              ...prev,
+              firstStep: true,
+              secondStep: false,
+              thirdStep: false,
+              fourthStep: false,
+              fifthStep: false,
+            }))
+            setStepsComplete((prev) => ({
+              ...prev,
+              thirdStep: false,
+              fourthStep: false,
+              fifthStep: false,
+              secondStep: false,
+            }))
           } else if (steps.firstStep) {
             setSteps((prev) => ({ ...prev, firstStep: false }))
           } else {
@@ -450,8 +596,15 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         children={Brush()}
         handleClick={() => {
           if (stepsComplete.secondStep && !steps.secondStep) {
-            setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
+            setSteps((prev) => ({
+              ...prev,
+              secondStep: true,
+              thirdStep: false,
+              firstStep: false,
+              fourthStep: false,
+              fifthStep: false,
+            }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false, fifthStep: false }))
           } else if (steps.secondStep) {
             setSteps((prev) => ({ ...prev, secondStep: false }))
           } else {
@@ -459,22 +612,69 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         }}
       />
       <Accordian
-        isOpen={steps.thirdStep}
-        isComplete={steps.thirdStep}
         label={3}
-        heading={"Output"}
+        isOpen={steps.thirdStep}
+        isComplete={stepsComplete.thirdStep}
+        heading={"Write Prompt"}
+        children={Prompt()}
         handleClick={() => {
           if (stepsComplete.thirdStep && !steps.thirdStep) {
-            setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
+            setSteps((prev) => ({
+              ...prev,
+              thirdStep: true,
+              secondStep: false,
+              firstStep: false,
+              fourthStep: false,
+              fifthStep: false,
+            }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: false, fifthStep: false }))
           } else if (steps.thirdStep) {
             setSteps((prev) => ({ ...prev, thirdStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+          } else {
+          }
+        }}
+      />
+      {/* <Accordian
+        label={4}
+        isOpen={steps.fourthStep}
+        isComplete={stepsComplete.fourthStep}
+        heading={"Select number of outputs"}
+        children={GenerateImages()}
+        handleClick={() => {
+          if (stepsComplete.fourthStep && !steps.fourthStep) {
+            setSteps((prev) => ({ ...prev, fourthStep: true, thirdStep: false, firstStep: false,secondStep:false, fifthStep: false }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true, fifthStep: false }))
+          } else if (steps.fourthStep) {
+            setSteps((prev) => ({ ...prev, fourthStep: false }))
+          } else {
+          }
+        }}
+      /> */}
+      <Accordian
+        isOpen={steps.fourthStep}
+        isComplete={steps.fourthStep}
+        label={4}
+        heading={"Final output"}
+        handleClick={() => {
+          if (stepsComplete.fourthStep && !steps.fourthStep) {
+            setSteps((prev) => ({
+              ...prev,
+              fourthStep: true,
+              thirdStep: false,
+              firstStep: false,
+              secondStep: false,
+              fifthStep: false,
+            }))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true, fifthStep: false }))
+          } else if (steps.fourthStep) {
+            setSteps((prev) => ({ ...prev, fourthStep: false }))
+            setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
           }
         }}
         children={outputResult()}
       />
       {isError.error && (
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
           <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
         </div>
       )}
@@ -482,4 +682,4 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   )
 }
 
-export default ObjectRemover
+export default ObjectReplacer

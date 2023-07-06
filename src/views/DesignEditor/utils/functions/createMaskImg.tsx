@@ -54,6 +54,5 @@ export const createMaskImage = ({
   }
 
   const dataURL = canvas.toDataURL("image/jpeg")
-  // console.log(dataURL)
   return dataURL
 }
