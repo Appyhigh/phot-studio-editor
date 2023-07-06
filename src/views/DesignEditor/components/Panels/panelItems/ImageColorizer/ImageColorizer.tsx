@@ -127,12 +127,22 @@ const ImageColorizer = () => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
           latest_ct = prev + 1
-          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setImgColorizerInfo
+          )
           return prev + 1
         })
       })
     } else {
-      UpdateObjectFunc(imageUrl, editor, frame)
+      UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
     }
     setCurrentActiveImg(_idx)
   }

@@ -213,18 +213,26 @@ const ImageUpscaler = () => {
 
   const addImg = async (imageUrl: string, _idx: number) => {
     if (currentActiveImg == -1) {
-      console.log("THIS")
       await getDimensions(imageUrl, (img: any) => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
           latest_ct = prev + 1
-          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setImgScalerInfo
+          )
           return prev + 1
         })
       })
     } else {
-      console.log("THAT")
-      UpdateObjectFunc(imageUrl, editor, frame)
+      UpdateObjectFunc(imageUrl, editor, frame, imgScalerInfo)
     }
     setCurrentActiveImg(_idx)
   }

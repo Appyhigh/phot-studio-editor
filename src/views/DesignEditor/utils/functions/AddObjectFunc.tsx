@@ -8,9 +8,11 @@ export const AddObjectFunc = (
   frame?: any,
   latest_ct?: any,
   setRejectedFileUpload?: any,
-  setAddImgInfo?: any
+  setAddImgInfo?: any,
+  setStateInfo?: any
 ) => {
   let scale = 1
+  const id = nanoid()
   if (width && height && frame) {
     if (width > frame.width || height > frame.height) {
       if (width / frame.width > height / frame.height) {
@@ -23,7 +25,7 @@ export const AddObjectFunc = (
   if (editor) {
     const options = {
       type: "StaticImage",
-      id: nanoid(),
+      id: id,
       src: url,
       preview: url,
       metadata: { generationDate: new Date().getTime(), originalLayerPreview: url },
@@ -33,8 +35,9 @@ export const AddObjectFunc = (
     }
     editor.objects.add(options).then(() => {
       setRejectedFileUpload ? setRejectedFileUpload(false) : null
-      
-      setAddImgInfo ? setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" })) : null
+
+      setAddImgInfo && setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" }))
+      setStateInfo && setStateInfo((prev: any) => ({ ...prev, id: id }))
     })
   }
 }

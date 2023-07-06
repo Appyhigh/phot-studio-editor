@@ -120,12 +120,22 @@ const PhotoEditor = () => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
           latest_ct = prev + 1
-          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setPhotoEditorInfo
+          )
           return prev + 1
         })
       })
     } else {
-      UpdateObjectFunc(imageUrl, editor, frame)
+      UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo)
     }
     setCurrentActiveImg(_idx)
   }
@@ -140,6 +150,7 @@ const PhotoEditor = () => {
     }))
     setPhotoEditorInfo((prev: any) => ({
       ...prev,
+      id: "",
       src: "",
       prompt: "",
       original: "",
@@ -205,6 +216,7 @@ const PhotoEditor = () => {
                   setCurrentActiveImg(-1)
                   setPhotoEditorInfo((prev: any) => ({
                     ...prev,
+                    id: "",
                     src: "",
                     original: "",
                     prompt: "",
@@ -267,7 +279,7 @@ const PhotoEditor = () => {
           <Block
             onClick={() => {
               setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-              setPhotoEditorInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
+              setPhotoEditorInfo((prev: any) => ({ ...prev, id: "", result: [], showclearTooltip: true }))
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}

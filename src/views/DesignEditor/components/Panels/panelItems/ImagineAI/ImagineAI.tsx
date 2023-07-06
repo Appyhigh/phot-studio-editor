@@ -136,12 +136,22 @@ const ImagineAI = () => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
           latest_ct = prev + 1
-          AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setTextToArtInputInfo
+          )
           return prev + 1
         })
       })
     } else {
-      UpdateObjectFunc(imageUrl, editor, frame)
+      UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
     }
   }
 
@@ -277,6 +287,7 @@ const ImagineAI = () => {
                     setStyleImage((prev: any) => ({ ...prev, styleImage: new Set<string>() }))
                     setTextToArtInputInfo((prev: any) => ({
                       ...prev,
+                      id: "",
                       prompt: "",
                       style: [],
                       images_generation_ct: 1,
