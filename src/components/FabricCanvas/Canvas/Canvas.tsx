@@ -115,15 +115,7 @@ function Canvas({ width, height }: any) {
   // }, [canvas, objects])
 
   return (
-    <div
-      style={{
-        width: "600px",
-        height: "740px",
-      }}
-      className="editor-canvas d-flex justify-center p-4"
-      id="cont"
-      ref={containerRef}
-    >
+    <div className="editor-canvas d-flex justify-center p-4" id="cont" ref={containerRef}>
       {/* <div className={classes.toggleBtn}>
         <div
           className={clsx(classes.btn, brushOn && classes.activeBrush)}
