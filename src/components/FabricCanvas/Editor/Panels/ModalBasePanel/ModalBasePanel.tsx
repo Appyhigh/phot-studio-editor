@@ -12,6 +12,7 @@ import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/ProductPreview/ProductPreview"
 import useAppContext from "~/hooks/useAppContext"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
+import { OBJECT_REMOVER } from "~/constants/contants"
 
 const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
