@@ -21,8 +21,6 @@ export const createMaskImage = ({
   intrinsicWidth: number
   pathsArray: PathProps[]
 }) => {
-console.log(canvasHeight,canvasWidth,intrinsicHeight,intrinsicWidth);
-
   // point
   const scaleX = intrinsicWidth / canvasWidth
   const scaleY = intrinsicHeight / canvasHeight
