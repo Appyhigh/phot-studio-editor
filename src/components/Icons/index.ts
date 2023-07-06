@@ -83,11 +83,15 @@ import ToolTip from "./Tooltip"
 import ImgLock from "./ImgLock"
 import NoneIcon from "./NoneIcon"
 import TickIcon from "./TickIcon"
+import ArrowLeft from "./ArrowLeft"
+import Brush from "./Brush"
+import Retry from "./Retry"
 import ImageUpscaler from "./ImageUpscaler"
 import PhotoEditor from "./PhotoEditor"
 import ObjectRemover from "./ObjectRemover"
 import ImageColorizer from "./ImageColorizer"
 import ObjectReplacer from "./ObjectReplacer"
+import RetryImg from "./RetryImg"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -166,19 +170,23 @@ class Icons {
   static Blur = Blur
   static Transform = Transform
   static ColorPlus = ColorPlus
-  static Flip = Flip
-  static CirclePlus = CirclePlus
-  static Cross = Cross
-  static ToolTipCross = ToolTipCross
-  static ToolTip = ToolTip
-  static ImgLock = ImgLock
-  static NoneIcon = NoneIcon
-  static TickIcon = TickIcon
+  static Flip =Flip
+  static CirclePlus=CirclePlus
+  static Cross=Cross
+  static ToolTipCross=ToolTipCross
+  static ToolTip=ToolTip
+  static ImgLock=ImgLock
+  static NoneIcon= NoneIcon
+  static TickIcon=TickIcon
+  static ArrowLeft=ArrowLeft
+  static Brush=Brush
+  static Retry=Retry
   static ImageUpscaler = ImageUpscaler
   static PhotoEditor = PhotoEditor
   static ObjectRemover = ObjectRemover
   static ImageColorizer = ImageColorizer
   static ObjectReplacer = ObjectReplacer
+  static RetryImg  = RetryImg 
 }
 
 export default Icons

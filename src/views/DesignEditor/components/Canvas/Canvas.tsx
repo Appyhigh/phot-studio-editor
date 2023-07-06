@@ -9,7 +9,8 @@ import MainImageContext from "~/contexts/MainImageContext"
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
-  const { setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+  const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
+  const activeObject: any = useActiveObject()
 
   useEffect(() => {
     if (editor) {
@@ -50,26 +51,33 @@ const Canvas = () => {
         }
       })
 
-      window.addEventListener("keydown", function (event) {
-        if (event.key == "Delete" || event.key == "Backspace") {
-          setPanelInfo((prev: any) => ({
-            ...prev,
-            uploadSection: true,
-            trySampleImg: true,
-            uploadPreview: false,
-            bgOptions: false,
-            bgRemoverBtnActive: false,
-          }))
-          if (setMainImgInfo) setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
-        }
-      })
-
       //   editor.canvas.canvas.on("object:modified", (event: any) => {
       //     var object = event.target
       //     object.applyFilters()
       //   })
     }
   }, [editor])
+
+  useEffect(() => {
+    if (editor) {
+      window.addEventListener("keydown", function (event) {
+        if (event.key == "Delete" || event.key == "Backspace") {
+          if (mainImgInfo && editor.canvas.canvas.getActiveObject()?.id === mainImgInfo.id) {
+            setPanelInfo((prev: any) => ({
+              ...prev,
+              uploadSection: true,
+              trySampleImg: true,
+              uploadPreview: false,
+              bgOptions: false,
+              bgRemoverBtnActive: false,
+            }))
+            if (setMainImgInfo) setMainImgInfo((prev: any) => ({ ...prev, id: "" }))
+            editor.objects.removeById(editor.canvas.canvas.getActiveObject()?.id as string)
+          }
+        }
+      })
+    }
+  }, [editor, mainImgInfo, activeObject])
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>

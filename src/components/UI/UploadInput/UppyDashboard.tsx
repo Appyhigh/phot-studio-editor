@@ -19,6 +19,10 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import MainImageContext from "~/contexts/MainImageContext"
+import { OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
+import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
+import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 
 const UppyDashboard = ({
   close,
@@ -43,8 +47,23 @@ const UppyDashboard = ({
   const { setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
+  const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
+  const {objectReplacerInfo, setObjectReplacerInfo} = useContext(ObjectReplacerContext) 
+
+  const setDimension = async (img: string) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+    })
+  }
+
+  const setDimensionReplacer = async (img: string) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+    })
+  }
 
   let uppy: any
+
   if (typeof window !== "undefined") {
     uppy = new Uppy({
       id: id,
@@ -70,7 +89,7 @@ const UppyDashboard = ({
     uppy.setOptions({
       restrictions: {
         maxNumberOfFiles: 1,
-        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+        allowedFileTypes: [".png", ".jpg", ".jpeg", ".bmp", ".webp"],
         maxFileSize: 5242880,
       },
     })
@@ -94,7 +113,15 @@ const UppyDashboard = ({
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
-        } else if (fileInputType == "photoEditor") {
+        } else if (uploadType === OBJECT_REMOVER) {
+          console.log(file)
+          setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
+          setDimension(imageUrl)
+        }else if(uploadType === OBJECT_REPLACER){
+          setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name: file.name }))
+          setDimensionReplacer(imageUrl)
+        }
+         else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
                 ...prev,
@@ -161,10 +188,9 @@ const UppyDashboard = ({
           if (fileInputType == "bgUpload") {
             HandleBgUpload(setImageLoading, setBgUploadPreview, imageUrl)
           } else if (fileInputType === "ImgUpscaler") {
-            // @ts-ignore
-            setImgScalerInfo ? setImgScalerInfo((prev) => ({ ...prev, url: imageUrl, original: imageUrl })) : null
-            //  @ts-ignore
-            setImgScalerPanelInfo((prev) => ({
+            setImgScalerInfo &&
+              setImgScalerInfo((prev: any) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+            setImgScalerPanelInfo((prev: any) => ({
               ...prev,
               uploadSection: false,
               uploadPreview: true,
@@ -184,7 +210,14 @@ const UppyDashboard = ({
               resultOption: false,
               tryFilters: false,
             }))
-          } else if (fileInputType == "photoEditor") {
+          } else if (uploadType === OBJECT_REMOVER) {
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
+            setDimension(imageUrl)
+          }else if(uploadType === OBJECT_REPLACER){
+            setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name: file.name }))
+            setDimensionReplacer(imageUrl)
+          } 
+          else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({
                   ...prev,
@@ -247,6 +280,7 @@ const UppyDashboard = ({
         close()
       }, 200)
     })
+
     uppy.on("restriction-failed", (file: any, error: any) => {
       if (file.size > 5242880) {
         setUploadErrorMsg("File size must be under 5 MB.")
@@ -254,6 +288,23 @@ const UppyDashboard = ({
         setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
       }
       setTimeout(() => {
+        setImageLoading(false)
+        setDisplayError(true)
+      }, 250)
+      uppy.cancelAll()
+      setTimeout(() => {
+        setDisplayError(false)
+        setTimeout(() => {
+          setUploadErrorMsg("")
+        }, 500)
+      }, 5000)
+      return false
+    })
+
+    uppy.on("info-visible", () => {
+      setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
+      setTimeout(() => {
+        setImageLoading(false)
         setDisplayError(true)
       }, 250)
       uppy.cancelAll()

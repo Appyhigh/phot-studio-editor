@@ -1,11 +1,29 @@
+import useAppContext from "~/hooks/useAppContext"
 import Canvas from "../../../FabricCanvas/Canvas"
-import classes from "./style.module.css";
+import classes from "./style.module.css"
+import Icons from "~/components/Icons"
+import { useEffect } from "react"
 
-function CanvasArea({width,height}:any) {
+function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
+  const { activePanel } = useAppContext()
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleBrush()
+    }, 5000)
+  }, [brushTooltipShow])
+
+  // @ts-ignore
   return (
-    <div className={classes.cavasarea} 
-    
-    >
+    <div className={classes.cavasarea}>
+      {brushTooltipShow && (
+        <div className={classes.toolTip}>
+          <div className={classes.brushIcon}>
+            <Icons.Brush />
+          </div>
+          <p>Brush over the image</p>
+        </div>
+      )}
       <Canvas width={width} height={height} />
     </div>
   )
