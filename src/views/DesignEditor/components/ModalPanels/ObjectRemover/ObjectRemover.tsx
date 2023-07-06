@@ -36,7 +36,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-    // @ts-ignore
+  const [callAPI, setCallAPI] = useState(false)
+  // @ts-ignore
   const { authState } = useAuth()
   const [isError, setIsError] = useState({
     error: false,
@@ -73,7 +74,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
       setBgImgFabricCanvas(imgSrc, canvas, img)
-
     })
   }
 
@@ -111,10 +111,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectRemoverInfo.preview, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
         .then((response) => {
-          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0] ,preview:response[0]}))
+          setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
+          setCallAPI(false)
         })
 
         .catch((error) => {
@@ -129,11 +131,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     }
   }
 
-
-  const setDimensionOfSampleImg=async(img:any)=>{
-   await getDimensions(img,(imgSrc:any)=>{
-    setObjectRemoverInfo((prev:any)=>({...prev,width:imgSrc.width,height:imgSrc.height}))
-   })
+  const setDimensionOfSampleImg = async (img: any) => {
+    await getDimensions(img, (imgSrc: any) => {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+    })
   }
 
   // to get points of brush strokes
@@ -192,6 +193,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
                 setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
                 setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
                 setBgTransparent(canvas)
+                setCallAPI(false)
               }}
             >
               <Icons.Trash size={"32"} />
@@ -219,7 +221,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             onClick={() => {
               setSelectedSampleImg(index)
               setDimensionOfSampleImg(image)
-              setObjectRemoverInfo((prev: any) => ({ ...prev, src: image, preview: image,file_name:"pexels-photo-3493777.jpeg" }))
+              setObjectRemoverInfo((prev: any) => ({
+                ...prev,
+                src: image,
+                preview: image,
+                file_name: "pexels-photo-3493777.jpeg",
+              }))
             }}
           >
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
@@ -247,12 +254,11 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   )
 
   useEffect(() => {
-    if (steps.thirdStep) {
+    if (steps.thirdStep && callAPI) {
       getOutputImg()
+      setCallAPI(false)
     }
   }, [steps.thirdStep])
-
-
 
   const Brush = () => (
     <>
@@ -307,7 +313,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
             // handleBgImg(objectRemoverInfo.src)
-
+            if (!user) return setShowLoginPopup(true)
             handleBrushToolTip(false)
             let paths: any = []
             //  @ts-ignore
@@ -338,6 +344,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             })
             setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
             setStepsComplete((prev) => ({ ...prev, secondStep: true, thirdStep: true }))
+            setCallAPI(true)
           }}
         />
       </div>
@@ -360,6 +367,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           <div
             className={classes.skeletonBox}
             onClick={() => {
+              
               setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
               getOutputImg()
             }}
@@ -393,6 +401,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             fontWeight="500"
             handleClick={() => {
               setObjectRemoverInfo((prev: any) => ({ ...prev, preview: prev.result }))
+              setCallAPI(false)
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false }))
             }}
           />

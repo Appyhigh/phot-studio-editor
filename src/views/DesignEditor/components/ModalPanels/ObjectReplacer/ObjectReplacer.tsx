@@ -37,6 +37,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
+    const [callAPI, setCallAPI] = useState(false)
+
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
@@ -116,10 +118,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       error: false,
       errorMsg: "",
     }))
-    if (steps.fourthStep) {
+ 
+    if (steps.fourthStep && callAPI) {
       getOutputImg()
+      setCallAPI(false)
+    
     }
   }, [steps.fourthStep])
+
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
@@ -136,7 +142,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       )
         .then((response) => {
           console.log("response0", response)
-
+          setCallAPI(false)   
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
           setResultLoading(false)
           handleBgImg(response[0])
@@ -373,6 +379,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               fourthStep: false,
               fifthStep: false,
             }))
+            setCallAPI(true)
           }}
         />
       </div>
