@@ -22,12 +22,14 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import LoginPopup from "../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import useAppContext from "~/hooks/useAppContext"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
   const { objectReplacerInfo, setObjectReplacerInfo } = useContext(ObjectReplacerContext)
   const [brushSize, setBrushSize] = useState(10)
   const { canvas, objects } = fabricEditor
+  const { activePanel, setActivePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
   const [imageLoading, setImageLoading] = useState(false)
@@ -118,11 +120,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       error: false,
       errorMsg: "",
     }))
- 
-    if (steps.fourthStep && callAPI) {
-      getOutputImg()
-      setCallAPI(false)
-    
+    if (steps.fourthStep) {
+      getOutputImg()      
     }
   }, [steps.fourthStep])
 
@@ -177,6 +176,12 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       }
     }
   }, [steps.secondStep])
+
+  useEffect(()=>{
+return (()=>{
+  setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
+})
+  },[])
 
   const upload = () => (
     <>
@@ -319,6 +324,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             // @ts-ignore
             canvas?.clearHistory()
             setStepsComplete((prev) => ({ ...prev }))
+            setStepsComplete((prev) => ({ ...prev }))
           }}
           fontSize="14px"
           fontWeight="500"
@@ -354,6 +360,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               intrinsicWidth: objectReplacerInfo.width,
               pathsArray: paths,
             })
+            setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
             setObjectReplacerInfo((prev: any) => ({ ...prev, mask_img: maskStr }))
 
             // @ts-ignore
@@ -543,7 +550,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   return (
     <div className={classes.mainPanel}>
       <div className={classes.heading}>
-        <div className={classes.arrowIcon}>
+        <div
+          className={classes.arrowIcon}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            setActivePanel(null as any)
+            setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
+          }}
+        >
           <Icons.ArrowLeft />
         </div>
         <p>Object Replacer</p>
@@ -657,6 +671,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         heading={"Final output"}
         handleClick={() => {
           if (stepsComplete.fourthStep && !steps.fourthStep) {
+            setSteps((prev) => ({
+              ...prev,
+              fourthStep: true,
+              thirdStep: false,
+              firstStep: false,
+              secondStep: false,
+              fifthStep: false,
+            }))
             setSteps((prev) => ({
               ...prev,
               fourthStep: true,

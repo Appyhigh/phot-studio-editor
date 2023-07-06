@@ -34,7 +34,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
           }),
         },
       }}
-      onClose={handleClose}
+      // onClose={handleClose}
       isOpen={isOpen}
     >
       {Component && <Component handleClose={handleClose}  />}
