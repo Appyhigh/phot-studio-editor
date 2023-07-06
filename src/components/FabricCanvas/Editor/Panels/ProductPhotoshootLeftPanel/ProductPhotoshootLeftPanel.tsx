@@ -113,7 +113,9 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       }))
       removeBackground()
       productPhotoshootInfo.prevObjects.forEach((obj: any) => {
-        addImage({ ...obj })
+        if (obj.src) {
+          addImage({ ...obj })
+        }
       })
     }
   }, [productPhotoshootInfo.again])
@@ -237,15 +239,19 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
       setCanvasLoader(true)
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
+      const objects = canvas.getObjects()
       productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
         .then((response) => {
+          console.log("INITIAL", canvas.getObjects())
+          console.log("INITIAL", objects)
           setProductPhotoshootInfo((prev: any) => ({
             ...prev,
-            prevObjects: canvas.getObjects(),
+            prevObjects: [...objects],
             result: [...response, ...prev.result],
             finalImage: response[0],
             tooltip: true,
           }))
+          console.log(canvas.getObjects())
           clearCanvas()
           setBackgroundImage(response[0])
           setResultLoading(false)
@@ -491,6 +497,13 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
     // <Scrollable>
     <div className={classes.leftPanel}>
       <div className={classes.heading}>
+        <button
+          onClick={() => {
+            console.log(productPhotoshootInfo)
+          }}
+        >
+          CLICK
+        </button>
         <div className={classes.arrowIcon} onClick={handleClose}>
           <Icons.ArrowLeft />
         </div>
