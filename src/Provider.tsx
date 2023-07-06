@@ -159,9 +159,10 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     mask_img:"",
     src: "",
     preview: "",
-    result: "",
+    result: [],
     width:0,
-    height:0
+    height:0,
+    activeResult:-1
   })
 
   return (

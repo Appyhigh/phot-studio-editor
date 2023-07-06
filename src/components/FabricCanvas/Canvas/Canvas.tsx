@@ -22,7 +22,7 @@ function Canvas({ width, height }: any) {
   const [bgSet, setBg] = useState(false)
   const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
   const base64CursorString = btoa(cursor)
-  
+
   // useCustomizationHandler()
   useGuidelinesHandler()
   useEventsHandler()

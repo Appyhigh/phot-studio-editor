@@ -50,13 +50,23 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
         handleClose()
       })
     } else {
-      await getDimensions(objectReplacerInfo.result, (imgSrc: any) => {
+      await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
           latest_ct = prev + 1
           return prev + 1
         })
-        AddObjectFunc(objectReplacerInfo.result, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+
+      
+        console.log( objectReplacerInfo.result[objectReplacerInfo.activeResult])
+        AddObjectFunc(
+          objectReplacerInfo.result[objectReplacerInfo.activeResult],
+          editor,
+          imgSrc.width,
+          imgSrc.height,
+          frame,
+          latest_ct
+        )
         handleClose()
       })
     }
