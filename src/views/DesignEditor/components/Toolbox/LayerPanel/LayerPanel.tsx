@@ -106,6 +106,7 @@ const LayerPanel = () => {
         (el: any) => el.type === "BackgroundImage" || el?.metadata?.type === backgroundLayerType
       )
       if (bgImageIndex !== -1) {
+         // @ts-ignore
         setBgUrl(editor?.frame?.background?.canvas?._objects[bgImageIndex].preview)
       } else {
         setBgUrl(editor?.frame?.background?.fill)

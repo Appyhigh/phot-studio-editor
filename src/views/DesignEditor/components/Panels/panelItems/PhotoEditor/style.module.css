@@ -104,10 +104,28 @@
 }
 
 .resultImages {
+  max-height: 495px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 0px 12px 0px 14px;
   gap: 6px 8px;
+  overflow-y: scroll;
+  /* scrollbar-width: none; */
+}
+
+/* Customize the appearance of the scrollbar */
+.resultImages::-webkit-scrollbar {
+  width: 7px; /* Set the width of the scrollbar */
+}
+
+.resultImages::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.resultImages::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color of the track */
 }
 
 .resultSection {
@@ -160,15 +178,15 @@
 }
 
 .eachImg img {
-  width: 132px;
-  height: 132px;
+  width: 130px;
+  height: 130px;
   border-radius: 10px;
   object-fit: cover;
 }
 
 .currentActiveImg {
-  width: 132px;
-  height: 132px;
+  width: 130px;
+  height: 130px;
   border-radius: 10px;
   background: linear-gradient(45deg, #7bc0ff, #ac31ff);
   display: flex;
@@ -232,8 +250,8 @@
     margin-left: 20px;
   }
   .eachImg img {
-    width: 158px;
-    height: 158px;
+    width: 152px;
+    height: 152px;
   }
 
   .resultImages {

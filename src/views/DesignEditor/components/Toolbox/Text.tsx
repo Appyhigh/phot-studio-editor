@@ -26,6 +26,7 @@ import { loadFonts } from "~/utils/fonts"
 import Scrollbar from "@layerhub-io/react-custom-scrollbar"
 import { useSelector } from "react-redux"
 import { selectAllFonts } from "~/store/slices/fonts/selectors"
+import TextEffectsNew from "./Shared/TextEffects"
 interface TextState {
   color: string
   bold: boolean
@@ -312,10 +313,11 @@ export default function () {
           {/* <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} /> */}
 
           {/* <TextSpacing /> */}
-          <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} />
-          <Button onClick={() => setActiveSubMenu("TextEffects")} size={SIZE.compact} kind={KIND.tertiary}>
+          {/* <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} /> */}
+          {/* <Button onClick={() => setActiveSubMenu("TextEffects")} size={SIZE.compact} kind={KIND.tertiary}>
             Effects
-          </Button>
+          </Button> */}
+          <TextEffectsNew />
           <Block width={"1px"} height={"24px"} backgroundColor="rgb(213,213,213)" margin={"0 4px"} />
         </Block>
         <Common />

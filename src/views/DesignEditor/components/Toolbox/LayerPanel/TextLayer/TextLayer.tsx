@@ -7,7 +7,7 @@ import TextAlignCenter from "~/components/Icons/TextAlignCenter"
 import TextAlignRight from "~/components/Icons/TextAlignRight"
 import FontSelector from "./FontSelector"
 import DropdownWrapper from "../ObjectLayer/DropdownWrapper"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { TextLayerOption } from "~/views/DesignEditor/utils/TextLayerOtion"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import DeleteIcon from "~/components/Icons/Delete"
@@ -18,6 +18,8 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const [isOpen, setIsOpen] = React.useState(false)
   const [textColor, setTextColor] = useState("#000000")
+  const [cursorPosition, setCursorPosition] = useState(0);
+  const textareaRef = useRef(null);
 
   function close() {
     setIsOpen(false)
@@ -31,6 +33,28 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
       setActiveState(-1)
     } else setActiveState(idx)
   }
+
+  const handleTextChange = (event:any) => {
+    const { value, selectionStart } = event.target;
+    setTextConent((prev) => ({ ...prev, text:value }))
+    setCursorPosition(selectionStart);
+  };
+
+  const handleCursorPosition = () => {
+    if (textareaRef.current) {
+       // @ts-ignore
+      setCursorPosition(textareaRef.current.selectionStart);
+    }
+  };
+  
+  useEffect(()=>{
+    if(activeObject){
+      // @ts-ignore
+      activeObject.setSelectionStart(cursorPosition)
+       // @ts-ignore
+      activeObject.setSelectionEnd(cursorPosition)
+    } 
+  },[cursorPosition])
 
   const TEXT_ALIGNS = ["left", "center", "right"]
   const activeObject = useActiveObject()
@@ -56,7 +80,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
     if (activeObject && activeObject.type === "StaticText") {
       // @ts-ignore
 
-      if (activeObject.id === textContent.id) editor.objects.update({ text: textContent.text })
+      if (activeObject.id === textContent.id) editor.objects.update({ text: textContent.text }) 
     }
   }, [activeObject, textContent])
 
@@ -75,10 +99,13 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
         <div>
           <div className={clsx("mt-3")}>
             <textarea
+              ref={textareaRef}
               className={classes.textAreaSection}
               value={textContent.text}
+              onClick={handleCursorPosition}
+              onKeyDown={handleCursorPosition}
               onChange={(e) => {
-                setTextConent((prev) => ({ ...prev, text: e.target.value }))
+                handleTextChange(e)
               }}
             />
           </div>
