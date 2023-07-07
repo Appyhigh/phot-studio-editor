@@ -1,4 +1,4 @@
-import { useEditor,useActiveObject } from "@layerhub-io/react"
+import { useEditor, useActiveObject } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import { Button, SIZE, KIND } from "baseui/button"
 import { PLACEMENT, StatefulPopover } from "baseui/popover"
@@ -10,12 +10,18 @@ import AlignMiddle from "~/components/Icons/AlignMiddle"
 import AlignBottom from "~/components/Icons/AlignBottom"
 import { ToolButton } from "./ToolButton"
 import AlignCenterIn from "~/components/Icons/AlignCenterIn"
-import {useState } from "react"
+import { useEffect, useState } from "react"
 
 const CommonAlign = ({ type }: any) => {
   const [isDisabled, setIsDisabled] = useState("none")
-  const activeObject = useActiveObject()
   const editor = useEditor()
+
+  useEffect(() => {
+    editor.on("history:changed", () => {
+      setIsDisabled("none")
+    })
+  }, [])
+
   return (
     <StatefulPopover
       placement={PLACEMENT.bottomRight}
@@ -40,18 +46,22 @@ const CommonAlign = ({ type }: any) => {
               <AlignLeft size={24} />
             </Button>
             <Button
-              onClick={() => {editor.objects.alignCenter()
-                setIsDisabled("center")}}
+              onClick={() => {
+                editor.objects.alignCenter()
+                setIsDisabled("center")
+              }}
               kind={KIND.tertiary}
               size={SIZE.mini}
               disabled={isDisabled === "center" ? true : false}
-              style={{opacity:isDisabled==="center"?"0.5":"1"}}
+              style={{ opacity: isDisabled === "center" ? "0.5" : "1" }}
             >
               <AlignCenterIn size={24} />
             </Button>
             <Button
-              onClick={() =>{ editor.objects.alignRight()
-              setIsDisabled("right")}}
+              onClick={() => {
+                editor.objects.alignRight()
+                setIsDisabled("right")
+              }}
               kind={KIND.tertiary}
               size={SIZE.mini}
               disabled={isDisabled === "right" ? true : false}
@@ -59,8 +69,10 @@ const CommonAlign = ({ type }: any) => {
               <AlignRight size={24} />
             </Button>
             <Button
-              onClick={() => {editor.objects.alignTop()
-              setIsDisabled("top")}}
+              onClick={() => {
+                editor.objects.alignTop()
+                setIsDisabled("top")
+              }}
               kind={KIND.tertiary}
               size={SIZE.mini}
               disabled={isDisabled === "top" ? true : false}
@@ -68,8 +80,10 @@ const CommonAlign = ({ type }: any) => {
               <AlignTop size={24} />
             </Button>
             <Button
-              onClick={() => {editor.objects.alignMiddle()
-                setIsDisabled("middle")}}
+              onClick={() => {
+                editor.objects.alignMiddle()
+                setIsDisabled("middle")
+              }}
               kind={KIND.tertiary}
               size={SIZE.mini}
               disabled={isDisabled === "middle" ? true : false}
@@ -77,8 +91,10 @@ const CommonAlign = ({ type }: any) => {
               <AlignMiddle size={24} />
             </Button>
             <Button
-              onClick={() => {editor.objects.alignBottom()
-                setIsDisabled("bottom")}}
+              onClick={() => {
+                editor.objects.alignBottom()
+                setIsDisabled("bottom")
+              }}
               kind={KIND.tertiary}
               size={SIZE.mini}
               disabled={isDisabled === "bottom" ? true : false}
