@@ -43,7 +43,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
           }),
         },
       }}
-      onClose={handleClose}
+      // onClose={handleClose}
       isOpen={isOpen}
     >
       {activePanel === ("ProductPhotoshoot" as any) && <ProductPhotoshootEditor handleClose={handleClose} />}
