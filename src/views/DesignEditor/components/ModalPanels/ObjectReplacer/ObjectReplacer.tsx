@@ -25,6 +25,8 @@ import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
 import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTransparent"
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
+import { getPollingIntervals } from "~/services/pollingIntervals.service"
+import { PollingInterval } from "~/contexts/PollingInterval"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -43,11 +45,12 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
   const [activeResultId, setActiveResultId] = useState(0)
+
+  const {pollingIntervalInfo,setPollingIntervalInfo}=useContext(PollingInterval)
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
   })
-
 
   const setDimensionOfSampleImg = async (img: any) => {
     await getDimensions(img, (imgSrc: any) => {
@@ -82,6 +85,20 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       // @ts-ignore
       (canvas.freeDrawingBrush.width = brushSize)
   }
+
+  useEffect(() => {
+    if (user) {
+      getPollingIntervals()
+        .then((res: any) => {
+          // Store polling intervals
+           setPollingIntervalInfo((prev:any)=>({...prev,objectReplacer:res.features.object_replacer}))
+          // storePollingIntervalCookies(res)
+        })
+        .catch(() => {
+          // an error occured so we rely on fallback polling intervals for each tool in this case
+        })
+    }
+  }, [user])
 
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
@@ -138,12 +155,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         objectReplacerInfo.preview,
         objectReplacerInfo.mask_img,
         objectReplacerInfo.file_name,
-        objectReplacerInfo.prompt
+        objectReplacerInfo.prompt,
+        pollingIntervalInfo.objectReplacer
       )
         .then((response) => {
           console.log("response0", response)
           setCallAPI(false)
-          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response ,activeResult:0}))
+          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response, activeResult: 0 }))
           setResultLoading(false)
           handleBgImg(response[0])
           setActiveResultId(0)
@@ -513,7 +531,9 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         {resultLoading ? (
           Array.from(Array(4).keys()).map((each, _idx) => {
             return (
-              <div key={_idx} className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
+              <div key={_idx} className={classes.skeletonBox}>
+                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+              </div>
             )
           })
         ) : isError.error ? (
@@ -547,7 +567,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                     onClick={() => {
                       if (activeResultId != _idx) {
                         setActiveResultId(_idx)
-                        setObjectReplacerInfo((prev:any)=>({...prev,activeResult:_idx}))
+                        setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
                         handleBgImg(each)
                       }
                     }}

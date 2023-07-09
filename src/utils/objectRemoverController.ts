@@ -6,7 +6,8 @@ export const objectRemoverController = async (
   imgLink: string | undefined,
   mask_img: string | undefined,
   file_name: string | undefined,
-  prompt?:string | undefined
+  prompt?:string | undefined,
+  polling_interval?:number|undefined
 ) => {
   try {
     // @ts-ignore
@@ -37,7 +38,7 @@ export const objectRemoverController = async (
     let status = response.data.order_status_code
 
     while (status == 102 || status == 103) {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, polling_interval))
       response = await axios.get(order_url, {
         headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
         params: {
