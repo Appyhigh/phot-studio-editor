@@ -93,7 +93,7 @@ const UppyDashboard = ({
     uppy.setOptions({
       restrictions: {
         maxNumberOfFiles: 1,
-        allowedFileTypes: [".png", ".jpg", ".jpeg", ".bmp", ".webp"],
+        allowedFileTypes: ["image/*", ".png", ".jpg", ".jpeg", ".bmp", ".webp"],
         maxFileSize: 5242880,
       },
     })
