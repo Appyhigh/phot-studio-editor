@@ -15,6 +15,7 @@ import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import Icons from "~/components/Icons"
 import FileError from "../Common/FileError/FileError"
 import UppyDashboard from "../UploadInput/UppyDashboard"
+import useAppContext from "~/hooks/useAppContext"
 
 const BgUpload = () => {
   const [bgUploading, setBgUploading] = useState(false)
@@ -22,6 +23,7 @@ const BgUpload = () => {
     showPreview: false,
     url: "",
   })
+  const { activePanel } = useAppContext()
   const { mainImgInfo, setMainImgInfo } = useContext(MainImageContext)
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
   const editor = useEditor()
@@ -48,7 +50,7 @@ const BgUpload = () => {
 
   return (
     <Block>
-      <div className={clsx(classes.bgUploadSection, "d-flex  flex-row")}>
+      <div className={clsx(classes.bgUploadSection, "d-flex  flex-row",activePanel=== "BgRemover"&& classes.UploadStockToggleBtn)} >
         <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
           Upload From PC
         </div>
@@ -68,7 +70,7 @@ const BgUpload = () => {
               </div>
             )}
             {!bgUploadPreview.showPreview && !bgUploading && !rejectedFileUpload && (
-              <div key={renderKey}>
+              <div key={renderKey} className={clsx(activePanel=== "BgRemover" && classes.UploadSectionBgremover)} >
                 <UppyDashboard
                   setImageLoading={setBgUploading}
                   setRejectedFileUpload={setRejectedFileUpload}
@@ -87,7 +89,7 @@ const BgUpload = () => {
             )}
 
             {bgUploadPreview.showPreview && !rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
-              <Scrollbars style={{ height: "300px" }}>
+              <Scrollbars  style={{ height: "300px",marginTop:activePanel=== "BgRemover"?"-10px":"none" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
                   discardHandler={() => {

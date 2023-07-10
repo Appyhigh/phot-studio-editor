@@ -23,6 +23,7 @@ import { OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 
 const UppyDashboard = ({
   close,
@@ -37,6 +38,8 @@ const UppyDashboard = ({
   uploads,
   setUploads,
   setBgUploadPreview,
+  imgUpload,
+  setImgUpload,
 }: any) => {
   const { setImagesCt } = useContext(ImagesContext)
   const editor = useEditor()
@@ -47,6 +50,7 @@ const UppyDashboard = ({
   const { setImgScalerInfo, setImgScalerPanelInfo } = useContext(ImageUpScalerContext)
   const { setImgColorizerInfo, setImgColorizerPanelInfo } = useContext(ImageColorizerContext)
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
+  const { setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const {objectReplacerInfo, setObjectReplacerInfo} = useContext(ObjectReplacerContext) 
 
@@ -113,6 +117,8 @@ const UppyDashboard = ({
             : null
           // @ts-ignore
           setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+        } else if (fileInputType === "modalUpload") {
+          setImgUpload((prev: any) => ({ ...prev, src: imageUrl }))
         } else if (uploadType === OBJECT_REMOVER) {
           console.log(file)
           setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
@@ -153,6 +159,12 @@ const UppyDashboard = ({
             resultOption: false,
             tryFilters: false,
           }))
+        } else if (fileInputType === "productAdd") {
+          setProductPhotoshootInfo((prev: any) => ({
+            ...prev,
+            addPreview: imageUrl,
+          }))
+          close()
         } else {
           HandleFile(
             imageUrl,
@@ -210,6 +222,8 @@ const UppyDashboard = ({
               resultOption: false,
               tryFilters: false,
             }))
+          } else if (fileInputType === "modalUpload") {
+            setImgUpload((prev: any) => ({ ...prev, src: imageUrl }))
           } else if (uploadType === OBJECT_REMOVER) {
             setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
             setDimension(imageUrl)
@@ -234,6 +248,12 @@ const UppyDashboard = ({
                   trySampleImg: false,
                 }))
               : null
+          } else if (fileInputType === "productAdd") {
+            setProductPhotoshootInfo((prev: any) => ({
+              ...prev,
+              addPreview: imageUrl,
+            }))
+            close()
           } else {
             HandleFile(
               imageUrl,

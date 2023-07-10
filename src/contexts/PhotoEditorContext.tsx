@@ -1,6 +1,7 @@
 import React from "react"
 const PhotoEditorContext = React.createContext({
   photoEditorInfo: {
+    id: "",
     src: "",
     original: "",
     prompt: "",

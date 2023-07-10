@@ -13,14 +13,16 @@ const Accordian = ({ label, heading, children, isOpen, isComplete, handleClick }
         }}
       >
         <div className="d-flex flex-row align-items-center">
-          {(isOpen || isComplete) ? (
+          {isComplete ? (
             <div>
               <div className={classes.tickIcon}>
                 <Icons.TickIcon />
               </div>
             </div>
           ) : (
-            <div className={classes.label}>{label}</div>
+            <div className={classes.label} style={{ background: isOpen ? "#6729f3" : "#92929d" }}>
+              {label}
+            </div>
           )}
 
           <p>{heading}</p>
@@ -31,7 +33,7 @@ const Accordian = ({ label, heading, children, isOpen, isComplete, handleClick }
           <Icons.ChevronDown size="12" />
         </div>
       </div>
-      {isOpen&&children}
+      {isOpen && children}
     </div>
   )
 }

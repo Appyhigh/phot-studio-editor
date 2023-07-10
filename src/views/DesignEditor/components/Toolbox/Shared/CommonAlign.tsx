@@ -1,4 +1,4 @@
-import { useEditor } from "@layerhub-io/react"
+import { useEditor, useActiveObject } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import { Button, SIZE, KIND } from "baseui/button"
 import { PLACEMENT, StatefulPopover } from "baseui/popover"
@@ -10,9 +10,18 @@ import AlignMiddle from "~/components/Icons/AlignMiddle"
 import AlignBottom from "~/components/Icons/AlignBottom"
 import { ToolButton } from "./ToolButton"
 import AlignCenterIn from "~/components/Icons/AlignCenterIn"
+import { useEffect, useState } from "react"
 
 const CommonAlign = ({ type }: any) => {
+  const [isDisabled, setIsDisabled] = useState("none")
   const editor = useEditor()
+
+  useEffect(() => {
+    editor.on("history:changed", () => {
+      setIsDisabled("none")
+    })
+  }, [])
+
   return (
     <StatefulPopover
       placement={PLACEMENT.bottomRight}
@@ -25,22 +34,71 @@ const CommonAlign = ({ type }: any) => {
             gridTemplateColumns="1fr 1fr 1fr"
             gridGap="8px"
           >
-            <Button onClick={() => editor.objects.alignLeft()} kind={KIND.tertiary} size={SIZE.mini}>
+            <Button
+              onClick={() => {
+                editor.objects.alignLeft()
+                setIsDisabled("left")
+              }}
+              kind={KIND.tertiary}
+              size={SIZE.mini}
+              disabled={isDisabled === "left" ? true : false}
+            >
               <AlignLeft size={24} />
             </Button>
-            <Button onClick={() => editor.objects.alignCenter()} kind={KIND.tertiary} size={SIZE.mini}>
-              <AlignCenterIn size={24}  />
+            <Button
+              onClick={() => {
+                editor.objects.alignCenter()
+                setIsDisabled("center")
+              }}
+              kind={KIND.tertiary}
+              size={SIZE.mini}
+              disabled={isDisabled === "center" ? true : false}
+              style={{ opacity: isDisabled === "center" ? "0.5" : "1" }}
+            >
+              <AlignCenterIn size={24} />
             </Button>
-            <Button onClick={() => editor.objects.alignRight()} kind={KIND.tertiary} size={SIZE.mini}>
+            <Button
+              onClick={() => {
+                editor.objects.alignRight()
+                setIsDisabled("right")
+              }}
+              kind={KIND.tertiary}
+              size={SIZE.mini}
+              disabled={isDisabled === "right" ? true : false}
+            >
               <AlignRight size={24} />
             </Button>
-            <Button onClick={() => editor.objects.alignTop()} kind={KIND.tertiary} size={SIZE.mini}>
+            <Button
+              onClick={() => {
+                editor.objects.alignTop()
+                setIsDisabled("top")
+              }}
+              kind={KIND.tertiary}
+              size={SIZE.mini}
+              disabled={isDisabled === "top" ? true : false}
+            >
               <AlignTop size={24} />
             </Button>
-            <Button onClick={() => editor.objects.alignMiddle()} kind={KIND.tertiary} size={SIZE.mini}>
+            <Button
+              onClick={() => {
+                editor.objects.alignMiddle()
+                setIsDisabled("middle")
+              }}
+              kind={KIND.tertiary}
+              size={SIZE.mini}
+              disabled={isDisabled === "middle" ? true : false}
+            >
               <AlignMiddle size={24} />
             </Button>
-            <Button onClick={() => editor.objects.alignBottom()} kind={KIND.tertiary} size={SIZE.mini}>
+            <Button
+              onClick={() => {
+                editor.objects.alignBottom()
+                setIsDisabled("bottom")
+              }}
+              kind={KIND.tertiary}
+              size={SIZE.mini}
+              disabled={isDisabled === "bottom" ? true : false}
+            >
               <AlignBottom size={24} />
             </Button>
           </Block>

@@ -74,13 +74,18 @@ function Canvas({ width, height }: any) {
 
     // set background of image
 
-    fabric.Image.fromURL("https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473", (img) => {
-      img.crossOrigin = "anonymous"
-      canvas.backgroundImage = img
-      canvas.renderAll()
-      canvas.add(img)
-      img.selectable = false
-    })
+    fabric.Image.fromURL(
+      "https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473",
+      (img) => {
+        canvas.backgroundImage = img
+        canvas.renderAll()
+        canvas.add(img)
+        img.selectable = false
+      },
+      {
+        crossOrigin: "anonymous",
+      }
+    )
 
     // canvas.add(workArea)
     // workArea.center()
@@ -115,7 +120,7 @@ function Canvas({ width, height }: any) {
         height: "740px",
         position: fabricEditor.brushShow && 'relative'
       }}
-      className="editor-canvas d-flex justify-center"
+      className="editor-canvas d-flex justify-center p-4"
       id="cont"
       ref={containerRef}
     >

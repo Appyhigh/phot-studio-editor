@@ -2,6 +2,7 @@ import React from "react"
 
 const TextToArtContext = React.createContext({
   textToArtInputInfo: {
+    id: "",
     prompt: "",
     style: [],
     images_generation_ct: 1,

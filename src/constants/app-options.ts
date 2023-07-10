@@ -104,10 +104,10 @@ export const BASE_ITEMS = [
     name: "ObjectReplacer",
   },
   {
-    id: "productphotoshoot",
-    icon: "ImagineAi",
-    label: "Product PhotoShoot",
-    name: "ProductPhotoShoot",
+    id: "productPhotoshoot",
+    icon: "ProductPhotoshoot",
+    label: "Product Photoshoot",
+    name: "ProductPhotoshoot",
   },
   // {
   //   id: "passportphotomaker",

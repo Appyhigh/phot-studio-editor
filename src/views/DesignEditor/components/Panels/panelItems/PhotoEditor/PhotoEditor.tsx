@@ -25,6 +25,7 @@ import photoEditorController from "~/utils/photoEditorController"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { PollingInterval } from "~/contexts/PollingInterval"
+import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 
 const PhotoEditor = () => {
   const { activePanel } = useAppContext()
@@ -104,13 +105,11 @@ const PhotoEditor = () => {
       setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
       photoEditorController(photoEditorInfo.src, photoEditorInfo.prompt,pollingIntervalInfo.photoEditor)
         .then((response) => {
+          addImg(response[0], 1)
           setImageLoading(false)
           setPhotoEditorInfo((prev: any) => ({
             ...prev,
-            result: [
-              ...photoEditorInfo.result,
-              ...response,
-            ],
+            result: [...photoEditorInfo.result, ...response],
           }))
         })
         .catch((error) => {
@@ -136,15 +135,29 @@ const PhotoEditor = () => {
 
 
   const addImg = async (imageUrl: string, _idx: number) => {
-    setCurrentActiveImg(_idx)
-    await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(imageUrl, editor, img.width, img.height, frame, (latest_ct = latest_ct))
-        return prev + 1
+    if (currentActiveImg == -1) {
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setPhotoEditorInfo
+          )
+          return prev + 1
+        })
       })
-    })
+    } else {
+      UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo)
+    }
+    setCurrentActiveImg(_idx)
   }
 
   const discardHandler = () => {
@@ -157,6 +170,7 @@ const PhotoEditor = () => {
     }))
     setPhotoEditorInfo((prev: any) => ({
       ...prev,
+      id: "",
       src: "",
       prompt: "",
       original: "",
@@ -222,6 +236,7 @@ const PhotoEditor = () => {
                   setCurrentActiveImg(-1)
                   setPhotoEditorInfo((prev: any) => ({
                     ...prev,
+                    id: "",
                     src: "",
                     original: "",
                     prompt: "",
@@ -284,7 +299,7 @@ const PhotoEditor = () => {
           <Block
             onClick={() => {
               setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-              setPhotoEditorInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
+              setPhotoEditorInfo((prev: any) => ({ ...prev, id: "", result: [], showclearTooltip: true }))
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
@@ -293,15 +308,8 @@ const PhotoEditor = () => {
           </Block>
 
           <div className={classes.resultImages}>
-            <div className={clsx("pointer", classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
-              <img
-                src={photoEditorInfo.src}
-                alt="orginal-img"
-                onClick={() => {
-                  addImg(photoEditorInfo.src, 0)
-                }}
-              />
-
+            <div className={clsx(classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
+              <img src={photoEditorInfo.src} alt="orginal-img" />
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
             {photoEditorInfo.result.map((each, idx) => {

@@ -441,6 +441,9 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           fontWeight="500"
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
+            if(!user) {
+              return setShowLoginPopup(true)
+            }
             handleBgImg(objectReplacerInfo.src)
             setSteps((prev) => ({
               ...prev,

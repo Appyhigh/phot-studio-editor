@@ -1,12 +1,21 @@
 import { Modal, SIZE } from "baseui/modal"
+import Editor from "../Editor"
+import classes from "./style.module.css"
+import Icons from "~/components/Icons"
 import useAppContext from "~/hooks/useAppContext"
 import ModalToolItems from "../../ModalToolsEditor"
+import ProductPhotoshootEditor from "../Editor/Panels/ProductPhotoshootEditor/ProductPhotoshootEditor"
+import ErrorContext from "~/contexts/ErrorContext"
+import Toast from "~/components/Toast/Toast"
+import { useContext } from "react"
 import ObjectReplacerEditor from "~/components/ModalToolsEditor/ObjectReplacerEditor/ObjectReplacerEditor"
+
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
-
   // @ts-ignore
   const Component = ModalToolItems[activePanel]
+  const { errorInfo } = useContext(ErrorContext)
+
   return (
     <Modal
       animate
@@ -37,7 +46,18 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       // onClose={handleClose}
       isOpen={isOpen}
     >
-      {Component && <Component handleClose={handleClose}  />}
+      {activePanel === ("ProductPhotoshoot" as any) && <ProductPhotoshootEditor handleClose={handleClose} />}
+      {errorInfo.showError && (
+        <Toast
+          style={{ width: "40%", position: "absolute", bottom: "1rem", left: "30%" }}
+          type="error"
+          message={errorInfo.errorMsg}
+          clickHandler={() => {
+            errorInfo.retryFn()
+          }}
+        />
+      )}
+      {Component && <Component handleClose={handleClose} />}
       {/* <ObjectReplacerEditor/> */}
     </Modal>
   )

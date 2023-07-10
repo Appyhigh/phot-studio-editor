@@ -12,9 +12,9 @@ const Prompt = ({ stateInfo, setStateInfo, placeholder }: any) => {
         className={classes.promptInput}
         placeholder={placeholder ?? "Write here..."}
         onChange={(e) => {
-          setStateInfo({ ...stateInfo, prompt: e.target.value })
+          setStateInfo && setStateInfo({ ...stateInfo, prompt: e.target.value })
         }}
-        value={stateInfo.prompt}
+        value={(stateInfo && stateInfo.prompt) ?? ""}
       ></textarea>
     </Block>
   )

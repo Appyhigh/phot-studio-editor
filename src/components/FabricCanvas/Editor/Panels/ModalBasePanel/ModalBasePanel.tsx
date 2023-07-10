@@ -2,38 +2,43 @@ import { Block } from "baseui/block"
 import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
-import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
-import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
-import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
+import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
-import { useEditor, useFrame } from "@layerhub-io/react"
+import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
+import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/ProductPreview/ProductPreview"
+import useAppContext from "~/hooks/useAppContext"
+import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
+import { OBJECT_REMOVER } from "~/constants/contants"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
-import useAppContext from "~/hooks/useAppContext"
-import { OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
-import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import { useEditor, useFrame } from "@layerhub-io/react"
 
-const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
+const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
+  const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const { objectReplacerInfo } = useContext(ObjectReplacerContext)
-  const editor = useEditor()
+
+  const { activePanel } = useAppContext()
+  const [showPreview, setShowPreview] = useState(false)
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
+  const { canvas, objects }: any = fabricEditor
 
   const handleCloseAddPopup = () => {
     setShowAddPopup(false)
+    setShowPreview(true)
   }
-  const frame = useFrame()
 
+  const editor = useEditor()
+  const frame = useFrame()
   const { setImagesCt } = useContext(ImagesContext)
 
-  const { fabricEditor, setFabricEditor } = useFabricEditor()
-
-  const { canvas, objects } = fabricEditor
-  const { activePanel } = useAppContext()
   // let width = canvas?.getWidth()
   // let height = canvas?.getHeight()
 
@@ -57,8 +62,7 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
           return prev + 1
         })
 
-      
-        console.log( objectReplacerInfo.result[objectReplacerInfo.activeResult])
+        console.log(objectReplacerInfo.result[objectReplacerInfo.activeResult])
         AddObjectFunc(
           objectReplacerInfo.result[objectReplacerInfo.activeResult],
           editor,
@@ -70,6 +74,9 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
         handleClose()
       })
     }
+  }
+  const closeProductPreview = () => {
+    setShowPreview(false)
   }
   // @ts-ignore
 
@@ -86,27 +93,46 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
   return (
     <div>
       <Block className={clsx(classes.basePanel)}>
-        {/* @ts-ignore  */}
-        {activePanel != OBJECT_REPLACER && activePanel != OBJECT_REMOVER && (
+        {activePanel == ("ProductPhotoshoot" as any) && (
           <>
-            <div className="p-relative addPopupBtn">
+            <div
+              className="p-relative addPopupBtn"
+              style={{
+                cursor: productPhotoshootInfo.result.length == 0 ? "not-allowed" : "",
+              }}
+            >
               <button
                 className={classes.basePanelBtn}
-                onMouseOver={() => {
+                style={{
+                  backgroundColor: productPhotoshootInfo.result.length == 0 ? "#6729f3" : "#F1F1F5",
+                  color: productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D",
+                  pointerEvents: productPhotoshootInfo.result.length == 0 ? "auto" : "none",
+                }}
+                onClick={() => {
                   setShowAddPopup(true)
                 }}
               >
                 <span className="d-flex align-items-center">
                   <span className="pr-1">
-                    <Icons.Plus size={16} />
+                    <Icons.Plus size={16} color={productPhotoshootInfo.result.length == 0 ? "#FAFAFB" : "#92929D"} />
                   </span>
                   Add
                   <span className="pl-3">
-                    <Icons.ArrowDown size={14} />
+                    <Icons.ArrowDown size={14} color={productPhotoshootInfo.result.length == 0 ? "#FFF" : "#92929D"} />
                   </span>
                 </span>
               </button>
-              <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
+              <UploadImgModal
+                fileInputType="productAdd"
+                isOpen={showAddPopup}
+                handleClose={handleCloseAddPopup}
+                id={"ProductAddPopup"}
+              />
+              <ProductPreview
+                isOpen={productPhotoshootInfo.addPreview && showPreview}
+                onClose={closeProductPreview}
+                imageUrl={productPhotoshootInfo.addPreview}
+              />
             </div>
             <Block
               className="flex-center pointer p-relative resizeCanvasBtn"
@@ -119,57 +145,6 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
             </Block>
           </>
         )}
-
-        {/* img zoom in zoom out  */}
-        {/* <input
-          type="range"
-          min={1}
-          max={1.5}
-          defaultValue={0}
-          step={0.1}
-          onChange={(e) => {
-            // const zoomMin = 10
-            // const zoomMax = 240
-            // let parsedValue = parseFloat(e.target.value)
-
-            // if (parsedValue < 0) {
-            //   canvas.setZoom(zoomMin / 100)
-            // } else if (parsedValue > zoomMax) {
-            //   canvas.setZoom(zoomMax / 100)
-            // } else {
-            //   canvas.setZoom(parsedValue / 100)
-            // }
-
-            // let width=canvas.getWidth();
-            // let height=canvas.getHeight();
-
-            // console.log(width,height)
-            //  console.log(e.target.value)
-            //  let val=e.target.value;
-            // canvas.setDimensions({
-            //   width: width * val,
-            //   height: height * val,
-            // })
-            let bg=canvas.getObjects()[0];
-
-            canvas.setZoom(1);
-            canvas.setDimensions({
-              width:width,
-              height:height
-            })
-            bg.scale(1)
-            bg.center()
-            canvas.setZoom(e.target.value)
-            canvas.setDimensions({
-              width: width * e.target.value,
-              height: height * e.target.value,
-            })
-            bg.scale(e.target.value)
-            bg.center()
-
-            // canvas.setDimensions({ width: newWidth, height: newHeight });
-          }}
-        /> */}
         <div className="flex-1"></div>
 
         <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
@@ -204,8 +179,9 @@ const ModalBasePanel = ({ handleClose, isDoneBtnDisabled }: any) => {
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
-            // @ts-ignore
-            handleClick={isDone ? handleAddCanvas : ""}
+            handleClick={
+              !isDoneBtnDisabled || objectRemoverInfo.result || objectReplacerInfo.result ? handleAddCanvas : null
+            }
           />
         </Block>
       </Block>
