@@ -300,7 +300,10 @@ const UppyDashboard = ({
     })
 
     uppy.on("restriction-failed", (file: any, error: any) => {
-      if (
+      console.log(file, error)
+      if (file.source == "Url") {
+        setUploadErrorMsg("Incorrect url format. Please enter a valid url.")
+      } else if (
         file.type != "image/jpeg" &&
         file.type != "image/png" &&
         file.type != "image/jpg" &&
@@ -327,8 +330,12 @@ const UppyDashboard = ({
       return false
     })
 
-    uppy.on("info-visible", (file: any) => {
-      if (
+    uppy.on("info-visible", (file: any, error: any) => {
+      console.log(file, error)
+      if (file && file.source == "Url") {
+        setUploadErrorMsg("Incorrect url format. Please enter a valid url.")
+      } else if (
+        file &&
         file.type != "image/jpeg" &&
         file.type != "image/png" &&
         file.type != "image/jpg" &&
@@ -336,10 +343,10 @@ const UppyDashboard = ({
         file.type != "image/webp"
       ) {
         setUploadErrorMsg("Wrong format file uploaded, Please upload an image in JPG, JPEG, PNG or BMP format")
-      } else if (file.size > 5242880) {
+      } else if (file && file.size > 5242880) {
         setUploadErrorMsg("File size must be under 5 MB.")
       } else {
-        setUploadErrorMsg("An error occurred while uploading the file. Please try again.")
+        setUploadErrorMsg("Incorrect url format. Please enter a valid url.")
       }
       setTimeout(() => {
         setImageLoading(false)
