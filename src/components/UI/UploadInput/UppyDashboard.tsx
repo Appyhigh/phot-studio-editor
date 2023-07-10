@@ -52,7 +52,7 @@ const UppyDashboard = ({
   const { setPhotoEditorInfo, setPhotoEditorPanelInfo } = useContext(PhotoEditorContext)
   const { setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
-  const {objectReplacerInfo, setObjectReplacerInfo} = useContext(ObjectReplacerContext) 
+  const { objectReplacerInfo, setObjectReplacerInfo } = useContext(ObjectReplacerContext)
 
   const setDimension = async (img: string) => {
     await getDimensions(img, (imgSrc: any) => {
@@ -123,11 +123,10 @@ const UppyDashboard = ({
           console.log(file)
           setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
           setDimension(imageUrl)
-        }else if(uploadType === OBJECT_REPLACER){
-          setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name: file.name }))
+        } else if (uploadType === OBJECT_REPLACER) {
+          setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
           setDimensionReplacer(imageUrl)
-        }
-         else if (fileInputType == "photoEditor") {
+        } else if (fileInputType == "photoEditor") {
           setPhotoEditorInfo
             ? setPhotoEditorInfo((prev: any) => ({
                 ...prev,
@@ -227,11 +226,10 @@ const UppyDashboard = ({
           } else if (uploadType === OBJECT_REMOVER) {
             setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
             setDimension(imageUrl)
-          }else if(uploadType === OBJECT_REPLACER){
-            setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl,file_name: file.name }))
+          } else if (uploadType === OBJECT_REPLACER) {
+            setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
             setDimensionReplacer(imageUrl)
-          } 
-          else if (fileInputType == "photoEditor") {
+          } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({
                   ...prev,
@@ -302,10 +300,18 @@ const UppyDashboard = ({
     })
 
     uppy.on("restriction-failed", (file: any, error: any) => {
-      if (file.size > 5242880) {
+      if (
+        file.type != "image/jpeg" &&
+        file.type != "image/png" &&
+        file.type != "image/jpg" &&
+        file.type != "image/bmp" &&
+        file.type != "image/webp"
+      ) {
+        setUploadErrorMsg("Wrong format file uploaded, Please upload an image in JPG, JPEG, PNG or BMP format")
+      } else if (file.size > 5242880) {
         setUploadErrorMsg("File size must be under 5 MB.")
       } else {
-        setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
+        setUploadErrorMsg("An error occurred while uploading the file. Please try again.")
       }
       setTimeout(() => {
         setImageLoading(false)
@@ -321,8 +327,20 @@ const UppyDashboard = ({
       return false
     })
 
-    uppy.on("info-visible", () => {
-      setUploadErrorMsg("Wrong format file uploaded , Please upload an image in JPG, JPEG , PNG or BMP format")
+    uppy.on("info-visible", (file: any) => {
+      if (
+        file.type != "image/jpeg" &&
+        file.type != "image/png" &&
+        file.type != "image/jpg" &&
+        file.type != "image/bmp" &&
+        file.type != "image/webp"
+      ) {
+        setUploadErrorMsg("Wrong format file uploaded, Please upload an image in JPG, JPEG, PNG or BMP format")
+      } else if (file.size > 5242880) {
+        setUploadErrorMsg("File size must be under 5 MB.")
+      } else {
+        setUploadErrorMsg("An error occurred while uploading the file. Please try again.")
+      }
       setTimeout(() => {
         setImageLoading(false)
         setDisplayError(true)
@@ -354,7 +372,7 @@ const UppyDashboard = ({
         disableInformer={true}
       />
       {uploadErrorMsg && (
-        <div style={{ position: "relative", top: "-0.75rem" }}>
+        <div style={{ position: "relative", top: "-0.25rem" }}>
           <FileError ErrorMsg={uploadErrorMsg} displayError={displayError} />
         </div>
       )}
