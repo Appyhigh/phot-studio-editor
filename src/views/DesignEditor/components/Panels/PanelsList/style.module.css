@@ -1,5 +1,5 @@
 .panelListSection {
-  width: 90px;
+  max-width: 90px !important;
   height: 100%;
 }
 
@@ -51,4 +51,13 @@
     width: 90px;
     font-weight: 500;
   }
+}
+
+
+.chevronIcon {
+  position: absolute;
+  z-index: 1000;
+  bottom: -20px;
+  left: 42px;
+  transform: translateX(10px);
 }
