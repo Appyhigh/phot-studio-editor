@@ -511,72 +511,78 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
         <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
         <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
-        <Accordian
-          label={"1"}
-          // heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
-          heading={"Upload / choose image"}
-          isOpen={steps[1]}
-          isComplete={stepsComplete[1]}
-          children={<UploadImage />}
-          handleClick={() => {
-            if (stepsComplete[1] && !steps[1]) {
-              setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-              // setStepsComplete((prev) => ({ ...prev, 4: false }))
-            } else if (steps[1]) {
-              setSteps((prev) => ({ ...prev, 1: false }))
-            } else {
+        <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
+          <Accordian
+            label={"1"}
+            // heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
+            heading={"Upload / choose image"}
+            isOpen={steps[1]}
+            isComplete={stepsComplete[1]}
+            children={<UploadImage />}
+            handleClick={() => {
+              if (stepsComplete[1] && !steps[1]) {
+                setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+                // setStepsComplete((prev) => ({ ...prev, 4: false }))
+              } else if (steps[1]) {
+                setSteps((prev) => ({ ...prev, 1: false }))
+              } else {
+              }
+            }}
+          />
+          <Accordian
+            label={"2"}
+            heading={"Resize your image"}
+            isOpen={steps[2]}
+            isComplete={stepsComplete[2] || productPhotoshootInfo.preview}
+            children={<ResizeImage />}
+            handleClick={() => {
+              if ((stepsComplete[2] || productPhotoshootInfo.preview) && !steps[2]) {
+                setSteps((prev) => ({ ...prev, 2: true, 1: false, 3: false, 4: false }))
+                // setStepsComplete((prev) => ({ ...prev, 4: false }))
+              } else if (steps[2]) {
+                setSteps((prev) => ({ ...prev, 2: false }))
+              } else {
+              }
+            }}
+          />
+          <Accordian
+            label={"3"}
+            heading={"Select background"}
+            isOpen={steps[3]}
+            isComplete={stepsComplete[3] || productPhotoshootInfo.prompt}
+            children={
+              <SelectBackground
+                setSteps={setSteps}
+                setStepsComplete={setStepsComplete}
+                generateResult={generateResult}
+              />
             }
-          }}
-        />
-        <Accordian
-          label={"2"}
-          heading={"Resize your image"}
-          isOpen={steps[2]}
-          isComplete={stepsComplete[2] || productPhotoshootInfo.preview}
-          children={<ResizeImage />}
-          handleClick={() => {
-            if ((stepsComplete[2] || productPhotoshootInfo.preview) && !steps[2]) {
-              setSteps((prev) => ({ ...prev, 2: true, 1: false, 3: false, 4: false }))
-              // setStepsComplete((prev) => ({ ...prev, 4: false }))
-            } else if (steps[2]) {
-              setSteps((prev) => ({ ...prev, 2: false }))
-            } else {
-            }
-          }}
-        />
-        <Accordian
-          label={"3"}
-          heading={"Select background"}
-          isOpen={steps[3]}
-          isComplete={stepsComplete[3] || productPhotoshootInfo.prompt}
-          children={
-            <SelectBackground setSteps={setSteps} setStepsComplete={setStepsComplete} generateResult={generateResult} />
-          }
-          handleClick={() => {
-            if ((stepsComplete[3] || productPhotoshootInfo.prompt) && !steps[3]) {
-              setSteps((prev) => ({ ...prev, 3: true, 1: false, 2: false, 4: false }))
-              // setStepsComplete((prev) => ({ ...prev, 4: false }))
-            } else if (steps[3]) {
-              setSteps((prev) => ({ ...prev, 3: false }))
-            } else {
-            }
-          }}
-        />
-        <Accordian
-          label={"4"}
-          heading={"Select output"}
-          isOpen={steps[4]}
-          isComplete={stepsComplete[4] || productPhotoshootInfo.finalImage}
-          children={<SelectOutput />}
-          handleClick={() => {
-            if ((stepsComplete[4] || productPhotoshootInfo.finalImage) && !steps[4]) {
-              setSteps((prev) => ({ ...prev, 4: true, 1: false, 2: false, 3: false }))
-            } else if (steps[4]) {
-              setSteps((prev) => ({ ...prev, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 4: true }))
-            }
-          }}
-        />
+            handleClick={() => {
+              if ((stepsComplete[3] || productPhotoshootInfo.prompt) && !steps[3]) {
+                setSteps((prev) => ({ ...prev, 3: true, 1: false, 2: false, 4: false }))
+                // setStepsComplete((prev) => ({ ...prev, 4: false }))
+              } else if (steps[3]) {
+                setSteps((prev) => ({ ...prev, 3: false }))
+              } else {
+              }
+            }}
+          />
+          <Accordian
+            label={"4"}
+            heading={"Select output"}
+            isOpen={steps[4]}
+            isComplete={stepsComplete[4] || productPhotoshootInfo.finalImage}
+            children={<SelectOutput />}
+            handleClick={() => {
+              if ((stepsComplete[4] || productPhotoshootInfo.finalImage) && !steps[4]) {
+                setSteps((prev) => ({ ...prev, 4: true, 1: false, 2: false, 3: false }))
+              } else if (steps[4]) {
+                setSteps((prev) => ({ ...prev, 4: false }))
+                setStepsComplete((prev) => ({ ...prev, 4: true }))
+              }
+            }}
+          />
+        </div>
         <LoginPopup
           isOpen={showLoginPopup}
           loginPopupCloseHandler={() => {

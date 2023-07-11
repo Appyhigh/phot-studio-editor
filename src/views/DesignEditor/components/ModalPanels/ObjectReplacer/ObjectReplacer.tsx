@@ -46,7 +46,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [callAPI, setCallAPI] = useState(false)
   const [activeResultId, setActiveResultId] = useState(0)
 
-  const {pollingIntervalInfo,setPollingIntervalInfo}=useContext(PollingInterval)
+  const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
@@ -91,7 +91,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       getPollingIntervals()
         .then((res: any) => {
           // Store polling intervals
-           setPollingIntervalInfo((prev:any)=>({...prev,objectReplacer:res.features.object_replacer}))
+          setPollingIntervalInfo((prev: any) => ({ ...prev, objectReplacer: res.features.object_replacer }))
           // storePollingIntervalCookies(res)
         })
         .catch(() => {
@@ -441,7 +441,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           fontWeight="500"
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
-            if(!user) {
+            if (!user) {
               return setShowLoginPopup(true)
             }
             handleBgImg(objectReplacerInfo.src)
@@ -649,7 +649,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           setShowLoginPopup(false)
         }}
       />
-      <Scrollbars>
+      <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
         <Accordian
           label={1}
           isOpen={steps.firstStep}
@@ -759,7 +759,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
         )}
-      </Scrollbars>
+      </div>
     </div>
   )
 }

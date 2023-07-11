@@ -1,14 +1,11 @@
 import { Modal, SIZE } from "baseui/modal"
-import Editor from "../Editor"
-import classes from "./style.module.css"
-import Icons from "~/components/Icons"
+
 import useAppContext from "~/hooks/useAppContext"
 import ModalToolItems from "../../ModalToolsEditor"
 import ProductPhotoshootEditor from "../Editor/Panels/ProductPhotoshootEditor/ProductPhotoshootEditor"
 import ErrorContext from "~/contexts/ErrorContext"
 import Toast from "~/components/Toast/Toast"
 import { useContext } from "react"
-import ObjectReplacerEditor from "~/components/ModalToolsEditor/ObjectReplacerEditor/ObjectReplacerEditor"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
@@ -38,7 +35,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
           style: ({ $theme }) => ({
             backgroundColor: "#F1F1F5",
             width: "100%",
-            height: "100%",
+            height: "80vh",
             margin: "1rem 2rem",
           }),
         },

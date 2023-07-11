@@ -25,6 +25,7 @@ import { getCookie } from "~/utils/common"
 import { useAuth } from "~/hooks/useAuth"
 import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import useAppContext from "~/hooks/useAppContext"
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
@@ -37,6 +38,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
+  const { activePanel, setActivePanel } = useAppContext()
   // @ts-ignore
   const { authState } = useAuth()
   const [isError, setIsError] = useState({
@@ -153,7 +155,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   useEffect(() => {
     if (steps.secondStep) {
       handleBrushToolTip(true)
-  
+
       if (canvas) {
         // @ts-ignore
         canvas.isDrawingMode = true
@@ -368,7 +370,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           <div
             className={classes.skeletonBox}
             onClick={() => {
-              
               setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
               getOutputImg()
             }}
@@ -413,7 +414,13 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   return (
     <div className={classes.mainPanel}>
       <div className={classes.heading}>
-        <div className={classes.arrowIcon}>
+        <div
+          onClick={() => {
+            setActivePanel(null as any)
+            setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: [] }))
+          }}
+          className={classes.arrowIcon}
+        >
           <Icons.ArrowLeft />
         </div>
         <p>Object Remover</p>
@@ -425,60 +432,62 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           setShowLoginPopup(false)
         }}
       />
-      <Accordian
-        label={1}
-        isOpen={steps.firstStep}
-        isComplete={stepsComplete.firstStep}
-        heading={"Upload / choose image"}
-        children={upload()}
-        handleClick={() => {
-          if (stepsComplete.firstStep && !steps.firstStep) {
-            setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
-          } else if (steps.firstStep) {
-            setSteps((prev) => ({ ...prev, firstStep: false }))
-          } else {
-            {
+      <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
+        <Accordian
+          label={1}
+          isOpen={steps.firstStep}
+          isComplete={stepsComplete.firstStep}
+          heading={"Upload / choose image"}
+          children={upload()}
+          handleClick={() => {
+            if (stepsComplete.firstStep && !steps.firstStep) {
+              setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
+              setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
+            } else if (steps.firstStep) {
+              setSteps((prev) => ({ ...prev, firstStep: false }))
+            } else {
+              {
+              }
             }
-          }
-        }}
-      />
-      <Accordian
-        label={2}
-        isOpen={steps.secondStep}
-        isComplete={stepsComplete.secondStep}
-        heading={"Brush over the image"}
-        children={Brush()}
-        handleClick={() => {
-          if (stepsComplete.secondStep && !steps.secondStep) {
-            setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
-          } else if (steps.secondStep) {
-            setSteps((prev) => ({ ...prev, secondStep: false }))
-          } else {
-          }
-        }}
-      />
-      <Accordian
-        isOpen={steps.thirdStep}
-        isComplete={stepsComplete.thirdStep}
-        label={3}
-        heading={"Output"}
-        handleClick={() => {
-          if (stepsComplete.thirdStep && !steps.thirdStep) {
-            setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
-          } else if (steps.thirdStep) {
-            setSteps((prev) => ({ ...prev, thirdStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
-          }
-        }}
-        children={outputResult()}
-      />
-      {isError.error && (
-        <div style={{ position: "relative" }}>
-          <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
-        </div>
-      )}
+          }}
+        />
+        <Accordian
+          label={2}
+          isOpen={steps.secondStep}
+          isComplete={stepsComplete.secondStep}
+          heading={"Brush over the image"}
+          children={Brush()}
+          handleClick={() => {
+            if (stepsComplete.secondStep && !steps.secondStep) {
+              setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
+              setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
+            } else if (steps.secondStep) {
+              setSteps((prev) => ({ ...prev, secondStep: false }))
+            } else {
+            }
+          }}
+        />
+        <Accordian
+          isOpen={steps.thirdStep}
+          isComplete={stepsComplete.thirdStep}
+          label={3}
+          heading={"Output"}
+          handleClick={() => {
+            if (stepsComplete.thirdStep && !steps.thirdStep) {
+              setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
+            } else if (steps.thirdStep) {
+              setSteps((prev) => ({ ...prev, thirdStep: false }))
+              setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+            }
+          }}
+          children={outputResult()}
+        />
+        {isError.error && (
+          <div style={{ position: "relative" }}>
+            <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

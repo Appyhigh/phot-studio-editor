@@ -17,8 +17,8 @@ import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
-    width: 800,
-    height: 800,
+    width: 600,
+    height: 600,
   })
 
   const { fabricEditor } = useFabricEditor()
