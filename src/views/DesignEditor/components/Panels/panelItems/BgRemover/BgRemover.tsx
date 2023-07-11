@@ -15,6 +15,8 @@ import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { REMOVE_BACKGROUND } from "~/constants/contants"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import useAppContext from "~/hooks/useAppContext"
+
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -23,7 +25,7 @@ const BgRemover = () => {
     type: -1,
     id: 0,
   })
-
+  const { activePanel } = useAppContext()
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
@@ -123,7 +125,7 @@ const BgRemover = () => {
       {panelInfo.bgOptions && (
         <>
           {" "}
-          <Block className="mt-2">
+          <Block className={clsx(activePanel=== "BgRemover" ?"mt-1":"mt-2")}>
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
               <Block
                 className={clsx(
