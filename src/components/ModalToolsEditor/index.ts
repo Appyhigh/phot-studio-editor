@@ -1,5 +1,5 @@
 import ObjectRemoverEditor from "./ObjectRemoverEditor/ObjectRemoverEditor"
-import ProductPhotoShoot from "./ProductPhotoShoot/ProductPhotoShoot"
+import ProductPhotoShoot from "../../views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoShoot"
 import ObjectReplacerEditor from "./ObjectReplacerEditor/ObjectReplacerEditor"
 export default {
   ObjectRemover: ObjectRemoverEditor,
