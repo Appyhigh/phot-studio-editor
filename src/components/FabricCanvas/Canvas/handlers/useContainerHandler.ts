@@ -23,8 +23,8 @@ function useContainerHandler() {
     [canvas]
   )
   useEffect(() => {
-    const containerWidth = 600
-    const containerHeight = 600
+    const containerWidth = 400
+    const containerHeight = 400
     // const containerWidth = containerRef.current.clientWidth
     // const containerHeight = containerRef.current.clientHeight
 
