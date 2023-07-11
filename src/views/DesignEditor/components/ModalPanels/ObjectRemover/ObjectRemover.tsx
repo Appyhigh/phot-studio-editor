@@ -168,6 +168,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     }
   }, [steps.secondStep])
 
+  useEffect(() => {
+    return () => {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
+    }
+  }, [])
+
   const upload = () => (
     <>
       {objectRemoverInfo.preview ? (
