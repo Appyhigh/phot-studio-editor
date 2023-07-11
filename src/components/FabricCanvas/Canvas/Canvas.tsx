@@ -15,6 +15,8 @@ import useAppContext from "~/hooks/useAppContext"
 
 function Canvas({ width, height }: any) {
   const containerRef = useContainerHandler()
+  const { activePanel } = useAppContext()
+
   const { fabricEditor, setFabricEditor } = useFabricEditor()
   const [brushSize, setBrushSize] = useState(10)
 
@@ -119,6 +121,7 @@ function Canvas({ width, height }: any) {
         width: "600px",
         height: "440px",
         position: fabricEditor.brushShow && "relative",
+        marginTop: activePanel === "ProductPhotoshoot" ? "30px" : "0px",
       }}
       className="editor-canvas d-flex justify-center p-4"
       id="cont"
