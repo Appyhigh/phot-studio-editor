@@ -106,6 +106,9 @@ const StockImages = (props: any) => {
       <div className={classes.inputWrapper}>
         <input
           className={classes.textInput}
+          onFocus={() => {
+            editor.objects.deselect()
+          }}
           onChange={(e) => {
             setSearch(e.target.value)
             if (e.target.value === "") {

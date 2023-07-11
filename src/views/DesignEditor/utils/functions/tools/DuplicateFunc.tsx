@@ -33,10 +33,10 @@ export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
         resolve(
           editor.objects.update(
             { name: activeObject.name, metadata: activeObject.metadata },
-            editor.objects.list()[editor.objects.list().length - 1].id
+            editor.canvas.canvas.getActiveObject()?.id
           )
         )
-      }, 50)
+      }, 100)
     }
 
     editor.cancelContextMenuRequest()
