@@ -35,13 +35,12 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { canvas, objects } = fabricEditor
   const { activePanel, setActivePanel } = useAppContext()
   // @ts-ignore
-  const { authState } = useAuth()
+  const { authState,setAuthState } = useAuth()
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [promptText, setPromptText] = useState("")
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
-  const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
   const [activeResultId, setActiveResultId] = useState(0)
@@ -58,7 +57,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     })
   }
 
-  const { user } = authState
+  const { user, showLoginPopUp} = authState
   const [steps, setSteps] = useState({
     firstStep: true,
     secondStep: false,
@@ -146,7 +145,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setShowLoginPopup(true)
+      setAuthState((prev:any) => ({...prev, showLoginPopUp: true}))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
@@ -442,7 +441,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
             if (!user) {
-              return setShowLoginPopup(true)
+              return setAuthState((prev:any) => ({...prev, showLoginPopUp: true}))
             }
             handleBgImg(objectReplacerInfo.src)
             setSteps((prev) => ({
@@ -642,13 +641,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         <p>Object Replacer</p>
       </div>
       <div className={classes.line}></div>
-
-      <LoginPopup
-        isOpen={showLoginPopup}
-        loginPopupCloseHandler={() => {
-          setShowLoginPopup(false)
-        }}
-      />
+      
       <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
         <Accordian
           label={1}

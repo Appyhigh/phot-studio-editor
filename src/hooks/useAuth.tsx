@@ -36,12 +36,14 @@ interface UserDetailsContext {
   user: NativeUser | null
   loading: boolean
   creditsData: any
+  showLoginPopUp:boolean
 }
 
 const userDefaults: UserDetailsContext = {
   user: null,
   loading: false,
   creditsData: { objectReplacer: null, backgroundReplacer: null, photoEditor: null },
+  showLoginPopUp:false,
 }
 
 const AuthContext = createContext<UserDetailsContext>(userDefaults)
