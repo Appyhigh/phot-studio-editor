@@ -24,6 +24,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import ErrorContext from "~/contexts/ErrorContext"
+import AlignCenter from "~/components/Icons/AlignCenter"
 
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -147,6 +148,24 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     }
   }, [productPhotoshootInfo.removeBg])
 
+  useEffect(() => {
+    return () => {
+      setCanvasLoader(false)
+      setProductPhotoshootInfo((prev: any) => ({
+        ...prev,
+        src: "",
+        preview: "",
+        tooltip: false,
+        prompt: "",
+        result: [],
+        finalImage: "",
+        again: false,
+        prevObjects: [],
+        addPreview: "",
+        removeBg: false,
+      }))
+    }
+  }, [])
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)
 
