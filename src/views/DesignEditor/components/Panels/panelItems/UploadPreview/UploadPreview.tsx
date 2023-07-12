@@ -21,6 +21,10 @@ import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import ErrorContext from "~/contexts/ErrorContext"
 import BaseButton from "~/components/UI/Button/BaseButton"
+import { useAuth } from "~/hooks/useAuth"
+import { COOKIE_KEYS } from "~/utils/enum"
+import { getCookie } from "~/utils/common"
+import LoginPopup from "../../../LoginPopup/LoginPopup"
 
 const UploadPreview = ({
   discardHandler,
@@ -41,8 +45,24 @@ const UploadPreview = ({
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
+  const [showLoginPopUp, setShowLoginPopup] = useState(false)
+  const [autoCallAPI, setAutoCallAPI] = useState(false)
+  // @ts-ignore
+  const { authState, setAuthState } = useAuth()
+  const { user } = authState
 
+  useEffect(() => {
+    if (user && autoCallAPI) {
+      removeBg()
+      setAutoCallAPI(false)
+    }
+  }, [user, autoCallAPI])
   const removeBg = () => {
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+      setAutoCallAPI(true)
+      setShowLoginPopup(true)
+    } else {
       let latest_ct = 0
       setImagesCt((prev: any) => {
         latest_ct = prev + 1
@@ -66,6 +86,7 @@ const UploadPreview = ({
         return prev + 1
       })
     }
+  }
 
   return (
     <div>
@@ -137,7 +158,12 @@ const UploadPreview = ({
                 </Block>
               )}
             </Block>
-
+            <LoginPopup
+              isOpen={showLoginPopUp}
+              loginPopupCloseHandler={() => {
+                setShowLoginPopup(false)
+              }}
+            />
             {btnTitle && (
               <BaseButton
                 title={btnTitle}

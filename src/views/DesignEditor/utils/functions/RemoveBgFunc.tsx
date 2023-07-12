@@ -21,6 +21,7 @@ export const RemoveBGFunc = async (
   try {
     if (mainImgInfo) {
       if (mainImgInfo?.metadata?.originalLayerPreview) {
+        console.log("first")
         var imageElement = document.createElement("img")
         imageElement.setAttribute("crossorigin", "Anonymous")
         imageElement.setAttribute("class", "canvas-img")
@@ -41,6 +42,7 @@ export const RemoveBGFunc = async (
         editor.objects.update(options)
         setMainImgInfo((prev: any) => ({ ...prev, ...options }))
       } else {
+        console.log("hi th",mainImgInfo)
         setLoaderPopup(true)
         let response = await removeBackgroundController(
           mainImgInfo.src,
@@ -114,6 +116,7 @@ export const RemoveBGFunc = async (
       editor.objects.update(options)
     } else {
       setLoaderPopup(true)
+      console.log("second")
       let response = await removeBackgroundController(
         activeObject ? activeObject?.metadata.originalLayerPreview : mainImgInfo.src,
         (image: string) => {
