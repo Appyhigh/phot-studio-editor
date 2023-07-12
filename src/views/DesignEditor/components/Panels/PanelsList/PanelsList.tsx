@@ -5,10 +5,13 @@ import Icons from "~/components/Icons"
 import { useTranslation } from "react-i18next"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import useEditorType from "~/hooks/useEditorType"
-import Scrollable from "~/components/Scrollable"
 import { Block } from "baseui/block"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import PointerIcon from "~/components/Icons/PointerIcon"
+import { OBJECT_REMOVER, OBJECT_REPLACER, PRODUCT_PHOTOSHOOT } from "~/constants/contants"
+import Scrollable from "~/components/Scrollable"
+import { useEffect, useRef } from "react"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   backgroundColor: $theme.colors.white,
@@ -23,13 +26,30 @@ const PanelsList = () => {
   const editorType = useEditorType()
   //@ts-ignore
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
+  const sidebarRef = useRef(null)
+
+  useEffect(() => {
+    if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
+      sidebarRef.current.style.overflowY = "visible"
+      sidebarRef.current.style.marginTop = "-170px"
+    } else {
+      sidebarRef.current.style.overflowY = "scroll"
+      sidebarRef.current.style.marginTop = "0"
+    }
+  }, [activePanel])
 
   return (
-    <Container className={classes.panelListSection}>
-      <Scrollable autoHide={true}>
+    <div className={classes.panelListSection}>
+      <div
+        ref={sidebarRef}
+        style={{
+          height: "92vh",
+          overflowY: "scroll",
+        }}
+      >
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
-            // @ts-ignore
+            sidebarRef={sidebarRef}
             label={panelListItem.label}
             name={panelListItem.name}
             key={panelListItem.id}
@@ -38,12 +58,12 @@ const PanelsList = () => {
             activePanel={activePanel}
           />
         ))}
-      </Scrollable>
-    </Container>
+      </div>
+    </div>
   )
 }
 
-const PanelListItem = ({ label, icon, activePanel, name }: any) => {
+const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
@@ -52,24 +72,35 @@ const PanelListItem = ({ label, icon, activePanel, name }: any) => {
   return (
     <Block
       id="EditorPanelList"
-      className={clsx(classes.panelListItem, "flex-center-column")}
+      className={clsx(classes.panelListItem, "flex-center-column p-relative")}
       onClick={() => {
+        // Change the style here
         setIsSidebarOpen(true)
         setActivePanel(name)
       }}
     >
       {name === "Images" ? (
-        <div className={clsx(classes.imagesIcon,activePanel !== name && classes.inActivePanel)}  >
-          <Icon size={24} color={activePanel !== name ? "#9BA6B0" :"#4E19C6"} />
+        <div className={clsx(classes.imagesIcon, activePanel !== name && classes.inActivePanel)}>
+          <Icon size={24} color={activePanel !== name ? "#9BA6B0" : "#4E19C6"} />
         </div>
       ) : (
-        <Icon size={24} color={activePanel !== name ? "#9BA6B0" :"#4E19C6"} />
+        <Icon size={24} color={activePanel !== name ? "#9BA6B0" : "#4E19C6"} />
       )}
 
       <Block
-        className={clsx("text-center", classes.panelListItemEach, activePanel === name && classes.activePanelItem)}
+        className={clsx(
+          "text-center p-relative",
+          classes.panelListItemEach,
+          activePanel === name && classes.activePanelItem
+        )}
       >
         {label}
+        {activePanel === name &&
+          (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) && (
+            <div className={classes.chevronIcon}>
+              <PointerIcon />
+            </div>
+          )}
       </Block>
     </Block>
   )

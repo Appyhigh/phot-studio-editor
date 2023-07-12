@@ -25,6 +25,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
     setIsOpen(false)
   }
 
+
   const [activeState, setActiveState] = useState(-1)
   const [align, setAlign] = useState("center")
   const editor = useEditor()
@@ -83,6 +84,9 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
       if (activeObject.id === textContent.id) editor.objects.update({ text: textContent.text }) 
     }
   }, [activeObject, textContent])
+
+
+  
 
   useEffect
   return showLayer ? (

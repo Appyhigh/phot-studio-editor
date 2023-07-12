@@ -8,9 +8,11 @@ const ObjectReplacerContext = React.createContext({
     mask_img:"",
     src: "",
     preview: "",
-    result: "",
+    result: [],
     width:0,
-    height:0
+    height:0,
+    activeResult:-1
+
   },
   setObjectReplacerInfo: (item: any) => {
     console.log("Dummy Intializer for ", item)

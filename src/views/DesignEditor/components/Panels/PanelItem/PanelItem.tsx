@@ -37,6 +37,7 @@ const PanelsList = () => {
       {Component && (
         <Block className="d-flex flex-1 p-relative bg-white">
           <Component />
+       
         </Block>
       )}{" "}
     </Block>

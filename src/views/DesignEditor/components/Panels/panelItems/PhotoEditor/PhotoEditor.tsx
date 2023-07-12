@@ -23,6 +23,8 @@ import PhotoEditorContext from "~/contexts/PhotoEditorContext"
 import Prompt from "~/components/Prompt/Prompt"
 import photoEditorController from "~/utils/photoEditorController"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { getPollingIntervals } from "~/services/pollingIntervals.service"
+import { PollingInterval } from "~/contexts/PollingInterval"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 
 const PhotoEditor = () => {
@@ -41,6 +43,7 @@ const PhotoEditor = () => {
   const { photoEditorInfo, setPhotoEditorInfo, photoEditorPanelInfo, setPhotoEditorPanelInfo } =
     useContext(PhotoEditorContext)
   const { sampleImages } = useContext(SampleImagesContext)
+  const {pollingIntervalInfo,setPollingIntervalInfo}=useContext(PollingInterval)
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -58,6 +61,21 @@ const PhotoEditor = () => {
     }))
     setPhotoEditorInfo((prev: any) => ({ ...prev, src: url, original: url }))
   }
+
+
+  useEffect(() => {
+    if (user) {
+      getPollingIntervals()
+        .then((res: any) => {
+          // Store polling intervals
+           setPollingIntervalInfo((prev:any)=>({...prev,photoEditor:res.features.photo_editor}))
+          // storePollingIntervalCookies(res)
+        })
+        .catch(() => {
+          // an error occured so we rely on fallback polling intervals for each tool in this case
+        })
+    }
+  }, [user])
 
   useEffect(() => {
     const checkIfClickedOutside = (e: MouseEvent) => {
@@ -85,7 +103,7 @@ const PhotoEditor = () => {
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
       setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
-      photoEditorController(photoEditorInfo.src, photoEditorInfo.prompt)
+      photoEditorController(photoEditorInfo.src, photoEditorInfo.prompt,pollingIntervalInfo.photoEditor)
         .then((response) => {
           addImg(response[0], 1)
           setImageLoading(false)
@@ -113,6 +131,8 @@ const PhotoEditor = () => {
         })
     }
   }
+
+
 
   const addImg = async (imageUrl: string, _idx: number) => {
     if (currentActiveImg == -1) {

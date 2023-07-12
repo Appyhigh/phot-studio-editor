@@ -1,6 +1,7 @@
 .panelListSection {
-  width: 90px;
+  width: 100px !important;
   height: 100%;
+  overflow-x: visible;
 }
 
 .panelListItem {
@@ -37,10 +38,9 @@
   border-radius: 6px;
   /* opacity: 0.5; */
   font-weight: 500;
-  
 }
 .inActivePanel {
-  background: #9BA6B0;
+  background: #9ba6b0;
   opacity: 0.6;
 }
 @media screen and (min-width: 1220px) {
@@ -51,4 +51,12 @@
     width: 90px;
     font-weight: 500;
   }
+}
+
+.chevronIcon {
+  position: absolute;
+  z-index: 1000;
+  bottom: -20px;
+  left: 42px;
+  transform: translateX(42px);
 }

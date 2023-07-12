@@ -6,10 +6,12 @@ import { useEffect, useContext } from "react"
 import LoaderSpinner from "../../../../views/Public/images/loader-spinner.svg"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
+import useFabricEditor from "src/hooks/useFabricEditor"
 function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   const { activePanel } = useAppContext()
   const { canvasLoader } = useContext(CanvasLoaderContext)
 
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
   useEffect(() => {
     setTimeout(() => {
       handleBrush && handleBrush()
@@ -32,6 +34,7 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
         </div>
       )}
       <Canvas width={width} height={height} />
+    
     </div>
   )
 }

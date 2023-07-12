@@ -1,20 +1,21 @@
 import { Modal, SIZE } from "baseui/modal"
-import Editor from "../Editor"
-import classes from "./style.module.css"
-import Icons from "~/components/Icons"
+
 import useAppContext from "~/hooks/useAppContext"
 import ModalToolItems from "../../ModalToolsEditor"
-import ProductPhotoshootEditor from "../Editor/Panels/ProductPhotoshootEditor/ProductPhotoshootEditor"
+import ProductPhotoshootEditor from "~/components/ModalToolsEditor/ProductPhotoshootEditor/ProductPhotoshootEditor"
 import ErrorContext from "~/contexts/ErrorContext"
 import Toast from "~/components/Toast/Toast"
-import { useContext } from "react"
-import ObjectReplacerEditor from "~/components/ModalToolsEditor/ObjectReplacerEditor/ObjectReplacerEditor"
+import { useContext, useEffect, useState } from "react"
+import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
+import { useAuth } from "~/hooks/useAuth"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
   // @ts-ignore
   const Component = ModalToolItems[activePanel]
   const { errorInfo } = useContext(ErrorContext)
+  const { authState, setAuthState }:any = useAuth()
+  const { showLoginPopUp } = authState
 
   return (
     <Modal
@@ -38,7 +39,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
           style: ({ $theme }) => ({
             backgroundColor: "#F1F1F5",
             width: "100%",
-            height: "100%",
+            height: "85vh",
             margin: "1rem 2rem",
           }),
         },
@@ -59,6 +60,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       )}
       {Component && <Component handleClose={handleClose} />}
       {/* <ObjectReplacerEditor/> */}
+      <LoginPopup isOpen={showLoginPopUp} loginPopupCloseHandler={() => setAuthState((prev:any) => ({...prev, showLoginPopUp: false})) }  /> 
     </Modal>
   )
 }

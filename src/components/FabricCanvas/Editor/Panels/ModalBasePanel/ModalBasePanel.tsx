@@ -13,8 +13,12 @@ import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/Pr
 import useAppContext from "~/hooks/useAppContext"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import { OBJECT_REMOVER } from "~/constants/contants"
+import ImagesContext from "~/contexts/ImagesCountContext"
+import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
+import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
+import { useEditor, useFrame } from "@layerhub-io/react"
 
-const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
+const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
   const [showCanvasResizePopup, setCanvasResizePopup] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
@@ -31,6 +35,46 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
     setShowPreview(true)
   }
 
+  const editor = useEditor()
+  const frame = useFrame()
+  const { setImagesCt } = useContext(ImagesContext)
+
+  // let width = canvas?.getWidth()
+  // let height = canvas?.getHeight()
+
+  const handleAddCanvas = async () => {
+    // @ts-ignore
+    if (activePanel === OBJECT_REMOVER) {
+      await getDimensions(objectRemoverInfo.result, (imgSrc: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          return prev + 1
+        })
+        AddObjectFunc(objectRemoverInfo.result, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+        handleClose()
+      })
+    } else {
+      await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          return prev + 1
+        })
+
+        console.log(objectReplacerInfo.result[objectReplacerInfo.activeResult])
+        AddObjectFunc(
+          objectReplacerInfo.result[objectReplacerInfo.activeResult],
+          editor,
+          imgSrc.width,
+          imgSrc.height,
+          frame,
+          latest_ct
+        )
+        handleClose()
+      })
+    }
+  }
   const closeProductPreview = () => {
     setShowPreview(false)
   }
@@ -127,7 +171,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
           </Block>
           <BaseButton
             title="Done"
-            disabled={isDoneBtnDisabled ? true : false}
+            disabled={isDone ? false : true}
             fontSize="0.75rem"
             padding="15px"
             borderRadius="10px"
@@ -135,7 +179,9 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled }: any) => {
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
-            handleClick={!isDoneBtnDisabled || objectRemoverInfo.result ? handleDone : null}
+            handleClick={
+              !isDoneBtnDisabled || objectRemoverInfo.result || objectReplacerInfo.result ? handleAddCanvas : null
+            }
           />
         </Block>
       </Block>

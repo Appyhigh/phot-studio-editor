@@ -26,3 +26,22 @@
 .activeBrush{
     background-color: blue;
 }
+
+
+.circleCon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.circle {
+    border-radius: 50%;
+    background-color: rgb(66, 79, 83);
+    opacity: 0.8;
+    border: 3px solid rgba(168, 85, 254, 1);
+}

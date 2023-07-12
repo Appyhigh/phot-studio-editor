@@ -23,6 +23,10 @@ import LoginPopup from "../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
+import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTransparent"
+import Scrollbars from "@layerhub-io/react-custom-scrollbar"
+import { getPollingIntervals } from "~/services/pollingIntervals.service"
+import { PollingInterval } from "~/contexts/PollingInterval"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -31,16 +35,17 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { canvas, objects } = fabricEditor
   const { activePanel, setActivePanel } = useAppContext()
   // @ts-ignore
-  const { authState } = useAuth()
+  const { authState, setAuthState } = useAuth()
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [promptText, setPromptText] = useState("")
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
-  const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
-    const [callAPI, setCallAPI] = useState(false)
+  const [callAPI, setCallAPI] = useState(false)
+  const [activeResultId, setActiveResultId] = useState(0)
 
+  const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
@@ -52,13 +57,12 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     })
   }
 
-  const { user } = authState
+  const { user, showLoginPopUp } = authState
   const [steps, setSteps] = useState({
     firstStep: true,
     secondStep: false,
     thirdStep: false,
     fourthStep: false,
-    fifthStep: false,
   })
 
   const [stepsComplete, setStepsComplete] = useState({
@@ -66,7 +70,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     secondStep: false,
     thirdStep: false,
     fourthStep: false,
-    fifthStep: false,
   })
 
   const handleBrushSizeChange = (e: any) => {
@@ -81,6 +84,20 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       // @ts-ignore
       (canvas.freeDrawingBrush.width = brushSize)
   }
+
+  useEffect(() => {
+    if (user) {
+      getPollingIntervals()
+        .then((res: any) => {
+          // Store polling intervals
+          setPollingIntervalInfo((prev: any) => ({ ...prev, objectReplacer: res.features.object_replacer }))
+          // storePollingIntervalCookies(res)
+        })
+        .catch(() => {
+          // an error occured so we rely on fallback polling intervals for each tool in this case
+        })
+    }
+  }, [user])
 
   const handleBgImg = async (imgSrc: string) => {
     await getDimensions(imgSrc, (img: any) => {
@@ -120,31 +137,34 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       error: false,
       errorMsg: "",
     }))
-    if (steps.fourthStep) {
-      getOutputImg()      
+    if (steps.fourthStep && callAPI) {
+      getOutputImg()
+      setCallAPI(false)
     }
   }, [steps.fourthStep])
 
-
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setShowLoginPopup(true)
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(
-        objectReplacerInfo.src,
+        objectReplacerInfo.preview,
         objectReplacerInfo.mask_img,
         objectReplacerInfo.file_name,
-        objectReplacerInfo.prompt
+        objectReplacerInfo.prompt,
+        pollingIntervalInfo.objectReplacer
       )
         .then((response) => {
           console.log("response0", response)
-          setCallAPI(false)   
-          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response[0] }))
+          setCallAPI(false)
+          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response, activeResult: 0 }))
           setResultLoading(false)
           handleBgImg(response[0])
+          setActiveResultId(0)
+
           setIsError((prev) => ({ ...prev, error: false }))
         })
 
@@ -177,11 +197,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     }
   }, [steps.secondStep])
 
-  useEffect(()=>{
-return (()=>{
-  setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
-})
-  },[])
+  useEffect(() => {
+    return () => {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: [] }))
+    }
+  }, [])
 
   const upload = () => (
     <>
@@ -196,7 +216,6 @@ return (()=>{
                 secondStep: false,
                 thirdStep: false,
                 fourthStep: false,
-                fifthStep: false,
               }))
               setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               setSelectedSampleImg(-1)
@@ -213,6 +232,22 @@ return (()=>{
             <span
               onClick={() => {
                 setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
+                setBgTransparent(canvas)
+                setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
+                setStepsComplete((prev) => ({
+                  ...prev,
+                  firstStep: true,
+                  secondStep: false,
+                  thirdStep: false,
+                  fourthStep: false,
+                }))
+                setSteps((prev) => ({
+                  ...prev,
+                  firstStep: true,
+                  secondStep: false,
+                  thirdStep: false,
+                  fourthStep: false,
+                }))
               }}
             >
               <Icons.Trash size={"32"} />
@@ -273,7 +308,6 @@ return (()=>{
             secondStep: true,
             thirdStep: false,
             fourthStep: false,
-            fifthStep: false,
           }))
           setStepsComplete((prev) => ({
             ...prev,
@@ -281,7 +315,6 @@ return (()=>{
             secondStep: true,
             thirdStep: false,
             fourthStep: false,
-            fifthStep: false,
           }))
         }}
       />
@@ -290,7 +323,7 @@ return (()=>{
 
   const Brush = () => (
     <>
-      <UploadPreview imgSrc={objectReplacerInfo.src} uploadType={MODAL_IMG_UPLOAD} />
+      <UploadPreview imgSrc={objectReplacerInfo.preview} uploadType={MODAL_IMG_UPLOAD} />
 
       <div className={classes.brushInput}>
         <p>Brush</p>
@@ -324,7 +357,6 @@ return (()=>{
             // @ts-ignore
             canvas?.clearHistory()
             setStepsComplete((prev) => ({ ...prev }))
-
           }}
           fontSize="14px"
           fontWeight="500"
@@ -375,14 +407,12 @@ return (()=>{
               secondStep: false,
               thirdStep: true,
               fourthStep: false,
-              fifthStep: false,
             }))
             setStepsComplete((prev) => ({
               ...prev,
               secondStep: true,
               thirdStep: true,
               fourthStep: false,
-              fifthStep: false,
             }))
             setCallAPI(true)
           }}
@@ -410,6 +440,9 @@ return (()=>{
           fontWeight="500"
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
+            if (!user) {
+              return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+            }
             handleBgImg(objectReplacerInfo.src)
             setSteps((prev) => ({
               ...prev,
@@ -417,15 +450,14 @@ return (()=>{
               secondStep: false,
               thirdStep: false,
               fourthStep: true,
-              fifthStep: false,
             }))
             setStepsComplete((prev) => ({
               ...prev,
               secondStep: true,
               thirdStep: true,
               fourthStep: true,
-              fifthStep: false,
             }))
+            setCallAPI(true)
             setObjectReplacerInfo((prev: any) => ({ ...prev, prompt: promptText }))
           }}
         />
@@ -475,14 +507,12 @@ return (()=>{
               secondStep: false,
               thirdStep: false,
               fourthStep: false,
-              fifthStep: true,
             }))
             setStepsComplete((prev) => ({
               ...prev,
               secondStep: true,
               thirdStep: true,
               fourthStep: true,
-              fifthStep: true,
             }))
           }}
         />
@@ -501,7 +531,13 @@ return (()=>{
         </div>
 
         {resultLoading ? (
-          <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
+          Array.from(Array(4).keys()).map((each, _idx) => {
+            return (
+              <div key={_idx} className={classes.skeletonBox}>
+                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+              </div>
+            )
+          })
         ) : isError.error ? (
           <div
             className={classes.skeletonBox}
@@ -517,12 +553,56 @@ return (()=>{
             }{" "}
           </div>
         ) : (
-          <div className={clsx("pointer p-relative", classes.eachImg, classes.currentActiveImg)}>
-            {<img src={objectReplacerInfo.result} onClick={() => {}} />}
-            <div className={classes.resultLabel}>{"Result"}</div>
-          </div>
+          objectReplacerInfo.result.map((each, _idx) => {
+            return (
+              <div
+                key={_idx}
+                className={clsx(
+                  "pointer p-relative",
+                  classes.eachImg,
+                  activeResultId === _idx && classes.currentActiveImg
+                )}
+              >
+                {
+                  <img
+                    src={each}
+                    onClick={() => {
+                      if (activeResultId != _idx) {
+                        setActiveResultId(_idx)
+                        setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
+                        handleBgImg(each)
+                      }
+                    }}
+                  />
+                }
+              </div>
+            )
+          })
         )}
       </div>
+      {stepsComplete.firstStep &&
+        stepsComplete.secondStep &&
+        stepsComplete.thirdStep &&
+        stepsComplete.fourthStep &&
+        !resultLoading &&
+        !isError.error && (
+          <BaseButton
+            borderRadius="10px"
+            title={"Replace more objects"}
+            height="38px"
+            margin={"20px 4px 4px 0px"}
+            width="320px"
+            fontSize="16px"
+            fontWeight="500"
+            handleClick={() => {
+              setPromptText((prev) => "")
+              setObjectReplacerInfo((prev: any) => ({ ...prev, preview: prev.result, prompt: "" }))
+              setCallAPI(false)
+              setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false }))
+              setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false, fourthStep: false }))
+            }}
+          />
+        )}
       {stepsComplete.firstStep &&
         stepsComplete.secondStep &&
         stepsComplete.thirdStep &&
@@ -553,7 +633,7 @@ return (()=>{
           style={{ cursor: "pointer" }}
           onClick={() => {
             setActivePanel(null as any)
-            setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
+            setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: [] }))
           }}
         >
           <Icons.ArrowLeft />
@@ -562,91 +642,74 @@ return (()=>{
       </div>
       <div className={classes.line}></div>
 
-      <LoginPopup
-        isOpen={showLoginPopup}
-        loginPopupCloseHandler={() => {
-          setShowLoginPopup(false)
-        }}
-      />
-
-      <Accordian
-        label={1}
-        isOpen={steps.firstStep}
-        isComplete={stepsComplete.firstStep}
-        heading={"Upload / choose image"}
-        children={upload()}
-        handleClick={() => {
-          if (stepsComplete.firstStep && !steps.firstStep) {
-            setSteps((prev) => ({
-              ...prev,
-              firstStep: true,
-              secondStep: false,
-              thirdStep: false,
-              fourthStep: false,
-              fifthStep: false,
-            }))
-            setStepsComplete((prev) => ({
-              ...prev,
-              thirdStep: false,
-              fourthStep: false,
-              fifthStep: false,
-              secondStep: false,
-            }))
-          } else if (steps.firstStep) {
-            setSteps((prev) => ({ ...prev, firstStep: false }))
-          } else {
-            {
+      <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>
+        <Accordian
+          label={1}
+          isOpen={steps.firstStep}
+          isComplete={stepsComplete.firstStep}
+          heading={"Upload / choose image"}
+          children={upload()}
+          handleClick={() => {
+            if (stepsComplete.firstStep && !steps.firstStep) {
+              setSteps((prev) => ({
+                ...prev,
+                firstStep: true,
+                secondStep: false,
+                thirdStep: false,
+                fourthStep: false,
+              }))
+            } else if (steps.firstStep) {
+              setSteps((prev) => ({ ...prev, firstStep: false }))
+            } else {
+              {
+              }
             }
-          }
-        }}
-      />
-      <Accordian
-        label={2}
-        isOpen={steps.secondStep}
-        isComplete={stepsComplete.secondStep}
-        heading={"Brush over the image"}
-        children={Brush()}
-        handleClick={() => {
-          if (stepsComplete.secondStep && !steps.secondStep) {
-            setSteps((prev) => ({
-              ...prev,
-              secondStep: true,
-              thirdStep: false,
-              firstStep: false,
-              fourthStep: false,
-              fifthStep: false,
-            }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false, fifthStep: false }))
-          } else if (steps.secondStep) {
-            setSteps((prev) => ({ ...prev, secondStep: false }))
-          } else {
-          }
-        }}
-      />
-      <Accordian
-        label={3}
-        isOpen={steps.thirdStep}
-        isComplete={stepsComplete.thirdStep}
-        heading={"Write Prompt"}
-        children={Prompt()}
-        handleClick={() => {
-          if (stepsComplete.thirdStep && !steps.thirdStep) {
-            setSteps((prev) => ({
-              ...prev,
-              thirdStep: true,
-              secondStep: false,
-              firstStep: false,
-              fourthStep: false,
-              fifthStep: false,
-            }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: false, fifthStep: false }))
-          } else if (steps.thirdStep) {
-            setSteps((prev) => ({ ...prev, thirdStep: false }))
-          } else {
-          }
-        }}
-      />
-      {/* <Accordian
+          }}
+        />
+        <Accordian
+          label={2}
+          isOpen={steps.secondStep}
+          isComplete={stepsComplete.secondStep}
+          heading={"Brush over the image"}
+          children={Brush()}
+          handleClick={() => {
+            if (stepsComplete.secondStep && !steps.secondStep) {
+              setSteps((prev) => ({
+                ...prev,
+                secondStep: true,
+                thirdStep: false,
+                firstStep: false,
+                fourthStep: false,
+              }))
+            } else if (steps.secondStep) {
+              setSteps((prev) => ({ ...prev, secondStep: false }))
+            } else {
+            }
+          }}
+        />
+        <Accordian
+          label={3}
+          isOpen={steps.thirdStep}
+          isComplete={stepsComplete.thirdStep}
+          heading={"Write Prompt"}
+          children={Prompt()}
+          handleClick={() => {
+            if (stepsComplete.thirdStep && !steps.thirdStep) {
+              setSteps((prev) => ({
+                ...prev,
+                thirdStep: true,
+                secondStep: false,
+                firstStep: false,
+                fourthStep: false,
+              }))
+              setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+            } else if (steps.thirdStep) {
+              setSteps((prev) => ({ ...prev, thirdStep: false }))
+            } else {
+            }
+          }}
+        />
+        {/* <Accordian
         label={4}
         isOpen={steps.fourthStep}
         isComplete={stepsComplete.fourthStep}
@@ -654,42 +717,42 @@ return (()=>{
         children={GenerateImages()}
         handleClick={() => {
           if (stepsComplete.fourthStep && !steps.fourthStep) {
-            setSteps((prev) => ({ ...prev, fourthStep: true, thirdStep: false, firstStep: false,secondStep:false, fifthStep: false }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true, fifthStep: false }))
+            setSteps((prev) => ({ ...prev, fourthStep: true, thirdStep: false, firstStep: false,secondStep:false}))
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true}))
           } else if (steps.fourthStep) {
             setSteps((prev) => ({ ...prev, fourthStep: false }))
           } else {
           }
         }}
       /> */}
-      <Accordian
-        isOpen={steps.fourthStep}
-        isComplete={steps.fourthStep}
-        label={4}
-        heading={"Final output"}
-        handleClick={() => {
-          if (stepsComplete.fourthStep && !steps.fourthStep) {
-            setSteps((prev) => ({
-              ...prev,
-              fourthStep: true,
-              thirdStep: false,
-              firstStep: false,
-              secondStep: false,
-              fifthStep: false,
-            }))
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true, fifthStep: false }))
-          } else if (steps.fourthStep) {
-            setSteps((prev) => ({ ...prev, fourthStep: false }))
-            setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
-          }
-        }}
-        children={outputResult()}
-      />
-      {isError.error && (
-        <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
-          <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
-        </div>
-      )}
+        <Accordian
+          isOpen={steps.fourthStep}
+          isComplete={stepsComplete.fourthStep}
+          label={4}
+          heading={"Final output"}
+          handleClick={() => {
+            if (stepsComplete.fourthStep && !steps.fourthStep) {
+              setSteps((prev) => ({
+                ...prev,
+                fourthStep: true,
+                thirdStep: false,
+                firstStep: false,
+                secondStep: false,
+              }))
+              setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true }))
+            } else if (steps.fourthStep) {
+              setSteps((prev) => ({ ...prev, fourthStep: false }))
+              setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
+            }
+          }}
+          children={outputResult()}
+        />
+        {isError.error && (
+          <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
+            <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
+          </div>
+        )}
+      </div>
     </div>
   )
 }

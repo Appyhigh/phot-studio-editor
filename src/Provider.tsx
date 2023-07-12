@@ -26,6 +26,7 @@ import { CanvasProvider } from "./components/FabricCanvas/Canvas"
 import ObjectRemoverContext from "./contexts/ObjectRemoverContext"
 import ObjectReplacerContext from "./contexts/ObjectReplacerContext"
 import "fabric-history"
+import { PollingInterval } from "./contexts/PollingInterval"
 import ProductPhotoshootContext from "./contexts/ProductPhotoshootContext"
 import CanvasLoaderContext from "./contexts/CanvasLoaderContext"
 
@@ -163,10 +164,24 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     mask_img: "",
     src: "",
     preview: "",
+    result: [],
+    width: 0,
+    height: 0,
+    activeResult: -1,
+  })
+
+  const [pollingIntervalInfo, setPollingIntervalInfo] = useState({
+    bgRemover: 0,
+    textToArt: 0,
+    imageUpscaler: 0,
+    photoEditor: 0,
+    imageColorizer: 0,
+    objectRemover: 0,
+    objectReplacer: 0,
+    productPhotoShoot: 0,
     result: "",
     width: 0,
     height: 0,
-
   })
 
   const [canvasLoader, setCanvasLoader] = useState(false)
@@ -182,7 +197,6 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     prevObjects: [],
     addPreview: "",
     removeBg: false,
-
   })
 
   return (
@@ -192,70 +206,72 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
           <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
             <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
               <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
-                <ObjectReplacerContext.Provider value={{ objectReplacerInfo, setObjectReplacerInfo }}>
-                  <ObjectRemoverContext.Provider value={{ objectRemoverInfo, setObjectRemoverInfo }}>
-                    <SampleImagesContext.Provider value={{ sampleImages, setSampleImages }}>
-
-                      <CanvasLoaderContext.Provider value={{ canvasLoader, setCanvasLoader }}>
-                        <ProductPhotoshootContext.Provider value={{ productPhotoshootInfo, setProductPhotoshootInfo }}>
-                          <ImageColorizerContext.Provider
-                            value={{
-                              ImgColorizerInfo,
-                              setImgColorizerInfo,
-                              ImgColorizerPanelInfo,
-                              setImgColorizerPanelInfo,
-                            }}
+                <PollingInterval.Provider value={{ pollingIntervalInfo, setPollingIntervalInfo }}>
+                  <ObjectReplacerContext.Provider value={{ objectReplacerInfo, setObjectReplacerInfo }}>
+                    <ObjectRemoverContext.Provider value={{ objectRemoverInfo, setObjectRemoverInfo }}>
+                      <SampleImagesContext.Provider value={{ sampleImages, setSampleImages }}>
+                        <CanvasLoaderContext.Provider value={{ canvasLoader, setCanvasLoader }}>
+                          <ProductPhotoshootContext.Provider
+                            value={{ productPhotoshootInfo, setProductPhotoshootInfo }}
                           >
-                            <ImageUpScalerContext.Provider
-                              value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
+                            <ImageColorizerContext.Provider
+                              value={{
+                                ImgColorizerInfo,
+                                setImgColorizerInfo,
+                                ImgColorizerPanelInfo,
+                                setImgColorizerPanelInfo,
+                              }}
                             >
-                              <PhotoEditorContext.Provider
-                                value={{
-                                  photoEditorInfo,
-                                  setPhotoEditorInfo,
-                                  photoEditorPanelInfo,
-                                  setPhotoEditorPanelInfo,
-                                }}
+                              <ImageUpScalerContext.Provider
+                                value={{ imgScalerInfo, setImgScalerInfo, imgScalerPanelInfo, setImgScalerPanelInfo }}
                               >
-                                <TextToArtContext.Provider
+                                <PhotoEditorContext.Provider
                                   value={{
-                                    textToArtInputInfo,
-                                    setTextToArtInputInfo,
-                                    textToArtpanelInfo,
-                                    setTextToArtPanelInfo,
-                                    styleImage,
-                                    setStyleImage,
-                                    result,
-                                    setResult,
+                                    photoEditorInfo,
+                                    setPhotoEditorInfo,
+                                    photoEditorPanelInfo,
+                                    setPhotoEditorPanelInfo,
                                   }}
                                 >
-                                  <MainImageContext.Provider
-                                    value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}
+                                  <TextToArtContext.Provider
+                                    value={{
+                                      textToArtInputInfo,
+                                      setTextToArtInputInfo,
+                                      textToArtpanelInfo,
+                                      setTextToArtPanelInfo,
+                                      styleImage,
+                                      setStyleImage,
+                                      result,
+                                      setResult,
+                                    }}
                                   >
-                                    <DesignEditorProvider>
-                                      <TimerProvider>
-                                        <AppProvider>
-                                          <ScenifyProvider>
-                                            <StyletronProvider value={engine}>
-                                              <BaseProvider theme={CustomTheme}>
-                                                <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
-                                              </BaseProvider>
-                                            </StyletronProvider>
-                                          </ScenifyProvider>
-                                        </AppProvider>
-                                      </TimerProvider>
-                                    </DesignEditorProvider>
-                                  </MainImageContext.Provider>
-                                </TextToArtContext.Provider>
-                              </PhotoEditorContext.Provider>
-                            </ImageUpScalerContext.Provider>
-                          </ImageColorizerContext.Provider>
-                        </ProductPhotoshootContext.Provider>
-                      </CanvasLoaderContext.Provider>
-
-                    </SampleImagesContext.Provider>
-                  </ObjectRemoverContext.Provider>
-                </ObjectReplacerContext.Provider>
+                                    <MainImageContext.Provider
+                                      value={{ mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo }}
+                                    >
+                                      <DesignEditorProvider>
+                                        <TimerProvider>
+                                          <AppProvider>
+                                            <ScenifyProvider>
+                                              <StyletronProvider value={engine}>
+                                                <BaseProvider theme={CustomTheme}>
+                                                  <I18nextProvider i18n={i18next}>{children}</I18nextProvider>
+                                                </BaseProvider>
+                                              </StyletronProvider>
+                                            </ScenifyProvider>
+                                          </AppProvider>
+                                        </TimerProvider>
+                                      </DesignEditorProvider>
+                                    </MainImageContext.Provider>
+                                  </TextToArtContext.Provider>
+                                </PhotoEditorContext.Provider>
+                              </ImageUpScalerContext.Provider>
+                            </ImageColorizerContext.Provider>
+                          </ProductPhotoshootContext.Provider>
+                        </CanvasLoaderContext.Provider>
+                      </SampleImagesContext.Provider>
+                    </ObjectRemoverContext.Provider>
+                  </ObjectReplacerContext.Provider>
+                </PollingInterval.Provider>
               </ErrorContext.Provider>
             </LoaderContext.Provider>
           </ImagesContext.Provider>

@@ -1,12 +1,10 @@
 import { useContext, useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
-import CanvasArea from "../../CanvasArea/CanvasArea"
+import CanvasArea from "~/components/FabricCanvas/Editor/CanvasArea/CanvasArea"
 import classes from "./style.module.css"
-import ModalBasePanel from "../ModalBasePanel/ModalBasePanel"
-import PointerIcon from "~/components/Icons/PointerIcon"
+import ModalBasePanel from "~/components/FabricCanvas/Editor/Panels/ModalBasePanel/ModalBasePanel"
 import "swiper/css"
 import "swiper/css/navigation"
-import ProductPhotoshootLeftPanel from "../ProductPhotoshootLeftPanel/ProductPhotoshootLeftPanel"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import Resize from "~/components/Icons/Resize"
 import { useEditor, useFrame } from "@layerhub-io/react"
@@ -14,11 +12,12 @@ import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimension
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
+import ProductPhotoshoot from "~/views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoshoot"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
-    width: 800,
-    height: 800,
+    width: 400,
+    height: 400,
   })
 
   const { fabricEditor } = useFabricEditor()
@@ -49,7 +48,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
       }}
     >
       <div className={"d-flex flex-row"} style={{ pointerEvents: canvasLoader ? "none" : "auto" }}>
-        <ProductPhotoshootLeftPanel handleClose={handleClose} />
+        <ProductPhotoshoot handleClose={handleClose} />
 
         <div className={classes.editor}>
           <ModalBasePanel handleDone={handleDone} isDoneBtnDisabled={!productPhotoshootInfo.finalImage} />
@@ -82,10 +81,6 @@ function ProductPhotoshootEditor({ handleClose }: any) {
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
         </div>
-      </div>
-
-      <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
-        <PointerIcon />
       </div>
     </div>
   )

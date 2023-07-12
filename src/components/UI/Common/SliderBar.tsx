@@ -1,9 +1,14 @@
 import { Slider } from "baseui/slider"
-
+import useFabricEditor from "src/hooks/useFabricEditor"
 const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize, step }: any) => {
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
+
   return (
     <div>
       <Slider
+        onFinalChange={() => {
+          setFabricEditor((prev) => ({ ...prev, brushShow: false }))
+        }}
         overrides={{
           InnerThumb: () => null,
           ThumbValue: () => null,
@@ -32,7 +37,10 @@ const SliderBar = ({ width, minVal, maxVal, val, handleChange, thumbSize, step }
         }}
         step={step}
         value={[val]}
-        onChange={({ value }) => handleChange(value)}
+        onChange={({ value }) => {
+          setFabricEditor((prev) => ({ ...prev, brushShow: true }))
+          handleChange(value)
+        }}
         min={minVal}
         max={maxVal}
       />

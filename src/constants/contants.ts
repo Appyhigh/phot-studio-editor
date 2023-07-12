@@ -30,6 +30,7 @@ export const IMAGE_COLORIZER = "ImageColorizer"
 export const OBJECT_REMOVER = "ObjectRemover"
 export const MODAL_IMG_UPLOAD = "ModalImgUpload"
 export const OBJECT_REPLACER = "ObjectReplacer"
+export const PRODUCT_PHOTOSHOOT = "ProductPhotoshoot"
 
 export const TOOL_NAMES = {
   Image: "Image",

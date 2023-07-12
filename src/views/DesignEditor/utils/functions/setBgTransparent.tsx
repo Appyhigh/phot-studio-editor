@@ -9,8 +9,8 @@ export const setBgTransparent = async (canvas: any) => {
     fabric.Image.fromURL("https://ik.imagekit.io/rxld8u68i/background.png?updatedAt=1683116649473", (img) => {
       // img.set({ type: "backgroundImage" })
       canvas.setDimensions({
-        width: 600,
-        height: 600,
+        width: 400,
+        height: 400,
       })
       img.crossOrigin = "anonymous"
       canvas.backgroundImage = img

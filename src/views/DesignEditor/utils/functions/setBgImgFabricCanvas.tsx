@@ -7,8 +7,8 @@ export const setBgImgFabricCanvas = async (imgSrc: any, canvas: any, result: any
     canvas.backgroundImage = null
     let width = result.width
     let height = result.height
-    let canvasWidth = 600
-    let canvasHeight = 600
+    let canvasWidth = 400
+    let canvasHeight = 400
     let scale = 1
 
     fabric.Image.fromURL(imgSrc, (img) => {

@@ -1,6 +1,5 @@
 .mainPanel {
   background-color: #fff;
-  height: 100%;
   border-radius: 20px 0px 0px 20px;
   width: 380px;
 }
@@ -85,6 +84,7 @@
   height: 132px;
   border-radius: 10px;
   object-fit: contain;
+  margin-right: 8px;
 }
 
 .currentActiveImg {
@@ -141,6 +141,9 @@
   background-repeat: no-repeat;
   cursor: pointer;
 }
+.uploadWrapper {
+  margin: -0.5rem -0.5rem 0rem -0.5rem;
+}
 
 .itemContainer {
   margin: 0.5rem 0rem 0px 5px;
@@ -177,7 +180,6 @@
   color: #fff;
 }
 
-
 @media screen and (min-width: 1220px) {
   .resultImages {
     margin: 24px 12px 0px 0px;
@@ -204,7 +206,7 @@
     line-height: 19px;
     letter-spacing: 0em;
     color: inherit;
-      padding: 10px 0 0 12px;
+    padding: 10px 0 0 12px;
   }
   .prompt {
     font-family: Rubik;

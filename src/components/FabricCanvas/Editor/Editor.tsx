@@ -4,7 +4,6 @@ import CanvasArea from "./CanvasArea/CanvasArea"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import ModalBasePanel from "./Panels/ModalBasePanel/ModalBasePanel"
-import PointerIcon from "~/components/Icons/PointerIcon"
 import ObjectRemoverEditor from "../../ModalToolsEditor/ObjectRemoverEditor/ObjectRemoverEditor"
 
 function Editor({ handleClose }: any) {
@@ -121,9 +120,6 @@ function Editor({ handleClose }: any) {
           <div className={clsx(classes.canvasStyling)}>
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
-        </div>
-        <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
-          <PointerIcon />
         </div>
       </div>
     </div>

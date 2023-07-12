@@ -7,6 +7,7 @@ const canvasAtom = atom({
     activeObject: null,
     zoomRatio: null,
     objects: null,
+    brushShow:false
 });
 
 export default canvasAtom
