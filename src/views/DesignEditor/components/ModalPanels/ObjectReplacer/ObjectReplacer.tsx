@@ -27,6 +27,10 @@ import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTran
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { PollingInterval } from "~/contexts/PollingInterval"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Navigation } from "swiper"
+import "swiper/css"
+import "swiper/css/navigation"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -265,11 +269,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div style={{ marginLeft: "8px" }} className={classes.sampleImagesLabel}>
+      <div className={classes.sampleImagesLabel}>
         or try one of these for free
       </div>
-      <div style={{ marginLeft: "8px" }} className={classes.sampleImages}>
+      <div  className={classes.sampleImages}>
+      <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]} >
         {sampleImg.map((image, index) => (
+          <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
           <div
             key={index}
             className={clsx(classes.sampleImage, "flex-center")}
@@ -287,7 +293,9 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           >
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
           </div>
+          </SwiperSlide>
         ))}
+        </Swiper>
       </div>
       <BaseButton
         margin="0 0px 0 8px"
