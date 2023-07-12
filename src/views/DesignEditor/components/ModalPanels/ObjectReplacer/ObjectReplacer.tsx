@@ -649,7 +649,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           setShowLoginPopup(false)
         }}
       />
-      <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
+      <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>
         <Accordian
           label={1}
           isOpen={steps.firstStep}

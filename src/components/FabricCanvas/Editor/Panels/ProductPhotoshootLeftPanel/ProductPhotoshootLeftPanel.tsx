@@ -511,7 +511,15 @@ const ProductPhotoshootLeftPanel = ({ handleClose }: any) => {
         <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
         <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
         <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
-        <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
+        <div
+          style={{
+            height: "75vh",
+            overflowY: "scroll",
+            paddingBottom: "40px",
+            backgroundColor: "#fff",
+            borderBottomLeftRadius: "20px",
+          }}
+        >
           <Accordian
             label={"1"}
             // heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}

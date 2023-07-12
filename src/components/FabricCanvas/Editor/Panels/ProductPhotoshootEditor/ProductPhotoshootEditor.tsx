@@ -3,7 +3,6 @@ import useFabricEditor from "src/hooks/useFabricEditor"
 import CanvasArea from "../../CanvasArea/CanvasArea"
 import classes from "./style.module.css"
 import ModalBasePanel from "../ModalBasePanel/ModalBasePanel"
-import PointerIcon from "~/components/Icons/PointerIcon"
 import "swiper/css"
 import "swiper/css/navigation"
 import ProductPhotoshootLeftPanel from "../ProductPhotoshootLeftPanel/ProductPhotoshootLeftPanel"
@@ -82,10 +81,6 @@ function ProductPhotoshootEditor({ handleClose }: any) {
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
         </div>
-      </div>
-
-      <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
-        <PointerIcon />
       </div>
     </div>
   )

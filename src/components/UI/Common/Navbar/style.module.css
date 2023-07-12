@@ -6,6 +6,7 @@
   flex-direction: row;
   box-shadow: inset 0px -1px 0px #e2e2ea;
   padding: 15px 20px;
+  z-index: 2000;
 }
 
 .creditsStatusBtn {

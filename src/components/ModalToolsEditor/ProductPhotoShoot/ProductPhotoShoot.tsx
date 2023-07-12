@@ -3,7 +3,6 @@ import { useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
 import CanvasArea from "~/components/FabricCanvas/Editor/CanvasArea/CanvasArea"
 import ModalBasePanel from "~/components/FabricCanvas/Editor/Panels/ModalBasePanel/ModalBasePanel"
-import PointerIcon from "~/components/Icons/PointerIcon"
 import classes from "./style.module.css"
 import ObjectReplacer from "~/views/DesignEditor/components/ModalPanels/ObjectReplacer/ObjectReplacer"
 function ProductPhotoShoot({ handleClose }: any) {
@@ -26,9 +25,6 @@ function ProductPhotoShoot({ handleClose }: any) {
           <div className={clsx(classes.canvasStyling)}>
             <CanvasArea width={dimension.width} height={dimension.height} />
           </div>
-        </div>
-        <div className={classes.chevronIcon} style={{ bottom: "0.5rem" }}>
-          <PointerIcon />
         </div>
       </div>
     </div>

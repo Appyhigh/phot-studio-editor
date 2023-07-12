@@ -35,7 +35,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
           style: ({ $theme }) => ({
             backgroundColor: "#F1F1F5",
             width: "100%",
-            height: "80vh",
+            height: "85vh",
             margin: "1rem 2rem",
           }),
         },
