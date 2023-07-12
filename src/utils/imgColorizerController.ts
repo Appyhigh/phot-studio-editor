@@ -4,7 +4,7 @@ import { COOKIE_KEYS } from "./enum"
 
 export const imgColorizerController = async (sourceUrl?: string, fileName?: string) => {
     try {
-      const url = "https://devapi.phot.ai/v1/color-restoration-2k"
+      const url = "https://devapi.phot.ai/app/api/v3/user_activity/color-restoration-2k"
       const body = {
         sourceUrl: sourceUrl,
         fileName: fileName,
