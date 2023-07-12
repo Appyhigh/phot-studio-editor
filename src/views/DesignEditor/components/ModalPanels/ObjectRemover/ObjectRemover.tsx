@@ -430,6 +430,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         </div>
         <p>Object Remover</p>
       </div>
+      <LoginPopup 
+       isOpen={showLoginPopUp}
+       loginPopupCloseHandler={() => {
+         showLoginPopUp(false)
+       }}
+      />
       <div className={classes.line}></div>
 
       <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>

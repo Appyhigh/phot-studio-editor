@@ -4,7 +4,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 
 const photoEditorController = async (input_image_link: string, prompt: string,pollingInterval?:number|undefined) => {
   try {
-    const url = "https://devapi.phot.ai/app/api/v3/user_activity/edit-photo"
+    const url = "https://devapi.phot.ai/app/api/v3/user_activity/photo-editor"
     const regex = /\/([^/]+)$/
     const match = regex.exec(input_image_link)
     let value = match ? match[1] : null

@@ -3,7 +3,7 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
-import { useContext, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
 import {
@@ -43,29 +43,29 @@ const UploadPreview = ({
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
 
   const removeBg = () => {
-    let latest_ct = 0
-    setImagesCt((prev: any) => {
-      latest_ct = prev + 1
-      RemoveBGFunc(
-        editor,
-        setLoaderPopup,
-        setPanelInfo,
-        mainImgInfo,
-        setMainImgInfo,
-        virtualSrcImageRef,
-        virtualMaskImageRef,
-        virtualCanvasSrcImageRef,
-        virtualCanvasMaskImageRef,
-        virtualCanvasResultImageRef,
-        0,
-        (latest_ct = latest_ct),
-        errorInfo,
-        setErrorInfo
-      )
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        RemoveBGFunc(
+          editor,
+          setLoaderPopup,
+          setPanelInfo,
+          mainImgInfo,
+          setMainImgInfo,
+          virtualSrcImageRef,
+          virtualMaskImageRef,
+          virtualCanvasSrcImageRef,
+          virtualCanvasMaskImageRef,
+          virtualCanvasResultImageRef,
+          0,
+          (latest_ct = latest_ct),
+          errorInfo,
+          setErrorInfo
+        )
 
-      return prev + 1
-    })
-  }
+        return prev + 1
+      })
+    }
 
   return (
     <div>

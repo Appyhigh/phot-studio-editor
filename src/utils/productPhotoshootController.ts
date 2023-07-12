@@ -4,7 +4,8 @@ import { COOKIE_KEYS } from "~/utils/enum"
 
 const productPhotoshootController = async (input_image: string, prompt: string) => {
   try {
-    const url = "https://devapi.phot.ai/app/api/v3/user_activity/background-generator"
+    const url = "https://devapi.phot.ai/app/api/v3/user_activity/background-replacer"
+    
     const regex = /\/([^/]+)$/
     const match = regex.exec(input_image)
     let value = match ? match[1] : null

@@ -3,9 +3,9 @@ import { API_BASE_URL, svgExtensionToJPEG } from "~/utils/common"
 export const removeBackgroundWithoutPromps = (image: string | undefined, fileName: string) => {
   const myHeaders = new Headers()
   // @ts-ignore
-  // myHeaders.append('Authorization', `Bearer ${getCookie(COOKIE_KEYS.AUTH)}`);
+  myHeaders.append('Authorization', `Bearer ${getCookie(COOKIE_KEYS.AUTH)}`);
   myHeaders.append("Content-Type", "application/json")
-
+  
   const raw = JSON.stringify({
     input_image_link: `${image}`,
     file_name: svgExtensionToJPEG(fileName),

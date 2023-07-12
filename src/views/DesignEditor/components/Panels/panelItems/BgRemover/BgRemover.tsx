@@ -32,6 +32,7 @@ const BgRemover = () => {
   const [imageLoading, setImageLoading] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
 
+
   const addObject = React.useCallback(
     (url: string) => {
       // @ts-ignore
@@ -93,6 +94,7 @@ const BgRemover = () => {
           />
         </>
       )}
+  
       {panelInfo.trySampleImg && (
         <>
           <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
