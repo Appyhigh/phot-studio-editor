@@ -257,7 +257,6 @@ export const removeBackgroundController = async (
   // Get the black and white masked image
   try {
     const result_image = await removeBackgroundWithoutPromps(inputImage, "layer" || "")
-    console.log(result_image)
     if (result_image?.output_image) {
       // Get the image with removed background
       removeBackgroundUsingMask({
