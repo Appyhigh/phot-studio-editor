@@ -308,6 +308,8 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
         {productPhotoshootInfo.src && !resetProduct ? (
           <div className="pb-2">
             <UploadPreview
+
+            
               discardHandler={() => {
                 setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
               }}
