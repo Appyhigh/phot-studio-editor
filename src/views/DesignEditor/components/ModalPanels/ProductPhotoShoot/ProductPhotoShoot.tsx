@@ -59,6 +59,7 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
   const [resultLoading, setResultLoading] = useState(false)
   const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const [resetProduct, setResetProduct] = useState(false)
 
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
@@ -148,6 +149,12 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
 
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)
+
+    canvas.getObjects().forEach((obj: any) => {
+      if(obj.imageType === "product" && !productPhotoshootInfo.removeBg){
+        canvas.remove(obj)
+      } 
+    })
     try {
       await getDimensions(imageUrl, async (img: any) => {
         let response = await removeBackgroundController(
@@ -166,7 +173,7 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
                 ...prev,
                 preview: productPhotoshootInfo.src,
                 tooltip: true,
-              }))
+              })) 
               setCanvasLoader(false)
             } else {
               setCanvasLoader(false)
@@ -225,7 +232,6 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
         top: 0,
         format: "png",
       })
-
       return dataURL
     }
     return undefined
@@ -280,30 +286,26 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
   }
 
   const resetCanvas = () => {
-    canvas.getObjects().forEach((obj: any) => {
-      canvas.remove(obj)
-    })
-    setSteps((prev: any) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: false }))
+    // canvas.getObjects().forEach((obj: any) => { 
+    //   if(obj.imageType === "product"){
+    //     console.log(obj);
+    //     canvas.remove(obj)
+    //   } 
+    // })
+    setSteps((prev: any) => ({ ...prev, 1: true, }))
+    setStepsComplete((prev: any) => ({ ...prev, 1: false }))
     setProductPhotoshootInfo((prev: any) => ({
       ...prev,
-      src: "",
-      preview: "",
-      tooltip: false,
-      prompt: "",
-      result: [],
-      finalImage: "",
-      again: false,
-      prevObjects: [],
-      addPreview: "",
-      removeBg: false,
+      src:'',
+      preview:"",
+      result:[]
     }))
   }
 
   const UploadImage = () => {
     return (
       <>
-        {productPhotoshootInfo.src ? (
+        {productPhotoshootInfo.src && !resetProduct ? (
           <div className="pb-2">
             <UploadPreview
               discardHandler={() => {
@@ -370,7 +372,7 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
           fontFamily="Poppins"
           fontWeight="600"
           handleClick={() => {
-            if (productPhotoshootInfo.preview && productPhotoshootInfo.src) {
+            if (productPhotoshootInfo.preview && productPhotoshootInfo.src) { 
               setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
             } else if (productPhotoshootInfo.src) {
@@ -483,14 +485,18 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
     return (
       <div className="d-flex flex-row">
         Upload / choose image
-        <div
-          onClick={() => {
-            resetCanvas()
-          }}
-          className={classes.resetButton}
+        <BaseButton
+        fontSize="10px"
+        title="Reset"
+        handleClick={() => {
+          resetCanvas()
+        }}
+          width="30px"
+          height="15px" 
+          margin="2px 0px 0px 30px"
         >
           RESET
-        </div>
+        </BaseButton>
       </div>
     )
   }
@@ -514,8 +520,8 @@ const ProductPhotoshoot= ({ handleClose }: any) => {
         <div style={{ height: "70vh", overflowY: "scroll", paddingBottom: "40px" }}>
           <Accordian
             label={"1"}
-            // heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
-            heading={"Upload / choose image"}
+            heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
+            // heading={"Upload / choose image"}
             isOpen={steps[1]}
             isComplete={stepsComplete[1]}
             children={<UploadImage />}

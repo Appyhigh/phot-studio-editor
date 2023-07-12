@@ -13,7 +13,7 @@ import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimension
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
-import ProductPhotoshoot from "~/views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoShoot"
+import ProductPhotoshoot from "~/views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoshoot"
 
 
 function ProductPhotoshootEditor({ handleClose }: any) {
