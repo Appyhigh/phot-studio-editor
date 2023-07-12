@@ -30,6 +30,8 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -51,6 +53,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   })
   const { user, showLoginPopUp } = authState
   const { setErrorInfo } = useContext(ErrorContext)
+  const { sampleImages } = useContext(SampleImagesContext)
 
   const [steps, setSteps] = useState({
     firstStep: true,
@@ -226,53 +229,31 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       )}
       <div className={classes.sampleImagesLabel}>or try one of these for free</div>
       <div className={classes.sampleImages}>
-        {/* <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={false} modules={[Navigation]}>
-          {sampleImg.map((image, index) => (
-            <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-              <div
-                key={index}
-                className={clsx(classes.sampleImage, "flex-center")}
-                style={{ backgroundImage: `url(${image})` }}
-                onClick={() => {
-                  setSelectedSampleImg(index)
-                  setDimensionOfSampleImg(image)
-                  setObjectRemoverInfo((prev: any) => ({
-                    ...prev,
-                    src: image,
-                    preview: image,
-                    file_name: "pexels-photo-3493777.jpeg",
-                  }))
-                }}
-              >
-                {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper> */}
-
-<Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]} >
-            {sampleImg.map((image, index) => (
+        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+          {sampleImages.objectRemover.map((image: any, index) => {
+            return (
               <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
                 <div
                   key={index}
                   className={clsx(classes.sampleImage, "flex-center")}
-                  style={{ backgroundImage: `url(${image})` }}
+                  style={{ backgroundImage: `url(${image.originalImage})` }}
                   onClick={() => {
                     setSelectedSampleImg(index)
-                    setDimensionOfSampleImg(image)
+                    setDimensionOfSampleImg(image.originalImageDimensions)
                     setObjectRemoverInfo((prev: any) => ({
                       ...prev,
-                      src: image,
-                      preview: image,
-                      file_name: "pexels-photo-3493777.jpeg",
+                      src: image.originalImage,
+                      preview: image.originalImage,
+                      file_name: image.file_name,
                     }))
                   }}
                 >
                   {selectedSampleImg == index && <Icons.Selection size={"24"} />}
                 </div>
               </SwiperSlide>
-            ))}
-          </Swiper>
+            )
+          })}
+        </Swiper>
       </div>
       <BaseButton
         borderRadius="10px"

@@ -31,6 +31,8 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { sample } from "lodash"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -48,6 +50,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
   const [activeResultId, setActiveResultId] = useState(0)
+  const { sampleImages } = useContext(SampleImagesContext)
 
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
   const [isError, setIsError] = useState({
@@ -274,20 +277,20 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       </div>
       <div  className={classes.sampleImages}>
       <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]} >
-        {sampleImg.map((image, index) => (
+        {sampleImages.objectReplacer.map((image:any, index) => (
           <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
           <div
             key={index}
             className={clsx(classes.sampleImage, "flex-center")}
-            style={{ backgroundImage: `url(${image})` }}
+            style={{ backgroundImage: `url(${image.originalImage})` }}
             onClick={() => {
               setSelectedSampleImg(index)
-              setDimensionOfSampleImg(image)
+              setDimensionOfSampleImg(image.originalImageDimensions)
               setObjectReplacerInfo((prev: any) => ({
                 ...prev,
-                src: image,
-                preview: image,
-                file_name: "pexels-photo-3493777.jpeg",
+                src: image.originalImage,
+                preview: image.originalImage,
+                file_name: image.file_name,
               }))
             }}
           >
