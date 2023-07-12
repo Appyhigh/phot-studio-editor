@@ -15,6 +15,8 @@ import useAppContext from "~/hooks/useAppContext"
 
 function Canvas({ width, height }: any) {
   const containerRef = useContainerHandler()
+  const { activePanel } = useAppContext()
+
   const { fabricEditor, setFabricEditor } = useFabricEditor()
   const [brushSize, setBrushSize] = useState(10)
 
@@ -44,15 +46,15 @@ function Canvas({ width, height }: any) {
       }, auto`,
     })
 
-    const containerWidth = 600
-    const containerHeight = 600
+    const containerWidth = 400
+    const containerHeight = 400
     const scaleX = containerWidth / canvas.getWidth()
     const scaleY = containerHeight / canvas.getHeight()
     const scale = Math.min(scaleX, scaleY)
 
     canvas.setDimensions({
-      width: canvas.getWidth() * scale,
-      height: canvas.getHeight() * scale,
+      width: 100,
+      height: 100,
     })
 
     // const workArea = new fabric.Rect({
@@ -117,8 +119,9 @@ function Canvas({ width, height }: any) {
     <div
       style={{
         width: "600px",
-        height: "740px",
-        position: fabricEditor.brushShow && 'relative'
+        height: "440px",
+        position: fabricEditor.brushShow && "relative",
+        marginTop: activePanel === "ProductPhotoshoot" ? "30px" : "0px",
       }}
       className="editor-canvas d-flex justify-center p-4"
       id="cont"
@@ -203,7 +206,7 @@ function Canvas({ width, height }: any) {
       {fabricEditor.brushShow && (
         <div className={classes.circleCon}>
           <div
-            style={{ width: canvas?.freeDrawingBrush?.width, height: canvas?.freeDrawingBrush?.width}}
+            style={{ width: canvas?.freeDrawingBrush?.width, height: canvas?.freeDrawingBrush?.width }}
             className={classes.circle}
           >
             &nbsp;

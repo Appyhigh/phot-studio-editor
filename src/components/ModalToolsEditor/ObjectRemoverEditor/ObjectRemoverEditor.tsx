@@ -9,8 +9,8 @@ import ObjectRemoverPanel from "~/views/DesignEditor/components/ModalPanels/Obje
 
 function ObjectRemoverEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
-    width: 800,
-    height: 800,
+    width: 400,
+    height: 400,
   })
   const [isDoneBtnDisabled, setIsDoneBtnDisabled] = useState(false)
   const [brushTooltipShow, setBrushToolTip] = useState(false)
