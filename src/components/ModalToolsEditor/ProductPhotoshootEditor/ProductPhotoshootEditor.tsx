@@ -1,11 +1,10 @@
 import { useContext, useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
-import CanvasArea from "../../CanvasArea/CanvasArea"
+import CanvasArea from "~/components/FabricCanvas/Editor/CanvasArea/CanvasArea"
 import classes from "./style.module.css"
-import ModalBasePanel from "../ModalBasePanel/ModalBasePanel"
+import ModalBasePanel from "~/components/FabricCanvas/Editor/Panels/ModalBasePanel/ModalBasePanel"
 import "swiper/css"
 import "swiper/css/navigation"
-import ProductPhotoshootLeftPanel from "../ProductPhotoshootLeftPanel/ProductPhotoshootLeftPanel"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
 import Resize from "~/components/Icons/Resize"
 import { useEditor, useFrame } from "@layerhub-io/react"
@@ -13,6 +12,7 @@ import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimension
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
+import ProductPhotoshoot from "~/views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoshoot"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -48,7 +48,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
       }}
     >
       <div className={"d-flex flex-row"} style={{ pointerEvents: canvasLoader ? "none" : "auto" }}>
-        <ProductPhotoshootLeftPanel handleClose={handleClose} />
+        <ProductPhotoshoot handleClose={handleClose} />
 
         <div className={classes.editor}>
           <ModalBasePanel handleDone={handleDone} isDoneBtnDisabled={!productPhotoshootInfo.finalImage} />

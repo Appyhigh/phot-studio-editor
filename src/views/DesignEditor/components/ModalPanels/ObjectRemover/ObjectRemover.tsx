@@ -36,16 +36,15 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
-  const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
   const { activePanel, setActivePanel } = useAppContext()
   // @ts-ignore
-  const { authState } = useAuth()
+  const { authState, setAuthState } = useAuth()
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
   })
-  const { user } = authState
+  const { user, showLoginPopUp } = authState
   const { setErrorInfo } = useContext(ErrorContext)
 
   const [steps, setSteps] = useState({
@@ -106,7 +105,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   }, [user, autoCallAPI])
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setShowLoginPopup(true)
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
@@ -168,6 +167,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       }
     }
   }, [steps.secondStep])
+
+  useEffect(() => {
+    return () => {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
+    }
+  }, [])
 
   const upload = () => (
     <>
@@ -316,7 +321,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
             // handleBgImg(objectRemoverInfo.src)
-            if (!user) return setShowLoginPopup(true)
+            if (!user) return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
             handleBrushToolTip(false)
             let paths: any = []
             //  @ts-ignore
@@ -426,12 +431,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         <p>Object Remover</p>
       </div>
       <div className={classes.line}></div>
-      <LoginPopup
-        isOpen={showLoginPopup}
-        loginPopupCloseHandler={() => {
-          setShowLoginPopup(false)
-        }}
-      />
+
       <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>
         <Accordian
           label={1}

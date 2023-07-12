@@ -141,6 +141,9 @@
   background-repeat: no-repeat;
   cursor: pointer;
 }
+.uploadWrapper {
+  margin: -0.5rem -0.5rem 0rem -0.5rem;
+}
 
 .itemContainer {
   margin: 0.5rem 0rem 0px 5px;
