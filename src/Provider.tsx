@@ -69,6 +69,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     cfg_scale: 7.5,
     aspect_ratio: "1:1",
     showclearTooltip: false,
+    isError:false
   })
 
   const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({
@@ -96,6 +97,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     scaler: 2,
     result: [],
     showclearTooltip: false,
+    isError:false
   })
 
   const [imgScalerPanelInfo, setImgScalerPanelInfo] = useState({
@@ -113,6 +115,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     images_generation_ct: 1,
     result: [],
     showclearTooltip: false,
+    isError:false
+
   })
 
   const [photoEditorPanelInfo, setPhotoEditorPanelInfo] = useState({
@@ -128,6 +132,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     original: "",
     resultImages: [],
+    isError:false
   })
 
   const [ImgColorizerPanelInfo, setImgColorizerPanelInfo] = useState({
@@ -197,6 +202,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     prevObjects: [],
     addPreview: "",
     removeBg: false,
+    isError:false
   })
 
   return (

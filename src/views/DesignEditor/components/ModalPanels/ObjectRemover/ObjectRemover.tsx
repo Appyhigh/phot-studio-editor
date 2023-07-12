@@ -372,17 +372,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         {resultLoading ? (
           <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
         ) : isError.error ? (
-          <div
-            className={classes.skeletonBox}
-            onClick={() => {
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
-            }}
-          >
+          <div className={classes.skeletonBox}>
             {
               <div className={classes.retry}>
-                <Icons.Retry />
-                <p>Retry</p>
+                <Icons.RetryImg />
               </div>
             }{" "}
           </div>
@@ -483,9 +476,23 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative",marginTop:"12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
+        )}
+        {isError.error && (
+          <BaseButton
+            disabled={imageLoading ? true : false}
+            handleClick={() => {
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
+            }}
+            width="319px"
+            margin="16px 0 0 20px"
+            fontSize="16px"
+          >
+            Retry
+          </BaseButton>
         )}
       </div>
     </div>

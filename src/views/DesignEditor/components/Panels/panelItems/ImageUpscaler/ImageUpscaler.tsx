@@ -24,6 +24,7 @@ import BaseButton from "~/components/UI/Button/BaseButton"
 import UploadPreview from "../UploadPreview/UploadPreview"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const ImageUpscaler = () => {
   const { activePanel } = useAppContext()
@@ -96,6 +97,7 @@ const ImageUpscaler = () => {
 
   const generateImg2Scaler = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setImgScalerInfo((prev: any) => ({ ...prev, isError: false }))
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
@@ -112,19 +114,8 @@ const ImageUpscaler = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateImg2Scaler()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setImgScalerInfo((prev: any) => ({ ...prev, isError: true }))
+
           console.error("Error:", error)
         })
     }
@@ -134,6 +125,7 @@ const ImageUpscaler = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
+      setImgScalerInfo((prev: any) => ({ ...prev, isError: false }))
     } else {
       setLoadingImgCt(1)
       setImageLoading(true)
@@ -150,19 +142,7 @@ const ImageUpscaler = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateImg4Scaler()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setImgScalerInfo((prev: any) => ({ ...prev, isError: true }))
           console.error("Error:", error)
         })
     }
@@ -170,6 +150,8 @@ const ImageUpscaler = () => {
 
   const generateImgBothScaler = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setImgScalerInfo((prev: any) => ({ ...prev, isError: false }))
+
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
@@ -191,19 +173,8 @@ const ImageUpscaler = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateImgBothScaler()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setImgScalerInfo((prev: any) => ({ ...prev, isError: true }))
+
           console.error("Error:", error)
         })
     }
@@ -428,7 +399,19 @@ const ImageUpscaler = () => {
                 </div>
               )
             })}
-
+            {imgScalerInfo.isError &&
+              !imageLoading &&
+              Array.from(Array(loadingImgCt).keys()).map((each, _idx) => {
+                return (
+                  <div className={classes.skeletonBox} key={_idx}>
+                    {
+                      <div className={classes.retry}>
+                        <Icons.RetryImg />
+                      </div>
+                    }{" "}
+                  </div>
+                )
+              })}
             {imageLoading &&
               Array.from(Array(loadingImgCt).keys()).map((each, _idx) => (
                 <div className={classes.skeletonBox} key={_idx}>
@@ -451,6 +434,33 @@ const ImageUpscaler = () => {
               </div>
             )}
           </div>
+          {!imageLoading && imgScalerInfo.isError && (
+            <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
+              <FileError
+                ErrorMsg={"Oops! unable to generate your image please try again."}
+                displayError={imgScalerInfo.isError}
+              />
+            </div>
+          )}
+          {imgScalerInfo.isError && !imageLoading && (
+            <BaseButton
+              disabled={imageLoading ? true : false}
+              handleClick={() => {
+                if (imgScalerInfo.scaler === 2) {
+                  setLoadingImgCt(2)
+                  generateImg2Scaler()
+                } else if (imgScalerInfo.scaler === 4) {
+                  setLoadingImgCt(2)
+                  generateImgBothScaler()
+                }
+              }}
+              width="319px"
+              margin="16px 0 0 20px"
+              fontSize="16px"
+            >
+              {"Retry"}
+            </BaseButton>
+          )}
         </div>
       )}
     </div>

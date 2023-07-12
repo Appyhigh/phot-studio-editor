@@ -23,6 +23,7 @@ import ErrorContext from "~/contexts/ErrorContext"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
@@ -33,11 +34,11 @@ const ImageColorizer = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
-  const { setErrorInfo } = useContext(ErrorContext)
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
 
   const generateImgColorizer = () => {
+    setImgColorizerInfo((prev: any) => ({ ...prev, isError: false }))
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
@@ -62,19 +63,7 @@ const ImageColorizer = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setImgColorizerPanelInfo((prev: any) => ({ ...prev, resultOption: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateImgColorizer()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setImgColorizerInfo((prev: any) => ({ ...prev, isError: true }))
           console.error("Error:", error)
         })
     }
@@ -244,6 +233,15 @@ const ImageColorizer = () => {
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
+            {ImgColorizerInfo.isError && !imageLoading && (
+                <div className={classes.skeletonBox}>
+                  {
+                    <div className={classes.retry}>
+                      <Icons.RetryImg />
+                    </div>
+                  }{" "}
+                </div>
+              )}
             {!imageLoading &&
               ImgColorizerInfo?.resultImages?.map((each, _idx) => {
                 return (
@@ -263,6 +261,7 @@ const ImageColorizer = () => {
                   </div>
                 )
               })}
+         
             {imageLoading &&
               Array.from(Array(1).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
@@ -270,6 +269,27 @@ const ImageColorizer = () => {
                 </div>
               ))}
           </div>
+          {ImgColorizerInfo.isError && !imageLoading && (
+              <>
+                <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
+                  <FileError
+                    ErrorMsg={"Oops! unable to generate your image please try again."}
+                    displayError={ImgColorizerInfo.isError}
+                  />
+                </div>
+                <BaseButton
+                  disabled={imageLoading ? true : false}
+                  handleClick={() => {
+                    generateImgColorizer()
+                  }}
+                  width="319px"
+                  margin="16px 0 0 20px"
+                  fontSize="16px"
+                >
+                  Retry
+                </BaseButton>
+              </>
+            )}
         </div>
       )}
     </Block>

@@ -7,6 +7,7 @@ const ImageColorizerContext = React.createContext({
     src: "",
     original: "",
     resultImages: [],
+    isError:false
   },
   ImgColorizerPanelInfo: {
     uploadSection: true,

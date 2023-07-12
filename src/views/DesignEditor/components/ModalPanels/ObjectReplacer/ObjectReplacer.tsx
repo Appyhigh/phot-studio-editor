@@ -530,55 +530,51 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
 
-        {resultLoading ? (
-          Array.from(Array(4).keys()).map((each, _idx) => {
-            return (
-              <div key={_idx} className={classes.skeletonBox}>
-                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-              </div>
-            )
-          })
-        ) : isError.error ? (
-          <div
-            className={classes.skeletonBox}
-            // onClick={() => {
-            //   setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-            //   getOutputImg()
-            // }}
-          >
-            {
-              <div className={classes.retry}>
-                <Icons.RetryImg />
-              </div>
-            }{" "}
-          </div>
-        ) : (
-          objectReplacerInfo.result.map((each, _idx) => {
-            return (
-              <div
-                key={_idx}
-                className={clsx(
-                  "pointer p-relative",
-                  classes.eachImg,
-                  activeResultId === _idx && classes.currentActiveImg
-                )}
-              >
-                {
-                  <img
-                    src={each}
-                    onClick={() => {
-                      if (activeResultId != _idx) {
-                        setActiveResultId(_idx)
-                        setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
-                        handleBgImg(each)
-                      }
-                    }}
-                  />
-                }
-              </div>
-            )
-          })
-        )}
+        {resultLoading
+          ? Array.from(Array(4).keys()).map((each, _idx) => {
+              return (
+                <div key={_idx} className={classes.skeletonBox}>
+                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              )
+            })
+          : isError.error
+          ? Array.from(Array(4).keys()).map((each, _idx) => {
+              return (
+                <div className={classes.skeletonBox}>
+                  {
+                    <div className={classes.retry}>
+                      <Icons.RetryImg />
+                    </div>
+                  }{" "}
+                </div>
+              )
+            })
+          : objectReplacerInfo.result.map((each, _idx) => {
+              return (
+                <div
+                  key={_idx}
+                  className={clsx(
+                    "pointer p-relative",
+                    classes.eachImg,
+                    activeResultId === _idx && classes.currentActiveImg
+                  )}
+                >
+                  {
+                    <img
+                      src={each}
+                      onClick={() => {
+                        if (activeResultId != _idx) {
+                          setActiveResultId(_idx)
+                          setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
+                          handleBgImg(each)
+                        }
+                      }}
+                    />
+                  }
+                </div>
+              )
+            })}
       </div>
       {stepsComplete.firstStep &&
         stepsComplete.secondStep &&
@@ -600,25 +596,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               setCallAPI(false)
               setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false }))
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false, fourthStep: false }))
-            }}
-          />
-        )}
-      {stepsComplete.firstStep &&
-        stepsComplete.secondStep &&
-        stepsComplete.thirdStep &&
-        !resultLoading &&
-        isError.error && (
-          <BaseButton
-            borderRadius="10px"
-            title={"Retry"}
-            height="38px"
-            margin={"20px 4px 4px 0px"}
-            width="320px"
-            fontSize="16px"
-            fontWeight="500"
-            handleClick={() => {
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
             }}
           />
         )}
@@ -725,6 +702,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           }
         }}
       /> */}
+
         <Accordian
           isOpen={steps.fourthStep}
           isComplete={stepsComplete.fourthStep}
@@ -748,9 +726,23 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
+          <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
+        )}
+        {isError.error && (
+          <BaseButton
+            disabled={imageLoading ? true : false}
+            handleClick={() => {
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
+            }}
+            width="319px"
+            margin="12px 0 0 20px"
+            fontSize="16px"
+          >
+            Retry
+          </BaseButton>
         )}
       </div>
     </div>

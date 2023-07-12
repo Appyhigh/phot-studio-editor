@@ -24,6 +24,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import ErrorContext from "~/contexts/ErrorContext"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -238,6 +239,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   }
 
   const generateResult = () => {
+    setProductPhotoshootInfo((prev: any) => ({ ...prev, isError: false }))
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
     } else {
@@ -266,20 +268,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
         .catch((error) => {
           setResultLoading(false)
           setCanvasLoader(false)
-          setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
-          setStepsComplete((prev: any) => ({ ...prev, 3: false, 4: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateResult()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setProductPhotoshootInfo((prev: any) => ({ ...prev, isError: true }))
           console.log("error", error)
         })
     }
@@ -461,22 +450,32 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                 }
               </div>
             ))}
+          {productPhotoshootInfo.isError &&
+            Array.from(Array(4).keys()).map((each, idx) => (
+              <div className={classes.skeletonBox} key={idx}>
+                <div className={classes.retry}>
+                      <Icons.RetryImg />
+                    </div>
+              </div>
+            ))}
         </div>
-        <div className="pb-2">
-          <BaseButton
-            title="Generate 4 more"
-            borderRadius="10px"
-            width="20.25rem"
-            height="2.375rem"
-            fontSize="0.75rem"
-            fontFamily="Poppins"
-            fontWeight="600"
-            disabled={resultLoading ? true : false}
-            handleClick={() => {
-              !resultLoading && generateResult()
-            }}
-          />
-        </div>
+        {!productPhotoshootInfo.isError && (
+          <div className="pb-2">
+            <BaseButton
+              title="Generate 4 more"
+              borderRadius="10px"
+              width="20.25rem"
+              height="2.375rem"
+              fontSize="0.75rem"
+              fontFamily="Poppins"
+              fontWeight="600"
+              disabled={resultLoading ? true : false}
+              handleClick={() => {
+                !resultLoading && generateResult()
+              }}
+            />
+          </div>
+        )}
       </>
     )
   }
@@ -596,6 +595,27 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
               }
             }}
           />
+          {productPhotoshootInfo.isError && (
+            <>
+              <div style={{ position: "relative"}}>
+                <FileError
+                  ErrorMsg={"Oops! unable to generate your image please try again."}
+                  displayError={productPhotoshootInfo.isError}
+                />
+              </div>
+              <BaseButton
+                disabled={imageLoading ? true : false}
+                handleClick={() => {
+                  generateResult()
+                }}
+                width="319px"
+                margin="12px 0 0 20px"
+                fontSize="16px"
+              >
+                Retry
+              </BaseButton>{" "}
+            </>
+          )}
         </div>
         <LoginPopup
           isOpen={showLoginPopup}
