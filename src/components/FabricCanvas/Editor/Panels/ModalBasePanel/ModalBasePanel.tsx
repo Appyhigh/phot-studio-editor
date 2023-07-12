@@ -12,7 +12,7 @@ import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 import ProductPreview from "~/views/DesignEditor/components/Panels/panelItems/ProductPreview/ProductPreview"
 import useAppContext from "~/hooks/useAppContext"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
-import { OBJECT_REMOVER } from "~/constants/contants"
+import { OBJECT_REMOVER, OBJECT_REPLACER, PRODUCT_PHOTOSHOOT } from "~/constants/contants"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -54,7 +54,8 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
         AddObjectFunc(objectRemoverInfo.result, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
         handleClose()
       })
-    } else {
+      // @ts-ignore
+    } else if(activePanel=== OBJECT_REPLACER) {
       await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
@@ -73,8 +74,20 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
         )
         handleClose()
       })
+      // @ts-ignore
+    }else if(activePanel===PRODUCT_PHOTOSHOOT){
+      await getDimensions(productPhotoshootInfo.finalImage, (imgSrc: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          return prev + 1
+        })
+        AddObjectFunc(productPhotoshootInfo.finalImage, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+        handleClose()
+      })
     }
   }
+  
   const closeProductPreview = () => {
     setShowPreview(false)
   }
@@ -83,12 +96,15 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
   const isDone =
     // @ts-ignore
     activePanel === OBJECT_REMOVER
-      ? objectRemoverInfo.result
+      && objectRemoverInfo.result
         ? true
         : false
-      : objectReplacerInfo.result
+        // @ts-ignore
+      || activePanel === OBJECT_REPLACER && objectReplacerInfo.result
       ? true
       : false
+      // @ts-ignore
+      || activePanel === PRODUCT_PHOTOSHOOT && productPhotoshootInfo.finalImage ? true :false
 
   return (
     <div>
@@ -179,9 +195,9 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
             height="2.375rem"
             width="7.5rem;"
             margin="0px 0.75rem"
-            handleClick={
-              !isDoneBtnDisabled || objectRemoverInfo.result || objectReplacerInfo.result ? handleAddCanvas : null
-            }
+            handleClick={() => {
+              !isDoneBtnDisabled || objectRemoverInfo.result || objectReplacerInfo.result || productPhotoshootInfo.finalImage ? handleAddCanvas() : null
+            }}
           />
         </Block>
       </Block>
