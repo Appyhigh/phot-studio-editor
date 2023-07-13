@@ -258,7 +258,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
       const objects = canvas.getObjects()
-      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
+      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt[0])
         .then((response) => {
           console.log("INITIAL", canvas.getObjects())
           console.log("INITIAL", objects)
