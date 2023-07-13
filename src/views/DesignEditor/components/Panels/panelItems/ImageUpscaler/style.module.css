@@ -180,6 +180,7 @@
 }
 .eachImg {
   position: relative;
+  cursor: pointer;
 }
 .eachImg img {
   width: 132px;

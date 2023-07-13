@@ -378,7 +378,12 @@ const ImageUpscaler = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
-              <img src={imgScalerInfo.src} alt="result-img" />
+              <img src={imgScalerInfo.src} alt="result-img" 
+                 onClick={() => {
+                  if(currentActiveImg===2) return ;
+                  addImg(imgScalerInfo.src,2)
+                }}
+              />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
@@ -392,6 +397,7 @@ const ImageUpscaler = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
+                      if(currentActiveImg===_idx) return ;
                       addImg(each, _idx)
                     }}
                   />

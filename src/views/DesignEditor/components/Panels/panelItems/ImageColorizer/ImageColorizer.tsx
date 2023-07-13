@@ -229,7 +229,12 @@ const ImageColorizer = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
-              <img src={ImgColorizerInfo.src} alt="orginal-img" />
+              <img src={ImgColorizerInfo.src} alt="orginal-img"
+              onClick={()=>{
+                if(currentActiveImg===1) return ;
+                addImg(ImgColorizerInfo.src,1)
+              }}
+              />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
@@ -253,6 +258,7 @@ const ImageColorizer = () => {
                       src={each}
                       alt="result-img"
                       onClick={() => {
+                        if(currentActiveImg===_idx) return ;
                         addImg(each, _idx)
                       }}
                     />

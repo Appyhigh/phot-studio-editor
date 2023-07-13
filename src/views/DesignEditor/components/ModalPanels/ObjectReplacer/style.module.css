@@ -85,6 +85,7 @@
   border-radius: 10px;
   object-fit: contain;
   margin-right: 8px;
+  cursor: pointer;
 }
 
 .currentActiveImg {

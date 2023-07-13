@@ -56,12 +56,11 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const [selectedSampleImg, setSelectedSampleImg] = useState(0)
   const [imageMoved, setImageMoved] = useState(false)
 
-  const [currentActiveImg, setCurrentActiveImg] = useState(-1)
+  const [currentActiveImg, setCurrentActiveImg] = useState(0)
   const [resultLoading, setResultLoading] = useState(false)
   const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [resetProduct, setResetProduct] = useState(false)
-
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
       setSelectedSampleImg(-1)
@@ -261,6 +260,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           }))
           console.log(canvas.getObjects())
           clearCanvas()
+          setCurrentActiveImg(0)
           setBackgroundImage(response[0])
           setResultLoading(false)
           setCanvasLoader(false)
@@ -441,6 +441,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                   <img
                     src={each}
                     onClick={() => {
+                    
+                      if (currentActiveImg === idx) return ;
                       setCurrentActiveImg(idx)
                       clearCanvas()
                       setBackgroundImage(each)
@@ -454,8 +456,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             Array.from(Array(4).keys()).map((each, idx) => (
               <div className={classes.skeletonBox} key={idx}>
                 <div className={classes.retry}>
-                      <Icons.RetryImg />
-                    </div>
+                  <Icons.RetryImg />
+                </div>
               </div>
             ))}
         </div>
@@ -597,7 +599,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           />
           {productPhotoshootInfo.isError && (
             <>
-              <div style={{ position: "relative"}}>
+              <div style={{ position: "relative" }}>
                 <FileError
                   ErrorMsg={"Oops! unable to generate your image please try again."}
                   displayError={productPhotoshootInfo.isError}

@@ -1,6 +1,6 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
-import React, { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
@@ -19,7 +19,6 @@ import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTran
 import { createMaskImage } from "~/views/DesignEditor/utils/functions/createMaskImg"
 import { PathProps } from "~/utils/canvasUtils"
 import { objectRemoverController } from "~/utils/objectRemoverController"
-import LoginPopup from "../../LoginPopup/LoginPopup"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import { useAuth } from "~/hooks/useAuth"
@@ -27,25 +26,26 @@ import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
-  const { fabricEditor, setFabricEditor } = useFabricEditor()
+  const { fabricEditor } = useFabricEditor()
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const [brushSize, setBrushSize] = useState(10)
-  const { canvas, objects } = fabricEditor
+  const { canvas } = fabricEditor
   const [paths, setPaths] = useState<PathProps[]>([])
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
-  const { activePanel, setActivePanel } = useAppContext()
+  const { setActivePanel } = useAppContext()
+  const [currentActiveImg, setCurrentActiveImg] = useState(1)
+
   // @ts-ignore
   const { authState, setAuthState } = useAuth()
   const [isError, setIsError] = useState({
     error: false,
     errorMsg: "",
   })
-  const { user, showLoginPopUp } = authState
-  const { setErrorInfo } = useContext(ErrorContext)
+  const { user } = authState
 
   const [steps, setSteps] = useState({
     firstStep: true,
@@ -115,6 +115,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
           setResultLoading(false)
+          setCurrentActiveImg(1);
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
           setCallAPI(false)
@@ -363,8 +364,17 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     <>
       {" "}
       <div className={classes.resultImages}>
-        <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={objectRemoverInfo.src} onClick={() => {}} />}
+        <div className={clsx("pointer p-relative", classes.eachImg,currentActiveImg === 0 && classes.currentActiveImg)}>
+          {
+            <img
+              src={objectRemoverInfo.src}
+              onClick={() => {
+                if (currentActiveImg === 0) return
+                setCurrentActiveImg(0)
+                handleBgImg(objectRemoverInfo.src)
+              }}
+            />
+          }
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
@@ -380,8 +390,19 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             }{" "}
           </div>
         ) : (
-          <div className={clsx("pointer p-relative", classes.eachImg, classes.currentActiveImg)}>
-            {<img src={objectRemoverInfo.result} onClick={() => {}} />}
+          <div
+            className={clsx("pointer p-relative", classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}
+          >
+            {
+              <img
+                src={objectRemoverInfo.result}
+                onClick={() => {
+                  if (currentActiveImg === 1) return
+                  setCurrentActiveImg(1)
+                  handleBgImg(objectRemoverInfo.result)
+                }}
+              />
+            }
             <div className={classes.resultLabel}>{"Result"}</div>
           </div>
         )}
@@ -476,7 +497,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative",marginTop:"12px" }}>
+          <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
         )}

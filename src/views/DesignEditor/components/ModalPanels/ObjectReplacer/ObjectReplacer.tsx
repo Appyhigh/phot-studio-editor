@@ -43,7 +43,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
-  const [activeResultId, setActiveResultId] = useState(0)
+  const [activeResultId, setActiveResultId] = useState(-1)
 
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
   const [isError, setIsError] = useState({
@@ -524,8 +524,24 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     <>
       {" "}
       <div className={classes.resultImages}>
-        <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={objectReplacerInfo.src} onClick={() => {}} />}
+        <div
+          className={clsx(
+            "pointer p-relative",
+            classes.eachImg,
+            objectReplacerInfo.result.length === activeResultId && classes.currentActiveImg
+          )}
+        >
+          {
+            <img
+              src={objectReplacerInfo.src}
+              onClick={() => {
+                if (activeResultId === objectReplacerInfo.result.length) return
+                setActiveResultId(objectReplacerInfo.result.length)
+                setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: objectReplacerInfo.result.length }))
+                handleBgImg(objectReplacerInfo.src)
+              }}
+            />
+          }
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>

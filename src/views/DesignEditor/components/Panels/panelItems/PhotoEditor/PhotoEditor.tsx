@@ -297,7 +297,12 @@ const PhotoEditor = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
-              <img src={photoEditorInfo.src} alt="orginal-img" />
+              <img src={photoEditorInfo.src} alt="orginal-img"  
+               onClick={() => {
+                if(currentActiveImg===0) return ;
+                addImg(photoEditorInfo.src, 0)
+              }}
+              />
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
             {photoEditorInfo.result.map((each, idx) => {
@@ -310,6 +315,7 @@ const PhotoEditor = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
+                      if(currentActiveImg===idx+1) return ;
                       addImg(each, idx + 1)
                     }}
                   />

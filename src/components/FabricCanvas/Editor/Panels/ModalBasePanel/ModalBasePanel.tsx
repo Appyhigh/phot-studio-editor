@@ -55,24 +55,36 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
         handleClose()
       })
     } else {
-      await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
-        let latest_ct = 0
-        setImagesCt((prev: any) => {
-          latest_ct = prev + 1
-          return prev + 1
-        })
+      if (objectReplacerInfo.activeResult === objectReplacerInfo.result.length) {
+        await getDimensions(objectReplacerInfo.src, (imgSrc: any) => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            return prev + 1
+          })
 
-        console.log(objectReplacerInfo.result[objectReplacerInfo.activeResult])
-        AddObjectFunc(
-          objectReplacerInfo.result[objectReplacerInfo.activeResult],
-          editor,
-          imgSrc.width,
-          imgSrc.height,
-          frame,
-          latest_ct
-        )
-        handleClose()
-      })
+          AddObjectFunc(objectReplacerInfo.src, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+          handleClose()
+        })
+      } else {
+        await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            return prev + 1
+          })
+
+          AddObjectFunc(
+            objectReplacerInfo.result[objectReplacerInfo.activeResult],
+            editor,
+            imgSrc.width,
+            imgSrc.height,
+            frame,
+            latest_ct
+          )
+          handleClose()
+        })
+      }
     }
   }
   const closeProductPreview = () => {
