@@ -35,7 +35,7 @@ const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
     useContext(TextToArtContext)
   const { setImagesCt } = useContext(ImagesContext)
-  const [currentActiveImg, setCurrentActiveImg] = useState(-1)
+  const [currentActiveImg, setCurrentActiveImg] = useState(0)
   const [imagesLoading, setImagesLoading] = useState(false)
   const editor = useEditor()
   const leftPanelRef = useRef()
@@ -55,6 +55,25 @@ const ImagineAI = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
     }
+  }, [])
+
+  useEffect(() => {
+    setTextToArtInputInfo((prev: any) => ({
+      ...prev,
+      id: "",
+      prompt: "",
+      style: [],
+      images_generation_ct: 1,
+      image_wt: 5.6,
+      uploaded_img: "",
+      negative_prompt_visible: false,
+      negative_prompt: "",
+      cfg_scale: 7.5,
+      aspect_ratio: "1:1",
+      showclearTooltip: false,
+      isError: false,
+    }))
+    setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
   }, [])
 
   useEffect(() => {
@@ -102,7 +121,7 @@ const ImagineAI = () => {
           setErrorInfo((prev) => ({ ...prev, showError: false }))
           setTextToArtPanelInfo((prev: any) => ({
             ...prev,
-            resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
+            resultImages: [...responseData["data"]["image"], ...prev.resultImages],
           }))
           setImagesLoading(false)
         })
@@ -318,6 +337,12 @@ const ImagineAI = () => {
               <Icons.ChevronRight fill="#000" size={"20"} />
             </Block>
             <div className={classes.resultImages}>
+              {imagesLoading &&
+                Array.from(Array(textToArtInputInfo.images_generation_ct).keys()).map((each, idx) => (
+                  <div className={classes.skeletonBox} key={idx}>
+                    {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                  </div>
+                ))}
               {textToArtpanelInfo.resultImages.map((each, idx) => (
                 <div
                   className={clsx("pointer", classes.eachImg, idx === currentActiveImg && classes.currentActiveImg)}
@@ -327,6 +352,7 @@ const ImagineAI = () => {
                     <img
                       src={each}
                       onClick={() => {
+                        if (currentActiveImg === idx) return
                         setCurrentActiveImg(idx)
                         addImgToCanvas(each)
                       }}
@@ -334,21 +360,19 @@ const ImagineAI = () => {
                   }
                 </div>
               ))}
-              {textToArtInputInfo.isError && !imagesLoading && (
-                <div className={classes.skeletonBox}>
-                  {
-                    <div className={classes.retry}>
-                      <Icons.RetryImg />
+              {textToArtInputInfo.isError &&
+                !imagesLoading &&
+                Array.from(Array(textToArtInputInfo.images_generation_ct).keys()).map((each, idx) => {
+                  return (
+                    <div className={classes.skeletonBox} key={idx}>
+                      {
+                        <div className={classes.retry}>
+                          <Icons.RetryImg />
+                        </div>
+                      }{" "}
                     </div>
-                  }{" "}
-                </div>
-              )}
-              {imagesLoading &&
-                Array.from(Array(textToArtInputInfo.images_generation_ct).keys()).map((each, idx) => (
-                  <div className={classes.skeletonBox} key={idx}>
-                    {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-                  </div>
-                ))}
+                  )
+                })}
             </div>
             {!imagesLoading && textToArtInputInfo.isError && (
               <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
@@ -358,7 +382,7 @@ const ImagineAI = () => {
                 />
               </div>
             )}
-            { 
+            {
               <BaseButton
                 disabled={imagesLoading ? true : false}
                 handleClick={() => {
@@ -368,7 +392,7 @@ const ImagineAI = () => {
                 margin="16px 0 0 20px"
                 fontSize="16px"
               >
-                {(textToArtInputInfo.isError && !imagesLoading) ? "Retry" : "Regenerate"}
+                {textToArtInputInfo.isError && !imagesLoading ? "Retry" : "Regenerate"}
               </BaseButton>
             }
             {/* <p className={classes.creditsPara}>

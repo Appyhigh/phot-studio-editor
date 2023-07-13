@@ -53,6 +53,27 @@ const PhotoEditor = () => {
     }
   }, [user, autoCallAPI])
 
+  useEffect(() => {
+    setPhotoEditorInfo((prev: any) => ({
+      ...prev,
+      id: "",
+      src: "",
+      original: "",
+      prompt: "",
+      images_generation_ct: 1,
+      result: [],
+      showclearTooltip: false,
+      isError: false,
+    }))
+    setPhotoEditorPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      resultSectionVisible: false,
+    }))
+  }, [])
+
   const addObject = (url: string) => {
     setPhotoEditorPanelInfo((prev: any) => ({
       ...prev,
@@ -297,11 +318,13 @@ const PhotoEditor = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
-              <img src={photoEditorInfo.src} alt="orginal-img"  
-               onClick={() => {
-                if(currentActiveImg===0) return ;
-                addImg(photoEditorInfo.src, 0)
-              }}
+              <img
+                src={photoEditorInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  if (currentActiveImg === 0) return
+                  addImg(photoEditorInfo.src, 0)
+                }}
               />
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
@@ -315,7 +338,7 @@ const PhotoEditor = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
-                      if(currentActiveImg===idx+1) return ;
+                      if (currentActiveImg === idx + 1) return
                       addImg(each, idx + 1)
                     }}
                   />

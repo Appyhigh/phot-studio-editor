@@ -54,6 +54,25 @@ const ImageUpscaler = () => {
   const { imgScalerPanelInfo, setImgScalerInfo, setImgScalerPanelInfo, imgScalerInfo } =
     useContext(ImageUpScalerContext)
 
+  useEffect(() => {
+    setImgScalerInfo((prev: any) => ({
+      ...prev,
+      id: "",
+      src: "",
+      original: "",
+      result: [],
+      showclearTooltip: false,
+      isError: false,
+    }))
+    setImgScalerPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      resultSectionVisible: false,
+    }))
+  }, [])
+
   const addObject = React.useCallback(
     (url: string) => {
       if (editor) {
@@ -378,10 +397,12 @@ const ImageUpscaler = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 2 && classes.currentActiveImg)}>
-              <img src={imgScalerInfo.src} alt="result-img" 
-                 onClick={() => {
-                  if(currentActiveImg===2) return ;
-                  addImg(imgScalerInfo.src,2)
+              <img
+                src={imgScalerInfo.src}
+                alt="result-img"
+                onClick={() => {
+                  if (currentActiveImg === 2) return
+                  addImg(imgScalerInfo.src, 2)
                 }}
               />
 
@@ -397,7 +418,7 @@ const ImageUpscaler = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
-                      if(currentActiveImg===_idx) return ;
+                      if (currentActiveImg === _idx) return
                       addImg(each, _idx)
                     }}
                   />

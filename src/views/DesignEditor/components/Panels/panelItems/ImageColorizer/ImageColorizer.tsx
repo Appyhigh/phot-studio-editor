@@ -7,7 +7,7 @@ import useAppContext from "~/hooks/useAppContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -36,6 +36,26 @@ const ImageColorizer = () => {
   const { sampleImages } = useContext(SampleImagesContext)
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
+
+  useEffect(() => {
+    setImgColorizerInfo((prev: any) => ({
+      ...prev,
+      type: "",
+      id: "",
+      src: "",
+      original: "",
+      resultImages: [],
+      isError: false,
+    }))
+    setImgColorizerPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      resultOption: false,
+      tryFilters: false,
+    }))
+  }, [])
 
   const generateImgColorizer = () => {
     setImgColorizerInfo((prev: any) => ({ ...prev, isError: false }))
@@ -229,24 +249,26 @@ const ImageColorizer = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
-              <img src={ImgColorizerInfo.src} alt="orginal-img"
-              onClick={()=>{
-                if(currentActiveImg===1) return ;
-                addImg(ImgColorizerInfo.src,1)
-              }}
+              <img
+                src={ImgColorizerInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  if (currentActiveImg === 1) return
+                  addImg(ImgColorizerInfo.src, 1)
+                }}
               />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
             {ImgColorizerInfo.isError && !imageLoading && (
-                <div className={classes.skeletonBox}>
-                  {
-                    <div className={classes.retry}>
-                      <Icons.RetryImg />
-                    </div>
-                  }{" "}
-                </div>
-              )}
+              <div className={classes.skeletonBox}>
+                {
+                  <div className={classes.retry}>
+                    <Icons.RetryImg />
+                  </div>
+                }{" "}
+              </div>
+            )}
             {!imageLoading &&
               ImgColorizerInfo?.resultImages?.map((each, _idx) => {
                 return (
@@ -258,7 +280,7 @@ const ImageColorizer = () => {
                       src={each}
                       alt="result-img"
                       onClick={() => {
-                        if(currentActiveImg===_idx) return ;
+                        if (currentActiveImg === _idx) return
                         addImg(each, _idx)
                       }}
                     />
@@ -267,7 +289,7 @@ const ImageColorizer = () => {
                   </div>
                 )
               })}
-         
+
             {imageLoading &&
               Array.from(Array(1).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
@@ -276,26 +298,26 @@ const ImageColorizer = () => {
               ))}
           </div>
           {ImgColorizerInfo.isError && !imageLoading && (
-              <>
-                <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
-                  <FileError
-                    ErrorMsg={"Oops! unable to generate your image please try again."}
-                    displayError={ImgColorizerInfo.isError}
-                  />
-                </div>
-                <BaseButton
-                  disabled={imageLoading ? true : false}
-                  handleClick={() => {
-                    generateImgColorizer()
-                  }}
-                  width="319px"
-                  margin="16px 0 0 20px"
-                  fontSize="16px"
-                >
-                  Retry
-                </BaseButton>
-              </>
-            )}
+            <>
+              <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
+                <FileError
+                  ErrorMsg={"Oops! unable to generate your image please try again."}
+                  displayError={ImgColorizerInfo.isError}
+                />
+              </div>
+              <BaseButton
+                disabled={imageLoading ? true : false}
+                handleClick={() => {
+                  generateImgColorizer()
+                }}
+                width="319px"
+                margin="16px 0 0 20px"
+                fontSize="16px"
+              >
+                Retry
+              </BaseButton>
+            </>
+          )}
         </div>
       )}
     </Block>
