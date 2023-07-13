@@ -119,6 +119,7 @@
 }
 
 .discardBtn {
+  width: 30px;
   bottom: 12rem;
   left: 18.25rem;
   z-index: 10;
