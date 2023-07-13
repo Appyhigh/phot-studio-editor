@@ -124,7 +124,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
           setResultLoading(false)
-          setCurrentActiveImg(1);
+          setCurrentActiveImg(1)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
           setCallAPI(false)
@@ -143,9 +143,13 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   }
 
   const setDimensionOfSampleImg = async (img: any) => {
-    await getDimensions(img, (imgSrc: any) => {
-      setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
-    })
+    if (img.width && img.height) {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, width: img.width, height: img.height }))
+    } else {
+      await getDimensions(img, (imgSrc: any) => {
+        setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+      })
+    }
   }
 
   // to get points of brush strokes
@@ -241,6 +245,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
                   style={{ backgroundImage: `url(${image.originalImage})` }}
                   onClick={() => {
                     setSelectedSampleImg(index)
+                    console.log("hi", image.originalImageDimensions)
                     setDimensionOfSampleImg(image.originalImageDimensions)
                     setObjectRemoverInfo((prev: any) => ({
                       ...prev,
@@ -379,7 +384,9 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     <>
       {" "}
       <div className={classes.resultImages}>
-        <div className={clsx("pointer p-relative", classes.eachImg,currentActiveImg === 0 && classes.currentActiveImg)}>
+        <div
+          className={clsx("pointer p-relative", classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}
+        >
           {
             <img
               src={objectRemoverInfo.src}

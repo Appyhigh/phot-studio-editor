@@ -49,7 +49,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
-const { sampleImages } = useContext(SampleImagesContext)
+  const { sampleImages } = useContext(SampleImagesContext)
 
   const [activeResultId, setActiveResultId] = useState(-1)
 
@@ -60,9 +60,13 @@ const { sampleImages } = useContext(SampleImagesContext)
   })
 
   const setDimensionOfSampleImg = async (img: any) => {
-    await getDimensions(img, (imgSrc: any) => {
-      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
-    })
+    if (img.width && img.height) {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: img.width, height: img.height }))
+    } else {
+      await getDimensions(img, (imgSrc: any) => {
+        setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+      })
+    }
   }
 
   const { user, showLoginPopUp } = authState
@@ -273,32 +277,30 @@ const { sampleImages } = useContext(SampleImagesContext)
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>
-        or try one of these for free
-      </div>
-      <div  className={classes.sampleImages}>
-      <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]} >
-        {sampleImages.objectReplacer.map((image:any, index) => (
-          <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-          <div
-            key={index}
-            className={clsx(classes.sampleImage, "flex-center")}
-            style={{ backgroundImage: `url(${image.originalImage})` }}
-            onClick={() => {
-              setSelectedSampleImg(index)
-              setDimensionOfSampleImg(image.originalImageDimensions)
-              setObjectReplacerInfo((prev: any) => ({
-                ...prev,
-                src: image.originalImage,
-                preview: image.originalImage,
-                file_name: image.file_name,
-              }))
-            }}
-          >
-            {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-          </div>
-          </SwiperSlide>
-        ))}
+      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+      <div className={classes.sampleImages}>
+        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+          {sampleImages.objectReplacer.map((image: any, index) => (
+            <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+              <div
+                key={index}
+                className={clsx(classes.sampleImage, "flex-center")}
+                style={{ backgroundImage: `url(${image.originalImage})` }}
+                onClick={() => {
+                  setSelectedSampleImg(index)
+                  setDimensionOfSampleImg(image.originalImageDimensions)
+                  setObjectReplacerInfo((prev: any) => ({
+                    ...prev,
+                    src: image.originalImage,
+                    preview: image.originalImage,
+                    file_name: image.file_name,
+                  }))
+                }}
+              >
+                {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
       <BaseButton
