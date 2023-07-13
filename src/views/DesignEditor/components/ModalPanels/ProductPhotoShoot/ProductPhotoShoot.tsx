@@ -80,6 +80,11 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
+    if (productPhotoshootInfo.src === "") {
+      setSelectedSampleImg(-1)
+    }
+  }, [productPhotoshootInfo.src])
+  useEffect(() => {
     if (user) {
       getPollingIntervals()
         .then((res: any) => {
@@ -746,6 +751,10 @@ const SelectBackground = ({ generateResult }: any) => {
     }))
     setSelectedImg(-1)
   }, [showPrompt])
+
+  useEffect(()=>{
+   setSelectedImg(-1)
+  },[selectedCategory])
 
   return (
     <div className={classes.selectBg}>

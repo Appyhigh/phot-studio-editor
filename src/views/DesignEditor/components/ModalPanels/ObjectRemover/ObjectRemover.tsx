@@ -3,7 +3,6 @@ import classes from "./style.module.css"
 import { useContext, useEffect, useState } from "react"
 import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
-import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import clsx from "clsx"
@@ -11,7 +10,6 @@ import Accordian from "~/components/UI/Accordian/Accordian"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg"
-import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
@@ -29,7 +27,6 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
-import { SampleImagesApi } from "~/services/SampleImagesApi"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
@@ -112,6 +109,13 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
+
+  useEffect(()=>{
+   if(objectRemoverInfo.src===""){
+    setSelectedSampleImg(-1);
+   }
+  },[objectRemoverInfo.src])
+
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))

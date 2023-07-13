@@ -219,6 +219,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (objectReplacerInfo.src === "") {
+      setSelectedSampleImg(-1)
+    }
+  }, [objectReplacerInfo.src])
   const upload = () => (
     <>
       {objectReplacerInfo.preview ? (
