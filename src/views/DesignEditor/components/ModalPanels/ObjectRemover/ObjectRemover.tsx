@@ -65,7 +65,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   })
 
   const [stepsComplete, setStepsComplete] = useState({
-    firstStep: true,
+    firstStep: false,
     secondStep: false,
     thirdStep: false,
   })
@@ -218,7 +218,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               onClick={() => {
                 setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
                 setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", result: "" }))
-                setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
+                setStepsComplete((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: false }))
                 setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
                 setBgTransparent(canvas)
                 setCallAPI(false)

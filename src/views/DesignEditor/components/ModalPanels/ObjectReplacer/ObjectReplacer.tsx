@@ -79,7 +79,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   })
 
   const [stepsComplete, setStepsComplete] = useState({
-    firstStep: true,
+    firstStep: false,
     secondStep: false,
     thirdStep: false,
     fourthStep: false,
@@ -253,7 +253,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
                 setStepsComplete((prev) => ({
                   ...prev,
-                  firstStep: true,
+                  firstStep: false,
                   secondStep: false,
                   thirdStep: false,
                   fourthStep: false,
@@ -662,6 +662,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
+            
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
