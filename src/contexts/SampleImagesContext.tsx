@@ -8,6 +8,10 @@ const SampleImagesContext = createContext({
     photoEditor: [],
     imageColorizer: [],
     bgRemoverBgOptions: [],
+    objectRemover:[],
+    objectReplacer:[],
+    productPhotoshoot:[],
+    productPhotoshootOptions:[]
   },
   setSampleImages: (item: any) => {
     console.log("Dummy Initializer for ", item)

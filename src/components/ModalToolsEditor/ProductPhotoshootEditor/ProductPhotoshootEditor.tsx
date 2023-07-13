@@ -51,7 +51,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
         <ProductPhotoshoot handleClose={handleClose} />
 
         <div className={classes.editor}>
-          <ModalBasePanel handleDone={handleDone} isDoneBtnDisabled={!productPhotoshootInfo.finalImage} />
+          <ModalBasePanel handleDone={handleDone} handleClose={handleClose }/>
           <div className={classes.three}>
             {productPhotoshootInfo.tooltip && (
               <div className={classes.toolTip}>

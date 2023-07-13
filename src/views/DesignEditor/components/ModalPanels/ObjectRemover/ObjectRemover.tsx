@@ -26,6 +26,13 @@ import { useAuth } from "~/hooks/useAuth"
 import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Navigation } from "swiper"
+import "swiper/css"
+import "swiper/css/navigation"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
+
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
@@ -46,6 +53,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   })
   const { user, showLoginPopUp } = authState
   const { setErrorInfo } = useContext(ErrorContext)
+  const { sampleImages } = useContext(SampleImagesContext)
 
   const [steps, setSteps] = useState({
     firstStep: true,
@@ -221,25 +229,31 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       )}
       <div className={classes.sampleImagesLabel}>or try one of these for free</div>
       <div className={classes.sampleImages}>
-        {sampleImg.map((image, index) => (
-          <div
-            key={index}
-            className={clsx(classes.sampleImage, "flex-center")}
-            style={{ backgroundImage: `url(${image})` }}
-            onClick={() => {
-              setSelectedSampleImg(index)
-              setDimensionOfSampleImg(image)
-              setObjectRemoverInfo((prev: any) => ({
-                ...prev,
-                src: image,
-                preview: image,
-                file_name: "pexels-photo-3493777.jpeg",
-              }))
-            }}
-          >
-            {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-          </div>
-        ))}
+        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+          {sampleImages.objectRemover.map((image: any, index) => {
+            return (
+              <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+                <div
+                  key={index}
+                  className={clsx(classes.sampleImage, "flex-center")}
+                  style={{ backgroundImage: `url(${image.originalImage})` }}
+                  onClick={() => {
+                    setSelectedSampleImg(index)
+                    setDimensionOfSampleImg(image.originalImageDimensions)
+                    setObjectRemoverInfo((prev: any) => ({
+                      ...prev,
+                      src: image.originalImage,
+                      preview: image.originalImage,
+                      file_name: image.file_name,
+                    }))
+                  }}
+                >
+                  {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                </div>
+              </SwiperSlide>
+            )
+          })}
+        </Swiper>
       </div>
       <BaseButton
         borderRadius="10px"

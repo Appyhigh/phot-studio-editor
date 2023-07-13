@@ -24,15 +24,18 @@
 }
 
 .bgTab {
-  padding: 0.375rem 0.75rem;
+  padding: 0.275rem 0.65rem;
   border-radius: 30px;
   background: #6729f3;
   color: #fafafb;
-  font-size: 0.875rem;
+  font-size: 0.675rem;
   font-family: Rubik;
   font-weight: 500;
 }
-
+.categoriesApi{
+  display: flex;
+  flex-direction: column;
+}
 .selected {
   position: absolute;
   top: 40%;
@@ -44,7 +47,7 @@
   color: #171725;
   padding-top: 0.2rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.675rem;
   font-family: Rubik;
 }
 
@@ -74,6 +77,7 @@
   font-weight: 500;
   cursor: pointer;
 }
+
 
 .sampleImagesLabel {
   color: #44444f;
