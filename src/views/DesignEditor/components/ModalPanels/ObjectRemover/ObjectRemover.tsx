@@ -31,6 +31,7 @@ import "swiper/css"
 import "swiper/css/navigation"
 import { SampleImagesApi } from "~/services/SampleImagesApi"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const { fabricEditor } = useFabricEditor()
@@ -45,6 +46,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const [callAPI, setCallAPI] = useState(false)
   const { setActivePanel } = useAppContext()
   const [currentActiveImg, setCurrentActiveImg] = useState(1)
+  const { setCanvasLoader } = useContext(CanvasLoaderContext)
 
   // @ts-ignore
   const { authState, setAuthState } = useAuth()
@@ -63,7 +65,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   })
 
   const [stepsComplete, setStepsComplete] = useState({
-    firstStep: true,
+    firstStep: false,
     secondStep: false,
     thirdStep: false,
   })
@@ -118,12 +120,14 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
+      setCanvasLoader(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectRemoverInfo.preview, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
         .then((response) => {
           setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
           setResultLoading(false)
+          setCanvasLoader(false)
           setCurrentActiveImg(1)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
@@ -137,6 +141,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             errorMsg: "Oops! unable to generate your image please try again.",
           }))
           setResultLoading(false)
+          setCanvasLoader(false)
           console.error("Error:", error)
         })
     }
@@ -184,6 +189,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
   useEffect(() => {
     return () => {
+      setCanvasLoader(false)
       setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: "" }))
     }
   }, [])
@@ -212,7 +218,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               onClick={() => {
                 setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
                 setObjectRemoverInfo((prev: any) => ({ ...prev, src: "", preview: "", result: "" }))
-                setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
+                setStepsComplete((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: false }))
                 setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
                 setBgTransparent(canvas)
                 setCallAPI(false)

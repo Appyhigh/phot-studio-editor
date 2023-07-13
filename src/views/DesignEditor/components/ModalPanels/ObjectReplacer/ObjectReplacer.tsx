@@ -32,7 +32,7 @@ import { Navigation } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
-import { sample } from "lodash"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -50,6 +50,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
+  const { setCanvasLoader } = useContext(CanvasLoaderContext)
 
   const [activeResultId, setActiveResultId] = useState(-1)
 
@@ -78,7 +79,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   })
 
   const [stepsComplete, setStepsComplete] = useState({
-    firstStep: true,
+    firstStep: false,
     secondStep: false,
     thirdStep: false,
     fourthStep: false,
@@ -161,6 +162,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
+      setCanvasLoader(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(
         objectReplacerInfo.preview,
@@ -174,6 +176,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           setCallAPI(false)
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response, activeResult: 0 }))
           setResultLoading(false)
+          setCanvasLoader(false)
           handleBgImg(response[0])
           setActiveResultId(0)
 
@@ -187,6 +190,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             errorMsg: "Oops! unable to generate your image please try again.",
           }))
           setResultLoading(false)
+          setCanvasLoader(false)
           console.error("Error:", error)
         })
     }
@@ -211,6 +215,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
   useEffect(() => {
     return () => {
+      setCanvasLoader(false)
       setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: [] }))
     }
   }, [])
@@ -248,7 +253,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
                 setStepsComplete((prev) => ({
                   ...prev,
-                  firstStep: true,
+                  firstStep: false,
                   secondStep: false,
                   thirdStep: false,
                   fourthStep: false,
@@ -657,6 +662,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
+            
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
