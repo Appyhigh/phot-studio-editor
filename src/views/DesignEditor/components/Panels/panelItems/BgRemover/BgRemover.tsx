@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useEditor } from "@layerhub-io/react"
@@ -33,6 +33,18 @@ const BgRemover = () => {
   }
   const [imageLoading, setImageLoading] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
+
+  useEffect(() => {
+    setMainImgInfo((prev: any) => ({ ...prev, src: "", url: "", preview: "", metadata: {}, id: "", type: "" }))
+    setPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      bgOptions: false,
+      bgRemoverBtnActive: false,
+    }))
+  }, [])
 
   const addObject = React.useCallback(
     (url: string) => {

@@ -54,28 +54,41 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
         AddObjectFunc(objectRemoverInfo.result, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
         handleClose()
       })
-      // @ts-ignore
-    } else if(activePanel=== OBJECT_REPLACER) {
-      await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
-        let latest_ct = 0
-        setImagesCt((prev: any) => {
-          latest_ct = prev + 1
-          return prev + 1
-        })
 
-        console.log(objectReplacerInfo.result[objectReplacerInfo.activeResult])
-        AddObjectFunc(
-          objectReplacerInfo.result[objectReplacerInfo.activeResult],
-          editor,
-          imgSrc.width,
-          imgSrc.height,
-          frame,
-          latest_ct
-        )
-        handleClose()
-      })
       // @ts-ignore
-    }else if(activePanel===PRODUCT_PHOTOSHOOT){
+    } else if (activePanel === OBJECT_REPLACER) {
+      if (objectReplacerInfo.activeResult === objectReplacerInfo.result.length) {
+        await getDimensions(objectReplacerInfo.src, (imgSrc: any) => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            return prev + 1
+          })
+
+          AddObjectFunc(objectReplacerInfo.src, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+          handleClose()
+        })
+      } else {
+        await getDimensions(objectReplacerInfo.result[objectReplacerInfo.activeResult], (imgSrc: any) => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            return prev + 1
+          })
+
+          AddObjectFunc(
+            objectReplacerInfo.result[objectReplacerInfo.activeResult],
+            editor,
+            imgSrc.width,
+            imgSrc.height,
+            frame,
+            latest_ct
+          )
+          handleClose()
+        })
+      }
+      // @ts-ignore
+    } else if (activePanel === PRODUCT_PHOTOSHOOT) {
       await getDimensions(productPhotoshootInfo.finalImage, (imgSrc: any) => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
@@ -87,7 +100,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
       })
     }
   }
-  
+
   const closeProductPreview = () => {
     setShowPreview(false)
   }
@@ -95,16 +108,17 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
 
   const isDone =
     // @ts-ignore
-    activePanel === OBJECT_REMOVER
-      && objectRemoverInfo.result
-        ? true
-        : false
+    activePanel === OBJECT_REMOVER && objectRemoverInfo.result
+      ? true
+      : false ||
         // @ts-ignore
-      || activePanel === OBJECT_REPLACER && objectReplacerInfo.result
+        (activePanel === OBJECT_REPLACER && objectReplacerInfo.result)
+      ? true
+      : false ||
+        // @ts-ignore
+        (activePanel === PRODUCT_PHOTOSHOOT && productPhotoshootInfo.finalImage)
       ? true
       : false
-      // @ts-ignore
-      || activePanel === PRODUCT_PHOTOSHOOT && productPhotoshootInfo.finalImage ? true :false
 
   return (
     <div>
@@ -196,7 +210,12 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
             width="7.5rem;"
             margin="0px 0.75rem"
             handleClick={() => {
-              !isDoneBtnDisabled || objectRemoverInfo.result || objectReplacerInfo.result || productPhotoshootInfo.finalImage ? handleAddCanvas() : null
+              !isDoneBtnDisabled ||
+              objectRemoverInfo.result ||
+              objectReplacerInfo.result ||
+              productPhotoshootInfo.finalImage
+                ? handleAddCanvas()
+                : null
             }}
           />
         </Block>

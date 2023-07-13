@@ -29,6 +29,7 @@ import BaseButton from "~/components/UI/Button/BaseButton"
 import Prompt from "~/components/Prompt/Prompt"
 import ImagesCount from "~/components/ImagesCount/ImagesCount"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -57,6 +58,25 @@ const ImagineAI = () => {
   }, [])
 
   useEffect(() => {
+    setTextToArtInputInfo((prev: any) => ({
+      ...prev,
+      id: "",
+      prompt: "",
+      style: [],
+      images_generation_ct: 1,
+      image_wt: 5.6,
+      uploaded_img: "",
+      negative_prompt_visible: false,
+      negative_prompt: "",
+      cfg_scale: 7.5,
+      aspect_ratio: "1:1",
+      showclearTooltip: false,
+      isError: false,
+    }))
+    setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
+  }, [])
+
+  useEffect(() => {
     const checkIfClickedOutside = (e: any) => {
       // If the clearField is open and the clicked target is not within the clearfield,
       // then close the clearfield
@@ -80,9 +100,10 @@ const ImagineAI = () => {
   const generateImage = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
+      setTextToArtInputInfo((prev: any) => ({ ...prev, isError: false }))
     } else {
       setImagesLoading(true)
-      setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
+      setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true, isError: false }))
       imagineAiController(
         textToArtInputInfo.prompt,
         textToArtInputInfo.cfg_scale,
@@ -100,29 +121,14 @@ const ImagineAI = () => {
           setErrorInfo((prev) => ({ ...prev, showError: false }))
           setTextToArtPanelInfo((prev: any) => ({
             ...prev,
-            resultImages: [...prev.resultImages, ...responseData["data"]["image"]],
+            resultImages: [...responseData["data"]["image"], ...prev.resultImages],
           }))
           setImagesLoading(false)
         })
         .catch((error) => {
           setImagesLoading(false)
           // @ts-ignore
-          setTextToArtPanelInfo((prev) => ({ ...prev, resultSectionVisible: false }))
-          // @ts-ignore
-          setErrorInfo((prev) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              // @ts-ignore
-              setErrorInfo((prev) => ({ ...prev, showError: false }))
-              generateImage()
-            },
-          }))
-          setTimeout(() => {
-            // @ts-ignore
-            setErrorInfo((prev) => ({ ...prev, showError: false }))
-          }, 5000)
+          setTextToArtInputInfo((prev) => ({ ...prev, isError: true }))
           console.error("Error:", error)
         })
     }
@@ -331,6 +337,12 @@ const ImagineAI = () => {
               <Icons.ChevronRight fill="#000" size={"20"} />
             </Block>
             <div className={classes.resultImages}>
+              {imagesLoading &&
+                Array.from(Array(textToArtInputInfo.images_generation_ct).keys()).map((each, idx) => (
+                  <div className={classes.skeletonBox} key={idx}>
+                    {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                  </div>
+                ))}
               {textToArtpanelInfo.resultImages.map((each, idx) => (
                 <div
                   className={clsx("pointer", classes.eachImg, idx === currentActiveImg && classes.currentActiveImg)}
@@ -340,6 +352,7 @@ const ImagineAI = () => {
                     <img
                       src={each}
                       onClick={() => {
+                        if (currentActiveImg === idx) return
                         setCurrentActiveImg(idx)
                         addImgToCanvas(each)
                       }}
@@ -347,31 +360,48 @@ const ImagineAI = () => {
                   }
                 </div>
               ))}
-              {imagesLoading &&
-                Array.from(Array(textToArtInputInfo.images_generation_ct).keys()).map((each, idx) => (
-                  <div className={classes.skeletonBox} key={idx}>
-                    {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-                  </div>
-                ))}
+              {textToArtInputInfo.isError &&
+                !imagesLoading &&
+                Array.from(Array(textToArtInputInfo.images_generation_ct).keys()).map((each, idx) => {
+                  return (
+                    <div className={classes.skeletonBox} key={idx}>
+                      {
+                        <div className={classes.retry}>
+                          <Icons.RetryImg />
+                        </div>
+                      }{" "}
+                    </div>
+                  )
+                })}
             </div>
-            <BaseButton
-              disabled={imagesLoading ? true : false}
-              handleClick={() => {
-                generateImage()
-              }}
-              width="319px"
-              margin="16px 0 0 20px"
-              fontSize="16px"
-            >
-              Regenerate
-            </BaseButton>
-            <p className={classes.creditsPara}>
+            {!imagesLoading && textToArtInputInfo.isError && (
+              <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
+                <FileError
+                  ErrorMsg={"Oops! unable to generate your image please try again."}
+                  displayError={textToArtInputInfo.isError}
+                />
+              </div>
+            )}
+            {
+              <BaseButton
+                disabled={imagesLoading ? true : false}
+                handleClick={() => {
+                  generateImage()
+                }}
+                width="319px"
+                margin="16px 0 0 20px"
+                fontSize="16px"
+              >
+                {textToArtInputInfo.isError && !imagesLoading ? "Retry" : "Regenerate"}
+              </BaseButton>
+            }
+            {/* <p className={classes.creditsPara}>
               <span>*{textToArtInputInfo.images_generation_ct} credits</span> will be used if you want to generate{" "}
               {textToArtInputInfo.images_generation_ct} more outputs
             </p>
             <div className={classes.buyMorePara}>
               <a href="https://www.phot.ai/pricing">Buy Credits</a>
-            </div>
+            </div> */}
           </div>
         )}
       </div>

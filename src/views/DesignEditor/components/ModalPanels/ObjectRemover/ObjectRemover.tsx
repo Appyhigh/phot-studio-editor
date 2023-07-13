@@ -1,6 +1,6 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
-import React, { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
@@ -19,7 +19,6 @@ import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTran
 import { createMaskImage } from "~/views/DesignEditor/utils/functions/createMaskImg"
 import { PathProps } from "~/utils/canvasUtils"
 import { objectRemoverController } from "~/utils/objectRemoverController"
-import LoginPopup from "../../LoginPopup/LoginPopup"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import { useAuth } from "~/hooks/useAuth"
@@ -34,17 +33,19 @@ import { SampleImagesApi } from "~/services/SampleImagesApi"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ObjectRemover = ({ handleBrushToolTip }: any) => {
-  const { fabricEditor, setFabricEditor } = useFabricEditor()
+  const { fabricEditor } = useFabricEditor()
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const [brushSize, setBrushSize] = useState(10)
-  const { canvas, objects } = fabricEditor
+  const { canvas } = fabricEditor
   const [paths, setPaths] = useState<PathProps[]>([])
   const [imageLoading, setImageLoading] = useState(false)
   const [resultLoading, setResultLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(-1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
-  const { activePanel, setActivePanel } = useAppContext()
+  const { setActivePanel } = useAppContext()
+  const [currentActiveImg, setCurrentActiveImg] = useState(1)
+
   // @ts-ignore
   const { authState, setAuthState } = useAuth()
   const [isError, setIsError] = useState({
@@ -123,6 +124,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
           setResultLoading(false)
+          setCurrentActiveImg(1)
           handleBgImg(response[0])
           setIsError((prev) => ({ ...prev, error: false }))
           setCallAPI(false)
@@ -141,9 +143,13 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   }
 
   const setDimensionOfSampleImg = async (img: any) => {
-    await getDimensions(img, (imgSrc: any) => {
-      setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
-    })
+    if (img.width && img.height) {
+      setObjectRemoverInfo((prev: any) => ({ ...prev, width: img.width, height: img.height }))
+    } else {
+      await getDimensions(img, (imgSrc: any) => {
+        setObjectRemoverInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+      })
+    }
   }
 
   // to get points of brush strokes
@@ -239,6 +245,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
                   style={{ backgroundImage: `url(${image.originalImage})` }}
                   onClick={() => {
                     setSelectedSampleImg(index)
+                    console.log("hi", image.originalImageDimensions)
                     setDimensionOfSampleImg(image.originalImageDimensions)
                     setObjectRemoverInfo((prev: any) => ({
                       ...prev,
@@ -377,8 +384,19 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     <>
       {" "}
       <div className={classes.resultImages}>
-        <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={objectRemoverInfo.src} onClick={() => {}} />}
+        <div
+          className={clsx("pointer p-relative", classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}
+        >
+          {
+            <img
+              src={objectRemoverInfo.src}
+              onClick={() => {
+                if (currentActiveImg === 0) return
+                setCurrentActiveImg(0)
+                handleBgImg(objectRemoverInfo.src)
+              }}
+            />
+          }
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
@@ -386,23 +404,27 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
         {resultLoading ? (
           <div className={classes.skeletonBox}>{<img className={classes.imagesLoader} src={LoaderSpinner} />} </div>
         ) : isError.error ? (
-          <div
-            className={classes.skeletonBox}
-            onClick={() => {
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
-            }}
-          >
+          <div className={classes.skeletonBox}>
             {
               <div className={classes.retry}>
-                <Icons.Retry />
-                <p>Retry</p>
+                <Icons.RetryImg />
               </div>
             }{" "}
           </div>
         ) : (
-          <div className={clsx("pointer p-relative", classes.eachImg, classes.currentActiveImg)}>
-            {<img src={objectRemoverInfo.result} onClick={() => {}} />}
+          <div
+            className={clsx("pointer p-relative", classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}
+          >
+            {
+              <img
+                src={objectRemoverInfo.result}
+                onClick={() => {
+                  if (currentActiveImg === 1) return
+                  setCurrentActiveImg(1)
+                  handleBgImg(objectRemoverInfo.result)
+                }}
+              />
+            }
             <div className={classes.resultLabel}>{"Result"}</div>
           </div>
         )}
@@ -497,9 +519,23 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative", marginTop: "8px" }}>
+          <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
+        )}
+        {isError.error && (
+          <BaseButton
+            disabled={imageLoading ? true : false}
+            handleClick={() => {
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
+            }}
+            width="319px"
+            margin="16px 0 0 20px"
+            fontSize="16px"
+          >
+            Retry
+          </BaseButton>
         )}
       </div>
     </div>

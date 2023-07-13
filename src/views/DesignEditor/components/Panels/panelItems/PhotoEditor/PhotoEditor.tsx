@@ -26,6 +26,7 @@ import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { PollingInterval } from "~/contexts/PollingInterval"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const PhotoEditor = () => {
   const { activePanel } = useAppContext()
@@ -43,7 +44,7 @@ const PhotoEditor = () => {
   const { photoEditorInfo, setPhotoEditorInfo, photoEditorPanelInfo, setPhotoEditorPanelInfo } =
     useContext(PhotoEditorContext)
   const { sampleImages } = useContext(SampleImagesContext)
-  const {pollingIntervalInfo,setPollingIntervalInfo}=useContext(PollingInterval)
+  const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -51,6 +52,27 @@ const PhotoEditor = () => {
       setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
+
+  useEffect(() => {
+    setPhotoEditorInfo((prev: any) => ({
+      ...prev,
+      id: "",
+      src: "",
+      original: "",
+      prompt: "",
+      images_generation_ct: 1,
+      result: [],
+      showclearTooltip: false,
+      isError: false,
+    }))
+    setPhotoEditorPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      resultSectionVisible: false,
+    }))
+  }, [])
 
   const addObject = (url: string) => {
     setPhotoEditorPanelInfo((prev: any) => ({
@@ -62,13 +84,12 @@ const PhotoEditor = () => {
     setPhotoEditorInfo((prev: any) => ({ ...prev, src: url, original: url }))
   }
 
-
   useEffect(() => {
     if (user) {
       getPollingIntervals()
         .then((res: any) => {
           // Store polling intervals
-           setPollingIntervalInfo((prev:any)=>({...prev,photoEditor:res.features.photo_editor}))
+          setPollingIntervalInfo((prev: any) => ({ ...prev, photoEditor: res.features.photo_editor }))
           // storePollingIntervalCookies(res)
         })
         .catch(() => {
@@ -95,6 +116,8 @@ const PhotoEditor = () => {
   const { setErrorInfo } = useContext(ErrorContext)
 
   const generateImage = () => {
+    setPhotoEditorInfo((prev: any) => ({ ...prev, isError: false }))
+
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
@@ -103,7 +126,7 @@ const PhotoEditor = () => {
       setAutoCallAPI(false)
       setCurrentActiveImg(-1)
       setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
-      photoEditorController(photoEditorInfo.src, photoEditorInfo.prompt,pollingIntervalInfo.photoEditor)
+      photoEditorController(photoEditorInfo.src, photoEditorInfo.prompt, pollingIntervalInfo.photoEditor)
         .then((response) => {
           addImg(response[0], 1)
           setImageLoading(false)
@@ -114,25 +137,11 @@ const PhotoEditor = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateImage()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setPhotoEditorInfo((prev: any) => ({ ...prev, isError: true }))
           console.error("Error:", error)
         })
     }
   }
-
-
 
   const addImg = async (imageUrl: string, _idx: number) => {
     if (currentActiveImg == -1) {
@@ -309,7 +318,15 @@ const PhotoEditor = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 0 && classes.currentActiveImg)}>
-              <img src={photoEditorInfo.src} alt="orginal-img" />
+              <img
+                src={photoEditorInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  if(imageLoading) return ;
+                  if (currentActiveImg === 0) return;
+                  addImg(photoEditorInfo.src, 0) ;
+                }}
+              />
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
             {photoEditorInfo.result.map((each, idx) => {
@@ -322,13 +339,23 @@ const PhotoEditor = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
+                      if (currentActiveImg === idx + 1) return
                       addImg(each, idx + 1)
                     }}
                   />
-                  <div className={classes.resultLabel}>{"Result"}</div>
+                  {/* <div className={classes.resultLabel}>{"Result"}</div> */}
                 </div>
               )
             })}
+            {photoEditorInfo.isError && !imageLoading && (
+              <div className={classes.skeletonBox}>
+                {
+                  <div className={classes.retry}>
+                    <Icons.RetryImg />
+                  </div>
+                }{" "}
+              </div>
+            )}
             {imageLoading &&
               Array.from(Array(photoEditorInfo.images_generation_ct).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
@@ -336,6 +363,14 @@ const PhotoEditor = () => {
                 </div>
               ))}
           </div>
+          {!imageLoading && photoEditorInfo.isError && (
+            <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
+              <FileError
+                ErrorMsg={"Oops! unable to generate your image please try again."}
+                displayError={photoEditorInfo.isError}
+              />
+            </div>
+          )}
           <BaseButton
             disabled={imageLoading ? true : false}
             handleClick={() => {
@@ -345,7 +380,7 @@ const PhotoEditor = () => {
             margin="16px 0 0 20px"
             fontSize="16px"
           >
-            Regenerate
+            {photoEditorInfo.isError && !imageLoading ? "Retry" : "Regenerate"}
           </BaseButton>
         </div>
       )}

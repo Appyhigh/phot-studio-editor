@@ -8,6 +8,7 @@ const PhotoEditorContext = React.createContext({
     images_generation_ct: 1,
     result: [],
     showclearTooltip: false,
+    isError:false
   },
   photoEditorPanelInfo: {
     uploadSection: true,

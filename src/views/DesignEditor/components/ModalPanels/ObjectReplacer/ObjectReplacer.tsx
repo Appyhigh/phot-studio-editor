@@ -49,8 +49,9 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
-  const [activeResultId, setActiveResultId] = useState(0)
   const { sampleImages } = useContext(SampleImagesContext)
+
+  const [activeResultId, setActiveResultId] = useState(-1)
 
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
   const [isError, setIsError] = useState({
@@ -59,9 +60,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   })
 
   const setDimensionOfSampleImg = async (img: any) => {
-    await getDimensions(img, (imgSrc: any) => {
-      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
-    })
+    if (img.width && img.height) {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: img.width, height: img.height }))
+    } else {
+      await getDimensions(img, (imgSrc: any) => {
+        setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+      })
+    }
   }
 
   const { user, showLoginPopUp } = authState
@@ -272,32 +277,30 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>
-        or try one of these for free
-      </div>
-      <div  className={classes.sampleImages}>
-      <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]} >
-        {sampleImages.objectReplacer.map((image:any, index) => (
-          <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-          <div
-            key={index}
-            className={clsx(classes.sampleImage, "flex-center")}
-            style={{ backgroundImage: `url(${image.originalImage})` }}
-            onClick={() => {
-              setSelectedSampleImg(index)
-              setDimensionOfSampleImg(image.originalImageDimensions)
-              setObjectReplacerInfo((prev: any) => ({
-                ...prev,
-                src: image.originalImage,
-                preview: image.originalImage,
-                file_name: image.file_name,
-              }))
-            }}
-          >
-            {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-          </div>
-          </SwiperSlide>
-        ))}
+      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+      <div className={classes.sampleImages}>
+        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+          {sampleImages.objectReplacer.map((image: any, index) => (
+            <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+              <div
+                key={index}
+                className={clsx(classes.sampleImage, "flex-center")}
+                style={{ backgroundImage: `url(${image.originalImage})` }}
+                onClick={() => {
+                  setSelectedSampleImg(index)
+                  setDimensionOfSampleImg(image.originalImageDimensions)
+                  setObjectReplacerInfo((prev: any) => ({
+                    ...prev,
+                    src: image.originalImage,
+                    preview: image.originalImage,
+                    file_name: image.file_name,
+                  }))
+                }}
+              >
+                {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
       <BaseButton
@@ -535,61 +538,73 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     <>
       {" "}
       <div className={classes.resultImages}>
-        <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={objectReplacerInfo.src} onClick={() => {}} />}
+        <div
+          className={clsx(
+            "pointer p-relative",
+            classes.eachImg,
+            objectReplacerInfo.result.length === activeResultId && classes.currentActiveImg
+          )}
+        >
+          {
+            <img
+              src={objectReplacerInfo.src}
+              onClick={() => {
+                if (activeResultId === objectReplacerInfo.result.length) return
+                setActiveResultId(objectReplacerInfo.result.length)
+                setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: objectReplacerInfo.result.length }))
+                handleBgImg(objectReplacerInfo.src)
+              }}
+            />
+          }
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
 
-        {resultLoading ? (
-          Array.from(Array(4).keys()).map((each, _idx) => {
-            return (
-              <div key={_idx} className={classes.skeletonBox}>
-                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-              </div>
-            )
-          })
-        ) : isError.error ? (
-          <div
-            className={classes.skeletonBox}
-            // onClick={() => {
-            //   setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-            //   getOutputImg()
-            // }}
-          >
-            {
-              <div className={classes.retry}>
-                <Icons.RetryImg />
-              </div>
-            }{" "}
-          </div>
-        ) : (
-          objectReplacerInfo.result.map((each, _idx) => {
-            return (
-              <div
-                key={_idx}
-                className={clsx(
-                  "pointer p-relative",
-                  classes.eachImg,
-                  activeResultId === _idx && classes.currentActiveImg
-                )}
-              >
-                {
-                  <img
-                    src={each}
-                    onClick={() => {
-                      if (activeResultId != _idx) {
-                        setActiveResultId(_idx)
-                        setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
-                        handleBgImg(each)
-                      }
-                    }}
-                  />
-                }
-              </div>
-            )
-          })
-        )}
+        {resultLoading
+          ? Array.from(Array(4).keys()).map((each, _idx) => {
+              return (
+                <div key={_idx} className={classes.skeletonBox}>
+                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              )
+            })
+          : isError.error
+          ? Array.from(Array(4).keys()).map((each, _idx) => {
+              return (
+                <div className={classes.skeletonBox}>
+                  {
+                    <div className={classes.retry}>
+                      <Icons.RetryImg />
+                    </div>
+                  }{" "}
+                </div>
+              )
+            })
+          : objectReplacerInfo.result.map((each, _idx) => {
+              return (
+                <div
+                  key={_idx}
+                  className={clsx(
+                    "pointer p-relative",
+                    classes.eachImg,
+                    activeResultId === _idx && classes.currentActiveImg
+                  )}
+                >
+                  {
+                    <img
+                      src={each}
+                      onClick={() => {
+                        if (activeResultId != _idx) {
+                          setActiveResultId(_idx)
+                          setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
+                          handleBgImg(each)
+                        }
+                      }}
+                    />
+                  }
+                </div>
+              )
+            })}
       </div>
       {stepsComplete.firstStep &&
         stepsComplete.secondStep &&
@@ -611,25 +626,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               setCallAPI(false)
               setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false }))
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false, fourthStep: false }))
-            }}
-          />
-        )}
-      {stepsComplete.firstStep &&
-        stepsComplete.secondStep &&
-        stepsComplete.thirdStep &&
-        !resultLoading &&
-        isError.error && (
-          <BaseButton
-            borderRadius="10px"
-            title={"Retry"}
-            height="38px"
-            margin={"20px 4px 4px 0px"}
-            width="320px"
-            fontSize="16px"
-            fontWeight="500"
-            handleClick={() => {
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
             }}
           />
         )}
@@ -736,6 +732,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           }
         }}
       /> */}
+
         <Accordian
           isOpen={steps.fourthStep}
           isComplete={stepsComplete.fourthStep}
@@ -759,9 +756,23 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
+          <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
+        )}
+        {isError.error && (
+          <BaseButton
+            disabled={imageLoading ? true : false}
+            handleClick={() => {
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
+            }}
+            width="319px"
+            margin="12px 0 0 20px"
+            fontSize="16px"
+          >
+            Retry
+          </BaseButton>
         )}
       </div>
     </div>
