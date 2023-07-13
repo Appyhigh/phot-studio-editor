@@ -138,9 +138,7 @@
   font-family: Rubik;
 }
 .sampleImages {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+
   margin: 1rem 0rem;
 }
 .sampleImage {

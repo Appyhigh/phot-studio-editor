@@ -160,6 +160,10 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     photoEditor: [],
     imageColorizer: [],
     bgRemoverBgOptions: [],
+    objectRemover:[],
+    objectReplacer:[],
+    productPhotoshoot:[],
+    productPhotoshootOption:[]
   })
 
   const [objectReplacerInfo, setObjectReplacerInfo] = useState({

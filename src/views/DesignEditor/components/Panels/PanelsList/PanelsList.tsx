@@ -98,7 +98,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
         {activePanel === name &&
           (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) && (
             <div className={classes.chevronIcon}>
-              <PointerIcon />
+              <PointerIcon width="20px" />
             </div>
           )}
       </Block>

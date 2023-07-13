@@ -25,6 +25,7 @@ import { getCookie } from "~/utils/common"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
 
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -41,15 +42,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     4: false,
   })
 
-  const sampleImages = [
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-    "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg",
-  ]
+  const { sampleImages } = useContext(SampleImagesContext)
+
 
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
@@ -147,6 +141,24 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     }
   }, [productPhotoshootInfo.removeBg])
 
+  useEffect(() => {
+    return () => {
+      setCanvasLoader(false)
+      setProductPhotoshootInfo((prev: any) => ({
+        ...prev,
+        src: "",
+        preview: "",
+        tooltip: false,
+        prompt: "",
+        result: [],
+        finalImage: "",
+        again: false,
+        prevObjects: [],
+        addPreview: "",
+        removeBg: false,
+      }))
+    }
+  }, [])
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
     setCanvasLoader(true)
 
@@ -247,7 +259,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
       const objects = canvas.getObjects()
-      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt)
+      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt[0])
         .then((response) => {
           console.log("INITIAL", canvas.getObjects())
           console.log("INITIAL", objects)
@@ -333,16 +345,16 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
         <div className={classes.sampleImagesLabel}>or try one of these for free</div>
         <div className={classes.sampleImages}>
           <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-            {sampleImages.map((image, index) => (
+            {sampleImages.productPhotoshoot.map((image:any, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
                 <div
                   key={index}
                   className={clsx(classes.sampleImage, "flex-center")}
-                  style={{ backgroundImage: `url(${image})` }}
+                  style={{ backgroundImage: `url(${image.originalImage})` }}
                   onClick={() => {
                     if (!productPhotoshootInfo.preview) {
                       setSelectedSampleImg(index)
-                      setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image }))
+                      setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image.originalImage }))
                     }
                   }}
                 >
@@ -635,50 +647,71 @@ const SelectBackground = ({ generateResult }: any) => {
   const [showPrompt, setShowPrompt] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
-  const [selectedCategory, setSelectedCategory] = useState("Mood")
+  const [selectedCategory, setSelectedCategory] = useState("Architecture")
+  const {sampleImages}= useContext(SampleImagesContext)
+  const [sampleCategoryHeading,setSampleCategoryHeading] = useState<any>([])
 
-  const categories: any = {
-    Mood: [
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-    ],
-    Colors: [
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Red" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Green" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Blue" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Orange" },
-    ],
-    Nature: [
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-      {
-        image:
-          "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-        label: "Tree",
-      },
-    ],
-    Texture: [
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-      { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-    ],
+  const groupedData =  () =>{
+    sampleImages.productPhotoshoot.reduce((acc:any, item:any) => {
+      const category = item.categories;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(item);
+      setSampleCategoryHeading(acc)
+      return acc;
+    }, {});
   }
+
+  useEffect(()=>{
+ groupedData()
+  },[])
+
+
+  
+
+  // const categories: any = {
+  //   Mood: [
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
+  //   ],
+  //   Colors: [
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Red" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Green" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Blue" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Orange" },
+  //   ],
+  //   Nature: [
+  //     {
+  //       image:
+  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+  //       label: "Tree",
+  //     },
+  //     {
+  //       image:
+  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+  //       label: "Tree",
+  //     },
+  //     {
+  //       image:
+  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+  //       label: "Tree",
+  //     },
+  //     {
+  //       image:
+  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
+  //       label: "Tree",
+  //     },
+  //   ],
+  //   Texture: [
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
+  //   ],
+  // }
 
   useEffect(() => {
     setProductPhotoshootInfo((prev: any) => ({
@@ -701,8 +734,8 @@ const SelectBackground = ({ generateResult }: any) => {
         </>
       ) : (
         <>
-          <Swiper spaceBetween={5} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-            {Object.keys(categories).map((each: any, index) => (
+          <Swiper spaceBetween={0} slidesPerView={"auto"} navigation={false} modules={[Navigation]}>
+          { Object.keys(sampleCategoryHeading)?.map((each: any, index:any) => (
               <SwiperSlide key={index}>
                 <div
                   className={classes.bgTab}
@@ -721,26 +754,27 @@ const SelectBackground = ({ generateResult }: any) => {
           </Swiper>
 
           <Swiper spaceBetween={20} slidesPerView={"auto"} navigation={true} modules={[Navigation]} className="mt-2">
-            {categories[selectedCategory].map((each: any, index: any) => (
+            {sampleCategoryHeading[selectedCategory]?.map((each: any, index: any) => (
               <SwiperSlide key={index}>
                 <img
                   className="pointer"
                   style={{
-                    width: "6rem",
-                    height: "4rem",
+                    width: "5rem",
+                    height: "3rem",
                     background: "#FFFFFF",
                     borderRadius: "8px",
                   }}
-                  src={each.image}
+                  src={each.originalImage}
                   onClick={() => {
                     setSelectedImg(index)
                     setProductPhotoshootInfo((prev: any) => ({
                       ...prev,
-                      prompt: each.label,
+                      prompt: each.prompt
+                      ,
                     }))
                   }}
                 />
-                <div className={classes.imageLabel}>{each.label}</div>
+                <div className={classes.imageLabel}>{each.prompt}</div>
                 {selectedImg == index && (
                   <div className={classes.selected}>
                     <Icons.Selection size={"28"} />

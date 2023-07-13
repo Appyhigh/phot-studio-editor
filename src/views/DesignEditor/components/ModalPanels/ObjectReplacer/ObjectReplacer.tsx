@@ -27,6 +27,12 @@ import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTran
 import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { PollingInterval } from "~/contexts/PollingInterval"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Navigation } from "swiper"
+import "swiper/css"
+import "swiper/css/navigation"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { sample } from "lodash"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -43,6 +49,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
+const { sampleImages } = useContext(SampleImagesContext)
+
   const [activeResultId, setActiveResultId] = useState(-1)
 
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
@@ -265,29 +273,33 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div style={{ marginLeft: "8px" }} className={classes.sampleImagesLabel}>
+      <div className={classes.sampleImagesLabel}>
         or try one of these for free
       </div>
-      <div style={{ marginLeft: "8px" }} className={classes.sampleImages}>
-        {sampleImg.map((image, index) => (
+      <div  className={classes.sampleImages}>
+      <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]} >
+        {sampleImages.objectReplacer.map((image:any, index) => (
+          <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
           <div
             key={index}
             className={clsx(classes.sampleImage, "flex-center")}
-            style={{ backgroundImage: `url(${image})` }}
+            style={{ backgroundImage: `url(${image.originalImage})` }}
             onClick={() => {
               setSelectedSampleImg(index)
-              setDimensionOfSampleImg(image)
+              setDimensionOfSampleImg(image.originalImageDimensions)
               setObjectReplacerInfo((prev: any) => ({
                 ...prev,
-                src: image,
-                preview: image,
-                file_name: "pexels-photo-3493777.jpeg",
+                src: image.originalImage,
+                preview: image.originalImage,
+                file_name: image.file_name,
               }))
             }}
           >
             {selectedSampleImg == index && <Icons.Selection size={"24"} />}
           </div>
+          </SwiperSlide>
         ))}
+        </Swiper>
       </div>
       <BaseButton
         margin="0 0px 0 8px"
