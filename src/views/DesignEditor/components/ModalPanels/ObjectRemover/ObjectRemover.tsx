@@ -121,13 +121,28 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectRemoverInfo.preview, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
         .then((response) => {
-          setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
-          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
-          setResultLoading(false)
-          setCurrentActiveImg(1)
-          handleBgImg(response[0])
-          setIsError((prev) => ({ ...prev, error: false }))
           setCallAPI(false)
+
+          if (response.output_urls.length === 0) {
+            setIsError((prev) => ({
+              ...prev,
+              error: true,
+              errorMsg: "Oops! unable to generate your image please try again.",
+            }))
+            setResultLoading(false)
+          } else {
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+            setObjectRemoverInfo((prev: any) => ({
+              ...prev,
+              result: response.output_urls[0],
+              preview: response.output_urls[0],
+            }))
+            setResultLoading(false)
+            setCurrentActiveImg(1)
+            handleBgImg(response.output_urls[0])
+            setIsError((prev) => ({ ...prev, error: false }))
+            setCallAPI(false)
+          }
         })
 
         .catch((error) => {

@@ -26,6 +26,9 @@ import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { getPollingIntervals } from "~/services/pollingIntervals.service"
+import { useAuth } from "~/hooks/useAuth"
+import { PollingInterval } from "~/contexts/PollingInterval"
 
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
@@ -55,6 +58,12 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [resetProduct, setResetProduct] = useState(false)
+  // @ts-ignore 
+  const { authState, setAuthState } = useAuth()
+  const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
+
+  const { user, showLoginPopUp } = authState
+
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
       setSelectedSampleImg(-1)
@@ -70,6 +79,23 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { fabricEditor } = useFabricEditor()
   const { canvas, activeObject }: any = fabricEditor
   const { setErrorInfo } = useContext(ErrorContext)
+
+  
+  useEffect(() => {
+    if (user) {
+      getPollingIntervals()
+        .then((res: any) => {
+          // Store polling intervals  
+          console.log("hi",res)        
+          setPollingIntervalInfo((prev: any) => ({ ...prev, productPhotoShoot: res.features.background_generator }))
+          // storePollingIntervalCookies(res)
+        })
+        .catch(() => {
+          // an error occured so we rely on fallback polling intervals for each tool in this case
+        })
+    }
+  }, [user])
+  
 
   useEffect(() => {
     if (!imageMoved) {
@@ -259,7 +285,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
       const objects = canvas.getObjects()
-      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt[0])
+      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt[0],pollingIntervalInfo.productPhotoShoot)
         .then((response) => {
           console.log("INITIAL", canvas.getObjects())
           console.log("INITIAL", objects)
@@ -667,8 +693,6 @@ const SelectBackground = ({ generateResult }: any) => {
  groupedData()
   },[])
 
-
-  
 
   // const categories: any = {
   //   Mood: [
