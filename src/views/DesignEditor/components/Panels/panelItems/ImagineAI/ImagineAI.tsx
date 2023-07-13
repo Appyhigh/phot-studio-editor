@@ -35,7 +35,7 @@ const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
     useContext(TextToArtContext)
   const { setImagesCt } = useContext(ImagesContext)
-  const [currentActiveImg, setCurrentActiveImg] = useState(0)
+  const [currentActiveImg, setCurrentActiveImg] = useState(-1)
   const [imagesLoading, setImagesLoading] = useState(false)
   const editor = useEditor()
   const leftPanelRef = useRef()

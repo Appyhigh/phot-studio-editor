@@ -123,7 +123,6 @@ const ImageUpscaler = () => {
       setImageLoading(true)
       setLoadingImgCt(2)
       setAutoCallAPI(false)
-      setCurrentActiveImg(-1)
       setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: true }))
       img2Upscaler(imgScalerInfo.src)
         .then((response) => {
@@ -149,7 +148,6 @@ const ImageUpscaler = () => {
       setLoadingImgCt(1)
       setImageLoading(true)
       setAutoCallAPI(false)
-      setCurrentActiveImg(-1)
       // @ts-ignore
       setImgScalerPanelInfo((prev) => ({ ...prev, resultSectionVisible: true }))
 
@@ -175,7 +173,6 @@ const ImageUpscaler = () => {
       setAutoCallAPI(true)
     } else {
       setLoadingImgCt(2)
-      setCurrentActiveImg(-1)
       setAutoCallAPI(false)
       setImageLoading(true)
       // @ts-ignore
@@ -401,6 +398,7 @@ const ImageUpscaler = () => {
                 src={imgScalerInfo.src}
                 alt="result-img"
                 onClick={() => {
+                  if (imageLoading) return ;
                   if (currentActiveImg === 2) return
                   addImg(imgScalerInfo.src, 2)
                 }}

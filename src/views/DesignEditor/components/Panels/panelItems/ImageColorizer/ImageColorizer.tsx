@@ -65,7 +65,6 @@ const ImageColorizer = () => {
     } else {
       setImageLoading(true)
       setAutoCallAPI(false)
-      setCurrentActiveImg(-1)
       setImgColorizerPanelInfo((prev: any) => ({
         ...prev,
         resultOption: true,
@@ -130,31 +129,36 @@ const ImageColorizer = () => {
   }
 
   const frame = useFrame()
-  const addImg = async (imageUrl: string, _idx: number) => {
-    if (currentActiveImg == -1) {
-      await getDimensions(imageUrl, (img: any) => {
-        let latest_ct = 0
-        setImagesCt((prev: any) => {
-          latest_ct = prev + 1
-          AddObjectFunc(
-            imageUrl,
-            editor,
-            img.width,
-            img.height,
-            frame,
-            (latest_ct = latest_ct),
-            null,
-            null,
-            setImgColorizerInfo
-          )
-          return prev + 1
+  const addImg = useCallback(
+    async (imageUrl: string, _idx: number) => {
+      if (currentActiveImg == -1) {
+        setCurrentActiveImg(_idx)
+
+        await getDimensions(imageUrl, (img: any) => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            AddObjectFunc(
+              imageUrl,
+              editor,
+              img.width,
+              img.height,
+              frame,
+              (latest_ct = latest_ct),
+              null,
+              null,
+              setImgColorizerInfo
+            )
+            return prev + 1
+          })
         })
-      })
-    } else {
-      UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
-    }
-    setCurrentActiveImg(_idx)
-  }
+      } else {
+        setCurrentActiveImg(_idx)
+        UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
+      }
+    },
+    [currentActiveImg]
+  )
 
   return (
     <Block className="d-flex flex-1 flex-column">
@@ -253,6 +257,7 @@ const ImageColorizer = () => {
                 src={ImgColorizerInfo.src}
                 alt="orginal-img"
                 onClick={() => {
+                  if (imageLoading) return
                   if (currentActiveImg === 1) return
                   addImg(ImgColorizerInfo.src, 1)
                 }}

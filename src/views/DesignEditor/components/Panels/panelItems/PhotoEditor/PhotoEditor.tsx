@@ -322,8 +322,9 @@ const PhotoEditor = () => {
                 src={photoEditorInfo.src}
                 alt="orginal-img"
                 onClick={() => {
-                  if (currentActiveImg === 0) return
-                  addImg(photoEditorInfo.src, 0)
+                  if(imageLoading) return ;
+                  if (currentActiveImg === 0) return;
+                  addImg(photoEditorInfo.src, 0) ;
                 }}
               />
               <div className={classes.resultLabel}>{"Original"}</div>
