@@ -206,7 +206,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const upload = () => (
     <>
       {objectRemoverInfo.preview ? (
-        <Block>
+        <div>
           <UploadPreview
             discardHandler={() => {
               setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
@@ -236,7 +236,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               <Icons.Trash size={"32"} />
             </span>
           </div>
-        </Block>
+        </div>
       ) : (
         <div className={classes.uploadWrapper}>
           <Uploads
@@ -248,39 +248,43 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-      <div className={classes.sampleImages}>
-        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-          {sampleImages.objectRemover.map((image: any, index) => {
-            return (
-              <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-                <div
-                  key={index}
-                  className={clsx(classes.sampleImage, "flex-center")}
-                  style={{ backgroundImage: `url(${image.originalImage})` }}
-                  onClick={() => {
-                    setSelectedSampleImg(index)
-                    console.log("hi", image.originalImageDimensions)
-                    setDimensionOfSampleImg(image.originalImageDimensions)
-                    setObjectRemoverInfo((prev: any) => ({
-                      ...prev,
-                      src: image.originalImage,
-                      preview: image.originalImage,
-                      file_name: image.file_name,
-                    }))
-                  }}
-                >
-                  {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-                </div>
-              </SwiperSlide>
-            )
-          })}
-        </Swiper>
-      </div>
+      {!objectRemoverInfo.src && (
+        <>
+          <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+          <div className={classes.sampleImages}>
+            <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              {sampleImages.objectRemover.map((image: any, index) => {
+                return (
+                  <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+                    <div
+                      key={index}
+                      className={clsx(classes.sampleImage, "flex-center")}
+                      style={{ backgroundImage: `url(${image.originalImage})` }}
+                      onClick={() => {
+                        setSelectedSampleImg(index)
+                        console.log("hi", image.originalImageDimensions)
+                        setDimensionOfSampleImg(image.originalImageDimensions)
+                        setObjectRemoverInfo((prev: any) => ({
+                          ...prev,
+                          src: image.originalImage,
+                          preview: image.originalImage,
+                          file_name: image.file_name,
+                        }))
+                      }}
+                    >
+                      {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                    </div>
+                  </SwiperSlide>
+                )
+              })}
+            </Swiper>
+          </div>
+        </>
+      )}
       <BaseButton
         borderRadius="10px"
         title={"Continue"}
-        margin={"8px 0 0 4px"}
+        margin={"0px 0 0 4px"}
         disabled={objectRemoverInfo.src ? false : true}
         width="315px"
         height="38px"

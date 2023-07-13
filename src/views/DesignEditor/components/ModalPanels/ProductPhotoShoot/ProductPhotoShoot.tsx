@@ -47,7 +47,6 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
 
   const { sampleImages } = useContext(SampleImagesContext)
 
-
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(0)
@@ -58,7 +57,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [resetProduct, setResetProduct] = useState(false)
-  // @ts-ignore 
+  // @ts-ignore
   const { authState, setAuthState } = useAuth()
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
 
@@ -80,13 +79,11 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { canvas, activeObject }: any = fabricEditor
   const { setErrorInfo } = useContext(ErrorContext)
 
-  
   useEffect(() => {
     if (user) {
       getPollingIntervals()
         .then((res: any) => {
-          // Store polling intervals  
-          console.log("hi",res)        
+          // Store polling intervals
           setPollingIntervalInfo((prev: any) => ({ ...prev, productPhotoShoot: res.features.background_generator }))
           // storePollingIntervalCookies(res)
         })
@@ -95,7 +92,6 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
         })
     }
   }, [user])
-  
 
   useEffect(() => {
     if (!imageMoved) {
@@ -199,7 +195,6 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           imageUrl,
           (image: string) => {
             if (image) {
-              removeBackground()
               addImage({
                 imageType: productPhotoshootInfo.removeBg ? "object" : "product",
                 type: "image",
@@ -285,7 +280,11 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
       const objects = canvas.getObjects()
-      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt[0],pollingIntervalInfo.productPhotoShoot)
+      productPhotoshootController(
+        getCurrentCanvasBase64Image(),
+        productPhotoshootInfo.prompt[0],
+        pollingIntervalInfo.productPhotoShoot
+      )
         .then((response) => {
           console.log("INITIAL", canvas.getObjects())
           console.log("INITIAL", objects)
@@ -333,7 +332,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     return (
       <>
         {productPhotoshootInfo.src && !resetProduct ? (
-          <div className="pb-2">
+          <div>
             <UploadPreview
               discardHandler={() => {
                 setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
@@ -368,30 +367,35 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             />
           </div>
         )}
-        <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-        <div className={classes.sampleImages}>
-          <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-            {sampleImages.productPhotoshoot.map((image:any, index) => (
-              <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div
-                  key={index}
-                  className={clsx(classes.sampleImage, "flex-center")}
-                  style={{ backgroundImage: `url(${image.originalImage})` }}
-                  onClick={() => {
-                    if (!productPhotoshootInfo.preview) {
-                      setSelectedSampleImg(index)
-                      setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image.originalImage }))
-                    }
-                  }}
-                >
-                  {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        {!productPhotoshootInfo.src && (
+          <>
+            <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+            <div className={classes.sampleImages}>
+              <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+                {sampleImages.productPhotoshoot.map((image: any, index) => (
+                  <SwiperSlide key={index} style={{ width: "auto" }}>
+                    <div
+                      key={index}
+                      className={clsx(classes.sampleImage, "flex-center")}
+                      style={{ backgroundImage: `url(${image.originalImage})` }}
+                      onClick={() => {
+                        if (!productPhotoshootInfo.preview) {
+                          setSelectedSampleImg(index)
+                          setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image.originalImage }))
+                        }
+                      }}
+                    >
+                      {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </>
+        )}
         <BaseButton
           title="Continue"
+          margin="0px"
           borderRadius="10px"
           width="20.25rem"
           height="2.375rem"
@@ -479,8 +483,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                   <img
                     src={each}
                     onClick={() => {
-                    
-                      if (currentActiveImg === idx) return ;
+                      if (currentActiveImg === idx) return
                       setCurrentActiveImg(idx)
                       clearCanvas()
                       setBackgroundImage(each)
@@ -674,25 +677,24 @@ const SelectBackground = ({ generateResult }: any) => {
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
   const [selectedCategory, setSelectedCategory] = useState("Architecture")
-  const {sampleImages}= useContext(SampleImagesContext)
-  const [sampleCategoryHeading,setSampleCategoryHeading] = useState<any>([])
+  const { sampleImages } = useContext(SampleImagesContext)
+  const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 
-  const groupedData =  () =>{
-    sampleImages.productPhotoshoot.reduce((acc:any, item:any) => {
-      const category = item.categories;
+  const groupedData = () => {
+    sampleImages.productPhotoshoot.reduce((acc: any, item: any) => {
+      const category = item.categories
       if (!acc[category]) {
-        acc[category] = [];
+        acc[category] = []
       }
-      acc[category].push(item);
+      acc[category].push(item)
       setSampleCategoryHeading(acc)
-      return acc;
-    }, {});
+      return acc
+    }, {})
   }
 
-  useEffect(()=>{
- groupedData()
-  },[])
-
+  useEffect(() => {
+    groupedData()
+  }, [])
 
   // const categories: any = {
   //   Mood: [
@@ -759,7 +761,7 @@ const SelectBackground = ({ generateResult }: any) => {
       ) : (
         <>
           <Swiper spaceBetween={0} slidesPerView={"auto"} navigation={false} modules={[Navigation]}>
-          { Object.keys(sampleCategoryHeading)?.map((each: any, index:any) => (
+            {Object.keys(sampleCategoryHeading)?.map((each: any, index: any) => (
               <SwiperSlide key={index}>
                 <div
                   className={classes.bgTab}
@@ -793,8 +795,7 @@ const SelectBackground = ({ generateResult }: any) => {
                     setSelectedImg(index)
                     setProductPhotoshootInfo((prev: any) => ({
                       ...prev,
-                      prompt: each.prompt
-                      ,
+                      prompt: each.prompt,
                     }))
                   }}
                 />

@@ -281,34 +281,39 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-      <div className={classes.sampleImages}>
-        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-          {sampleImages.objectReplacer.map((image: any, index) => (
-            <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-              <div
-                key={index}
-                className={clsx(classes.sampleImage, "flex-center")}
-                style={{ backgroundImage: `url(${image.originalImage})` }}
-                onClick={() => {
-                  setSelectedSampleImg(index)
-                  setDimensionOfSampleImg(image.originalImageDimensions)
-                  setObjectReplacerInfo((prev: any) => ({
-                    ...prev,
-                    src: image.originalImage,
-                    preview: image.originalImage,
-                    file_name: image.file_name,
-                  }))
-                }}
-              >
-                {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+
+      {!objectReplacerInfo.src && (
+        <>
+          <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+          <div className={classes.sampleImages}>
+            <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              {sampleImages.objectReplacer.map((image: any, index) => (
+                <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+                  <div
+                    key={index}
+                    className={clsx(classes.sampleImage, "flex-center")}
+                    style={{ backgroundImage: `url(${image.originalImage})` }}
+                    onClick={() => {
+                      setSelectedSampleImg(index)
+                      setDimensionOfSampleImg(image.originalImageDimensions)
+                      setObjectReplacerInfo((prev: any) => ({
+                        ...prev,
+                        src: image.originalImage,
+                        preview: image.originalImage,
+                        file_name: image.file_name,
+                      }))
+                    }}
+                  >
+                    {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </>
+      )}
       <BaseButton
-        margin="0 0px 0 8px"
+        margin="0px"
         borderRadius="10px"
         title={"Continue"}
         disabled={objectReplacerInfo.src ? false : true}
