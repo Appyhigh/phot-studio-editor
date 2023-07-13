@@ -22,8 +22,15 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   return (
     <div className={classes.canvasarea}>
       {canvasLoader && (
-        // @ts-ignore
-        <div className={clsx(activePanel!=="ObjectReplacer" && classes.loaderContainer, activePanel==="ObjectReplacer" && classes.loaderContainerRelacer)}>
+        
+        <div
+          className={clsx(
+            // @ts-ignore
+            activePanel !== "ObjectReplacer" && activePanel !== "ObjectRemover" && classes.loaderContainer,
+            // @ts-ignore
+            (activePanel === "ObjectReplacer" || activePanel === "ObjectRemover") && classes.loaderContainerRelacer
+          )}
+        >
           <img src={LoaderSpinner} />
         </div>
       )}
@@ -36,7 +43,6 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
         </div>
       )}
       <Canvas width={width} height={height} />
-    
     </div>
   )
 }
