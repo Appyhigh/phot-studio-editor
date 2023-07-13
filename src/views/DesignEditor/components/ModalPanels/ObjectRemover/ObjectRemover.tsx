@@ -483,7 +483,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative", marginTop: "8px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
         )}
