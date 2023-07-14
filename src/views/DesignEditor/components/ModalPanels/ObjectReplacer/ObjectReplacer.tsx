@@ -172,7 +172,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         pollingIntervalInfo.objectReplacer
       )
         .then((response) => {
-          console.log("response0", response)
           setCallAPI(false)
           setObjectReplacerInfo((prev: any) => ({ ...prev, result: response, activeResult: 0 }))
           setResultLoading(false)
