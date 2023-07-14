@@ -543,12 +543,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           }}
           children={outputResult()}
         />
-        {isError.error && (
+        {isError.error && steps.thirdStep && (
           <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
         )}
-        {isError.error && (
+        {isError.error && steps.thirdStep && (
           <BaseButton
             disabled={imageLoading ? true : false}
             handleClick={() => {
