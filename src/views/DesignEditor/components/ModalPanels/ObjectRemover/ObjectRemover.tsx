@@ -505,7 +505,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           handleClick={() => {
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
             } else if (steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: false }))
             } else {
@@ -523,7 +522,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           handleClick={() => {
             if (stepsComplete.secondStep && !steps.secondStep) {
               setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
             } else if (steps.secondStep) {
               setSteps((prev) => ({ ...prev, secondStep: false }))
             } else {
