@@ -58,7 +58,12 @@ const LoginPopup = ({ loginPopupCloseHandler, isOpen }: LoginPopupProps) => {
         <p className={classes.text}>Please login with google, to use BG remover tool!</p>
         <div className={classes.loginBtnWrapper}>
           <button
-            onClick={loginHandler}
+            onClick={()=>{
+              loginHandler()
+              loginPopupCloseHandler()
+            }
+              
+            }
             className={clsx(classes.loginBtn, "d-flex align-items-center justify-content-center")}
           >
             <div className={clsx("mr-2 d-inline-block", classes.googleCon)}>
