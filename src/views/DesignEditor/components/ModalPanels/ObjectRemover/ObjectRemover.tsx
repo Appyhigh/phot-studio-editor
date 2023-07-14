@@ -508,6 +508,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             } else if (steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: false }))
             } else {
+              setSteps((prev) => ({ ...prev, firstStep: true }))
               {
               }
             }

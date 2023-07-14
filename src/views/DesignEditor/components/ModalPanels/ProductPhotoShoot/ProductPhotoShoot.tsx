@@ -589,6 +589,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
               } else if (steps[1]) {
                 setSteps((prev) => ({ ...prev, 1: false }))
               } else {
+                setSteps((prev) => ({ ...prev, 1:true }))
+
               }
             }}
           />
