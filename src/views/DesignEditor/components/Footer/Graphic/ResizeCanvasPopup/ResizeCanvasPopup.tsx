@@ -10,12 +10,17 @@ import { useStyletron } from "baseui"
 import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import useFabricEditor from "src/hooks/useFabricEditor"
 
-const ResizeCanvasPopup = ({ show }: any) => {
+const ResizeCanvasPopup = ({ show, type }: any) => {
   const [desiredFrame, setDesiredFrame] = useState<any>({
     width: "",
     height: "",
   })
+
+  const { fabricEditor } = useFabricEditor()
+
+  const { canvas, objects }: any = fabricEditor
 
   const [selectedFrame, setSelectedFrame] = useState<any>({
     id: 0,
@@ -30,56 +35,73 @@ const ResizeCanvasPopup = ({ show }: any) => {
 
   const frame = useFrame()
   const applyResize = () => {
-    const size = activeKey === "0" ? selectedFrame : desiredFrame
-    if (editor) {
-      const bgObject = editor.frame.background.canvas._objects.filter((el: any) => el?.type === "BackgroundImage")[0]
+    if (type === "ModalCanvas") {
+      // const size = activeKey === "0" ? selectedFrame : desiredFrame
 
-      if (bgObject) {
-        editor.frame.resize({ width: frame.width, height: frame.height })
-        editor.objects.remove(bgObject.id)
-        const options = {
-          type: "BackgroundImage",
-          src: bgObject.preview,
-          preview: bgObject.preview,
-          metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+      // const containerWidth = 600
+      // const containerHeight = 440
+
+      // const scaleX = 900/parseInt(size.width) 
+      // const scaleY = 600/parseInt(size.height) 
+      // const scale = Math.min(scaleX, scaleY)
+  
+      // canvas.setDimensions({
+      //   width: 900 * scale,
+      //   height: 600 * scale,
+      // })
+      // canvas.setWidth(900*scale);
+      // canvas.setHeight(600*scale);
+
+    } else {
+      const size = activeKey === "0" ? selectedFrame : desiredFrame
+      if (editor) {
+        const bgObject = editor.frame.background.canvas._objects.filter((el: any) => el?.type === "BackgroundImage")[0]
+
+        if (bgObject) {
+          editor.frame.resize({ width: frame.width, height: frame.height })
+          editor.objects.remove(bgObject.id)
+          const options = {
+            type: "BackgroundImage",
+            src: bgObject.preview,
+            preview: bgObject.preview,
+            metadata: { generationDate: new Date().getTime(), type: backgroundLayerType },
+          }
+          // Timeout works as a fix so canvas does not get dislocated
+
+          editor.objects.add(options).then(() => {
+            setTimeout(() => {
+              editor.objects.setAsBackgroundImage()
+            }, 100)
+          })
         }
-        // Timeout works as a fix so canvas does not get dislocated
-
-        editor.objects.add(options).then(() => {
-          setTimeout(() => {
-            editor.objects.setAsBackgroundImage()
-          }, 100)
-        })
-      }
-      setDesiredFrame({
-        width: parseInt(size.width),
-        height: parseInt(size.height),
-      })
-      editor.frame.resize({
-        width: parseInt(size.width),
-        height: parseInt(size.height),
-      })
-
-      setCurrentDesign({
-        ...currentDesign,
-        frame: {
+        setDesiredFrame({
           width: parseInt(size.width),
           height: parseInt(size.height),
-        },
-      })
+        })
+        editor.frame.resize({
+          width: parseInt(size.width),
+          height: parseInt(size.height),
+        })
+
+        setCurrentDesign({
+          ...currentDesign,
+          frame: {
+            width: parseInt(size.width),
+            height: parseInt(size.height),
+          },
+        })
+      }
+      setTimeout(() => {
+        editor.history.initialize()
+        editor.history.reset()
+        editor.history.save()
+        editor.history.reset()
+        editor.history.save()
+      }, 200)
     }
 
     // after resizing dont allow undo operation
-    setTimeout(() => {
-      editor.history.initialize()
-      editor.history.reset()
-      editor.history.save()
-      editor.history.reset()
-      editor.history.save()
-    }, 200)
   }
-
-
 
   const handleWidth = (width: any) => {
     setActiveKey("1")
@@ -118,7 +140,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
                     type="number"
                     placeholder="Width"
                     handleChange={handleWidth}
-                    value={desiredFrame.width??desiredFrame.width}
+                    value={desiredFrame.width ?? desiredFrame.width}
                     width="88px"
                     height="32px"
                   />
@@ -127,7 +149,7 @@ const ResizeCanvasPopup = ({ show }: any) => {
                   type="number"
                   placeholder="Height"
                   handleChange={handleHeight}
-                  value={desiredFrame.height??desiredFrame.height}
+                  value={desiredFrame.height ?? desiredFrame.height}
                   width="88px"
                   height="32px"
                 />

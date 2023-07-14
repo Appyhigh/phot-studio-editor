@@ -36,7 +36,7 @@ export const objectRemoverController = async (
       },
     })
     let status = response.data.order_status_code
-
+     
     while (status == 102 || status == 103) {
       await new Promise((resolve) => setTimeout(resolve, polling_interval))
       response = await axios.get(order_url, {
@@ -48,7 +48,7 @@ export const objectRemoverController = async (
       status = response.data.order_status_code
     }
 
-    return response!.data.output_urls
+    return response!.data
   } catch (error) {
     console.error("An error occurred while sending the request:", error)
     throw error

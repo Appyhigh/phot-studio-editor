@@ -9,6 +9,7 @@ export const PollingInterval = React.createContext({
     objectRemover: 0,
     objectReplacer: 0,
     productPhotoShoot: 0,
+    
   },
 
   setPollingIntervalInfo: (item: any) => {

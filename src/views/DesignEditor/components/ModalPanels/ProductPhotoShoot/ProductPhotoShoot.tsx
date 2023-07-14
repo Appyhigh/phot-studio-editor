@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { MODAL_IMG_UPLOAD } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, checkboxBGUrl } from "~/constants/contants"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import Accordian from "~/components/UI/Accordian/Accordian"
@@ -26,7 +26,10 @@ import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import ErrorContext from "~/contexts/ErrorContext"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
-
+import { getPollingIntervals } from "~/services/pollingIntervals.service"
+import { useAuth } from "~/hooks/useAuth"
+import { PollingInterval } from "~/contexts/PollingInterval"
+import { fabric } from "fabric"
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
     1: true,
@@ -44,7 +47,6 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
 
   const { sampleImages } = useContext(SampleImagesContext)
 
-
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(0)
@@ -55,6 +57,12 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [resetProduct, setResetProduct] = useState(false)
+  // @ts-ignore
+  const { authState, setAuthState } = useAuth()
+  const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
+
+  const { user, showLoginPopUp } = authState
+
   useEffect(() => {
     if (!productPhotoshootInfo.src) {
       setSelectedSampleImg(-1)
@@ -70,6 +78,25 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   const { fabricEditor } = useFabricEditor()
   const { canvas, activeObject }: any = fabricEditor
   const { setErrorInfo } = useContext(ErrorContext)
+
+  useEffect(() => {
+    if (productPhotoshootInfo.src === "") {
+      setSelectedSampleImg(-1)
+    }
+  }, [productPhotoshootInfo.src])
+  useEffect(() => {
+    if (user) {
+      getPollingIntervals()
+        .then((res: any) => {
+          // Store polling intervals
+          setPollingIntervalInfo((prev: any) => ({ ...prev, productPhotoShoot: res.features.background_generator }))
+          // storePollingIntervalCookies(res)
+        })
+        .catch(() => {
+          // an error occured so we rely on fallback polling intervals for each tool in this case
+        })
+    }
+  }, [user])
 
   useEffect(() => {
     if (!imageMoved) {
@@ -118,12 +145,14 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   useEffect(() => {
     if (canvas) {
       if (steps[2] && productPhotoshootInfo.result.length == 0) {
-        canvas.getObjects().forEach((obj: any) => {
-          obj.set("selectable", true)
+        canvas.getObjects().forEach((obj: any, _idx: any) => {
+          if (_idx === 0) {
+            canvas.backgroundImage.selectable = false
+          } else obj.set("selectable", true)
         })
       } else {
         canvas.discardActiveObject().renderAll()
-        canvas.getObjects().forEach((obj: any) => {
+        canvas.getObjects().forEach((obj: any, _idx: any) => {
           obj.set("selectable", false)
         })
       }
@@ -173,7 +202,6 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           imageUrl,
           (image: string) => {
             if (image) {
-              removeBackground()
               addImage({
                 imageType: productPhotoshootInfo.removeBg ? "object" : "product",
                 type: "image",
@@ -259,7 +287,11 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
       const objects = canvas.getObjects()
-      productPhotoshootController(getCurrentCanvasBase64Image(), productPhotoshootInfo.prompt[0])
+      productPhotoshootController(
+        getCurrentCanvasBase64Image(),
+        productPhotoshootInfo.prompt[0],
+        pollingIntervalInfo.productPhotoShoot
+      )
         .then((response) => {
           console.log("INITIAL", canvas.getObjects())
           console.log("INITIAL", objects)
@@ -307,7 +339,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     return (
       <>
         {productPhotoshootInfo.src && !resetProduct ? (
-          <div className="pb-2">
+          <div>
             <UploadPreview
               discardHandler={() => {
                 setProductPhotoshootInfo((prev: any) => ({ ...prev, src: "", preview: "" }))
@@ -342,30 +374,35 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             />
           </div>
         )}
-        <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-        <div className={classes.sampleImages}>
-          <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-            {sampleImages.productPhotoshoot.map((image:any, index) => (
-              <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div
-                  key={index}
-                  className={clsx(classes.sampleImage, "flex-center")}
-                  style={{ backgroundImage: `url(${image.originalImage})` }}
-                  onClick={() => {
-                    if (!productPhotoshootInfo.preview) {
-                      setSelectedSampleImg(index)
-                      setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image.originalImage }))
-                    }
-                  }}
-                >
-                  {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        {!productPhotoshootInfo.src && (
+          <>
+            <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+            <div className={classes.sampleImages}>
+              <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+                {sampleImages.productPhotoshoot.map((image: any, index) => (
+                  <SwiperSlide key={index} style={{ width: "auto" }}>
+                    <div
+                      key={index}
+                      className={clsx(classes.sampleImage, "flex-center")}
+                      style={{ backgroundImage: `url(${image.originalImage})` }}
+                      onClick={() => {
+                        if (!productPhotoshootInfo.preview) {
+                          setSelectedSampleImg(index)
+                          setProductPhotoshootInfo((prev: any) => ({ ...prev, src: image.originalImage }))
+                        }
+                      }}
+                    >
+                      {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+          </>
+        )}
         <BaseButton
           title="Continue"
+          margin="0px"
           borderRadius="10px"
           width="20.25rem"
           height="2.375rem"
@@ -453,8 +490,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                   <img
                     src={each}
                     onClick={() => {
-                    
-                      if (currentActiveImg === idx) return ;
+                      if (currentActiveImg === idx) return
                       setCurrentActiveImg(idx)
                       clearCanvas()
                       setBackgroundImage(each)
@@ -648,27 +684,24 @@ const SelectBackground = ({ generateResult }: any) => {
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
   const [selectedCategory, setSelectedCategory] = useState("Architecture")
-  const {sampleImages}= useContext(SampleImagesContext)
-  const [sampleCategoryHeading,setSampleCategoryHeading] = useState<any>([])
+  const { sampleImages } = useContext(SampleImagesContext)
+  const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 
-  const groupedData =  () =>{
-    sampleImages.productPhotoshoot.reduce((acc:any, item:any) => {
-      const category = item.categories;
+  const groupedData = () => {
+    sampleImages.productPhotoshoot.reduce((acc: any, item: any) => {
+      const category = item.categories
       if (!acc[category]) {
-        acc[category] = [];
+        acc[category] = []
       }
-      acc[category].push(item);
+      acc[category].push(item)
       setSampleCategoryHeading(acc)
-      return acc;
-    }, {});
+      return acc
+    }, {})
   }
 
-  useEffect(()=>{
- groupedData()
-  },[])
-
-
-  
+  useEffect(() => {
+    groupedData()
+  }, [])
 
   // const categories: any = {
   //   Mood: [
@@ -721,6 +754,10 @@ const SelectBackground = ({ generateResult }: any) => {
     setSelectedImg(-1)
   }, [showPrompt])
 
+  useEffect(() => {
+    setSelectedImg(-1)
+  }, [selectedCategory])
+
   return (
     <div className={classes.selectBg}>
       {showPrompt ? (
@@ -735,7 +772,7 @@ const SelectBackground = ({ generateResult }: any) => {
       ) : (
         <>
           <Swiper spaceBetween={0} slidesPerView={"auto"} navigation={false} modules={[Navigation]}>
-          { Object.keys(sampleCategoryHeading)?.map((each: any, index:any) => (
+            {Object.keys(sampleCategoryHeading)?.map((each: any, index: any) => (
               <SwiperSlide key={index}>
                 <div
                   className={classes.bgTab}
@@ -769,8 +806,7 @@ const SelectBackground = ({ generateResult }: any) => {
                     setSelectedImg(index)
                     setProductPhotoshootInfo((prev: any) => ({
                       ...prev,
-                      prompt: each.prompt
-                      ,
+                      prompt: each.prompt,
                     }))
                   }}
                 />

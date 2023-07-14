@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
-import React, { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
+import { useContext, useEffect, useState } from "react"
+import { MODAL_IMG_UPLOAD, OBJECT_REPLACER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
@@ -11,7 +11,6 @@ import Accordian from "~/components/UI/Accordian/Accordian"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg"
-import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
@@ -19,12 +18,10 @@ import { createMaskImage } from "~/views/DesignEditor/utils/functions/createMask
 import { getCookie } from "~/utils/common"
 import { objectRemoverController } from "~/utils/objectRemoverController"
 import { COOKIE_KEYS } from "~/utils/enum"
-import LoginPopup from "../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
 import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTransparent"
-import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { PollingInterval } from "~/contexts/PollingInterval"
 import { Swiper, SwiperSlide } from "swiper/react"
@@ -173,13 +170,22 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       )
         .then((response) => {
           setCallAPI(false)
-          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response, activeResult: 0 }))
-          setResultLoading(false)
-          setCanvasLoader(false)
-          handleBgImg(response[0])
-          setActiveResultId(0)
-
-          setIsError((prev) => ({ ...prev, error: false }))
+          if (response.output_urls.length === 0) {
+            setIsError((prev) => ({
+              ...prev,
+              error: true,
+              errorMsg: "Oops! unable to generate your image please try again.",
+            }))
+            setResultLoading(false)
+          } else {
+            console.log("response0", response)
+            setObjectReplacerInfo((prev: any) => ({ ...prev, result: response.output_urls, activeResult: 0 }))
+            setResultLoading(false)
+            handleBgImg(response.output_urls[0])
+            setActiveResultId(0)
+            setCanvasLoader(false)
+            setIsError((prev) => ({ ...prev, error: false }))
+          }
         })
 
         .catch((error) => {
@@ -219,6 +225,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     }
   }, [])
 
+  useEffect(() => {
+    if (objectReplacerInfo.src === "") {
+      setSelectedSampleImg(-1)
+    }
+  }, [objectReplacerInfo.src])
   const upload = () => (
     <>
       {objectReplacerInfo.preview ? (
@@ -281,34 +292,39 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-      <div className={classes.sampleImages}>
-        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-          {sampleImages.objectReplacer.map((image: any, index) => (
-            <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-              <div
-                key={index}
-                className={clsx(classes.sampleImage, "flex-center")}
-                style={{ backgroundImage: `url(${image.originalImage})` }}
-                onClick={() => {
-                  setSelectedSampleImg(index)
-                  setDimensionOfSampleImg(image.originalImageDimensions)
-                  setObjectReplacerInfo((prev: any) => ({
-                    ...prev,
-                    src: image.originalImage,
-                    preview: image.originalImage,
-                    file_name: image.file_name,
-                  }))
-                }}
-              >
-                {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
+
+      {!objectReplacerInfo.src && (
+        <>
+          <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+          <div className={classes.sampleImages}>
+            <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              {sampleImages.objectReplacer.map((image: any, index) => (
+                <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+                  <div
+                    key={index}
+                    className={clsx(classes.sampleImage, "flex-center")}
+                    style={{ backgroundImage: `url(${image.originalImage})` }}
+                    onClick={() => {
+                      setSelectedSampleImg(index)
+                      setDimensionOfSampleImg(image.originalImageDimensions)
+                      setObjectReplacerInfo((prev: any) => ({
+                        ...prev,
+                        src: image.originalImage,
+                        preview: image.originalImage,
+                        file_name: image.file_name,
+                      }))
+                    }}
+                  >
+                    {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </>
+      )}
       <BaseButton
-        margin="0 0px 0 8px"
+        margin="0px"
         borderRadius="10px"
         title={"Continue"}
         disabled={objectReplacerInfo.src ? false : true}

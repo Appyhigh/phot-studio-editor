@@ -3,7 +3,6 @@ import classes from "./style.module.css"
 import { useContext, useEffect, useState } from "react"
 import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
-import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
 import BaseButton from "~/components/UI/Button/BaseButton"
 import clsx from "clsx"
@@ -11,7 +10,6 @@ import Accordian from "~/components/UI/Accordian/Accordian"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg"
-import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
@@ -29,7 +27,6 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import { Navigation } from "swiper"
 import "swiper/css"
 import "swiper/css/navigation"
-import { SampleImagesApi } from "~/services/SampleImagesApi"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
@@ -114,6 +111,13 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(false)
     }
   }, [user, autoCallAPI])
+
+  useEffect(() => {
+    if (objectRemoverInfo.src === "") {
+      setSelectedSampleImg(-1)
+    }
+  }, [objectRemoverInfo.src])
+
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
@@ -124,14 +128,27 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(objectRemoverInfo.preview, objectRemoverInfo.mask_img, objectRemoverInfo.file_name)
         .then((response) => {
-          setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
-          setObjectRemoverInfo((prev: any) => ({ ...prev, result: response[0], preview: response[0] }))
+          if (response.output_urls.length === 0) {
+            setIsError((prev) => ({
+              ...prev,
+              error: true,
+              errorMsg: "Oops! unable to generate your image please try again.",
+            }))
+            setIsError((prev) => ({ ...prev, error: false }))
+          } else {
+            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+            setObjectRemoverInfo((prev: any) => ({
+              ...prev,
+              result: response.output_urls[0],
+              preview: response.output_urls[0],
+            }))
+            setCurrentActiveImg(1)
+            handleBgImg(response.output_urls[0])
+          }
           setResultLoading(false)
-          setCanvasLoader(false)
-          setCurrentActiveImg(1)
-          handleBgImg(response[0])
-          setIsError((prev) => ({ ...prev, error: false }))
           setCallAPI(false)
+          setCanvasLoader(false)
+          setIsError((prev) => ({ ...prev, error: false }))
         })
 
         .catch((error) => {
@@ -197,7 +214,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
   const upload = () => (
     <>
       {objectRemoverInfo.preview ? (
-        <Block>
+        <div>
           <UploadPreview
             discardHandler={() => {
               setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
@@ -227,7 +244,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               <Icons.Trash size={"32"} />
             </span>
           </div>
-        </Block>
+        </div>
       ) : (
         <div className={classes.uploadWrapper}>
           <Uploads
@@ -239,39 +256,43 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div className={classes.sampleImagesLabel}>or try one of these for free</div>
-      <div className={classes.sampleImages}>
-        <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
-          {sampleImages.objectRemover.map((image: any, index) => {
-            return (
-              <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
-                <div
-                  key={index}
-                  className={clsx(classes.sampleImage, "flex-center")}
-                  style={{ backgroundImage: `url(${image.originalImage})` }}
-                  onClick={() => {
-                    setSelectedSampleImg(index)
-                    console.log("hi", image.originalImageDimensions)
-                    setDimensionOfSampleImg(image.originalImageDimensions)
-                    setObjectRemoverInfo((prev: any) => ({
-                      ...prev,
-                      src: image.originalImage,
-                      preview: image.originalImage,
-                      file_name: image.file_name,
-                    }))
-                  }}
-                >
-                  {selectedSampleImg == index && <Icons.Selection size={"24"} />}
-                </div>
-              </SwiperSlide>
-            )
-          })}
-        </Swiper>
-      </div>
+      {!objectRemoverInfo.src && (
+        <>
+          <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+          <div className={classes.sampleImages}>
+            <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              {sampleImages.objectRemover.map((image: any, index) => {
+                return (
+                  <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+                    <div
+                      key={index}
+                      className={clsx(classes.sampleImage, "flex-center")}
+                      style={{ backgroundImage: `url(${image.originalImage})` }}
+                      onClick={() => {
+                        setSelectedSampleImg(index)
+                        console.log("hi", image.originalImageDimensions)
+                        setDimensionOfSampleImg(image.originalImageDimensions)
+                        setObjectRemoverInfo((prev: any) => ({
+                          ...prev,
+                          src: image.originalImage,
+                          preview: image.originalImage,
+                          file_name: image.file_name,
+                        }))
+                      }}
+                    >
+                      {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                    </div>
+                  </SwiperSlide>
+                )
+              })}
+            </Swiper>
+          </div>
+        </>
+      )}
       <BaseButton
         borderRadius="10px"
         title={"Continue"}
-        margin={"8px 0 0 4px"}
+        margin={"0px 0 0 4px"}
         disabled={objectRemoverInfo.src ? false : true}
         width="315px"
         height="38px"
