@@ -13,11 +13,7 @@ export const AddObjectFunc = (
 ) => {
   let scale = 1
   const id = nanoid()
-  let left = 0;
-  let top = 0; 
   if (width && height && frame) {
-    console.log(width,height,frame);
-    
     if (width > frame.width || height > frame.height) {
       if (width / frame.width > height / frame.height) {
         scale = frame.width / width
@@ -25,11 +21,7 @@ export const AddObjectFunc = (
         scale = frame.height / height
       }
     }
-    // // Calculate the centered position
-    left += (frame.width - width * scale) / 2;
-    top += (frame.height - height * scale) / 2;
-    console.log(left,top);
-    
+  
   }
   if (editor) {
     const options = {
@@ -40,15 +32,15 @@ export const AddObjectFunc = (
       metadata: { generationDate: new Date().getTime(), originalLayerPreview: url },
       scaleX: scale,
       scaleY: scale,
-      name: latest_ct.toString(),
-      left:left,
-      top:top
-    }
+      name: latest_ct.toString(), 
+    } 
     editor.objects.add(options).then(() => {
       setRejectedFileUpload ? setRejectedFileUpload(false) : null
 
       setAddImgInfo && setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" }))
       setStateInfo && setStateInfo((prev: any) => ({ ...prev, id: id }))
-    })
+    }).then(()=>{
+      editor.objects.alignCenter()
+    }) 
   }
 }

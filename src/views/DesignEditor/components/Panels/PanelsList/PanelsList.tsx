@@ -43,7 +43,7 @@ const PanelsList = () => {
       <div
         ref={sidebarRef}
         style={{
-          height: "92vh",
+          height: "93vh",
           overflowY: "scroll",
         }}
       >
