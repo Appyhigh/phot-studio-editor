@@ -335,7 +335,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       <div className={classes.brushActionBtn}>
         <BaseButton
           borderRadius="10px"
-          title={"Redo"}
+          title={"Undo"}
           height="38px"
           margin={"8px 8px 4px 4px"}
           width="155px"
