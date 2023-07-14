@@ -13,11 +13,11 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   const { canvasLoader } = useContext(CanvasLoaderContext)
 
   const { fabricEditor, setFabricEditor } = useFabricEditor()
-  useEffect(() => {
-    setTimeout(() => {
-      handleBrush && handleBrush()
-    }, 5000)
-  }, [brushTooltipShow])
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     handleBrush && handleBrush()
+  //   }, 5000)
+  // }, [brushTooltipShow])
 
   return (
     <div className={classes.canvasarea}>
