@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { MODAL_IMG_UPLOAD } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, checkboxBGUrl } from "~/constants/contants"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import Accordian from "~/components/UI/Accordian/Accordian"
@@ -29,7 +29,7 @@ import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { useAuth } from "~/hooks/useAuth"
 import { PollingInterval } from "~/contexts/PollingInterval"
-
+import { fabric } from "fabric"
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
     1: true,
@@ -145,12 +145,14 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   useEffect(() => {
     if (canvas) {
       if (steps[2] && productPhotoshootInfo.result.length == 0) {
-        canvas.getObjects().forEach((obj: any) => {
-          obj.set("selectable", true)
+        canvas.getObjects().forEach((obj: any, _idx: any) => {
+          if (_idx === 0) {
+            canvas.backgroundImage.selectable = false
+          } else obj.set("selectable", true)
         })
       } else {
         canvas.discardActiveObject().renderAll()
-        canvas.getObjects().forEach((obj: any) => {
+        canvas.getObjects().forEach((obj: any, _idx: any) => {
           obj.set("selectable", false)
         })
       }
@@ -752,9 +754,9 @@ const SelectBackground = ({ generateResult }: any) => {
     setSelectedImg(-1)
   }, [showPrompt])
 
-  useEffect(()=>{
-   setSelectedImg(-1)
-  },[selectedCategory])
+  useEffect(() => {
+    setSelectedImg(-1)
+  }, [selectedCategory])
 
   return (
     <div className={classes.selectBg}>

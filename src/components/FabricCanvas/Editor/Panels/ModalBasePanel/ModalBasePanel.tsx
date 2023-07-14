@@ -171,7 +171,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
               }}
             >
               <Icons.CanvasResize size={24} />
-              <ResizeCanvasPopup show={showCanvasResizePopup} />
+              <ResizeCanvasPopup type={"ModalCanvas"} show={showCanvasResizePopup} />
             </Block>
           </>
         )}
