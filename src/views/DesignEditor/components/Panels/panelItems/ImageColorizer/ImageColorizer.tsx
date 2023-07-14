@@ -24,6 +24,7 @@ import LoginPopup from "../../../LoginPopup/LoginPopup"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import { useAuth } from "~/hooks/useAuth"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
@@ -36,6 +37,9 @@ const ImageColorizer = () => {
   const { sampleImages } = useContext(SampleImagesContext)
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
+  // @ts-ignore
+  const { authState } = useAuth()
+  const { user } = authState
 
   useEffect(() => {
     setImgColorizerInfo((prev: any) => ({
@@ -57,6 +61,12 @@ const ImageColorizer = () => {
     }))
   }, [])
 
+  useEffect(() => {
+    if (user && autoCallAPI) {
+      generateImgColorizer()
+      setAutoCallAPI(false)
+    }
+  }, [user, autoCallAPI])
   const generateImgColorizer = () => {
     setImgColorizerInfo((prev: any) => ({ ...prev, isError: false }))
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
