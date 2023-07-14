@@ -12,7 +12,7 @@ import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimension
 import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
-import ProductPhotoshoot from "~/views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoshoot"
+import ProductPhotoshoot from "./../../../views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoShoot"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -51,7 +51,7 @@ function ProductPhotoshootEditor({ handleClose }: any) {
         <ProductPhotoshoot handleClose={handleClose} />
 
         <div className={classes.editor}>
-          <ModalBasePanel handleDone={handleDone} handleClose={handleClose }/>
+          <ModalBasePanel handleDone={handleDone} handleClose={handleClose} />
           <div className={classes.three}>
             {productPhotoshootInfo.tooltip && (
               <div className={classes.toolTip}>
