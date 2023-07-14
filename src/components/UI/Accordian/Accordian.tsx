@@ -25,7 +25,7 @@ const Accordian = ({ label, heading, children, isOpen, isComplete, handleClick }
             </div>
           )}
 
-          <p>{heading}</p>
+          <p style={{color:isComplete?"#44444F":"#92929D",fontWeight:"400"}}>{heading}</p>
         </div>
 
         <div className="flex-1"></div>
