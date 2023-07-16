@@ -30,7 +30,6 @@ export const HandleBgChangeOption = async (
   const options = {
     type: "StaticImage",
     src: previewWithUpdatedBackground,
-    preview: previewWithUpdatedBackground,
     original: mainImgInfo.original,
     name: activeObject ? activeObject.name : mainImgInfo.name,
     id: nanoid(),

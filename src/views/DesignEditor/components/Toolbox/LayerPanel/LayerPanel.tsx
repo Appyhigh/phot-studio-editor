@@ -106,7 +106,7 @@ const LayerPanel = () => {
         (el: any) => el.type === "BackgroundImage" || el?.metadata?.type === backgroundLayerType
       )
       if (bgImageIndex !== -1) {
-         // @ts-ignore
+        // @ts-ignore
         setBgUrl(editor?.frame?.background?.canvas?._objects[bgImageIndex].preview)
       } else {
         setBgUrl(editor?.frame?.background?.fill)
@@ -372,7 +372,7 @@ const LayerPanel = () => {
                                             index == 0 && "mt-1",
                                             index === obj?.objects.length - 1 && "mb-1"
                                           )}
-                                          src={object.preview ?? object.src}
+                                          src={object.src ?? object.preview}
                                           style={{
                                             borderRadius: "4px",
                                             width: layerState.isOpenSlider ? "50px" : "60px",
@@ -489,7 +489,7 @@ const LayerPanel = () => {
                                 </div>
                               ) : (
                                 <img
-                                  src={obj.preview ?? obj.src}
+                                  src={obj.src ?? obj.preview}
                                   alt="nn"
                                   className={clsx(
                                     classes.bgImage,
