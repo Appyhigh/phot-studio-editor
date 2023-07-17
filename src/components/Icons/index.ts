@@ -94,6 +94,9 @@ import ObjectReplacer from "./ObjectReplacer"
 import ProductPhotoshoot from "./ProductPhotoshoot"
 import ArrowLeft from "./ArrowLeft"
 import RetryImg from "./RetryImg"
+import BgRemoverPopup from "./BgRemoverPopup"
+import TextToArtPopup from "./TextToArtPopup"
+import ProductPhotoPopup from "./productPhotoPopup"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -191,6 +194,9 @@ class Icons {
   static ProductPhotoshoot = ProductPhotoshoot
   static ArrowLeft = ArrowLeft
   static RetryImg = RetryImg
+  static BgRemoverPopup = BgRemoverPopup
+  static TextToArtPopup = TextToArtPopup
+  static ProductPhotoPopup = ProductPhotoPopup
 }
 
 export default Icons
