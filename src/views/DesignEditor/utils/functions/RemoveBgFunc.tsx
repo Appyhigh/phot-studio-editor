@@ -89,29 +89,52 @@ export const RemoveBGFunc = async (
         }
       }
     } else if (
-      activeObject &&
-      activeObject?.metadata?.originalLayerPreview &&
-      (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
+      (activeObject &&
+        activeObject?.metadata?.originalLayerPreview &&
+        (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http") ||
+      (activeObject && activeObject.src && (activeObject.src).substring(0, 4) != "http")
     ) {
-      var imageElement = document.createElement("img")
-      imageElement.setAttribute("crossorigin", "Anonymous")
-      imageElement.setAttribute("class", "canvas-img")
-      imageElement.setAttribute("src", activeObject?.metadata?.originalLayerPreview)
-      const options = {
-        type: "StaticImage",
-        src: activeObject?.metadata?.originalLayerPreview,
-        preview: activeObject?.metadata?.originalLayerPreview,
-        original: activeObject.original,
-        id: activeObject.id,
-        name: activeObject?.name,
-        metadata: {
-          generationDate: activeObject?.metadata?.generationDate,
-          originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
-        },
-        _element: imageElement,
-        _originalElement: imageElement,
+      if (activeObject?.src != "http") {
+        var imageElement = document.createElement("img")
+        imageElement.setAttribute("crossorigin", "Anonymous")
+        imageElement.setAttribute("class", "canvas-img")
+        imageElement.setAttribute("src", activeObject?.preview)
+        const options = {   
+          type: "StaticImage",
+          id: activeObject.id,
+          original: activeObject.original,
+          src:activeObject.preview,
+          
+          name: activeObject?.name,
+          metadata: {
+            generationDate: activeObject?.metadata?.generationDate,
+            originalLayerPreview: activeObject.preview,
+          },
+          _element: imageElement,
+          _originalElement: imageElement,
+        }
+        editor.objects.update(options)
+      } else {
+        var imageElement = document.createElement("img")
+        imageElement.setAttribute("crossorigin", "Anonymous")
+        imageElement.setAttribute("class", "canvas-img")
+        imageElement.setAttribute("src", activeObject?.metadata?.originalLayerPreview)
+        const options = {
+          type: "StaticImage",
+          src: activeObject?.metadata?.originalLayerPreview,
+          preview: activeObject?.metadata?.originalLayerPreview,
+          original: activeObject.original,
+          id: activeObject.id,
+          name: activeObject?.name,
+          metadata: {
+            generationDate: activeObject?.metadata?.generationDate,
+            originalLayerPreview: activeObject?.metadata?.originalLayerPreview ?? activeObject.preview,
+          },
+          _element: imageElement,
+          _originalElement: imageElement,
+        }
+        editor.objects.update(options)
       }
-      editor.objects.update(options)
     } else {
       setLoaderPopup(true)
       let response = await removeBackgroundController(

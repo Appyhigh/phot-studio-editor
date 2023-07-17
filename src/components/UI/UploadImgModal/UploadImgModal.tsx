@@ -49,10 +49,10 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb, id }: an
           style: ({ $theme }) => ({
             backgroundColor: $theme.colors.white,
             width: "550px",
-            position: fileInputType === "productAdd" && "absolute",
-            top: fileInputType === "productAdd" && "7.75rem",
-            left: fileInputType === "productAdd" && "31.25rem",
-            boxShadow: fileInputType === "productAdd" && "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
+            position: fileInputType === "productAdd" ? "absolute":"relative",
+            top: fileInputType === "productAdd" ? "7.75rem":"0rem",
+            left: fileInputType === "productAdd" ?"31.25rem":"0rem",
+            boxShadow: fileInputType === "productAdd" ? "0px 0px 20px 0px rgba(0, 0, 0, 0.05)":"0px",
           }),
         },
         DialogContainer: {

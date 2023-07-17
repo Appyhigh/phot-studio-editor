@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid"
 import { applyExtraFilter } from "./applyExtraFilterFunc"
-import { log } from "fabric/fabric-impl"
 
 export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
   return new Promise((resolve, reject) => {
@@ -27,16 +26,18 @@ export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
       })
     } else {
       editor.objects.clone()
-      editor.objects.select("frame")
+      let originalLayer = activeObject?.metadata?.originalLayerPreview
+      // editor.objects.select("frame")
       setTimeout(() => {
-        editor.objects.update({ name: latest_ct })
-        resolve(
-          editor.objects.update(
-            { name: activeObject.name, metadata: activeObject.metadata },
-            editor.canvas.canvas.getActiveObject()?.id
-          )
-        )
+        editor.objects.update({
+          name: latest_ct,
+          preview:originalLayer,
+          metadata: {
+            originalLayerPreview: originalLayer,
+          },
+        })
       }, 100)
+     
     }
 
     editor.cancelContextMenuRequest()
