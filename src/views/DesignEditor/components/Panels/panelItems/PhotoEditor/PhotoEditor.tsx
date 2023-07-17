@@ -189,7 +189,7 @@ const PhotoEditor = () => {
   }
 
   return (
-    <div className="d-flex flex-1 flex-column">
+    <div className="d-flex flex-1 flex-column pb-2">
       {!photoEditorPanelInfo.resultSectionVisible ? (
         <>
           {photoEditorInfo.src ? (

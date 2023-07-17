@@ -43,7 +43,7 @@ const Images = () => {
 
   const accordinanContent = () => <h3>Children</h3>
   return (
-    <Block className="d-flex flex-1 flex-column">
+    <Block className="d-flex flex-1 flex-column pb-2">
       {/* accordian demo  */}
       {/* <ToolUploadModal/> */}
       {/* <Accordian label={1} isDone={true} heading={"Upload/choose image"} children={accordinanContent()} /> */}

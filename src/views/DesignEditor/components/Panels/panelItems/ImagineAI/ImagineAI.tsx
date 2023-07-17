@@ -57,6 +57,9 @@ const ImagineAI = () => {
     }
   }, [])
 
+
+
+
   useEffect(() => {
     setTextToArtInputInfo((prev: any) => ({
       ...prev,

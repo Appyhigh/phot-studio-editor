@@ -34,6 +34,19 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
     setShowAddPopup(false)
     setShowPreview(true)
   }
+  const getCurrentCanvasBase64Image = () => {
+    if (canvas) {
+      const dataURL = canvas.toDataURL({
+        width: canvas.width / fabricEditor.productPhotoShootScale,
+        height: canvas.height / fabricEditor.productPhotoShootScale,
+        left: 0,
+        top: 0,
+        format: "png",
+      })
+      return dataURL
+    }
+    return undefined
+  }
 
   const editor = useEditor()
   const frame = useFrame()
@@ -95,6 +108,9 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
           latest_ct = prev + 1
           return prev + 1
         })
+
+        console.log(getCurrentCanvasBase64Image())
+
         AddObjectFunc(productPhotoshootInfo.finalImage, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
         handleClose()
       })

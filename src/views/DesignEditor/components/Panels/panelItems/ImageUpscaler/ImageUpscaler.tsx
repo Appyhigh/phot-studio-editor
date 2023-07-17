@@ -243,7 +243,7 @@ const ImageUpscaler = () => {
   }
 
   return (
-    <div className="d-flex flex-1 flex-column">
+    <div className="d-flex flex-1 flex-column pb-2">
       {!imgScalerPanelInfo.resultSectionVisible ? (
         <>
           {imgScalerInfo.src ? (

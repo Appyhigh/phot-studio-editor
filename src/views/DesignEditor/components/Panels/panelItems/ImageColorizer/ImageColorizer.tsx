@@ -161,7 +161,7 @@ const ImageColorizer = () => {
   )
 
   return (
-    <Block className="d-flex flex-1 flex-column">
+    <Block className="d-flex flex-1 flex-column pb-2">
       {!ImgColorizerPanelInfo.resultOption && (
         <>
           {ImgColorizerInfo.src ? (

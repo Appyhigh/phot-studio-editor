@@ -18,7 +18,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
     height: "",
   })
 
-  const { fabricEditor } = useFabricEditor()
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
 
   const { canvas, objects }: any = fabricEditor
 
@@ -36,22 +36,58 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
   const frame = useFrame()
   const applyResize = () => {
     if (type === "ModalCanvas") {
-      // const size = activeKey === "0" ? selectedFrame : desiredFrame
+      const size = activeKey === "0" ? selectedFrame : desiredFrame
 
-      // const containerWidth = 600
-      // const containerHeight = 440
+      console.log(parseInt(size.width), parseInt(size.height))
 
-      // const scaleX = 900/parseInt(size.width) 
-      // const scaleY = 600/parseInt(size.height) 
-      // const scale = Math.min(scaleX, scaleY)
-  
-      // canvas.setDimensions({
-      //   width: 900 * scale,
-      //   height: 600 * scale,
-      // })
-      // canvas.setWidth(900*scale);
-      // canvas.setHeight(600*scale);
+      let canvasWidth = 400
+      let canvasHeight = 400
+      let DesiredWidth = parseInt(size.width)
+      let DesiredHeight = parseInt(size.height)
+      let scale = 1
+      if (DesiredHeight >= canvasHeight || DesiredWidth >= canvasWidth) {
+        if (DesiredWidth / canvasWidth > DesiredHeight / canvasHeight) {
+          scale = canvasWidth / DesiredWidth
+        } else {
+          scale = canvasHeight / DesiredHeight
+        }
+      }
 
+      setFabricEditor((prev) => ({ ...prev, productPhotoShootScale: scale }))
+
+      canvas.setDimensions({
+        width: DesiredWidth * scale,
+        height: DesiredHeight * scale,
+      })
+
+      // if (parseInt(size.width) >= 1500 || parseInt(size.height) >= 1500) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.35,
+      //     height: parseInt(size.height) * 0.35,
+      //   })
+      // }
+      // else if (parseInt(size.width) >= 1000 || parseInt(size.height) >= 1000) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.45,
+      //     height: parseInt(size.height) * 0.45,
+      //   })
+      // }
+      // else if (parseInt(size.width) >= 800 || parseInt(size.height) >= 800) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.5,
+      //     height: parseInt(size.height) * 0.5,
+      //   })
+      // } else if (parseInt(size.width) >= 600 || parseInt(size.height) >= 600) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.7,
+      //     height: parseInt(size.height) * 0.7,
+      //   })
+      // } else {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width),
+      //     height: parseInt(size.height),
+      //   })
+      // }
     } else {
       const size = activeKey === "0" ? selectedFrame : desiredFrame
       if (editor) {
