@@ -54,15 +54,16 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const handleChangeBg = useCallback(
     async (each: any) => {
       let inputImage
-      if ((activeObject?.src) && (activeObject.src).substring(0, 4) != "http") {
-        inputImage = activeObject?.preview
-        changeBGFillHandler(inputImage, each.color)
-      }
-     else if (
+      if (
         activeObject?.metadata?.originalLayerPreview &&
-        (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
+        activeObject &&
+        activeObject.metadata && activeObject.metadata.originalLayerPreview&&
+        (activeObject.metadata.originalLayerPreview).substring(0, 4) != "http"
       ) {
         inputImage = activeObject?.metadata?.originalLayerPreview
+        changeBGFillHandler(inputImage, each.color)
+      } else if (activeObject?.src && activeObject.src.substring(0, 4) != "http") {
+        inputImage = activeObject?.preview
         changeBGFillHandler(inputImage, each.color)
       } else {
         removeBackgroundBeforeChangingColor(each)

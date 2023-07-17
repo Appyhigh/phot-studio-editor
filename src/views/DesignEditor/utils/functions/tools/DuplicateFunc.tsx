@@ -31,12 +31,13 @@ export const DuplicateFunc = ({ editor, activeObject, latest_ct }: any) => {
       setTimeout(() => {
         editor.objects.update({
           name: latest_ct,
-          preview: originalLayer,
+          preview:originalLayer,
           metadata: {
             originalLayerPreview: originalLayer,
           },
         })
       }, 100)
+     
     }
 
     editor.cancelContextMenuRequest()

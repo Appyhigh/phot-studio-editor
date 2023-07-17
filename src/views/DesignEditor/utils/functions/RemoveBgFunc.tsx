@@ -92,21 +92,23 @@ export const RemoveBGFunc = async (
       (activeObject &&
         activeObject?.metadata?.originalLayerPreview &&
         (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http") ||
-      (activeObject?.src).substring(0, 4) != "http"
+      (activeObject && activeObject.src && (activeObject.src).substring(0, 4) != "http")
     ) {
       if (activeObject?.src != "http") {
         var imageElement = document.createElement("img")
         imageElement.setAttribute("crossorigin", "Anonymous")
         imageElement.setAttribute("class", "canvas-img")
-        imageElement.setAttribute("src", activeObject?.src)
-        const options = {
+        imageElement.setAttribute("src", activeObject?.preview)
+        const options = {   
           type: "StaticImage",
-          original: activeObject.original,
           id: activeObject.id,
+          original: activeObject.original,
+          src:activeObject.preview,
+          
           name: activeObject?.name,
           metadata: {
             generationDate: activeObject?.metadata?.generationDate,
-            originalLayerPreview: activeObject?.src,
+            originalLayerPreview: activeObject.preview,
           },
           _element: imageElement,
           _originalElement: imageElement,
