@@ -17,6 +17,10 @@ import ErrorContext from "~/contexts/ErrorContext"
 import { ObjectLayerOption } from "~/views/DesignEditor/utils/ObjectLayerOptions"
 import DropdownWrapper from "./DropdownWrapper"
 import Loader from "~/components/UI/Loader/Loader"
+import { getCookie } from "~/utils/common"
+import { COOKIE_KEYS } from "~/utils/enum"
+import LoginPopup from "../../../LoginPopup/LoginPopup"
+import { useAuth } from "~/hooks/useAuth"
 
 const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const virtualSrcImageRef = useRef<HTMLImageElement | null>(null)
@@ -31,7 +35,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const [activeOb, setActiveOb] = useState<any>()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
-
+  const [showLoginPopUp, setShowLoginPopup] = useState(false)
+  // @ts-ignore
+  const { authState, setAuthState } = useAuth()
+  const { user } = authState
   const handleActiveState = (idx: number) => {
     if (idx == activeState) {
       setActiveState(-1)
@@ -50,11 +57,13 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const { setLoaderPopup } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
-
   const handleChangeBg = useCallback(
+    
     async (each: any) => {
       let inputImage
-
+      if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+       return setShowLoginPopup(true)
+      }
       if (
         activeObject?.metadata?.originalLayerPreview &&
         (activeObject && activeObject?.metadata?.originalLayerPreview).substring(0, 4) != "http"
@@ -65,7 +74,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         removeBackgroundBeforeChangingColor(each)
       }
     },
-    [activeObject]
+    [activeObject,user]
   )
 
   const eraseHandler = () => {
@@ -191,6 +200,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                 <p>Delete</p>
               </div>{" "}
             </div>
+            <LoginPopup
+              isOpen={showLoginPopUp}
+              loginPopupCloseHandler={() => {
+                setShowLoginPopup(false)
+              }}
+            />
             <div className={clsx(classes.modifierSection, classes.panelSubHeading, "mb-2")}>Modifiers</div>
             {ObjectLayerOption.map((each, idx) => (
               <DropdownWrapper
@@ -247,6 +262,10 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                   latest_ct = prev
                   return prev
                 })
+                if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+                  setShowLoginPopup(true)
+                  return
+                }
                 if (mainImgInfo?.id === activeObject?.id) {
                   RemoveBGFunc(
                     editor,

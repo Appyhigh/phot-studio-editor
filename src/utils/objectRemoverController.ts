@@ -26,7 +26,7 @@ export const objectRemoverController = async (
 
     
     //@ts-ignore
-    const order = await axios.post("https://devapi.phot.ai/app/api/v1/user_activity/object-replacer-v2", body, config)
+    const order = await axios.post("https://devapi.phot.ai/app/api/v3/user_activity/replace-object", body, config)
     const order_id = order.data.order_id
     const order_url = `https://devapi.phot.ai/app/api/v1/user_activity/order-status?${order_id}`
     let response = await axios.get(order_url, {
