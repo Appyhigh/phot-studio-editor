@@ -7,7 +7,7 @@ import useAppContext from "~/hooks/useAppContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
@@ -23,6 +23,7 @@ import ErrorContext from "~/contexts/ErrorContext"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
+import FileError from "~/components/UI/Common/FileError/FileError"
 
 const ImageColorizer = () => {
   const { activePanel } = useAppContext()
@@ -33,18 +34,37 @@ const ImageColorizer = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
-  const { setErrorInfo } = useContext(ErrorContext)
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
 
+  useEffect(() => {
+    setImgColorizerInfo((prev: any) => ({
+      ...prev,
+      type: "",
+      id: "",
+      src: "",
+      original: "",
+      resultImages: [],
+      isError: false,
+    }))
+    setImgColorizerPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      resultOption: false,
+      tryFilters: false,
+    }))
+  }, [])
+
   const generateImgColorizer = () => {
+    setImgColorizerInfo((prev: any) => ({ ...prev, isError: false }))
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
       setShowLoginPopup(true)
       setAutoCallAPI(true)
     } else {
       setImageLoading(true)
       setAutoCallAPI(false)
-      setCurrentActiveImg(-1)
       setImgColorizerPanelInfo((prev: any) => ({
         ...prev,
         resultOption: true,
@@ -62,19 +82,7 @@ const ImageColorizer = () => {
         })
         .catch((error) => {
           setImageLoading(false)
-          setImgColorizerPanelInfo((prev: any) => ({ ...prev, resultOption: false }))
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Some error has occurred",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              generateImgColorizer()
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+          setImgColorizerInfo((prev: any) => ({ ...prev, isError: true }))
           console.error("Error:", error)
         })
     }
@@ -121,31 +129,36 @@ const ImageColorizer = () => {
   }
 
   const frame = useFrame()
-  const addImg = async (imageUrl: string, _idx: number) => {
-    if (currentActiveImg == -1) {
-      await getDimensions(imageUrl, (img: any) => {
-        let latest_ct = 0
-        setImagesCt((prev: any) => {
-          latest_ct = prev + 1
-          AddObjectFunc(
-            imageUrl,
-            editor,
-            img.width,
-            img.height,
-            frame,
-            (latest_ct = latest_ct),
-            null,
-            null,
-            setImgColorizerInfo
-          )
-          return prev + 1
+  const addImg = useCallback(
+    async (imageUrl: string, _idx: number) => {
+      if (currentActiveImg == -1) {
+        setCurrentActiveImg(_idx)
+
+        await getDimensions(imageUrl, (img: any) => {
+          let latest_ct = 0
+          setImagesCt((prev: any) => {
+            latest_ct = prev + 1
+            AddObjectFunc(
+              imageUrl,
+              editor,
+              img.width,
+              img.height,
+              frame,
+              (latest_ct = latest_ct),
+              null,
+              null,
+              setImgColorizerInfo
+            )
+            return prev + 1
+          })
         })
-      })
-    } else {
-      UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
-    }
-    setCurrentActiveImg(_idx)
-  }
+      } else {
+        setCurrentActiveImg(_idx)
+        UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
+      }
+    },
+    [currentActiveImg]
+  )
 
   return (
     <Block className="d-flex flex-1 flex-column">
@@ -240,10 +253,27 @@ const ImageColorizer = () => {
 
           <div className={classes.resultImages}>
             <div className={clsx(classes.eachImg, currentActiveImg === 1 && classes.currentActiveImg)}>
-              <img src={ImgColorizerInfo.src} alt="orginal-img" />
+              <img
+                src={ImgColorizerInfo.src}
+                alt="orginal-img"
+                onClick={() => {
+                  if (imageLoading) return
+                  if (currentActiveImg === 1) return
+                  addImg(ImgColorizerInfo.src, 1)
+                }}
+              />
 
               <div className={classes.resultLabel}>{"Original"}</div>
             </div>
+            {ImgColorizerInfo.isError && !imageLoading && (
+              <div className={classes.skeletonBox}>
+                {
+                  <div className={classes.retry}>
+                    <Icons.RetryImg />
+                  </div>
+                }{" "}
+              </div>
+            )}
             {!imageLoading &&
               ImgColorizerInfo?.resultImages?.map((each, _idx) => {
                 return (
@@ -255,6 +285,7 @@ const ImageColorizer = () => {
                       src={each}
                       alt="result-img"
                       onClick={() => {
+                        if (currentActiveImg === _idx) return
                         addImg(each, _idx)
                       }}
                     />
@@ -263,6 +294,7 @@ const ImageColorizer = () => {
                   </div>
                 )
               })}
+
             {imageLoading &&
               Array.from(Array(1).keys()).map((each, idx) => (
                 <div className={classes.skeletonBox} key={idx}>
@@ -270,6 +302,27 @@ const ImageColorizer = () => {
                 </div>
               ))}
           </div>
+          {ImgColorizerInfo.isError && !imageLoading && (
+            <>
+              <div style={{ position: "relative", margin: "12px 0px 0px -7px" }}>
+                <FileError
+                  ErrorMsg={"Oops! unable to generate your image please try again."}
+                  displayError={ImgColorizerInfo.isError}
+                />
+              </div>
+              <BaseButton
+                disabled={imageLoading ? true : false}
+                handleClick={() => {
+                  generateImgColorizer()
+                }}
+                width="319px"
+                margin="16px 0 0 20px"
+                fontSize="16px"
+              >
+                Retry
+              </BaseButton>
+            </>
+          )}
         </div>
       )}
     </Block>

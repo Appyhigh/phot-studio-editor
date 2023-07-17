@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useEditor } from "@layerhub-io/react"
@@ -15,6 +15,7 @@ import { nanoid } from "nanoid"
 import MainImageContext from "~/contexts/MainImageContext"
 import { REMOVE_BACKGROUND } from "~/constants/contants"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
+import useAppContext from "~/hooks/useAppContext"
 
 const BgRemover = () => {
   const editor = useEditor()
@@ -23,7 +24,7 @@ const BgRemover = () => {
     type: -1,
     id: 0,
   })
-
+  const { activePanel } = useAppContext()
   const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
@@ -32,6 +33,17 @@ const BgRemover = () => {
   const [imageLoading, setImageLoading] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
 
+  useEffect(() => {
+    setMainImgInfo((prev: any) => ({ ...prev, src: "", url: "", preview: "", metadata: {}, id: "", type: "" }))
+    setPanelInfo((prev: any) => ({
+      ...prev,
+      uploadSection: true,
+      trySampleImg: true,
+      uploadPreview: false,
+      bgOptions: false,
+      bgRemoverBtnActive: false,
+    }))
+  }, [])
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -94,7 +106,7 @@ const BgRemover = () => {
           />
         </>
       )}
-  
+
       {panelInfo.trySampleImg && (
         <>
           <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
@@ -125,7 +137,7 @@ const BgRemover = () => {
       {panelInfo.bgOptions && (
         <>
           {" "}
-          <Block className="mt-2">
+          <Block className={clsx(activePanel === "BgRemover" ? "mt-1" : "mt-2")}>
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
               <Block
                 className={clsx(

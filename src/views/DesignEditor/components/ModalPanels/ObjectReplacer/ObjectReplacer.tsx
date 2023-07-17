@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
-import React, { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REMOVER, OBJECT_REPLACER } from "~/constants/contants"
+import { useContext, useEffect, useState } from "react"
+import { MODAL_IMG_UPLOAD, OBJECT_REPLACER } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
@@ -11,7 +11,6 @@ import Accordian from "~/components/UI/Accordian/Accordian"
 import SliderBar from "~/components/UI/Common/SliderBar"
 import useFabricEditor from "../../../../../../src/hooks/useFabricEditor"
 import LoaderSpinner from "../../../../../views/Public/images/loader-spinner.svg"
-import { sampleImg } from "~/constants/sample-images"
 import { setBgImgFabricCanvas } from "~/views/DesignEditor/utils/functions/setBgImgFabricCanvas"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
@@ -19,14 +18,18 @@ import { createMaskImage } from "~/views/DesignEditor/utils/functions/createMask
 import { getCookie } from "~/utils/common"
 import { objectRemoverController } from "~/utils/objectRemoverController"
 import { COOKIE_KEYS } from "~/utils/enum"
-import LoginPopup from "../../LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
 import FileError from "~/components/UI/Common/FileError/FileError"
 import useAppContext from "~/hooks/useAppContext"
 import { setBgTransparent } from "~/views/DesignEditor/utils/functions/setBgTransparent"
-import Scrollbars from "@layerhub-io/react-custom-scrollbar"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { PollingInterval } from "~/contexts/PollingInterval"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Navigation } from "swiper"
+import "swiper/css"
+import "swiper/css/navigation"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const { fabricEditor, setFabricEditor } = useFabricEditor()
@@ -43,7 +46,10 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   const [imgGenerationCt, setImgGenerationCt] = useState(1)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
   const [callAPI, setCallAPI] = useState(false)
-  const [activeResultId, setActiveResultId] = useState(0)
+  const { sampleImages } = useContext(SampleImagesContext)
+  const { setCanvasLoader } = useContext(CanvasLoaderContext)
+
+  const [activeResultId, setActiveResultId] = useState(-1)
 
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
   const [isError, setIsError] = useState({
@@ -52,9 +58,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   })
 
   const setDimensionOfSampleImg = async (img: any) => {
-    await getDimensions(img, (imgSrc: any) => {
-      setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
-    })
+    if (img.width && img.height) {
+      setObjectReplacerInfo((prev: any) => ({ ...prev, width: img.width, height: img.height }))
+    } else {
+      await getDimensions(img, (imgSrc: any) => {
+        setObjectReplacerInfo((prev: any) => ({ ...prev, width: imgSrc.width, height: imgSrc.height }))
+      })
+    }
   }
 
   const { user, showLoginPopUp } = authState
@@ -66,7 +76,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
   })
 
   const [stepsComplete, setStepsComplete] = useState({
-    firstStep: true,
+    firstStep: false,
     secondStep: false,
     thirdStep: false,
     fourthStep: false,
@@ -149,6 +159,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
+      setCanvasLoader(true)
       setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
       objectRemoverController(
         objectReplacerInfo.preview,
@@ -158,14 +169,23 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         pollingIntervalInfo.objectReplacer
       )
         .then((response) => {
-          console.log("response0", response)
           setCallAPI(false)
-          setObjectReplacerInfo((prev: any) => ({ ...prev, result: response, activeResult: 0 }))
-          setResultLoading(false)
-          handleBgImg(response[0])
-          setActiveResultId(0)
-
-          setIsError((prev) => ({ ...prev, error: false }))
+          if (response.output_urls.length === 0) {
+            setIsError((prev) => ({
+              ...prev,
+              error: true,
+              errorMsg: "Oops! unable to generate your image please try again.",
+            }))
+            setResultLoading(false)
+          } else {
+            console.log("response0", response)
+            setObjectReplacerInfo((prev: any) => ({ ...prev, result: response.output_urls, activeResult: 0 }))
+            setResultLoading(false)
+            handleBgImg(response.output_urls[0])
+            setActiveResultId(0)
+            setCanvasLoader(false)
+            setIsError((prev) => ({ ...prev, error: false }))
+          }
         })
 
         .catch((error) => {
@@ -175,6 +195,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             errorMsg: "Oops! unable to generate your image please try again.",
           }))
           setResultLoading(false)
+          setCanvasLoader(false)
           console.error("Error:", error)
         })
     }
@@ -199,10 +220,16 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
   useEffect(() => {
     return () => {
+      setCanvasLoader(false)
       setObjectReplacerInfo((prev: any) => ({ ...prev, src: "", preview: "", mask_img: "", result: [] }))
     }
   }, [])
 
+  useEffect(() => {
+    if (objectReplacerInfo.src === "") {
+      setSelectedSampleImg(-1)
+    }
+  }, [objectReplacerInfo.src])
   const upload = () => (
     <>
       {objectReplacerInfo.preview ? (
@@ -236,7 +263,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 setIsError((prev) => ({ ...prev, error: false, errorMsg: "" }))
                 setStepsComplete((prev) => ({
                   ...prev,
-                  firstStep: true,
+                  firstStep: false,
                   secondStep: false,
                   thirdStep: false,
                   fourthStep: false,
@@ -265,32 +292,39 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           />
         </div>
       )}
-      <div style={{ marginLeft: "8px" }} className={classes.sampleImagesLabel}>
-        or try one of these for free
-      </div>
-      <div style={{ marginLeft: "8px" }} className={classes.sampleImages}>
-        {sampleImg.map((image, index) => (
-          <div
-            key={index}
-            className={clsx(classes.sampleImage, "flex-center")}
-            style={{ backgroundImage: `url(${image})` }}
-            onClick={() => {
-              setSelectedSampleImg(index)
-              setDimensionOfSampleImg(image)
-              setObjectReplacerInfo((prev: any) => ({
-                ...prev,
-                src: image,
-                preview: image,
-                file_name: "pexels-photo-3493777.jpeg",
-              }))
-            }}
-          >
-            {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+
+      {!objectReplacerInfo.src && (
+        <>
+          <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+          <div className={classes.sampleImages}>
+            <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              {sampleImages.objectReplacer.map((image: any, index) => (
+                <SwiperSlide key={index} style={{ width: "auto", alignItems: "center" }}>
+                  <div
+                    key={index}
+                    className={clsx(classes.sampleImage, "flex-center")}
+                    style={{ backgroundImage: `url(${image.originalImage})` }}
+                    onClick={() => {
+                      setSelectedSampleImg(index)
+                      setDimensionOfSampleImg(image.originalImageDimensions)
+                      setObjectReplacerInfo((prev: any) => ({
+                        ...prev,
+                        src: image.originalImage,
+                        preview: image.originalImage,
+                        file_name: image.file_name,
+                      }))
+                    }}
+                  >
+                    {selectedSampleImg == index && <Icons.Selection size={"24"} />}
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
-        ))}
-      </div>
+        </>
+      )}
       <BaseButton
-        margin="0 0px 0 8px"
+        margin="0px"
         borderRadius="10px"
         title={"Continue"}
         disabled={objectReplacerInfo.src ? false : true}
@@ -524,61 +558,73 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     <>
       {" "}
       <div className={classes.resultImages}>
-        <div className={clsx("pointer p-relative", classes.eachImg)}>
-          {<img src={objectReplacerInfo.src} onClick={() => {}} />}
+        <div
+          className={clsx(
+            "pointer p-relative",
+            classes.eachImg,
+            objectReplacerInfo.result.length === activeResultId && classes.currentActiveImg
+          )}
+        >
+          {
+            <img
+              src={objectReplacerInfo.src}
+              onClick={() => {
+                if (activeResultId === objectReplacerInfo.result.length) return
+                setActiveResultId(objectReplacerInfo.result.length)
+                setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: objectReplacerInfo.result.length }))
+                handleBgImg(objectReplacerInfo.src)
+              }}
+            />
+          }
 
           <div className={classes.resultLabel}>{"Original"}</div>
         </div>
 
-        {resultLoading ? (
-          Array.from(Array(4).keys()).map((each, _idx) => {
-            return (
-              <div key={_idx} className={classes.skeletonBox}>
-                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-              </div>
-            )
-          })
-        ) : isError.error ? (
-          <div
-            className={classes.skeletonBox}
-            // onClick={() => {
-            //   setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-            //   getOutputImg()
-            // }}
-          >
-            {
-              <div className={classes.retry}>
-                <Icons.RetryImg />
-              </div>
-            }{" "}
-          </div>
-        ) : (
-          objectReplacerInfo.result.map((each, _idx) => {
-            return (
-              <div
-                key={_idx}
-                className={clsx(
-                  "pointer p-relative",
-                  classes.eachImg,
-                  activeResultId === _idx && classes.currentActiveImg
-                )}
-              >
-                {
-                  <img
-                    src={each}
-                    onClick={() => {
-                      if (activeResultId != _idx) {
-                        setActiveResultId(_idx)
-                        setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
-                        handleBgImg(each)
-                      }
-                    }}
-                  />
-                }
-              </div>
-            )
-          })
-        )}
+        {resultLoading
+          ? Array.from(Array(4).keys()).map((each, _idx) => {
+              return (
+                <div key={_idx} className={classes.skeletonBox}>
+                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              )
+            })
+          : isError.error
+          ? Array.from(Array(4).keys()).map((each, _idx) => {
+              return (
+                <div className={classes.skeletonBox}>
+                  {
+                    <div className={classes.retry}>
+                      <Icons.RetryImg />
+                    </div>
+                  }{" "}
+                </div>
+              )
+            })
+          : objectReplacerInfo.result.map((each, _idx) => {
+              return (
+                <div
+                  key={_idx}
+                  className={clsx(
+                    "pointer p-relative",
+                    classes.eachImg,
+                    activeResultId === _idx && classes.currentActiveImg
+                  )}
+                >
+                  {
+                    <img
+                      src={each}
+                      onClick={() => {
+                        if (activeResultId != _idx) {
+                          setActiveResultId(_idx)
+                          setObjectReplacerInfo((prev: any) => ({ ...prev, activeResult: _idx }))
+                          handleBgImg(each)
+                        }
+                      }}
+                    />
+                  }
+                </div>
+              )
+            })}
       </div>
       {stepsComplete.firstStep &&
         stepsComplete.secondStep &&
@@ -600,25 +646,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               setCallAPI(false)
               setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false }))
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false, fourthStep: false }))
-            }}
-          />
-        )}
-      {stepsComplete.firstStep &&
-        stepsComplete.secondStep &&
-        stepsComplete.thirdStep &&
-        !resultLoading &&
-        isError.error && (
-          <BaseButton
-            borderRadius="10px"
-            title={"Retry"}
-            height="38px"
-            margin={"20px 4px 4px 0px"}
-            width="320px"
-            fontSize="16px"
-            fontWeight="500"
-            handleClick={() => {
-              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
-              getOutputImg()
             }}
           />
         )}
@@ -650,6 +677,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
+            
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
@@ -725,6 +753,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           }
         }}
       /> */}
+
         <Accordian
           isOpen={steps.fourthStep}
           isComplete={stepsComplete.fourthStep}
@@ -748,9 +777,23 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           children={outputResult()}
         />
         {isError.error && (
-          <div style={{ position: "relative", margin: "0px 0px 0px -7px" }}>
+          <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
+        )}
+        {isError.error && (
+          <BaseButton
+            disabled={imageLoading ? true : false}
+            handleClick={() => {
+              setIsError((prev: any) => ({ ...prev, error: false, errorMsg: "" }))
+              getOutputImg()
+            }}
+            width="319px"
+            margin="12px 0 0 20px"
+            fontSize="16px"
+          >
+            Retry
+          </BaseButton>
         )}
       </div>
     </div>

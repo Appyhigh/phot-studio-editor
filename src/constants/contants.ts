@@ -48,4 +48,7 @@ export const SAMPLE_IMAGES: any = {
   imageUpscaler: "UPSCALER",
   imageColorizer: "STUDIO_COLORISER",
   photoEditor: "STUDIO_PHOTO_EDITOR",
+  objectRemover:"STUDIO_OBJECT_REMOVER",
+  objectReplacer:"STUDIO_OBJECT_REPLACER",
+  productPhotoshoot:"STUDIO_PHOTOSHOOT"
 }

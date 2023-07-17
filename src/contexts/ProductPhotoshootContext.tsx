@@ -12,6 +12,7 @@ const ProductPhotoshootContext = createContext({
     prevObjects: [],
     addPreview: "",
     removeBg: false,
+    isError:false
   },
   setProductPhotoshootInfo: (item: any) => {
     console.log("Dummy Intializer for ", item)

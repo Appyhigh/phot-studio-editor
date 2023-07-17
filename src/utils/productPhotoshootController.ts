@@ -2,10 +2,10 @@ import axios from "axios"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 
-const productPhotoshootController = async (input_image: string, prompt: string) => {
+const productPhotoshootController = async (input_image: string, prompt: string, pollingInterval: number) => {
   try {
-    const url = "https://devapi.phot.ai/app/api/v3/user_activity/background-replacer"
-    
+    console.log("poling", pollingInterval)
+    const url = "https://devapi.phot.ai/app/api/v3/user_activity/background-generator"
     const regex = /\/([^/]+)$/
     const match = regex.exec(input_image)
     let value = match ? match[1] : null
@@ -34,7 +34,7 @@ const productPhotoshootController = async (input_image: string, prompt: string) 
     let status = response.data.order_status_code
 
     while (status == 102 || status == 103) {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, pollingInterval))
       response = await axios.get(order_url, {
         headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },
         params: {

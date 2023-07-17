@@ -21,6 +21,7 @@ export const AddObjectFunc = (
         scale = frame.height / height
       }
     }
+  
   }
   if (editor) {
     const options = {
@@ -31,13 +32,15 @@ export const AddObjectFunc = (
       metadata: { generationDate: new Date().getTime(), originalLayerPreview: url },
       scaleX: scale,
       scaleY: scale,
-      name: latest_ct.toString(),
-    }
+      name: latest_ct.toString(), 
+    } 
     editor.objects.add(options).then(() => {
       setRejectedFileUpload ? setRejectedFileUpload(false) : null
 
       setAddImgInfo && setAddImgInfo((prev: any) => ({ ...prev, showPreview: false, url: "" }))
       setStateInfo && setStateInfo((prev: any) => ({ ...prev, id: id }))
-    })
+    }).then(()=>{
+      editor.objects.alignCenter()
+    }) 
   }
 }

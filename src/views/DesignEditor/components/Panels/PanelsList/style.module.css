@@ -2,6 +2,7 @@
   width: 100px !important;
   height: 100%;
   overflow-x: visible;
+  background-color: white;
 }
 
 .panelListItem {
@@ -57,6 +58,6 @@
   position: absolute;
   z-index: 1000;
   bottom: -20px;
-  left: 42px;
+  left: 63px;
   transform: translateX(42px);
 }

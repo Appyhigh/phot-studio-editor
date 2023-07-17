@@ -7,6 +7,8 @@ const ImageUpScalerContext = React.createContext({
     scaler: 2,
     result:[],
     showclearTooltip: false,
+    isError:false,
+    
   },
   imgScalerPanelInfo: {
     uploadSection: true,

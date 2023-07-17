@@ -86,6 +86,7 @@
 
 .eachImg {
   margin-right: 8px;
+  cursor: pointer;
 }
 
 .eachImg img {
@@ -93,16 +94,18 @@
   height: 132px;
   border-radius: 10px;
   object-fit: contain;
+  margin-right: 0px;
 }
 
 .currentActiveImg {
   width: 132px;
   height: 132px;
-  border-radius: 10px;
   background: linear-gradient(45deg, #7bc0ff, #ac31ff);
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
+  border: 1.5px solid var(--secondary, #6729f3);
 }
 .currentActiveImg img {
   width: 128px;
@@ -126,6 +129,7 @@
 }
 
 .discardBtn {
+  width: 30px;
   bottom: 12rem;
   left: 18.25rem;
   z-index: 10;
@@ -136,9 +140,7 @@
   font-family: Rubik;
 }
 .sampleImages {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+
   margin: 1rem 0rem;
 }
 .sampleImage {

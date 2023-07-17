@@ -63,6 +63,7 @@
 }
 .eachImg {
   position: relative;
+  cursor: pointer;
 }
 
 .eachImg img {

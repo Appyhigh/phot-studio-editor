@@ -85,6 +85,7 @@
   border-radius: 10px;
   object-fit: contain;
   margin-right: 8px;
+  cursor: pointer;
 }
 
 .currentActiveImg {
@@ -118,6 +119,7 @@
 }
 
 .discardBtn {
+  width: 30px;
   bottom: 12rem;
   left: 18.25rem;
   z-index: 10;

@@ -47,14 +47,14 @@ function useCoreHandler() {
                 }
               }
             }
-            img.set({ type: "image", scaleX: scale, scaleY: scale, ...imageOptions })
+            img.set({ type: "image", scaleX: scale-0.01, scaleY: scale, ...imageOptions })
             // Add the image object to the canvas
             //@ts-ignore
             canvas.add(img)
             canvas.setActiveObject(img)
             imageOptions.left ?? img.center()
 
-            img.clipPath = workarea
+            // img.clipPath = workarea
             //@ts-ignore
             canvas.renderAll()
             setFabricEditor({ ...fabricEditor, canvas: canvas })
