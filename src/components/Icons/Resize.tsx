@@ -6,7 +6,7 @@ function Resize({ size = 15 }: { size?: number }) {
         d="M6.76621 2L8.23288 2M12.6329 6.76667L12.6329 8.23333M6.76621 13L8.23288 13M2.36621 6.76667V8.23333"
         stroke="white"
         stroke-width="2.5"
-        stroke-linecap="round"
+        strokeLinecap="round"
       />
     </svg>
   )

@@ -17,7 +17,6 @@ import { REMOVE_BACKGROUND } from "~/constants/contants"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import useAppContext from "~/hooks/useAppContext"
 
-
 const BgRemover = () => {
   const editor = useEditor()
   const [backgroundChoice, setBackgroundChoice] = useState(0)
@@ -107,6 +106,7 @@ const BgRemover = () => {
           />
         </>
       )}
+
       {panelInfo.trySampleImg && (
         <>
           <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
@@ -137,7 +137,7 @@ const BgRemover = () => {
       {panelInfo.bgOptions && (
         <>
           {" "}
-          <Block className={clsx(activePanel=== "BgRemover" ?"mt-1": "mt-2")}>
+          <Block className={clsx(activePanel === "BgRemover" ? "mt-1" : "mt-2")}>
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
               <Block
                 className={clsx(

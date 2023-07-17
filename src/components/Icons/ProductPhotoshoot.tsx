@@ -3,8 +3,8 @@ function ProductPhotoshoot({ size, color }: { size: any; color: any }) {
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g id="Frame 1073711804">
         <g id="Group 1000005659">
-          <path id="Vector 31" d="M3.5 9V22.5L6 25.5" stroke="#9BA6B0" stroke-linecap="round" />
-          <path id="Vector 32" d="M3.5 9V22.5L1 25.5" stroke="#9BA6B0" stroke-linecap="round" />
+          <path id="Vector 31" d="M3.5 9V22.5L6 25.5" stroke="#9BA6B0" strokeLinecap="round" />
+          <path id="Vector 32" d="M3.5 9V22.5L1 25.5" stroke="#9BA6B0" strokeLinecap="round" />
           <g id="Group 1000005661">
             <path id="Vector 30" d="M12 2.36914L3.90476 6.17866L2 9.512L5.80952 17.131L12 2.36914Z" fill={color} />
             <circle id="Ellipse 1788" cx="3.42857" cy="7.98814" r="1.42857" fill={color} />
