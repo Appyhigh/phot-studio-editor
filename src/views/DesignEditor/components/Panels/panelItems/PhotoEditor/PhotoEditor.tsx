@@ -309,6 +309,7 @@ const PhotoEditor = () => {
             onClick={() => {
               setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
               setPhotoEditorInfo((prev: any) => ({ ...prev, id: "", result: [], showclearTooltip: true }))
+              setCurrentActiveImg(-1)
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}

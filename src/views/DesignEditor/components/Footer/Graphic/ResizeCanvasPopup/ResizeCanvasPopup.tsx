@@ -20,6 +20,11 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
 
   const { fabricEditor, setFabricEditor } = useFabricEditor()
 
+
+  useEffect(()=>{
+  console.log(fabricEditor)
+  },[fabricEditor])
+
   const { canvas, objects }: any = fabricEditor
 
   const [selectedFrame, setSelectedFrame] = useState<any>({
@@ -52,6 +57,8 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
           scale = canvasHeight / DesiredHeight
         }
       }
+
+      console.log(scale)
 
       setFabricEditor((prev) => ({ ...prev, productPhotoShootScale: scale }))
 

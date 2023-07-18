@@ -244,6 +244,7 @@ const ImageColorizer = () => {
                 uploadSection: true,
                 uploadPreview: false,
               }))
+              setCurrentActiveImg(-1)
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}

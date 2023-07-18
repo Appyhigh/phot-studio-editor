@@ -333,6 +333,7 @@ const ImagineAI = () => {
               onClick={() => {
                 setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true }))
                 setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
+                setCurrentActiveImg(-1);
               }}
               $style={{ cursor: "pointer", display: "flex" }}
               className={classes.chevronRightIcon}

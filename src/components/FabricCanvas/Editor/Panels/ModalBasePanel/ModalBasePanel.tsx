@@ -43,6 +43,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
         top: 0,
         format: "png",
       })
+      console.log( canvas.width,canvas.height, canvas.width / fabricEditor.productPhotoShootScale, canvas.height / fabricEditor.productPhotoShootScale)
       return dataURL
     }
     return undefined

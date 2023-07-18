@@ -385,6 +385,7 @@ const ImageUpscaler = () => {
             onClick={() => {
               setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
               setImgScalerInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
+              setCurrentActiveImg(-1)
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
