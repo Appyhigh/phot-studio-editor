@@ -47,7 +47,7 @@ function useCoreHandler() {
                 }
               }
             }
-            img.set({ type: "image", scaleX: scale-0.01, scaleY: scale, ...imageOptions })
+            img.set({ type: "image", scaleX: scale - 0.01, scaleY: scale, ...imageOptions })
             // Add the image object to the canvas
             //@ts-ignore
             canvas.add(img)

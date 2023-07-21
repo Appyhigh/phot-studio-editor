@@ -1,7 +1,7 @@
 import { Block } from "baseui/block"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { fixedSizeFrameTypes } from "~/constants/editor"
 import CommonInput from "~/components/UI/Common/Input"
 import ResizeFrameCanvas from "../ResizeCanvasTypes"
@@ -11,6 +11,7 @@ import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import useFabricEditor from "src/hooks/useFabricEditor"
+import FabricCanvasContext from "~/contexts/FabricCanvasContext"
 
 const ResizeCanvasPopup = ({ show, type }: any) => {
   const [desiredFrame, setDesiredFrame] = useState<any>({
@@ -37,7 +38,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
 
   const { currentDesign, setCurrentDesign } = useDesignEditorContext()
   const editor = useEditor()
-
+  const {fabricCanvas,setFabricCanvas}=useContext(FabricCanvasContext)
   const frame = useFrame()
   const applyResize = () => {
     if (type === "ModalCanvas") {
@@ -57,10 +58,10 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
           scale = canvasHeight / DesiredHeight
         }
       }
-
+     
       console.log(scale)
-
-      setFabricEditor((prev) => ({ ...prev, productPhotoShootScale: scale }))
+      setFabricCanvas((prev:any)=>({...prev,width:DesiredWidth,height:DesiredHeight,scale:scale}))
+     
 
       canvas.setDimensions({
         width: DesiredWidth * scale,

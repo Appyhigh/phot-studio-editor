@@ -17,6 +17,7 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import { useEditor, useFrame } from "@layerhub-io/react"
+import FabricCanvasContext from "~/contexts/FabricCanvasContext"
 
 const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => {
   const [showAddPopup, setShowAddPopup] = useState(false)
@@ -24,6 +25,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const { objectRemoverInfo, setObjectRemoverInfo } = useContext(ObjectRemoverContext)
   const { objectReplacerInfo } = useContext(ObjectReplacerContext)
+  const { fabricCanvas, setFabricCanvas } = useContext(FabricCanvasContext)
 
   const { activePanel } = useAppContext()
   const [showPreview, setShowPreview] = useState(false)
@@ -37,13 +39,13 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
   const getCurrentCanvasBase64Image = () => {
     if (canvas) {
       const dataURL = canvas.toDataURL({
-        width: canvas.width / fabricEditor.productPhotoShootScale,
-        height: canvas.height / fabricEditor.productPhotoShootScale,
+        width: canvas.width,
+        height: canvas.height,
         left: 0,
         top: 0,
         format: "png",
       })
-      console.log( canvas.width,canvas.height, canvas.width / fabricEditor.productPhotoShootScale, canvas.height / fabricEditor.productPhotoShootScale)
+
       return dataURL
     }
     return undefined
@@ -109,10 +111,28 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
           latest_ct = prev + 1
           return prev + 1
         })
-
+        canvas.getObjects().map((each: any) => {
+          console.log(1 / fabricCanvas.scale)
+          each.scale(1 / fabricCanvas.scale)
+        })
+        canvas.setDimension({
+          width: fabricCanvas.width,
+          height: fabricCanvas.height,
+        })
         console.log(getCurrentCanvasBase64Image())
-
-        AddObjectFunc(productPhotoshootInfo.finalImage, editor, imgSrc.width, imgSrc.height, frame, latest_ct)
+        AddObjectFunc(
+          productPhotoshootInfo.finalImage,
+          editor,
+          fabricCanvas.width,
+          fabricCanvas.height,
+          frame,
+          latest_ct,
+          null,
+          null,
+          null,
+          true,
+          fabricCanvas.scale
+        )
         handleClose()
       })
     }
