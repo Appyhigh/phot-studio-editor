@@ -14,6 +14,7 @@ export const AddObjectFunc = (
   let scale = 1
   const id = nanoid()
   if (width && height && frame) {
+    
     if (width > frame.width || height > frame.height) {
       if (width / frame.width > height / frame.height) {
         scale = frame.width / width
@@ -23,6 +24,7 @@ export const AddObjectFunc = (
     }
   
   }
+
   if (editor) {
     const options = {
       type: "StaticImage",

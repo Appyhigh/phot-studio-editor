@@ -7,7 +7,7 @@ import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import React, { useContext, useEffect, useRef, useState } from "react"
 import ImageUpScalerContext from "~/contexts/ImageUpScalerContext"
-import { useEditor, useFrame } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
@@ -72,6 +72,16 @@ const ImageUpscaler = () => {
       resultSectionVisible: false,
     }))
   }, [])
+
+  const activeObject = useActiveObject()
+  useEffect(() => {
+    if (editor) {
+      let resultImg = editor?.objects?.findById(imgScalerInfo.id)
+      if (resultImg[0] === null) {
+        setCurrentActiveImg(-1)
+      }
+    }
+  }, [activeObject])
 
   const addObject = React.useCallback(
     (url: string) => {
@@ -199,7 +209,11 @@ const ImageUpscaler = () => {
   const frame = useFrame()
 
   const addImg = async (imageUrl: string, _idx: number) => {
-    if (currentActiveImg == -1) {
+    const resultId = imgScalerInfo.id
+    let resultImg = editor?.objects?.findById(resultId)
+
+    if (currentActiveImg == -1 || resultImg[0]==null) {
+      setCurrentActiveImg(_idx)
       await getDimensions(imageUrl, (img: any) => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
@@ -218,10 +232,12 @@ const ImageUpscaler = () => {
           return prev + 1
         })
       })
-    } else {
+    } 
+    else if(currentActiveImg===_idx) return ;
+    else {
+      setCurrentActiveImg(_idx)
       UpdateObjectFunc(imageUrl, editor, frame, imgScalerInfo)
     }
-    setCurrentActiveImg(_idx)
   }
 
   const discardHandler = () => {
@@ -243,7 +259,7 @@ const ImageUpscaler = () => {
   }
 
   return (
-    <div className="d-flex flex-1 flex-column">
+    <div className="d-flex flex-1 flex-column pb-2">
       {!imgScalerPanelInfo.resultSectionVisible ? (
         <>
           {imgScalerInfo.src ? (
@@ -385,6 +401,7 @@ const ImageUpscaler = () => {
             onClick={() => {
               setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
               setImgScalerInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
+              setCurrentActiveImg(-1)
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
@@ -398,8 +415,7 @@ const ImageUpscaler = () => {
                 src={imgScalerInfo.src}
                 alt="result-img"
                 onClick={() => {
-                  if (imageLoading) return ;
-                  if (currentActiveImg === 2) return
+                  if (imageLoading) return
                   addImg(imgScalerInfo.src, 2)
                 }}
               />
@@ -416,7 +432,6 @@ const ImageUpscaler = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
-                      if (currentActiveImg === _idx) return
                       addImg(each, _idx)
                     }}
                   />

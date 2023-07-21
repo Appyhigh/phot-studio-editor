@@ -8,7 +8,7 @@ import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import ToggleBtn from "~/components/UI/ToggleBtn/ToggleBtn"
 import Scrollable from "~/components/Scrollable"
 import AspectRatioSwiper from "~/components/UI/AspectRatioSwiper/AspectRatioSwiper"
-import { useEditor, useFrame } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import ImagesContext from "~/contexts/ImagesCountContext"
 import SliderInput from "~/components/UI/SliderInput/SliderInput"
@@ -96,6 +96,15 @@ const ImagineAI = () => {
       document.removeEventListener("mousedown", checkIfClickedOutside)
     }
   }, [textToArtInputInfo.showclearTooltip])
+  const activeObject = useActiveObject()
+  useEffect(() => {
+    if (editor) {
+      let resultImg = editor?.objects?.findById(textToArtInputInfo.id)
+      if (resultImg[0] === null) {
+        setCurrentActiveImg(-1)
+      }
+    }
+  }, [activeObject])
 
   const generateImage = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
@@ -115,8 +124,7 @@ const ImagineAI = () => {
         textToArtInputInfo.uploaded_img
       )
         .then((responseData) => {
-          addImgToCanvas(responseData["data"]["image"][0])
-          setCurrentActiveImg(0)
+          addImgToCanvas(responseData["data"]["image"][0], 0)
           // @ts-ignore
           setErrorInfo((prev) => ({ ...prev, showError: false }))
           setTextToArtPanelInfo((prev: any) => ({
@@ -136,8 +144,11 @@ const ImagineAI = () => {
 
   const frame = useFrame()
 
-  const addImgToCanvas = async (imageUrl: string) => {
-    if (currentActiveImg == -1) {
+  const addImgToCanvas = async (imageUrl: string, idx: number) => {
+    const resultId = textToArtInputInfo.id
+    let resultImg = editor?.objects?.findById(resultId)
+    if (currentActiveImg == -1 || resultImg[0] === null) {
+      setCurrentActiveImg(idx)
       await getDimensions(imageUrl, (img: any) => {
         let latest_ct = 0
         setImagesCt((prev: any) => {
@@ -156,7 +167,9 @@ const ImagineAI = () => {
           return prev + 1
         })
       })
-    } else {
+    } else if (currentActiveImg === idx) return
+    else {
+      setCurrentActiveImg(idx)
       UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
     }
   }
@@ -330,6 +343,7 @@ const ImagineAI = () => {
               onClick={() => {
                 setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true }))
                 setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
+                setCurrentActiveImg(-1)
               }}
               $style={{ cursor: "pointer", display: "flex" }}
               className={classes.chevronRightIcon}
@@ -352,9 +366,7 @@ const ImagineAI = () => {
                     <img
                       src={each}
                       onClick={() => {
-                        if (currentActiveImg === idx) return
-                        setCurrentActiveImg(idx)
-                        addImgToCanvas(each)
+                        addImgToCanvas(each, idx)
                       }}
                     />
                   }

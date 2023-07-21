@@ -6,7 +6,7 @@ import Scrollable from "~/components/Scrollable"
 import useAppContext from "~/hooks/useAppContext"
 import ImageColorizerContext from "~/contexts/ImageColorizerContext"
 import clsx from "clsx"
-import { useEditor, useFrame } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import { useCallback, useContext, useEffect, useState } from "react"
 import { nanoid } from "nanoid"
 import Icons from "~/components/Icons"
@@ -116,6 +116,16 @@ const ImageColorizer = () => {
     [editor]
   )
 
+  const activeObject = useActiveObject()
+  useEffect(() => {
+    if (editor) {
+      let resultImg = editor?.objects?.findById(ImgColorizerInfo.id)
+      if (resultImg[0] === null) {
+        setCurrentActiveImg(-1)
+      }
+    }
+  }, [activeObject])
+
   const discardSampleImageHandler = () => {
     setImgColorizerInfo((prev: any) => ({ ...prev, src: "" }))
     setImgColorizerPanelInfo((prev: any) => ({
@@ -129,39 +139,40 @@ const ImageColorizer = () => {
   }
 
   const frame = useFrame()
-  const addImg = useCallback(
-    async (imageUrl: string, _idx: number) => {
-      if (currentActiveImg == -1) {
-        setCurrentActiveImg(_idx)
+  const addImg = async (imageUrl: string, _idx: number) => {
+    const resultId = ImgColorizerInfo.id
+    let resultImg = editor?.objects?.findById(resultId)
 
-        await getDimensions(imageUrl, (img: any) => {
-          let latest_ct = 0
-          setImagesCt((prev: any) => {
-            latest_ct = prev + 1
-            AddObjectFunc(
-              imageUrl,
-              editor,
-              img.width,
-              img.height,
-              frame,
-              (latest_ct = latest_ct),
-              null,
-              null,
-              setImgColorizerInfo
-            )
-            return prev + 1
-          })
+    if (currentActiveImg == -1 || resultImg[0] == null) {
+      setCurrentActiveImg(_idx)
+
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setImgColorizerInfo
+          )
+          return prev + 1
         })
-      } else {
-        setCurrentActiveImg(_idx)
-        UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
-      }
-    },
-    [currentActiveImg]
-  )
+      })
+    } else if (currentActiveImg === _idx) return
+    else {
+      setCurrentActiveImg(_idx)
+      UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
+    }
+  }
 
   return (
-    <Block className="d-flex flex-1 flex-column">
+    <Block className="d-flex flex-1 flex-column pb-2">
       {!ImgColorizerPanelInfo.resultOption && (
         <>
           {ImgColorizerInfo.src ? (
@@ -244,6 +255,7 @@ const ImageColorizer = () => {
                 uploadSection: true,
                 uploadPreview: false,
               }))
+              setCurrentActiveImg(-1)
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
@@ -258,7 +270,6 @@ const ImageColorizer = () => {
                 alt="orginal-img"
                 onClick={() => {
                   if (imageLoading) return
-                  if (currentActiveImg === 1) return
                   addImg(ImgColorizerInfo.src, 1)
                 }}
               />
@@ -285,7 +296,6 @@ const ImageColorizer = () => {
                       src={each}
                       alt="result-img"
                       onClick={() => {
-                        if (currentActiveImg === _idx) return
                         addImg(each, _idx)
                       }}
                     />

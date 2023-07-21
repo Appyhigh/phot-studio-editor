@@ -7,6 +7,8 @@ import clsx from "clsx"
 import PopupCloseIcon from "~/components/Icons/PopupCloseIcon"
 import GoogleIcon from "~/components/Icons/GoogleIcon"
 import { Modal } from "baseui/modal"
+import useAppContext from "~/hooks/useAppContext"
+import { ACTIVE_PANEL_TOOL_NAMES } from "~/constants/contants"
 
 interface LoginPopupProps {
   loginPopupCloseHandler: () => void
@@ -22,6 +24,9 @@ const LoginPopup = ({ loginPopupCloseHandler, isOpen }: LoginPopupProps) => {
       console.log("error occured", error)
     }
   }
+
+  const { activePanel } = useAppContext()
+
 
   return (
     <Modal
@@ -55,7 +60,7 @@ const LoginPopup = ({ loginPopupCloseHandler, isOpen }: LoginPopupProps) => {
           <Lottie animationData={loginLottieData} loop={true} />
         </div>
         <h3 className={classes.mainHeading}>Login to continue!</h3>
-        <p className={classes.text}>Please login with google, to use BG remover tool!</p>
+        <p className={classes.text}>Please login with google, to use {ACTIVE_PANEL_TOOL_NAMES[activePanel]} tool!</p>
         <div className={classes.loginBtnWrapper}>
           <button
             onClick={()=>{

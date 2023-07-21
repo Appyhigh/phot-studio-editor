@@ -99,7 +99,7 @@ export const BASE_ITEMS = [
   },
   {
     id: "objectreplacer",
-    icon: "ImagineAi",
+    icon: "ObjectReplacer",
     label: "Object Replacer",
     name: "ObjectReplacer",
   },

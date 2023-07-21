@@ -1,7 +1,7 @@
 import { Block } from "baseui/block"
 import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import { useEditor, useFrame } from "@layerhub-io/react"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { fixedSizeFrameTypes } from "~/constants/editor"
 import CommonInput from "~/components/UI/Common/Input"
 import ResizeFrameCanvas from "../ResizeCanvasTypes"
@@ -11,6 +11,7 @@ import { backgroundLayerType } from "~/constants/contants"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import useFabricEditor from "src/hooks/useFabricEditor"
+import FabricCanvasContext from "~/contexts/FabricCanvasContext"
 
 const ResizeCanvasPopup = ({ show, type }: any) => {
   const [desiredFrame, setDesiredFrame] = useState<any>({
@@ -18,7 +19,12 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
     height: "",
   })
 
-  const { fabricEditor } = useFabricEditor()
+  const { fabricEditor, setFabricEditor } = useFabricEditor()
+
+
+  useEffect(()=>{
+  console.log(fabricEditor)
+  },[fabricEditor])
 
   const { canvas, objects }: any = fabricEditor
 
@@ -32,26 +38,64 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
 
   const { currentDesign, setCurrentDesign } = useDesignEditorContext()
   const editor = useEditor()
-
+  const {fabricCanvas,setFabricCanvas}=useContext(FabricCanvasContext)
   const frame = useFrame()
   const applyResize = () => {
     if (type === "ModalCanvas") {
-      // const size = activeKey === "0" ? selectedFrame : desiredFrame
+      const size = activeKey === "0" ? selectedFrame : desiredFrame
 
-      // const containerWidth = 600
-      // const containerHeight = 440
+      console.log(parseInt(size.width), parseInt(size.height))
 
-      // const scaleX = 900/parseInt(size.width) 
-      // const scaleY = 600/parseInt(size.height) 
-      // const scale = Math.min(scaleX, scaleY)
-  
-      // canvas.setDimensions({
-      //   width: 900 * scale,
-      //   height: 600 * scale,
-      // })
-      // canvas.setWidth(900*scale);
-      // canvas.setHeight(600*scale);
+      let canvasWidth = 400
+      let canvasHeight = 400
+      let DesiredWidth = parseInt(size.width)
+      let DesiredHeight = parseInt(size.height)
+      let scale = 1
+      if (DesiredHeight >= canvasHeight || DesiredWidth >= canvasWidth) {
+        if (DesiredWidth / canvasWidth > DesiredHeight / canvasHeight) {
+          scale = canvasWidth / DesiredWidth
+        } else {
+          scale = canvasHeight / DesiredHeight
+        }
+      }
+     
+      console.log(scale)
+      setFabricCanvas((prev:any)=>({...prev,width:DesiredWidth,height:DesiredHeight,scale:scale}))
+     
 
+      canvas.setDimensions({
+        width: DesiredWidth * scale,
+        height: DesiredHeight * scale,
+      })
+
+      // if (parseInt(size.width) >= 1500 || parseInt(size.height) >= 1500) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.35,
+      //     height: parseInt(size.height) * 0.35,
+      //   })
+      // }
+      // else if (parseInt(size.width) >= 1000 || parseInt(size.height) >= 1000) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.45,
+      //     height: parseInt(size.height) * 0.45,
+      //   })
+      // }
+      // else if (parseInt(size.width) >= 800 || parseInt(size.height) >= 800) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.5,
+      //     height: parseInt(size.height) * 0.5,
+      //   })
+      // } else if (parseInt(size.width) >= 600 || parseInt(size.height) >= 600) {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width) * 0.7,
+      //     height: parseInt(size.height) * 0.7,
+      //   })
+      // } else {
+      //   canvas.setDimensions({
+      //     width: parseInt(size.width),
+      //     height: parseInt(size.height),
+      //   })
+      // }
     } else {
       const size = activeKey === "0" ? selectedFrame : desiredFrame
       if (editor) {

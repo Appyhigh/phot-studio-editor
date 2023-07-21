@@ -108,6 +108,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     try {
       setLoaderPopup(true)
       let response = await removeBackgroundController(
+      
         activeObject.metadata ? activeObject.metadata.originalLayerPreview : activeObject.src,
         async (image: string) => {
           if (activeObject?.id === mainImgInfo?.id) {

@@ -48,7 +48,18 @@ export const SAMPLE_IMAGES: any = {
   imageUpscaler: "UPSCALER",
   imageColorizer: "STUDIO_COLORISER",
   photoEditor: "STUDIO_PHOTO_EDITOR",
-  objectRemover:"STUDIO_OBJECT_REMOVER",
-  objectReplacer:"STUDIO_OBJECT_REPLACER",
-  productPhotoshoot:"STUDIO_PHOTOSHOOT"
+  objectRemover: "STUDIO_OBJECT_REMOVER",
+  objectReplacer: "STUDIO_OBJECT_REPLACER",
+  productPhotoshoot: "STUDIO_PHOTOSHOOT",
+}
+
+export const ACTIVE_PANEL_TOOL_NAMES: any = {
+  BgRemover: "Background Remover",
+  ImagineAI: "Text to Art",
+  ImageUpscaler: "Image Upscaler",
+  PhotoEditor: "Photo Editor",
+  ImageColorizer: "Image Colorizer",
+  ObjectReplacer: "Object Replacer",
+  ProductPhotoshoot: "Product PhotoShoot",
+  ObjectRemover: "Object Remover",
 }

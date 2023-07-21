@@ -6,7 +6,7 @@ import clsx from "clsx"
 import { Block } from "baseui/block"
 import Scrollable from "~/components/Scrollable"
 import { useContext, useEffect, useRef, useState } from "react"
-import { useEditor, useFrame } from "@layerhub-io/react"
+import { useActiveObject, useEditor, useFrame } from "@layerhub-io/react"
 import Icons from "~/components/Icons"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import ImagesContext from "~/contexts/ImagesCountContext"
@@ -84,6 +84,17 @@ const PhotoEditor = () => {
     setPhotoEditorInfo((prev: any) => ({ ...prev, src: url, original: url }))
   }
 
+  const activeObject=useActiveObject()
+
+  useEffect(() => {
+    if (editor) {
+      let resultImg = editor?.objects?.findById(photoEditorInfo.id)
+      if (resultImg[0] === null) {
+        setCurrentActiveImg(-1)
+      }
+    }
+  }, [activeObject])
+
   useEffect(() => {
     if (user) {
       getPollingIntervals()
@@ -144,8 +155,13 @@ const PhotoEditor = () => {
   }
 
   const addImg = async (imageUrl: string, _idx: number) => {
-    if (currentActiveImg == -1) {
+    const resultId = photoEditorInfo.id
+    let resultImg = editor?.objects?.findById(resultId)
+
+    if (currentActiveImg == -1 || resultImg[0] == null) {
       await getDimensions(imageUrl, (img: any) => {
+        setCurrentActiveImg(_idx)
+
         let latest_ct = 0
         setImagesCt((prev: any) => {
           latest_ct = prev + 1
@@ -163,10 +179,11 @@ const PhotoEditor = () => {
           return prev + 1
         })
       })
-    } else {
+    } else if (currentActiveImg === _idx) return
+    else {
+      setCurrentActiveImg(_idx)
       UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo)
     }
-    setCurrentActiveImg(_idx)
   }
 
   const discardHandler = () => {
@@ -189,7 +206,7 @@ const PhotoEditor = () => {
   }
 
   return (
-    <div className="d-flex flex-1 flex-column">
+    <div className="d-flex flex-1 flex-column pb-2">
       {!photoEditorPanelInfo.resultSectionVisible ? (
         <>
           {photoEditorInfo.src ? (
@@ -309,6 +326,7 @@ const PhotoEditor = () => {
             onClick={() => {
               setPhotoEditorPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
               setPhotoEditorInfo((prev: any) => ({ ...prev, id: "", result: [], showclearTooltip: true }))
+              setCurrentActiveImg(-1)
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
@@ -322,9 +340,8 @@ const PhotoEditor = () => {
                 src={photoEditorInfo.src}
                 alt="orginal-img"
                 onClick={() => {
-                  if(imageLoading) return ;
-                  if (currentActiveImg === 0) return;
-                  addImg(photoEditorInfo.src, 0) ;
+                  if (imageLoading) return
+                  addImg(photoEditorInfo.src, 0)
                 }}
               />
               <div className={classes.resultLabel}>{"Original"}</div>
@@ -339,7 +356,6 @@ const PhotoEditor = () => {
                     src={each}
                     alt="result-img"
                     onClick={() => {
-                      if (currentActiveImg === idx + 1) return
                       addImg(each, idx + 1)
                     }}
                   />

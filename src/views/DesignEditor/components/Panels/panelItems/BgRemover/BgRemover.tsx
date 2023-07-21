@@ -84,7 +84,7 @@ const BgRemover = () => {
   }
 
   return (
-    <Block className="d-flex flex-1 flex-column">
+    <Block className="d-flex flex-1 flex-column pb-2">
       {mainImgInfo.id && mainImgInfo.preview ? (
         <Block>
           <UploadPreview
