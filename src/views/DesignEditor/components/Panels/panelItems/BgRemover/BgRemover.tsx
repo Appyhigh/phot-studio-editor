@@ -17,7 +17,6 @@ import { REMOVE_BACKGROUND } from "~/constants/contants"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import useAppContext from "~/hooks/useAppContext"
 
-
 const BgRemover = () => {
   const editor = useEditor()
   const [backgroundChoice, setBackgroundChoice] = useState(0)
@@ -122,6 +121,10 @@ const BgRemover = () => {
                         key={index}
                         onClick={() => {
                           addObject(image.originalImage)
+                          setPanelInfo((prev: any) => ({
+                            ...prev,
+                            bgOptions: true,
+                          }))
                         }}
                         preview={image.thumbnail}
                         imageLoading={imageLoading}
@@ -137,7 +140,7 @@ const BgRemover = () => {
       {panelInfo.bgOptions && (
         <>
           {" "}
-          <Block className={clsx(activePanel=== "BgRemover" ?"mt-1": "mt-2")}>
+          <Block className={clsx(activePanel === "BgRemover" ? "mt-1" : "mt-2")}>
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
               <Block
                 className={clsx(
@@ -161,31 +164,27 @@ const BgRemover = () => {
               </Block>
             </Block>
           </Block>
-          <>
-            {backgroundChoice === 0 ? (
-              <Scrollable>
-                <Block className="mt-2 mb-2">
-                  {sampleImages.bgRemoverBgOptions.map((each: any, index: number) => (
-                    <Block key={index}>
-                      <Block
-                        className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}
-                      >
-                        <LabelLarge> {each.heading}</LabelLarge>
-                      </Block>
-                      <SwiperWrapper
-                        type={index}
-                        selectedBgOption={selectedBgOption}
-                        handleBgChangeOption={handleBgChangeOption}
-                        data={each.options}
-                      />
+          {backgroundChoice === 0 ? (
+            <Scrollable>
+              <Block className="mt-2 mb-2">
+                {sampleImages.bgRemoverBgOptions.map((each: any, index: number) => (
+                  <Block key={index}>
+                    <Block className={clsx("d-flex align-items-center justify-content-start", classes.bgOptionHeading)}>
+                      <LabelLarge> {each.heading}</LabelLarge>
                     </Block>
-                  ))}
-                </Block>
-              </Scrollable>
-            ) : (
-              <BgUpload />
-            )}
-          </>
+                    <SwiperWrapper
+                      type={index}
+                      selectedBgOption={selectedBgOption}
+                      handleBgChangeOption={handleBgChangeOption}
+                      data={each.options}
+                    />
+                  </Block>
+                ))}
+              </Block>
+            </Scrollable>
+          ) : (
+            <BgUpload />
+          )}
         </>
       )}
       <Loader isOpen={loaderPopup} />
