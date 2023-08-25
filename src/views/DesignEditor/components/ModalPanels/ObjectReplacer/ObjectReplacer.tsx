@@ -87,12 +87,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     const base64CursorString = btoa(cursor)
 
     setBrushSize(parseInt(e[0]))
-    // @ts-ignore
-    ;(canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${
-      brushSize / 2
-    }, auto`),
       // @ts-ignore
-      (canvas.freeDrawingBrush.width = brushSize)
+      ; (canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${brushSize / 2
+        }, auto`),
+        // @ts-ignore
+        (canvas.freeDrawingBrush.width = brushSize)
   }
 
   useEffect(() => {
@@ -582,14 +581,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
         {resultLoading
           ? Array.from(Array(4).keys()).map((each, _idx) => {
-              return (
-                <div key={_idx} className={classes.skeletonBox}>
-                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-                </div>
-              )
-            })
+            return (
+              <div key={_idx} className={classes.skeletonBox}>
+                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+              </div>
+            )
+          })
           : isError.error
-          ? Array.from(Array(4).keys()).map((each, _idx) => {
+            ? Array.from(Array(4).keys()).map((each, _idx) => {
               return (
                 <div className={classes.skeletonBox}>
                   {
@@ -600,7 +599,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 </div>
               )
             })
-          : objectReplacerInfo.result.map((each, _idx) => {
+            : objectReplacerInfo.result.map((each, _idx) => {
               return (
                 <div
                   key={_idx}
@@ -642,7 +641,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             fontWeight="500"
             handleClick={() => {
               setPromptText((prev) => "")
-              setObjectReplacerInfo((prev: any) => ({ ...prev, preview: prev.result, prompt: "" }))
+              setObjectReplacerInfo((prev: any) => ({ ...prev, preview: prev.src, prompt: "" }))
               setCallAPI(false)
               setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false }))
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false, fourthStep: false }))
@@ -677,7 +676,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
-            
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
