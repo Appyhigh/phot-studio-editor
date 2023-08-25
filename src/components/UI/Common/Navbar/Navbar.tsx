@@ -84,12 +84,12 @@ const Navbar = () => {
                     <a>Sign out</a>
                   </p>
                 </div>
-                <div className={classes.creditsOfProfile}>
+                {/* <div className={classes.creditsOfProfile}>
                   <div className={classes.remainingCredits}>Remaining Credits: {user && user?.credits_remaining}</div>
                   <div className={classes.buyMoreCredits}>
                     <a>Buy More</a>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </Block>
@@ -97,7 +97,7 @@ const Navbar = () => {
       ) : (
         <>
           <BaseButton
-          title="Login"
+            title="Login"
             handleClick={() => {
               setShowLoginPopup(true)
             }}

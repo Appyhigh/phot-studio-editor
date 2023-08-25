@@ -335,14 +335,14 @@
 
 .profileCon {
   min-width: 298px;
-  min-height: 200px;
+  /* min-height: 200px; */
   max-height: 200px;
   background: #ffffff;
   box-shadow: 0px 4px 14px 10px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   right: 0px;
   position: absolute;
-  padding: 23px 23px 21px 23px;
+  padding: 23px 23px 1px 23px;
   z-index: 500;
   top: 18px;
 }
