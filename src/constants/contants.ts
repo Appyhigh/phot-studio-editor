@@ -39,6 +39,9 @@ export const TOOL_NAMES = {
   imageUpscalar: "Image Upscaler",
   imageColorizer: "Image Colorizer",
   photoEditor: "Photo Editor",
+  productPhotoshoot: "Product Photoshoot",
+  objectReplacer: "Object Replacer",
+  objectRemover: "Object Remover",
 }
 
 export const SAMPLE_IMAGES: any = {
@@ -48,7 +51,7 @@ export const SAMPLE_IMAGES: any = {
   imageUpscaler: "UPSCALER",
   imageColorizer: "STUDIO_COLORISER",
   photoEditor: "STUDIO_PHOTO_EDITOR",
-  objectRemover:"STUDIO_OBJECT_REMOVER",
-  objectReplacer:"STUDIO_OBJECT_REPLACER",
-  productPhotoshoot:"STUDIO_PHOTOSHOOT"
+  objectRemover: "STUDIO_OBJECT_REMOVER",
+  objectReplacer: "STUDIO_OBJECT_REPLACER",
+  productPhotoshoot: "STUDIO_PHOTOSHOOT",
 }

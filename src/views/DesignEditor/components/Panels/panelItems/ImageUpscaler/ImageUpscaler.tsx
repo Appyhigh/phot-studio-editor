@@ -1,4 +1,4 @@
-import { IMAGE_UPSCALER } from "~/constants/contants"
+import { IMAGE_UPSCALER, TOOL_NAMES } from "~/constants/contants"
 import Uploads from "../UploadDropzone/Uploads"
 import classes from "./style.module.css"
 import useAppContext from "~/hooks/useAppContext"
@@ -308,6 +308,7 @@ const ImageUpscaler = () => {
                 loginPopupCloseHandler={() => {
                   setShowLoginPopup(false)
                 }}
+                toolName={TOOL_NAMES.imageUpscalar}
               />
               {/* <p className={classes.freeImgText}>*1/5 free images left</p> */}
             </div>
@@ -398,7 +399,7 @@ const ImageUpscaler = () => {
                 src={imgScalerInfo.src}
                 alt="result-img"
                 onClick={() => {
-                  if (imageLoading) return ;
+                  if (imageLoading) return;
                   if (currentActiveImg === 2) return
                   addImg(imgScalerInfo.src, 2)
                 }}

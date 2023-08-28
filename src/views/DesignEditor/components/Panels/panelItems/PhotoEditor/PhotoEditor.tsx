@@ -1,4 +1,4 @@
-import { PHOTO_EDITOR } from "~/constants/contants"
+import { PHOTO_EDITOR, TOOL_NAMES } from "~/constants/contants"
 import Uploads from "../UploadDropzone/Uploads"
 import classes from "./style.module.css"
 import useAppContext from "~/hooks/useAppContext"
@@ -233,6 +233,7 @@ const PhotoEditor = () => {
                 loginPopupCloseHandler={() => {
                   setShowLoginPopup(false)
                 }}
+                toolName={TOOL_NAMES.photoEditor}
               />
             </div>
           )}
@@ -322,9 +323,9 @@ const PhotoEditor = () => {
                 src={photoEditorInfo.src}
                 alt="orginal-img"
                 onClick={() => {
-                  if(imageLoading) return ;
+                  if (imageLoading) return;
                   if (currentActiveImg === 0) return;
-                  addImg(photoEditorInfo.src, 0) ;
+                  addImg(photoEditorInfo.src, 0);
                 }}
               />
               <div className={classes.resultLabel}>{"Original"}</div>

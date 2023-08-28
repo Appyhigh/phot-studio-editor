@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, OBJECT_REMOVER, TOOL_NAMES } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
 import BaseButton from "~/components/UI/Button/BaseButton"
@@ -72,12 +72,11 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     const base64CursorString = btoa(cursor)
 
     setBrushSize(parseInt(e[0]))
-    // @ts-ignore
-    ;(canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${
-      brushSize / 2
-    }, auto`),
       // @ts-ignore
-      (canvas.freeDrawingBrush.width = brushSize)
+      ; (canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${brushSize / 2
+        }, auto`),
+        // @ts-ignore
+        (canvas.freeDrawingBrush.width = brushSize)
   }
 
   const handleBgImg = async (imgSrc: string) => {
@@ -120,7 +119,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectRemover }))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
@@ -368,8 +367,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
+            console.log('hello remover');
+
             // handleBgImg(objectRemoverInfo.src)
-            if (!user) return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+            if (!user) return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectRemover }))
             handleBrushToolTip(false)
             let paths: any = []
             //  @ts-ignore

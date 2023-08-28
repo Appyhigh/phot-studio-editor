@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { MODAL_IMG_UPLOAD, checkboxBGUrl } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, PRODUCT_PHOTOSHOOT, TOOL_NAMES, checkboxBGUrl } from "~/constants/contants"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import Accordian from "~/components/UI/Accordian/Accordian"
@@ -46,7 +46,6 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   })
 
   const { sampleImages } = useContext(SampleImagesContext)
-
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [imageLoading, setImageLoading] = useState(false)
   const [selectedSampleImg, setSelectedSampleImg] = useState(0)
@@ -589,7 +588,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
               } else if (steps[1]) {
                 setSteps((prev) => ({ ...prev, 1: false }))
               } else {
-                setSteps((prev) => ({ ...prev, 1:true }))
+                setSteps((prev) => ({ ...prev, 1: true }))
 
               }
             }}
@@ -674,6 +673,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           loginPopupCloseHandler={() => {
             setShowLoginPopup(false)
           }}
+          toolName={TOOL_NAMES.productPhotoshoot}
         />
       </div>
     </div>

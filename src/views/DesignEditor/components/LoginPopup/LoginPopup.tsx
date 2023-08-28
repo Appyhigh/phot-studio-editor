@@ -11,9 +11,10 @@ import { Modal } from "baseui/modal"
 interface LoginPopupProps {
   loginPopupCloseHandler: () => void
   isOpen: boolean
+  toolName?: String
 }
 
-const LoginPopup = ({ loginPopupCloseHandler, isOpen }: LoginPopupProps) => {
+const LoginPopup = ({ loginPopupCloseHandler, isOpen, toolName }: LoginPopupProps) => {
   const loginHandler = async () => {
     try {
       await signInWithPopup(auth(), new GoogleAuthProvider())
@@ -55,14 +56,14 @@ const LoginPopup = ({ loginPopupCloseHandler, isOpen }: LoginPopupProps) => {
           <Lottie animationData={loginLottieData} loop={true} />
         </div>
         <h3 className={classes.mainHeading}>Login to continue!</h3>
-        <p className={classes.text}>Please login with google, to use BG remover tool!</p>
+        <p className={classes.text}>Please login with google, to use {toolName ? toolName : 'BG remover'} tool!</p>
         <div className={classes.loginBtnWrapper}>
           <button
-            onClick={()=>{
+            onClick={() => {
               loginHandler()
               loginPopupCloseHandler()
             }
-              
+
             }
             className={clsx(classes.loginBtn, "d-flex align-items-center justify-content-center")}
           >

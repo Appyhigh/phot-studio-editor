@@ -30,6 +30,7 @@ import Prompt from "~/components/Prompt/Prompt"
 import ImagesCount from "~/components/ImagesCount/ImagesCount"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import { TOOL_NAMES } from "~/constants/contants"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -279,6 +280,7 @@ const ImagineAI = () => {
               loginPopupCloseHandler={() => {
                 setShowLoginPopup(false)
               }}
+              toolName={TOOL_NAMES.imagineAi}
             />
 
             <p className={classes.creditsPara}>

@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REPLACER } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, OBJECT_REPLACER, TOOL_NAMES } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
@@ -154,7 +154,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectReplacer }))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
@@ -474,7 +474,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
             if (!user) {
-              return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+              return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectReplacer }))
             }
             handleBgImg(objectReplacerInfo.src)
             setSteps((prev) => ({
