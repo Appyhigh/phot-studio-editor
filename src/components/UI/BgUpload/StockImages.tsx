@@ -109,6 +109,7 @@ const StockImages = (props: any) => {
           onFocus={() => {
             editor.objects.deselect()
           }}
+          placeholder="images, flowers or category"
           onChange={(e) => {
             setSearch(e.target.value)
             if (e.target.value === "") {
@@ -145,13 +146,13 @@ const StockImages = (props: any) => {
                       })
                       props.imageAs == "foreground"
                         ? AddObjectFunc(
-                            image.image_url_list[0],
-                            editor,
-                            image.width,
-                            image.height,
-                            frame,
-                            (latest_ct = latest_ct)
-                          )
+                          image.image_url_list[0],
+                          editor,
+                          image.width,
+                          image.height,
+                          frame,
+                          (latest_ct = latest_ct)
+                        )
                         : (setIsLoading(true),
                           toDataURL(image.image_url_list[0], async function (dataUrl: string) {
                             HandleBgChangeOption(
