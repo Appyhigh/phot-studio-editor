@@ -138,28 +138,48 @@ const ImagineAI = () => {
   const frame = useFrame()
 
   const addImgToCanvas = async (imageUrl: string) => {
-    if (currentActiveImg == -1) {
-      await getDimensions(imageUrl, (img: any) => {
-        let latest_ct = 0
-        setImagesCt((prev: any) => {
-          latest_ct = prev + 1
-          AddObjectFunc(
-            imageUrl,
-            editor,
-            img.width,
-            img.height,
-            frame,
-            (latest_ct = latest_ct),
-            null,
-            null,
-            setTextToArtInputInfo
-          )
-          return prev + 1
-        })
+    // if (currentActiveImg == -1) {
+    //   await getDimensions(imageUrl, (img: any) => {
+    //     let latest_ct = 0
+    //     setImagesCt((prev: any) => {
+    //       latest_ct = prev + 1
+    //       AddObjectFunc(
+    //         imageUrl,
+    //         editor,
+    //         img.width,
+    //         img.height,
+    //         frame,
+    //         (latest_ct = latest_ct),
+    //         null,
+    //         null,
+    //         setTextToArtInputInfo
+    //       )
+    //       return prev + 1
+    //     })
+    //   })
+    // }
+    // else {
+    //   UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
+    // }
+    await getDimensions(imageUrl, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(
+          imageUrl,
+          editor,
+          img.width,
+          img.height,
+          frame,
+          (latest_ct = latest_ct),
+          null,
+          null,
+          setTextToArtInputInfo
+        )
+        return prev + 1
       })
-    } else {
-      UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
-    }
+    })
+
   }
 
   return (
@@ -356,7 +376,10 @@ const ImagineAI = () => {
                       onClick={() => {
                         if (currentActiveImg === idx) return
                         setCurrentActiveImg(idx)
-                        addImgToCanvas(each)
+                        if (currentActiveImg !== idx) {
+                          addImgToCanvas(each)
+                        }
+
                       }}
                     />
                   }
