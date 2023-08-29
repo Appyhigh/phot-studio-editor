@@ -20,6 +20,7 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
   const [textColor, setTextColor] = useState("#000000")
   const [cursorPosition, setCursorPosition] = useState(0);
   const textareaRef = useRef(null);
+  const [textareaHeight, setTextareaHeight] = useState(44);
 
   function close() {
     setIsOpen(false)
@@ -35,27 +36,27 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
     } else setActiveState(idx)
   }
 
-  const handleTextChange = (event:any) => {
+  const handleTextChange = (event: any) => {
     const { value, selectionStart } = event.target;
-    setTextConent((prev) => ({ ...prev, text:value }))
+    setTextConent((prev) => ({ ...prev, text: value }))
     setCursorPosition(selectionStart);
   };
 
   const handleCursorPosition = () => {
     if (textareaRef.current) {
-       // @ts-ignore
+      // @ts-ignore
       setCursorPosition(textareaRef.current.selectionStart);
     }
   };
-  
-  useEffect(()=>{
-    if(activeObject){
+
+  useEffect(() => {
+    if (activeObject) {
       // @ts-ignore
       activeObject.setSelectionStart(cursorPosition)
-       // @ts-ignore
+      // @ts-ignore
       activeObject.setSelectionEnd(cursorPosition)
-    } 
-  },[cursorPosition])
+    }
+  }, [cursorPosition])
 
   const TEXT_ALIGNS = ["left", "center", "right"]
   const activeObject = useActiveObject()
@@ -81,12 +82,19 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
     if (activeObject && activeObject.type === "StaticText") {
       // @ts-ignore
 
-      if (activeObject.id === textContent.id) editor.objects.update({ text: textContent.text }) 
+      if (activeObject.id === textContent.id) editor.objects.update({ text: textContent.text })
     }
   }, [activeObject, textContent])
 
+  const handleTextareaChange = () => {
+    // @ts-ignore
+    const newHeight = textareaRef.current.scrollHeight;
+    setTextareaHeight(newHeight);
+  };
 
-  
+  useEffect(() => {
+    handleTextareaChange()
+  }, [textContent.text])
 
   useEffect
   return showLayer ? (
@@ -110,7 +118,9 @@ const TextLayer = ({ showLayer, handleClose }: any) => {
               onKeyDown={handleCursorPosition}
               onChange={(e) => {
                 handleTextChange(e)
+                handleTextareaChange()
               }}
+              style={{ height: `${textareaHeight}px` }}
             />
           </div>
           <div className={classes.alignmentWrapper}>
