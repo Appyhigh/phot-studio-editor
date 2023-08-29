@@ -49,8 +49,8 @@ const BgUpload = () => {
   }, [bgUploading])
 
   return (
-    <Block>
-      <div className={clsx(classes.bgUploadSection, "d-flex  flex-row",activePanel=== "BgRemover"&& classes.UploadStockToggleBtn)} >
+    <Block style={{ height: '100%' }}>
+      <div className={clsx(classes.bgUploadSection, "d-flex  flex-row", activePanel === "BgRemover" && classes.UploadStockToggleBtn)} >
         <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
           Upload From PC
         </div>
@@ -70,7 +70,7 @@ const BgUpload = () => {
               </div>
             )}
             {!bgUploadPreview.showPreview && !bgUploading && !rejectedFileUpload && (
-              <div key={renderKey} className={clsx(activePanel=== "BgRemover" && classes.UploadSectionBgremover)} >
+              <div key={renderKey} className={clsx(activePanel === "BgRemover" && classes.UploadSectionBgremover)} >
                 <UppyDashboard
                   setImageLoading={setBgUploading}
                   setRejectedFileUpload={setRejectedFileUpload}
@@ -89,7 +89,7 @@ const BgUpload = () => {
             )}
 
             {bgUploadPreview.showPreview && !rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
-              <Scrollbars  style={{ height: "300px",marginTop:activePanel=== "BgRemover"?"-10px":"none" }}>
+              <Scrollbars style={{ height: "300px", marginTop: activePanel === "BgRemover" ? "-10px" : "none" }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
                   discardHandler={() => {
@@ -105,7 +105,7 @@ const BgUpload = () => {
           </Scrollbars>
         </>
       ) : (
-        <StockImages height="240px" />
+        <StockImages height="100%" />
       )}
     </Block>
   )
