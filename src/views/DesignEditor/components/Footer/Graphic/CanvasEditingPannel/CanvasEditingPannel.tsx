@@ -118,7 +118,7 @@ const CanvasEditingPannel = () => {
           editor.history.redo()
         }}
       >
-        <Icons.Redo size={22} color={editor?.history?.redos.length > 1 ? "#6729f3" : ''} />
+        <Icons.Redo size={22} color={editor?.history?.redos.length >= 1 ? "#6729f3" : ''} />
       </Block>
     </Block>
   )
