@@ -9,7 +9,7 @@ const Shadows = () => {
   const editor = useEditor()
   const [selectedFilter, setSelectedFilter] = useState<string>()
   const [selectedOption, setSelectedOption] = useState<string>("Samples")
-  const [shadowColorHex, setShadowColorHex] = useState("#00000")
+  const [shadowColorHex, setShadowColorHex] = useState("#000000")
   const [shadowColorOpacity, setShadowColorOpacity] = useState(100)
   const [isOpen, setIsOpen] = useState(false)
   const [shadowValues, setShadowValues] = useState({
@@ -144,7 +144,10 @@ const Shadows = () => {
         .replace(/[^\d.,]/g, "") // Remove non-numeric characters except for dots and commas
         .split(",")
         .map((value: any) => parseFloat(value.trim()))
-      setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
+
+      if (Math.round(rgbaValues[3] * 100)) {
+        setShadowColorOpacity(Math.round(rgbaValues[3] * 100))
+      }
     }
   }
 
@@ -180,9 +183,10 @@ const Shadows = () => {
         setInputColor={setShadowColorHex}
         isOpen={isOpen}
         handleClose={() => setIsOpen(false)}
-        handleChangeColor={(color:any) => {
+        handleChangeColor={(color: any) => {
           setShadowColorHex(color)
-          setIsOpen(false)}}
+          setIsOpen(false)
+        }}
       />
       <div className={classes.filterOptions}>
         <div
