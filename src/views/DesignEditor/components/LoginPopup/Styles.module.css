@@ -13,6 +13,13 @@
   width: 100%;
   padding: 0 28px;
 }
+.activeToolText {
+  color: #6729f3;
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+}
 
 .closeIconWrapper {
   width: 16px;

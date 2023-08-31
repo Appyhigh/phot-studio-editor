@@ -56,7 +56,7 @@ const LoginPopup = ({ loginPopupCloseHandler, isOpen, toolName }: LoginPopupProp
           <Lottie animationData={loginLottieData} loop={true} />
         </div>
         <h3 className={classes.mainHeading}>Login to continue!</h3>
-        <p className={classes.text}>Please login with google, to use {toolName ? toolName : 'BG remover'} tool!</p>
+        <p className={classes.text}>Please login with google, to use <span className={classes.activeToolText}>{toolName ? toolName : 'BG remover'}</span> tool!</p>
         <div className={classes.loginBtnWrapper}>
           <button
             onClick={() => {
