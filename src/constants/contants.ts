@@ -45,9 +45,7 @@ export const TOOL_NAMES = {
 }
 
 export const SAMPLE_IMAGES: any = {
-  Image: "",
   bgRemover: "STUDIO_BACKGROUND_REMOVER",
-  imagineAi: "",
   imageUpscaler: "UPSCALER",
   imageColorizer: "STUDIO_COLORISER",
   photoEditor: "STUDIO_PHOTO_EDITOR",
