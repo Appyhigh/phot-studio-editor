@@ -222,7 +222,7 @@ export default function () {
         height: "58px",
         width: "max-content",
         padding: "6px 12px",
-        position: "absolute",
+        position: "static",
         left: "auto",
         right: "5%",
         zIndex: "20",
@@ -517,7 +517,7 @@ function TextSpacing() {
                     InputContainer: {},
                   }}
                   size={SIZE.mini}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   value={Math.round(state.lineHeight)}
                 />
               </Block>
@@ -579,7 +579,7 @@ function TextSpacing() {
                     InputContainer: {},
                   }}
                   size={SIZE.mini}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   value={Math.round(state.charSpacing)}
                 />
               </Block>
