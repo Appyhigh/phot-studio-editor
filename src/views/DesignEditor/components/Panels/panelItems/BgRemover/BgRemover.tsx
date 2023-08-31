@@ -108,7 +108,7 @@ const BgRemover = () => {
       )}
       {panelInfo.trySampleImg && (
         <>
-          <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
+          <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-2 mt-3")}>
             Try Sample Images
           </Block>
           <Scrollable>
