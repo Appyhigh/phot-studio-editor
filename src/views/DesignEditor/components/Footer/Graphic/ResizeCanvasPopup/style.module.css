@@ -1,6 +1,6 @@
 .resizeCanvasContainer {
   height: fit-content;
-  width: 421px;
+  width: 423px;
   background-color: #fff;
   border: 1px solid #f1f1f5;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
@@ -18,6 +18,7 @@
 
 .subSection {
   margin: 4px 16px;
+  margin-top: 8px !important;
 }
 .subHeading {
   color: #44444f;
@@ -33,13 +34,29 @@
   margin-left: 20px;
 }
 .oddOption {
-  margin: 10px 32px;
+  /* margin: 10px 32px; */
   min-width: 100px;
+}
+.contentWrap {
+  display: flex;
+  justify-content: start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* margin-left: 2px; */
+  gap: 7px;
 }
 
 .evenOption {
-  margin: 10px 0px;
-  min-width: 100px;
+  /* margin: 10px 0px; */
+  width: 125px !important;
+  height: 128px !important;
+  background-color: #f1f1f5;
+  overflow: hidden;
+  border-radius: 3px;
+}
+.addBorder {
+  border: 2px solid #6729f3;
+  border-radius: 3px;
 }
 .optionHeading {
   color: #44444f;
@@ -53,17 +70,22 @@
   color: #92929d;
 }
 
-.resizeBtn{
-    width: 90%;
-    margin: 20px auto;
-    height: 38px;
-    color: "#92929D";
-    font-weight: 600;
-    letter-spacing: 1px;
-    background-color:  #F1F1F5;
-    border-radius: 10px;
+.resizeBtn {
+  width: 90%;
+  margin: 20px auto;
+  height: 38px;
+  color: "#92929D";
+  font-weight: 600;
+  letter-spacing: 1px;
+  background-color: #f1f1f5;
+  border-radius: 10px;
 }
-.isEnabledBtn{
-    color: #FFF;
-    background-color: #000;
+.isEnabledBtn {
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0px;
+  color: #ffffff;
+  background-color: #6729f3;
 }

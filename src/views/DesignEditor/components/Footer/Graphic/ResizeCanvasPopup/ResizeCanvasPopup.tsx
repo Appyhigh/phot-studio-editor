@@ -44,7 +44,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
       // const scaleX = 900/parseInt(size.width) 
       // const scaleY = 600/parseInt(size.height) 
       // const scale = Math.min(scaleX, scaleY)
-  
+
       // canvas.setDimensions({
       //   width: 900 * scale,
       //   height: 600 * scale,
@@ -161,7 +161,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
 
           <div className={clsx(classes.subSection, "mt-2 mx-2 ")}>
             <div className={clsx(classes.subHeading, "pt-1 pb-1")}> Fixed Size</div>
-            <Block className="d-flex justify-content-start flex-row flex-wrap ml-1">
+            <Block className={classes.contentWrap}>
               {fixedSizeFrameTypes.map((sample, index) => {
                 const { img, name, subHeading, imgHeight, id } = sample
                 // @ts-ignore
@@ -170,8 +170,10 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
                   <Block
                     key={index}
                     className={clsx(
-                      index == 1 || index == 4 || index == 7 ? classes.oddOption : classes.evenOption,
-                      "flex-center-column  text-center pointer"
+                      classes.evenOption,
+                      "flex-center-column  text-center pointer p-2 w-[125px]",
+                      id === selectedFrame.id && classes.addBorder
+
                     )}
                     onClick={() => {
                       setActiveKey("0")
@@ -198,7 +200,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
           </button>
         </div>
       </Block>
-    </Block>
+    </Block >
   )
 }
 
