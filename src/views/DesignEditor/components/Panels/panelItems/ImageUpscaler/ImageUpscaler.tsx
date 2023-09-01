@@ -41,7 +41,6 @@ const ImageUpscaler = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
   const { setErrorInfo } = useContext(ErrorContext)
-  console.log(sampleImages.imageUpscaler);
 
   useEffect(() => {
     if (user && autoCallAPI) {
