@@ -4,7 +4,7 @@ import { removeBackgroundController } from "~/utils/removeBackground"
 
 export const RemoveBGFunc = async (
   editor: any,
-  setLoaderPopup: any,
+  setBlinkInOutLoader: any,
   setPanelInfo: any,
   mainImgInfo: any,
   setMainImgInfo: any,
@@ -41,7 +41,7 @@ export const RemoveBGFunc = async (
         editor.objects.update(options)
         setMainImgInfo((prev: any) => ({ ...prev, ...options }))
       } else {
-        setLoaderPopup(true)
+        setBlinkInOutLoader(true)
         let response = await removeBackgroundController(
           mainImgInfo.src,
           (image: string) => {
@@ -68,10 +68,10 @@ export const RemoveBGFunc = async (
                 editor.objects.removeById(mainImgInfo.id)
                 setMainImgInfo((prev: any) => ({ ...prev, ...options }))
                 // Stop the loader
-                setLoaderPopup(false)
+                setBlinkInOutLoader(false)
               })
             } else {
-              setLoaderPopup(false)
+              setBlinkInOutLoader(false)
               throw new Error("Something went wrong while removing background...")
             }
           },
@@ -84,7 +84,7 @@ export const RemoveBGFunc = async (
           1000
         )
         if (response) {
-          setLoaderPopup(false)
+          setBlinkInOutLoader(false)
           throw new Error("Something went wrong while removing background...")
         }
       }
@@ -113,7 +113,7 @@ export const RemoveBGFunc = async (
       }
       editor.objects.update(options)
     } else {
-      setLoaderPopup(true)
+      setBlinkInOutLoader(true)
       let response = await removeBackgroundController(
         activeObject ? activeObject?.metadata.originalLayerPreview : mainImgInfo.src,
         (image: string) => {
@@ -138,9 +138,9 @@ export const RemoveBGFunc = async (
             }
             editor.objects.update(options)
             // Stop the loader
-            setLoaderPopup(false)
+            setBlinkInOutLoader(false)
           } else {
-            setLoaderPopup(false)
+            setBlinkInOutLoader(false)
             throw new Error("Something went wrong while removing background...")
           }
         },
@@ -153,14 +153,14 @@ export const RemoveBGFunc = async (
         activeObject ? activeObject?.height * activeObject?.scaleY : 1000
       )
       if (response) {
-        setLoaderPopup(false)
+        setBlinkInOutLoader(false)
         throw new Error("Something went wrong while removing background...")
       }
     }
 
     // Start the loader
   } catch (error: any) {
-    setLoaderPopup(false)
+    setBlinkInOutLoader(false)
     // @ts-ignore
     setErrorInfo((prev) => ({
       ...prev,
@@ -171,7 +171,7 @@ export const RemoveBGFunc = async (
         setErrorInfo((prev) => ({ ...prev, showError: false }))
         RemoveBGFunc(
           editor,
-          setLoaderPopup,
+          setBlinkInOutLoader,
           setPanelInfo,
           mainImgInfo,
           setMainImgInfo,

@@ -34,6 +34,7 @@ const engine = new Styletron()
 
 const Provider = ({ children }: { children: React.ReactNode }) => {
   const [loaderPopup, setLoaderPopup] = useState<boolean>(false)
+  const [blinkInOutLoader, setBlinkInOutLoader] = useState<boolean>(false)
 
   const [mainImgInfo, setMainImgInfo] = useState({
     type: "",
@@ -69,7 +70,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     cfg_scale: 7.5,
     aspect_ratio: "1:1",
     showclearTooltip: false,
-    isError:false
+    isError: false
   })
 
   const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({
@@ -86,7 +87,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
       showError: false,
       errorMsg: "",
       timer: 0,
-      retryFn: () => {},
+      retryFn: () => { },
     },
   })
 
@@ -97,7 +98,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     scaler: 2,
     result: [],
     showclearTooltip: false,
-    isError:false
+    isError: false
   })
 
   const [imgScalerPanelInfo, setImgScalerPanelInfo] = useState({
@@ -115,7 +116,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     images_generation_ct: 1,
     result: [],
     showclearTooltip: false,
-    isError:false
+    isError: false
 
   })
 
@@ -132,7 +133,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     src: "",
     original: "",
     resultImages: [],
-    isError:false
+    isError: false
   })
 
   const [ImgColorizerPanelInfo, setImgColorizerPanelInfo] = useState({
@@ -160,10 +161,10 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     photoEditor: [],
     imageColorizer: [],
     bgRemoverBgOptions: [],
-    objectRemover:[],
-    objectReplacer:[],
-    productPhotoshoot:[],
-    productPhotoshootOption:[]
+    objectRemover: [],
+    objectReplacer: [],
+    productPhotoshoot: [],
+    productPhotoshootOption: []
   })
 
   const [objectReplacerInfo, setObjectReplacerInfo] = useState({
@@ -206,7 +207,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     prevObjects: [],
     addPreview: "",
     removeBg: false,
-    isError:false
+    isError: false
   })
 
   return (
@@ -214,7 +215,7 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
       <ReduxProvier store={store}>
         <CanvasProvider>
           <ImagesContext.Provider value={{ imagesCt, setImagesCt }}>
-            <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup }}>
+            <LoaderContext.Provider value={{ loaderPopup, setLoaderPopup, blinkInOutLoader, setBlinkInOutLoader }}>
               <ErrorContext.Provider value={{ errorInfo, setErrorInfo }}>
                 <PollingInterval.Provider value={{ pollingIntervalInfo, setPollingIntervalInfo }}>
                   <ObjectReplacerContext.Provider value={{ objectReplacerInfo, setObjectReplacerInfo }}>
