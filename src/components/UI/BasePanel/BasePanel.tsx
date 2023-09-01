@@ -177,7 +177,7 @@ const BasePanel = () => {
             fontFamily="poppins"
             height="38px"
             width="120px"
-            // className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
+          // className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
           />
 
           {!downloadBtnDisable && <DownloadPopup />}
