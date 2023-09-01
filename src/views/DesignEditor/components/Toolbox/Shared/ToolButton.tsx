@@ -1,14 +1,17 @@
 import clsx from "clsx"
 import classes from "./style.module.css"
+import { useActiveObject } from "@layerhub-io/react"
 
 export const ToolButton = ({ type, func, icon, name }: any) => {
+  const activeObject = useActiveObject()
   return (
     <button
       disabled={type === "lock" ? true : false}
       className={clsx(
         "d-flex justify-content-center align-items-center flex-column ml-1",
         classes.editingBtn,
-        type === "lock" && classes.disabledBtn
+        type === "lock" && classes.disabledBtn,
+        (name === 'Back' && activeObject?._objects) && classes.disabledBtn
       )}
       onClick={func}
     >
