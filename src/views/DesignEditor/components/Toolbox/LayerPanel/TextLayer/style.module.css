@@ -15,6 +15,8 @@
   line-height: 14px;
   color: #44444f;
   overflow-y: hidden;
+  padding-bottom: 8px;
+  resize: none;
 }
 
 .alignmentWrapper {
