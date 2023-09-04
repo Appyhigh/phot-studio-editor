@@ -222,7 +222,7 @@ export default function () {
         height: "58px",
         width: "max-content",
         padding: "6px 12px",
-        position: "static",
+        position: "absolute",
         left: "auto",
         right: "5%",
         zIndex: "20",
