@@ -1,6 +1,6 @@
 .resizeCanvasContainer {
   height: fit-content;
-  width: 423px;
+  width: 415px;
   background-color: #fff;
   border: 1px solid #f1f1f5;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
@@ -30,7 +30,7 @@
 .horizontalLine {
   border: 1px solid #f1f1f5;
   width: 90%;
-  margin-top: 12px;
+  margin-top: 8px;
   margin-left: 20px;
 }
 .oddOption {
@@ -48,11 +48,12 @@
 
 .evenOption {
   /* margin: 10px 0px; */
-  width: 125px !important;
-  height: 128px !important;
+  width: 122px !important;
+  height: 110px !important;
   background-color: #f1f1f5;
   overflow: hidden;
   border-radius: 3px;
+  gap: 0px !important;
 }
 .addBorder {
   border: 2px solid #6729f3;

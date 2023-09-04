@@ -160,7 +160,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
           <div className={classes.horizontalLine}></div>
 
           <div className={clsx(classes.subSection, "mt-2 mx-2 ")}>
-            <div className={clsx(classes.subHeading, "pt-1 pb-1")}> Fixed Size</div>
+            <div className={clsx(classes.subHeading, "pt-0 pb-1")}> Fixed Size</div>
             <Block className={classes.contentWrap}>
               {fixedSizeFrameTypes.map((sample, index) => {
                 const { img, name, subHeading, imgHeight, id } = sample
@@ -171,7 +171,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
                     key={index}
                     className={clsx(
                       classes.evenOption,
-                      "flex-center-column  text-center pointer p-2 w-[125px]",
+                      "flex-center-column  text-center pointer p-2",
                       id === selectedFrame.id && classes.addBorder
 
                     )}
@@ -180,7 +180,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
                       setSelectedFrame(sample)
                     }}
                   >
-                    <Block style={{ height: imgHeight, marginBottom: "8px" }} className="flex-center">
+                    <Block style={{ height: '60px', marginBottom: '6px' }} className="flex-center">
                       {Component && <Component color={id === selectedFrame.id ? "#000" : "#92929D"} />}
                     </Block>
                     <div className={classes.optionHeading}>{name}</div>
