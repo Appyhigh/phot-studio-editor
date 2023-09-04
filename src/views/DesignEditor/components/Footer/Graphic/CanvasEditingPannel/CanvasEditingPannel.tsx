@@ -110,7 +110,7 @@ const CanvasEditingPannel = () => {
           }
         }}
       >
-        <Icons.Undo size={22} />
+        <Icons.Undo size={22} color={(editor?.history?.undos.length > 1 && editor?.history?.current.length > 3) ? "#6729f3" : ''} />
       </Block>
       <Block
         className={classes.canvasOptions}
@@ -118,7 +118,7 @@ const CanvasEditingPannel = () => {
           editor.history.redo()
         }}
       >
-        <Icons.Redo size={22} />
+        <Icons.Redo size={22} color={editor?.history?.redos.length >= 1 ? "#6729f3" : ''} />
       </Block>
     </Block>
   )

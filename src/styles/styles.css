@@ -761,17 +761,15 @@ ul {
 }
 .aspect-ratio-slider .swiper-button-prev {
   background-color: rgba(0, 0, 0, 0.6);
-  top: 36px;
+  top: 36px !important;
   background-image: url("/src/views/Public/images/left-slider.svg");
-
 }
 
 .aspect-ratio-slider .swiper-button-next {
   background-color: rgba(0, 0, 0, 0.6);
-  top: 36px;
+  top: 36px !important;
   right: 10px;
   background-image: url("/src/views/Public/images/right-slider.svg");
-
 }
 
 .swiper-wrapper {

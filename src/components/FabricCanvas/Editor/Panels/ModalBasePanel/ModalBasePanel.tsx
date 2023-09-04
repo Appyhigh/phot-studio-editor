@@ -2,7 +2,7 @@ import { Block } from "baseui/block"
 import clsx from "clsx"
 import classes from "./style.module.css"
 import Icons from "~/components/Icons"
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import ResizeCanvasPopup from "~/views/DesignEditor/components/Footer/Graphic/ResizeCanvasPopup/ResizeCanvasPopup"
 import BaseButton from "../../../../UI/Button/BaseButton"
 import UploadImgModal from "~/components/UI/UploadImgModal/UploadImgModal"
@@ -28,6 +28,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
   const { activePanel } = useAppContext()
   const [showPreview, setShowPreview] = useState(false)
   const { fabricEditor, setFabricEditor } = useFabricEditor()
+  const [startRedoActive, setStartRedoActive] = useState(false)
   const { canvas, objects }: any = fabricEditor
 
   const handleCloseAddPopup = () => {
@@ -113,12 +114,31 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
       : false ||
         // @ts-ignore
         (activePanel === OBJECT_REPLACER && objectReplacerInfo.result)
+        ? true
+        : false ||
+          // @ts-ignore
+          (activePanel === PRODUCT_PHOTOSHOOT && productPhotoshootInfo.finalImage)
+          ? true
+          : false
+
+
+
+  useEffect(() => {
+    if (canvas?.getObjects().length > 1) {
+      setStartRedoActive(true)
+    }
+  }, [canvas?.getObjects().length])
+
+  const isActiveUndoRedo =
+    // @ts-ignore
+    activePanel === OBJECT_REMOVER
       ? true
       : false ||
         // @ts-ignore
-        (activePanel === PRODUCT_PHOTOSHOOT && productPhotoshootInfo.finalImage)
-      ? true
-      : false
+        (activePanel === OBJECT_REPLACER)
+        ? true
+        : false
+
 
   return (
     <div>
@@ -188,7 +208,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
               }
             }}
           >
-            <Icons.Undo size={22} />
+            <Icons.Undo size={22} color={canvas?.getObjects().length > 1 && isActiveUndoRedo ? "#6729f3" : ''} />
           </Block>
           <Block
             className={classes.canvasOptions}
@@ -197,7 +217,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
               canvas.redo()
             }}
           >
-            <Icons.Redo size={22} />
+            <Icons.Redo size={22} color={(canvas?.getObjects().length > 1 || startRedoActive) && isActiveUndoRedo ? "#6729f3" : ''} />
           </Block>
           <BaseButton
             title="Done"
@@ -211,9 +231,9 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
             margin="0px 0.75rem"
             handleClick={() => {
               !isDoneBtnDisabled ||
-              objectRemoverInfo.result ||
-              objectReplacerInfo.result ||
-              productPhotoshootInfo.finalImage
+                objectRemoverInfo.result ||
+                objectReplacerInfo.result ||
+                productPhotoshootInfo.finalImage
                 ? handleAddCanvas()
                 : null
             }}

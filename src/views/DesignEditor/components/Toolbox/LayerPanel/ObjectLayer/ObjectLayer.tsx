@@ -54,7 +54,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   const editor = useEditor()
   const activeObject: any = useActiveObject()
-  const { setLoaderPopup } = useContext(LoaderContext)
+  const { setBlinkInOutLoader } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
   const handleChangeBg = useCallback(
@@ -101,12 +101,12 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     } else {
       HandleBgChangeOption(editor, 0, 0, BG, changeLayerFill, activeObject, inputImg)
     }
-    setLoaderPopup(false)
+    setBlinkInOutLoader(false)
   }
 
   const removeBackgroundBeforeChangingColor = async (each: any) => {
     try {
-      setLoaderPopup(true)
+      setBlinkInOutLoader(true)
       let response = await removeBackgroundController(
         activeObject.metadata ? activeObject.metadata.originalLayerPreview : activeObject.src,
         async (image: string) => {
@@ -134,7 +134,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         throw new Error("Something went wrong while removing background...")
       }
     } catch (error: any) {
-      setLoaderPopup(false)
+      setBlinkInOutLoader(false)
       // @ts-ignore
       setErrorInfo((prev) => ({
         ...prev,
@@ -156,7 +156,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
 
   return showLayer ? (
     <>
-      <Loader isOpen={setLoaderPopup} />
+      <Loader isOpen={setBlinkInOutLoader} />
       <Scrollable>
         <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
         <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
@@ -269,7 +269,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                 if (mainImgInfo?.id === activeObject?.id) {
                   RemoveBGFunc(
                     editor,
-                    setLoaderPopup,
+                    setBlinkInOutLoader,
                     setPanelInfo,
                     mainImgInfo,
                     setMainImgInfo,
@@ -286,7 +286,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                 } else {
                   RemoveBGFunc(
                     editor,
-                    setLoaderPopup,
+                    setBlinkInOutLoader,
                     setPanelInfo,
                     0,
                     setMainImgInfo,

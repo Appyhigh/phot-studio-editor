@@ -517,7 +517,7 @@ function TextSpacing() {
                     InputContainer: {},
                   }}
                   size={SIZE.mini}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   value={Math.round(state.lineHeight)}
                 />
               </Block>
@@ -579,7 +579,7 @@ function TextSpacing() {
                     InputContainer: {},
                   }}
                   size={SIZE.mini}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   value={Math.round(state.charSpacing)}
                 />
               </Block>

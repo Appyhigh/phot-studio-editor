@@ -10,11 +10,17 @@ import AlignMiddle from "~/components/Icons/AlignMiddle"
 import AlignBottom from "~/components/Icons/AlignBottom"
 import { ToolButton } from "./ToolButton"
 import AlignCenterIn from "~/components/Icons/AlignCenterIn"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const CommonAlign = ({ type }: any) => {
   const [isDisabled, setIsDisabled] = useState("none")
   const editor = useEditor()
+  const tooltipRef = useRef(null);
+
+  const handleTooltipMouseLeave = () => {
+    // @ts-ignore
+    tooltipRef.current.style.display = 'none';
+  };
 
   useEffect(() => {
     editor.on("history:changed", () => {
@@ -28,6 +34,8 @@ const CommonAlign = ({ type }: any) => {
       content={() =>
         type === "lock" ? null : (
           <Block
+            ref={tooltipRef}
+            onMouseLeave={handleTooltipMouseLeave}
             padding="12px"
             backgroundColor="#ffffff"
             display="grid"

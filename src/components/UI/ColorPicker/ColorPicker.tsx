@@ -28,7 +28,7 @@ const ColorPicker = ({ isOpen, handleClose, inputColor, handleChangeColor }: any
       overrides={{
         Root: {
           style: ({ $theme }) => ({
-            zIndex: 500,
+            zIndex: 2001,
             borderBottomWidth: "none",
             borderTopWidth: "none",
             borderLeftWidth: "none",

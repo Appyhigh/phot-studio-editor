@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { Block } from "baseui/block"
 import { Input } from "baseui/input"
 import { Slider } from "baseui/slider"
@@ -16,6 +16,13 @@ const Opacity = ({ type }: any) => {
     opacityTemp: number
   }>({ opacity: 0, opacityTemp: 0 })
   const activeObject = useActiveObject() as Required<ILayer>
+  const tooltipRef = useRef(null);
+
+  const handleTooltipMouseLeave = () => {
+    // @ts-ignore
+    tooltipRef.current.style.display = 'none';
+  };
+
 
   React.useEffect(() => {
     if (activeObject) {
@@ -54,7 +61,7 @@ const Opacity = ({ type }: any) => {
       placement={PLACEMENT.bottomLeft}
       content={() =>
         type === "lock" ? null : (
-          <Block width={"200px"} backgroundColor={"#ffffff"} padding={"20px"}>
+          <Block ref={tooltipRef} onMouseLeave={handleTooltipMouseLeave} width={"200px"} backgroundColor={"#ffffff"} padding={"20px"}>
             <Block $style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <Block $style={{ fontSize: "14px" }}>Opacity</Block>
               <Block width={"52px"}></Block>

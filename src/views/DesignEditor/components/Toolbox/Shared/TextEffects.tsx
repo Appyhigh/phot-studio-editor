@@ -3,11 +3,17 @@ import { Block } from "baseui/block"
 import { Button, SIZE, KIND } from "baseui/button"
 import { PLACEMENT, StatefulPopover } from "baseui/popover"
 import { TEXT_EFFECTS } from "~/constants/design-editor"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 const TextEffectsNew = ({ type }: any) => {
   const editor = useEditor()
   const [color, setColor] = useState("#b32aa9")
+  const tooltipRef = useRef(null);
+
+  const handleTooltipMouseLeave = () => {
+    // @ts-ignore
+    tooltipRef.current.style.display = 'none';
+  };
 
   const EFFECTS = {
     None: {
@@ -95,6 +101,8 @@ const TextEffectsNew = ({ type }: any) => {
       content={() =>
         type === "lock" ? null : (
           <Block
+            onMouseLeave={handleTooltipMouseLeave}
+            ref={tooltipRef}
             padding="12px"
             backgroundColor="#ffffff"
             display="grid"
@@ -115,8 +123,8 @@ const TextEffectsNew = ({ type }: any) => {
       returnFocus
       autoFocus
     >
-      <div style={{padding:"8px 5px",fontWeight:500,cursor:"pointer"}}>
-      <p >Effects</p>
+      <div style={{ padding: "8px 5px", fontWeight: 500, cursor: "pointer" }}>
+        <p >Effects</p>
       </div>
     </StatefulPopover>
   )

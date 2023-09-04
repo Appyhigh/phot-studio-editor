@@ -5,12 +5,14 @@ import useDesignEditorContext from "~/hooks/useDesignEditorContext"
 import ContextMenu from "../ContextMenu"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 import MainImageContext from "~/contexts/MainImageContext"
+import LoaderContext from "~/contexts/LoaderContext"
 
 const Canvas = () => {
   const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const activeObject: any = useActiveObject()
+  const { blinkInOutLoader } = useContext(LoaderContext)
 
   useEffect(() => {
     if (editor) {
@@ -78,6 +80,48 @@ const Canvas = () => {
       })
     }
   }, [editor, mainImgInfo, activeObject])
+
+  useEffect(() => {
+    let animationFrameId: any = null;
+    let opacity = 1;
+    let increasing = false;
+
+    // Function to handle the smooth blinking animation
+    function animateBlink() {
+      if (activeObject) {
+        const blinkSpeed = 0.015;
+        const minOpacity = 0.2;
+        if (increasing) {
+          opacity += blinkSpeed;
+          if (opacity >= 1) {
+            opacity = 1;
+            increasing = false;
+          }
+        } else {
+          opacity -= blinkSpeed;
+          if (opacity <= minOpacity) {
+            opacity = minOpacity;
+            increasing = true;
+          }
+        }
+
+        activeObject.set({ opacity });
+        activeObject.canvas.requestRenderAll();
+
+        animationFrameId = requestAnimationFrame(animateBlink);
+      }
+
+    }
+    if (blinkInOutLoader) {
+      animateBlink();
+    } else if (activeObject) {
+      activeObject.set({ opacity });
+    }
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, [blinkInOutLoader]);
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>

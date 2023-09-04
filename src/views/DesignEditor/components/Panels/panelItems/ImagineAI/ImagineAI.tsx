@@ -30,6 +30,7 @@ import Prompt from "~/components/Prompt/Prompt"
 import ImagesCount from "~/components/ImagesCount/ImagesCount"
 import { UpdateObjectFunc } from "~/views/DesignEditor/utils/functions/UpdateObjectFunc"
 import FileError from "~/components/UI/Common/FileError/FileError"
+import { TOOL_NAMES } from "~/constants/contants"
 
 const ImagineAI = () => {
   const { textToArtInputInfo, textToArtpanelInfo, setTextToArtInputInfo, setTextToArtPanelInfo } =
@@ -137,28 +138,48 @@ const ImagineAI = () => {
   const frame = useFrame()
 
   const addImgToCanvas = async (imageUrl: string) => {
-    if (currentActiveImg == -1) {
-      await getDimensions(imageUrl, (img: any) => {
-        let latest_ct = 0
-        setImagesCt((prev: any) => {
-          latest_ct = prev + 1
-          AddObjectFunc(
-            imageUrl,
-            editor,
-            img.width,
-            img.height,
-            frame,
-            (latest_ct = latest_ct),
-            null,
-            null,
-            setTextToArtInputInfo
-          )
-          return prev + 1
-        })
+    // if (currentActiveImg == -1) {
+    //   await getDimensions(imageUrl, (img: any) => {
+    //     let latest_ct = 0
+    //     setImagesCt((prev: any) => {
+    //       latest_ct = prev + 1
+    //       AddObjectFunc(
+    //         imageUrl,
+    //         editor,
+    //         img.width,
+    //         img.height,
+    //         frame,
+    //         (latest_ct = latest_ct),
+    //         null,
+    //         null,
+    //         setTextToArtInputInfo
+    //       )
+    //       return prev + 1
+    //     })
+    //   })
+    // }
+    // else {
+    //   UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
+    // }
+    await getDimensions(imageUrl, (img: any) => {
+      let latest_ct = 0
+      setImagesCt((prev: any) => {
+        latest_ct = prev + 1
+        AddObjectFunc(
+          imageUrl,
+          editor,
+          img.width,
+          img.height,
+          frame,
+          (latest_ct = latest_ct),
+          null,
+          null,
+          setTextToArtInputInfo
+        )
+        return prev + 1
       })
-    } else {
-      UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
-    }
+    })
+
   }
 
   return (
@@ -279,6 +300,7 @@ const ImagineAI = () => {
               loginPopupCloseHandler={() => {
                 setShowLoginPopup(false)
               }}
+              toolName={TOOL_NAMES.imagineAi}
             />
 
             <p className={classes.creditsPara}>
@@ -354,7 +376,10 @@ const ImagineAI = () => {
                       onClick={() => {
                         if (currentActiveImg === idx) return
                         setCurrentActiveImg(idx)
-                        addImgToCanvas(each)
+                        if (currentActiveImg !== idx) {
+                          addImgToCanvas(each)
+                        }
+
                       }}
                     />
                   }

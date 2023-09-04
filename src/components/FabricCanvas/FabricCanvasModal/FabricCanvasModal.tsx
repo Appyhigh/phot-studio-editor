@@ -14,8 +14,8 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   // @ts-ignore
   const Component = ModalToolItems[activePanel]
   const { errorInfo } = useContext(ErrorContext)
-  const { authState, setAuthState }:any = useAuth()
-  const { showLoginPopUp } = authState
+  const { authState, setAuthState }: any = useAuth()
+  const { showLoginPopUp, toolName } = authState
 
   return (
     <Modal
@@ -60,7 +60,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       )}
       {Component && <Component handleClose={handleClose} />}
       {/* <ObjectReplacerEditor/> */}
-      <LoginPopup isOpen={showLoginPopUp} loginPopupCloseHandler={() => setAuthState((prev:any) => ({...prev, showLoginPopUp: false})) }  /> 
+      <LoginPopup isOpen={showLoginPopUp} loginPopupCloseHandler={() => setAuthState((prev: any) => ({ ...prev, showLoginPopUp: false }))} toolName={toolName ? toolName : ''} />
     </Modal>
   )
 }

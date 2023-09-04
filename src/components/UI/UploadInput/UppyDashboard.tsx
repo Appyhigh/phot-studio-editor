@@ -102,6 +102,15 @@ const UppyDashboard = ({
 
   useEffect(() => {
     uppy.on("file-added", async (file: any) => {
+      if(file.type==="image/tiff"){
+        setImageLoading(false)
+        setDisplayError(true)
+        setUploadErrorMsg("Wrong format file uploaded, Please upload an image in JPG, JPEG, PNG or BMP format")
+        setTimeout(() => {
+          setDisplayError(false)
+        }, 5000);
+        close()
+      }
       if (file.source == "Dropbox" || file.source == "OneDrive") {
         setImageLoading ? setImageLoading(true) : null
         uppy.upload()

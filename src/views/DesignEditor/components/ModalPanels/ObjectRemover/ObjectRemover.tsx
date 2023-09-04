@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REMOVER } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, OBJECT_REMOVER, TOOL_NAMES } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
 import BaseButton from "~/components/UI/Button/BaseButton"
@@ -72,12 +72,11 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     const base64CursorString = btoa(cursor)
 
     setBrushSize(parseInt(e[0]))
-    // @ts-ignore
-    ;(canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${
-      brushSize / 2
-    }, auto`),
       // @ts-ignore
-      (canvas.freeDrawingBrush.width = brushSize)
+      ; (canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${brushSize / 2
+        }, auto`),
+        // @ts-ignore
+        (canvas.freeDrawingBrush.width = brushSize)
   }
 
   const handleBgImg = async (imgSrc: string) => {
@@ -120,7 +119,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectRemover }))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
@@ -335,7 +334,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       <div className={classes.brushActionBtn}>
         <BaseButton
           borderRadius="10px"
-          title={"Redo"}
+          title={"Undo"}
           height="38px"
           margin={"8px 8px 4px 4px"}
           width="155px"
@@ -368,8 +367,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
+            console.log('hello remover');
+
             // handleBgImg(objectRemoverInfo.src)
-            if (!user) return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+            if (!user) return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectRemover }))
             handleBrushToolTip(false)
             let paths: any = []
             //  @ts-ignore
@@ -505,10 +506,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           handleClick={() => {
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
             } else if (steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: false }))
             } else {
+              setSteps((prev) => ({ ...prev, firstStep: true }))
               {
               }
             }
@@ -523,7 +524,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           handleClick={() => {
             if (stepsComplete.secondStep && !steps.secondStep) {
               setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: false }))
             } else if (steps.secondStep) {
               setSteps((prev) => ({ ...prev, secondStep: false }))
             } else {
@@ -545,12 +545,12 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           }}
           children={outputResult()}
         />
-        {isError.error && (
+        {isError.error && steps.thirdStep && (
           <div style={{ position: "relative", marginTop: "12px" }}>
             <FileError ErrorMsg={isError.errorMsg} displayError={isError.error} />
           </div>
         )}
-        {isError.error && (
+        {isError.error && steps.thirdStep && (
           <BaseButton
             disabled={imageLoading ? true : false}
             handleClick={() => {

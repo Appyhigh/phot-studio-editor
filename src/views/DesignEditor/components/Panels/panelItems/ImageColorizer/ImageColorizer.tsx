@@ -1,5 +1,5 @@
 import { Block } from "baseui/block"
-import { IMAGE_COLORIZER } from "~/constants/contants"
+import { IMAGE_COLORIZER, TOOL_NAMES } from "~/constants/contants"
 import classes from "./style.module.css"
 import Uploads from "../UploadDropzone/Uploads"
 import Scrollable from "~/components/Scrollable"
@@ -198,13 +198,14 @@ const ImageColorizer = () => {
                 loginPopupCloseHandler={() => {
                   setShowLoginPopup(false)
                 }}
+                toolName={TOOL_NAMES.imageColorizer}
               />
             </div>
           )}
 
           {ImgColorizerPanelInfo.trySampleImg && (
             <>
-              <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-3")}>
+              <Block className={clsx(classes.tryImgHeading, "d-flex align-items-center justify-content-start mb-2 mt-3")}>
                 Try Sample Images
               </Block>
               <Scrollable>

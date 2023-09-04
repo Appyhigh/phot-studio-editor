@@ -24,7 +24,7 @@ const Navbar = () => {
 
       {user ? (
         <>
-          <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
+          {/* <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
             <Icons.ActivityIcon size={24} />
           </Block>
           <BaseButton
@@ -48,7 +48,7 @@ const Navbar = () => {
             fontSize="12px"
             borderRadius="10px"
             margin="0px 0px 0px 16px"
-          />
+          /> */}
           <Block className={clsx(classes.profileWrapper, "ml-2 pointer mt-1")}>
             {user.avatar ? (
               <img src={user.avatar} className="border-circle o-hidden" width="32px" height="32px" />
@@ -84,12 +84,12 @@ const Navbar = () => {
                     <a>Sign out</a>
                   </p>
                 </div>
-                <div className={classes.creditsOfProfile}>
+                {/* <div className={classes.creditsOfProfile}>
                   <div className={classes.remainingCredits}>Remaining Credits: {user && user?.credits_remaining}</div>
                   <div className={classes.buyMoreCredits}>
                     <a>Buy More</a>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </Block>
@@ -97,7 +97,7 @@ const Navbar = () => {
       ) : (
         <>
           <BaseButton
-          title="Login"
+            title="Login"
             handleClick={() => {
               setShowLoginPopup(true)
             }}

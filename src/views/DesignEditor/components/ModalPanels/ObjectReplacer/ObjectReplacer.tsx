@@ -1,7 +1,7 @@
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import { useContext, useEffect, useState } from "react"
-import { MODAL_IMG_UPLOAD, OBJECT_REPLACER } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, OBJECT_REPLACER, TOOL_NAMES } from "~/constants/contants"
 import UploadPreview from "../../Panels/panelItems/UploadPreview/UploadPreview"
 import { Block } from "baseui/block"
 import Uploads from "../../Panels/panelItems/UploadDropzone/Uploads"
@@ -87,12 +87,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     const base64CursorString = btoa(cursor)
 
     setBrushSize(parseInt(e[0]))
-    // @ts-ignore
-    ;(canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${
-      brushSize / 2
-    }, auto`),
       // @ts-ignore
-      (canvas.freeDrawingBrush.width = brushSize)
+      ; (canvas.freeDrawingCursor = `url('data:image/svg+xml;base64,${base64CursorString}') ${brushSize / 2} ${brushSize / 2
+        }, auto`),
+        // @ts-ignore
+        (canvas.freeDrawingBrush.width = brushSize)
   }
 
   useEffect(() => {
@@ -155,7 +154,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
   const getOutputImg = () => {
     if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+      setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectReplacer }))
       setAutoCallAPI(true)
     } else {
       setResultLoading(true)
@@ -475,7 +474,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           disabled={promptText.trim().length > 0 ? false : true}
           handleClick={() => {
             if (!user) {
-              return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true }))
+              return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectReplacer }))
             }
             handleBgImg(objectReplacerInfo.src)
             setSteps((prev) => ({
@@ -582,14 +581,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
 
         {resultLoading
           ? Array.from(Array(4).keys()).map((each, _idx) => {
-              return (
-                <div key={_idx} className={classes.skeletonBox}>
-                  {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
-                </div>
-              )
-            })
+            return (
+              <div key={_idx} className={classes.skeletonBox}>
+                {<img className={classes.imagesLoader} src={LoaderSpinner} />}{" "}
+              </div>
+            )
+          })
           : isError.error
-          ? Array.from(Array(4).keys()).map((each, _idx) => {
+            ? Array.from(Array(4).keys()).map((each, _idx) => {
               return (
                 <div className={classes.skeletonBox}>
                   {
@@ -600,7 +599,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 </div>
               )
             })
-          : objectReplacerInfo.result.map((each, _idx) => {
+            : objectReplacerInfo.result.map((each, _idx) => {
               return (
                 <div
                   key={_idx}
@@ -642,7 +641,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             fontWeight="500"
             handleClick={() => {
               setPromptText((prev) => "")
-              setObjectReplacerInfo((prev: any) => ({ ...prev, preview: prev.result, prompt: "" }))
+              setObjectReplacerInfo((prev: any) => ({ ...prev, preview: prev.src, prompt: "" }))
               setCallAPI(false)
               setStepsComplete((prev) => ({ ...prev, thirdStep: false, fourthStep: false }))
               setSteps((prev) => ({ ...prev, secondStep: true, firstStep: false, thirdStep: false, fourthStep: false }))
@@ -677,7 +676,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
-            
             if (stepsComplete.firstStep && !steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
@@ -689,6 +687,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             } else if (steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: false }))
             } else {
+              setSteps((prev) => ({ ...prev, firstStep: true }))
               {
               }
             }

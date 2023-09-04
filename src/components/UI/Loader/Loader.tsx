@@ -30,7 +30,7 @@ const Loader = ({ isOpen }: any) => {
       isOpen={isOpen}
     >
       <div className="flex-center" >
-        <img src={LoaderSpinner}/>
+        <img src={LoaderSpinner} />
       </div>
     </Modal>
   ) : null

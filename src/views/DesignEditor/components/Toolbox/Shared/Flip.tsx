@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import { Block } from "baseui/block"
 import { Button, SIZE, KIND } from "baseui/button"
@@ -12,6 +12,12 @@ const Flip = ({ type }: any) => {
   const editor = useEditor()
   const activeObject = useActiveObject() as any
   const [state, setState] = React.useState({ flipX: false, flipY: false })
+  const tooltipRef = useRef(null);
+
+  const handleTooltipMouseLeave = () => {
+    // @ts-ignore
+    tooltipRef.current.style.display = 'none';
+  };
 
   React.useEffect(() => {
     if (activeObject) {
@@ -37,7 +43,7 @@ const Flip = ({ type }: any) => {
       placement={PLACEMENT.bottom}
       content={() =>
         type === "lock" ? null : (
-          <Block width="180px" padding="12px" backgroundColor="#ffffff">
+          <Block ref={tooltipRef} onMouseLeave={handleTooltipMouseLeave} width="180px" padding="12px" backgroundColor="#ffffff">
             <Block>
               <Button
                 className={classes.flipDirectionBtn}

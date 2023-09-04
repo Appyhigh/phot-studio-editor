@@ -14,6 +14,7 @@
   font-family: "Rubik";
   line-height: 14px;
   color: #44444f;
+  overflow-y: hidden;
 }
 
 .alignmentWrapper {

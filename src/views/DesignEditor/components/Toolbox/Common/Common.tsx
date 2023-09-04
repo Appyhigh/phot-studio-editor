@@ -68,7 +68,20 @@ const Common = ({ type }: any) => {
                 editor.objects.position("left", activeObject.left)
                 editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                 editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                if (activeObject._objects) editor.objects.group()
+                setTimeout(() => {
+                  if (activeObject._objects) {
+                    // for center of the canvas result
+                    // editor.objects.alignCenter()
+
+                    // over the input image
+                    editor.objects.group()
+                    editor.objects.position("top", activeObject.top)
+                    editor.objects.position("left", activeObject.left)
+                    editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                    editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                  }
+                }, 20);
+
               }, 20)
             })
             return prev + 1
