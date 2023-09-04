@@ -137,7 +137,7 @@ const BgRemover = () => {
         </>
       )}
 
-      {panelInfo.bgOptions && (
+      {(panelInfo.bgOptions && !panelInfo.bgRemoverBtnActive) && (
         <>
           {" "}
           <Block className={clsx(activePanel === "BgRemover" ? "mt-1" : "mt-2")}>
