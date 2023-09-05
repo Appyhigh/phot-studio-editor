@@ -49,10 +49,10 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb, id }: an
           style: ({ $theme }) => ({
             backgroundColor: $theme.colors.white,
             width: "550px",
-            position: fileInputType === "productAdd" && "absolute",
-            top: fileInputType === "productAdd" && "7.75rem",
-            left: fileInputType === "productAdd" && "31.25rem",
-            boxShadow: fileInputType === "productAdd" && "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
+            position: "absolute",
+            top: "7.75rem",
+            left: "31.25rem",
+            boxShadow: "0px 0px 20px 0px rgba(0, 0, 0, 0.05)",
           }),
         },
         DialogContainer: {
@@ -71,8 +71,8 @@ const UploadImgModal = ({ isOpen, handleClose, fileInputType, activeOb, id }: an
               {fileInputType === "update"
                 ? "Update Image"
                 : fileInputType === "bgupdate"
-                ? "Update background"
-                : "Add Image"}
+                  ? "Update background"
+                  : "Add Image"}
             </div>
             <div className={classes.uploadInput}>
               <UppyDashboard
