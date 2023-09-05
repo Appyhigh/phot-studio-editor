@@ -57,6 +57,16 @@ const Canvas = () => {
       //     var object = event.target
       //     object.applyFilters()
       //   })
+
+      // Set event handlers for key shortcuts
+
+      document.addEventListener("keydown", (event) => {
+        // On escape key press deselect everything from the canvas
+        if (event.key === "Escape") {
+          editor.canvas.canvas.discardActiveObject()
+          editor.canvas.canvas.renderAll()
+        }
+      })
     }
   }, [editor])
 
@@ -82,46 +92,45 @@ const Canvas = () => {
   }, [editor, mainImgInfo, activeObject])
 
   useEffect(() => {
-    let animationFrameId: any = null;
-    let opacity = 1;
-    let increasing = false;
+    let animationFrameId: any = null
+    let opacity = 1
+    let increasing = false
 
     // Function to handle the smooth blinking animation
     function animateBlink() {
       if (activeObject) {
-        const blinkSpeed = 0.015;
-        const minOpacity = 0.2;
+        const blinkSpeed = 0.015
+        const minOpacity = 0.2
         if (increasing) {
-          opacity += blinkSpeed;
+          opacity += blinkSpeed
           if (opacity >= 1) {
-            opacity = 1;
-            increasing = false;
+            opacity = 1
+            increasing = false
           }
         } else {
-          opacity -= blinkSpeed;
+          opacity -= blinkSpeed
           if (opacity <= minOpacity) {
-            opacity = minOpacity;
-            increasing = true;
+            opacity = minOpacity
+            increasing = true
           }
         }
 
-        activeObject.set({ opacity });
-        activeObject.canvas.requestRenderAll();
+        activeObject.set({ opacity })
+        activeObject.canvas.requestRenderAll()
 
-        animationFrameId = requestAnimationFrame(animateBlink);
+        animationFrameId = requestAnimationFrame(animateBlink)
       }
-
     }
     if (blinkInOutLoader) {
-      animateBlink();
+      animateBlink()
     } else if (activeObject) {
-      activeObject.set({ opacity });
+      activeObject.set({ opacity })
     }
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, [blinkInOutLoader]);
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [blinkInOutLoader])
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
