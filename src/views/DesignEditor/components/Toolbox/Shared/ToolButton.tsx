@@ -11,7 +11,8 @@ export const ToolButton = ({ type, func, icon, name }: any) => {
         "d-flex justify-content-center align-items-center flex-column ml-1",
         classes.editingBtn,
         type === "lock" && classes.disabledBtn,
-        (name === 'Back' && activeObject?._objects) && classes.disabledBtn
+        (name === 'Back' && activeObject?._objects && activeObject?.name !== 'group') && classes.disabledBtn,
+        (name === 'Front' && activeObject?._objects && activeObject?.name !== 'group') && classes.disabledBtn
       )}
       onClick={func}
     >
