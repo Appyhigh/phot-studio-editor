@@ -24,6 +24,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import ErrorContext from "~/contexts/ErrorContext"
+
 import FileError from "~/components/UI/Common/FileError/FileError"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
 import { getPollingIntervals } from "~/services/pollingIntervals.service"
@@ -110,6 +111,15 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     }
   }, [canvas])
 
+  const [autoCallAPI, setAutoCallAPI] = useState(false)
+
+  useEffect(() => {
+    if (autoCallAPI && user) {
+      handleRemoveBgAndAddObject(productPhotoshootInfo.src)
+      setAutoCallAPI(false)
+    }
+  }, [autoCallAPI, user])
+
   useEffect(() => {
     if (productPhotoshootInfo.tooltip && productPhotoshootInfo.result.length == 0) {
       setTimeout(() => {
@@ -188,77 +198,84 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     }
   }, [])
   const handleRemoveBgAndAddObject = async (imageUrl: any) => {
-    setCanvasLoader(true)
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setShowLoginPopup(true)
+      setAutoCallAPI(true)
+    } else {
+      setCanvasLoader(true)
 
-    canvas.getObjects().forEach((obj: any) => {
-      if (obj.imageType === "product" && !productPhotoshootInfo.removeBg) {
-        canvas.remove(obj)
-      }
-    })
-    try {
-      await getDimensions(imageUrl, async (img: any) => {
-        let response = await removeBackgroundController(
-          imageUrl,
-          (image: string) => {
-            if (image) {
-              addImage({
-                imageType: productPhotoshootInfo.removeBg ? "object" : "product",
-                type: "image",
-                src: image,
-              })
-              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-              setProductPhotoshootInfo((prev: any) => ({
-                ...prev,
-                preview: productPhotoshootInfo.src,
-                tooltip: true,
-              }))
-              setCanvasLoader(false)
-            } else {
-              setCanvasLoader(false)
-              throw new Error("Something went wrong while removing background...")
-            }
-          },
-          virtualSrcImageRef,
-          virtualMaskImageRef,
-          virtualCanvasSrcImageRef,
-          virtualCanvasMaskImageRef,
-          virtualCanvasResultImageRef,
-          img.width,
-          img.height
-        )
-        if (response) {
-          setCanvasLoader(false)
-          setErrorInfo((prev: any) => ({
-            ...prev,
-            showError: true,
-            errorMsg: "Something went wrong while removing background...",
-            retryFn: () => {
-              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-              handleRemoveBgAndAddObject(imageUrl)
-            },
-          }))
-          setTimeout(() => {
-            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
-          }, 5000)
+      canvas.getObjects().forEach((obj: any) => {
+        if (obj.imageType === "product" && !productPhotoshootInfo.removeBg) {
+          canvas.remove(obj)
         }
       })
-    } catch (error: any) {
-      setCanvasLoader(false)
-      setErrorInfo((prev: any) => ({
-        ...prev,
-        showError: true,
-        errorMsg: "Something went wrong while removing background...",
-        retryFn: () => {
+
+      try {
+        await getDimensions(imageUrl, async (img: any) => {
+          let response = await removeBackgroundController(
+            imageUrl,
+            (image: string) => {
+              if (image) {
+                removeBackground()
+                addImage({
+                  imageType: productPhotoshootInfo.removeBg ? "object" : "product",
+                  type: "image",
+                  src: image,
+                })
+                setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
+                setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+                setProductPhotoshootInfo((prev: any) => ({
+                  ...prev,
+                  preview: productPhotoshootInfo.src,
+                  tooltip: true,
+                }))
+                setCanvasLoader(false)
+              } else {
+                setCanvasLoader(false)
+                throw new Error("Something went wrong while removing background...")
+              }
+            },
+            virtualSrcImageRef,
+            virtualMaskImageRef,
+            virtualCanvasSrcImageRef,
+            virtualCanvasMaskImageRef,
+            virtualCanvasResultImageRef,
+            img.width,
+            img.height
+          )
+          if (response) {
+            setCanvasLoader(false)
+            setErrorInfo((prev: any) => ({
+              ...prev,
+              showError: true,
+              errorMsg: "Something went wrong while removing background...",
+              retryFn: () => {
+                setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+                handleRemoveBgAndAddObject(imageUrl)
+              },
+            }))
+            setTimeout(() => {
+              setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+            }, 5000)
+          }
+        })
+      } catch (error: any) {
+        setCanvasLoader(false)
+        setErrorInfo((prev: any) => ({
+          ...prev,
+          showError: true,
+          errorMsg: "Something went wrong while removing background...",
+          retryFn: () => {
+            // @ts-ignore
+            setErrorInfo((prev) => ({ ...prev, showError: false }))
+            handleRemoveBgAndAddObject(imageUrl)
+          },
+        }))
+        setTimeout(() => {
           // @ts-ignore
           setErrorInfo((prev) => ({ ...prev, showError: false }))
-          handleRemoveBgAndAddObject(imageUrl)
-        },
-      }))
-      setTimeout(() => {
-        // @ts-ignore
-        setErrorInfo((prev) => ({ ...prev, showError: false }))
-      }, 5000)
+        }, 5000)
+      }
     }
   }
 

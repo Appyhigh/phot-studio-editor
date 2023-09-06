@@ -4,7 +4,7 @@ import { COOKIE_KEYS } from "./enum"
 
 export const img2Upscaler = async (sourceUrl: string, fileName?: string) => {
   try {
-    const url = "https://devapi.phot.ai/v1/create-enhancer-2k"
+    const url = "https://devapi.phot.ai/app/api/v3/user_activity/create-enhancer-2k"
     const body = {
       sourceUrl: sourceUrl,
       fileName: fileName,
@@ -22,7 +22,7 @@ export const img2Upscaler = async (sourceUrl: string, fileName?: string) => {
 
 export const imgBothUpscaler = async (sourceUrl: string, fileName?: string) => {
   try {
-    const url = "https://devapi.phot.ai/v1/create-enhancer-2k-4k"
+    const url = "https://devapi.phot.ai/app/api/v3/user_activity/create-enhancer-2k-4k"
     const body = {
       sourceUrl: sourceUrl,
       fileName: fileName,
@@ -42,7 +42,7 @@ export const imgBothUpscaler = async (sourceUrl: string, fileName?: string) => {
 
 export const img4Upscaler = async (sourceUrl: string, fileName?: string) => {
   try {
-    const url = "https://devapi.phot.ai/v1/create-enhancer-4k"
+    const url = "https://devapi.phot.ai/app/api/v3/user_activity/create-enhancer-4k"
     const body = {
       sourceUrl: sourceUrl,
       fileName: fileName,

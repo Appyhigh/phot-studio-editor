@@ -2,9 +2,9 @@ import axios from "axios"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 
-const productPhotoshootController = async (input_image: string, prompt: string,pollingInterval:number) => {
+const productPhotoshootController = async (input_image: string, prompt: string, pollingInterval: number) => {
   try {
-    console.log("poling",pollingInterval)
+    console.log("poling", pollingInterval)
     const url = "https://devapi.phot.ai/app/api/v3/user_activity/background-generator"
     const regex = /\/([^/]+)$/
     const match = regex.exec(input_image)
