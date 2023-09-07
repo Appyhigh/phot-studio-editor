@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Block } from "baseui/block"
 import { useActiveObject, useEditor } from "@layerhub-io/react"
 import DeleteIcon from "~/components/Icons/Delete"
@@ -62,27 +62,19 @@ const Common = ({ type }: any) => {
           let latest_ct = 0
           setImagesCt((prev: any) => {
             latest_ct = prev + 1
-            DuplicateFunc({ editor, activeObject, latest_ct }).then(() => {
+            DuplicateFunc({ editor, activeObject, latest_ct: 'groupImage' }).then(() => {
               setTimeout(() => {
+                if (activeObject._objects) {
+                  setTimeout(() => {
+                    editor.objects.group()
+                    editor.objects.findById(activeObject.id)[0].center()
+                  }, 20);
+                }
                 editor.objects.position("top", activeObject.top)
                 editor.objects.position("left", activeObject.left)
                 editor.objects.resize("height", activeObject.height * activeObject.scaleY)
                 editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                setTimeout(() => {
-                  if (activeObject._objects) {
-                    // for center of the canvas result
-                    // editor.objects.alignCenter()
-
-                    // over the input image
-                    editor.objects.group()
-                    editor.objects.position("top", activeObject.top)
-                    editor.objects.position("left", activeObject.left)
-                    editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                    editor.objects.resize("width", activeObject.width * activeObject.scaleX)
-                  }
-                }, 20);
-
-              }, 20)
+              }, 30)
             })
             return prev + 1
           })
