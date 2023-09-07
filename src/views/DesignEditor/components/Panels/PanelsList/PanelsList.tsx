@@ -93,6 +93,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
           classes.panelListItemEach,
           activePanel === name && classes.activePanelItem
         )}
+        style={{ marginBottom: name === 'ProductPhotoshoot' ? '26px' : '' }}
       >
         {label}
         {activePanel === name &&
