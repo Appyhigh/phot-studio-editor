@@ -3,18 +3,18 @@
   transition: ease width 0.1s;
   overflow: hidden;
   width: 0;
+  padding-bottom: 20px;
 }
 
-.sideBarOpenItem{
-    width: 300px;
+.sideBarOpenItem {
+  width: 300px;
 }
 
 @media screen and (min-width: 1220px) {
-
-.panelItem{
+  .panelItem {
     width: 0;
-}
-.sideBarOpenItem{
+  }
+  .sideBarOpenItem {
     width: 360px;
-}
+  }
 }
