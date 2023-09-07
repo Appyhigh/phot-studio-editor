@@ -91,14 +91,15 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
         className={clsx(
           "text-center p-relative",
           classes.panelListItemEach,
-          activePanel === name && classes.activePanelItem
+          activePanel === name && classes.activePanelItem,
+          name === 'ProductPhotoshoot' && classes.lastActiveItem
         )}
-        style={{ marginBottom: name === 'ProductPhotoshoot' ? '26px' : '' }}
+
       >
         {label}
         {activePanel === name &&
           (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) && (
-            <div className={classes.chevronIcon}>
+            <div className={clsx(classes.chevronIcon, name === 'ProductPhotoshoot' && classes.lastChevronIcon)}>
               <PointerIcon width="20px" />
             </div>
           )}

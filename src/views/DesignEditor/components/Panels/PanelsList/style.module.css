@@ -61,8 +61,14 @@
   left: 63px;
   transform: translateX(42px);
 }
+.lastChevronIcon {
+  bottom: 5px !important;
+}
+.lastActiveItem {
+  margin-bottom: 20px !important;
+}
 
-@media screen and (max-height: 740px) {
+@media screen and (max-height: 700px) {
   .chevronIcon {
     display: none;
   }
