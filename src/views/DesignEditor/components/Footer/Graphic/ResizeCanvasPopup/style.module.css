@@ -1,6 +1,6 @@
 .resizeCanvasContainer {
   height: fit-content;
-  width: 415px;
+  width: 438px;
   background-color: #fff;
   border: 1px solid #f1f1f5;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
@@ -44,20 +44,38 @@
   flex-wrap: wrap;
   /* margin-left: 2px; */
   gap: 7px;
+  height: 270px;
+  overflow-y: scroll;
+  padding-bottom: 2px;
+}
+
+.contentWrap::-webkit-scrollbar {
+  width: 4px; /* Set the width of the scrollbar */
+}
+
+.contentWrap::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.contentWrap::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color of the track */
 }
 
 .evenOption {
   /* margin: 10px 0px; */
-  width: 122px !important;
-  height: 110px !important;
-  background-color: #f1f1f5;
+  width: 125px !important;
+  height: 130px !important;
   overflow: hidden;
   border-radius: 3px;
   gap: 0px !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 .addBorder {
   border: 2px solid #6729f3;
   border-radius: 3px;
+  background-color: #f1f1f5;
 }
 .optionHeading {
   color: #44444f;
@@ -82,11 +100,6 @@
   border-radius: 10px;
 }
 .isEnabledBtn {
-  font-family: Poppins;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 18px;
-  letter-spacing: 0px;
   color: #ffffff;
   background-color: #6729f3;
 }
