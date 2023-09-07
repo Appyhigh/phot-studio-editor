@@ -58,11 +58,11 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
   const handleChangeBg = useCallback(
-    
+
     async (each: any) => {
       let inputImage
       if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-       return setShowLoginPopup(true)
+        return setShowLoginPopup(true)
       }
       if (
         activeObject?.metadata?.originalLayerPreview &&
@@ -74,7 +74,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
         removeBackgroundBeforeChangingColor(each)
       }
     },
-    [activeObject,user]
+    [activeObject, user]
   )
 
   const eraseHandler = () => {
@@ -253,77 +253,72 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             }}
           />
 
-          <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
-          <div className={classes.otherToolsWrapper}>
-            <div
-              onClick={() => {
-                let latest_ct = 0
-                setImagesCt((prev: any) => {
-                  latest_ct = prev
-                  return prev
-                })
-                if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
-                  setShowLoginPopup(true)
-                  return
-                }
-                if (mainImgInfo?.id === activeObject?.id) {
-                  RemoveBGFunc(
-                    editor,
-                    setBlinkInOutLoader,
-                    setPanelInfo,
-                    mainImgInfo,
-                    setMainImgInfo,
-                    virtualSrcImageRef,
-                    virtualMaskImageRef,
-                    virtualCanvasSrcImageRef,
-                    virtualCanvasMaskImageRef,
-                    virtualCanvasResultImageRef,
-                    0,
-                    (latest_ct = latest_ct),
-                    errorInfo,
-                    setErrorInfo
-                  )
-                } else {
-                  RemoveBGFunc(
-                    editor,
-                    setBlinkInOutLoader,
-                    setPanelInfo,
-                    0,
-                    setMainImgInfo,
-                    virtualSrcImageRef,
-                    virtualMaskImageRef,
-                    virtualCanvasSrcImageRef,
-                    virtualCanvasMaskImageRef,
-                    virtualCanvasResultImageRef,
-                    activeObject,
-                    (latest_ct = latest_ct),
-                    errorInfo,
-                    setErrorInfo
-                  )
-                }
-              }}
-              className={clsx(
-                classes.otherToolsBox,
-                "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
-              )}
-            >
-              <Icons.Image />
-              <p>Remove Background</p>
-            </div>
-            {/* {[1, 2, 3].map((each, idx) => (
-            <div
-              key={idx}
-              className={clsx(
-                classes.otherToolsBox,
-                "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
-              )}
-            >
-              <Icons.Image />
-              <p>Tool</p>
-            </div>
-          ))} */}
-          </div>
+          {
+            activeObject?.metadata?.originalLayerPreview !== activeObject?.preview && <>
+              <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
+              <div className={classes.otherToolsWrapper}>
+                <div
+                  onClick={() => {
+                    let latest_ct = 0
+                    setImagesCt((prev: any) => {
+                      latest_ct = prev
+                      return prev
+                    })
+                    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+                      setShowLoginPopup(true)
+                      return
+                    }
+                    if (mainImgInfo?.id === activeObject?.id) {
+                      RemoveBGFunc(
+                        editor,
+                        setBlinkInOutLoader,
+                        setPanelInfo,
+                        mainImgInfo,
+                        setMainImgInfo,
+                        virtualSrcImageRef,
+                        virtualMaskImageRef,
+                        virtualCanvasSrcImageRef,
+                        virtualCanvasMaskImageRef,
+                        virtualCanvasResultImageRef,
+                        0,
+                        (latest_ct = latest_ct),
+                        errorInfo,
+                        setErrorInfo
+                      )
+                    } else {
+                      RemoveBGFunc(
+                        editor,
+                        setBlinkInOutLoader,
+                        setPanelInfo,
+                        0,
+                        setMainImgInfo,
+                        virtualSrcImageRef,
+                        virtualMaskImageRef,
+                        virtualCanvasSrcImageRef,
+                        virtualCanvasMaskImageRef,
+                        virtualCanvasResultImageRef,
+                        activeObject,
+                        (latest_ct = latest_ct),
+                        errorInfo,
+                        setErrorInfo
+                      )
+                    }
+                  }}
+                  className={clsx(
+                    classes.otherToolsBox,
+                    "d-flex  pointer justify-content-center align-items-center flex-column mr-1 mb-1"
+                  )}
+                >
+                  <Icons.Image />
+                  <p>Remove Background</p>
+                </div>
+
+
+              </div>
+            </>
+          }
         </div>
+
         <UploadImgModal
           activeOb={activeOb}
           fileInputType="update"
