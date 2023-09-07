@@ -61,15 +61,24 @@
   left: 63px;
   transform: translateX(42px);
 }
-.lastChevronIcon {
-  bottom: 5px !important;
-}
-.lastActiveItem {
-  margin-bottom: 20px !important;
-}
 
-@media screen and (max-height: 700px) {
-  .chevronIcon {
-    display: none;
+@media screen and (max-height: 730px) {
+  .sidebarActiveModal {
+    margin-top: -215px !important;
+  }
+}
+@media screen and (max-height: 690px) {
+  .sidebarActiveModal {
+    margin-top: -230px !important;
+  }
+}
+@media screen and (max-height: 670px) {
+  .sidebarActiveModal {
+    margin-top: -250px !important;
+  }
+}
+@media screen and (max-height: 650px) {
+  .sidebarActiveModal {
+    margin-top: -270px !important;
   }
 }

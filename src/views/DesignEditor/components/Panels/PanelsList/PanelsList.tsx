@@ -46,6 +46,7 @@ const PanelsList = () => {
           height: "93vh",
           overflowY: "scroll",
         }}
+        className={clsx((activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) && classes.sidebarActiveModal)}
       >
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
@@ -91,15 +92,13 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
         className={clsx(
           "text-center p-relative",
           classes.panelListItemEach,
-          activePanel === name && classes.activePanelItem,
-          name === 'ProductPhotoshoot' && classes.lastActiveItem
+          activePanel === name && classes.activePanelItem
         )}
-
       >
         {label}
         {activePanel === name &&
           (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) && (
-            <div className={clsx(classes.chevronIcon, name === 'ProductPhotoshoot' && classes.lastChevronIcon)}>
+            <div className={classes.chevronIcon}>
               <PointerIcon width="20px" />
             </div>
           )}
