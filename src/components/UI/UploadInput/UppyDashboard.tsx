@@ -197,7 +197,7 @@ const UppyDashboard = ({
           uppy.cancelAll()
           setTimeout(() => {
             fileInputType != "panelAdd" ? (setImageLoading ? setImageLoading(false) : null) : null
-            close()
+            // close()
           }, 200)
         }
       })
