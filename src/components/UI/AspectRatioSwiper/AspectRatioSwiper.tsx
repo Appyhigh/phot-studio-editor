@@ -19,6 +19,7 @@ const AspectRatioSwiper = ({
   slides,
   centeredSlides,
   spacing,
+  sticky,
 }: any) => {
   const [css, theme] = useStyletron()
   const swiper = useSwiper()
@@ -34,7 +35,7 @@ const AspectRatioSwiper = ({
       <Swiper
         spaceBetween={spacing ? spacing : 10}
         slidesPerView={slides ? slides : 3.5}
-        loop={true}
+        loop={sticky ? false : true}
         centeredSlides={centeredSlides ? false : true}
         autoplay={false}
         navigation={true}
