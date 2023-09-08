@@ -59,6 +59,7 @@ const ImagePopUp = ({ openModal, setOpenModal, imageUrl, setImageUrl }: any) => 
             slides={"auto"}
             centeredSlides={"no"}
             spacing={16}
+            sticky={true}
           />
         </div>
         <div>

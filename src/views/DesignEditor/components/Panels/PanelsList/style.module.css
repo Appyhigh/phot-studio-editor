@@ -5,6 +5,12 @@
   background-color: white;
 }
 
+.panelListContainer {
+  padding-bottom: 30px;
+  height: 93vh;
+  overflow-y: scroll;
+}
+
 .panelListItem {
   padding: 16px 15px;
   background-color: #fff;
@@ -60,4 +66,8 @@
   bottom: -20px;
   left: 63px;
   transform: translateX(42px);
+}
+
+.sidebarActiveModal {
+  margin-top: -29.5vh !important;
 }

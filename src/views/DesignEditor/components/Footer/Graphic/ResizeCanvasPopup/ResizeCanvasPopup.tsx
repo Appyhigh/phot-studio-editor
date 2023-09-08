@@ -27,6 +27,31 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
     width: 0,
     height: 0,
   })
+  useEffect(() => {
+    if (desiredFrame.width == 1024 && desiredFrame.height == 768) {
+      setSelectedFrame(fixedSizeFrameTypes[0])
+    } else if (desiredFrame.width == 1920 && desiredFrame.height == 1080) {
+      setSelectedFrame(fixedSizeFrameTypes[1])
+    } else if (desiredFrame.width == 512 && desiredFrame.height == 1024) {
+      setSelectedFrame(fixedSizeFrameTypes[2])
+    } else if (desiredFrame.width == 1080 && desiredFrame.height == 1080) {
+      setSelectedFrame(fixedSizeFrameTypes[3])
+    } else if (desiredFrame.width == 1200 && desiredFrame.height == 1200) {
+      setSelectedFrame(fixedSizeFrameTypes[4])
+    } else if (desiredFrame.width == 1702 && desiredFrame.height == 630) {
+      setSelectedFrame(fixedSizeFrameTypes[5])
+    } else if (desiredFrame.width == 1280 && desiredFrame.height == 720) {
+      setSelectedFrame(fixedSizeFrameTypes[6])
+    } else if (desiredFrame.width == 1200 && desiredFrame.height == 675) {
+      setSelectedFrame(fixedSizeFrameTypes[7])
+    } else {
+      setSelectedFrame({
+        id: 0,
+        width: 0,
+        height: 0,
+      })
+    }
+  }, [desiredFrame])
 
   const [activeKey, setActiveKey] = useState<string | number>("0")
 
@@ -160,7 +185,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
           <div className={classes.horizontalLine}></div>
 
           <div className={clsx(classes.subSection, "mt-2 mx-2 ")}>
-            <div className={clsx(classes.subHeading, "pt-1 pb-1")}> Fixed Size</div>
+            <div className={clsx(classes.subHeading, "pt-1 pb-2")}> Fixed Size</div>
             <Block className={classes.contentWrap}>
               {fixedSizeFrameTypes.map((sample, index) => {
                 const { img, name, subHeading, imgHeight, id } = sample
@@ -171,7 +196,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
                     key={index}
                     className={clsx(
                       classes.evenOption,
-                      "flex-center-column  text-center pointer p-2 w-[125px]",
+                      "flex-center-column  text-center pointer ",
                       id === selectedFrame.id && classes.addBorder
 
                     )}
@@ -180,7 +205,7 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
                       setSelectedFrame(sample)
                     }}
                   >
-                    <Block style={{ height: imgHeight, marginBottom: "8px" }} className="flex-center">
+                    <Block style={{ height: '60px', marginBottom: '6px' }} className="flex-center">
                       {Component && <Component color={id === selectedFrame.id ? "#000" : "#92929D"} />}
                     </Block>
                     <div className={classes.optionHeading}>{name}</div>

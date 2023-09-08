@@ -46,6 +46,11 @@ const PanelsList = () => {
           height: "93vh",
           overflowY: "scroll",
         }}
+        className={clsx(
+          classes.panelListContainer,
+          (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) &&
+            classes.sidebarActiveModal
+        )}
       >
         {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem

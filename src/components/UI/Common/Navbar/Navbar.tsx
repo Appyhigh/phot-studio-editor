@@ -71,10 +71,10 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className={classes.profilePopupLinks}>
-                  <p className={classes.profileLinks}>
+                  {/* <p className={classes.profileLinks}>
                     {" "}
                     <a>My Dashboard</a>
-                  </p>
+                  </p> */}
                   <p
                     className={classes.profileLinks}
                     onClick={() => {

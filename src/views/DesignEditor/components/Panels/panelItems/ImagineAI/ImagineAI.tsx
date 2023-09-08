@@ -272,13 +272,18 @@ const ImagineAI = () => {
             {textToArtInputInfo.uploaded_img == "" && (
               <div className={classes.aspectRatioSection}>
                 <div className={clsx(classes.artSubHeading)}>Aspect Ratio</div>
-                <AspectRatioSwiper
-                  data={aspectRatio}
-                  aspectRatioSelected={textToArtInputInfo.aspect_ratio}
-                  handleChange={(x: number, y: number) => {
-                    setTextToArtInputInfo((prev: any) => ({ ...prev, aspect_ratio: `${x}:${y}` }))
-                  }}
-                />
+                <div  >
+                  <AspectRatioSwiper
+                    data={aspectRatio}
+                    aspectRatioSelected={textToArtInputInfo.aspect_ratio}
+                    handleChange={(x: number, y: number) => {
+                      setTextToArtInputInfo((prev: any) => ({ ...prev, aspect_ratio: `${x}:${y}` }))
+                    }}
+                    sticky={true}
+                    slides={"auto"}
+                    centeredSlides={"no"}
+                  />
+                </div>
               </div>
             )}
 

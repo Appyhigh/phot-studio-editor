@@ -23,6 +23,7 @@ export const HandleBgChangeOption = async (
   ).catch((err: any) => {
     if (setIsLoading) setIsLoading(false)
   })
+
   var imageElement = document.createElement("img")
   imageElement.setAttribute("crossorigin", "Anonymous")
   imageElement.setAttribute("class", "canvas-img")
@@ -33,7 +34,7 @@ export const HandleBgChangeOption = async (
     preview: previewWithUpdatedBackground,
     original: mainImgInfo.original,
     name: activeObject ? activeObject.name : mainImgInfo.name,
-    id: nanoid(),
+    id: activeObject?.id ? nanoid() : mainImgInfo.id,
     metadata: {
       generationDate: new Date().getTime(),
       originalLayerPreview: mainImgInfo
@@ -44,7 +45,7 @@ export const HandleBgChangeOption = async (
     _originalElement: imageElement,
   }
 
-  editor.objects.update(options)
+  editor.objects.update(options, mainImgInfo.id)
   if (mainImgInfo) {
     setMainImgInfo((prev: any) => ({ ...prev, ...options }))
   }

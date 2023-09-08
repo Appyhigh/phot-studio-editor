@@ -11,10 +11,10 @@ interface Options {
   zoomRatioTemp: number
 }
 const CanvasEditingPannel = () => {
-  const zoomMin = 10
+  const zoomMin = 27
   const zoomMax = 210
   const [options, setOptions] = React.useState<Options>({
-    zoomRatio: 10,
+    zoomRatio: 30,
     zoomRatioTemp: 30,
   })
   const editor = useEditor()
@@ -83,7 +83,10 @@ const CanvasEditingPannel = () => {
           },
         }}
         value={[options.zoomRatio]}
-        onChange={({ value }) => applyZoomRatio("zoomRatio", { target: { value: value[0] } })}
+        onChange={({ value }) => {
+          console.log(value)
+          applyZoomRatio("zoomRatio", { target: { value: value[0] } })
+        }}
         min={zoomMin}
         max={zoomMax}
       />
@@ -110,7 +113,10 @@ const CanvasEditingPannel = () => {
           }
         }}
       >
-        <Icons.Undo size={22} color={(editor?.history?.undos.length > 1 && editor?.history?.current.length > 3) ? "#6729f3" : ''} />
+        <Icons.Undo
+          size={22}
+          color={editor?.history?.undos.length > 1 && editor?.history?.current.length > 3 ? "#6729f3" : ""}
+        />
       </Block>
       <Block
         className={classes.canvasOptions}
@@ -118,7 +124,7 @@ const CanvasEditingPannel = () => {
           editor.history.redo()
         }}
       >
-        <Icons.Redo size={22} color={editor?.history?.redos.length >= 1 ? "#6729f3" : ''} />
+        <Icons.Redo size={22} color={editor?.history?.redos.length >= 1 ? "#6729f3" : ""} />
       </Block>
     </Block>
   )
