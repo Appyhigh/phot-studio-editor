@@ -69,11 +69,13 @@ const Common = ({ type }: any) => {
                     editor.objects.group()
                     editor.objects.findById(activeObject.id)[0].center()
                   }, 20);
+                  editor.objects.position("top", activeObject.top)
+                  editor.objects.position("left", activeObject.left)
+                  editor.objects.resize("height", activeObject.height * activeObject.scaleY)
+                  editor.objects.resize("width", activeObject.width * activeObject.scaleX)
+                } else {
+                  activeObject.center()
                 }
-                editor.objects.position("top", activeObject.top)
-                editor.objects.position("left", activeObject.left)
-                editor.objects.resize("height", activeObject.height * activeObject.scaleY)
-                editor.objects.resize("width", activeObject.width * activeObject.scaleX)
               }, 30)
             })
             return prev + 1
