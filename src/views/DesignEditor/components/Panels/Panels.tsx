@@ -6,7 +6,7 @@ import Icons from "~/components/Icons"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import useAppContext from "~/hooks/useAppContext"
 import { PanelType } from "~/constants/app-options"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
@@ -97,7 +97,8 @@ const Panels = () => {
 
   return (
     <>
-      <PanelsList />
+      {!isSidebarOpen && <PanelsList />}
+
       <Block className="d-flex">
         <PanelItem />
         <Block

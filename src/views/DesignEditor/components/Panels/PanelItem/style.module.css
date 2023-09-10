@@ -9,7 +9,18 @@
 .sideBarOpenItem {
   width: 300px;
 }
-
+.backBtn {
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  background-color: white;
+}
 @media screen and (min-width: 1220px) {
   .panelItem {
     width: 0;

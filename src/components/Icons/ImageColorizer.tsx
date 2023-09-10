@@ -1,20 +1,14 @@
 function ImageColorizer({ size, color }: { size: any; color: any }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fillRule="evenodd" clipRule="evenodd" d="M22 2H15V6H18V8.75H22V2Z" fill={color} />
-      <path fillRule="evenodd" clipRule="evenodd" d="M2 22H9V18H6V15.25H2V22Z" fill={color} />
-      <path fillRule="evenodd" clipRule="evenodd" d="M2 2H9V6H6V8.75H2V2Z" fill={color} />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M16.2757 18.5337C16.3586 17.4004 17.2631 16.4954 18.3961 16.4115L12.7776 10.793C12.2725 10.2879 11.3881 10.3533 10.8024 10.9391C10.2166 11.5249 10.1512 12.4092 10.6563 12.9144L16.2757 18.5337Z"
-        fill={color}
-      />
-      <path
-        d="M20.163 16.6737C22.121 16.6737 23.7049 18.3096 23.7049 20.332C23.7049 21.0332 23.8702 21.5994 24.0965 22.0578C25.1843 24.2511 27.6819 23.9904 20.163 23.9904C18.2049 23.9904 16.6211 22.3545 16.6211 20.332C16.6211 18.3096 18.2049 16.6737 20.163 16.6737Z"
-        fill={color}
-      />
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="19" r="19" fill={color} />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M25.6846 9.93604H20.376V12.9695H22.6511V15.055H25.6846V9.93604Z" fill="#92929D" />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5166 25.1035H15.8252V22.07H13.5501V19.9845H10.5166V25.1035Z" fill="#92929D" />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5166 9.93604H15.8252V12.9695H13.5501V15.055H10.5166V9.93604Z" fill="#92929D" />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M21.3429 22.4751C21.4056 21.6156 22.0915 20.9291 22.9507 20.8654L18.6898 16.6045C18.3067 16.2214 17.636 16.271 17.1918 16.7152C16.7475 17.1594 16.6979 17.8301 17.081 18.2132L21.3429 22.4751Z" fill="#92929D" />
+      <path d="M24.1232 20.9311C25.5918 20.9311 26.7796 22.158 26.7796 23.6748C26.7796 24.2006 26.9036 24.6254 27.0733 24.9692C27.8892 26.6141 29.7624 26.4186 24.1232 26.4186C22.6547 26.4186 21.4668 25.1916 21.4668 23.6748C21.4668 22.158 22.6547 20.9311 24.1232 20.9311Z" fill="#92929D" />
     </svg>
+
   )
 }
 

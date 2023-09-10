@@ -1,19 +1,15 @@
 function ImageUpscaler({ size, color }: { size: any; color: any }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fillRule="evenodd" clipRule="evenodd" d="M22 2H15V6H18V8.75H22V2Z" fill={color} />
-      <path fillRule="evenodd" clipRule="evenodd" d="M2 24H9V20H6V17.25H2V24Z" fill={color} />
-      <path fillRule="evenodd" clipRule="evenodd" d="M2 2H9V6H6V8.75H2V2Z" fill={color} />
-      <path d="M16 16L19 19L22 22" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M15.002 15.002H20.148" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-      <path
-        d="M15.002 15.002L15.002 20.148"
-        stroke={color}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="19" r="19" fill={color} />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M26.8672 11.8901H21.8184V14.7752H23.9821V16.7586H26.8672V11.8901Z" fill="#92929D" />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12.4434 27.7583H17.4922V24.8733H15.3284V22.8898H12.4434V27.7583Z" fill="#92929D" />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12.4434 11.8901H17.4922V14.7752H15.3284V16.7586H12.4434V11.8901Z" fill="#92929D" />
+      <path d="M22.5391 21.9883L24.7028 24.1521L26.8666 26.3158" stroke="#92929D" stroke-width="2.16378" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M21.8203 21.2681H25.532" stroke="#92929D" stroke-width="2.16378" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M21.8203 21.2681L21.8203 24.9797" stroke="#92929D" stroke-width="2.16378" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
+
   )
 }
 
