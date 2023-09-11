@@ -12,7 +12,7 @@ import Icons from "~/components/Icons"
 interface State {
   panel: string
 }
-const PanelsList = () => {
+const PanelsList = (setSiderbarToggle: any) => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
   const setIsSidebarOpen = useSetIsSidebarOpen()
@@ -32,6 +32,7 @@ const PanelsList = () => {
 
   // @ts-ignore
   const Component = panelItems[state.panel]
+  console.log(setSiderbarToggle);
 
   return (
     <Block
@@ -41,15 +42,19 @@ const PanelsList = () => {
 
       {Component && (
         <Block className={classes.mainContainer}>
-          <span className={classes.backBtn} onClick={() => setIsSidebarOpen(false)}>
+          <span className={classes.backBtn} onClick={() => {
+            setIsSidebarOpen(false)
+            setSiderbarToggle(true)
+          }}>
             <Icons.ArrowLeft />
           </span>
 
           <Component />
 
         </Block>
-      )}{" "}
-    </Block>
+      )
+      }{" "}
+    </Block >
   )
 }
 

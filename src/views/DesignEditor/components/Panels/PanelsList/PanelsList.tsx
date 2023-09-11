@@ -49,7 +49,7 @@ const PanelsList = () => {
     if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
       sidebarRef.current.style.display = 'none';
     } else {
-      sidebarRef.current.style.display = 'block';
+      sidebarRef.current.style.display = 'flex';
     }
   }, [activePanel])
 
@@ -72,6 +72,7 @@ const PanelsList = () => {
               <div className={classes.roundProfileDP}>
                 {user?.avatar ? (
                   <img src={user?.avatar} width="42px" height="42px" alt="profile-icon" />
+                  // <Icons.ProfileIcon size={32} />
                 ) : (
                   <Icons.ProfileIcon size={32} />
                 )}
