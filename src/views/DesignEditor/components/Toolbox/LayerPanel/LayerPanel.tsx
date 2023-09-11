@@ -25,7 +25,7 @@ const DEFAULT_TOOLBOX = "Canvas"
 
 const Container = styled("div", (props) => ({
   minWidth: "300px",
-  height: "100%",
+  height: "98%",
   display: "flex",
 }))
 
@@ -106,7 +106,7 @@ const LayerPanel = () => {
         (el: any) => el.type === "BackgroundImage" || el?.metadata?.type === backgroundLayerType
       )
       if (bgImageIndex !== -1) {
-         // @ts-ignore
+        // @ts-ignore
         setBgUrl(editor?.frame?.background?.canvas?._objects[bgImageIndex].preview)
       } else {
         setBgUrl(editor?.frame?.background?.fill)
@@ -415,8 +415,8 @@ const LayerPanel = () => {
                                 backgroundColor: check_group(obj.id)
                                   ? "#F1F1F5"
                                   : activeObject?.id == obj.id
-                                  ? "#F1F1F5"
-                                  : "#fff",
+                                    ? "#F1F1F5"
+                                    : "#fff",
                                 marginTop: "8px",
                                 ":hover": {
                                   background: "#F1F1F5",
