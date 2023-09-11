@@ -45,6 +45,13 @@ const PanelsList = () => {
   //     sidebarRef.current.style.marginTop = "0"
   //   }
   // }, [activePanel])
+  useEffect(() => {
+    if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
+      sidebarRef.current.style.display = 'none';
+    } else {
+      sidebarRef.current.style.display = 'block';
+    }
+  }, [activePanel])
 
   return (
     <div className={classes.panelListSection}>
@@ -105,7 +112,23 @@ const PanelsList = () => {
                 {!isAiToolsOpen ? <Icons.RightArrow size={16} /> : <Icons.DownArrow size={16} />}
               </div>
               {isAiToolsOpen && <div className={classes.AiToolTree}>
-                {PANEL_ITEMS.map((panelListItem) => (
+                {PANEL_ITEMS.map(panelListItem => (
+                  <div key={panelListItem.category}>
+                    <h2 className={classes.panelCategoriesName}>{panelListItem.category}</h2>
+                    {panelListItem.items.map(item => (
+                      <PanelListItem
+                        sidebarRef={sidebarRef}
+                        label={item.label}
+                        name={item.name}
+                        key={item.id}
+                        // @ts-ignore
+                        icon={item.icon ? item.icon : item.name}
+                        activePanel={activePanel}
+                      />
+                    ))}
+                  </div>
+                ))}
+                {/* {PANEL_ITEMS.map((panelListItem) => (
                   <PanelListItem
                     sidebarRef={sidebarRef}
                     label={panelListItem.label}
@@ -115,7 +138,7 @@ const PanelsList = () => {
                     icon={panelListItem.icon ? panelListItem.icon : panelListItem.name}
                     activePanel={activePanel}
                   />
-                ))}
+                ))} */}
               </div >}
             </div>
             <div className={classes.panelItemSectionContainer} >

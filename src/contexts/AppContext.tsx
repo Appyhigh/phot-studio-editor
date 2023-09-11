@@ -25,23 +25,23 @@ interface IAppContext {
 
 export const AppContext = createContext<IAppContext>({
   isMobile: false,
-  setIsMobile: () => {},
+  setIsMobile: () => { },
   templates: [],
-  setTemplates: () => {},
+  setTemplates: () => { },
   uploads: [],
-  setUploads: () => {},
+  setUploads: () => { },
   shapes: [],
-  setShapes: () => {},
+  setShapes: () => { },
   activePanel: PanelType.BACKGROUND_REMOVER,
-  setActivePanel: () => {},
+  setActivePanel: () => { },
   activeSubMenu: null,
-  setActiveSubMenu: (value: string) => {},
+  setActiveSubMenu: (value: string) => { },
   currentTemplate: {},
   setCurrentTemplate: {},
   res: [],
-  setRes: () => {},
+  setRes: () => { },
   search: "",
-  setSearch: () => {},
+  setSearch: () => { },
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -49,7 +49,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [templates, setTemplates] = useState<Template[]>([])
   const [uploads, setUploads] = useState<any[]>([])
   const [shapes, setShapes] = useState<Template[]>([])
-  const [activePanel, setActivePanel] = useState<PanelType>(PanelType.IMAGINE_AI)
+  const [activePanel, setActivePanel] = useState<PanelType>(PanelType.IMAGES)
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [res, setRes] = useState<any[]>([])

@@ -118,6 +118,7 @@
   font-size: 12px;
   display: flex;
   align-items: center;
+  padding: 5px 0px;
 }
 .lineBorder {
   border: 1px solid rgba(227, 227, 238, 1);
@@ -207,4 +208,15 @@
 
 .sidebarActiveModal {
   margin-top: -29.5vh !important;
+}
+
+.panelCategoriesName {
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: rgba(68, 68, 79, 1);
+  letter-spacing: 0.10000000149011612px;
+  margin-bottom: 12px;
+  margin-top: 6px;
 }

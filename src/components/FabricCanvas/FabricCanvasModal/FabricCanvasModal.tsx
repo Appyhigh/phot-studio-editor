@@ -26,7 +26,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
         Root: {
           style: ({ $theme }) => ({
             zIndex: 500,
-            margin: "4.3rem 0rem 0rem 6rem",
+            margin: "4.3rem 0rem 0rem 0rem",
           }),
         },
         Close: {
@@ -40,7 +40,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
             backgroundColor: "#F1F1F5",
             width: "100%",
             height: "85vh",
-            margin: "1rem 2rem",
+            // margin: "1rem 2rem",
           }),
         },
       }}

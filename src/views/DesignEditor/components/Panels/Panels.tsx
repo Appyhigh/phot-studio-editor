@@ -90,6 +90,7 @@ const Panels = () => {
 
   useEffect(() => {
     fetchSampleImages()
+    setIsSidebarOpen(false)
     return () => {
       clearTimeout(ErrortimeOut)
     }
