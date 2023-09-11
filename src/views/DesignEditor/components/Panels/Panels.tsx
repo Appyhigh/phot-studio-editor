@@ -96,7 +96,6 @@ const Panels = () => {
       clearTimeout(ErrortimeOut)
     }
   }, [])
-  console.log('!isSidebarOpen', !isSidebarOpen, 'sidebarToggle', sidebarToggle);
 
   return (
     <>

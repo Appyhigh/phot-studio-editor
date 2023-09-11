@@ -5,6 +5,46 @@
   background-color: white;
   padding: 30px 20px;
 }
+.skeletonLoader {
+  display: flex;
+  align-items: center;
+}
+
+.roundProfileDPSke {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #f0f0f0; /* Light gray background */
+  margin-right: 10px;
+}
+
+.userInfoSke {
+  flex-grow: 1;
+}
+
+.userNameSke {
+  width: 80%;
+  height: 12px;
+  background-color: #f0f0f0; /* Light gray background */
+  margin-bottom: 8px;
+}
+
+/* Animation */
+@keyframes skeletonAnimation {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.skeletonLoader div {
+  animation: skeletonAnimation 1.5s infinite;
+}
 .profileContainer {
   display: flex;
   flex-direction: column;
@@ -162,6 +202,7 @@
   cursor: pointer;
   transition: all 1s;
 }
+
 .panelListItemEach {
   font-weight: 500;
   color: #92929d;
@@ -207,7 +248,7 @@
 }
 
 .sidebarActiveModal {
-  margin-top: -29.5vh !important;
+  /* margin-top: -29.5vh !important; */
 }
 
 .panelCategoriesName {
@@ -219,4 +260,7 @@
   letter-spacing: 0.10000000149011612px;
   margin-bottom: 12px;
   margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
 }

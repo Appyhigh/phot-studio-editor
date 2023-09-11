@@ -113,7 +113,7 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
       ? true
       : false ||
         // @ts-ignore
-        (activePanel === OBJECT_REPLACER && objectReplacerInfo.result)
+        (activePanel === OBJECT_REPLACER && objectReplacerInfo.result.length > 0)
         ? true
         : false ||
           // @ts-ignore

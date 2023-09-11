@@ -31,10 +31,16 @@ const PanelsList = () => {
   const [isAiToolsOpen, setIsAiToolsOpen] = useState(false);
   const { authState } = useAuth()
   const { user } = authState
+  const [openCategory, setOpenCategory] = useState(null);
 
   const toggleAiTools = () => {
     setIsAiToolsOpen(!isAiToolsOpen);
   };
+
+
+  const toggleCategory = (category: any) => {
+    setOpenCategory(openCategory === category ? null : category);
+  }
 
   // useEffect(() => {
   //   if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
@@ -45,13 +51,13 @@ const PanelsList = () => {
   //     sidebarRef.current.style.marginTop = "0"
   //   }
   // }, [activePanel])
-  useEffect(() => {
-    if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
-      sidebarRef.current.style.display = 'none';
-    } else {
-      sidebarRef.current.style.display = 'flex';
-    }
-  }, [activePanel])
+  // useEffect(() => {
+  //   if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
+  //     sidebarRef.current.style.display = 'block';
+  //   } else {
+  //     sidebarRef.current.style.display = 'flex';
+  //   }
+  // }, [activePanel])
 
   return (
     <div className={classes.panelListSection}>
@@ -67,11 +73,12 @@ const PanelsList = () => {
         )}
       >
         <div className={classes.siderbarTopSection}>
-          {user && <div className={classes.profileContainer}>
+          {user ? <div className={classes.profileContainer}>
             <div className={classes.headerProfile}>
               <div className={classes.roundProfileDP}>
                 {user?.avatar ? (
-                  <img src={user?.avatar} width="42px" height="42px" alt="profile-icon" />
+                  // <img src={user?.avatar} width="42px" height="42px" alt="profile-icon" />
+                  <Icons.ProfileIcon size={32} />
                   // <Icons.ProfileIcon size={32} />
                 ) : (
                   <Icons.ProfileIcon size={32} />
@@ -80,28 +87,36 @@ const PanelsList = () => {
 
               <div className={classes.userInfo}>
                 <div className={classes.userName}>{user?.name}</div>
-                <div className={classes.userPlan}>Free member * Free plan</div>
+                {/* <div className={classes.userPlan}>Free member * Free plan</div> */}
               </div>
             </div>
-            <button
+            {/* <button
               className={classes.basePanelBtn}
             >
               <span className="pr-1">
                 <Icons.Upgrade size={16} />
               </span>
               Upgrade
-            </button>
-          </div>}
+            </button> */}
+          </div> :
+            <div className={classes.skeletonLoader}>
+              <div className={classes.roundProfileDPSke}></div>
+              <div className={classes.userInfoSke}>
+                <div className={classes.userNameSke}></div>
+              </div>
+            </div>
+          }
+
 
           <div className={classes.ToolsTreeSection} >
 
-            <div className={classes.panelItemSectionContainer} >
+            {/* <div className={classes.panelItemSectionContainer} >
               <div className={classes.panelItemSection}>
                 <Icons.CreateRounded size={16} />
                 <p>Create</p>
               </div>
               <Icons.RightArrow size={16} />
-            </div>
+            </div> */}
 
 
             <div className={classes.AiToolsTreeSection}>
@@ -115,8 +130,15 @@ const PanelsList = () => {
               {isAiToolsOpen && <div className={classes.AiToolTree}>
                 {PANEL_ITEMS.map(panelListItem => (
                   <div key={panelListItem.category}>
-                    <h2 className={classes.panelCategoriesName}>{panelListItem.category}</h2>
-                    {panelListItem.items.map(item => (
+                    <div onClick={() => toggleCategory(panelListItem.category)} className={classes.panelCategoriesName}>
+                      <p>{panelListItem.category}</p>
+                      {openCategory === panelListItem.category ?
+                        <Icons.DownArrow size={8} /> :
+                        <Icons.RightArrow size={8} />
+                      }
+
+                    </div>
+                    {openCategory === panelListItem.category && panelListItem.items.map(item => (
                       <PanelListItem
                         sidebarRef={sidebarRef}
                         label={item.label}
@@ -142,7 +164,7 @@ const PanelsList = () => {
                 ))} */}
               </div >}
             </div>
-            <div className={classes.panelItemSectionContainer} >
+            {/* <div className={classes.panelItemSectionContainer} >
               <div className={classes.panelItemSection}>
                 <Icons.Assets size={16} />
                 <p>Assets</p>
@@ -154,18 +176,19 @@ const PanelsList = () => {
                 <Icons.Designs size={16} />
                 <p>Designs</p>
               </div>
-            </div>
-            <div className={classes.lineBorder}></div>
+            </div> */}
+
+            {/* <div className={classes.lineBorder}></div>
             <div className={classes.panelItemSectionContainer} >
               <div className={classes.panelItemSection}>
                 <Icons.sideBarTempletes size={16} />
                 <p>Templates</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
-        <div className={classes.siderbarFooterSection}>
+        {/* <div className={classes.siderbarFooterSection}>
           <div className={classes.panelItemSectionContainer} >
             <div className={classes.panelItemSection}>
               <Icons.ManageSubs size={16} />
@@ -179,7 +202,7 @@ const PanelsList = () => {
               <p>Prefrences</p>
             </div>
           </div>
-        </div>
+        </div> */}
         {/* {PANEL_ITEMS.map((panelListItem) => (
           <PanelListItem
             sidebarRef={sidebarRef}

@@ -32,7 +32,6 @@ const PanelsList = (setSiderbarToggle: any) => {
 
   // @ts-ignore
   const Component = panelItems[state.panel]
-  console.log(setSiderbarToggle);
 
   return (
     <Block
