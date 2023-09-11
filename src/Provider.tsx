@@ -70,7 +70,8 @@ const Provider = ({ children }: { children: React.ReactNode }) => {
     cfg_scale: 7.5,
     aspect_ratio: "1:1",
     showclearTooltip: false,
-    isError: false
+    isError: false,
+    isImageUploading: false,
   })
 
   const [textToArtpanelInfo, setTextToArtPanelInfo] = useState({

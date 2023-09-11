@@ -14,7 +14,6 @@ import FileError from "../Common/FileError/FileError"
 import ImagePopUp from "./ImagePopUp"
 
 const UploadInputImg = () => {
-  const [imageUploading, setImageUploading] = useState(false)
   const inputImageRef = React.useRef<HTMLInputElement>(null)
   const [rejectedFileUpload, setRejectedFileUpload] = useState(false)
 
@@ -34,22 +33,22 @@ const UploadInputImg = () => {
       setRejectedFileUpload(false)
     } else {
       setRejectedFileUpload(true)
-      setImageUploading(false)
+      setTextToArtInputInfo((prev: any) => ({ ...prev, isImageUploading: false }))
       return
     }
     const imageUrl = await getBucketImageUrlFromFile(file)
     setImageUrl(imageUrl)
     if (imageUrl) {
-      setImageUploading(false)
+      setTextToArtInputInfo((prev: any) => ({ ...prev, isImageUploading: false }))
       setOpenModal(true)
     } else {
       console.log("ERROR: Could not upload image")
-      setImageUploading(false)
+      setTextToArtInputInfo((prev: any) => ({ ...prev, isImageUploading: false }))
     }
   }
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setImageUploading(true)
+    setTextToArtInputInfo((prev: any) => ({ ...prev, isImageUploading: true }))
     handleDropFiles(e.target.files!)
   }
 
@@ -59,7 +58,7 @@ const UploadInputImg = () => {
 
   return (
     <>
-      {!textToArtInputInfo.uploaded_img && !imageUploading && !rejectedFileUpload && (
+      {!textToArtInputInfo.uploaded_img && !textToArtInputInfo.isImageUploading && !rejectedFileUpload && (
         <div>
           <div className={classes.artSubHeading}>Add an image (optional)</div>
 
@@ -82,7 +81,7 @@ const UploadInputImg = () => {
         </div>
       )}
 
-      {imageUploading && !rejectedFileUpload && (
+      {textToArtInputInfo.isImageUploading && !rejectedFileUpload && (
         <div>
           <div className={clsx(classes.artSubHeading, "mb-1")}>Add an image </div>
 

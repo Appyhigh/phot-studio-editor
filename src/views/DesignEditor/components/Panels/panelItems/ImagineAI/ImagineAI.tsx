@@ -294,7 +294,7 @@ const ImagineAI = () => {
               disabledBgColor="#92929d"
               fontSize="16px"
               disabled={
-                textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.trim().length == 0 ? true : false
+                (textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.trim().length == 0 ? true : false || textToArtInputInfo.isImageUploading)
               }
               handleClick={() => {
                 generateImage()
