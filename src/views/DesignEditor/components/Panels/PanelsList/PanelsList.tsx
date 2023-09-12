@@ -41,7 +41,7 @@ const PanelsList = () => {
   }
 
   useEffect(() => {
-    if (activeCategory) {
+    if (activePanel) {
       setIsAiToolsOpen(true)
     }
   }, [])
@@ -57,7 +57,7 @@ const PanelsList = () => {
     } else {
       setIsLogin(true)
     }
-  }, [])
+  }, [getCookie(COOKIE_KEYS.AUTH)])
   // useEffect(() => {
   //   if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
   //     sidebarRef.current.style.overflowY = "visible"
@@ -158,13 +158,8 @@ const PanelsList = () => {
                         className={classes.panelCategoriesName}
                       >
                         <p>{panelListItem.category}</p>
-                        {activeCategory == panelListItem.category ? (
-                          <Icons.DownArrow size={8} />
-                        ) : (
-                          <Icons.RightArrow size={8} />
-                        )}
                       </div>
-                      {activeCategory === panelListItem.category &&
+                      {
                         panelListItem.items.map((item) => (
                           <PanelListItem
                             sidebarRef={sidebarRef}
@@ -249,6 +244,7 @@ const PanelsList = () => {
 
 const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
+  console.log(name);
 
   const setIsSidebarOpen = useSetIsSidebarOpen()
   // @ts-ignore
@@ -262,6 +258,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
         setIsSidebarOpen(true)
         setActivePanel(name)
       }}
+      style={{ marginBottom: name == 'ProductPhotoshoot' ? '-70px' : '' }}
     >
       {name === "Images" ? (
         <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
