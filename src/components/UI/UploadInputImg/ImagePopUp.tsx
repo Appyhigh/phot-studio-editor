@@ -27,7 +27,7 @@ const ImagePopUp = ({ openModal, setOpenModal, imageUrl, setImageUrl }: any) => 
       overrides={{
         Root: {
           style: ({ $theme }) => ({
-            zIndex: 100,
+            zIndex: 2001,
           }),
         },
 
