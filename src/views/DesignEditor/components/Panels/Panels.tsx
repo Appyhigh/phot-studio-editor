@@ -99,7 +99,7 @@ const Panels = () => {
 
   return (
     <>
-      {(!isSidebarOpen && sidebarToggle) && <PanelsList />}
+      {!isSidebarOpen && <PanelsList />}
 
       <Block className="d-flex">
         <PanelItem setSidebarToggle={setSiderbarToggle} />

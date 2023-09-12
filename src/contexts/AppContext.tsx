@@ -21,6 +21,8 @@ interface IAppContext {
   setRes: (res: any[]) => void
   search: string
   setSearch: (search: string) => void
+  activeCategory: string
+  setActiveCategory: (search: string) => void
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -42,6 +44,8 @@ export const AppContext = createContext<IAppContext>({
   setRes: () => { },
   search: "",
   setSearch: () => { },
+  activeCategory: "",
+  setActiveCategory: () => { },
 })
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
@@ -54,6 +58,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [res, setRes] = useState<any[]>([])
   const [search, setSearch] = useState<string>("")
+  const [activeCategory, setActiveCategory] = useState<string>("")
   const context = {
     isMobile,
     setIsMobile,
@@ -73,6 +78,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setRes,
     search,
     setSearch,
+    activeCategory,
+    setActiveCategory
   }
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>
 }

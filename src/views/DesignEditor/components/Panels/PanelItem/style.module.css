@@ -3,7 +3,7 @@
   transition: ease width 0.1s;
   overflow: hidden;
   width: 0;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 
 .sideBarOpenItem {

@@ -13,6 +13,8 @@ import { OBJECT_REMOVER, OBJECT_REPLACER, PRODUCT_PHOTOSHOOT } from "~/constants
 import Scrollable from "~/components/Scrollable"
 import { useEffect, useRef, useState } from "react"
 import { useAuth } from "~/hooks/useAuth"
+import { getCookie } from "~/utils/common"
+import { COOKIE_KEYS } from "~/utils/enum"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   backgroundColor: $theme.colors.white,
@@ -22,26 +24,40 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 }))
 
 const PanelsList = () => {
-  const { activePanel } = useAppContext()
+  const { activePanel, activeCategory, setActiveCategory } = useAppContext()
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
   //@ts-ignore
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
   const sidebarRef = useRef(null)
-  const [isAiToolsOpen, setIsAiToolsOpen] = useState(false);
+  const [isAiToolsOpen, setIsAiToolsOpen] = useState(false)
   const { authState } = useAuth()
   const { user } = authState
-  const [openCategory, setOpenCategory] = useState(null);
+  const [openCategory, setOpenCategory] = useState(null)
+  const [isLogin, setIsLogin] = useState(false)
 
   const toggleAiTools = () => {
-    setIsAiToolsOpen(!isAiToolsOpen);
-  };
-
-
-  const toggleCategory = (category: any) => {
-    setOpenCategory(openCategory === category ? null : category);
+    setIsAiToolsOpen(!isAiToolsOpen)
   }
 
+  useEffect(() => {
+    if (activeCategory) {
+      setIsAiToolsOpen(true)
+    }
+  }, [])
+
+  const toggleCategory = (category: any) => {
+    setOpenCategory(openCategory === category ? null : category)
+    setActiveCategory(openCategory === category ? null : category)
+  }
+
+  useEffect(() => {
+    if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
+      setIsLogin(false)
+    } else {
+      setIsLogin(true)
+    }
+  }, [])
   // useEffect(() => {
   //   if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
   //     sidebarRef.current.style.overflowY = "visible"
@@ -73,24 +89,27 @@ const PanelsList = () => {
         )}
       >
         <div className={classes.siderbarTopSection}>
-          {user ? <div className={classes.profileContainer}>
-            <div className={classes.headerProfile}>
-              <div className={classes.roundProfileDP}>
-                {user?.avatar ? (
-                  // <img src={user?.avatar} width="42px" height="42px" alt="profile-icon" />
-                  <Icons.ProfileIcon size={32} />
-                  // <Icons.ProfileIcon size={32} />
-                ) : (
-                  <Icons.ProfileIcon size={32} />
-                )}
-              </div>
+          {isLogin && (
+            <>
+              {user ? (
+                <div className={classes.profileContainer}>
+                  <div className={classes.headerProfile}>
+                    <div className={classes.roundProfileDP}>
+                      {user?.avatar ? (
+                        <img src={user?.avatar} width="42px" height="42px" alt="profile-icon" />
+                      ) : (
+                        // <Icons.ProfileIcon size={32} />
+                        // <Icons.ProfileIcon size={32} />
+                        <Icons.ProfileIcon size={32} />
+                      )}
+                    </div>
 
-              <div className={classes.userInfo}>
-                <div className={classes.userName}>{user?.name}</div>
-                {/* <div className={classes.userPlan}>Free member * Free plan</div> */}
-              </div>
-            </div>
-            {/* <button
+                    <div className={classes.userInfo}>
+                      <div className={classes.userName}>{user?.name}</div>
+                      {/* <div className={classes.userPlan}>Free member * Free plan</div> */}
+                    </div>
+                  </div>
+                  {/* <button
               className={classes.basePanelBtn}
             >
               <span className="pr-1">
@@ -98,18 +117,19 @@ const PanelsList = () => {
               </span>
               Upgrade
             </button> */}
-          </div> :
-            <div className={classes.skeletonLoader}>
-              <div className={classes.roundProfileDPSke}></div>
-              <div className={classes.userInfoSke}>
-                <div className={classes.userNameSke}></div>
-              </div>
-            </div>
-          }
+                </div>
+              ) : (
+                <div className={classes.skeletonLoader}>
+                  <div className={classes.roundProfileDPSke}></div>
+                  <div className={classes.userInfoSke}>
+                    <div className={classes.userNameSke}></div>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
-
-          <div className={classes.ToolsTreeSection} >
-
+          <div className={classes.ToolsTreeSection}>
             {/* <div className={classes.panelItemSectionContainer} >
               <div className={classes.panelItemSection}>
                 <Icons.CreateRounded size={16} />
@@ -118,40 +138,47 @@ const PanelsList = () => {
               <Icons.RightArrow size={16} />
             </div> */}
 
-
             <div className={classes.AiToolsTreeSection}>
-              <div onClick={toggleAiTools} className={classes.panelItemSectionContainer} >
+              <div onClick={toggleAiTools} className={classes.panelItemSectionContainer}>
                 <div className={classes.panelItemSection}>
                   <Icons.AiTools size={16} />
                   <p>AI tools</p>
                 </div>
                 {!isAiToolsOpen ? <Icons.RightArrow size={16} /> : <Icons.DownArrow size={16} />}
               </div>
-              {isAiToolsOpen && <div className={classes.AiToolTree}>
-                {PANEL_ITEMS.map(panelListItem => (
-                  <div key={panelListItem.category}>
-                    <div onClick={() => toggleCategory(panelListItem.category)} className={classes.panelCategoriesName}>
-                      <p>{panelListItem.category}</p>
-                      {openCategory === panelListItem.category ?
-                        <Icons.DownArrow size={8} /> :
-                        <Icons.RightArrow size={8} />
-                      }
-
+              {isAiToolsOpen && (
+                <div className={classes.AiToolTree}>
+                  {PANEL_ITEMS.map((panelListItem) => (
+                    <div key={panelListItem.category}>
+                      <div
+                        onClick={() => {
+                          toggleCategory(panelListItem.category)
+                          // setActiveCategory(panelListItem.category)
+                        }}
+                        className={classes.panelCategoriesName}
+                      >
+                        <p>{panelListItem.category}</p>
+                        {activeCategory == panelListItem.category ? (
+                          <Icons.DownArrow size={8} />
+                        ) : (
+                          <Icons.RightArrow size={8} />
+                        )}
+                      </div>
+                      {activeCategory === panelListItem.category &&
+                        panelListItem.items.map((item) => (
+                          <PanelListItem
+                            sidebarRef={sidebarRef}
+                            label={item.label}
+                            name={item.name}
+                            key={item.id}
+                            // @ts-ignore
+                            icon={item.icon ? item.icon : item.name}
+                            activePanel={activePanel}
+                          />
+                        ))}
                     </div>
-                    {openCategory === panelListItem.category && panelListItem.items.map(item => (
-                      <PanelListItem
-                        sidebarRef={sidebarRef}
-                        label={item.label}
-                        name={item.name}
-                        key={item.id}
-                        // @ts-ignore
-                        icon={item.icon ? item.icon : item.name}
-                        activePanel={activePanel}
-                      />
-                    ))}
-                  </div>
-                ))}
-                {/* {PANEL_ITEMS.map((panelListItem) => (
+                  ))}
+                  {/* {PANEL_ITEMS.map((panelListItem) => (
                   <PanelListItem
                     sidebarRef={sidebarRef}
                     label={panelListItem.label}
@@ -162,7 +189,8 @@ const PanelsList = () => {
                     activePanel={activePanel}
                   />
                 ))} */}
-              </div >}
+                </div>
+              )}
             </div>
             {/* <div className={classes.panelItemSectionContainer} >
               <div className={classes.panelItemSection}>
@@ -237,7 +265,6 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
     >
       {name === "Images" ? (
         <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
-
       ) : (
         <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
       )}
