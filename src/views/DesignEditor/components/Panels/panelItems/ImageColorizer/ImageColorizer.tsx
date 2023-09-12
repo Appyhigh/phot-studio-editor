@@ -129,36 +129,35 @@ const ImageColorizer = () => {
   }
 
   const frame = useFrame()
-  const addImg = useCallback(
-    async (imageUrl: string, _idx: number) => {
-      if (currentActiveImg == -1) {
-        setCurrentActiveImg(_idx)
+  const addImg = async (imageUrl: string, _idx: number) => {
+    if (currentActiveImg == -1) {
+      setCurrentActiveImg(_idx)
 
-        await getDimensions(imageUrl, (img: any) => {
-          let latest_ct = 0
-          setImagesCt((prev: any) => {
-            latest_ct = prev + 1
-            AddObjectFunc(
-              imageUrl,
-              editor,
-              img.width,
-              img.height,
-              frame,
-              (latest_ct = latest_ct),
-              null,
-              null,
-              setImgColorizerInfo
-            )
-            return prev + 1
-          })
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setImgColorizerInfo
+          )
+          return prev + 1
         })
-      } else {
-        setCurrentActiveImg(_idx)
-        UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo)
-      }
-    },
-    [currentActiveImg]
-  )
+      })
+    } else {
+      setCurrentActiveImg(_idx)
+      UpdateObjectFunc(imageUrl, editor, frame, ImgColorizerInfo, setImgColorizerInfo, setImagesCt)
+    }
+  }
+
+
 
   return (
     <Block className="d-flex flex-1 flex-column">

@@ -164,7 +164,7 @@ const PhotoEditor = () => {
         })
       })
     } else {
-      UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo)
+      UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo, setPhotoEditorInfo, setImagesCt)
     }
     setCurrentActiveImg(_idx)
   }

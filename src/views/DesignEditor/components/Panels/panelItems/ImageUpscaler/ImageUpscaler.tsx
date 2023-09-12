@@ -219,7 +219,7 @@ const ImageUpscaler = () => {
         })
       })
     } else {
-      UpdateObjectFunc(imageUrl, editor, frame, imgScalerInfo)
+      UpdateObjectFunc(imageUrl, editor, frame, imgScalerInfo, setImgScalerInfo, setImagesCt)
     }
     setCurrentActiveImg(_idx)
   }
