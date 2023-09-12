@@ -58,22 +58,6 @@ const PanelsList = () => {
       setIsLogin(true)
     }
   }, [getCookie(COOKIE_KEYS.AUTH)])
-  // useEffect(() => {
-  //   if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
-  //     sidebarRef.current.style.overflowY = "visible"
-  //     sidebarRef.current.style.marginTop = "-170px"
-  //   } else {
-  //     sidebarRef.current.style.overflowY = "scroll"
-  //     sidebarRef.current.style.marginTop = "0"
-  //   }
-  // }, [activePanel])
-  // useEffect(() => {
-  //   if (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) {
-  //     sidebarRef.current.style.display = 'block';
-  //   } else {
-  //     sidebarRef.current.style.display = 'flex';
-  //   }
-  // }, [activePanel])
 
   return (
     <div className={classes.panelListSection}>
@@ -98,8 +82,6 @@ const PanelsList = () => {
                       {user?.avatar ? (
                         <img src={user?.avatar} width="42px" height="42px" alt="profile-icon" />
                       ) : (
-                        // <Icons.ProfileIcon size={32} />
-                        // <Icons.ProfileIcon size={32} />
                         <Icons.ProfileIcon size={32} />
                       )}
                     </div>
@@ -244,8 +226,6 @@ const PanelsList = () => {
 
 const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
-  console.log(name);
-
   const setIsSidebarOpen = useSetIsSidebarOpen()
   // @ts-ignore
   const Icon = Icons[icon]
