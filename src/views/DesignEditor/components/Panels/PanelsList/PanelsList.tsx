@@ -49,7 +49,7 @@ const PanelsList = () => {
         className={clsx(
           classes.panelListContainer,
           (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) &&
-            classes.sidebarActiveModal
+          classes.sidebarActiveModal
         )}
       >
         {PANEL_ITEMS.map((panelListItem) => (

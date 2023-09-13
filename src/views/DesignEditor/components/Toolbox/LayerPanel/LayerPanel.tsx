@@ -25,7 +25,7 @@ const DEFAULT_TOOLBOX = "Canvas"
 
 const Container = styled("div", (props) => ({
   minWidth: "300px",
-  height: "98%",
+  height: "97%",
   display: "flex",
 }))
 
@@ -211,11 +211,12 @@ const LayerPanel = () => {
     // @ts-ignore
     <div className="d-flex flex-column p-relative" ref={rightPanelRef}>
       <Container
-        className="p-relative"
+        className={clsx(classes.Container, "p-relative")}
         style={{
           minWidth: layerState.isOpenSlider ? "300px" : "111px",
           maxWidth: "400px",
         }}
+
       >
         <Block className="flex-center">
           <Block
