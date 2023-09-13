@@ -226,6 +226,31 @@
     font-weight: 500;
   }
 }
+@media screen and (max-height: 725px) {
+  .AiToolTree {
+    height: 90%;
+  }
+}
+@media screen and (max-height: 695px) {
+  .AiToolTree {
+    height: 85%;
+  }
+}
+@media screen and (max-height: 675px) {
+  .AiToolTree {
+    height: 80%;
+  }
+}
+@media screen and (max-height: 645px) {
+  .AiToolTree {
+    height: 75%;
+  }
+}
+@media screen and (max-height: 620px) {
+  .AiToolTree {
+    height: 70%;
+  }
+}
 
 .chevronIcon {
   position: absolute;
