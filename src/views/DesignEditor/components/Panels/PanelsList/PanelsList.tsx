@@ -87,7 +87,7 @@ const PanelsList = () => {
                     </div>
 
                     <div className={classes.userInfo}>
-                      <div className={classes.userName}>{user?.name}</div>
+                      <div className={classes.userName}>{user?.name.slice(0, 22)}</div>
                       {/* <div className={classes.userPlan}>Free member * Free plan</div> */}
                     </div>
                   </div>
@@ -227,6 +227,7 @@ const PanelsList = () => {
 const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const isModalOpen = activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT
   // @ts-ignore
   const Icon = Icons[icon]
   return (
@@ -241,21 +242,26 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       style={{ marginBottom: name == 'ProductPhotoshoot' ? '-70px' : '' }}
     >
       {name === "Images" ? (
-        <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
-      ) : (
-        <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
+        <Icon size={24} color={"#F1F1F5"} />
+      ) : (<>
+        {
+          !isModalOpen ? <Icon size={24} color={"#F1F1F5"} />
+            : <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
+        }
+      </>
+
       )}
 
       <Block
         className={clsx(
           "text-center p-relative",
           classes.panelListItemEach,
-          activePanel === name && classes.activePanelItem
+          activePanel === name && isModalOpen && classes.activePanelItem
         )}
       >
         {label}
         {activePanel === name &&
-          (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) && (
+          isModalOpen && (
             <div className={classes.chevronIcon}>
               <PointerIcon width="20px" />
             </div>
