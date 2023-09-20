@@ -38,6 +38,12 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     3: false,
     4: false,
   })
+  const [isVisited, setIsVisited] = useState({
+    1: true,
+    2: false,
+    3: false,
+    4: false,
+  })
 
   const [stepsComplete, setStepsComplete] = useState({
     1: false,
@@ -224,6 +230,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                 })
                 setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
                 setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+                setIsVisited((prev) => ({ ...prev, 2: true, }))
                 setProductPhotoshootInfo((prev: any) => ({
                   ...prev,
                   preview: productPhotoshootInfo.src,
@@ -302,6 +309,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       setCanvasLoader(true)
       setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
       setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
+      setIsVisited((prev) => ({ ...prev, 4: true, }))
       const objects = canvas.getObjects()
       productPhotoshootController(
         getCurrentCanvasBase64Image(),
@@ -344,6 +352,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     removeBackground()
     setSteps((prev: any) => ({ ...prev, 1: true }))
     setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: false }))
+    setIsVisited((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false, }))
     setProductPhotoshootInfo((prev: any) => ({
       ...prev,
       src: "",
@@ -437,6 +446,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             if (productPhotoshootInfo.preview && productPhotoshootInfo.src) {
               setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+              setIsVisited((prev) => ({ ...prev, 2: true, }))
             } else if (productPhotoshootInfo.src) {
               handleRemoveBgAndAddObject(productPhotoshootInfo.src)
             }
@@ -468,6 +478,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             handleClick={() => {
               setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
+              setIsVisited((prev) => ({ ...prev, 3: true, }))
               setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
               canvas.discardActiveObject().renderAll()
             }}
@@ -484,6 +495,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             handleClick={() => {
               setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
               setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
+              setIsVisited((prev) => ({ ...prev, 3: true, }))
               setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
               canvas.discardActiveObject().renderAll()
             }}
@@ -603,6 +615,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             label={"1"}
             heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
             // heading={"Upload / choose image"}
+            isVisited={isVisited[1]}
             isOpen={steps[1]}
             isComplete={stepsComplete[1]}
             children={<UploadImage />}
@@ -621,8 +634,9 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           <Accordian
             label={"2"}
             heading={"Resize your image"}
+            isVisited={isVisited[2]}
             isOpen={steps[2]}
-            isComplete={stepsComplete[2] || productPhotoshootInfo.preview}
+            isComplete={stepsComplete[2]}
             children={<ResizeImage />}
             handleClick={() => {
               if ((stepsComplete[2] || productPhotoshootInfo.preview) && !steps[2]) {
@@ -637,8 +651,9 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           <Accordian
             label={"3"}
             heading={"Select background"}
+            isVisited={isVisited[3]}
             isOpen={steps[3]}
-            isComplete={stepsComplete[3] || productPhotoshootInfo.prompt}
+            isComplete={stepsComplete[3]}
             children={
               <SelectBackground
                 setSteps={setSteps}
@@ -647,18 +662,16 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
               />
             }
             handleClick={() => {
-              if ((stepsComplete[3] || productPhotoshootInfo.prompt) && !steps[3]) {
-                setSteps((prev) => ({ ...prev, 3: true, 1: false, 2: false, 4: false }))
-                // setStepsComplete((prev) => ({ ...prev, 4: false }))
-              } else if (steps[3]) {
-                setSteps((prev) => ({ ...prev, 3: false }))
-              } else {
+              if (stepsComplete[2]) {
+                setSteps((prev) => ({ ...prev, 3: !steps[3], 1: false, 2: false, 4: false }))
               }
+
             }}
           />
           <Accordian
             label={"4"}
             heading={"Select output"}
+            isVisited={isVisited[4]}
             isOpen={steps[4]}
             isComplete={stepsComplete[4] || productPhotoshootInfo.finalImage}
             children={<SelectOutput />}
