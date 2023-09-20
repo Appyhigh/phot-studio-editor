@@ -45,7 +45,7 @@ const PanelsList = (setSiderbarToggle: any) => {
             setIsSidebarOpen(false)
             setSiderbarToggle(true)
           }}>
-            <Icons.ArrowLeft />
+            <Icons.Cross />
           </span>
 
           <Component />

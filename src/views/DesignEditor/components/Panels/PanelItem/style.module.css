@@ -13,6 +13,10 @@
   margin-left: 1.5rem;
   margin-top: 1rem;
   cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: 9px;
+  z-index: 1;
 }
 .mainContainer {
   display: flex;
