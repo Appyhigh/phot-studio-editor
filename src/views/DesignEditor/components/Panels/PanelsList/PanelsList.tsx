@@ -31,7 +31,7 @@ const PanelsList = () => {
   //@ts-ignore
   const PANEL_ITEMS = editorType === "VIDEO" ? VIDEO_PANEL_ITEMS : BASE_ITEMS
   const sidebarRef = useRef(null)
-  const [isAiToolsOpen, setIsAiToolsOpen] = useState(false)
+  const [isAiToolsOpen, setIsAiToolsOpen] = useState(true)
   const { authState } = useAuth()
   const { user } = authState
   const [openCategory, setOpenCategory] = useState(null)
