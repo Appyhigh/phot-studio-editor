@@ -80,7 +80,7 @@
   flex-direction: column;
   margin-top: 1rem;
   overflow-y: scroll;
-  height: 95%;
+  height: 100vh;
 }
 .headerProfile {
   display: flex;
@@ -214,27 +214,32 @@
 }
 @media screen and (max-height: 725px) {
   .AiToolTree {
+    height: 95vh;
+  }
+}
+@media screen and (max-height: 700px) {
+  .AiToolTree {
+    height: 100%;
+  }
+}
+@media screen and (max-height: 685px) {
+  .AiToolTree {
+    height: 95%;
+  }
+}
+@media screen and (max-height: 650px) {
+  .AiToolTree {
     height: 90%;
   }
 }
-@media screen and (max-height: 695px) {
+@media screen and (max-height: 625px) {
   .AiToolTree {
     height: 85%;
   }
 }
-@media screen and (max-height: 675px) {
+@media screen and (max-height: 600px) {
   .AiToolTree {
     height: 80%;
-  }
-}
-@media screen and (max-height: 645px) {
-  .AiToolTree {
-    height: 75%;
-  }
-}
-@media screen and (max-height: 620px) {
-  .AiToolTree {
-    height: 70%;
   }
 }
 
