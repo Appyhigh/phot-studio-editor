@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react"
 import { useAuth } from "~/hooks/useAuth"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
+import { Skeleton } from 'baseui/skeleton';
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   backgroundColor: $theme.colors.white,
@@ -102,9 +103,15 @@ const PanelsList = () => {
                 </div>
               ) : (
                 <div className={classes.skeletonLoader}>
-                  <div className={classes.roundProfileDPSke}></div>
+                  <Skeleton width="42px" height="42px" animation overrides={{
+                    Root: {
+                      style: {
+                        borderRadius: '50%',
+                      },
+                    },
+                  }} />
                   <div className={classes.userInfoSke}>
-                    <div className={classes.userNameSke}></div>
+                    <Skeleton width="80%" height="20px" animation />
                   </div>
                 </div>
               )}

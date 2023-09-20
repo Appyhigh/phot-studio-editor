@@ -8,28 +8,14 @@
 .skeletonLoader {
   display: flex;
   align-items: center;
-}
-
-.roundProfileDPSke {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background-color: #f0f0f0; /* Light gray background */
-  margin-right: 10px;
+  gap: 8px;
 }
 
 .userInfoSke {
   flex-grow: 1;
 }
 
-.userNameSke {
-  width: 80%;
-  height: 12px;
-  background-color: #f0f0f0; /* Light gray background */
-  margin-bottom: 8px;
-}
-
-/* Animation */
+/* Animation
 @keyframes skeletonAnimation {
   0% {
     opacity: 0.8;
@@ -43,8 +29,8 @@
 }
 
 .skeletonLoader div {
-  animation: skeletonAnimation 1.5s infinite;
-}
+  animation: skeletonAnimation 1s infinite;
+} */
 .profileContainer {
   display: flex;
   flex-direction: column;
