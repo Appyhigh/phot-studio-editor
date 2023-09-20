@@ -98,10 +98,10 @@ const Panels = () => {
   }, [])
 
   return (
-    <>
+    <div className={classes.baseSidebarContainer}>
       {!isSidebarOpen && <PanelsList />}
 
-      <Block className="d-flex">
+      <Block className="d-flex" style={{ height: '100%' }}>
         <PanelItem setSidebarToggle={setSiderbarToggle} />
         <Block
           className={clsx("m-auto pointer p-absolute", classes.sliderBtnWrapper, isSidebarOpen && classes.sliderOpen)}
@@ -126,7 +126,7 @@ const Panels = () => {
           )}
         </Block>
       </Block>
-    </>
+    </div>
   )
 }
 

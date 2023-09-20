@@ -1,3 +1,9 @@
+.baseSidebarContainer {
+  width: 360px;
+  height: 90vh;
+  background-color: white;
+  overflow: hidden;
+}
 .sliderBtnWrapper {
   display: none;
   top: 50%;
