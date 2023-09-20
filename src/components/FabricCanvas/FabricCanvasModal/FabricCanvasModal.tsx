@@ -26,7 +26,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
         Root: {
           style: ({ $theme }) => ({
             zIndex: 500,
-            margin: "4.3rem 0rem 0rem 20rem",
+            margin: "4.3rem 0rem 0rem 22.5rem",
           }),
         },
         Close: {
@@ -48,20 +48,22 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       isOpen={isOpen}
     >
       {activePanel === ("ProductPhotoshoot" as any) && <ProductPhotoshootEditor handleClose={handleClose} />}
-      {errorInfo.showError && (
-        <Toast
-          style={{ width: "40%", position: "absolute", bottom: "1rem", left: "30%" }}
-          type="error"
-          message={errorInfo.errorMsg}
-          clickHandler={() => {
-            errorInfo.retryFn()
-          }}
-        />
-      )}
+      {
+        errorInfo.showError && (
+          <Toast
+            style={{ width: "40%", position: "absolute", bottom: "1rem", left: "30%" }}
+            type="error"
+            message={errorInfo.errorMsg}
+            clickHandler={() => {
+              errorInfo.retryFn()
+            }}
+          />
+        )
+      }
       {Component && <Component handleClose={handleClose} />}
       {/* <ObjectReplacerEditor/> */}
       <LoginPopup isOpen={showLoginPopUp} loginPopupCloseHandler={() => setAuthState((prev: any) => ({ ...prev, showLoginPopUp: false }))} toolName={toolName ? toolName : ''} />
-    </Modal>
+    </Modal >
   )
 }
 
