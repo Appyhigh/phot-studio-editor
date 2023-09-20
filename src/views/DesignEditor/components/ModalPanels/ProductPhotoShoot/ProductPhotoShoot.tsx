@@ -702,7 +702,7 @@ const SelectBackground = ({ generateResult }: any) => {
   const [showPrompt, setShowPrompt] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
-  const [selectedCategory, setSelectedCategory] = useState("Architecture")
+  const [selectedCategory, setSelectedCategory] = useState("lifestyle")
   const { sampleImages } = useContext(SampleImagesContext)
   const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 
