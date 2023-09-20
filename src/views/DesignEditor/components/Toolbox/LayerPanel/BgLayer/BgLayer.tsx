@@ -20,15 +20,16 @@ const BgLayer = ({ showLayer, handleClose }: any) => {
     setIsOpen(false)
   }
   const [disableDeleteBtn, setDisableDeleteBtn] = useState(false)
-  useEffect(() => {
-    const bgObject = editor?.frame?.background?.canvas?._objects.filter(
-      (el: any) => el.metadata?.type === backgroundLayerType
-    )[0]
+  const bgObject = editor?.frame?.background?.canvas?._objects.filter(
+    (el: any) => el.metadata?.type === backgroundLayerType
+  )[0]
 
+  useEffect(() => {
     if (bgObject) {
       setDisableDeleteBtn(true)
     } else setDisableDeleteBtn(false)
-  }, [editor])
+  }, [bgObject])
+
   const updateObjectFill = (each: any) => {
     const bgObject = editor.frame.background.canvas._objects.filter(
       (el: any) => el.metadata?.type === backgroundLayerType
