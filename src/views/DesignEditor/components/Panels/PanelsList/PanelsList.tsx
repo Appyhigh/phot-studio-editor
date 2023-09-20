@@ -228,12 +228,15 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isModalOpen = activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT
+  const [isHovered, setIsHovered] = useState(false);
   // @ts-ignore
   const Icon = Icons[icon]
   return (
     <Block
       id="EditorPanelList"
       className={clsx(classes.panelListItem, "p-relative")}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
         // Change the style here
         setIsSidebarOpen(true)
@@ -242,11 +245,11 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       style={{ marginBottom: name == 'ProductPhotoshoot' ? '-70px' : '' }}
     >
       {name === "Images" ? (
-        <Icon size={24} color={"#F1F1F5"} />
+        <Icon size={24} color={isHovered ? '#4E19C6' : "#F1F1F5"} />
       ) : (<>
         {
-          !isModalOpen ? <Icon size={24} color={"#F1F1F5"} />
-            : <Icon size={24} color={activePanel !== name ? "#F1F1F5" : "#4E19C6"} />
+          !isModalOpen ? <Icon size={24} color={isHovered ? '#4E19C6' : "#F1F1F5"} />
+            : <Icon size={24} color={isHovered ? '#4E19C6' : (activePanel !== name ? "#F1F1F5" : "#4E19C6")} />
         }
       </>
 
@@ -256,7 +259,8 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
         className={clsx(
           "text-center p-relative",
           classes.panelListItemEach,
-          activePanel === name && isModalOpen && classes.activePanelItem
+          activePanel === name && isModalOpen && classes.activePanelItem,
+          isHovered && classes.activePanelItem,
         )}
       >
         {label}
