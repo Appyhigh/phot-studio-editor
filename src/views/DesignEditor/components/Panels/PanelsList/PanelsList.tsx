@@ -36,6 +36,7 @@ const PanelsList = () => {
   const { user } = authState
   const [openCategory, setOpenCategory] = useState(null)
   const [isLogin, setIsLogin] = useState(false)
+  const [aiToolTreeHeight, setAiToolTreeHeight] = useState(window.innerHeight - 240);
 
   const toggleAiTools = () => {
     setIsAiToolsOpen(!isAiToolsOpen)
@@ -59,6 +60,19 @@ const PanelsList = () => {
       setIsLogin(true)
     }
   }, [getCookie(COOKIE_KEYS.AUTH)])
+  useEffect(() => {
+    function handleResize() {
+      setAiToolTreeHeight(window.innerHeight - 240);
+    }
+
+    // Attach the event listener
+    window.addEventListener('resize', handleResize);
+
+    // Remove the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div className={classes.panelListSection}>
@@ -136,7 +150,7 @@ const PanelsList = () => {
                 {!isAiToolsOpen ? <Icons.RightArrow size={16} /> : <Icons.DownArrow size={16} />}
               </div>
               {isAiToolsOpen && (
-                <div className={classes.AiToolTree}>
+                <div className={classes.AiToolTree} style={{ height: aiToolTreeHeight + 'px' }}>
                   {PANEL_ITEMS.map((panelListItem) => (
                     <div key={panelListItem.category}>
                       <div
