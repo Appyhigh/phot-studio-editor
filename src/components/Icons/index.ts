@@ -94,6 +94,17 @@ import ObjectReplacer from "./ObjectReplacer"
 import ProductPhotoshoot from "./ProductPhotoshoot"
 import ArrowLeft from "./ArrowLeft"
 import RetryImg from "./RetryImg"
+import Upgrade from "./Upgrade"
+import CreateRounded from "./CreateRounded"
+import AiTools from "./AiTools"
+import Assets from "./Assets"
+import Designs from "./Designs"
+import sideBarTempletes from "./sideBarTempletes"
+import ManageSubs from "./ManageSubs"
+import Settings from "./Settings"
+import RightArrow from "./RightArrow"
+import DownArrow from "./DownArrow"
+import UpArrow from "./UpArrow"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -191,6 +202,17 @@ class Icons {
   static ProductPhotoshoot = ProductPhotoshoot
   static ArrowLeft = ArrowLeft
   static RetryImg = RetryImg
+  static Upgrade = Upgrade
+  static CreateRounded = CreateRounded
+  static AiTools = AiTools
+  static Assets = Assets
+  static Designs = Designs
+  static sideBarTempletes = sideBarTempletes
+  static ManageSubs = ManageSubs
+  static Settings = Settings
+  static RightArrow = RightArrow
+  static DownArrow = DownArrow
+  static UpArrow = UpArrow
 }
 
 export default Icons

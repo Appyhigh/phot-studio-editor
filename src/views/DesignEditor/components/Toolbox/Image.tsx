@@ -5,7 +5,7 @@ import clsx from "clsx"
 
 const Image = () => {
   return (
-    <Block className={clsx("d-flex align-items-center justify-content-between",classes.bottomPanel)}>
+    <Block className={clsx("d-flex align-items-center justify-content-between", classes.bottomPanel)}>
       {/* //dont need for now  */}
       {/* <Block>
       </Block> */}

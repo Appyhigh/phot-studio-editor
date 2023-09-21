@@ -6,7 +6,7 @@ import Icons from "~/components/Icons"
 import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import classes from "./style.module.css"
 import clsx from "clsx"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import useAppContext from "~/hooks/useAppContext"
 import { PanelType } from "~/constants/app-options"
 import SampleImagesContext from "~/contexts/SampleImagesContext"
@@ -19,6 +19,7 @@ import { getStockImages } from "~/services/stockApi"
 const Panels = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isSidebarOpen = useIsSidebarOpen()
+  const [sidebarToggle, setSiderbarToggle] = useState(true)
   const { activePanel } = useAppContext()
 
   useEffect(() => {
@@ -90,24 +91,28 @@ const Panels = () => {
 
   useEffect(() => {
     fetchSampleImages()
+    setIsSidebarOpen(false)
     return () => {
       clearTimeout(ErrortimeOut)
     }
   }, [])
 
   return (
-    <>
-      <PanelsList />
-      <Block className="d-flex">
-        <PanelItem />
+    <div className={classes.baseSidebarContainer}>
+      {!isSidebarOpen && <PanelsList />}
+
+      <Block className="d-flex" style={{ height: '100%' }}>
+        <PanelItem setSidebarToggle={setSiderbarToggle} />
         <Block
           className={clsx("m-auto pointer p-absolute", classes.sliderBtnWrapper, isSidebarOpen && classes.sliderOpen)}
+        // style={{ display: isSidebarOpen ? 'block' : 'none' }}
         >
           {activePanel && Object.values(PanelType).includes(activePanel) && (
             <Block
               className={clsx("p-relative", classes.sliderBtn)}
               onClick={() => {
                 setIsSidebarOpen(!isSidebarOpen)
+                setSiderbarToggle(false)
               }}
             >
               <div>
@@ -121,7 +126,7 @@ const Panels = () => {
           )}
         </Block>
       </Block>
-    </>
+    </div>
   )
 }
 

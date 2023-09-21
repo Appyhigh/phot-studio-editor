@@ -21,6 +21,8 @@ const useAppContext = () => {
     setRes,
     search,
     setSearch,
+    activeCategory,
+    setActiveCategory,
   } = useContext(AppContext)
   return {
     isMobile,
@@ -41,6 +43,8 @@ const useAppContext = () => {
     setRes,
     search,
     setSearch,
+    activeCategory,
+    setActiveCategory,
   }
 }
 

@@ -1,55 +1,207 @@
 .panelListSection {
-  width: 100px !important;
+  width: 100% !important;
   height: 100%;
   overflow-x: visible;
   background-color: white;
+  padding: 30px 20px;
+}
+.skeletonLoader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.userInfoSke {
+  flex-grow: 1;
+}
+
+/* Animation
+@keyframes skeletonAnimation {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.skeletonLoader div {
+  animation: skeletonAnimation 1s infinite;
+} */
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.basePanelBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(103, 41, 243, 1);
+  border-radius: 6px;
+  font-family: Rubik;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 15px;
+  letter-spacing: 0em;
+  width: 100%;
+  height: 44px;
+  background: transparent;
 }
 
 .panelListContainer {
   padding-bottom: 30px;
   height: 93vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.AiToolTree::-webkit-scrollbar {
+  width: 0px;
+}
+
+.AiToolTree::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 16px;
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.AiToolTree::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.AiToolTree {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
   overflow-y: scroll;
+}
+.headerProfile {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+}
+.roundDP {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.roundProfileDP {
+  position: relative;
+}
+.roundDP :nth-child(1) {
+  border-radius: 50%;
+}
+
+.roundDP:hover {
+  cursor: pointer;
+}
+
+.roundProfileDP :nth-child(1) {
+  border-radius: 50%;
+}
+
+.roundProfileDP:hover {
+  cursor: pointer;
+}
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.userName {
+  font-family: Rubik;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  letter-spacing: 0em;
+}
+.userPlan {
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: rgba(110, 110, 110, 1);
 }
 
 .panelListItem {
-  padding: 16px 15px;
+  /* padding: 16px 15px; */
   background-color: #fff;
   font-family: "Poppins";
   font-size: "0.8rem";
   user-select: none;
   transition: all 0.5s;
-  gap: 0.1rem;
+  gap: 10px;
   font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 5px 0px;
+}
+.lineBorder {
+  border: 1px solid rgba(227, 227, 238, 1);
+}
+.ToolsTreeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+}
+
+.siderbarTopSection {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.siderbarFooterSection {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 10vh;
+  margin-top: 28px;
+}
+.panelItemSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0.10000000149011612px;
+}
+.panelItemSectionContainer {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  align-items: center;
 }
 
 .panelListItem:hover {
   cursor: pointer;
   transition: all 1s;
 }
+
 .panelListItemEach {
   font-weight: 500;
   color: #92929d;
-  width: 90px;
+  width: 100% !important;
+  display: flex;
+  justify-content: start;
 }
 .activePanelItem {
   font-weight: 500;
   color: #000;
 }
-.imagesIcon {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(85.66deg, #3e5387 11.38%, #542670 97.9%);
-  border-radius: 6px;
-  /* opacity: 0.5; */
-  font-weight: 500;
-}
-.inActivePanel {
-  background: #9ba6b0;
-  opacity: 0.6;
-}
+
 @media screen and (min-width: 1220px) {
   .panelListSection {
     width: 100px;
@@ -68,6 +220,16 @@
   transform: translateX(42px);
 }
 
-.sidebarActiveModal {
-  margin-top: -29.5vh !important;
+.panelCategoriesName {
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: rgba(68, 68, 79, 1);
+  letter-spacing: 0.10000000149011612px;
+  margin-bottom: 12px;
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
 }

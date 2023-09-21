@@ -1,20 +1,13 @@
 function BgRemover({ size, color }: { size: any; color: any }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M13.5 18.5L19 12.5L25 17.5" stroke={color} strokeLinecap="round" strokeLinejoin="round" />
-      <path
-        d="M25 19C25 20.1046 24.1046 21 23 21L14 21L14 7L23 7C24.1046 7 25 7.89543 25 9L25 19Z"
-        stroke={color}
-        strokeWidth="2"
-      />
-      <path d="M14 3L14 25" stroke={color} strokeWidth="2" strokeLinecap="round" />
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M3 6C1.89543 6 1 6.89543 1 8V20C1 21.1046 1.89543 22 3 22H13V6H3ZM5 12C6.10457 12 7 11.1046 7 10C7 8.89543 6.10457 8 5 8C3.89543 8 3 8.89543 3 10C3 11.1046 3.89543 12 5 12ZM2.01189 21.7393C1.71738 21.5716 1.46961 21.3312 1.29297 21.0427L8.16089 14.6326C8.33364 14.4731 8.59416 14.4556 8.78676 14.5904L14 18.5003V19.749L8.54323 15.6406L2.01189 21.7393Z"
-        fill={color}
-      />
+    <svg width="38" height="38" viewBox="0 0 38 38" fill={color} xmlns="http://www.w3.org/2000/svg">
+      <circle cx="19" cy="19" r="19" fill={color} />
+      <path d="M18.5713 22.201L23.2856 17.0581L28.4284 21.3438" stroke={color == '#4E19C6' ? '#FFFFFF' : "#696974"} stroke-width="0.857143" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M28.4287 22.6295C28.4287 23.5762 27.6612 24.3437 26.7144 24.3437L19.0001 24.3437L19.0001 12.3437L26.7144 12.3438C27.6612 12.3438 28.4287 13.1113 28.4287 14.058L28.4287 22.6295Z" stroke={color == '#4E19C6' ? '#FFFFFF' : "#696974"} stroke-width="1.71429" />
+      <path d="M19 8.91504L19 27.7722" stroke={color == '#4E19C6' ? '#FFFFFF' : "#696974"} stroke-width="1.71429" stroke-linecap="round" />
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M9.57073 11.4868C8.62396 11.4868 7.85645 12.2543 7.85645 13.2011V23.4868C7.85645 24.4336 8.62396 25.2011 9.57073 25.2011H18.1422V11.4868H9.57073ZM11.285 16.6294C12.2317 16.6294 12.9992 15.8619 12.9992 14.9151C12.9992 13.9683 12.2317 13.2008 11.285 13.2008C10.3382 13.2008 9.57067 13.9683 9.57067 14.9151C9.57067 15.8619 10.3382 16.6294 11.285 16.6294ZM8.72449 24.9772C8.47203 24.8335 8.25961 24.6276 8.10816 24.3802L13.9951 18.8858C14.1432 18.7491 14.3664 18.734 14.5315 18.8496L18.9997 22.2007V23.2711L14.3228 19.7497L8.72449 24.9772Z" fill={color == '#4E19C6' ? '#FFFFFF' : "#696974"} />
     </svg>
+
   )
 }
 

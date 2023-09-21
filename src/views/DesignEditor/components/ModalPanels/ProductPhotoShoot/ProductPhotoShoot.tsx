@@ -335,19 +335,27 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   }
 
   const resetCanvas = () => {
-    // canvas.getObjects().forEach((obj: any) => {
-    //   if(obj.imageType === "product"){
-    //     console.log(obj);
-    //     canvas.remove(obj)
-    //   }
-    // })
+
+    canvas.getObjects().forEach((obj: any) => {
+      if (obj.imageType === "product") {
+        canvas.remove(obj)
+      }
+    })
+    removeBackground()
     setSteps((prev: any) => ({ ...prev, 1: true }))
-    setStepsComplete((prev: any) => ({ ...prev, 1: false }))
+    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: false }))
     setProductPhotoshootInfo((prev: any) => ({
       ...prev,
       src: "",
       preview: "",
+      tooltip: false,
+      prompt: "",
       result: [],
+      finalImage: "",
+      again: false,
+      prevObjects: [],
+      addPreview: "",
+      removeBg: false,
     }))
   }
 
@@ -702,7 +710,7 @@ const SelectBackground = ({ generateResult }: any) => {
   const [showPrompt, setShowPrompt] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
-  const [selectedCategory, setSelectedCategory] = useState("Architecture")
+  const [selectedCategory, setSelectedCategory] = useState("lifestyle")
   const { sampleImages } = useContext(SampleImagesContext)
   const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 

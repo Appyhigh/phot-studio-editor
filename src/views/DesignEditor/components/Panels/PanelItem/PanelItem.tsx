@@ -5,13 +5,17 @@ import useIsSidebarOpen from "~/hooks/useIsSidebarOpen"
 import { Block } from "baseui/block"
 import classes from "./style.module.css"
 import clsx from "clsx"
+import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
+import Icons from "~/components/Icons"
+
 
 interface State {
   panel: string
 }
-const PanelsList = () => {
+const PanelsList = (setSiderbarToggle: any) => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
+  const setIsSidebarOpen = useSetIsSidebarOpen()
   const { activePanel, activeSubMenu } = useAppContext()
 
   React.useEffect(() => {
@@ -34,13 +38,22 @@ const PanelsList = () => {
       className={clsx("d-flex p-relative", classes.panelItem, isSidebarOpen && classes.sideBarOpenItem)}
       id="EditorPanelItem"
     >
+
       {Component && (
-        <Block className="d-flex flex-1 p-relative bg-white">
+        <Block className={classes.mainContainer}>
+          <span className={classes.backBtn} onClick={() => {
+            setIsSidebarOpen(false)
+            setSiderbarToggle(true)
+          }}>
+            <Icons.Cross />
+          </span>
+
           <Component />
-       
+
         </Block>
-      )}{" "}
-    </Block>
+      )
+      }{" "}
+    </Block >
   )
 }
 

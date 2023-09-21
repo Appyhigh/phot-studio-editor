@@ -3,13 +3,28 @@
   transition: ease width 0.1s;
   overflow: hidden;
   width: 0;
-  padding-bottom: 20px;
+  /* padding-bottom: 20px; */
 }
 
 .sideBarOpenItem {
   width: 300px;
 }
-
+.backBtn {
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: 0px;
+  z-index: 1;
+}
+.mainContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  background-color: white;
+}
 @media screen and (min-width: 1220px) {
   .panelItem {
     width: 0;

@@ -1,7 +1,14 @@
+.baseSidebarContainer {
+  width: 360px;
+  height: 90vh;
+  background-color: white;
+  overflow: hidden;
+}
 .sliderBtnWrapper {
+  display: none;
   top: 50%;
   z-index: 2;
-  left: 90px;
+  /* left: 90px; */
 }
 .sliderOpen {
   left: 390px;
@@ -19,10 +26,11 @@
 }
 @media screen and (min-width: 1220px) {
   .sliderBtnWrapper {
-    left:100px;
+    display: none;
+    /* left: 100px; */
   }
   .sliderOpen {
-    left: 460px;
+    left: 360px;
   }
   .sliderIcon {
     left: 10px;
