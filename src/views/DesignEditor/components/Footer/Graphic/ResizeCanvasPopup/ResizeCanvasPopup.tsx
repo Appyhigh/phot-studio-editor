@@ -61,22 +61,29 @@ const ResizeCanvasPopup = ({ show, type }: any) => {
   const frame = useFrame()
   const applyResize = () => {
     if (type === "ModalCanvas") {
-      // const size = activeKey === "0" ? selectedFrame : desiredFrame
-
-      // const containerWidth = 600
-      // const containerHeight = 440
-
-      // const scaleX = 900/parseInt(size.width) 
-      // const scaleY = 600/parseInt(size.height) 
-      // const scale = Math.min(scaleX, scaleY)
-
-      // canvas.setDimensions({
-      //   width: 900 * scale,
-      //   height: 600 * scale,
-      // })
-      // canvas.setWidth(900*scale);
-      // canvas.setHeight(600*scale);
-
+      const size = activeKey === "0" ? selectedFrame : desiredFrame
+      let newWidth = size.width;
+      let newHeight = size.height
+      const aspectRatio = newWidth / newHeight;
+      if (newHeight === newWidth && newHeight > 450 && newWidth > 450) {
+        newHeight = 400
+        newWidth = 400
+      } else {
+        if (newWidth > 450) {
+          newWidth = 450;
+          newHeight = newWidth / aspectRatio;
+        }
+        if (newHeight > 450) {
+          newHeight = 450;
+          newWidth = newHeight * aspectRatio;
+        }
+      }
+      canvas.setDimensions({
+        width: newWidth,
+        height: newHeight,
+      })
+      canvas.setWidth(newWidth);
+      canvas.setHeight(newHeight);
     } else {
       const size = activeKey === "0" ? selectedFrame : desiredFrame
       if (editor) {

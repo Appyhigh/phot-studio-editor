@@ -723,11 +723,12 @@ const SelectBackground = ({ generateResult }: any) => {
   const [showPrompt, setShowPrompt] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
-  const [selectedCategory, setSelectedCategory] = useState("lifestyle")
+  const [selectedCategory, setSelectedCategory] = useState()
   const { sampleImages } = useContext(SampleImagesContext)
   const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 
   const groupedData = () => {
+    setSelectedCategory(sampleImages?.productPhotoshoot[0]?.categories)
     sampleImages.productPhotoshoot.reduce((acc: any, item: any) => {
       const category = item.categories
       if (!acc[category]) {
