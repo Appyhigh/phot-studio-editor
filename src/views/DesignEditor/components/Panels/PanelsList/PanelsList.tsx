@@ -259,9 +259,11 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        // Change the style here
-        setIsSidebarOpen(true)
-        setActivePanel(name)
+        if (!((activePanel === name) && isModalOpen)) {
+          // Change the style here
+          setIsSidebarOpen(true)
+          setActivePanel(name)
+        }
       }}
       style={{ marginBottom: name == 'ProductPhotoshoot' ? '-70px' : '' }}
     >
