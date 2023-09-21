@@ -245,7 +245,7 @@
 
 .chevronIcon {
   position: absolute;
-  z-index: 1000;
+  z-index: 100;
   bottom: -20px;
   left: 63px;
   transform: translateX(42px);
