@@ -102,7 +102,7 @@ const PanelsList = () => {
                     </div>
 
                     <div className={classes.userInfo}>
-                      <div className={classes.userName}>{user?.name.slice(0, 22)}{user?.name.length > 22 && '...'}</div>
+                      <div className={classes.userName}>{user?.name?.slice(0, 22)}{user?.name?.length > 22 && '...'}</div>
                       {/* <div className={classes.userPlan}>Free member * Free plan</div> */}
                     </div>
                   </div>
