@@ -60,7 +60,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
 
   const [currentActiveImg, setCurrentActiveImg] = useState(0)
   const [resultLoading, setResultLoading] = useState(false)
-  const { addImage, setBackgroundImage, clearCanvas, removeBackground } = useCoreHandler()
+  const { addImage, setCanvasBgAndAspectFromImage, clearCanvas, removeBackground } = useCoreHandler()
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [resetProduct, setResetProduct] = useState(false)
   // @ts-ignore
@@ -329,7 +329,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           console.log(canvas.getObjects())
           clearCanvas()
           setCurrentActiveImg(0)
-          setBackgroundImage(response[0])
+          setCanvasBgAndAspectFromImage(response[0])
           setResultLoading(false)
           setCanvasLoader(false)
         })
@@ -529,7 +529,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                       if (currentActiveImg === idx) return
                       setCurrentActiveImg(idx)
                       clearCanvas()
-                      setBackgroundImage(each)
+                      setCanvasBgAndAspectFromImage(each)
                       setProductPhotoshootInfo((prev: any) => ({ ...prev, finalImage: each }))
                     }}
                   />

@@ -184,15 +184,16 @@ const ModalBasePanel = ({ handleDone, isDoneBtnDisabled, handleClose }: any) => 
                 imageUrl={productPhotoshootInfo.addPreview}
               />
             </div>
-            <Block
-              className="flex-center pointer p-relative resizeCanvasBtn"
-              onMouseOver={() => {
-                setCanvasResizePopup(true)
-              }}
-            >
-              <Icons.CanvasResize size={24} />
-              <ResizeCanvasPopup type={"ModalCanvas"} show={showCanvasResizePopup} />
-            </Block>
+            {!productPhotoshootInfo.preview &&
+              <Block
+                className="flex-center pointer p-relative resizeCanvasBtn"
+                onMouseOver={() => {
+                  setCanvasResizePopup(true)
+                }}
+              >
+                <Icons.CanvasResize size={24} />
+                <ResizeCanvasPopup type={"ModalCanvas"} show={showCanvasResizePopup} />
+              </Block>}
           </>
         )}
         <div className="flex-1"></div>
