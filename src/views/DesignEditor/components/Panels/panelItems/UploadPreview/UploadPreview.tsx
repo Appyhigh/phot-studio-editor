@@ -90,14 +90,14 @@ const UploadPreview = ({
 
   return (
     <div>
-      <Block paddingTop={"10px"}>
+      <Block paddingTop={"10px"} className={clsx(uploadType !== TEXT_TO_ART && classes.uploadPreviewMainContainer)}>
         {uploadType != MAIN_IMG_Bg &&
           uploadType !== IMAGE_COLORIZER &&
           uploadType != MODAL_IMG_UPLOAD &&
           uploadType != OBJECT_REMOVER &&
           uploadType != OBJECT_REPLACER && (
             <div
-              className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
+              className="d-flex justify-content-start flex-row align-items-center pointer pl-2 "
               onClick={() => {
                 discardHandler()
               }}
