@@ -58,7 +58,6 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
   const handleChangeBg = useCallback(
-
     async (each: any) => {
       let inputImage
       if (getCookie(COOKIE_KEYS.AUTH) == "invalid_cookie_value_detected") {
@@ -253,8 +252,9 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             }}
           />
 
-          {
-            activeObject?.metadata?.originalLayerPreview !== activeObject?.preview && <>
+          {activeObject?.preview !== activeObject?.metadata?.originalLayerPreview ||
+          activeObject?.src !== activeObject?.metadata?.originalLayerPreview ? (
+            <>
               <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
               <div className={classes.otherToolsWrapper}>
                 <div
@@ -312,11 +312,9 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
                   <Icons.Image />
                   <p>Remove Background</p>
                 </div>
-
-
               </div>
             </>
-          }
+          ) : null}
         </div>
 
         <UploadImgModal
