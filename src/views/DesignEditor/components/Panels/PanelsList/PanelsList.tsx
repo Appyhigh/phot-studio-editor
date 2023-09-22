@@ -102,7 +102,7 @@ const PanelsList = () => {
                     </div>
 
                     <div className={classes.userInfo}>
-                      <div className={classes.userName}>{user?.name.slice(0, 22)}{user?.name.length > 22 && '...'}</div>
+                      <div className={classes.userName}>{user?.name?.slice(0, 22)}{user?.name?.length > 22 && '...'}</div>
                       {/* <div className={classes.userPlan}>Free member * Free plan</div> */}
                     </div>
                   </div>
@@ -259,9 +259,11 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        // Change the style here
-        setIsSidebarOpen(true)
-        setActivePanel(name)
+        if (!((activePanel === name) && isModalOpen)) {
+          // Change the style here
+          setIsSidebarOpen(true)
+          setActivePanel(name)
+        }
       }}
       style={{ marginBottom: name == 'ProductPhotoshoot' ? '-70px' : '' }}
     >
