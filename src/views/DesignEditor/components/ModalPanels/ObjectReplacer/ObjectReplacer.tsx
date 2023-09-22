@@ -182,6 +182,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               errorMsg: "Oops! unable to generate your image please try again.",
             }))
             setResultLoading(false)
+            setCanvasLoader(false)
           } else {
             console.log("response0", response)
             setObjectReplacerInfo((prev: any) => ({ ...prev, result: response.output_urls, activeResult: 0 }))
