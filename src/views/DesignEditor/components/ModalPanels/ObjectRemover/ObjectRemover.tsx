@@ -510,10 +510,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
-            if (!steps.firstStep) {
+            if (isVisited.firstStep && !steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-            } else {
-              setSteps((prev) => ({ ...prev, firstStep: false }))
+            } else if (isVisited.firstStep && steps.firstStep) {
+              setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: false }))
             }
           }}
         />
@@ -525,10 +525,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           heading={"Brush over the image"}
           children={Brush()}
           handleClick={() => {
-            if (!steps.secondStep) {
+            if (isVisited.secondStep && !steps.secondStep) {
               setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
-            } else {
-              setSteps((prev) => ({ ...prev, secondStep: false }))
+            } else if (isVisited.secondStep && steps.secondStep) {
+              setSteps((prev) => ({ ...prev, secondStep: false, thirdStep: false, firstStep: false }))
             }
           }}
         />
@@ -539,10 +539,10 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           label={3}
           heading={"Output"}
           handleClick={() => {
-            if (!steps.thirdStep) {
+            if (isVisited.thirdStep && !steps.thirdStep) {
               setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
-            } else {
-              setSteps((prev) => ({ ...prev, thirdStep: false }))
+            } else if (isVisited.thirdStep && steps.thirdStep) {
+              setSteps((prev) => ({ ...prev, thirdStep: false, firstStep: false, secondStep: false }))
             }
           }}
           children={outputResult()}

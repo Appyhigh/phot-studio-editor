@@ -687,7 +687,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
-            if (stepsComplete.firstStep && !steps.firstStep) {
+            if (!steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
                 firstStep: true,
@@ -695,10 +695,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 thirdStep: false,
                 fourthStep: false,
               }))
-            } else if (steps.firstStep) {
-              setSteps((prev) => ({ ...prev, firstStep: false }))
             } else {
-              setSteps((prev) => ({ ...prev, firstStep: true }))
+              setSteps((prev) => ({
+                ...prev,
+                firstStep: false,
+                secondStep: false,
+                thirdStep: false,
+                fourthStep: false,
+              }))
               {
               }
             }
@@ -712,7 +716,15 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Brush over the image"}
           children={Brush()}
           handleClick={() => {
-            if (!steps.secondStep) {
+            if (isVisited.secondStep && steps.secondStep) {
+              setSteps((prev) => ({
+                ...prev,
+                secondStep: false,
+                thirdStep: false,
+                firstStep: false,
+                fourthStep: false,
+              }))
+            } else if (isVisited.secondStep && !steps.secondStep) {
               setSteps((prev) => ({
                 ...prev,
                 secondStep: true,
@@ -720,8 +732,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 firstStep: false,
                 fourthStep: false,
               }))
-            } else {
-              setSteps((prev) => ({ ...prev, secondStep: false }))
             }
           }}
         />
@@ -733,7 +743,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           heading={"Write Prompt"}
           children={Prompt()}
           handleClick={() => {
-            if (!steps.thirdStep) {
+            if (isVisited.thirdStep && !steps.thirdStep) {
               setSteps((prev) => ({
                 ...prev,
                 thirdStep: true,
@@ -741,8 +751,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 firstStep: false,
                 fourthStep: false,
               }))
-            } else {
-              setSteps((prev) => ({ ...prev, thirdStep: false }))
+            } else if (isVisited.thirdStep && steps.thirdStep) {
+              setSteps((prev) => ({
+                ...prev, thirdStep: false,
+                secondStep: false,
+                firstStep: false,
+                fourthStep: false,
+              }))
             }
           }}
         />
@@ -770,7 +785,15 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           label={4}
           heading={"Final output"}
           handleClick={() => {
-            if (!steps.fourthStep) {
+            if (isVisited.fourthStep && steps.fourthStep) {
+              setSteps((prev) => ({
+                ...prev,
+                fourthStep: false,
+                thirdStep: false,
+                firstStep: false,
+                secondStep: false,
+              }))
+            } else if (isVisited.fourthStep && !steps.fourthStep) {
               setSteps((prev) => ({
                 ...prev,
                 fourthStep: true,
@@ -778,8 +801,6 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 firstStep: false,
                 secondStep: false,
               }))
-            } else if (steps.fourthStep) {
-              setSteps((prev) => ({ ...prev, fourthStep: false }))
               // setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
             }
           }}
