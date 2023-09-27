@@ -15,6 +15,7 @@ import {
   OBJECT_REPLACER,
   REMOVE_BACKGROUND,
   TEXT_TO_ART,
+  TOOL_NAMES,
 } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
@@ -25,7 +26,7 @@ import { useAuth } from "~/hooks/useAuth"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
-
+import useAppContext from "~/hooks/useAppContext"
 const UploadPreview = ({
   discardHandler,
   uploadType,
@@ -47,6 +48,7 @@ const UploadPreview = ({
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
   const [showLoginPopUp, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const activePanel = useAppContext()
   // @ts-ignore
   const { authState, setAuthState } = useAuth()
   const { user } = authState
@@ -163,6 +165,7 @@ const UploadPreview = ({
               loginPopupCloseHandler={() => {
                 setShowLoginPopup(false)
               }}
+              toolName={activePanel.activePanel === 'BgRemover' ? TOOL_NAMES.bgRemover : ''}
             />
             {btnTitle && (
               <BaseButton

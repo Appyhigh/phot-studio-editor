@@ -1,13 +1,13 @@
 import { Modal, SIZE } from "baseui/modal"
-
 import useAppContext from "~/hooks/useAppContext"
 import ModalToolItems from "../../ModalToolsEditor"
 import ProductPhotoshootEditor from "~/components/ModalToolsEditor/ProductPhotoshootEditor/ProductPhotoshootEditor"
 import ErrorContext from "~/contexts/ErrorContext"
 import Toast from "~/components/Toast/Toast"
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { useAuth } from "~/hooks/useAuth"
+import { TOOL_NAMES } from "~/constants/contants"
 
 const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const { activePanel } = useAppContext()
@@ -15,7 +15,9 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
   const Component = ModalToolItems[activePanel]
   const { errorInfo } = useContext(ErrorContext)
   const { authState, setAuthState }: any = useAuth()
-  const { showLoginPopUp, toolName } = authState
+  const { showLoginPopUp } = authState
+  // @ts-ignore
+  const loginPopuoToolName = activePanel === 'ObjectRemover' ? TOOL_NAMES.objectRemover : activePanel === 'ObjectReplacer' ? TOOL_NAMES.objectReplacer : TOOL_NAMES.productPhotoshoot
 
   return (
     <Modal
@@ -62,7 +64,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
       }
       {Component && <Component handleClose={handleClose} />}
       {/* <ObjectReplacerEditor/> */}
-      <LoginPopup isOpen={showLoginPopUp} loginPopupCloseHandler={() => setAuthState((prev: any) => ({ ...prev, showLoginPopUp: false }))} toolName={toolName ? toolName : ''} />
+      <LoginPopup isOpen={showLoginPopUp} loginPopupCloseHandler={() => setAuthState((prev: any) => ({ ...prev, showLoginPopUp: false }))} toolName={loginPopuoToolName} />
     </Modal >
   )
 }
