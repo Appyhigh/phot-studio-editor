@@ -48,7 +48,6 @@ const ImageUpscaler = () => {
       setCurrentActiveImg(-1)
     }
   }, [editor.objects.findById(imgScalerInfo.id)[0]])
-  console.log(imgScalerInfo);
 
   useEffect(() => {
     if (user && autoCallAPI) {
