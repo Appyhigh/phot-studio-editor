@@ -41,6 +41,13 @@ const ImageUpscaler = () => {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { sampleImages } = useContext(SampleImagesContext)
   const { setErrorInfo } = useContext(ErrorContext)
+  const { imgScalerPanelInfo, setImgScalerInfo, setImgScalerPanelInfo, imgScalerInfo } =
+    useContext(ImageUpScalerContext)
+  useEffect(() => {
+    if (editor.objects.findById(imgScalerInfo.id)[0] === null) {
+      setCurrentActiveImg(-1)
+    }
+  }, [editor.objects.findById(imgScalerInfo.id)[0]])
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -51,8 +58,6 @@ const ImageUpscaler = () => {
     }
   }, [user, autoCallAPI])
 
-  const { imgScalerPanelInfo, setImgScalerInfo, setImgScalerPanelInfo, imgScalerInfo } =
-    useContext(ImageUpScalerContext)
 
   useEffect(() => {
     setImgScalerInfo((prev: any) => ({

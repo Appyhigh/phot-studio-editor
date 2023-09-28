@@ -36,6 +36,11 @@ const ImageColorizer = () => {
   const { sampleImages } = useContext(SampleImagesContext)
   const { ImgColorizerInfo, setImgColorizerInfo, ImgColorizerPanelInfo, setImgColorizerPanelInfo } =
     useContext(ImageColorizerContext)
+  useEffect(() => {
+    if (editor.objects.findById(ImgColorizerInfo.id)[0] === null) {
+      setCurrentActiveImg(-1)
+    }
+  }, [editor.objects.findById(ImgColorizerInfo.id)[0]])
 
   useEffect(() => {
     setImgColorizerInfo((prev: any) => ({
