@@ -91,6 +91,22 @@
 .textToArtTrashIcon {
   right: 25px;
 }
+.uploadInputSection {
+  border-radius: 8px;
+  margin: 0px auto 8px;
+  width: 280px;
+}
+.uploadInputContainer {
+  width: 280px;
+  height: 200px;
+  position: relative;
+}
+.loadingSpinner {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+}
 @media screen and (min-width: 1220px) {
   .uploadPreviewContainer {
     width: 320px;
@@ -136,5 +152,13 @@
 
   .textToArtTrashIcon {
     right: 30px;
+  }
+  .uploadInputSection {
+    width: 319px;
+    margin: 14px auto 26px;
+  }
+  .uploadInputContainer {
+    width: 320px;
+    height: 200px;
   }
 }

@@ -25,7 +25,6 @@ const BgRemover = () => {
     id: 0,
   })
   const { activePanel } = useAppContext()
-  const { loaderPopup } = useContext(LoaderContext)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const handleBgChangeOption = ({ type, idx }: { type: number; idx: number }) => {
     setSelectedBgOption({ type: type, id: idx })
@@ -188,7 +187,6 @@ const BgRemover = () => {
           )}
         </>
       )}
-      <Loader isOpen={loaderPopup} />
     </Block>
   )
 }

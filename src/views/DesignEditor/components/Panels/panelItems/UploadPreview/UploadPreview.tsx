@@ -4,7 +4,6 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
 import { useContext, useEffect, useRef, useState } from "react"
-import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
 import {
   IMAGE_COLORIZER,
@@ -27,6 +26,7 @@ import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
 import useAppContext from "~/hooks/useAppContext"
+import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 const UploadPreview = ({
   discardHandler,
   uploadType,
@@ -42,7 +42,7 @@ const UploadPreview = ({
   const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
   const editor = useEditor()
-  const { setLoaderPopup } = useContext(LoaderContext)
+  const [loaderRemoveBg, setLoaderRemoveBg] = useState(false)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
@@ -70,7 +70,7 @@ const UploadPreview = ({
         latest_ct = prev + 1
         RemoveBGFunc(
           editor,
-          setLoaderPopup,
+          setLoaderRemoveBg,
           setPanelInfo,
           mainImgInfo,
           setMainImgInfo,
@@ -138,36 +138,44 @@ const UploadPreview = ({
               <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} />
             </Block>
             <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
-              <img
-                className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
-                style={{ objectFit: "contain" }}
-                src={imgSrc}
-                alt="preview"
-              />
+              {loaderRemoveBg ? (
+                <div className={classes.loadingSpinner}>
+                  {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              ) : <>
+                <img
+                  className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
+                  style={{ objectFit: "contain" }}
+                  src={imgSrc}
+                  alt="preview"
+                />
 
-              {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
-                <Block
-                  className={clsx(
-                    "p-absolute pointer",
-                    classes.discardBtn,
-                    uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
-                    uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
-                  )}
-                >
-                  <span onClick={discardHandler}>
-                    <Icons.Trash size={"32"} />
-                  </span>
-                </Block>
-              )}
+                {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
+                  <Block
+                    className={clsx(
+                      "p-absolute pointer",
+                      classes.discardBtn,
+                      uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
+                      uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
+                    )}
+                  >
+                    <span onClick={discardHandler}>
+                      <Icons.Trash size={"32"} />
+                    </span>
+                  </Block>
+                )}
+              </>}
+
             </Block>
+
             <LoginPopup
               isOpen={showLoginPopUp}
               loginPopupCloseHandler={() => {
                 setShowLoginPopup(false)
               }}
-              toolName={activePanel.activePanel === 'BgRemover' ? TOOL_NAMES.bgRemover : ''}
+              toolName={activePanel.activePanel === "BgRemover" ? TOOL_NAMES.bgRemover : ""}
             />
-            {btnTitle && (
+            {(btnTitle && !loaderRemoveBg) && (
               <BaseButton
                 title={btnTitle}
                 disabled={uploadType === REMOVE_BACKGROUND ? (panelInfo.bgRemoverBtnActive ? false : true) : false}

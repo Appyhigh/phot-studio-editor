@@ -19,7 +19,7 @@ import { getStockImages } from "~/services/stockApi"
 const Panels = () => {
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isSidebarOpen = useIsSidebarOpen()
-  const [sidebarToggle, setSiderbarToggle] = useState(true)
+  const [sidebarToggle, setSidebarToggle] = useState(true)
   const { activePanel } = useAppContext()
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const Panels = () => {
       {!isSidebarOpen && <PanelsList />}
 
       <Block className="d-flex" style={{ height: '100%' }}>
-        <PanelItem setSidebarToggle={setSiderbarToggle} />
+        <PanelItem />
         <Block
           className={clsx("m-auto pointer p-absolute", classes.sliderBtnWrapper, isSidebarOpen && classes.sliderOpen)}
         // style={{ display: isSidebarOpen ? 'block' : 'none' }}
@@ -112,7 +112,7 @@ const Panels = () => {
               className={clsx("p-relative", classes.sliderBtn)}
               onClick={() => {
                 setIsSidebarOpen(!isSidebarOpen)
-                setSiderbarToggle(false)
+                setSidebarToggle(false)
               }}
             >
               <div>
