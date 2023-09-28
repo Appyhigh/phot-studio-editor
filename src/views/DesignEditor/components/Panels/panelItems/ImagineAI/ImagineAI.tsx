@@ -362,7 +362,7 @@ const ImagineAI = () => {
           <div className={classes.resultSection}>
             <Block
               onClick={() => {
-                setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true }))
+                setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true, id: '' }))
                 setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
               }}
               $style={{ cursor: "pointer", display: "flex" }}

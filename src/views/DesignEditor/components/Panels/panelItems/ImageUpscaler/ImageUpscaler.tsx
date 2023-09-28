@@ -48,6 +48,7 @@ const ImageUpscaler = () => {
       setCurrentActiveImg(-1)
     }
   }, [editor.objects.findById(imgScalerInfo.id)[0]])
+  console.log(imgScalerInfo);
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -390,7 +391,7 @@ const ImageUpscaler = () => {
           <Block
             onClick={() => {
               setImgScalerPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false }))
-              setImgScalerInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true }))
+              setImgScalerInfo((prev: any) => ({ ...prev, result: [], showclearTooltip: true, id: '' }))
             }}
             $style={{ cursor: "pointer", display: "flex" }}
             className={classes.chevronRightIcon}
