@@ -4,7 +4,6 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import { useEditor } from "@layerhub-io/react"
 import { useContext, useEffect, useRef, useState } from "react"
-import LoaderContext from "~/contexts/LoaderContext"
 import MainImageContext from "~/contexts/MainImageContext"
 import {
   IMAGE_COLORIZER,
@@ -15,6 +14,7 @@ import {
   OBJECT_REPLACER,
   REMOVE_BACKGROUND,
   TEXT_TO_ART,
+  TOOL_NAMES,
 } from "~/constants/contants"
 import { ID_MASK_CANVAS, ID_RESULT_CANVAS, ID_SRC_CANVAS } from "~/utils/removeBackground"
 import { RemoveBGFunc } from "~/views/DesignEditor/utils/functions/RemoveBgFunc"
@@ -25,7 +25,8 @@ import { useAuth } from "~/hooks/useAuth"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { getCookie } from "~/utils/common"
 import LoginPopup from "../../../LoginPopup/LoginPopup"
-
+import useAppContext from "~/hooks/useAppContext"
+import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 const UploadPreview = ({
   discardHandler,
   uploadType,
@@ -41,12 +42,13 @@ const UploadPreview = ({
   const virtualCanvasMaskImageRef = useRef<HTMLCanvasElement | null>(null)
   const virtualCanvasResultImageRef = useRef<HTMLCanvasElement | null>(null)
   const editor = useEditor()
-  const { setLoaderPopup } = useContext(LoaderContext)
+  const [loaderRemoveBg, setLoaderRemoveBg] = useState(false)
   const { mainImgInfo, setMainImgInfo, panelInfo, setPanelInfo } = useContext(MainImageContext)
   const { setImagesCt } = useContext(ImagesContext)
   const { errorInfo, setErrorInfo } = useContext(ErrorContext)
   const [showLoginPopUp, setShowLoginPopup] = useState(false)
   const [autoCallAPI, setAutoCallAPI] = useState(false)
+  const activePanel = useAppContext()
   // @ts-ignore
   const { authState, setAuthState } = useAuth()
   const { user } = authState
@@ -68,7 +70,7 @@ const UploadPreview = ({
         latest_ct = prev + 1
         RemoveBGFunc(
           editor,
-          setLoaderPopup,
+          setLoaderRemoveBg,
           setPanelInfo,
           mainImgInfo,
           setMainImgInfo,
@@ -90,14 +92,14 @@ const UploadPreview = ({
 
   return (
     <div>
-      <Block paddingTop={"10px"}>
+      <Block paddingTop={"10px"} className={clsx(uploadType !== TEXT_TO_ART && classes.uploadPreviewMainContainer)}>
         {uploadType != MAIN_IMG_Bg &&
           uploadType !== IMAGE_COLORIZER &&
           uploadType != MODAL_IMG_UPLOAD &&
           uploadType != OBJECT_REMOVER &&
           uploadType != OBJECT_REPLACER && (
             <div
-              className="d-flex justify-content-start flex-row align-items-center pointer pl-2"
+              className="d-flex justify-content-start flex-row align-items-center pointer pl-2 "
               onClick={() => {
                 discardHandler()
               }}
@@ -136,35 +138,44 @@ const UploadPreview = ({
               <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} />
             </Block>
             <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
-              <img
-                className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
-                style={{ objectFit: "contain" }}
-                src={imgSrc}
-                alt="preview"
-              />
+              {loaderRemoveBg ? (
+                <div className={classes.loadingSpinner}>
+                  {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
+                </div>
+              ) : <>
+                <img
+                  className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
+                  style={{ objectFit: "contain" }}
+                  src={imgSrc}
+                  alt="preview"
+                />
 
-              {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
-                <Block
-                  className={clsx(
-                    "p-absolute pointer",
-                    classes.discardBtn,
-                    uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
-                    uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
-                  )}
-                >
-                  <span onClick={discardHandler}>
-                    <Icons.Trash size={"32"} />
-                  </span>
-                </Block>
-              )}
+                {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
+                  <Block
+                    className={clsx(
+                      "p-absolute pointer",
+                      classes.discardBtn,
+                      uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
+                      uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
+                    )}
+                  >
+                    <span onClick={discardHandler}>
+                      <Icons.Trash size={"32"} />
+                    </span>
+                  </Block>
+                )}
+              </>}
+
             </Block>
+
             <LoginPopup
               isOpen={showLoginPopUp}
               loginPopupCloseHandler={() => {
                 setShowLoginPopup(false)
               }}
+              toolName={activePanel.activePanel === "BgRemover" ? TOOL_NAMES.bgRemover : ""}
             />
-            {btnTitle && (
+            {(btnTitle && !loaderRemoveBg) && (
               <BaseButton
                 title={btnTitle}
                 disabled={uploadType === REMOVE_BACKGROUND ? (panelInfo.bgRemoverBtnActive ? false : true) : false}

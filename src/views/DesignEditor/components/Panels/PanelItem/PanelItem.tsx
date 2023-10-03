@@ -12,11 +12,11 @@ import Icons from "~/components/Icons"
 interface State {
   panel: string
 }
-const PanelsList = (setSiderbarToggle: any) => {
+const PanelItem = () => {
   const [state, setState] = React.useState<State>({ panel: "Text" })
   const isSidebarOpen = useIsSidebarOpen()
   const setIsSidebarOpen = useSetIsSidebarOpen()
-  const { activePanel, activeSubMenu } = useAppContext()
+  const { activePanel, setActivePanel, activeSubMenu } = useAppContext()
 
   React.useEffect(() => {
     setState({ panel: activePanel })
@@ -43,7 +43,7 @@ const PanelsList = (setSiderbarToggle: any) => {
         <Block className={classes.mainContainer}>
           <span className={classes.backBtn} onClick={() => {
             setIsSidebarOpen(false)
-            setSiderbarToggle(true)
+            setActivePanel(null as any)
           }}>
             <Icons.Cross />
           </span>
@@ -57,4 +57,4 @@ const PanelsList = (setSiderbarToggle: any) => {
   )
 }
 
-export default PanelsList
+export default PanelItem

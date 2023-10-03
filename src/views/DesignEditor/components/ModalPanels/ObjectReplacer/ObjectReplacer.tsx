@@ -81,6 +81,12 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
     thirdStep: false,
     fourthStep: false,
   })
+  const [isVisited, setIsVisited] = useState({
+    firstStep: true,
+    secondStep: false,
+    thirdStep: false,
+    fourthStep: false,
+  })
 
   const handleBrushSizeChange = (e: any) => {
     const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
@@ -176,11 +182,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               errorMsg: "Oops! unable to generate your image please try again.",
             }))
             setResultLoading(false)
+            setCanvasLoader(false)
           } else {
             console.log("response0", response)
             setObjectReplacerInfo((prev: any) => ({ ...prev, result: response.output_urls, activeResult: 0 }))
             setResultLoading(false)
             handleBgImg(response.output_urls[0])
+            setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
             setActiveResultId(0)
             setCanvasLoader(false)
             setIsError((prev) => ({ ...prev, error: false }))
@@ -345,10 +353,11 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
           setStepsComplete((prev) => ({
             ...prev,
             firstStep: true,
-            secondStep: true,
+            secondStep: false,
             thirdStep: false,
             fourthStep: false,
           }))
+          setIsVisited((prev) => ({ ...prev, secondStep: true, }))
         }}
       />
     </>
@@ -444,9 +453,10 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
             setStepsComplete((prev) => ({
               ...prev,
               secondStep: true,
-              thirdStep: true,
+              thirdStep: false,
               fourthStep: false,
             }))
+            setIsVisited((prev) => ({ ...prev, thirdStep: true, }))
             setCallAPI(true)
           }}
         />
@@ -488,8 +498,8 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
               ...prev,
               secondStep: true,
               thirdStep: true,
-              fourthStep: true,
             }))
+            setIsVisited((prev) => ({ ...prev, fourthStep: true, }))
             setCallAPI(true)
             setObjectReplacerInfo((prev: any) => ({ ...prev, prompt: promptText }))
           }}
@@ -671,12 +681,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>
         <Accordian
           label={1}
+          isVisited={isVisited.firstStep}
           isOpen={steps.firstStep}
           isComplete={stepsComplete.firstStep}
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
-            if (stepsComplete.firstStep && !steps.firstStep) {
+            if (!steps.firstStep) {
               setSteps((prev) => ({
                 ...prev,
                 firstStep: true,
@@ -684,10 +695,14 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 thirdStep: false,
                 fourthStep: false,
               }))
-            } else if (steps.firstStep) {
-              setSteps((prev) => ({ ...prev, firstStep: false }))
             } else {
-              setSteps((prev) => ({ ...prev, firstStep: true }))
+              setSteps((prev) => ({
+                ...prev,
+                firstStep: false,
+                secondStep: false,
+                thirdStep: false,
+                fourthStep: false,
+              }))
               {
               }
             }
@@ -695,12 +710,21 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
         />
         <Accordian
           label={2}
+          isVisited={isVisited.secondStep}
           isOpen={steps.secondStep}
           isComplete={stepsComplete.secondStep}
           heading={"Brush over the image"}
           children={Brush()}
           handleClick={() => {
-            if (stepsComplete.secondStep && !steps.secondStep) {
+            if (isVisited.secondStep && steps.secondStep) {
+              setSteps((prev) => ({
+                ...prev,
+                secondStep: false,
+                thirdStep: false,
+                firstStep: false,
+                fourthStep: false,
+              }))
+            } else if (isVisited.secondStep && !steps.secondStep) {
               setSteps((prev) => ({
                 ...prev,
                 secondStep: true,
@@ -708,20 +732,18 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 firstStep: false,
                 fourthStep: false,
               }))
-            } else if (steps.secondStep) {
-              setSteps((prev) => ({ ...prev, secondStep: false }))
-            } else {
             }
           }}
         />
         <Accordian
           label={3}
+          isVisited={isVisited.thirdStep}
           isOpen={steps.thirdStep}
           isComplete={stepsComplete.thirdStep}
           heading={"Write Prompt"}
           children={Prompt()}
           handleClick={() => {
-            if (stepsComplete.thirdStep && !steps.thirdStep) {
+            if (isVisited.thirdStep && !steps.thirdStep) {
               setSteps((prev) => ({
                 ...prev,
                 thirdStep: true,
@@ -729,10 +751,13 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 firstStep: false,
                 fourthStep: false,
               }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
-            } else if (steps.thirdStep) {
-              setSteps((prev) => ({ ...prev, thirdStep: false }))
-            } else {
+            } else if (isVisited.thirdStep && steps.thirdStep) {
+              setSteps((prev) => ({
+                ...prev, thirdStep: false,
+                secondStep: false,
+                firstStep: false,
+                fourthStep: false,
+              }))
             }
           }}
         />
@@ -754,12 +779,21 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
       /> */}
 
         <Accordian
+          isVisited={isVisited.fourthStep}
           isOpen={steps.fourthStep}
           isComplete={stepsComplete.fourthStep}
           label={4}
           heading={"Final output"}
           handleClick={() => {
-            if (stepsComplete.fourthStep && !steps.fourthStep) {
+            if (isVisited.fourthStep && steps.fourthStep) {
+              setSteps((prev) => ({
+                ...prev,
+                fourthStep: false,
+                thirdStep: false,
+                firstStep: false,
+                secondStep: false,
+              }))
+            } else if (isVisited.fourthStep && !steps.fourthStep) {
               setSteps((prev) => ({
                 ...prev,
                 fourthStep: true,
@@ -767,10 +801,7 @@ const ObjectReplacer = ({ handleBrushToolTip }: any) => {
                 firstStep: false,
                 secondStep: false,
               }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: true, fourthStep: true }))
-            } else if (steps.fourthStep) {
-              setSteps((prev) => ({ ...prev, fourthStep: false }))
-              setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
+              // setStepsComplete((prev) => ({ ...prev, fourthStep: true }))
             }
           }}
           children={outputResult()}

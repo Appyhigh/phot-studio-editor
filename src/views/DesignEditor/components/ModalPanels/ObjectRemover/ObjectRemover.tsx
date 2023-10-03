@@ -66,6 +66,11 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
     secondStep: false,
     thirdStep: false,
   })
+  const [isVisited, setIsVisited] = useState({
+    firstStep: true,
+    secondStep: false,
+    thirdStep: false,
+  })
 
   const handleBrushSizeChange = (e: any) => {
     const cursor = `<svg width="${brushSize}" height="${brushSize}" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" ><circle cx="24" cy="24" r="23.5" fill="#429CB9" fill-opacity="0.43" stroke="#F8F8F8"/></svg>`
@@ -135,7 +140,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
             }))
             setIsError((prev) => ({ ...prev, error: false }))
           } else {
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+
             setObjectRemoverInfo((prev: any) => ({
               ...prev,
               result: response.output_urls[0],
@@ -146,6 +151,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           }
           setResultLoading(false)
           setCallAPI(false)
+          setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           setCanvasLoader(false)
           setIsError((prev) => ({ ...prev, error: false }))
         })
@@ -302,7 +308,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
           canvas.isDrawingMode = true
           handleBgImg(objectRemoverInfo.src)
           setSteps((prev) => ({ ...prev, firstStep: false, secondStep: true, thirdStep: false }))
-          setStepsComplete((prev) => ({ ...prev, firstStep: true, secondStep: true, thirdStep: false }))
+          setStepsComplete((prev) => ({ ...prev, firstStep: true }))
+          setIsVisited((prev) => ({ ...prev, secondStep: true }))
         }}
       />
     </>
@@ -350,7 +357,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               }
             })
             // @ts-ignore
-            setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
           }}
           fontSize="14px"
           fontWeight="500"
@@ -367,8 +373,6 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
 
           disabled={canvas?.getObjects().length >= 2 ? false : true}
           handleClick={() => {
-            console.log('hello remover');
-
             // handleBgImg(objectRemoverInfo.src)
             if (!user) return setAuthState((prev: any) => ({ ...prev, showLoginPopUp: true, toolName: TOOL_NAMES.objectRemover }))
             handleBrushToolTip(false)
@@ -400,7 +404,8 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
               obj.selectable = false
             })
             setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: true }))
-            setStepsComplete((prev) => ({ ...prev, secondStep: true, thirdStep: true }))
+            setIsVisited((prev) => ({ ...prev, thirdStep: true }))
+            setStepsComplete((prev) => ({ ...prev, secondStep: true }))
             setCallAPI(true)
           }}
         />
@@ -499,48 +504,45 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>
         <Accordian
           label={1}
+          isVisited={isVisited.firstStep}
           isOpen={steps.firstStep}
           isComplete={stepsComplete.firstStep}
           heading={"Upload / choose image"}
           children={upload()}
           handleClick={() => {
-            if (stepsComplete.firstStep && !steps.firstStep) {
+            if (isVisited.firstStep && !steps.firstStep) {
               setSteps((prev) => ({ ...prev, firstStep: true, secondStep: false, thirdStep: false }))
-            } else if (steps.firstStep) {
-              setSteps((prev) => ({ ...prev, firstStep: false }))
-            } else {
-              setSteps((prev) => ({ ...prev, firstStep: true }))
-              {
-              }
+            } else if (isVisited.firstStep && steps.firstStep) {
+              setSteps((prev) => ({ ...prev, firstStep: false, secondStep: false, thirdStep: false }))
             }
           }}
         />
         <Accordian
           label={2}
+          isVisited={isVisited.secondStep}
           isOpen={steps.secondStep}
           isComplete={stepsComplete.secondStep}
           heading={"Brush over the image"}
           children={Brush()}
           handleClick={() => {
-            if (stepsComplete.secondStep && !steps.secondStep) {
+            if (isVisited.secondStep && !steps.secondStep) {
               setSteps((prev) => ({ ...prev, secondStep: true, thirdStep: false, firstStep: false }))
-            } else if (steps.secondStep) {
-              setSteps((prev) => ({ ...prev, secondStep: false }))
-            } else {
+            } else if (isVisited.secondStep && steps.secondStep) {
+              setSteps((prev) => ({ ...prev, secondStep: false, thirdStep: false, firstStep: false }))
             }
           }}
         />
         <Accordian
           isOpen={steps.thirdStep}
+          isVisited={isVisited.thirdStep}
           isComplete={stepsComplete.thirdStep}
           label={3}
           heading={"Output"}
           handleClick={() => {
-            if (stepsComplete.thirdStep && !steps.thirdStep) {
+            if (isVisited.thirdStep && !steps.thirdStep) {
               setSteps((prev) => ({ ...prev, thirdStep: true, firstStep: false, secondStep: false }))
-            } else if (steps.thirdStep) {
-              setSteps((prev) => ({ ...prev, thirdStep: false }))
-              setStepsComplete((prev) => ({ ...prev, thirdStep: true }))
+            } else if (isVisited.thirdStep && steps.thirdStep) {
+              setSteps((prev) => ({ ...prev, thirdStep: false, firstStep: false, secondStep: false }))
             }
           }}
           children={outputResult()}

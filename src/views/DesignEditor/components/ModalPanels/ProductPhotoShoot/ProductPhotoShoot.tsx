@@ -313,7 +313,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       const objects = canvas.getObjects()
       productPhotoshootController(
         getCurrentCanvasBase64Image(),
-        productPhotoshootInfo.prompt[0],
+        productPhotoshootInfo.prompt,
         pollingIntervalInfo.productPhotoShoot
       )
         .then((response) => {
@@ -847,7 +847,7 @@ const SelectBackground = ({ generateResult }: any) => {
                     setSelectedImg(index)
                     setProductPhotoshootInfo((prev: any) => ({
                       ...prev,
-                      prompt: each.prompt,
+                      prompt: each.prompt[0],
                     }))
                   }}
                 />
