@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
 import classes from "./style.module.css"
 import clsx from "clsx"
@@ -6,12 +6,15 @@ import ModalBasePanel from "../../FabricCanvas/Editor/Panels/ModalBasePanel/Moda
 import CanvasArea from "../../FabricCanvas/Editor/CanvasArea/CanvasArea"
 import ObjectRemoverPanel from "~/views/DesignEditor/components/ModalPanels/ObjectRemover/ObjectRemover"
 import ObjectReplacer from "~/views/DesignEditor/components/ModalPanels/ObjectReplacer/ObjectReplacer"
+import LoaderSpinner from "../../../views/Public/images/loader-spinner.svg"
+import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 function ObjectReplacerEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
     width: 400,
     height: 400,
   })
+  const { canvasLoader } = useContext(CanvasLoaderContext)
   const [isDoneBtnDisabled, setIsDoneBtnDisabled] = useState(false)
   const [brushTooltipShow, setBrushToolTip] = useState(false)
 
@@ -33,6 +36,12 @@ function ObjectReplacerEditor({ handleClose }: any) {
         <div className="flex-1 d-flex flex-column p-relative">
           <ModalBasePanel handleClose={handleClose} isDoneBtnDisabled={isDoneBtnDisabled} />
           <div className={clsx(classes.canvasStyling)}>
+            {canvasLoader && (
+              <div className={classes.loaderContainerRelacer}>
+                <img src={LoaderSpinner} />
+              </div>
+            )}
+
             <CanvasArea
               brushTooltipShow={brushTooltipShow}
               width={dimension.width}

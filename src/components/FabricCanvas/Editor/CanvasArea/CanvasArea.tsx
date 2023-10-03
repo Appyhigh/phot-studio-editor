@@ -7,7 +7,6 @@ import LoaderSpinner from "../../../../views/Public/images/loader-spinner.svg"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 
 import useFabricEditor from "src/hooks/useFabricEditor"
-import clsx from "clsx"
 function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
   const { activePanel } = useAppContext()
   const { canvasLoader } = useContext(CanvasLoaderContext)
@@ -21,16 +20,8 @@ function CanvasArea({ width, height, brushTooltipShow, handleBrush }: any) {
 
   return (
     <div className={classes.canvasarea}>
-      {canvasLoader && (
-        
-        <div
-          className={clsx(
-            // @ts-ignore
-            activePanel !== "ObjectReplacer" && activePanel !== "ObjectRemover" && classes.loaderContainer,
-            // @ts-ignore
-            (activePanel === "ObjectReplacer" || activePanel === "ObjectRemover") && classes.loaderContainerRelacer
-          )}
-        >
+      {canvasLoader && activePanel === "ProductPhotoshoot" && (
+        <div className={classes.loaderContainer}>
           <img src={LoaderSpinner} />
         </div>
       )}
