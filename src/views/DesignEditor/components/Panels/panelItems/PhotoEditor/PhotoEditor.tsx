@@ -45,6 +45,11 @@ const PhotoEditor = () => {
     useContext(PhotoEditorContext)
   const { sampleImages } = useContext(SampleImagesContext)
   const { pollingIntervalInfo, setPollingIntervalInfo } = useContext(PollingInterval)
+  useEffect(() => {
+    if (editor.objects.findById(photoEditorInfo.id)[0] === null) {
+      setCurrentActiveImg(-1)
+    }
+  }, [editor.objects.findById(photoEditorInfo.id)[0]])
 
   useEffect(() => {
     if (user && autoCallAPI) {
@@ -164,7 +169,7 @@ const PhotoEditor = () => {
         })
       })
     } else {
-      UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo)
+      UpdateObjectFunc(imageUrl, editor, frame, photoEditorInfo, setPhotoEditorInfo, setImagesCt)
     }
     setCurrentActiveImg(_idx)
   }

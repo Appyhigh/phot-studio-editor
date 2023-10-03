@@ -1,6 +1,7 @@
+import { AddObjectFunc } from "./AddObjectFunc"
 import { getDimensions } from "./getDimensions"
 
-export const UpdateObjectFunc = (url: string, editor: any, frame?: any, stateInfo?: any) => {
+export const UpdateObjectFunc = (url: string, editor: any, frame?: any, stateInfo?: any, setImgScalerInfo?: any, setImagesCt?: any) => {
   getDimensions(url, (img: any) => {
     let scale = 1
     if (img.width && img.height && frame) {
@@ -30,7 +31,7 @@ export const UpdateObjectFunc = (url: string, editor: any, frame?: any, stateInf
       }
       setTimeout(() => {
         editor.objects.update(options, stateInfo.id)
-      }, 100)
+      }, 500)
       setTimeout(() => {
         editor.canvas.requestRenderAll()
       }, 1000)

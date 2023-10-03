@@ -733,6 +733,10 @@ ul {
 .swiper-button-prev::after {
   display: none;
 }
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  display: none;
+}
 
 .swiper-button-prev {
   width: 20px !important;

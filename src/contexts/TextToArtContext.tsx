@@ -13,7 +13,8 @@ const TextToArtContext = React.createContext({
     cfg_scale: 7.5,
     aspect_ratio: "1:1",
     showclearTooltip: false,
-    isError:false
+    isError: false,
+    isImageUploading: false,
   },
   textToArtpanelInfo: {
     resultSectionVisible: false,

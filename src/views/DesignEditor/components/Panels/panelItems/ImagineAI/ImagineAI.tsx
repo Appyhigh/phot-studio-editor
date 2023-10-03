@@ -47,6 +47,12 @@ const ImagineAI = () => {
   const { setErrorInfo } = useContext(ErrorContext)
 
   useEffect(() => {
+    if (editor.objects.findById(textToArtInputInfo.id)[0] === null) {
+      setCurrentActiveImg(-1)
+    }
+  }, [editor.objects.findById(textToArtInputInfo.id)[0]])
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (selectStyleRef.current && !selectStyleRef.current.contains(event.target as Node)) {
         setSelectStyleDisplay(false)
@@ -116,7 +122,7 @@ const ImagineAI = () => {
         textToArtInputInfo.uploaded_img
       )
         .then((responseData) => {
-          addImgToCanvas(responseData["data"]["image"][0])
+          addImgToCanvas(responseData["data"]["image"][0], 0)
           setCurrentActiveImg(0)
           // @ts-ignore
           setErrorInfo((prev) => ({ ...prev, showError: false }))
@@ -137,8 +143,31 @@ const ImagineAI = () => {
 
   const frame = useFrame()
 
-  const addImgToCanvas = async (imageUrl: string) => {
-    // if (currentActiveImg == -1) {
+  const addImgToCanvas = async (imageUrl: string, _idx: number) => {
+    if (currentActiveImg == -1) {
+      await getDimensions(imageUrl, (img: any) => {
+        let latest_ct = 0
+        setImagesCt((prev: any) => {
+          latest_ct = prev + 1
+          AddObjectFunc(
+            imageUrl,
+            editor,
+            img.width,
+            img.height,
+            frame,
+            (latest_ct = latest_ct),
+            null,
+            null,
+            setTextToArtInputInfo
+          )
+          return prev + 1
+        })
+      })
+    }
+    else {
+      UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo, setTextToArtInputInfo, setImagesCt)
+    }
+    setCurrentActiveImg(_idx)
     //   await getDimensions(imageUrl, (img: any) => {
     //     let latest_ct = 0
     //     setImagesCt((prev: any) => {
@@ -157,28 +186,6 @@ const ImagineAI = () => {
     //       return prev + 1
     //     })
     //   })
-    // }
-    // else {
-    //   UpdateObjectFunc(imageUrl, editor, frame, textToArtInputInfo)
-    // }
-    await getDimensions(imageUrl, (img: any) => {
-      let latest_ct = 0
-      setImagesCt((prev: any) => {
-        latest_ct = prev + 1
-        AddObjectFunc(
-          imageUrl,
-          editor,
-          img.width,
-          img.height,
-          frame,
-          (latest_ct = latest_ct),
-          null,
-          null,
-          setTextToArtInputInfo
-        )
-        return prev + 1
-      })
-    })
 
   }
 
@@ -294,7 +301,7 @@ const ImagineAI = () => {
               disabledBgColor="#92929d"
               fontSize="16px"
               disabled={
-                textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.trim().length == 0 ? true : false
+                (textToArtInputInfo.showclearTooltip || textToArtInputInfo.prompt.trim().length == 0 ? true : false || textToArtInputInfo.isImageUploading)
               }
               handleClick={() => {
                 generateImage()
@@ -355,7 +362,7 @@ const ImagineAI = () => {
           <div className={classes.resultSection}>
             <Block
               onClick={() => {
-                setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true }))
+                setTextToArtInputInfo((prev: any) => ({ ...prev, showclearTooltip: true, id: '' }))
                 setTextToArtPanelInfo((prev: any) => ({ ...prev, resultSectionVisible: false, resultImages: [] }))
               }}
               $style={{ cursor: "pointer", display: "flex" }}
@@ -382,7 +389,7 @@ const ImagineAI = () => {
                         if (currentActiveImg === idx) return
                         setCurrentActiveImg(idx)
                         if (currentActiveImg !== idx) {
-                          addImgToCanvas(each)
+                          addImgToCanvas(each, idx)
                         }
 
                       }}

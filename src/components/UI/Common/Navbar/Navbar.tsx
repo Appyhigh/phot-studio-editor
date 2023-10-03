@@ -3,17 +3,19 @@ import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import clsx from "clsx"
 import { useAuth } from "~/hooks/useAuth"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { signOut } from "firebase/auth"
 import { auth } from "~/utils/firebase"
 import BaseButton from "../../Button/BaseButton"
+import TextToArtContext from "~/contexts/TextToArtContext"
 
 const Navbar = () => {
   // @ts-ignore
   const { authState } = useAuth()
   const { user } = authState
   const [showLoginPopup, setShowLoginPopup] = useState(false)
+  const { textToArtInputInfo } = useContext(TextToArtContext)
 
   return (
     <Block className={classes.header}>
@@ -107,6 +109,7 @@ const Navbar = () => {
             fontFamily="poppins"
             fontSize="12px"
             borderRadius="10px"
+            disabled={textToArtInputInfo.isImageUploading}
           />
           <LoginPopup
             isOpen={showLoginPopup}
