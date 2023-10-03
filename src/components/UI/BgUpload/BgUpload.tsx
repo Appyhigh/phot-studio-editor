@@ -49,7 +49,7 @@ const BgUpload = () => {
   }, [bgUploading])
 
   return (
-    <Block style={{ height: '100%' }}>
+    <Block style={{ height: '100%', marginTop: '8px' }}>
       <div className={clsx(classes.bgUploadSection, "d-flex  flex-row", activePanel === "BgRemover" && classes.UploadStockToggleBtn)} >
         <div className={clsx(classes.tabs, bgChoice === 0 && classes.selectedChoice)} onClick={() => setBgChoice(0)}>
           Upload From PC
@@ -60,7 +60,7 @@ const BgUpload = () => {
       </div>
       {bgChoice === 0 ? (
         <>
-          <Scrollbars style={{ height: "650%" }}>
+          <Scrollbars style={{ height: "80%" }}>
             {bgUploading && bgChoice === 0 && (
               <div>
                 <Block className={classes.uploadInputContainer}>
@@ -89,7 +89,7 @@ const BgUpload = () => {
             )}
 
             {bgUploadPreview.showPreview && !rejectedFileUpload && bgUploadPreview.url && !bgUploading && (
-              <Scrollbars style={{ height: "300px", marginTop: activePanel === "BgRemover" ? "-10px" : "none" }}>
+              <Scrollbars style={{ height: "300px", marginTop: activePanel === "BgRemover" ? "-10px" : "none", }}>
                 <UploadPreview
                   uploadType={MAIN_IMG_Bg}
                   discardHandler={() => {
