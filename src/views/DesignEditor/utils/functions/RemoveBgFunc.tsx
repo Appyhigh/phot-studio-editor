@@ -35,6 +35,7 @@ export const RemoveBGFunc = async (
             generationDate: activeObject?.metadata?.generationDate,
             originalLayerPreview: mainImgInfo?.metadata?.originalLayerPreview ?? activeObject.preview,
           },
+          swiper_selected_color: '',
           _element: imageElement,
           _originalElement: imageElement,
         }
@@ -112,6 +113,7 @@ export const RemoveBGFunc = async (
         _originalElement: imageElement,
       }
       editor.objects.update(options)
+      setMainImgInfo((prev: any) => ({ ...prev, swiper_selected_color: '' }))
     } else {
       setBlinkInOutLoader(true)
       let response = await removeBackgroundController(
