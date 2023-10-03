@@ -563,7 +563,7 @@ button:focus {
 }
 
 .px-1 {
-  padding: 0px 8px 0px 8px;
+  padding: 0px 8px 12px 8px;
 }
 .mx-1 {
   margin-left: 8px;
