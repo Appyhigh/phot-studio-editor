@@ -47,7 +47,7 @@ function useCoreHandler() {
                 }
               }
             }
-            img.set({ type: "image", scaleX: scale-0.01, scaleY: scale, ...imageOptions })
+            img.set({ type: "image", scaleX: scale - 0.01, scaleY: scale, ...imageOptions })
             // Add the image object to the canvas
             //@ts-ignore
             canvas.add(img)
@@ -166,6 +166,62 @@ function useCoreHandler() {
     },
     [canvas]
   )
+
+  const setCanvasBgAndAspectFromImage = useCallback(
+    (imageURL: any) => {
+      if (canvas) {
+        fabric.Image.fromURL(
+          imageURL,
+          (img: any) => {
+            const background = canvas.backgroundImage
+            if (background) {
+              // If a background image already exists, remove it
+              canvas.remove(background)
+            }
+
+            let newWidth = img.width
+            let newHeight = img.height
+            const aspectRatio = newWidth / newHeight
+            if (newHeight === newWidth && newHeight > 450 && newWidth > 450) {
+              newHeight = 400
+              newWidth = 400
+            } else {
+              if (newWidth > 450) {
+                newWidth = 450
+                newHeight = newWidth / aspectRatio
+              }
+
+              if (newHeight > 450) {
+                newHeight = 450
+                newWidth = newHeight * aspectRatio
+              }
+            }
+            canvas.setDimensions({
+              width: newWidth,
+              height: newHeight,
+            })
+            canvas.setWidth(newWidth)
+            canvas.setHeight(newHeight)
+
+            const scaleX = canvas.width / newWidth
+            const scaleY = canvas.height / newHeight
+            const scale = Math.min(scaleX, scaleY)
+            img.set({
+              scaleX: scale,
+              scaleY: scale,
+              selectable: false, // Make it non-selectable
+              evented: false, // Make it non-evented
+            })
+            canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas))
+          },
+          {
+            crossOrigin: "anonymous",
+          }
+        )
+      }
+    },
+    [canvas]
+  )
   const removeBackground = useCallback(() => {
     if (canvas) {
       fabric.Image.fromURL(
@@ -192,6 +248,7 @@ function useCoreHandler() {
     addImage,
     getCanvasSize,
     setBackgroundImage,
+    setCanvasBgAndAspectFromImage,
     removeBackground,
   }
 }
