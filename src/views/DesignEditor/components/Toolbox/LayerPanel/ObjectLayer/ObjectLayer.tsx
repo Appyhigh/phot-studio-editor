@@ -57,6 +57,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const { setBlinkInOutLoader } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
+  const [isRemoveBgShown, setIsRemoveBgShown] = useState(false)
   const handleChangeBg = useCallback(
     async (each: any) => {
       let inputImage
@@ -162,6 +163,16 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
     }
   }, [mainImgInfo])
 
+  useEffect(() => {
+    if (activeObject?.src) {
+      setIsRemoveBgShown(activeObject?.preview !== activeObject?.metadata?.originalLayerPreview ||
+        activeObject?.src !== activeObject?.metadata?.originalLayerPreview)
+    } else if (activeObject?.preview.startsWith('http')) {
+      setIsRemoveBgShown(true)
+    } else {
+      setIsRemoveBgShown(activeObject?.preview !== activeObject?.metadata?.originalLayerPreview)
+    }
+  }, [activeObject, activeObject?.src])
 
   return showLayer ? (
     <>
@@ -282,8 +293,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             }}
           />
 
-          {activeObject?.preview !== activeObject?.metadata?.originalLayerPreview ||
-            activeObject?.src !== activeObject?.metadata?.originalLayerPreview ? (
+          {isRemoveBgShown ? (
             <>
               <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
               <div className={classes.otherToolsWrapper}>
