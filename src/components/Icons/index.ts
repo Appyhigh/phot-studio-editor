@@ -105,6 +105,12 @@ import Settings from "./Settings"
 import RightArrow from "./RightArrow"
 import DownArrow from "./DownArrow"
 import UpArrow from "./UpArrow"
+import SearchBarIcon from "./SearchBarIcon"
+import BatchUpload from "./BatchUpload"
+import CreateScratch from "./CreateScratch"
+import Brand from "./Brand"
+import AiProfessionalPhotoshoot from "./AiProfessionalPhotoshoot"
+import ImageLightFixer from "./ImageLightFixer"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -213,6 +219,12 @@ class Icons {
   static RightArrow = RightArrow
   static DownArrow = DownArrow
   static UpArrow = UpArrow
+  static SearchBarIcon = SearchBarIcon
+  static BatchUpload = BatchUpload
+  static CreateScratch = CreateScratch
+  static Brand = Brand
+  static AiProfessionalPhotoshoot = AiProfessionalPhotoshoot
+  static ImageLightFixer = ImageLightFixer
 }
 
 export default Icons

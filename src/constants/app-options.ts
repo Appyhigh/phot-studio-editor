@@ -70,6 +70,130 @@ export const BASE_ITEMS = [
   },
 ]
 
+export const CREATE_BTN_ITEMS = [
+  {
+    category: "",
+    items: [
+      {
+        id: "createScratch",
+        icon: "CreateScratch",
+        label: "Create from scratch",
+        name: "Create from scratch",
+      },
+      {
+        id: "BatchUpload",
+        icon: "BatchUpload",
+        label: "Batch upload",
+        name: "Batch upload",
+      },
+    ],
+  },
+  {
+    category: "Background editing tools",
+    items: [
+      {
+        id: "bgremover",
+        icon: "BgRemover",
+        label: "Remove Background",
+        name: "BgRemover",
+      },
+      {
+        id: "bgremover",
+        icon: "ProductPhotoshoot",
+        label: "Change Background",
+        name: "BgRemover",
+      },
+    ],
+  },
+  {
+    category: "Image editing tools",
+    items: [
+      // {
+      //   id: "images",
+      //   name: "Images",
+      //   label: "Image",
+      //   icon: "",
+      // },
+      {
+        id: "photoeditor",
+        icon: "PhotoEditor",
+        label: "AI Photo Editor",
+        name: "PhotoEditor",
+      },
+      {
+        id: "photoeditor",
+        icon: "ProductPhotoshoot",
+        label: "AI Avatars",
+        name: "PhotoEditor",
+      },
+      {
+        id: "objectremover",
+        icon: "ObjectRemover",
+        label: "Object Remover",
+        name: "ObjectRemover",
+      },
+      {
+        id: "imagineai",
+        icon: "ImagineAi",
+        label: "Text to Art",
+        name: "ImagineAI",
+      },
+      {
+        id: "imagineai",
+        icon: "AiProfessionalPhotoshoot",
+        label: "AI Professional Photoshoot",
+        name: "ImagineAI",
+      },
+      {
+        id: "imageupscaler",
+        icon: "ImageUpscaler",
+        label: "Image Upscaler",
+        name: "ImageUpscaler",
+      },
+      {
+        id: "imageupscaler",
+        icon: "ImageLightFixer",
+        label: "Image Lightfixer",
+        name: "ImageUpscaler",
+      },
+      {
+        id: "imageupscaler",
+        icon: "ProductPhotoshoot",
+        label: "Photo Enhancer",
+        name: "ImageUpscaler",
+      },
+      {
+        id: "imagecolorizer",
+        icon: "ImageColorizer",
+        label: "Image Colorizer",
+        name: "ImageColorizer",
+      },
+      {
+        id: "imagecolorizer",
+        icon: "ProductPhotoshoot",
+        label: "Photo Restorer",
+        name: "ImageColorizer",
+      },
+    ],
+  },
+  {
+    category: "Object editing tools",
+    items: [
+      {
+        id: "objectreplacer",
+        icon: "ImagineAi",
+        label: "Object Replacer",
+        name: "ObjectReplacer",
+      },
+      {
+        id: "productPhotoshoot",
+        icon: "ProductPhotoshoot",
+        label: "Product Photoshoot",
+        name: "ProductPhotoshoot",
+      },
+    ],
+  },
+]
 // export const BASE_ITEMS = [
 //   // {
 //   //   id: "templates",

@@ -1,0 +1,84 @@
+.createPopup {
+  width: 312px;
+  height: 92vh;
+  border: 1px solid #f1f1f5;
+  padding: 0px 0px 0px 26px;
+  background-color: white;
+  position: absolute;
+  top: 45px;
+  left: -171px;
+  z-index: 20001;
+  overflow-y: scroll;
+  border-radius: 4px;
+}
+.createPopup::-webkit-scrollbar {
+  width: 0px;
+}
+.createPopupCon {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.popupCategoriesName {
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: rgba(68, 68, 79, 1);
+  letter-spacing: 0.10000000149011612px;
+  margin-bottom: 12px;
+  margin-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.popupListItemEach {
+  font-weight: 500;
+  color: #92929d;
+  width: 100% !important;
+  display: flex;
+  justify-content: start;
+}
+.activePopupItem {
+  font-weight: 500;
+  color: #000;
+}
+.popupListItem {
+  /* padding: 16px 15px; */
+  background-color: #fff;
+  font-family: "Poppins";
+  font-size: "0.8rem";
+  user-select: none;
+  transition: all 0.5s;
+  gap: 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  padding: 5px 0px;
+}
+@media screen and (min-width: 1220px) {
+  .panelListSection {
+    width: 100px;
+  }
+  .panelListItemEach {
+    width: 90px;
+    font-weight: 500;
+  }
+}
+
+@media screen and (max-height: 750px) {
+  .createPopup {
+    height: 91vh;
+  }
+}
+@media screen and (max-height: 685px) {
+  .createPopup {
+    height: 90vh;
+  }
+}
+@media screen and (max-height: 600px) {
+  .createPopup {
+    height: 89vh;
+  }
+}

@@ -1,0 +1,48 @@
+.allToolsCon {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+.allToolHead {
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 17px;
+  letter-spacing: 0em;
+  color: #44444f;
+}
+.allCardWrap {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.homepageToolsTabs {
+  display: flex;
+  position: relative;
+  gap: 8px;
+}
+
+.homepageToolsTabsBtn {
+  height: 30px;
+  padding: 8px 20px 8px 20px;
+  border-radius: 40px;
+  border: 1px solid #969696;
+  gap: 10px;
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  color: #000000;
+  background-color: transparent;
+}
+
+.selectedToolCategoryTab {
+  background-color: #6729f3;
+  color: #ffffff;
+  border: 1px solid #969696;
+}
