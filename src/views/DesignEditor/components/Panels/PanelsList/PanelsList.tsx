@@ -266,6 +266,7 @@ const PanelsList = () => {
 const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
+  const router = useLocation()
   const isModalOpen =
     activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT
   const [isHovered, setIsHovered] = useState(false)
@@ -278,6 +279,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
+        if (router.pathname === "/home") return
         if (!(activePanel === name && isModalOpen)) {
           // Change the style here
           setIsSidebarOpen(true)
