@@ -81,7 +81,7 @@ const PanelsList = () => {
           classes.sidebarActiveModal
         )}
       >
-        {router.pathname === "/home" && (
+        {router.pathname.startsWith('/home') && (
           <div className={classes.siderbarTopSection}>
             <Block className="d-flex justify-content-start pointer">
               <Icons.PhotAILogo size={23} />
@@ -315,7 +315,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (router.pathname === "/home") return
+        if (router.pathname.startsWith('/home')) return
         if (!(activePanel === name && isModalOpen)) {
           // Change the style here
           setIsSidebarOpen(true)
