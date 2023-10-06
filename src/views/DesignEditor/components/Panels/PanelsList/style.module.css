@@ -3,7 +3,7 @@
   height: 100%;
   overflow-x: visible;
   background-color: white;
-  padding: 1rem 20px;
+  padding: 0rem 20px 0px 20px;
 }
 .skeletonLoader {
   display: flex;
@@ -61,7 +61,6 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 49px;
 }
 .AllToolsTreeSection {
   height: 100%;
@@ -75,6 +74,7 @@
   flex-direction: column;
   width: 100%;
   height: auto;
+  margin-top: 1rem;
   /* overflow-y: scroll; */
 }
 
@@ -169,14 +169,18 @@
 }
 
 .siderbarTopSection {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  height: 58.5px;
+  border-bottom: 1px solid #d6dce4;
+  /* box-shadow: inset 0px -1px 0px #e2e2ea; */
 }
+
 .siderbarFooterSection {
   display: flex;
   flex-direction: column;
-  margin-top: 28px;
+  margin-bottom: 0.5rem;
 }
 .panelItemSection {
   display: flex;

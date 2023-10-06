@@ -5,7 +5,7 @@ import HomeNavbar from '~/components/HomePage/Navbar/HomeNavbar'
 import { Block } from 'baseui/block'
 import PopularTools from '~/components/HomePage/PopularTools/PopularToolsSection'
 import AllToolsSection from '~/components/HomePage/AllTools/AllToolsSection'
-import HomePoster from '~/components/HomePage/Poster/HomePoster'
+import HomeSlider from '~/components/HomePage/Poster/HomeSlider'
 import classes from './style.module.css'
 const HomePage = () => {
   return (
@@ -14,7 +14,7 @@ const HomePage = () => {
       <Block style={{ width: '100%', height: '100%' }}>
         <HomeNavbar />
         <Block className={classes.homeSection} >
-          <HomePoster />
+          <HomeSlider />
           <PopularTools />
           <AllToolsSection />
         </Block>
