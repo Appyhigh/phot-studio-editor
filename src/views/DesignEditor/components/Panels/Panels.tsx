@@ -15,8 +15,10 @@ import { SAMPLE_IMAGES, TOOL_NAMES } from "~/constants/contants"
 import ErrorContext from "~/contexts/ErrorContext"
 import { BgOptions } from "~/views/DesignEditor/utils/BgOptions"
 import { getStockImages } from "~/services/stockApi"
+import { useLocation } from "react-router-dom"
 
 const Panels = () => {
+  const route = useLocation()
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const isSidebarOpen = useIsSidebarOpen()
   const [sidebarToggle, setSidebarToggle] = useState(true)
@@ -98,7 +100,7 @@ const Panels = () => {
   }, [])
 
   return (
-    <div className={classes.baseSidebarContainer}>
+    <div className={classes.baseSidebarContainer} style={route.pathname === '/' ? { height: 'calc(100vh - 70px)' } : {}}>
       {!isSidebarOpen && <PanelsList />}
 
       <Block className="d-flex" style={{ height: '100%' }}>

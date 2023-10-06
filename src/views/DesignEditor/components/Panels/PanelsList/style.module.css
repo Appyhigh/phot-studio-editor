@@ -3,12 +3,13 @@
   height: 100%;
   overflow-x: visible;
   background-color: white;
-  padding: 30px 20px;
+  padding: 0rem 20px 0px 20px;
 }
 .skeletonLoader {
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 35px;
 }
 
 .userInfoSke {
@@ -35,51 +36,67 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 35px;
 }
 .basePanelBtn {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  border: 1px solid rgba(103, 41, 243, 1);
-  border-radius: 6px;
-  font-family: Rubik;
+  gap: 4px;
+  border: 1px solid #d6dce4;
+  border-radius: 100px;
+  font-family: Poppins;
   font-size: 13px;
   font-weight: 500;
-  line-height: 15px;
-  letter-spacing: 0em;
   width: 100%;
   height: 44px;
   background: transparent;
+  border: 1px solid #d6dce4;
+}
+.basePanelBtn:hover {
+  border: 1px solid #d6dce4;
 }
 
 .panelListContainer {
-  padding-bottom: 30px;
-  height: 93vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.AllToolsTreeSection {
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: scroll;
+}
+.ToolsTreeSection {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  /* overflow-y: scroll; */
 }
 
-.AiToolTree::-webkit-scrollbar {
+.AllToolsTreeSection::-webkit-scrollbar {
   width: 0px;
 }
 
-.AiToolTree::-webkit-scrollbar-thumb {
+.AllToolsTreeSection::-webkit-scrollbar-thumb {
   cursor: pointer;
   border-radius: 16px;
   background-color: rgba(0, 0, 0, 0.08);
 }
 
-.AiToolTree::-webkit-scrollbar-track {
+.AllToolsTreeSection::-webkit-scrollbar-track {
   background-color: transparent;
 }
 .AiToolTree {
   gap: 10px;
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
-  overflow-y: scroll;
+  margin: 10px 0 0 1rem;
+  height: 555px;
 }
 .headerProfile {
   display: flex;
@@ -147,26 +164,23 @@
   padding: 5px 0px;
 }
 .lineBorder {
+  margin: 0.7rem 0px;
   border: 1px solid rgba(227, 227, 238, 1);
-}
-.ToolsTreeSection {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  width: 100%;
 }
 
 .siderbarTopSection {
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  height: 58.5px;
+  border-bottom: 1px solid #d6dce4;
+  /* box-shadow: inset 0px -1px 0px #e2e2ea; */
 }
+
 .siderbarFooterSection {
   display: flex;
   flex-direction: column;
-  gap: 28px;
-  margin-bottom: 10vh;
-  margin-top: 28px;
+  margin-bottom: 0.5rem;
 }
 .panelItemSection {
   display: flex;
@@ -183,8 +197,17 @@
   justify-content: space-between;
   cursor: pointer;
   align-items: center;
+  height: 48px;
+  border-radius: 7px;
+  padding: 13px 20px 13px 13px;
 }
-
+.hoveredTool {
+  background-color: rgba(103, 41, 243, 0.07);
+}
+.activeTool {
+  font-weight: 500;
+  color: rgba(103, 41, 243, 1);
+}
 .panelListItem:hover {
   cursor: pointer;
   transition: all 1s;
