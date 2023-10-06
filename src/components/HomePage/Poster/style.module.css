@@ -3,6 +3,12 @@
   height: 280px;
   position: relative;
 }
+.Splide {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  overflow-y: hidden;
+}
 .posterCon img {
   width: 100%;
   height: 100%;

@@ -8,7 +8,7 @@ const HomeSlider = () => {
     return (
         <section className={classes.posterCon}>
             <Splide
-                className="w-100 h-100"
+                className={classes.Splide}
                 options={{
                     rewind: true,
                     autoplay: true,
