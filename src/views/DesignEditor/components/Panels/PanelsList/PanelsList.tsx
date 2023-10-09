@@ -38,7 +38,16 @@ const PanelsList = () => {
   const { user } = authState
   const [openCategory, setOpenCategory] = useState(null)
   const [isLogin, setIsLogin] = useState(false)
-  const [toolHover, setToolHover] = useState(-1)
+  const [categoryHover, setCategoryHover] = useState({
+    create: false,
+    aiTools: false,
+    assets: false,
+    yourDesigns: false,
+    brand: false,
+    templates: false,
+    manageSubs: false,
+    preferences: false,
+  })
   const toggleAiTools = () => {
     setIsAiToolsOpen(!isAiToolsOpen)
   }
@@ -62,7 +71,6 @@ const PanelsList = () => {
     }
   }, [getCookie(COOKIE_KEYS.AUTH)])
 
-
   return (
     <div className={classes.panelListSection}>
       <div
@@ -73,7 +81,7 @@ const PanelsList = () => {
           classes.sidebarActiveModal
         )}
       >
-        {router.pathname === "/home" && (
+        {router.pathname.startsWith('/home') && (
           <div className={classes.siderbarTopSection}>
             <Block className="d-flex justify-content-start pointer">
               <Icons.PhotAILogo size={23} />
@@ -133,29 +141,39 @@ const PanelsList = () => {
               </>
             )}
             <div
-              className={clsx(classes.panelItemSectionContainer, toolHover === 0 && classes.hoveredTool)}
-              onMouseEnter={() => setToolHover(0)}
-              onMouseLeave={() => setToolHover(-1)}
+              className={clsx(classes.panelItemSectionContainer, categoryHover.create && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, create: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, create: false }))}
             >
-              <div className={clsx(classes.panelItemSection, toolHover === 0 && classes.activeTool)}>
-                <Icons.CreateRounded size={16} color={toolHover === 0 ? '#6729F3' : '#696974'} />
+              <div className={clsx(classes.panelItemSection, categoryHover.create && classes.activeTool)}>
+                <Icons.CreateRounded size={16} color={categoryHover.create ? "#6729F3" : "#696974"} />
                 <p>Create</p>
               </div>
-              <Icons.RightArrow size={16} color={toolHover === 0 ? '#6729F3' : '#696974'} />
+              <Icons.RightArrow size={16} color={categoryHover.create ? "#6729F3" : "#696974"} />
             </div>
 
             <div className={classes.AiToolsTreeSection}>
               <div
                 onClick={toggleAiTools}
-                className={clsx(classes.panelItemSectionContainer, toolHover === 1 && classes.hoveredTool)}
-
-                onMouseEnter={() => setToolHover(1)}
-                onMouseLeave={() => setToolHover(-1)}>
-                <div className={clsx(classes.panelItemSection, toolHover === 1 && classes.activeTool, isAiToolsOpen && classes.activeTool)}>
-                  <Icons.AiTools size={16} color={toolHover === 1 || isAiToolsOpen ? '#6729F3' : '#696974'} />
+                className={clsx(classes.panelItemSectionContainer, categoryHover.aiTools && classes.hoveredTool)}
+                onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, aiTools: true }))}
+                onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, aiTools: false }))}
+              >
+                <div
+                  className={clsx(
+                    classes.panelItemSection,
+                    categoryHover.aiTools && classes.activeTool,
+                    isAiToolsOpen && classes.activeTool
+                  )}
+                >
+                  <Icons.AiTools size={16} color={categoryHover.aiTools || isAiToolsOpen ? "#6729F3" : "#696974"} />
                   <p>AI tools</p>
                 </div>
-                {!isAiToolsOpen ? <Icons.RightArrow size={16} color={toolHover === 1 || isAiToolsOpen ? '#6729F3' : '#696974'} /> : <Icons.UpArrow size={16} color="#6729F3" />}
+                {!isAiToolsOpen ? (
+                  <Icons.RightArrow size={16} color={categoryHover.aiTools || isAiToolsOpen ? "#6729F3" : "#696974"} />
+                ) : (
+                  <Icons.UpArrow size={16} color="#6729F3" />
+                )}
               </div>
               {isAiToolsOpen && (
                 <div className={classes.AiToolTree}>
@@ -197,50 +215,68 @@ const PanelsList = () => {
                 </div>
               )}
             </div>
-            <div className={clsx(classes.panelItemSectionContainer, toolHover === 2 && classes.hoveredTool)} onMouseEnter={() => setToolHover(2)}
-              onMouseLeave={() => setToolHover(-1)}>
-              <div className={clsx(classes.panelItemSection, toolHover === 2 && classes.activeTool)}>
-                <Icons.Assets size={16} color={toolHover === 2 ? '#6729F3' : '#696974'} />
+            <div
+              className={clsx(classes.panelItemSectionContainer, categoryHover.assets && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, assets: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, assets: false }))}
+            >
+              <div className={clsx(classes.panelItemSection, categoryHover.assets && classes.activeTool)}>
+                <Icons.Assets size={16} color={categoryHover.assets ? "#6729F3" : "#696974"} />
                 <p>Assets</p>
               </div>
             </div>
-            <div className={clsx(classes.panelItemSectionContainer, toolHover === 3 && classes.hoveredTool)} onMouseEnter={() => setToolHover(3)}
-              onMouseLeave={() => setToolHover(-1)}>
-              <div className={clsx(classes.panelItemSection, toolHover === 3 && classes.activeTool)}>
-                <Icons.Designs size={16} color={toolHover === 3 ? '#6729F3' : '#696974'} />
+            <div
+              className={clsx(classes.panelItemSectionContainer, categoryHover.yourDesigns && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, yourDesigns: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, yourDesigns: false }))}
+            >
+              <div className={clsx(classes.panelItemSection, categoryHover.yourDesigns && classes.activeTool)}>
+                <Icons.Designs size={16} color={categoryHover.yourDesigns ? "#6729F3" : "#696974"} />
                 <p>Your designs</p>
               </div>
             </div>
-            <div className={clsx(classes.panelItemSectionContainer, toolHover === 4 && classes.hoveredTool)} onMouseEnter={() => setToolHover(4)}
-              onMouseLeave={() => setToolHover(-1)}>
-              <div className={clsx(classes.panelItemSection, toolHover === 4 && classes.activeTool)}>
-                <Icons.Brand size={16} color={toolHover === 4 ? '#6729F3' : '#696974'} />
+            <div
+              className={clsx(classes.panelItemSectionContainer, categoryHover.brand && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, brand: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, brand: false }))}
+            >
+              <div className={clsx(classes.panelItemSection, categoryHover.brand && classes.activeTool)}>
+                <Icons.Brand size={16} color={categoryHover.brand ? "#6729F3" : "#696974"} />
                 <p>Brand</p>
               </div>
             </div>
 
             <div className={classes.lineBorder}></div>
-            <div className={clsx(classes.panelItemSectionContainer, toolHover === 5 && classes.hoveredTool)} onMouseEnter={() => setToolHover(5)}
-              onMouseLeave={() => setToolHover(-1)}>
-              <div className={clsx(classes.panelItemSection, toolHover === 5 && classes.activeTool)}>
-                <Icons.sideBarTempletes size={16} color={toolHover === 5 ? '#6729F3' : '#696974'} />
+            <div
+              className={clsx(classes.panelItemSectionContainer, categoryHover.templates && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, templates: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, templates: false }))}
+            >
+              <div className={clsx(classes.panelItemSection, categoryHover.templates && classes.activeTool)}>
+                <Icons.sideBarTempletes size={16} color={categoryHover.templates ? "#6729F3" : "#696974"} />
                 <p>Templates</p>
               </div>
             </div>
           </div>
           <div className={classes.siderbarFooterSection}>
-            <div className={clsx(classes.panelItemSectionContainer, toolHover === 6 && classes.hoveredTool)} onMouseEnter={() => setToolHover(6)}
-              onMouseLeave={() => setToolHover(-1)}>
-              <div className={clsx(classes.panelItemSection, toolHover === 6 && classes.activeTool)}>
-                <Icons.ManageSubs size={16} color={toolHover === 6 ? '#6729F3' : '#696974'} />
+            <div
+              className={clsx(classes.panelItemSectionContainer, categoryHover.manageSubs && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, manageSubs: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, manageSubs: false }))}
+            >
+              <div className={clsx(classes.panelItemSection, categoryHover.manageSubs && classes.activeTool)}>
+                <Icons.ManageSubs size={16} color={categoryHover.manageSubs ? "#6729F3" : "#696974"} />
                 <p>Manage Subscriptions</p>
               </div>
             </div>
 
-            <div className={clsx(classes.panelItemSectionContainer, toolHover === 7 && classes.hoveredTool)} onMouseEnter={() => setToolHover(7)}
-              onMouseLeave={() => setToolHover(-1)}>
-              <div className={clsx(classes.panelItemSection, toolHover === 7 && classes.activeTool)}>
-                <Icons.Settings size={16} color={toolHover === 7 ? '#6729F3' : '#696974'} />
+            <div
+              className={clsx(classes.panelItemSectionContainer, categoryHover.preferences && classes.hoveredTool)}
+              onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, preferences: true }))}
+              onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, preferences: false }))}
+            >
+              <div className={clsx(classes.panelItemSection, categoryHover.preferences && classes.activeTool)}>
+                <Icons.Settings size={16} color={categoryHover.preferences ? "#6729F3" : "#696974"} />
                 <p>Prefrences</p>
               </div>
             </div>
@@ -280,6 +316,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
         if (router.pathname === "/home" && name !== 'ProductPhotoshoot') return
+
         if (!(activePanel === name && isModalOpen)) {
           // Change the style here
           setIsSidebarOpen(true)
