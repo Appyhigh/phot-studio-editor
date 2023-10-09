@@ -3,6 +3,7 @@
   font-weight: 600;
   font-size: 16;
   margin-left: 10px;
+  margin-top: 0px !important;
 }
 .sampleImgSection {
   display: grid;
