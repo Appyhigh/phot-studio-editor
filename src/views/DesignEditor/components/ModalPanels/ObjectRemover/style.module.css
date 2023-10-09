@@ -14,7 +14,7 @@
 }
 
 .uploadWrapper {
-  margin: -0.5rem -0.5rem 0rem -0.5rem;
+  margin-top: 0.5rem;
 }
 
 .arrowIcon {
@@ -140,7 +140,6 @@
   font-family: Rubik;
 }
 .sampleImages {
-
   margin: 1rem 0rem;
 }
 .sampleImage {

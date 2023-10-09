@@ -217,7 +217,7 @@ const PhotoEditor = () => {
           )}
           {photoEditorPanelInfo.uploadPreview && (
             <div>
-              <div className={classes.inputSection}>
+              <div className={classes.inputSection} style={{ padding: '0rem 1.4rem 1.4rem 1.4rem' }}>
                 <Prompt stateInfo={photoEditorInfo} setStateInfo={setPhotoEditorInfo} />
               </div>
               {/* hide for now credits related  */}

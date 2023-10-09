@@ -169,7 +169,7 @@ const ImageColorizer = () => {
       {!ImgColorizerPanelInfo.resultOption && (
         <>
           {ImgColorizerInfo.src ? (
-            <Block>
+            <Block style={{ width: '95%' }}>
               <UploadPreview
                 discardHandler={discardSampleImageHandler}
                 uploadType={IMAGE_COLORIZER}

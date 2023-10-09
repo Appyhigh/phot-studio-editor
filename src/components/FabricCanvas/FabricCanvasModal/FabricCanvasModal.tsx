@@ -43,6 +43,7 @@ const FabricCanvasModal = ({ isOpen, handleClose }: any) => {
             width: "100%",
             height: "85vh",
             margin: "1rem 2rem",
+            overflow: "hidden",
           }),
         },
       }}

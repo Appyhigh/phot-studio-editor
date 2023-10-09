@@ -94,13 +94,16 @@ const UploadInputImg = () => {
       {textToArtInputInfo.uploaded_img != "" && (
         <>
           <div className={clsx(classes.artSubHeading, "mb-1")}>Add an image </div>
-          <UploadPreview
-            uploadType={TEXT_TO_ART}
-            imgSrc={textToArtInputInfo.uploaded_img}
-            discardHandler={() => {
-              setTextToArtInputInfo((prev: any) => ({ ...prev, uploaded_img: "" }))
-            }}
-          />
+          <div className={classes.uploadPreviewCon}>
+            <UploadPreview
+              uploadType={TEXT_TO_ART}
+              imgSrc={textToArtInputInfo.uploaded_img}
+              discardHandler={() => {
+                setTextToArtInputInfo((prev: any) => ({ ...prev, uploaded_img: "" }))
+              }}
+            />
+          </div>
+
           <div className={clsx(classes.artSubHeading, "mt-3 mb-1")}>Selected Aspect Ratio</div>
           <div className={classes.imageAspectRatio}>
             <div

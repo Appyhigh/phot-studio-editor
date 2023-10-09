@@ -12,6 +12,7 @@ import {
   MODAL_IMG_UPLOAD,
   OBJECT_REMOVER,
   OBJECT_REPLACER,
+  PRODUCT_PHOTOSHOOT,
   REMOVE_BACKGROUND,
   TEXT_TO_ART,
   TOOL_NAMES,
@@ -91,7 +92,7 @@ const UploadPreview = ({
   }
 
   return (
-    <div>
+    <div style={{ width: "100%" }}>
       <Block paddingTop={"10px"} className={clsx(uploadType !== TEXT_TO_ART && classes.uploadPreviewMainContainer)}>
         {uploadType != MAIN_IMG_Bg &&
           uploadType !== IMAGE_COLORIZER &&
@@ -123,11 +124,22 @@ const UploadPreview = ({
         <div
           className={clsx(
             classes.uploadPreviewSection,
-            "d-flex align-items-center pointer",
+            "d-flex align-items-center pointer ",
             uploadType === LOCAL_SAMPLE_IMG && classes.localImg
           )}
+          style={
+            uploadType != OBJECT_REMOVER &&
+              uploadType != OBJECT_REPLACER &&
+              uploadType != PRODUCT_PHOTOSHOOT &&
+              uploadType !== MODAL_IMG_UPLOAD &&
+              uploadType !== LOCAL_SAMPLE_IMG
+              ? { padding: "1.5rem", }
+              : uploadType === LOCAL_SAMPLE_IMG
+                ? { padding: "1.5rem 1rem 1rem 0" }
+                : {}
+          }
         >
-          <div className="p-relative">
+          <div className="p-relative w-full" style={{ width: "100%", borderRadius: "4px", gap: '1rem' }}>
             <img src="" ref={virtualSrcImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
             <img src="" ref={virtualMaskImageRef} style={{ display: "none" }} crossOrigin="anonymous" />
 
@@ -135,37 +147,38 @@ const UploadPreview = ({
             <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
             <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
             <Block className={clsx(classes.uploadPreviewContainer, uploadType === MAIN_IMG_Bg && classes.mainImgBg)}>
-              <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} />
+              {/* <Icons.InputContainer height={uploadType === MAIN_IMG_Bg && "165"} /> */}
             </Block>
-            <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")}>
+            <Block className={clsx(classes.uploadPreview, "flex-center flex-column ")} >
               {loaderRemoveBg ? (
                 <div className={classes.loadingSpinner}>
                   {<img className={classes.stockImagesLoader} src={LoaderSpinner} />}{" "}
                 </div>
-              ) : <>
-                <img
-                  className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
-                  style={{ objectFit: "contain" }}
-                  src={imgSrc}
-                  alt="preview"
-                />
+              ) : (
+                <>
+                  <img
+                    className={clsx(classes.uploadedImg, uploadType === MAIN_IMG_Bg && classes.mainBgUploadedImg)}
+                    style={{ objectFit: "contain" }}
+                    src={imgSrc}
+                    alt="preview"
+                  />
 
-                {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
-                  <Block
-                    className={clsx(
-                      "p-absolute pointer",
-                      classes.discardBtn,
-                      uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
-                      uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
-                    )}
-                  >
-                    <span onClick={discardHandler}>
-                      <Icons.Trash size={"32"} />
-                    </span>
-                  </Block>
-                )}
-              </>}
-
+                  {uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && (
+                    <Block
+                      className={clsx(
+                        "p-absolute pointer",
+                        classes.discardBtn,
+                        uploadType === MAIN_IMG_Bg && classes.mainImgBgDiscard,
+                        uploadType === TEXT_TO_ART && classes.textToArtTrashIcon
+                      )}
+                    >
+                      <span onClick={discardHandler}>
+                        <Icons.Trash size={"32"} />
+                      </span>
+                    </Block>
+                  )}
+                </>
+              )}
             </Block>
 
             <LoginPopup
@@ -175,7 +188,7 @@ const UploadPreview = ({
               }}
               toolName={activePanel.activePanel === "BgRemover" ? TOOL_NAMES.bgRemover : ""}
             />
-            {(btnTitle && !loaderRemoveBg) && (
+            {btnTitle && !loaderRemoveBg && (
               <BaseButton
                 title={btnTitle}
                 disabled={uploadType === REMOVE_BACKGROUND ? (panelInfo.bgRemoverBtnActive ? false : true) : false}

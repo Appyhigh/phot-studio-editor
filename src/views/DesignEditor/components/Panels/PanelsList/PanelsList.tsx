@@ -279,7 +279,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (router.pathname === "/home") return
+        if (router.pathname === "/home" && name !== 'ProductPhotoshoot') return
         if (!(activePanel === name && isModalOpen)) {
           // Change the style here
           setIsSidebarOpen(true)

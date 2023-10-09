@@ -31,25 +31,23 @@ import { getPollingIntervals } from "~/services/pollingIntervals.service"
 import { useAuth } from "~/hooks/useAuth"
 import { PollingInterval } from "~/contexts/PollingInterval"
 import { fabric } from "fabric"
+import { Block } from "baseui/block"
 const ProductPhotoshoot = ({ handleClose }: any) => {
   const [steps, setSteps] = useState({
     1: true,
     2: false,
     3: false,
-    4: false,
   })
   const [isVisited, setIsVisited] = useState({
     1: true,
     2: false,
     3: false,
-    4: false,
   })
 
   const [stepsComplete, setStepsComplete] = useState({
     1: false,
     2: false,
     3: false,
-    4: false,
   })
 
   const { sampleImages } = useContext(SampleImagesContext)
@@ -133,14 +131,14 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           ...prev,
           tooltip: false,
         }))
-      }, 3000)
+      }, 5000)
     }
   }, [productPhotoshootInfo.tooltip, productPhotoshootInfo.result])
 
   useEffect(() => {
     if (productPhotoshootInfo.again) {
-      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
-      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, }))
+      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
       setProductPhotoshootInfo((prev: any) => ({
         ...prev,
         prompt: "",
@@ -228,9 +226,9 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                   type: "image",
                   src: image,
                 })
-                setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
-                setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-                setIsVisited((prev) => ({ ...prev, 2: true, }))
+                setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, }))
+                setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+                setIsVisited((prev) => ({ ...prev, 2: true }))
                 setProductPhotoshootInfo((prev: any) => ({
                   ...prev,
                   preview: productPhotoshootInfo.src,
@@ -307,9 +305,9 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     } else {
       setResultLoading(true)
       setCanvasLoader(true)
-      setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: true }))
-      setStepsComplete((prev: any) => ({ ...prev, 3: true, 4: false }))
-      setIsVisited((prev) => ({ ...prev, 4: true, }))
+      setSteps((prev: any) => ({ ...prev, 1: false, 2: false, 3: true }))
+      setStepsComplete((prev: any) => ({ ...prev, 2: true, 3: false }))
+      setIsVisited((prev) => ({ ...prev, 3: true }))
       const objects = canvas.getObjects()
       productPhotoshootController(
         getCurrentCanvasBase64Image(),
@@ -341,6 +339,13 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
         })
     }
   }
+  useEffect(() => {
+    if (productPhotoshootInfo.finalImage) {
+      setStepsComplete((prev: any) => ({ ...prev, 3: true, }))
+    } else {
+      setStepsComplete((prev: any) => ({ ...prev, 3: false, }))
+    }
+  }, [productPhotoshootInfo.finalImage])
 
   const resetCanvas = () => {
 
@@ -351,8 +356,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     })
     removeBackground()
     setSteps((prev: any) => ({ ...prev, 1: true }))
-    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, 4: false }))
-    setIsVisited((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false, }))
+    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, }))
+    setIsVisited((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
     setProductPhotoshootInfo((prev: any) => ({
       ...prev,
       src: "",
@@ -404,14 +409,20 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
               setImgUpload={setProductPhotoshootInfo}
               fileInputType={"modalUpload"}
               id={"modalUpload"}
+              uploadType={PRODUCT_PHOTOSHOOT}
             />
           </div>
         )}
         {!productPhotoshootInfo.src && (
           <>
-            <div className={classes.sampleImagesLabel}>or try one of these for free</div>
+            <div className={classes.sampleImagesLabel}>Try sample images</div>
             <div className={classes.sampleImages}>
-              <Swiper spaceBetween={15} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              <Swiper
+                spaceBetween={'7px'}
+                slidesPerView={"auto"}
+                navigation={true}
+                modules={[Navigation]}
+              >
                 {sampleImages.productPhotoshoot.map((image: any, index) => (
                   <SwiperSlide key={index} style={{ width: "auto" }}>
                     <div
@@ -435,73 +446,24 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
         )}
         <BaseButton
           title="Continue"
-          margin="0px"
+          margin="-16px 0 0 0"
           borderRadius="10px"
-          width="20.25rem"
+          width="100%"
           height="2.375rem"
           fontSize="0.75rem"
           fontFamily="Poppins"
           fontWeight="600"
           handleClick={() => {
             if (productPhotoshootInfo.preview && productPhotoshootInfo.src) {
-              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-              setIsVisited((prev) => ({ ...prev, 2: true, }))
+              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, }))
+              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+              setIsVisited((prev) => ({ ...prev, 2: true }))
             } else if (productPhotoshootInfo.src) {
               handleRemoveBgAndAddObject(productPhotoshootInfo.src)
             }
           }}
           disabled={!productPhotoshootInfo.src}
         />
-      </>
-    )
-  }
-
-  const ResizeImage = () => {
-    return (
-      <>
-        {productPhotoshootInfo.src && (
-          <UploadPreview imgSrc={productPhotoshootInfo.src} uploadType={MODAL_IMG_UPLOAD} />
-        )}
-        <div className={classes.resizeLabel}>*The output will depend on the size of the input images.</div>
-        <div className={classes.resizeButtons}>
-          <BaseButton
-            title="Skip"
-            borderRadius="10px"
-            width="9.6875rem"
-            height="2.375rem"
-            fontSize="0.75rem"
-            fontFamily="Poppins"
-            fontWeight="600"
-            bgColor="#F1F1F5"
-            txtColor="#44444F"
-            handleClick={() => {
-              setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
-              setIsVisited((prev) => ({ ...prev, 3: true, }))
-              setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
-              canvas.discardActiveObject().renderAll()
-            }}
-          />
-          <BaseButton
-            title="Continue"
-            borderRadius="10px"
-            width="9.6875rem"
-            height="2.375rem"
-            fontSize="0.75rem"
-            fontFamily="Poppins"
-            fontWeight="600"
-            disabled={!imageMoved}
-            handleClick={() => {
-              setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true, 4: false }))
-              setStepsComplete((prev) => ({ ...prev, 2: true, 3: false, 4: false }))
-              setIsVisited((prev) => ({ ...prev, 3: true, }))
-              setProductPhotoshootInfo((prev: any) => ({ ...prev, tooltip: false }))
-              canvas.discardActiveObject().renderAll()
-            }}
-          />
-        </div>
-        {imageMoved && <div className={classes.resizeNote}>Clicking Continue will save the changes automatically.</div>}
       </>
     )
   }
@@ -539,18 +501,16 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           {productPhotoshootInfo.isError &&
             Array.from(Array(4).keys()).map((each, idx) => (
               <div className={classes.skeletonBox} key={idx}>
-                <div className={classes.retry}>
-                  <Icons.RetryImg />
-                </div>
+                <Icons.RetryImg />
               </div>
             ))}
         </div>
         {!productPhotoshootInfo.isError && (
-          <div className="pb-2">
-            <BaseButton
+          <div className={classes.resultBtnCon}>
+            {/* <BaseButton
               title="Generate 4 more"
               borderRadius="10px"
-              width="20.25rem"
+              width="100%"
               height="2.375rem"
               fontSize="0.75rem"
               fontFamily="Poppins"
@@ -559,7 +519,25 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
               handleClick={() => {
                 !resultLoading && generateResult()
               }}
-            />
+            /> */}
+            <button
+              className={clsx(classes.generateBtn, resultLoading && classes.editBtnDisabled)}
+              onClick={() => {
+                setSteps((prev: any) => ({ ...prev, 2: true, 3: false }))
+                setStepsComplete((prev: any) => ({ ...prev, 3: false }))
+                setIsVisited((prev) => ({ ...prev, 3: false }))
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className={clsx(classes.generateBtn, resultLoading && classes.generateBtnDisabled)}
+              onClick={() => {
+                !resultLoading && generateResult()
+              }}
+            >
+              Generate 4 more
+            </button>
           </div>
         )}
       </>
@@ -571,14 +549,14 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
       <div className="d-flex flex-row">
         Upload / choose image
         <BaseButton
-          fontSize="10px"
+          fontSize="8px"
           title="Reset"
           handleClick={() => {
             resetCanvas()
           }}
-          width="30px"
+          width="25px"
           height="15px"
-          margin="2px 0px 0px 30px"
+          margin="2px 0px 0px 10px"
         >
           RESET
         </BaseButton>
@@ -590,9 +568,13 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     // <Scrollable>
     <div className={classes.leftPanel}>
       <div className={classes.heading}>
-        <div className={classes.arrowIcon} onClick={handleClose}>
-          <Icons.ArrowLeft />
-        </div>
+        <Block
+          onClick={handleClose}
+          $style={{ cursor: "pointer", display: "flex" }}
+          className={classes.chevronRightIcon}
+        >
+          <Icons.ChevronRight fill="#000" size={"20"} />
+        </Block>
         Product Photoshoot
       </div>
       <div className={classes.headingDivider}></div>
@@ -602,15 +584,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
         <canvas className={ID_SRC_CANVAS} ref={virtualCanvasSrcImageRef} style={{ display: "none" }} />
         <canvas className={ID_MASK_CANVAS} ref={virtualCanvasMaskImageRef} style={{ display: "none" }} />
         <canvas className={ID_RESULT_CANVAS} ref={virtualCanvasResultImageRef} style={{ display: "none" }} />
-        <div
-          style={{
-            height: "75vh",
-            overflowY: "scroll",
-            paddingBottom: "40px",
-            backgroundColor: "#fff",
-            borderBottomLeftRadius: "20px",
-          }}
-        >
+        <div className={classes.productPhotoCon}>
           <Accordian
             label={"1"}
             heading={productPhotoshootInfo.preview ? <ResetHeading /> : "Upload / choose image"}
@@ -621,70 +595,51 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             children={<UploadImage />}
             handleClick={() => {
               if (stepsComplete[1] && !steps[1]) {
-                setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
-                // setStepsComplete((prev) => ({ ...prev, 4: false }))
+                setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+                // setStepsComplete((prev) => ({ ...prev, }))
               } else if (steps[1]) {
                 setSteps((prev) => ({ ...prev, 1: false }))
               } else {
                 setSteps((prev) => ({ ...prev, 1: true }))
-
               }
             }}
           />
           <Accordian
             label={"2"}
-            heading={"Resize your image"}
+            heading={"Choose background"}
             isVisited={isVisited[2]}
             isOpen={steps[2]}
             isComplete={stepsComplete[2]}
-            children={<ResizeImage />}
-            handleClick={() => {
-              if ((stepsComplete[2] || productPhotoshootInfo.preview) && !steps[2]) {
-                setSteps((prev) => ({ ...prev, 2: true, 1: false, 3: false, 4: false }))
-                // setStepsComplete((prev) => ({ ...prev, 4: false }))
-              } else if (steps[2]) {
-                setSteps((prev) => ({ ...prev, 2: false }))
-              } else {
-              }
-            }}
-          />
-          <Accordian
-            label={"3"}
-            heading={"Select background"}
-            isVisited={isVisited[3]}
-            isOpen={steps[3]}
-            isComplete={stepsComplete[3]}
             children={
-              <SelectBackground
+              <ChooseBackground
                 setSteps={setSteps}
                 setStepsComplete={setStepsComplete}
                 generateResult={generateResult}
               />
             }
             handleClick={() => {
-              if (stepsComplete[2]) {
-                setSteps((prev) => ({ ...prev, 3: !steps[3], 1: false, 2: false, 4: false }))
+              if (stepsComplete[1]) {
+                setSteps((prev) => ({ ...prev, 1: false, 2: !steps[2], 3: false }))
               }
-
             }}
           />
           <Accordian
-            label={"4"}
+            label={"3"}
             heading={"Select output"}
-            isVisited={isVisited[4]}
-            isOpen={steps[4]}
-            isComplete={stepsComplete[4] || productPhotoshootInfo.finalImage}
+            isVisited={isVisited[3]}
+            isOpen={steps[3]}
+            isComplete={stepsComplete[3]}
             children={<SelectOutput />}
             handleClick={() => {
-              if ((stepsComplete[4] || productPhotoshootInfo.finalImage) && !steps[4]) {
-                setSteps((prev) => ({ ...prev, 4: true, 1: false, 2: false, 3: false }))
-              } else if (steps[4]) {
-                setSteps((prev) => ({ ...prev, 4: false }))
-                setStepsComplete((prev) => ({ ...prev, 4: true }))
+              if ((stepsComplete[3] || productPhotoshootInfo.finalImage) && !steps[3]) {
+                setSteps((prev) => ({ ...prev, 1: false, 2: false, 3: true }))
+              } else if (steps[3]) {
+                setSteps((prev) => ({ ...prev, 3: false }))
+                setStepsComplete((prev) => ({ ...prev, 3: true }))
               }
             }}
           />
-          {productPhotoshootInfo.isError && (
+          {productPhotoshootInfo.isError && stepsComplete[3] && (
             <>
               <div style={{ position: "relative" }}>
                 <FileError
@@ -719,7 +674,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   )
 }
 
-const SelectBackground = ({ generateResult }: any) => {
+const ChooseBackground = ({ generateResult }: any) => {
   const [showPrompt, setShowPrompt] = useState(false)
   const { productPhotoshootInfo, setProductPhotoshootInfo } = useContext(ProductPhotoshootContext)
   const [selectedImg, setSelectedImg] = useState(-1)
@@ -744,49 +699,6 @@ const SelectBackground = ({ generateResult }: any) => {
     groupedData()
   }, [])
 
-  // const categories: any = {
-  //   Mood: [
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Flower" },
-  //   ],
-  //   Colors: [
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Red" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Green" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Blue" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Orange" },
-  //   ],
-  //   Nature: [
-  //     {
-  //       image:
-  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-  //       label: "Tree",
-  //     },
-  //     {
-  //       image:
-  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-  //       label: "Tree",
-  //     },
-  //     {
-  //       image:
-  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-  //       label: "Tree",
-  //     },
-  //     {
-  //       image:
-  //         "https://media.istockphoto.com/id/1093110112/photo/picturesque-morning-in-plitvice-national-park-colorful-spring-scene-of-green-forest-with-pure.jpg?s=612x612&w=0&k=20&c=lpQ1sQI49bYbTp9WQ_EfVltAqSP1DXg0Ia7APTjjxz4=",
-  //       label: "Tree",
-  //     },
-  //   ],
-  //   Texture: [
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-  //     { image: "https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_1280.jpg", label: "Abstract" },
-  //   ],
-  // }
-
   useEffect(() => {
     setProductPhotoshootInfo((prev: any) => ({
       ...prev,
@@ -802,43 +714,41 @@ const SelectBackground = ({ generateResult }: any) => {
   return (
     <div className={classes.selectBg}>
       {showPrompt ? (
-        <>
-          <div className={classes.inputSection}>
-            <Prompt stateInfo={productPhotoshootInfo} setStateInfo={setProductPhotoshootInfo} />
-          </div>
-          <div className={classes.defaultBgLabel} onClick={() => setShowPrompt(false)}>
-            Select default backgrounds.
-          </div>
-        </>
+        <div className={classes.inputSection}>
+          <Prompt stateInfo={productPhotoshootInfo} setStateInfo={setProductPhotoshootInfo} />
+        </div>
       ) : (
-        <>
-          <Swiper spaceBetween={0} slidesPerView={"auto"} navigation={false} modules={[Navigation]}>
-            {Object.keys(sampleCategoryHeading)?.map((each: any, index: any) => (
-              <SwiperSlide key={index}>
-                <div
-                  className={classes.bgTab}
-                  style={{
-                    background: selectedCategory == each ? "#6729f3" : "#fff",
-                    color: selectedCategory == each ? "#fafafb" : "#92929D",
-                  }}
-                  onClick={() => {
-                    setSelectedCategory(each)
-                  }}
-                >
-                  {each}
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+        <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "6px", }}>
+          <div style={{ height: '44px' }}>
+            <Swiper spaceBetween={0} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+              {Object.keys(sampleCategoryHeading)?.map((each: any, index: any) => (
+                <SwiperSlide key={index}>
+                  <div
+                    className={classes.bgTab}
+                    style={{
+                      background: selectedCategory == each ? "#FFFFFF" : "#F1F1F5",
+                      color: selectedCategory == each ? "#6729F3" : "#404040",
+                      border: selectedCategory == each ? "1px solid #6729F3" : "",
+                    }}
+                    onClick={() => {
+                      setSelectedCategory(each)
+                    }}
+                  >
+                    {each.substring(0, 10)}
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
 
-          <Swiper spaceBetween={20} slidesPerView={"auto"} navigation={true} modules={[Navigation]} className="mt-2">
+          <div className={classes.siperSlide}>
             {sampleCategoryHeading[selectedCategory]?.map((each: any, index: any) => (
-              <SwiperSlide key={index}>
+              <div style={{ width: "90px", overflow: "hidden", position: "relative", marginBottom: '10px' }} key={index}>
                 <img
                   className="pointer"
                   style={{
-                    width: "5rem",
-                    height: "3rem",
+                    width: "90px",
+                    height: "90px",
                     background: "#FFFFFF",
                     borderRadius: "8px",
                   }}
@@ -854,35 +764,38 @@ const SelectBackground = ({ generateResult }: any) => {
                 <div className={classes.imageLabel}>{each.prompt}</div>
                 {selectedImg == index && (
                   <div className={classes.selected}>
-                    <Icons.Selection size={"28"} />
+                    <Icons.Selection size={"30"} />
                   </div>
                 )}
-              </SwiperSlide>
+              </div>
             ))}
-          </Swiper>
-          <div className={classes.promptLabel} onClick={() => setShowPrompt(true)}>
-            Want a more customized background? <span>Generate with a prompt.</span>
           </div>
-          {/* {productPhotoshootInfo.result.length > 0 && (
-            <div className={classes.prevOutputNote}>Your previous output will not be discarded.</div>
-          )} */}
-        </>
+        </div>
       )}
-      <BaseButton
-        title="Continue"
-        borderRadius="10px"
-        width="20.25rem"
-        height="2.375rem"
-        fontSize="0.75rem"
-        fontFamily="Poppins"
-        fontWeight="600"
-        handleClick={() => {
-          if (productPhotoshootInfo.prompt.length > 0) {
-            generateResult()
-          }
-        }}
-        disabled={productPhotoshootInfo.prompt.length == 0}
-      />
+      <div className={classes.generateBtnCon}>
+        <button
+          className={clsx(classes.generateBtn)}
+          onClick={() => {
+            if (showPrompt) {
+              setShowPrompt(false)
+            } else {
+              setShowPrompt(true)
+            }
+          }}
+        >
+          {showPrompt ? "Try Backgrounds" : "Try prompt"}
+        </button>
+        <button
+          className={clsx(classes.generateBtn, productPhotoshootInfo.prompt.length == 0 && classes.generateBtnDisabled)}
+          onClick={() => {
+            if (productPhotoshootInfo.prompt.length > 0) {
+              generateResult()
+            }
+          }}
+        >
+          Generate
+        </button>
+      </div>
     </div>
   )
 }

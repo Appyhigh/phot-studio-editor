@@ -1,11 +1,16 @@
 .uploadPreviewContainer {
-  width: 280px;
+  width: 100%;
   height: 200px;
   position: relative;
+  background-color: #f3f5f9;
+  border-radius: 4px;
+}
+.uploadInputWrapper {
+  width: 100%;
 }
 
 .uploadPreviewSection {
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,18 +24,18 @@
 }
 
 .uploadPreviewMainContainer {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  /* margin-bottom: 1rem; */
 }
 
 .uploadPreview {
   border-radius: 8px;
-  width: 280px;
+  width: 100%;
 }
 .uploadedImg {
   position: absolute;
-  width: 140px;
-  height: 140px;
+  width: 170px;
+  height: 170px;
   border-radius: 4px;
   top: 30px;
 }
@@ -47,7 +52,7 @@
 
 .mainImgBgDiscard {
   top: 20px;
-  right: 20px;
+  right: 10px;
 }
 .chevronRightIcon {
   cursor: pointer;
@@ -109,11 +114,11 @@
 }
 @media screen and (min-width: 1220px) {
   .uploadPreviewContainer {
-    width: 320px;
-    height: 200px;
+    /* width: 288px; */
+    height: 220px;
   }
   .uploadPreview {
-    width: 319px;
+    width: 100%;
   }
   .discardBtn {
     top: 15px;
@@ -143,8 +148,8 @@
   }
 
   .uploadedImg {
-    width: 140px;
-    height: 140px;
+    width: 170px;
+    height: 170px;
   }
   .mainBgUploadedImg {
     top: 12px;

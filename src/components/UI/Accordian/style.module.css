@@ -1,7 +1,7 @@
 .accordianMain {
-  padding: 28px 20px 0px;
+  padding: 1rem;
   color: #44444f;
-  font-size: 16px;
+  font-size: 14px;
 }
 .heading {
   display: flex;

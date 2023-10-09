@@ -1,6 +1,9 @@
 import { Modal, SIZE } from 'baseui/modal'
+import ProductPhotoshootEditor from '~/components/ModalToolsEditor/ProductPhotoshootEditor/ProductPhotoshootEditor'
+import { useNavigate } from 'react-router-dom'
 
 const index = () => {
+    const navigate = useNavigate()
     return (
         <Modal
             animate
@@ -10,7 +13,6 @@ const index = () => {
                 Root: {
                     style: ({ $theme }) => ({
                         zIndex: 500,
-                        // margin: "4.3rem 0rem 0rem 22.5rem",
                     }),
                 },
                 Close: {
@@ -22,9 +24,10 @@ const index = () => {
                 Dialog: {
                     style: ({ $theme }) => ({
                         backgroundColor: "#F1F1F5",
-                        width: "100%",
+                        width: "85%",
                         height: "85vh",
-                        margin: "1rem 2rem",
+                        overflow: 'hidden'
+                        // margin: "84px 100px 84px 100px",
                     }),
                 },
             }}
@@ -33,6 +36,7 @@ const index = () => {
         >
 
 
+            <ProductPhotoshootEditor handleClose={() => navigate('/')} />
         </Modal>
     )
 }
