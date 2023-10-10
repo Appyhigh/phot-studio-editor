@@ -111,6 +111,8 @@ import CreateScratch from "./CreateScratch"
 import Brand from "./Brand"
 import AiProfessionalPhotoshoot from "./AiProfessionalPhotoshoot"
 import ImageLightFixer from "./ImageLightFixer"
+import SliderLeftIcon from "./SliderLeftIcon"
+import SliderRightIcon from "./SliderRightIcon"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -225,6 +227,8 @@ class Icons {
   static Brand = Brand
   static AiProfessionalPhotoshoot = AiProfessionalPhotoshoot
   static ImageLightFixer = ImageLightFixer
+  static SliderLeftIcon = SliderLeftIcon
+  static SliderRightIcon = SliderRightIcon
 }
 
 export default Icons

@@ -36,7 +36,7 @@ const index = () => {
         >
 
 
-            <ProductPhotoshootEditor handleClose={() => navigate('/')} />
+            <ProductPhotoshootEditor handleClose={() => navigate('/home')} />
         </Modal>
     )
 }

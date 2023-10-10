@@ -1,3 +1,35 @@
+.swiperWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 12px;
+}
+.swiperButtons {
+  position: absolute;
+  background: #f1f1f1;
+  position: absolute;
+  top: 0;
+  height: 34px;
+}
+.swiperButtonLeft {
+  left: -10px;
+}
+.swiperButtonRight {
+  right: -10px;
+}
+.categoryList {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  transition: transform 0.3s ease 0s;
+  margin: 0 4px;
+  overflow: auto;
+}
+.categoryList::-webkit-scrollbar {
+  width: 0;
+}
 .leftPanel {
   background-color: #fff;
   border-top-left-radius: 20px;
@@ -58,7 +90,7 @@
   font-weight: 400;
   line-height: 14px;
   letter-spacing: 0em;
-  padding: 10px 16px 10px 14px;
+  padding: 10px 17px 10px 17px;
   border-radius: 7px;
 }
 .categoriesApi {
@@ -189,7 +221,7 @@
 
 .sampleImages {
   height: 57px;
-  margin: 0.5rem 0rem 1rem 0rem;
+  margin: 0.5rem 0rem 1.5rem 0rem;
 }
 
 .sampleImage {
@@ -223,11 +255,18 @@
   gap: 6px 8px;
 }
 
-.skeletonBox img {
+.skeletonBox {
   background: #f1f1f5;
   width: 136px;
   height: 136px;
   border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.imagesLoader {
+  width: 120px;
+  height: 80px;
 }
 
 .eachImg img {

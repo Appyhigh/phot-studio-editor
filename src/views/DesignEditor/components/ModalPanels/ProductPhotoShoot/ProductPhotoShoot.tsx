@@ -682,6 +682,8 @@ const ChooseBackground = ({ generateResult }: any) => {
   const { sampleImages } = useContext(SampleImagesContext)
   const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 
+  const scrollRef: any = useRef();
+  const [scrollPosition, setScrollPosition] = useState(0);
   const groupedData = () => {
     setSelectedCategory(sampleImages?.productPhotoshoot[0]?.categories)
     sampleImages.productPhotoshoot.reduce((acc: any, item: any) => {
@@ -711,6 +713,35 @@ const ChooseBackground = ({ generateResult }: any) => {
     setSelectedImg(-1)
   }, [selectedCategory])
 
+  useEffect(() => {
+    const onScroll = () => {
+      const currentPosition = scrollRef.current.scrollLeft;
+      setScrollPosition(Math.min(Math.max(0, currentPosition), 150));
+    };
+
+    if (scrollRef.current) {
+      scrollRef.current.addEventListener('scroll', onScroll);
+    }
+
+    return () => {
+      if (scrollRef.current) {
+        scrollRef.current.removeEventListener('scroll', onScroll);
+      }
+    };
+  }, [scrollRef.current]);
+
+  const handleScroll = (direction: any) => {
+    const sliderWidth = scrollRef.current.clientWidth;
+    const newPosition =
+      direction === 'left' ? scrollPosition - sliderWidth * 0.9 : scrollPosition + sliderWidth * 0.2;
+
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: newPosition, behavior: 'smooth' });
+    }
+    setScrollPosition(Math.min(Math.max(0, newPosition), 100));
+  };
+
+
   return (
     <div className={classes.selectBg}>
       {showPrompt ? (
@@ -718,27 +749,54 @@ const ChooseBackground = ({ generateResult }: any) => {
           <Prompt stateInfo={productPhotoshootInfo} setStateInfo={setProductPhotoshootInfo} />
         </div>
       ) : (
-        <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "6px", }}>
-          <div style={{ height: '44px' }}>
-            <Swiper spaceBetween={0} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
+        <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "6px", width: '100%' }}>
+          <div className={classes.swiperWrapper}>
+            <button
+              className={clsx(classes.swiperButtons, classes.swiperButtonLeft)}
+              onClick={() => handleScroll('left')}
+              disabled={scrollPosition === 0}
+              style={{
+                cursor: scrollPosition === 0 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <Icons.SliderRightIcon></Icons.SliderRightIcon>
+            </button>
+            <ul
+              className={clsx(
+                'd-flex align-items-center hiddenOverflowScroll ',
+                classes.categoryList
+              )}
+              ref={scrollRef}
+            >
               {Object.keys(sampleCategoryHeading)?.map((each: any, index: any) => (
-                <SwiperSlide key={index}>
-                  <div
-                    className={classes.bgTab}
-                    style={{
-                      background: selectedCategory == each ? "#FFFFFF" : "#F1F1F5",
-                      color: selectedCategory == each ? "#6729F3" : "#404040",
-                      border: selectedCategory == each ? "1px solid #6729F3" : "",
-                    }}
-                    onClick={() => {
-                      setSelectedCategory(each)
-                    }}
-                  >
-                    {each.substring(0, 10)}
-                  </div>
-                </SwiperSlide>
+                <li
+                  key={index}
+                  className={classes.bgTab}
+                  style={{
+                    background: selectedCategory == each ? "#FFFFFF" : "#F1F1F5",
+                    color: selectedCategory == each ? "#6729F3" : "#404040",
+                    border: selectedCategory == each ? "1px solid #6729F3" : "",
+                    padding: selectedCategory == each ? "10px 16px 10px 15px" : "",
+                  }}
+                  onClick={() => {
+                    setSelectedCategory(each)
+                  }}
+                >
+                  {each.substring(0, 10)}
+                </li>
               ))}
-            </Swiper>
+            </ul>
+
+            <button
+              onClick={() => handleScroll('right')}
+              className={clsx(classes.swiperButtons, classes.swiperButtonRight)}
+              disabled={scrollPosition === 100}
+              style={{
+                cursor: scrollPosition === 100 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <Icons.SliderLeftIcon></Icons.SliderLeftIcon>
+            </button>
           </div>
 
           <div className={classes.siperSlide}>
