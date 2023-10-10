@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import DesignEditor from "~/views/DesignEditor"
 import Dashboard from "~/views/Dashboard"
-import HomePage from "./views/HomePage"
+import HomePage from "./views/HomePage/HomePage"
 
 const Router = () => {
   return (

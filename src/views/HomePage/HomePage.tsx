@@ -3,20 +3,24 @@ import Panels from '../DesignEditor/components/Panels'
 import { Theme, styled } from "baseui"
 import HomeNavbar from '~/components/HomePage/Navbar/HomeNavbar'
 import { Block } from 'baseui/block'
-import PopularTools from '~/components/HomePage/PopularTools/PopularToolsSection'
-import AllToolsSection from '~/components/HomePage/AllTools/AllToolsSection'
-import HomeSlider from '~/components/HomePage/Poster/HomeSlider'
 import classes from './style.module.css'
+import TempletSection from '~/components/Templets/TempletMain'
+import Home from '~/components/HomePage'
+import useAppContext from '~/hooks/useAppContext'
+
 const HomePage = () => {
+
+  const { activeSection } = useAppContext()
+
+
   return (
     <EditorContainer>
       <Panels />
       <Block style={{ width: '100%', height: '100%' }}>
         <HomeNavbar />
         <Block className={classes.homeSection} >
-          <HomeSlider />
-          <PopularTools />
-          <AllToolsSection />
+          {activeSection === 'Home' && <Home />}
+          {activeSection === 'TempletSection' && <TempletSection />}
         </Block>
       </Block>
     </EditorContainer>

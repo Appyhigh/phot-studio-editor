@@ -1,6 +1,6 @@
 import { Block } from "baseui/block"
 import classes from "./style.module.css"
-import HomepageToolCard from "../HomepageToolCard"
+import HomepageToolCard from "../card/HomepageToolCard"
 import { POPULAR_TOOLS } from "~/components/HomePage/dummy"
 
 const PopularToolsSection = () => {
