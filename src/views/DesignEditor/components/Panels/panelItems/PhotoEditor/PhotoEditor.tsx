@@ -194,7 +194,7 @@ const PhotoEditor = () => {
   }
 
   return (
-    <div className="d-flex flex-1 flex-column">
+    <div className={clsx("d-flex flex-1 flex-column", classes.photoEditorCon)}>
       {!photoEditorPanelInfo.resultSectionVisible ? (
         <>
           {photoEditorInfo.src ? (
