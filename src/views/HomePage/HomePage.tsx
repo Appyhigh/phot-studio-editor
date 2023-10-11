@@ -4,7 +4,7 @@ import { Theme, styled } from "baseui"
 import HomeNavbar from '~/components/HomePage/Navbar/HomeNavbar'
 import { Block } from 'baseui/block'
 import classes from './style.module.css'
-import TempletSection from '~/components/Templets/TempletMain'
+import TempletSection from '~/components/Templets'
 import Home from '~/components/HomePage'
 import useAppContext from '~/hooks/useAppContext'
 
