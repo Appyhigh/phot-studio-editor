@@ -2,7 +2,7 @@ import { Block } from 'baseui/block';
 import { Modal, SIZE } from 'baseui/modal'
 import classes from './style.module.css'
 
-const TempleteModal = ({ isModalOpen, HandleClose, }: any) => {
+const TempleteModal = ({ isModalOpen, HandleClose, data }: any) => {
     return (
         <Modal
             animate
@@ -42,9 +42,8 @@ const TempleteModal = ({ isModalOpen, HandleClose, }: any) => {
                 </Block>
                 <Block className={classes.popupInfo}>
                     <Block className={classes.popupContent}>
-                        <h2 className={classes.popupHeading}>Orange and black happy halloween
-                            twitter post</h2>
-                        <p className={classes.popupDiscription}>1920 x 1080 • Created on 12 June</p>
+                        <h2 className={classes.popupHeading}>{data.title}</h2>
+                        <p className={classes.popupDiscription}>{data.discription}</p>
                     </Block>
                     <Block className={classes.popupBtnsCont}>
                         <button className={classes.useTempBtn}>Use this template</button>
