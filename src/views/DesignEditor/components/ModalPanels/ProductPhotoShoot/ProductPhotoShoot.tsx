@@ -137,8 +137,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
 
   useEffect(() => {
     if (productPhotoshootInfo.again) {
-      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, }))
-      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+      setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false }))
+      setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false }))
       setProductPhotoshootInfo((prev: any) => ({
         ...prev,
         prompt: "",
@@ -226,8 +226,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
                   type: "image",
                   src: image,
                 })
-                setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, }))
-                setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+                setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false }))
+                setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false }))
                 setIsVisited((prev) => ({ ...prev, 2: true }))
                 setProductPhotoshootInfo((prev: any) => ({
                   ...prev,
@@ -341,14 +341,13 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
   }
   useEffect(() => {
     if (productPhotoshootInfo.finalImage) {
-      setStepsComplete((prev: any) => ({ ...prev, 3: true, }))
+      setStepsComplete((prev: any) => ({ ...prev, 3: true }))
     } else {
-      setStepsComplete((prev: any) => ({ ...prev, 3: false, }))
+      setStepsComplete((prev: any) => ({ ...prev, 3: false }))
     }
   }, [productPhotoshootInfo.finalImage])
 
   const resetCanvas = () => {
-
     canvas.getObjects().forEach((obj: any) => {
       if (obj.imageType === "product") {
         canvas.remove(obj)
@@ -356,8 +355,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     })
     removeBackground()
     setSteps((prev: any) => ({ ...prev, 1: true }))
-    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false, }))
-    setIsVisited((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+    setStepsComplete((prev: any) => ({ ...prev, 1: false, 2: false, 3: false }))
+    setIsVisited((prev) => ({ ...prev, 1: true, 2: false, 3: false }))
     setProductPhotoshootInfo((prev: any) => ({
       ...prev,
       src: "",
@@ -417,12 +416,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           <>
             <div className={classes.sampleImagesLabel}>Try sample images</div>
             <div className={classes.sampleImages}>
-              <Swiper
-                spaceBetween={'7px'}
-                slidesPerView={"auto"}
-                navigation={true}
-                modules={[Navigation]}
-              >
+              <Swiper spaceBetween={"7px"} slidesPerView={"auto"} navigation={true} modules={[Navigation]}>
                 {sampleImages.productPhotoshoot.map((image: any, index) => (
                   <SwiperSlide key={index} style={{ width: "auto" }}>
                     <div
@@ -455,8 +449,8 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
           fontWeight="600"
           handleClick={() => {
             if (productPhotoshootInfo.preview && productPhotoshootInfo.src) {
-              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, }))
-              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+              setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false }))
+              setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false }))
               setIsVisited((prev) => ({ ...prev, 2: true }))
             } else if (productPhotoshootInfo.src) {
               handleRemoveBgAndAddObject(productPhotoshootInfo.src)
@@ -595,7 +589,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
             children={<UploadImage />}
             handleClick={() => {
               if (stepsComplete[1] && !steps[1]) {
-                setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false, }))
+                setSteps((prev) => ({ ...prev, 1: true, 2: false, 3: false }))
                 // setStepsComplete((prev) => ({ ...prev, }))
               } else if (steps[1]) {
                 setSteps((prev) => ({ ...prev, 1: false }))
@@ -682,8 +676,11 @@ const ChooseBackground = ({ generateResult }: any) => {
   const { sampleImages } = useContext(SampleImagesContext)
   const [sampleCategoryHeading, setSampleCategoryHeading] = useState<any>([])
 
-  const scrollRef: any = useRef();
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollRef: any = useRef()
+  const chooseBgRef: any = useRef()
+  const [scrollCategPosition, setScrollCategPosition] = useState(0)
+  const [scrollBgImgsPosition, setScrollBgImgsPosition] = useState(0)
+  const categorieImgsLen = sampleCategoryHeading[selectedCategory]?.length > 6
   const groupedData = () => {
     setSelectedCategory(sampleImages?.productPhotoshoot[0]?.categories)
     sampleImages.productPhotoshoot.reduce((acc: any, item: any) => {
@@ -715,32 +712,57 @@ const ChooseBackground = ({ generateResult }: any) => {
 
   useEffect(() => {
     const onScroll = () => {
-      const currentPosition = scrollRef.current.scrollLeft;
-      setScrollPosition(Math.min(Math.max(0, currentPosition), 150));
-    };
+      const currentPosition = scrollRef.current.scrollLeft
+      setScrollCategPosition(Math.min(Math.max(0, currentPosition), 150))
+    }
 
     if (scrollRef.current) {
-      scrollRef.current.addEventListener('scroll', onScroll);
+      scrollRef.current.addEventListener("scroll", onScroll)
     }
 
     return () => {
       if (scrollRef.current) {
-        scrollRef.current.removeEventListener('scroll', onScroll);
+        scrollRef.current.removeEventListener("scroll", onScroll)
       }
-    };
-  }, [scrollRef.current]);
+    }
+  }, [scrollRef.current])
+
+  useEffect(() => {
+    const onScroll = () => {
+      const currentPosition = chooseBgRef.current.scrollLeft
+      setScrollCategPosition(Math.min(Math.max(0, currentPosition), 100))
+    }
+
+    if (chooseBgRef.current) {
+      chooseBgRef.current.addEventListener("scroll", onScroll)
+    }
+
+    return () => {
+      if (chooseBgRef.current) {
+        chooseBgRef.current.removeEventListener("scroll", onScroll)
+      }
+    }
+  }, [chooseBgRef.current])
 
   const handleScroll = (direction: any) => {
-    const sliderWidth = scrollRef.current.clientWidth;
-    const newPosition =
-      direction === 'left' ? scrollPosition - sliderWidth * 0.9 : scrollPosition + sliderWidth * 0.2;
+    const sliderWidth = scrollRef.current.clientWidth
+    const newPosition = direction === "left" ? scrollCategPosition - sliderWidth * 0.9 : scrollCategPosition + sliderWidth * 0.2
 
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: newPosition, behavior: 'smooth' });
+      scrollRef.current.scrollBy({ left: newPosition, behavior: "smooth" })
     }
-    setScrollPosition(Math.min(Math.max(0, newPosition), 100));
-  };
+    setScrollCategPosition(Math.min(Math.max(0, newPosition), 100))
+  }
 
+  const handleBgScroll = (direction: any) => {
+    const sliderWidth = chooseBgRef.current.clientWidth
+    const newPosition = direction === "left" ? scrollBgImgsPosition - sliderWidth * 0.9 : scrollBgImgsPosition + sliderWidth * 0.2
+
+    if (chooseBgRef.current) {
+      chooseBgRef.current.scrollBy({ left: newPosition, behavior: "smooth" })
+    }
+    setScrollBgImgsPosition(Math.min(Math.max(0, newPosition), 100))
+  }
 
   return (
     <div className={classes.selectBg}>
@@ -749,23 +771,21 @@ const ChooseBackground = ({ generateResult }: any) => {
           <Prompt stateInfo={productPhotoshootInfo} setStateInfo={setProductPhotoshootInfo} />
         </div>
       ) : (
-        <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "6px", width: '100%' }}>
+        <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "6px", width: "100%" }}>
           <div className={classes.swiperWrapper}>
             <button
               className={clsx(classes.swiperButtons, classes.swiperButtonLeft)}
-              onClick={() => handleScroll('left')}
-              disabled={scrollPosition === 0}
+              onClick={() => handleScroll("left")}
+              disabled={scrollCategPosition === 0}
               style={{
-                cursor: scrollPosition === 0 ? 'not-allowed' : 'pointer',
+                cursor: scrollCategPosition === 0 ? "not-allowed" : "pointer",
               }}
             >
               <Icons.SliderRightIcon></Icons.SliderRightIcon>
             </button>
+
             <ul
-              className={clsx(
-                'd-flex align-items-center hiddenOverflowScroll ',
-                classes.categoryList
-              )}
+              className={clsx("d-flex align-items-center hiddenOverflowScroll ", classes.categoryList)}
               ref={scrollRef}
             >
               {Object.keys(sampleCategoryHeading)?.map((each: any, index: any) => (
@@ -788,46 +808,75 @@ const ChooseBackground = ({ generateResult }: any) => {
             </ul>
 
             <button
-              onClick={() => handleScroll('right')}
+              onClick={() => handleScroll("right")}
               className={clsx(classes.swiperButtons, classes.swiperButtonRight)}
-              disabled={scrollPosition === 100}
+              disabled={scrollCategPosition === 100}
               style={{
-                cursor: scrollPosition === 100 ? 'not-allowed' : 'pointer',
+                cursor: scrollCategPosition === 100 ? "not-allowed" : "pointer",
               }}
             >
               <Icons.SliderLeftIcon></Icons.SliderLeftIcon>
             </button>
           </div>
 
-          <div className={classes.siperSlide}>
-            {sampleCategoryHeading[selectedCategory]?.map((each: any, index: any) => (
-              <div style={{ width: "90px", overflow: "hidden", position: "relative", marginBottom: '10px' }} key={index}>
-                <img
-                  className="pointer"
+          <Block style={{ position: 'relative' }}>
+            <div className={clsx(classes.cateImagesGrid, !categorieImgsLen && classes.cateImagesGridBase)} ref={chooseBgRef}>
+              {sampleCategoryHeading[selectedCategory]?.map((each: any, index: any) => (
+                <div
+                  className={classes.cateImageCon}
                   style={{
-                    width: "90px",
-                    height: "90px",
-                    background: "#FFFFFF",
-                    borderRadius: "8px",
+                    gridRow: categorieImgsLen ? `${index % 2 === 0 ? 1 : 2}` : "",
+                    gridColumn: categorieImgsLen ? `${Math.ceil((index + 1) / 2)}` : "",
                   }}
-                  src={each.originalImage}
-                  onClick={() => {
-                    setSelectedImg(index)
-                    setProductPhotoshootInfo((prev: any) => ({
-                      ...prev,
-                      prompt: each.prompt[0],
-                    }))
-                  }}
-                />
-                <div className={classes.imageLabel}>{each.prompt}</div>
-                {selectedImg == index && (
-                  <div className={classes.selected}>
-                    <Icons.Selection size={"30"} />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+                  key={index}
+                >
+                  <img
+                    className={classes.cateImage}
+                    src={each.originalImage}
+                    onClick={() => {
+                      setSelectedImg(index)
+                      setProductPhotoshootInfo((prev: any) => ({
+                        ...prev,
+                        prompt: each.prompt[0],
+                      }))
+                    }}
+                  />
+                  <div className={classes.imageLabel}>{each.prompt}</div>
+                  {selectedImg == index && (
+                    <div className={classes.selected}>
+                      <Icons.Selection size={"30"} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => handleBgScroll("left")}
+              // disabled={scrollBgImgsPosition === 0}
+              style={{
+                background: 'transparent',
+                position: 'absolute',
+                top: '91px',
+                left: '-13px',
+                display: scrollBgImgsPosition === 0 ? 'none' : 'block'
+              }}
+            >
+              <Icons.ScrollCircleLeft />
+            </button>
+            <button
+              onClick={() => handleBgScroll("right")}
+              // disabled={scrollBgImgsPosition === 100}
+              style={{
+                background: 'transparent',
+                position: 'absolute',
+                top: '91px',
+                right: '-13px',
+                display: (scrollBgImgsPosition === 100 || !categorieImgsLen) ? 'none' : 'block'
+              }}
+            >
+              <Icons.ScrollCircleRight />
+            </button>
+          </Block>
         </div>
       )}
       <div className={classes.generateBtnCon}>

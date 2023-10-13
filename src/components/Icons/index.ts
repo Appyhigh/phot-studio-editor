@@ -113,6 +113,8 @@ import AiProfessionalPhotoshoot from "./AiProfessionalPhotoshoot"
 import ImageLightFixer from "./ImageLightFixer"
 import SliderLeftIcon from "./SliderLeftIcon"
 import SliderRightIcon from "./SliderRightIcon"
+import ScrollCircleLeft from "./ScrollCircleLeft"
+import ScrollCircleRight from "./ScrollCircleRight"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -229,6 +231,8 @@ class Icons {
   static ImageLightFixer = ImageLightFixer
   static SliderLeftIcon = SliderLeftIcon
   static SliderRightIcon = SliderRightIcon
+  static ScrollCircleLeft = ScrollCircleLeft
+  static ScrollCircleRight = ScrollCircleRight
 }
 
 export default Icons
