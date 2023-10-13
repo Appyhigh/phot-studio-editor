@@ -1,5 +1,5 @@
 import { styled, Theme } from "baseui"
-import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
+import { BASE_ITEMS, PanelSection, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import { useTranslation } from "react-i18next"
@@ -27,7 +27,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 
 const PanelsList = () => {
   const router = useLocation()
-  const { activePanel, activeCategory, setActiveCategory } = useAppContext()
+  const { activePanel, activeCategory, setActiveCategory, activeSection, setActiveSection } = useAppContext()
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
   //@ts-ignore
@@ -81,8 +81,8 @@ const PanelsList = () => {
           classes.sidebarActiveModal
         )}
       >
-        {router.pathname.startsWith('/home') && (
-          <div className={classes.siderbarTopSection}>
+        {router.pathname.startsWith("/home") && (
+          <div className={classes.siderbarTopSection} onClick={() => setActiveSection(PanelSection.Home)}>
             <Block className="d-flex justify-content-start pointer">
               <Icons.PhotAILogo size={23} />
             </Block>
@@ -219,6 +219,9 @@ const PanelsList = () => {
               className={clsx(classes.panelItemSectionContainer, categoryHover.assets && classes.hoveredTool)}
               onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, assets: true }))}
               onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, assets: false }))}
+              onClick={() => {
+                setActiveSection(PanelSection.Assets)
+              }}
             >
               <div className={clsx(classes.panelItemSection, categoryHover.assets && classes.activeTool)}>
                 <Icons.Assets size={16} color={categoryHover.assets ? "#6729F3" : "#696974"} />
@@ -251,6 +254,9 @@ const PanelsList = () => {
               className={clsx(classes.panelItemSectionContainer, categoryHover.templates && classes.hoveredTool)}
               onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, templates: true }))}
               onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, templates: false }))}
+              onClick={() => {
+                setActiveSection(PanelSection.TempletSection)
+              }}
             >
               <div className={clsx(classes.panelItemSection, categoryHover.templates && classes.activeTool)}>
                 <Icons.sideBarTempletes size={16} color={categoryHover.templates ? "#6729F3" : "#696974"} />
@@ -316,15 +322,11 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (router.pathname.startsWith('/home') && name === 'ProductPhotoshoot') {
-          navigate('/product-photoshoot')
-        } else if (router.pathname.startsWith("/home") && name !== 'ProductPhotoshoot') return
-        else {
-          if (!(activePanel === name && isModalOpen)) {
-            // Change the style here
-            setIsSidebarOpen(true)
-            setActivePanel(name)
-          }
+        if (router.pathname.startsWith("/home")) return
+        if (!(activePanel === name && isModalOpen)) {
+          // Change the style here
+          setIsSidebarOpen(true)
+          setActivePanel(name)
         }
       }}
       style={{ marginBottom: name == "ProductPhotoshoot" ? "-70px" : "" }}

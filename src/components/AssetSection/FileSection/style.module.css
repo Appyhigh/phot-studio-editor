@@ -1,0 +1,167 @@
+.assetsContainer {
+  width: 100%;
+  max-width: 1084px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.allFilesContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.sectionToolsCon {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+  padding: 18px 20px 18px 20px;
+}
+.sectionTopCon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sectionTopBtns {
+  display: flex;
+  gap: 16px;
+}
+.sectionfileBtn {
+  height: 78px;
+  width: 248px;
+  /* padding: 25px 80.66px 25px 26px; */
+  border-radius: 16px;
+  gap: 14px;
+  background-color: #f3f5f9;
+  font-family: Rubik;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #44444f;
+  display: flex;
+  align-items: center;
+  padding: 0 26px;
+  justify-content: space-between;
+}
+.fileBtnContent {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.folderMenuPopup {
+  position: absolute;
+  width: 167px;
+  height: 143px;
+  border-radius: 6px;
+  border: 1px solid #f1f1f5;
+  background-color: white;
+  right: -110px;
+  top: 63px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 0px;
+}
+.menuOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0.10000000149011612px;
+  color: #696974;
+  cursor: pointer;
+  height: 36px;
+  padding-left: 16px;
+}
+.menuOption:hover {
+  background-color: #f2f2f2;
+}
+.sectionBtns {
+  width: auto;
+  height: 39px;
+  padding: 11px 16px 11px 16px;
+  border-radius: 5px;
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f5f9;
+  outline: none;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0px;
+  color: #44444f;
+}
+.sectionToolFolderHead {
+  font-family: Rubik;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #000000;
+}
+.sectionToolHead {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0px;
+  color: #000000;
+}
+.sectionCardWrap {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.folderContainer {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.addFolderCon {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.addFolderTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #000000;
+}
+.addFolderBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.addFolderInput {
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  background: rgb(242, 242, 242);
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+  color: #44444f;
+  display: flex;
+  align-items: center;
+  padding-left: 18px;
+  outline: none;
+}

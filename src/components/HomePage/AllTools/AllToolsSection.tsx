@@ -1,6 +1,6 @@
 import { Block } from "baseui/block"
 import classes from "./style.module.css"
-import HomepageToolCard from "../HomepageToolCard"
+import HomepageToolCard from "../card/HomepageToolCard"
 import clsx from "clsx"
 import { useState } from "react"
 import { All_TOOLS, ALL_TOOLS_TABS } from "../dummy"

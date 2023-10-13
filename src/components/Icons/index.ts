@@ -111,6 +111,14 @@ import CreateScratch from "./CreateScratch"
 import Brand from "./Brand"
 import AiProfessionalPhotoshoot from "./AiProfessionalPhotoshoot"
 import ImageLightFixer from "./ImageLightFixer"
+import PopupClose from "./PopupClose"
+import DownArrowFilled from "./DownArrowFilled"
+import FileIcon from "./FileIcon"
+import RenamePencil from "./RenamePencil"
+import DownloadSimple from "./DownloadSimple"
+import TrashSimple from "./TrashSimple"
+import KebabMenu from "./KebabMenu"
+import ClosedFilled from "./CrossFilled"
 import SliderLeftIcon from "./SliderLeftIcon"
 import SliderRightIcon from "./SliderRightIcon"
 import ScrollCircleLeft from "./ScrollCircleLeft"
@@ -229,6 +237,14 @@ class Icons {
   static Brand = Brand
   static AiProfessionalPhotoshoot = AiProfessionalPhotoshoot
   static ImageLightFixer = ImageLightFixer
+  static PopupClose = PopupClose
+  static DownArrowFilled = DownArrowFilled
+  static FileIcon = FileIcon
+  static RenamePencil = RenamePencil
+  static DownloadSimple = DownloadSimple
+  static TrashSimple = TrashSimple
+  static KebabMenu = KebabMenu
+  static ClosedFilled = ClosedFilled
   static SliderLeftIcon = SliderLeftIcon
   static SliderRightIcon = SliderRightIcon
   static ScrollCircleLeft = ScrollCircleLeft
