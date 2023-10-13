@@ -322,13 +322,18 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (router.pathname.startsWith("/home")) return
-        if (!(activePanel === name && isModalOpen)) {
-          // Change the style here
-          setIsSidebarOpen(true)
-          setActivePanel(name)
+        if (router.pathname.startsWith('/home') && name === 'ProductPhotoshoot') {
+          navigate('/product-photoshoot')
+        } else if (router.pathname.startsWith("/home") && name !== 'ProductPhotoshoot') return
+        else {
+          if (!(activePanel === name && isModalOpen)) {
+            // Change the style here
+            setIsSidebarOpen(true)
+            setActivePanel(name)
+          }
         }
-      }}
+      }
+      }
       style={{ marginBottom: name == "ProductPhotoshoot" ? "-70px" : "" }}
     >
       {name === "Images" ? (
