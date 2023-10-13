@@ -112,6 +112,13 @@ import Brand from "./Brand"
 import AiProfessionalPhotoshoot from "./AiProfessionalPhotoshoot"
 import ImageLightFixer from "./ImageLightFixer"
 import PopupClose from "./PopupClose"
+import DownArrowFilled from "./DownArrowFilled"
+import FileIcon from "./FileIcon"
+import RenamePencil from "./RenamePencil"
+import DownloadSimple from "./DownloadSimple"
+import TrashSimple from "./TrashSimple"
+import KebabMenu from "./KebabMenu"
+import ClosedFilled from "./CrossFilled"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -227,6 +234,13 @@ class Icons {
   static AiProfessionalPhotoshoot = AiProfessionalPhotoshoot
   static ImageLightFixer = ImageLightFixer
   static PopupClose = PopupClose
+  static DownArrowFilled = DownArrowFilled
+  static FileIcon = FileIcon
+  static RenamePencil = RenamePencil
+  static DownloadSimple = DownloadSimple
+  static TrashSimple = TrashSimple
+  static KebabMenu = KebabMenu
+  static ClosedFilled = ClosedFilled
 }
 
 export default Icons

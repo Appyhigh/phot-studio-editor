@@ -2,7 +2,7 @@ import { Block } from "baseui/block";
 import classes from "./style.module.css";
 import { Modal, SIZE } from "baseui/modal";
 
-const TempletCard = ({ data, isModalOpen, HandleClose }: any) => {
+const TempletCard = ({ data }: any) => {
     return (
         <Block className={classes.templeteCard} >
             <div className={classes.templeteCardImgCon}>
