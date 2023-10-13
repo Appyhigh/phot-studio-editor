@@ -374,3 +374,8 @@ export enum PanelType {
   IMAGE_COLORIZER = "ImageColorizer",
   PHOTO_EDITOR = "PhotoEditor",
 }
+
+export enum PanelSection {
+  Home = "Home",
+  TempletSection = "TempletSection",
+}

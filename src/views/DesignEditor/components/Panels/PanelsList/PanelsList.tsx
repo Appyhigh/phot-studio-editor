@@ -1,5 +1,5 @@
 import { styled, Theme } from "baseui"
-import { BASE_ITEMS, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
+import { BASE_ITEMS, PanelSection, VIDEO_PANEL_ITEMS } from "~/constants/app-options"
 import useAppContext from "~/hooks/useAppContext"
 import Icons from "~/components/Icons"
 import { useTranslation } from "react-i18next"
@@ -27,7 +27,7 @@ const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
 
 const PanelsList = () => {
   const router = useLocation()
-  const { activePanel, activeCategory, setActiveCategory } = useAppContext()
+  const { activePanel, activeCategory, setActiveCategory, activeSection, setActiveSection } = useAppContext()
   const { t } = useTranslation("editor")
   const editorType = useEditorType()
   //@ts-ignore
@@ -82,7 +82,7 @@ const PanelsList = () => {
         )}
       >
         {router.pathname.startsWith('/home') && (
-          <div className={classes.siderbarTopSection}>
+          <div className={classes.siderbarTopSection} onClick={() => setActiveSection(PanelSection.Home)}>
             <Block className="d-flex justify-content-start pointer">
               <Icons.PhotAILogo size={23} />
             </Block>
@@ -252,7 +252,9 @@ const PanelsList = () => {
               onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, templates: true }))}
               onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, templates: false }))}
             >
-              <div className={clsx(classes.panelItemSection, categoryHover.templates && classes.activeTool)}>
+              <div className={clsx(classes.panelItemSection, categoryHover.templates && classes.activeTool)} onClick={() => {
+                setActiveSection(PanelSection.TempletSection)
+              }}>
                 <Icons.sideBarTempletes size={16} color={categoryHover.templates ? "#6729F3" : "#696974"} />
                 <p>Templates</p>
               </div>

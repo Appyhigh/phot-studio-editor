@@ -1,4 +1,4 @@
-import { PanelType } from "~/constants/app-options"
+import { PanelSection, PanelType } from "~/constants/app-options"
 import React, { createContext, useState } from "react"
 
 type Template = any
@@ -13,6 +13,8 @@ interface IAppContext {
   setShapes: (templates: any[]) => void
   activePanel: PanelType
   setActivePanel: (option: PanelType) => void
+  activeSection: PanelSection
+  setActiveSection: (option: PanelSection) => void
   activeSubMenu: string | null
   setActiveSubMenu: (option: string) => void
   currentTemplate: any
@@ -36,6 +38,8 @@ export const AppContext = createContext<IAppContext>({
   setShapes: () => { },
   activePanel: PanelType.BACKGROUND_REMOVER,
   setActivePanel: () => { },
+  activeSection: PanelSection.Home,
+  setActiveSection: () => { },
   activeSubMenu: null,
   setActiveSubMenu: (value: string) => { },
   currentTemplate: {},
@@ -54,6 +58,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [uploads, setUploads] = useState<any[]>([])
   const [shapes, setShapes] = useState<Template[]>([])
   const [activePanel, setActivePanel] = useState<PanelType>(null)
+  const [activeSection, setActiveSection] = useState<PanelSection>(PanelSection.Home)
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null)
   const [currentTemplate, setCurrentTemplate] = useState(null)
   const [res, setRes] = useState<any[]>([])
@@ -66,6 +71,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setTemplates,
     activePanel,
     setActivePanel,
+    activeSection,
+    setActiveSection,
     shapes,
     setShapes,
     activeSubMenu,
