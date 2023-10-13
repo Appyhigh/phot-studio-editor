@@ -7,6 +7,7 @@ import classes from './style.module.css'
 import TempletSection from '~/components/Templets'
 import Home from '~/components/HomePage'
 import useAppContext from '~/hooks/useAppContext'
+import AssetSection from '~/components/AssetSection'
 
 const HomePage = () => {
 
@@ -21,6 +22,7 @@ const HomePage = () => {
         <Block className={classes.homeSection} >
           {activeSection === 'Home' && <Home />}
           {activeSection === 'TempletSection' && <TempletSection />}
+          {activeSection === 'Assets' && <AssetSection />}
         </Block>
       </Block>
     </EditorContainer>

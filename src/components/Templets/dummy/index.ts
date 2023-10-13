@@ -25,3 +25,66 @@ export const TEMPLETS_DATA = [
     discription: "1080 x 1080 • Created on 24 June",
   },
 ]
+
+export const ASSETS_DATA = [
+  {
+    src: cardImg3,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg1,
+    title: "Oglivy Cover Design",
+    discription: "1920 x 1080 • Created on 12 June",
+  },
+  {
+    src: cardImg2,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg4,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg3,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg1,
+    title: "Oglivy Cover Design",
+    discription: "1920 x 1080 • Created on 12 June",
+  },
+  {
+    src: cardImg2,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg4,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg3,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg1,
+    title: "Oglivy Cover Design",
+    discription: "1920 x 1080 • Created on 12 June",
+  },
+  {
+    src: cardImg2,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+  {
+    src: cardImg4,
+    title: "Birthday Post",
+    discription: "1080 x 1080 • Created on 24 June",
+  },
+]
