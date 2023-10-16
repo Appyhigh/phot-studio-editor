@@ -1,11 +1,12 @@
 import { Block } from "baseui/block";
 import classes from "./style.module.css";
 import { Modal, SIZE } from "baseui/modal";
+import clsx from "clsx";
 
-const TempletCard = ({ data }: any) => {
+const TempletCard = ({ data, isKebabMenu }: any) => {
     return (
         <Block className={classes.templeteCard} >
-            <div className={classes.templeteCardImgCon}>
+            <div className={clsx(classes.templeteCardImgCon, isKebabMenu && classes.templeteCardImgConHover)}>
                 <img src={data.src} alt={data.title} />
             </div>
             <div className={classes.descCon}>
