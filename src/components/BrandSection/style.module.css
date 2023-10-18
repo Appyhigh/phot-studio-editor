@@ -1,0 +1,89 @@
+.brandMainContainer {
+  width: 100%;
+  max-width: 1084px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.posterCon {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.posterCon img {
+  width: 100%;
+  height: 100%;
+}
+.brandSectionCon {
+  padding: 18px 20px;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: white;
+  border-radius: 1rem;
+}
+.brandLogoTop {
+  display: flex;
+  flex-direction: column;
+}
+.brandLogoBottom {
+  position: relative;
+  display: flex;
+  gap: 1rem;
+}
+.sectionHeading {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: rgba(0, 0, 0, 1);
+}
+.sectionDiscription {
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(130, 130, 130, 1);
+}
+
+.addFolderCon {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.addFolderTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #000000;
+}
+.addFolderBottom {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.addFolderInput {
+  height: 48px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  background: rgb(242, 242, 242);
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+  color: #44444f;
+  display: flex;
+  align-items: center;
+  padding-left: 18px;
+  outline: none;
+}

@@ -119,6 +119,9 @@ import DownloadSimple from "./DownloadSimple"
 import TrashSimple from "./TrashSimple"
 import KebabMenu from "./KebabMenu"
 import ClosedFilled from "./CrossFilled"
+import CreateBrandPlus from "./CreateBrandPlus"
+import DeleteIcon from "./DeleteIcon"
+import ColorSelecter from "./ColorSelector"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -241,6 +244,9 @@ class Icons {
   static TrashSimple = TrashSimple
   static KebabMenu = KebabMenu
   static ClosedFilled = ClosedFilled
+  static CreateBrandPlus = CreateBrandPlus
+  static DeleteIcon = DeleteIcon
+  static ColorSelecter = ColorSelecter
 }
 
 export default Icons

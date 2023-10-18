@@ -1,0 +1,160 @@
+.colorPickerContainer {
+  z-index: 500;
+  width: 328px;
+  height: 544px;
+  top: 709px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: white;
+  box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.25);
+}
+.colorInfoCon {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.inputLabel {
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(68, 68, 79, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.colorInputCon {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.inputBox {
+  width: 197px;
+  height: 42px;
+  border-radius: 6px;
+  padding: 12px 11px;
+  border: 1px solid #d9d9d9;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(146, 146, 157, 1);
+  outline: none;
+  background-color: #f4f4f4;
+}
+.inputBox :focus {
+  color: black;
+}
+.colorValuesInput {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.selectColorCont {
+  width: 100%;
+  height: 100%;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #44444f;
+  outline: none;
+  border: none;
+  padding-left: 11px;
+  z-index: 1;
+  cursor: pointer;
+}
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.selectColorCodeCon {
+  position: relative;
+  width: 67px;
+  height: 35px;
+  border-radius: 8px;
+  border: 1px solid #f1f1f5;
+  overflow: hidden;
+  cursor: pointer;
+}
+.selectDownArrow {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 14px;
+  align-items: center;
+  /* justify-content: center; */
+  height: 100%;
+}
+.colorPickerInputField {
+  outline: none;
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  font-family: Rubik;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #44444f;
+}
+.colorPercentageInputField {
+  outline: none;
+  background-color: transparent;
+  border: none;
+  border-left: 2px solid #e7e7eb;
+  width: 62px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-family: Rubik;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #44444f;
+}
+.inputPercentage {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px 6px 1rem;
+  width: 202px;
+  height: 42px;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  background-color: rgb(241, 242, 246);
+}
+.colorTypeHeading {
+  font-size: 16px;
+  line-height: 19px;
+  color: #44444f;
+  margin: 25px 0px 8px;
+}
+.colorSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 0.25rem;
+}
+.eachColor {
+  height: 62px;
+  width: 62px;
+  cursor: pointer;
+  border-radius: 4px;
+}
