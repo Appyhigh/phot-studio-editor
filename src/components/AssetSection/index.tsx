@@ -5,6 +5,7 @@ import Icons from "../Icons"
 import { Modal, SIZE } from "baseui/modal"
 import BaseButton from "../UI/Button/BaseButton"
 import Section from "./FileSection/FileSection"
+import { PanelSection } from "~/constants/app-options"
 
 const AssetSection = () => {
     const [isKebabMenu, setIsKebabMenu] = useState(null)
@@ -84,7 +85,7 @@ const AssetSection = () => {
                 </section>
             </Block>}
 
-            <Section name={sectionDataName} HandleBackBtn={HandleBackBtn} />
+            <Section name={sectionDataName} HandleBackBtn={HandleBackBtn} type={PanelSection.Assets} />
             <AddFolderModal isAddFolderOpen={isAddFolderOpen} HandleCloseAddModal={HandleCloseAddModal} />
         </Block>
     )

@@ -232,6 +232,9 @@ const PanelsList = () => {
               className={clsx(classes.panelItemSectionContainer, categoryHover.yourDesigns && classes.hoveredTool)}
               onMouseEnter={() => setCategoryHover((prev) => ({ ...prev, yourDesigns: true }))}
               onMouseLeave={() => setCategoryHover((prev) => ({ ...prev, yourDesigns: false }))}
+              onClick={() => {
+                setActiveSection(PanelSection.YourDesigns)
+              }}
             >
               <div className={clsx(classes.panelItemSection, categoryHover.yourDesigns && classes.activeTool)}>
                 <Icons.Designs size={16} color={categoryHover.yourDesigns ? "#6729F3" : "#696974"} />

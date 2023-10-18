@@ -119,6 +119,8 @@ import DownloadSimple from "./DownloadSimple"
 import TrashSimple from "./TrashSimple"
 import KebabMenu from "./KebabMenu"
 import ClosedFilled from "./CrossFilled"
+import RightTickMark from "./RightTickMark"
+import CommingSoon from "./CommingSoon"
 import CreateBrandPlus from "./CreateBrandPlus"
 import DeleteIcon from "./DeleteIcon"
 import ColorSelecter from "./ColorSelector"
@@ -244,6 +246,8 @@ class Icons {
   static TrashSimple = TrashSimple
   static KebabMenu = KebabMenu
   static ClosedFilled = ClosedFilled
+  static RightTickMark = RightTickMark
+  static CommingSoon = CommingSoon
   static CreateBrandPlus = CreateBrandPlus
   static DeleteIcon = DeleteIcon
   static ColorSelecter = ColorSelecter

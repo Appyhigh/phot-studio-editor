@@ -9,6 +9,7 @@ import Home from '~/components/HomePage'
 import useAppContext from '~/hooks/useAppContext'
 import AssetSection from '~/components/AssetSection'
 import BrandSection from '~/components/BrandSection'
+import YourDesigns from '~/components/YourDesigns'
 
 const HomePage = () => {
 
@@ -25,6 +26,7 @@ const HomePage = () => {
           {activeSection === 'TempletSection' && <TempletSection />}
           {activeSection === 'Assets' && <AssetSection />}
           {activeSection === 'Brand' && <BrandSection />}
+          {activeSection === 'YourDesigns' && <YourDesigns />}
         </Block>
       </Block>
     </EditorContainer>

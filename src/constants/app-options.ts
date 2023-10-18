@@ -380,4 +380,5 @@ export enum PanelSection {
   TempletSection = "TempletSection",
   Assets = "Assets",
   Brand = "Brand",
+  YourDesigns = "YourDesigns",
 }

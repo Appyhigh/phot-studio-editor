@@ -3,6 +3,16 @@ import cardImg2 from "./cardImg2.png"
 import cardImg3 from "./cardImg3.png"
 import cardImg4 from "./cardImg4.png"
 
+export const SORT_OPTIONS = [
+  {
+    title: "Alphabetical",
+    options: ["A to Z", "Z to A"],
+  },
+  {
+    title: "By Order",
+    options: ["Date", "Size"],
+  },
+]
 export const TEMPLETS_DATA = [
   {
     src: cardImg3,
