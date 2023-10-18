@@ -17,6 +17,9 @@
   background-color: #f3f5f9;
   overflow: hidden;
 }
+.templeteCardImgConHover {
+  filter: contrast(0.5);
+}
 .templeteCardImgCon img {
   width: 100%;
   height: 100%;

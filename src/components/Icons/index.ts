@@ -119,6 +119,8 @@ import DownloadSimple from "./DownloadSimple"
 import TrashSimple from "./TrashSimple"
 import KebabMenu from "./KebabMenu"
 import ClosedFilled from "./CrossFilled"
+import RightTickMark from "./RightTickMark"
+import CommingSoon from "./CommingSoon"
 import SliderLeftIcon from "./SliderLeftIcon"
 import SliderRightIcon from "./SliderRightIcon"
 import ScrollCircleLeft from "./ScrollCircleLeft"
@@ -245,6 +247,8 @@ class Icons {
   static TrashSimple = TrashSimple
   static KebabMenu = KebabMenu
   static ClosedFilled = ClosedFilled
+  static RightTickMark = RightTickMark
+  static CommingSoon = CommingSoon
   static SliderLeftIcon = SliderLeftIcon
   static SliderRightIcon = SliderRightIcon
   static ScrollCircleLeft = ScrollCircleLeft
