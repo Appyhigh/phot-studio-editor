@@ -4,6 +4,7 @@ import { Block } from "baseui/block"
 import clsx from "clsx"
 import { CREATE_BTN_ITEMS } from "~/constants/app-options"
 import Icons from "~/components/Icons"
+import { Link } from "react-router-dom"
 
 const CreatePopup = ({ setShowCreatePopup }: any) => {
     return (
@@ -35,7 +36,8 @@ const PopupListItem = ({ label, icon, activePanel, name }: any) => {
     // @ts-ignore
     const Icon = Icons[icon]
     return (
-        <Block
+        <Link
+            to={name === 'ProductPhotoshoot' ? '/product-photoshoot' : "/home"}
             id="EditorPopupList"
             className={clsx(classes.popupListItem, "p-relative")}
             onMouseEnter={() => setIsHovered(true)}
@@ -48,7 +50,7 @@ const PopupListItem = ({ label, icon, activePanel, name }: any) => {
             >
                 {label}
             </Block>
-        </Block>
+        </Link>
     )
 }
 

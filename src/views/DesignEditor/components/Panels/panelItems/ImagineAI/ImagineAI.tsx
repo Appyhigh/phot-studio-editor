@@ -194,11 +194,14 @@ const ImagineAI = () => {
       {!textToArtpanelInfo.resultSectionVisible && (
         <Block className="d-flex flex-1 flex-column">
           {/* Prompt */}
-          <Prompt
-            stateInfo={textToArtInputInfo}
-            setStateInfo={setTextToArtInputInfo}
-            placeholder={"Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"}
-          />
+          <div style={{ margin: '1.5rem 1.5rem 0px 20px' }}>
+            <Prompt
+              stateInfo={textToArtInputInfo}
+              setStateInfo={setTextToArtInputInfo}
+              placeholder={"Oil painting, fantasy, fantasy style, japanese female wearing a blue kimono holding a katana"}
+            />
+          </div>
+
           {/* Select a Style */}
           <Block className={classes.imagineItemContainer}>
             <Block className={classes.imagineItemHeading}>Select a Style</Block>

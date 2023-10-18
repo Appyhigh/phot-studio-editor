@@ -46,7 +46,10 @@
   margin-bottom: 24px;
   position: relative;
 }
-
+.uploadPreviewCon {
+  width: 107%;
+  margin-left: -1.35px;
+}
 .imageWeightSubHeading {
   margin: 24px 0px 6px;
 }

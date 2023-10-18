@@ -27,7 +27,7 @@ const Accordian = ({ label, heading, isVisited, children, isOpen, isComplete, ha
             </div>
           )}
 
-          <p style={{ color: isVisited ? "#44444F" : "#92929D", fontWeight: "400" }}>{heading}</p>
+          <p style={{ color: isVisited ? "#44444F" : "#92929D", fontWeight: isVisited ? "500" : '400px' }}>{heading}</p>
         </div>
 
         <div className="flex-1"></div>

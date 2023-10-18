@@ -1,8 +1,25 @@
+.photoEditorCon {
+  overflow-y: scroll;
+}
+.photoEditorCon::-webkit-scrollbar {
+  width: 6px;
+}
+
+.photoEditorCon::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  background-color: #c7c9cd;
+  border-radius: 1rem;
+}
+
+.photoEditorCon::-webkit-scrollbar-track {
+  background-color: white; /* Set the color of the track */
+}
 .tryImgHeading {
   padding: 0 12px;
   font-weight: 600;
   font-size: 16;
   margin-left: 10px;
+  margin-top: 0px !important;
 }
 
 .sampleImgSection {

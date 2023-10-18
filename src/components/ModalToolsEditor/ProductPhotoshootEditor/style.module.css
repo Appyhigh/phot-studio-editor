@@ -201,7 +201,7 @@
 
 .toolTip {
   position: absolute;
-  top: 4rem;
+  top: 5rem;
   z-index: 100;
   display: inline-flex;
   padding: 0.5rem 1rem;

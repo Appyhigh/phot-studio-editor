@@ -5,7 +5,7 @@ import classes from "./style.module.css"
 import clsx from "clsx"
 import LoaderSpinner from "../../../../../Public/images/loader-spinner.svg"
 import UppyDashboard from "~/components/UI/UploadInput/UppyDashboard"
-import { MODAL_IMG_UPLOAD } from "~/constants/contants"
+import { MODAL_IMG_UPLOAD, OBJECT_REMOVER, OBJECT_REPLACER, PRODUCT_PHOTOSHOOT } from "~/constants/contants"
 
 export default function ({
   uploadType,
@@ -29,14 +29,14 @@ export default function ({
 
   return (
     <>
-      <Block className={clsx(uploadType != MODAL_IMG_UPLOAD && "mt-3")}>
+      <Block className={clsx(uploadType != MODAL_IMG_UPLOAD && uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && uploadType != PRODUCT_PHOTOSHOOT && "mt-3")}>
         <Block className="d-flex align-items-center flex-start">
           <Block className="pl-1">
             <Block className={classes.panelHeading}>{mainHeading}</Block>
           </Block>
         </Block>
 
-        <div>
+        <div style={uploadType != OBJECT_REMOVER && uploadType != OBJECT_REPLACER && uploadType != PRODUCT_PHOTOSHOOT ? { padding: '1rem' } : {}}>
           {!imageLoading && (
             // <div key={renderKey}>
             <div>

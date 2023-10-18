@@ -121,6 +121,10 @@ import KebabMenu from "./KebabMenu"
 import ClosedFilled from "./CrossFilled"
 import RightTickMark from "./RightTickMark"
 import CommingSoon from "./CommingSoon"
+import SliderLeftIcon from "./SliderLeftIcon"
+import SliderRightIcon from "./SliderRightIcon"
+import ScrollCircleLeft from "./ScrollCircleLeft"
+import ScrollCircleRight from "./ScrollCircleRight"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -245,6 +249,10 @@ class Icons {
   static ClosedFilled = ClosedFilled
   static RightTickMark = RightTickMark
   static CommingSoon = CommingSoon
+  static SliderLeftIcon = SliderLeftIcon
+  static SliderRightIcon = SliderRightIcon
+  static ScrollCircleLeft = ScrollCircleLeft
+  static ScrollCircleRight = ScrollCircleRight
 }
 
 export default Icons

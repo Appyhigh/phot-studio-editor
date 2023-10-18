@@ -501,7 +501,7 @@ const ObjectRemover = ({ handleBrushToolTip }: any) => {
       </div>
       <div className={classes.line}></div>
 
-      <div style={{ height: "75vh", overflowY: "scroll", paddingBottom: "40px" }}>
+      <div className={classes.objRemoverCon}>
         <Accordian
           label={1}
           isVisited={isVisited.firstStep}

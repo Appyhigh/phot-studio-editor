@@ -1,38 +1,99 @@
+.swiperWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 12px;
+}
+.swiperButtons {
+  position: absolute;
+  background: #f1f1f1;
+  position: absolute;
+  top: 0;
+  height: 34px;
+}
+.swiperButtonLeft {
+  left: -10px;
+}
+.swiperButtonRight {
+  right: -10px;
+}
+.categoryList {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  transition: transform 0.3s ease 0s;
+  margin: 0 4px;
+  overflow: auto;
+}
+.categoryList::-webkit-scrollbar {
+  width: 0;
+}
 .leftPanel {
   background-color: #fff;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  width: 24rem;
-  max-height: 80vh;
+  width: 324px;
+  height: 100%;
 }
 
+.productPhotoCon {
+  height: 75vh;
+  overflow-y: scroll;
+  background-color: #fff;
+  border-bottom-right-radius: 20px;
+}
+.productPhotoCon::-webkit-scrollbar {
+  width: 4px;
+}
+
+.productPhotoCon::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  background-color: #d8dade;
+}
+
+.productPhotoCon::-webkit-scrollbar-track {
+  background-color: white; /* Set the color of the track */
+}
 .heading {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1.25rem 1rem;
+  padding: 15.4px;
   gap: 0.75rem;
-  color: #44444f;
-  font-size: 1.125rem;
+  border-bottom: 1.5px solid #e9e9e9;
   font-family: Rubik;
+  font-size: 16px;
   font-weight: 500;
-  border-bottom: 0.0625rem solid #e9e9e9;
+  line-height: 19px;
+  letter-spacing: 0em;
+  color: #171725;
 }
 
 .selectBg {
   padding-top: 1rem;
 }
-
-.bgTab {
-  padding: 0.275rem 0.65rem;
-  border-radius: 30px;
-  background: #6729f3;
-  color: #fafafb;
-  font-size: 0.675rem;
-  font-family: Rubik;
-  font-weight: 500;
+.chevronRightIcon {
+  cursor: pointer;
+  display: flex;
+  width: 38px;
+  height: 38px;
+  background: #eeeeee;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
 }
-.categoriesApi{
+.bgTab {
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  padding: 10px 17px 10px 17px;
+  border-radius: 7px;
+}
+.categoriesApi {
   display: flex;
   flex-direction: column;
 }
@@ -42,17 +103,49 @@
   left: 50%;
   transform: translate(-50%, -40%);
 }
+.cateImagesGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 9px;
+  overflow-x: auto;
+}
+.cateImagesGrid::-webkit-scrollbar {
+  width: 0;
+}
+.cateImagesGridBase {
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+.cateImageCon {
+  width: 90px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 5px;
+}
+.cateImage {
+  width: 100%;
+  height: 90px;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
 
 .imageLabel {
-  color: #171725;
-  padding-top: 0.2rem;
-  text-align: center;
-  font-size: 0.675rem;
+  width: 100%;
+  overflow: hidden;
+  height: 17px;
   font-family: Rubik;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #404040;
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
 }
 
 .inputSection {
-  margin: 12px -30px 20px -20px;
+  margin: 0px 0px 24px 0px;
 }
 
 .defaultBgLabel {
@@ -71,6 +164,63 @@
   font-family: Rubik;
   line-height: 1.125rem;
 }
+.generateBtnCon {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 38px;
+}
+.generateBtn {
+  width: 48%;
+  height: 38px;
+  border: 1px solid #6729f3;
+  border-radius: 6px;
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #6729f3;
+  background-color: #fafafb;
+}
+.generateBtn:focus {
+  border: 1px solid #6729f3;
+}
+.generateBtn:hover {
+  background-color: #6729f3;
+  color: white;
+}
+.generateBtnDisabled {
+  background-color: #f1f1f5;
+  color: #92929d;
+  border: none;
+  cursor: not-allowed;
+}
+.generateBtnDisabled:hover {
+  background-color: #f1f1f5;
+  color: #92929d;
+  border: none;
+}
+.generateBtnDisabled:focus {
+  border: none;
+}
+
+.editBtnDisabled {
+  background-color: #fafafb;
+  color: #92929d;
+  border: 1px solid #f1f1f5;
+  cursor: not-allowed;
+}
+.editBtnDisabled:hover {
+  color: #92929d;
+  border: 1px solid #f1f1f5;
+}
+.editBtnDisabled:focus {
+  border: 1px solid #f1f1f5;
+}
 
 .promptLabel span {
   color: #6729f3;
@@ -78,15 +228,19 @@
   cursor: pointer;
 }
 
-
 .sampleImagesLabel {
-  color: #44444f;
-  font-size: 0.9375rem;
   font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  color: #44444f;
+  margin-bottom: 12px;
 }
 
 .sampleImages {
-  margin: 1rem 0rem;
+  height: 57px;
+  margin: 0.5rem 0rem 1.5rem 0rem;
 }
 
 .sampleImage {
@@ -120,46 +274,51 @@
   gap: 6px 8px;
 }
 
-.skeletonBox img {
-  width: 9.875rem;
-  height: 9.875rem;
+.skeletonBox {
+  background: #f1f1f5;
+  width: 136px;
+  height: 136px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.imagesLoader {
+  width: 120px;
+  height: 80px;
 }
 
 .eachImg img {
-  width: 9.875rem;
-  height: 9.875rem;
+  width: 136px;
+  height: 136px;
   border-radius: 4px;
   object-fit: contain;
 }
 
 .currentActiveImg {
-  width: 9.875rem;
-  height: 9.875rem;
+  width: 141px;
+  height: 141px;
   border-radius: 4px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 2px solid #6729f3;
 }
 
 .currentActiveImg img {
-  width: 10.375rem;
-  height: 10.375rem;
+  width: 136px;
+  height: 136px;
   border-radius: 6px;
-  border: 1.5px solid var(--secondary, #6729f3);
-}
-
-.arrowIcon {
-  cursor: pointer;
 }
 
 .uploadWrapper {
-  margin: -1.5rem 0rem 0rem;
+  margin: 0.7rem 0rem 0rem;
 }
 
 .discardBtn {
   width: 30px;
-  bottom: 12rem;
-  left: 18.25rem;
+  bottom: 13.3rem;
+  left: 15.8rem;
   z-index: 10;
 }
 
@@ -181,4 +340,10 @@
   font-style: normal;
   font-weight: 500;
   line-height: 1.125rem;
+}
+
+.resultBtnCon {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
 }

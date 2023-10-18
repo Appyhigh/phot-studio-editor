@@ -16,7 +16,7 @@ import { useAuth } from "~/hooks/useAuth"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { Skeleton } from "baseui/skeleton"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   backgroundColor: $theme.colors.white,
@@ -312,6 +312,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const { setActivePanel } = useAppContext()
   const setIsSidebarOpen = useSetIsSidebarOpen()
   const router = useLocation()
+  const navigate = useNavigate()
   const isModalOpen =
     activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT
   const [isHovered, setIsHovered] = useState(false)
@@ -324,13 +325,18 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (router.pathname.startsWith("/home")) return
-        if (!(activePanel === name && isModalOpen)) {
-          // Change the style here
-          setIsSidebarOpen(true)
-          setActivePanel(name)
+        if (router.pathname.startsWith('/home') && name === 'ProductPhotoshoot') {
+          navigate('/product-photoshoot')
+        } else if (router.pathname.startsWith("/home") && name !== 'ProductPhotoshoot') return
+        else {
+          if (!(activePanel === name && isModalOpen)) {
+            // Change the style here
+            setIsSidebarOpen(true)
+            setActivePanel(name)
+          }
         }
-      }}
+      }
+      }
       style={{ marginBottom: name == "ProductPhotoshoot" ? "-70px" : "" }}
     >
       {name === "Images" ? (

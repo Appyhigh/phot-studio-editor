@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import useFabricEditor from "src/hooks/useFabricEditor"
 import CanvasArea from "~/components/FabricCanvas/Editor/CanvasArea/CanvasArea"
 import classes from "./style.module.css"
@@ -13,6 +13,12 @@ import ImagesContext from "~/contexts/ImagesCountContext"
 import { AddObjectFunc } from "~/views/DesignEditor/utils/functions/AddObjectFunc"
 import CanvasLoaderContext from "~/contexts/CanvasLoaderContext"
 import ProductPhotoshoot from "./../../../views/DesignEditor/components/ModalPanels/ProductPhotoShoot/ProductPhotoShoot"
+import { useNavigate } from "react-router-dom"
+import { SAMPLE_IMAGES } from "~/constants/contants"
+import { SampleImagesApi } from "~/services/SampleImagesApi"
+import SampleImagesContext from "~/contexts/SampleImagesContext"
+import { getStockImages } from "~/services/stockApi"
+import ErrorContext from "~/contexts/ErrorContext"
 
 function ProductPhotoshootEditor({ handleClose }: any) {
   const [dimension, setDimension] = useState({
@@ -28,6 +34,10 @@ function ProductPhotoshootEditor({ handleClose }: any) {
   const { setImagesCt } = useContext(ImagesContext)
   const frame = useFrame()
   const { canvasLoader } = useContext(CanvasLoaderContext)
+  const navigate = useNavigate()
+  const { setSampleImages } = useContext(SampleImagesContext)
+  const { setErrorInfo } = useContext(ErrorContext)
+  let ErrortimeOut: any
 
   const handleDone = async () => {
     await getDimensions(productPhotoshootInfo.finalImage, (img: any) => {
@@ -39,15 +49,79 @@ function ProductPhotoshootEditor({ handleClose }: any) {
       })
     })
     handleClose()
+    navigate('/')
   }
+
+
+  // Fetching Sample images data on /product-photoshoot
+  const fetchSampleImages = () => {
+    const sampleImageKeys = Object.keys(SAMPLE_IMAGES)
+    Promise.all(sampleImageKeys.map((key: string) => SampleImagesApi(SAMPLE_IMAGES[key])))
+      .then((results) => {
+        const updatedSampleImages = sampleImageKeys.reduce((prev: any, key: string, index: number) => {
+          prev[key] = results[index]
+          return prev
+        }, {})
+        setSampleImages((prev: any) => ({
+          ...prev,
+          ...updatedSampleImages,
+        }))
+        const categories = ["Nature", "Flowers", "Textures"]
+        const addCategoryOptions = async (category: any) => {
+          const res = await getStockImages(category)
+          const newOptions = res.map((image: any) => ({ img: image.image_url_list[0] }))
+          setSampleImages((prev: any) => {
+            return {
+              ...prev,
+              bgRemoverBgOptions: [
+                ...prev.bgRemoverBgOptions,
+                {
+                  heading: category,
+                  options: newOptions,
+                },
+              ],
+            }
+          })
+        }
+        categories.forEach((category) => {
+          addCategoryOptions(category)
+        })
+      })
+      .catch((error) => {
+        setErrorInfo((prev: any) => ({
+          ...prev,
+          showError: true,
+          errorMsg: `Failed to load Sample Images for ${Object.values(TOOL_NAMES).join(", ")} panels`,
+          retryFn: () => {
+            if (ErrortimeOut) {
+              clearTimeout(ErrortimeOut)
+            }
+            setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+            fetchSampleImages()
+          },
+        }))
+        ErrortimeOut = setTimeout(() => {
+          setErrorInfo((prev: any) => ({ ...prev, showError: false }))
+        }, 5000)
+        console.error("Error:", error)
+      })
+  }
+
+  useEffect(() => {
+    fetchSampleImages()
+    return () => {
+      clearTimeout(ErrortimeOut)
+    }
+  }, [])
 
   return (
     <div
       style={{
         cursor: canvasLoader ? "not-allowed" : "pointer",
+        height: '100%',
       }}
     >
-      <div className={"d-flex flex-row"} style={{ pointerEvents: canvasLoader ? "none" : "auto" }}>
+      <div className={"d-flex flex-row"} style={{ pointerEvents: canvasLoader ? "none" : "auto", height: '100%' }}>
         <ProductPhotoshoot handleClose={handleClose} />
 
         <div className={classes.editor}>

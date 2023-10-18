@@ -194,7 +194,7 @@ const PhotoEditor = () => {
   }
 
   return (
-    <div className="d-flex flex-1 flex-column">
+    <div className={clsx("d-flex flex-1 flex-column", classes.photoEditorCon)}>
       {!photoEditorPanelInfo.resultSectionVisible ? (
         <>
           {photoEditorInfo.src ? (
@@ -217,7 +217,7 @@ const PhotoEditor = () => {
           )}
           {photoEditorPanelInfo.uploadPreview && (
             <div>
-              <div className={classes.inputSection}>
+              <div className={classes.inputSection} style={{ padding: '0rem 1.4rem 1.4rem 1.4rem' }}>
                 <Prompt stateInfo={photoEditorInfo} setStateInfo={setPhotoEditorInfo} />
               </div>
               {/* hide for now credits related  */}

@@ -4,6 +4,7 @@ import OneDrive from "@uppy/onedrive"
 import Dropbox from "@uppy/dropbox"
 import XHR from "@uppy/xhr-upload"
 import Url from "@uppy/url"
+// import GoogleDrive from "@uppy/google-drive"
 import "./uppy.css"
 import "@uppy/core/dist/style.min.css"
 import "@uppy/dashboard/dist/style.min.css"
@@ -82,6 +83,7 @@ const UppyDashboard = ({
     uppy.use(Url, {
       companionUrl: "https://devapi.phot.ai/companion",
     })
+    // uppy.use(GoogleDrive, { companionUrl: "https://devapi.phot.ai/companion" })
     uppy.use(XHR, {
       endpoint: "https://devapi.phot.ai/app/api/v1/signedURL?tool=BACKGROUND_REMOVER",
       withCredentials: true,
@@ -109,7 +111,7 @@ const UppyDashboard = ({
           setUploadErrorMsg("Wrong format file uploaded, Please upload an image in JPG, JPEG, PNG or BMP format")
           setTimeout(() => {
             setDisplayError(false)
-          }, 5000);
+          }, 5000)
           close()
         }
         if (file.source == "Dropbox" || file.source == "OneDrive") {
@@ -126,7 +128,12 @@ const UppyDashboard = ({
               setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
               : null
             // @ts-ignore
-            setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+            setImgScalerPanelInfo((prev) => ({
+              ...prev,
+              uploadSection: false,
+              uploadPreview: true,
+              trySampleImg: false,
+            }))
           } else if (fileInputType === "modalUpload") {
             setImgUpload((prev: any) => ({ ...prev, src: imageUrl }))
           } else if (uploadType === OBJECT_REMOVER) {
@@ -237,7 +244,12 @@ const UppyDashboard = ({
               setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
               setDimension(imageUrl)
             } else if (uploadType === OBJECT_REPLACER) {
-              setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
+              setObjectReplacerInfo((prev: any) => ({
+                ...prev,
+                src: imageUrl,
+                preview: imageUrl,
+                file_name: file.name,
+              }))
               setDimensionReplacer(imageUrl)
             } else if (fileInputType == "photoEditor") {
               setPhotoEditorInfo
@@ -372,7 +384,7 @@ const UppyDashboard = ({
         return false
       })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }, [displayError, uploadErrorMsg, activePanel])
 
@@ -385,8 +397,8 @@ const UppyDashboard = ({
         hideUploadButton={true}
         locale={{
           strings: {
-            dropPasteImportFiles: "Drag and drop your image or %{browseFiles}",
-            browseFiles: "click to browse",
+            dropPasteImportFiles: "Drop your file here, or  %{browseFiles}",
+            browseFiles: "Browse",
           },
         }}
         disableInformer={true}
