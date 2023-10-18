@@ -28,8 +28,6 @@ const BrandColorPicker = ({ isOpen, handleClose, inputColor, handleChangeColor }
         setOpacity(`${Math.round(color?.a * 100)}%`)
     }
 
-    console.log(color);
-
     return (
         <Block className={classes.colorPickerContainer}>
             <Block className={classes.colorInfoCon}>

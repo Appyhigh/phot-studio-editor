@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import classes from './style.module.css'
 import { Block } from 'baseui/block'
 import PosterImage from './dummyAssets/PosterImage.png'
@@ -17,8 +17,6 @@ const BrandSection = () => {
     const BgSolidColors = ['#ffffff', '#000000']
     const GradientColors = ['linear-gradient(to right, rgba(242, 89, 232, 1), rgba(103, 41, 243, 1))', '#linear-gradient(to right, rgba(89, 187, 242, 1), rgba(178, 41, 243, 1))']
     const [createSolidPopup, setCreateSolidPopup] = useState(false)
-    // const [createGradientPopup, setCreateGradientPopup] = useState(false)
-    // const [createBgPopup, setCreateBgPopup] = useState(false)
     const HandleUplaodModalClose = () => {
         setIsUploadLogo(false)
     }
@@ -29,14 +27,6 @@ const BrandSection = () => {
     const HandleSolidColorCreateClick = () => {
         setCreateSolidPopup(!createSolidPopup)
     }
-    useEffect(() => {
-        if (createSolidPopup !== null) {
-            const popupElement = document.getElementById(`popup-${createSolidPopup}`);
-            if (popupElement) {
-                popupElement.scrollIntoView({ behavior: "smooth" });
-            }
-        }
-    }, [createSolidPopup]);
     return (
         <Block className={classes.brandMainContainer}>
             <Block className={classes.posterCon}>
@@ -52,7 +42,7 @@ const BrandSection = () => {
                     <CreateBtn HandleOnClick={HandleUplaodModalOpen} />
                     <BrandLogo />
                     <BrandLogo />
-                    <BrandLogo />
+                    <BrandLogo endImgLogo={true} />
                 </Block>
             </Block>
 
@@ -62,7 +52,7 @@ const BrandSection = () => {
                 </Block>
                 <Block className={classes.brandLogoBottom}>
                     <CreateBtn Width='120px' Height='120px' HandleOnClick={HandleSolidColorCreateClick} />
-                    {createSolidPopup && <div id={`popup-${createSolidPopup}`} style={{ position: 'absolute', top: '14px', left: '136px', zIndex: '1' }} ><BrandColorPicker /></div>}
+                    {createSolidPopup && <div id={`popup-${createSolidPopup}`} onMouseLeave={() => setCreateSolidPopup(false)} style={{ position: 'absolute', top: '14px', left: '136px', zIndex: '1' }} ><BrandColorPicker /></div>}
 
                     {
                         SolidColors.map((colors, ind) => {
