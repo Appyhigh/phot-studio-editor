@@ -6,8 +6,9 @@ import TempletCard from '../../Templets/TempletCard'
 import { Modal, SIZE } from 'baseui/modal'
 import Uploads from '~/views/DesignEditor/components/Panels/panelItems/UploadDropzone/Uploads'
 import { useState } from 'react'
+import { PanelSection } from '~/constants/app-options'
 
-const Section = ({ name, HandleBackBtn }: any) => {
+const Section = ({ name, HandleBackBtn, type }: any) => {
     const [isAddFolderOpen, setIsAddFolderOpen] = useState(false)
     const HandleCloseAddModal = () => {
         setIsAddFolderOpen(false)
@@ -17,12 +18,12 @@ const Section = ({ name, HandleBackBtn }: any) => {
             <section className={classes.sectionToolsCon}>
                 <Block className={classes.sectionTopCon}>
                     <span className='d-flex align-items-center' style={{ gap: '12px', cursor: 'pointer' }} onClick={() => HandleBackBtn()}>
-                        {name !== 'All files' && < Icons.ArrowLeft color='black' />}
+                        {name !== 'All files' && type !== PanelSection.YourDesigns && < Icons.ArrowLeft color='black' />}
                         <h3 className={classes.sectionToolHead}>{name}</h3>
                     </span>
 
                     <Block className={classes.sectionTopBtns}>
-                        <Block className="p-relative addPopupBtn">
+                        {type !== PanelSection.YourDesigns && <Block className="p-relative addPopupBtn">
                             <button className={classes.sectionBtns}>
                                 <span className="d-flex align-items-center" onClick={() => { setIsAddFolderOpen(true) }}>
                                     New File
@@ -32,7 +33,7 @@ const Section = ({ name, HandleBackBtn }: any) => {
                                 </span>
                             </button>
                             {/* popup */}
-                        </Block>
+                        </Block>}
 
                         <Block className="p-relative addPopupBtn">
                             <button className={classes.sectionBtns}>

@@ -119,6 +119,8 @@ import DownloadSimple from "./DownloadSimple"
 import TrashSimple from "./TrashSimple"
 import KebabMenu from "./KebabMenu"
 import ClosedFilled from "./CrossFilled"
+import RightTickMark from "./RightTickMark"
+import CommingSoon from "./CommingSoon"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -241,6 +243,8 @@ class Icons {
   static TrashSimple = TrashSimple
   static KebabMenu = KebabMenu
   static ClosedFilled = ClosedFilled
+  static RightTickMark = RightTickMark
+  static CommingSoon = CommingSoon
 }
 
 export default Icons

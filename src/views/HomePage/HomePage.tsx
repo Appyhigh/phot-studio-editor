@@ -8,6 +8,7 @@ import TempletSection from '~/components/Templets'
 import Home from '~/components/HomePage'
 import useAppContext from '~/hooks/useAppContext'
 import AssetSection from '~/components/AssetSection'
+import YourDesigns from '~/components/YourDesigns'
 
 const HomePage = () => {
 
@@ -23,6 +24,7 @@ const HomePage = () => {
           {activeSection === 'Home' && <Home />}
           {activeSection === 'TempletSection' && <TempletSection />}
           {activeSection === 'Assets' && <AssetSection />}
+          {activeSection === 'YourDesigns' && <YourDesigns />}
         </Block>
       </Block>
     </EditorContainer>
