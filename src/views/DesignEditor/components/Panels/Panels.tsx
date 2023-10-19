@@ -100,14 +100,14 @@ const Panels = () => {
   }, [])
 
   return (
-    <div className={classes.baseSidebarContainer} style={route.pathname === '/' ? { height: 'calc(100vh - 70px)' } : {}}>
+    <div className={classes.baseSidebarContainer} style={route.pathname === "/" ? { height: "calc(100vh)" } : {}}>
       {!isSidebarOpen && <PanelsList />}
 
-      <Block className="d-flex" style={{ height: '100%' }}>
+      <Block className="d-flex" style={{ height: "100%" }}>
         <PanelItem />
         <Block
           className={clsx("m-auto pointer p-absolute", classes.sliderBtnWrapper, isSidebarOpen && classes.sliderOpen)}
-        // style={{ display: isSidebarOpen ? 'block' : 'none' }}
+          // style={{ display: isSidebarOpen ? 'block' : 'none' }}
         >
           {activePanel && Object.values(PanelType).includes(activePanel) && (
             <Block
