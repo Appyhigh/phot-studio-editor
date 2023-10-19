@@ -121,9 +121,13 @@ import KebabMenu from "./KebabMenu"
 import ClosedFilled from "./CrossFilled"
 import RightTickMark from "./RightTickMark"
 import CommingSoon from "./CommingSoon"
+import CommingSoonClose from "./CommingSoonClose"
+import CongratulationsTick from "./CongratulationsTick"
 import CreateBrandPlus from "./CreateBrandPlus"
 import DeleteIcon from "./DeleteIcon"
 import ColorSelecter from "./ColorSelector"
+import EclipsePlay from "./EclipsePlay"
+import VideoPlayIcon from "./VideoPlayIcon"
 class Icons {
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
@@ -248,9 +252,13 @@ class Icons {
   static ClosedFilled = ClosedFilled
   static RightTickMark = RightTickMark
   static CommingSoon = CommingSoon
+  static CommingSoonClose = CommingSoonClose
+  static CongratulationsTick = CongratulationsTick
   static CreateBrandPlus = CreateBrandPlus
   static DeleteIcon = DeleteIcon
   static ColorSelecter = ColorSelecter
+  static EclipsePlay = EclipsePlay
+  static VideoPlayIcon = VideoPlayIcon
 }
 
 export default Icons
