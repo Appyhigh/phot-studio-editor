@@ -43,6 +43,7 @@ const CommingSoon = ({ isOpen }: any) => {
             autoFocus
             size={SIZE.auto}
             isOpen={isOpen}
+            onClose={() => { window.location.href = 'https://www.phot.ai/' }}
             overrides={{
                 Root: {
                     style: ({ $theme }) => ({
