@@ -1,0 +1,14 @@
+.brandCreateBtn {
+  width: 243.14px;
+  height: 172px;
+  border-radius: 15.63px;
+  border: 0.98px solid #dadee5;
+  background-color: white;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.brandCreateBtn:focus {
+  border: 0.98px solid #dadee5;
+}
