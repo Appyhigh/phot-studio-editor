@@ -7,9 +7,10 @@ import AiArt1 from "./AiArt1.png"
 import AiArt2 from "./AiArt2.png"
 import AiArt3 from "./AiArt3.png"
 import AiArt4 from "./AiArt4.png"
+import CommingSoon from "./CommingSoon.mp4"
 
 export const POSTER_IMAGES = [{ src: Poster }]
-
+export const CommingSoonVideo = CommingSoon
 export const POPULAR_TOOLS = [
   {
     src: AiArtGen,

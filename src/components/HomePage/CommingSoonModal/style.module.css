@@ -1,0 +1,139 @@
+.CoomingSoonMain {
+  display: flex;
+  flex-direction: column;
+  gap: 58px;
+}
+.commingSoonTopBar {
+  display: flex;
+  justify-content: space-between;
+}
+.commingSoonCon {
+  padding: 0px 46px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+}
+.commingSoonVideoCon {
+  width: 100%;
+  height: auto;
+  margin-top: 1rem;
+  position: relative;
+  cursor: pointer;
+}
+.customVideoIcon {
+  position: absolute;
+  top: 40%;
+  right: 45%;
+  z-index: 1;
+}
+.video {
+  border-radius: 10px;
+}
+.commingSoonContentCon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 72px;
+  padding: 0px 64px;
+}
+.contentHead {
+  font-family: Rubik;
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 40px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #333333;
+}
+.waitingListCont {
+  position: relative;
+  width: 416px;
+  height: 32px;
+  border-bottom: 1px solid #333333;
+  display: flex;
+  justify-content: space-between;
+}
+.joinButton {
+  width: 128px;
+  border-radius: 8px 8px 0px 8px;
+  background-color: #333333;
+  font-family: Rubik;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inputField {
+  width: 280px;
+  font-family: Rubik;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 15px;
+  letter-spacing: 0em;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  outline: none;
+  border: none;
+}
+
+.CommingSoonAddedToWishList {
+  display: flex;
+  flex-direction: column;
+  margin-top: -1rem;
+  justify-content: center;
+  align-items: center;
+}
+.AddedToWishListMsg {
+  font-family: Rubik;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #44444f;
+}
+.errorMsg {
+  position: absolute;
+  font-family: Rubik;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #fc5a5a;
+  bottom: -20px;
+}
+@media screen and (max-height: 850px) {
+  .CoomingSoonMain {
+    gap: 0;
+  }
+}
+
+@media screen and (max-height: 790px) {
+  .commingSoonCon {
+    gap: 20px;
+  }
+}
+@media screen and (max-height: 750px) {
+  .commingSoonContentCon {
+    gap: 50px;
+  }
+}
+@media screen and (max-height: 710px) {
+  .commingSoonContentCon {
+    gap: 20px;
+  }
+}
+@media screen and (max-height: 670px) {
+  .commingSoonVideoCon {
+    width: 90%;
+    height: auto;
+  }
+}
