@@ -5,23 +5,29 @@ import Icons from "~/components/Icons"
 import { useState } from "react"
 import clsx from "clsx"
 import { COMING_SOON_VIDEO_URL } from "~/utils/common"
+import { addEmailForWaitingList } from "~/services/earlyAccess.service"
 
 const CommingSoon = ({ isOpen }: any) => {
   const [userEmail, setUserEmail] = useState("")
-  const [isValid, setIsValid] = useState<boolean | null>(true)
   const [isAddedToWishList, setIsAddedToWishList] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [err, setErr] = useState("")
 
-  const HandleJoinWaitingList = () => {
+  const HandleJoinWaitingList = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     const isValidEmail = emailRegex.test(userEmail)
-    setIsValid(isValidEmail)
     if (isValidEmail) {
-      setIsAddedToWishList(true)
+      try {
+        const res = await addEmailForWaitingList(userEmail)
+        if (res.status === 201) {
+          setIsAddedToWishList(true)
+        }
+      } catch (error: any) {
+        setErr(error.message)
+      }
+    } else {
+      setErr(" * Wrong Email try again ! ")
     }
-    setTimeout(() => {
-      setIsValid(true)
-    }, 3000)
   }
 
   const handlePlayPause = () => {
@@ -134,7 +140,7 @@ const CommingSoon = ({ isOpen }: any) => {
                   >
                     Join waiting list
                   </button>
-                  {!isValid && <p className={classes.errorMsg}> * Wrong Email try again ! </p>}
+                  {err && err.length > 0 && <p className={classes.errorMsg}>{err}</p>}
                 </div>
               </>
             ) : (
