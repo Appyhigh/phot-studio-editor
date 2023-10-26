@@ -4,6 +4,7 @@ import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import { useState } from "react"
 import clsx from "clsx"
+import { COMING_SOON_VIDEO_URL } from "~/utils/common"
 
 const CommingSoon = ({ isOpen }: any) => {
   const [userEmail, setUserEmail] = useState("")
@@ -97,10 +98,7 @@ const CommingSoon = ({ isOpen }: any) => {
               // poster={CommingSoonPoster}
               onEnded={() => setIsPlaying(false)}
             >
-              <source
-                src={"https://ai-image-editor-wasabi-bucket.apyhi.com/all-tools/Phot AI Teaser.mp4"}
-                type="video/mp4"
-              />
+              <source src={COMING_SOON_VIDEO_URL} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
             {!isPlaying && (
