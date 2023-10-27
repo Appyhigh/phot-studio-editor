@@ -80,7 +80,7 @@ const CommingSoon = ({ isOpen }: any) => {
     >
       <Block className={classes.CoomingSoonMain}>
         <Block className={classes.commingSoonTopBar}>
-          <span>
+          <span className={classes.PhotLogo}>
             <Icons.PhotAILogo size={33} />
           </span>
 

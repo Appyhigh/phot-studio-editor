@@ -7,6 +7,9 @@
   display: flex;
   justify-content: space-between;
 }
+.PhotLogo svg {
+  cursor: pointer;
+}
 .commingSoonCon {
   padding: 0px 46px;
   display: flex;
