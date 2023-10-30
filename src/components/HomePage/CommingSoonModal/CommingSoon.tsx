@@ -4,7 +4,7 @@ import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import { useState } from "react"
 import clsx from "clsx"
-import { COMING_SOON_VIDEO_URL } from "~/utils/common"
+import { COMING_SOON_VIDEO_URL, ProdPhotAILink } from "~/utils/common"
 import { addEmailForWaitingList } from "~/services/earlyAccess.service"
 
 const CommingSoon = ({ isOpen }: any) => {
@@ -88,11 +88,11 @@ const CommingSoon = ({ isOpen }: any) => {
     >
       <Block className={classes.CoomingSoonMain}>
         <Block className={classes.commingSoonTopBar}>
-          <a href="https://www.phot.ai/" className={classes.PhotLogo}>
+          <a href={ProdPhotAILink} target="_blank" className={classes.PhotLogo}>
             <Icons.PhotAILogo size={33} />
           </a>
 
-          <a href="https://www.phot.ai/" style={{ cursor: "pointer" }}>
+          <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer" }}>
             <Icons.CommingSoonClose />
           </a>
         </Block>

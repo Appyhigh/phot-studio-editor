@@ -6,6 +6,7 @@ export const API_BASE_URL =
   "https://devapi.phot.ai"
 
 export const COMING_SOON_VIDEO_URL = "https://ai-image-editor-wasabi-bucket.apyhi.com/all-tools/Phot AI Teaser.mp4"
+export const ProdPhotAILink = "https://www.phot.ai/"
 
 export const svgExtensionToJPEG = (svgFileName: string) => {
   if (svgFileName.endsWith(".svg")) {
