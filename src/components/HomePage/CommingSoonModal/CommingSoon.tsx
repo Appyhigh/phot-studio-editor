@@ -77,11 +77,11 @@ const CommingSoon = ({ isOpen }: any) => {
     >
       <Block className={classes.CoomingSoonMain}>
         <Block className={classes.commingSoonTopBar}>
-          <a href="https://www.phot.ai/" className={classes.PhotLogo} target="_blank">
+          <a href="https://www.phot.ai/" className={classes.PhotLogo}>
             <Icons.PhotAILogo size={33} />
           </a>
 
-          <a href="https://www.phot.ai/" style={{ cursor: "pointer" }} target="_blank">
+          <a href="https://www.phot.ai/" style={{ cursor: "pointer" }}>
             <Icons.CommingSoonClose />
           </a>
         </Block>
