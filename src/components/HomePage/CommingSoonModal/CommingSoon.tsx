@@ -19,11 +19,16 @@ const CommingSoon = ({ isOpen }: any) => {
     if (isValidEmail) {
       try {
         const res = await addEmailForWaitingList(userEmail)
-        if (res.status === 201) {
+
+        if (res.message === "Email saved successfully") {
           setIsAddedToWishList(true)
         }
       } catch (error: any) {
-        setErr(error.message)
+        if (error.response && error.response.status === 400) {
+          setErr(" * User already exists !")
+        } else {
+          setErr(error.message)
+        }
       }
     } else {
       setErr(" * Wrong Email try again ! ")
