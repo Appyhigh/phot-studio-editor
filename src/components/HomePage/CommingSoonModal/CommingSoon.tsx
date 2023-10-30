@@ -22,6 +22,12 @@ const CommingSoon = ({ isOpen }: any) => {
 
         if (res.message === "Email saved successfully") {
           setIsAddedToWishList(true)
+          setErr("")
+          setUserEmail("")
+
+          setTimeout(() => {
+            setIsAddedToWishList(false)
+          }, 3000)
         }
       } catch (error: any) {
         if (error.response && error.response.status === 400) {
