@@ -2,10 +2,11 @@ import { destroyCookie } from "nookies"
 import { COOKIE_KEYS } from "./enum"
 
 export const API_BASE_URL =
-  // process.env.NEXT_PUBLIC_DEPLOYMENT_ENVIRONMENT === "PROD" ? "https://prodapi.phot.ai" : "https://devapi.phot.ai"
-  "https://devapi.phot.ai"
+  import.meta.env.VITE_DEPLOYMENT_ENVIRONMENT === "PROD" ? "https://prodapi.phot.ai" : "https://devapi.phot.ai"
+// "https://devapi.phot.ai"
 
 export const COMING_SOON_VIDEO_URL = "https://ai-image-editor-wasabi-bucket.apyhi.com/all-tools/Phot AI Teaser.mp4"
+export const ProdPhotAILink = "https://www.phot.ai/"
 
 export const svgExtensionToJPEG = (svgFileName: string) => {
   if (svgFileName.endsWith(".svg")) {

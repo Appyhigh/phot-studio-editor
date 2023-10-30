@@ -7,8 +7,12 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/manage" element={<Dashboard />} />
-        <Route path="/old-home" element={<DesignEditor />} />
+        {import.meta.env.VITE_DEPLOYMENT_ENVIRONMENT !== "PROD" && (
+          <>
+            <Route path="/manage" element={<Dashboard />} />
+            <Route path="/old-home" element={<DesignEditor />} />
+          </>
+        )}
         <Route path="/" element={<HomePage />} />
       </Routes>
     </BrowserRouter>

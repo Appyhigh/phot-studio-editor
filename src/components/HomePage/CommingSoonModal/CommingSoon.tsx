@@ -4,7 +4,7 @@ import classes from "./style.module.css"
 import Icons from "~/components/Icons"
 import { useState } from "react"
 import clsx from "clsx"
-import { COMING_SOON_VIDEO_URL } from "~/utils/common"
+import { COMING_SOON_VIDEO_URL, ProdPhotAILink } from "~/utils/common"
 import { addEmailForWaitingList } from "~/services/earlyAccess.service"
 
 const CommingSoon = ({ isOpen }: any) => {
@@ -19,11 +19,22 @@ const CommingSoon = ({ isOpen }: any) => {
     if (isValidEmail) {
       try {
         const res = await addEmailForWaitingList(userEmail)
-        if (res.status === 201) {
+
+        if (res.message === "Email saved successfully") {
           setIsAddedToWishList(true)
+          setErr("")
+          setUserEmail("")
+
+          setTimeout(() => {
+            setIsAddedToWishList(false)
+          }, 3000)
         }
       } catch (error: any) {
-        setErr(error.message)
+        if (error.response && error.response.status === 400) {
+          setErr(" * User already exists !")
+        } else {
+          setErr(error.message)
+        }
       }
     } else {
       setErr(" * Wrong Email try again ! ")
@@ -48,9 +59,6 @@ const CommingSoon = ({ isOpen }: any) => {
       autoFocus
       size={SIZE.auto}
       isOpen={isOpen}
-      onClose={() => {
-        window.location.href = "https://www.phot.ai/"
-      }}
       overrides={{
         Root: {
           style: ({ $theme }) => ({
@@ -69,9 +77,9 @@ const CommingSoon = ({ isOpen }: any) => {
           style: ({ $theme }) => ({
             backgroundColor: "white",
             width: "46.56% ",
-            height: "90vh",
+            maxHeight: "90vh",
             borderRadius: "10px",
-            padding: "37px 35px 37px 26px",
+            padding: "37px 35px 60px 26px",
             margin: "0px",
             overflow: "hidden",
           }),
@@ -80,18 +88,13 @@ const CommingSoon = ({ isOpen }: any) => {
     >
       <Block className={classes.CoomingSoonMain}>
         <Block className={classes.commingSoonTopBar}>
-          <span>
+          <a href={ProdPhotAILink} target="_blank" className={classes.PhotLogo}>
             <Icons.PhotAILogo size={33} />
-          </span>
+          </a>
 
-          <span
-            onClick={() => {
-              window.location.href = "https://www.phot.ai/"
-            }}
-            style={{ cursor: "pointer" }}
-          >
+          <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer" }}>
             <Icons.CommingSoonClose />
-          </span>
+          </a>
         </Block>
 
         <Block className={classes.commingSoonCon}>
