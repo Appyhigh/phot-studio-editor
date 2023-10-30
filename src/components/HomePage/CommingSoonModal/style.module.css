@@ -7,6 +7,10 @@
   display: flex;
   justify-content: space-between;
 }
+
+.PhotLogo {
+  outline: none;
+}
 .PhotLogo svg {
   cursor: pointer;
 }
