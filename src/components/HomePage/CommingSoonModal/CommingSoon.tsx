@@ -114,8 +114,15 @@ const CommingSoon = ({ isOpen }: any) => {
               <div className={classes.customVideoIcon}>
                 <div className={classes.customVideoCon}>
                   <span style={{ position: "relative" }}>
-                    <Icons.EclipsePlay />
-                    <span style={{ position: "absolute", zIndex: "1", right: "20px", top: "-32px" }}>
+                    <span
+                      style={{
+                        position: "absolute",
+                        zIndex: "1",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-100%,0%)",
+                      }}
+                    >
                       <Icons.VideoPlayIcon />
                     </span>
                   </span>
