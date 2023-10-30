@@ -77,9 +77,9 @@ const CommingSoon = ({ isOpen }: any) => {
           style: ({ $theme }) => ({
             backgroundColor: "white",
             width: "46.56% ",
-            height: "90vh",
+            maxHeight: "90vh",
             borderRadius: "10px",
-            padding: "37px 35px 37px 26px",
+            padding: "37px 35px 60px 26px",
             margin: "0px",
             overflow: "hidden",
           }),
