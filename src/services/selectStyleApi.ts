@@ -1,4 +1,5 @@
 import axios from "axios"
+import { API_BASE_URL } from "~/utils/common"
 
 const defaultProps = {
   search: "",
@@ -13,7 +14,7 @@ export const selectStyleApi = (
 ): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { data } = await axios.get(`https://devapi.phot.ai/v1/get-studio-options`, {
+      const { data } = await axios.get(`${API_BASE_URL}/v1/get-studio-options`, {
         params: {
           q: search,
           pageNumber: page,

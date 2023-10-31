@@ -24,6 +24,7 @@ import ObjectRemoverContext from "~/contexts/ObjectRemoverContext"
 import ObjectReplacerContext from "~/contexts/ObjectReplacerContext"
 import { getDimensions } from "~/views/DesignEditor/utils/functions/getDimensions"
 import ProductPhotoshootContext from "~/contexts/ProductPhotoshootContext"
+import { API_BASE_URL } from "~/utils/common"
 
 const UppyDashboard = ({
   close,
@@ -74,16 +75,16 @@ const UppyDashboard = ({
       autoProceed: false,
     })
     uppy.use(OneDrive, {
-      companionUrl: "https://devapi.phot.ai/companion",
+      companionUrl: API_BASE_URL + "/companion",
     })
     uppy.use(Dropbox, {
-      companionUrl: "https://devapi.phot.ai/companion",
+      companionUrl: API_BASE_URL + "/companion",
     })
     uppy.use(Url, {
-      companionUrl: "https://devapi.phot.ai/companion",
+      companionUrl: API_BASE_URL + "/companion",
     })
     uppy.use(XHR, {
-      endpoint: "https://devapi.phot.ai/app/api/v1/signedURL?tool=BACKGROUND_REMOVER",
+      endpoint: API_BASE_URL + "/app/api/v1/signedURL?tool=BACKGROUND_REMOVER",
       withCredentials: true,
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -109,7 +110,7 @@ const UppyDashboard = ({
           setUploadErrorMsg("Wrong format file uploaded, Please upload an image in JPG, JPEG, PNG or BMP format")
           setTimeout(() => {
             setDisplayError(false)
-          }, 5000);
+          }, 5000)
           close()
         }
         if (file.source == "Dropbox" || file.source == "OneDrive") {
@@ -123,10 +124,15 @@ const UppyDashboard = ({
           } else if (fileInputType === "ImgUpscaler") {
             setImgScalerInfo
               ? // @ts-ignore
-              setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
+                setImgScalerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, scale: 2, result: [] }))
               : null
             // @ts-ignore
-            setImgScalerPanelInfo((prev) => ({ ...prev, uploadSection: false, uploadPreview: true, trySampleImg: false }))
+            setImgScalerPanelInfo((prev) => ({
+              ...prev,
+              uploadSection: false,
+              uploadPreview: true,
+              trySampleImg: false,
+            }))
           } else if (fileInputType === "modalUpload") {
             setImgUpload((prev: any) => ({ ...prev, src: imageUrl }))
           } else if (uploadType === OBJECT_REMOVER) {
@@ -139,24 +145,24 @@ const UppyDashboard = ({
           } else if (fileInputType == "photoEditor") {
             setPhotoEditorInfo
               ? setPhotoEditorInfo((prev: any) => ({
-                ...prev,
-                src: imageUrl,
-                original: imageUrl,
-                result: [],
-              }))
+                  ...prev,
+                  src: imageUrl,
+                  original: imageUrl,
+                  result: [],
+                }))
               : null
             setPhotoEditorPanelInfo
               ? setPhotoEditorPanelInfo((prev: any) => ({
-                ...prev,
-                uploadSection: false,
-                uploadPreview: true,
-                trySampleImg: false,
-              }))
+                  ...prev,
+                  uploadSection: false,
+                  uploadPreview: true,
+                  trySampleImg: false,
+                }))
               : null
           } else if (fileInputType === "ImgColorizer") {
             setImgColorizerInfo
               ? // @ts-ignore
-              setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, resultImages: [] }))
+                setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl, resultImages: [] }))
               : null
 
             // @ts-ignore
@@ -220,7 +226,7 @@ const UppyDashboard = ({
             } else if (fileInputType === "ImgColorizer") {
               setImgColorizerInfo
                 ? // @ts-ignore
-                setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl }))
+                  setImgColorizerInfo((prev) => ({ ...prev, src: imageUrl, original: imageUrl }))
                 : null
               // @ts-ignore
               setImgColorizerPanelInfo((prev) => ({
@@ -237,24 +243,29 @@ const UppyDashboard = ({
               setObjectRemoverInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
               setDimension(imageUrl)
             } else if (uploadType === OBJECT_REPLACER) {
-              setObjectReplacerInfo((prev: any) => ({ ...prev, src: imageUrl, preview: imageUrl, file_name: file.name }))
+              setObjectReplacerInfo((prev: any) => ({
+                ...prev,
+                src: imageUrl,
+                preview: imageUrl,
+                file_name: file.name,
+              }))
               setDimensionReplacer(imageUrl)
             } else if (fileInputType == "photoEditor") {
               setPhotoEditorInfo
                 ? setPhotoEditorInfo((prev: any) => ({
-                  ...prev,
-                  src: imageUrl,
-                  original: imageUrl,
-                  result: [],
-                }))
+                    ...prev,
+                    src: imageUrl,
+                    original: imageUrl,
+                    result: [],
+                  }))
                 : null
               setPhotoEditorPanelInfo
                 ? setPhotoEditorPanelInfo((prev: any) => ({
-                  ...prev,
-                  uploadSection: false,
-                  uploadPreview: true,
-                  trySampleImg: false,
-                }))
+                    ...prev,
+                    uploadSection: false,
+                    uploadPreview: true,
+                    trySampleImg: false,
+                  }))
                 : null
             } else if (fileInputType === "productAdd") {
               setProductPhotoshootInfo((prev: any) => ({
@@ -372,7 +383,7 @@ const UppyDashboard = ({
         return false
       })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }, [displayError, uploadErrorMsg, activePanel])
 
