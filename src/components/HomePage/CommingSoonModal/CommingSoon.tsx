@@ -103,7 +103,19 @@ const CommingSoon = ({ isOpen }: any) => {
           </a>
 
           <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer", transform: "translateY(3px)" }}>
-            <button className={classes.goToStudioBtn}>Back to Phot.AI</button>
+            <button
+              onClick={() => {
+                const video = document.getElementById("videoPlayer")
+                if (isPlaying) {
+                  // @ts-ignore
+                  video.pause()
+                  setIsPlaying(!isPlaying)
+                }
+              }}
+              className={classes.goToStudioBtn}
+            >
+              Back to Phot.AI
+            </button>
           </a>
         </Block>
 
