@@ -1,11 +1,11 @@
 import axios from "axios"
-import { getCookie } from "~/utils/common"
+import { API_BASE_URL, getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 
 const productPhotoshootController = async (input_image: string, prompt: string, pollingInterval: number) => {
   try {
     console.log("poling", pollingInterval)
-    const url = "https://devapi.phot.ai/app/api/v3/user_activity/background-generator"
+    const url = API_BASE_URL + "/app/api/v3/user_activity/background-generator"
     const regex = /\/([^/]+)$/
     const match = regex.exec(input_image)
     let value = match ? match[1] : null
@@ -23,7 +23,7 @@ const productPhotoshootController = async (input_image: string, prompt: string, 
 
     const order = await axios.post(url, body, config)
     const order_id = order.data.order_id
-    const order_url = "https://devapi.phot.ai/app/api/v1/user_activity/order-status"
+    const order_url = `${API_BASE_URL}/app/api/v1/user_activity/order-status`
 
     let response = await axios.get(order_url, {
       headers: { Authorization: `Bearer ${getCookie(COOKIE_KEYS.AUTH)}` },

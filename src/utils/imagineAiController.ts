@@ -1,5 +1,5 @@
 import axios from "axios"
-import { getCookie } from "~/utils/common"
+import { API_BASE_URL, getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 
 const imagineAiController = async (
@@ -13,7 +13,7 @@ const imagineAiController = async (
   image?: string
 ) => {
   try {
-    const url = "https://devapi.phot.ai/v1/create-art"
+    const url = API_BASE_URL + "/v1/create-art"
     const body = {
       prompt: prompt,
       image: image,
