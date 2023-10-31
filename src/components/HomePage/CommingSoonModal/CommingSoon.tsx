@@ -12,9 +12,8 @@ const CommingSoon = ({ isOpen }: any) => {
   const [userEmail, setUserEmail] = useState("")
   const [isAddedToWishList, setIsAddedToWishList] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [err, setErr] = useState("");
-  const [preExistUserMsg, setPreExistUserMsg] = useState("");
-  
+  const [err, setErr] = useState("")
+  const [preExistUserMsg, setPreExistUserMsg] = useState("")
 
   const HandleJoinWaitingList = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -35,7 +34,7 @@ const CommingSoon = ({ isOpen }: any) => {
       } catch (error: any) {
         if (error.response && error.response.status === 400) {
           setPreExistUserMsg("Thank you for your interest. You are already registered in waitlist!")
-          setIsAddedToWishList(true);
+          setIsAddedToWishList(true)
         } else {
           setErr(error.message)
         }
@@ -96,7 +95,7 @@ const CommingSoon = ({ isOpen }: any) => {
             <Icons.PhotAILogo size={33} />
           </a>
 
-          <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer" }}>
+          <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer", transform: "translateY(3px)" }}>
             <button className={classes.goToStudioBtn}>Back to Phot.AI</button>
           </a>
         </Block>
@@ -157,13 +156,13 @@ const CommingSoon = ({ isOpen }: any) => {
                   {err && err.length > 0 && <p className={classes.errorMsg}>{err}</p>}
                 </div>
               </>
-            ) : preExistUserMsg === '' ? (
+            ) : preExistUserMsg === "" ? (
               <div className={classes.CommingSoonAddedToWishList}>
                 <Icons.CongratulationsTick />
                 <p className={classes.AddedToWishListMsg}>Congratulations! You've been added to the waitlist!</p>
               </div>
-            ): (
-                <div className={classes.CommingSoonAddedToWishList}>
+            ) : (
+              <div className={classes.CommingSoonAddedToWishList}>
                 <Icons.CongratulationsTick />
                 <p className={classes.AddedToWishListMsg}>{preExistUserMsg}</p>
               </div>
