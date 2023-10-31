@@ -78,7 +78,7 @@ const PanelsList = () => {
         className={clsx(
           classes.panelListContainer,
           (activePanel === OBJECT_REMOVER || activePanel === OBJECT_REPLACER || activePanel === PRODUCT_PHOTOSHOOT) &&
-          classes.sidebarActiveModal
+            classes.sidebarActiveModal
         )}
       >
         {router.pathname === "/" && (
@@ -290,7 +290,7 @@ const PanelsList = () => {
             >
               <div className={clsx(classes.panelItemSection, categoryHover.preferences && classes.activeTool)}>
                 <Icons.Settings size={16} color={categoryHover.preferences ? "#6729F3" : "#696974"} />
-                <p>Prefrences</p>
+                <p>Preferences</p>
               </div>
             </div>
           </div>
