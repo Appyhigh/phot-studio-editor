@@ -35,6 +35,13 @@ const CommingSoon = ({ isOpen }: any) => {
         if (error.response && error.response.status === 400) {
           setPreExistUserMsg("Thank you for your interest. You are already registered in waitlist!")
           setIsAddedToWishList(true)
+          setErr("")
+          setUserEmail("")
+
+          setTimeout(() => {
+            setPreExistUserMsg("")
+            setIsAddedToWishList(false)
+          }, 3000)
         } else {
           setErr(error.message)
         }
