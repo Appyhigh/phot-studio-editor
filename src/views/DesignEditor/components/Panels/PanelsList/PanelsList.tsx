@@ -16,7 +16,7 @@ import { useAuth } from "~/hooks/useAuth"
 import { getCookie } from "~/utils/common"
 import { COOKIE_KEYS } from "~/utils/enum"
 import { Skeleton } from "baseui/skeleton"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   backgroundColor: $theme.colors.white,
@@ -177,7 +177,7 @@ const PanelsList = () => {
               </div>
               {isAiToolsOpen && (
                 <div className={classes.AiToolTree}>
-                  {PANEL_ITEMS.map((panelListItem) => (
+                  {PANEL_ITEMS.map((panelListItem: any) => (
                     <div key={panelListItem.category}>
                       <div
                         onClick={() => {
@@ -321,6 +321,7 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
   const [isHovered, setIsHovered] = useState(false)
   // @ts-ignore
   const Icon = Icons[icon]
+  const navigate = useNavigate()
   return (
     <Block
       id="EditorPanelList"
@@ -328,7 +329,10 @@ const PanelListItem = ({ label, icon, activePanel, name, sidebarRef }: any) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={() => {
-        if (router.pathname === "/") return
+        if (router.pathname === "/") {
+          navigate("/art-board")
+          return
+        }
         if (!(activePanel === name && isModalOpen)) {
           // Change the style here
           setIsSidebarOpen(true)
