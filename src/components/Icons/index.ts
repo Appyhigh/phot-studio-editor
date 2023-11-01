@@ -92,7 +92,6 @@ import ObjectRemover from "./ObjectRemover"
 import ImageColorizer from "./ImageColorizer"
 import ObjectReplacer from "./ObjectReplacer"
 import ProductPhotoshoot from "./ProductPhotoshoot"
-import ArrowLeft from "./ArrowLeft"
 import RetryImg from "./RetryImg"
 import Upgrade from "./Upgrade"
 import CreateRounded from "./CreateRounded"
@@ -128,7 +127,9 @@ import DeleteIcon from "./DeleteIcon"
 import ColorSelecter from "./ColorSelector"
 import EclipsePlay from "./EclipsePlay"
 import VideoPlayIcon from "./VideoPlayIcon"
+import ComingSoonCloseIcon from "./ComingSoonCloseIcon"
 class Icons {
+  static ComingSoonCloseIcon = ComingSoonCloseIcon
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon
   static GroupIcon = GroupIcon
@@ -223,7 +224,6 @@ class Icons {
   static ImageColorizer = ImageColorizer
   static ObjectReplacer = ObjectReplacer
   static ProductPhotoshoot = ProductPhotoshoot
-  static ArrowLeft = ArrowLeft
   static RetryImg = RetryImg
   static Upgrade = Upgrade
   static CreateRounded = CreateRounded

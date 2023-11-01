@@ -7,8 +7,9 @@ import clsx from "clsx"
 import { COMING_SOON_VIDEO_URL, ProdPhotAILink } from "~/utils/common"
 import { addEmailForWaitingList } from "~/services/earlyAccess.service"
 import CommingSoonPoster from "../dummy/CommingSoonPoster.png"
+import { Button, SHAPE } from "baseui/button"
 
-const CommingSoon = ({ isOpen }: any) => {
+const CommingSoon = ({ isOpen, closeHandler }: any) => {
   const [userEmail, setUserEmail] = useState("")
   const [isAddedToWishList, setIsAddedToWishList] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -102,21 +103,27 @@ const CommingSoon = ({ isOpen }: any) => {
             <Icons.PhotAILogo size={33} />
           </a>
 
-          <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer", transform: "translateY(3px)" }}>
-            <button
-              onClick={() => {
-                const video = document.getElementById("videoPlayer")
-                if (isPlaying) {
-                  // @ts-ignore
-                  video.pause()
-                  setIsPlaying(!isPlaying)
-                }
-              }}
-              className={classes.goToStudioBtn}
-            >
-              Back to Phot.AI
-            </button>
-          </a>
+          {import.meta.env.VITE_DEPLOYMENT_ENVIRONMENT === "PROD" ? (
+            <a href={ProdPhotAILink} target="_blank" style={{ cursor: "pointer", transform: "translateY(3px)" }}>
+              <button
+                onClick={() => {
+                  const video = document.getElementById("videoPlayer")
+                  if (isPlaying) {
+                    // @ts-ignore
+                    video.pause()
+                    setIsPlaying(!isPlaying)
+                  }
+                }}
+                className={classes.goToStudioBtn}
+              >
+                Back to Phot.AI
+              </button>
+            </a>
+          ) : (
+            <Block $style={{ cursor: "pointer" }} onClick={closeHandler}>
+              <Icons.ComingSoonCloseIcon />
+            </Block>
+          )}
         </Block>
 
         <Block className={classes.commingSoonCon}>
