@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import DesignEditor from "~/views/DesignEditor"
 import Dashboard from "~/views/Dashboard"
 import HomePage from "./views/HomePage/HomePage"
+import ArtBoard from "./views/ArtBoard"
 
 const Router = () => {
   return (
@@ -11,6 +12,7 @@ const Router = () => {
           <>
             <Route path="/manage" element={<Dashboard />} />
             <Route path="/old-home" element={<DesignEditor />} />
+            <Route path="/art-board" element={<ArtBoard />} />
           </>
         )}
         <Route path="/" element={<HomePage />} />

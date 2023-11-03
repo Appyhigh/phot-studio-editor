@@ -8,7 +8,6 @@ import clsx from "clsx"
 import useSetIsSidebarOpen from "~/hooks/useSetIsSidebarOpen"
 import Icons from "~/components/Icons"
 
-
 interface State {
   panel: string
 }
@@ -38,22 +37,22 @@ const PanelItem = () => {
       className={clsx("d-flex p-relative", classes.panelItem, isSidebarOpen && classes.sideBarOpenItem)}
       id="EditorPanelItem"
     >
-
       {Component && (
         <Block className={classes.mainContainer}>
-          <span className={classes.backBtn} onClick={() => {
-            setIsSidebarOpen(false)
-            setActivePanel(null as any)
-          }}>
+          <span
+            className={classes.backBtn}
+            onClick={() => {
+              setIsSidebarOpen(false)
+              setActivePanel(null as any)
+            }}
+          >
             <Icons.Cross />
           </span>
 
           <Component />
-
         </Block>
-      )
-      }{" "}
-    </Block >
+      )}{" "}
+    </Block>
   )
 }
 
