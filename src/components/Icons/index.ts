@@ -128,7 +128,18 @@ import ColorSelecter from "./ColorSelector"
 import EclipsePlay from "./EclipsePlay"
 import VideoPlayIcon from "./VideoPlayIcon"
 import ComingSoonCloseIcon from "./ComingSoonCloseIcon"
+import Shortcut from "./Shortcut"
+import Media from "./Media"
+import Elements2 from "./Elements2"
+import Templates2 from "./Templates2"
+import TextTool from "./TextTool"
+
 class Icons {
+  static TextTool = TextTool
+  static Templates2 = Templates2
+  static Elements2 = Elements2
+  static Media = Media
+  static Shortcut = Shortcut
   static ComingSoonCloseIcon = ComingSoonCloseIcon
   static GoogleIcon = GoogleIcon
   static PopupCloseIcon = PopupCloseIcon

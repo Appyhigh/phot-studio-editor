@@ -1,10 +1,22 @@
 import EditorContainer from "../DesignEditor/components/EditorContainer"
-import { Block } from "baseui/block"
+import Footer from "../DesignEditor/components/Footer"
+import Canvas from "./Components/Canvas"
+import Sidebar from "./Components/Sidebar/Sidebar"
+import BasePanel from "~/components/UI/BasePanel/BasePanel"
 
 const ArtBoard = () => {
   return (
     <EditorContainer>
-      <Block>Art board page</Block>
+      {/* <Navbar /> */}
+      <BasePanel />
+      <div style={{ display: "flex", flex: 1 }}>
+        {/* <Panels /> */}
+        <Sidebar />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>
+          <Footer />
+          <Canvas />
+        </div>
+      </div>
     </EditorContainer>
   )
 }

@@ -1,14 +1,10 @@
 import { useContext, useEffect } from "react"
 import { Canvas as LayerhubCanvas, useActiveObject, useEditor } from "@layerhub-io/react"
-import Playback from "../Playback"
-import useDesignEditorContext from "~/hooks/useDesignEditorContext"
-import ContextMenu from "../ContextMenu"
 import { backgroundLayerType, checkboxBGUrl } from "~/constants/contants"
 import MainImageContext from "~/contexts/MainImageContext"
 import LoaderContext from "~/contexts/LoaderContext"
 
 const Canvas = () => {
-  const { displayPlayback } = useDesignEditorContext()
   const editor = useEditor()
   const { mainImgInfo, setMainImgInfo, setPanelInfo } = useContext(MainImageContext)
   const activeObject: any = useActiveObject()
@@ -124,8 +120,6 @@ const Canvas = () => {
 
   return (
     <div style={{ flex: 1, display: "flex", position: "relative" }}>
-      {displayPlayback && <Playback />}
-      <ContextMenu />
       <LayerhubCanvas
         config={{
           background: "#f1f2f6",

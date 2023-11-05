@@ -4,7 +4,6 @@ import getSelectionType from "~/utils/get-selection-type"
 import { styled } from "baseui"
 import Items from "./Items"
 import useAppContext from "~/hooks/useAppContext"
-import { ILayer } from "@layerhub-io/types"
 
 const DEFAULT_TOOLBOX = "Canvas"
 

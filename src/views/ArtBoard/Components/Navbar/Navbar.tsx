@@ -7,8 +7,8 @@ import { useContext, useState } from "react"
 import LoginPopup from "~/views/DesignEditor/components/LoginPopup/LoginPopup"
 import { signOut } from "firebase/auth"
 import { auth } from "~/utils/firebase"
-import BaseButton from "../../Button/BaseButton"
 import TextToArtContext from "~/contexts/TextToArtContext"
+import BaseButton from "~/components/UI/Button/BaseButton"
 
 const Navbar = () => {
   // @ts-ignore

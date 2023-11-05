@@ -19,7 +19,7 @@ const primitives = {
   secondary: "#6729F3",
   accent: "#6729F3",
   primaryFontFamily: "Rubik",
-  secondaryFontFamily: "Poppins",
+  secondaryFontFamily: "Rubik",
   scale0: "2px",
   scale100: "4px",
   scale200: "6px",
@@ -39,6 +39,8 @@ const primitives = {
   backgroundSecondary: "#696974",
   borderAccent: "#92929D",
   borderAccentLight: "#E2E2EA",
+  grey3: "#92929D",
+  grey4: "#F1F1F5",
 }
 
 const breakpoints = {
@@ -68,6 +70,8 @@ const overrides = {
     backgroundSecondary: primitives.backgroundSecondary,
     borderAccent: primitives.borderAccent,
     borderAccentLight: primitives.borderAccentLight,
+    grey3: primitives.grey3,
+    grey4: primitives.grey4,
   },
   typography: {
     primaryExtraBold: {
