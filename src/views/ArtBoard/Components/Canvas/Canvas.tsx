@@ -119,7 +119,7 @@ const Canvas = () => {
   }, [blinkInOutLoader])
 
   return (
-    <div style={{ flex: 1, display: "flex", position: "relative" }}>
+    <div style={{ flex: 1, display: "flex", position: "relative", transform: "translateY(-10vh)", zIndex: 10 }}>
       <LayerhubCanvas
         config={{
           background: "#f1f2f6",

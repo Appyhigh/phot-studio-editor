@@ -1,6 +1,6 @@
 import { useEditor, useZoomRatio } from "@layerhub-io/react"
 import { Slider } from "baseui/slider"
-import React from "react"
+import React, { useEffect } from "react"
 import Icons from "~/components/Icons"
 import classes from "./style.module.css"
 import { Block } from "baseui/block"
@@ -11,8 +11,8 @@ interface Options {
   zoomRatioTemp: number
 }
 const CanvasEditingPannel = () => {
-  const zoomMin = 27
-  const zoomMax = 210
+  const zoomMin = 14
+  const zoomMax = 160
   const [options, setOptions] = React.useState<Options>({
     zoomRatio: 30,
     zoomRatioTemp: 30,
@@ -41,6 +41,14 @@ const CanvasEditingPannel = () => {
       }
     }
   }
+
+  useEffect(() => {
+    if (editor) {
+      setTimeout(() => {
+        applyZoomRatio("zoomRatio", { target: { value: 22 } })
+      }, 100)
+    }
+  }, [editor])
 
   return (
     <Block className="d-flex justify-content-center align-items-center">
@@ -84,7 +92,6 @@ const CanvasEditingPannel = () => {
         }}
         value={[options.zoomRatio]}
         onChange={({ value }) => {
-          console.log(value)
           applyZoomRatio("zoomRatio", { target: { value: value[0] } })
         }}
         min={zoomMin}

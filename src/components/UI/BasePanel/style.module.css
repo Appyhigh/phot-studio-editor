@@ -4,6 +4,7 @@
   box-shadow: inset 0px -1px 0px #e2e2ea;
   padding: 15px 0px;
   border-left: 2px solid #e2e2ea;
+  z-index: 100;
 }
 
 .basePanelBtn {
