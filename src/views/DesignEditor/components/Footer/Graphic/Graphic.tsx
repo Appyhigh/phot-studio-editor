@@ -4,6 +4,7 @@ import { Theme } from "baseui/theme"
 import Toolbox from "../../Toolbox"
 import ErrorContext from "~/contexts/ErrorContext"
 import Toast from "~/components/Toast/Toast"
+import Scenes from "./Scenes"
 
 const Container = styled<"div", {}, Theme>("div", ({ $theme }) => ({
   width: "100%",
@@ -14,7 +15,6 @@ const Graphic = () => {
 
   return (
     <Container className="d-flex justify-content-center flex-column align-items-center">
-      {/* <Scenes /> */}
       {errorInfo.showError && (
         <Toast
           style={{ width: "60%" }}
@@ -27,6 +27,7 @@ const Graphic = () => {
       )}
 
       <Toolbox />
+      <Scenes />
 
       {/* <Common /> */}
     </Container>

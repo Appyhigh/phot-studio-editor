@@ -45,8 +45,8 @@ const CanvasEditingPannel = () => {
   useEffect(() => {
     if (editor) {
       setTimeout(() => {
-        applyZoomRatio("zoomRatio", { target: { value: 22 } })
-      }, 100)
+        applyZoomRatio("zoomRatio", { target: { value: 20 } })
+      }, 200)
     }
   }, [editor])
 

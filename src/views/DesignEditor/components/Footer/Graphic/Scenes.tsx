@@ -172,7 +172,14 @@ const Scenes = () => {
     >
       <Block
         id="TimelineItemsContainer"
-        $style={{ padding: "0.25rem 0.75rem", background: "#ffffff", position: "relative" }}
+        $style={{
+          padding: "14px 16px",
+          background: "#ffffff",
+          position: "relative",
+          width: "100%",
+          transform: "translateY(-8vh)",
+          zIndex: "100",
+        }}
       >
         <div className={css({ display: "flex", alignItems: "center" })}>
           {contextMenuTimelineRequest.visible && <SceneContextMenu />}

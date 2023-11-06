@@ -13,8 +13,8 @@ const ArtBoard = () => {
         {/* <Panels /> */}
         <Sidebar />
         <div style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative" }}>
-          <Footer />
           <Canvas />
+          <Footer />
         </div>
       </div>
     </EditorContainer>

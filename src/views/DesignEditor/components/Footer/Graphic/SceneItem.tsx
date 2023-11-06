@@ -53,7 +53,7 @@ const SceneItem = ({ isCurrentScene, scene, preview, index, changePage }: Props)
       {...listeners}
       $style={{
         backgroundColor: isCurrentScene ? "rgb(243,244,246)" : "#ffffff",
-        padding: "1rem 0.5rem",
+        padding: "0.5rem",
         ...style,
       }}
     >
@@ -71,9 +71,9 @@ const SceneItem = ({ isCurrentScene, scene, preview, index, changePage }: Props)
           $style={{
             position: "absolute",
             bottom: "4px",
-            right: "4px",
-            background: "rgba(0,0,0,0.4)",
-            color: "#fff",
+            right: "50%",
+            transform: "translateX(50%)",
+            color: "#44444F",
             fontSize: "10px",
             borderRadius: "2px",
             height: "16px",

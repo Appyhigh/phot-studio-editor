@@ -13,7 +13,7 @@ const Canvas = () => {
   useEffect(() => {
     if (editor) {
       if (
-        editor.frame.background.canvas._objects.length <= 2 &&
+        editor.frame?.background?.canvas?._objects.length <= 2 &&
         editor.frame?.background?.canvas?._objects[1]?.fill == "#ffffff" &&
         editor.frame?.background?.canvas?._objects[2]?.metadata?.type != backgroundLayerType
       ) {
@@ -119,7 +119,7 @@ const Canvas = () => {
   }, [blinkInOutLoader])
 
   return (
-    <div style={{ flex: 1, display: "flex", position: "relative", transform: "translateY(-10vh)", zIndex: 10 }}>
+    <div style={{ flex: 1, display: "flex", position: "relative", zIndex: 10, marginBottom: "-10vh" }}>
       <LayerhubCanvas
         config={{
           background: "#f1f2f6",
