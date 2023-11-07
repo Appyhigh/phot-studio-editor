@@ -459,6 +459,18 @@
   padding-left: 24px;
 }
 
+.basePanelBtn {
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 12px;
+  border-radius: 10px;
+  font-weight: 500;
+  font-family: "Poppins";
+  color: #44444f;
+  padding: 9px 15px;
+  background-color: #f1f1f5;
+}
+
 .showProduct {
   /* display: block; */
   /* height: 350px; */

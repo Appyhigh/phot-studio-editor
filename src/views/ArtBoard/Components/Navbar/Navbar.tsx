@@ -9,6 +9,12 @@ import { signOut } from "firebase/auth"
 import { auth } from "~/utils/firebase"
 import TextToArtContext from "~/contexts/TextToArtContext"
 import BaseButton from "~/components/UI/Button/BaseButton"
+import AddPopup from "~/views/DesignEditor/components/Footer/Graphic/AddPopup/AddPopup"
+import { LabelSmall } from "baseui/typography"
+import { useStyletron } from "baseui"
+import { useEditor } from "@layerhub-io/react"
+import { backgroundLayerType } from "~/constants/contants"
+import DownloadPopup from "~/views/DesignEditor/components/Footer/Graphic/DownloadPopup/DownloadPopup"
 
 const Navbar = () => {
   // @ts-ignore
@@ -16,31 +22,102 @@ const Navbar = () => {
   const { user } = authState
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const { textToArtInputInfo } = useContext(TextToArtContext)
+  const [showAddPopup, setShowAddPopup] = useState(false)
+  const [css, theme] = useStyletron()
+  const editor = useEditor()
+
+  const handleCloseAddPopup = () => {
+    setShowAddPopup(false)
+  }
+
+  const downloadBtnDisable =
+    (editor?.frame?.background?.canvas?._objects?.length === 3 &&
+      editor?.frame?.background?.canvas?._objects[2]?.metadata?.type === backgroundLayerType) ||
+    (editor?.frame?.background?.canvas?._objects?.length === 2 &&
+      editor?.frame?.background?.canvas?._objects[1]?.fill === "#ffffff")
 
   return (
     <Block className={classes.header}>
       <Block className="d-flex justify-content-start pointer">
         <Icons.PhotAILogo size={23} />
       </Block>
-      <div className="flex-1"></div>
+      <Block className="d-flex align-items-center justify-content-between w-100">
+        <Block display={"flex"} alignItems={"center"}>
+          <button className={classes.basePanelBtn}>
+            <span className="d-flex align-items-center">
+              <Icons.ChevronRight size={16} color="#44444F" />
+            </span>
+          </button>
+          <div className="p-relative addPopupBtn">
+            <button
+              className={classes.basePanelBtn}
+              onMouseOver={() => {
+                setShowAddPopup(true)
+              }}
+            >
+              <span className="d-flex align-items-center">
+                <span className="pr-1">
+                  <Icons.Plus size={16} color="#44444F" />
+                </span>
+                Add
+                <span className="pl-3">
+                  <Icons.ArrowDown size={14} color="#44444F" />
+                </span>
+              </span>
+            </button>
+
+            <AddPopup showPopup={showAddPopup} handleClose={handleCloseAddPopup} />
+          </div>
+          <Block marginLeft={"20px"}>
+            <Icons.Save size={26} />
+          </Block>
+        </Block>
+        <Block className="d-flex align-items-center">
+          <Icons.Pen />
+          <LabelSmall color={theme.colors.primary500} marginLeft={"8px"} className="pointer">
+            Untitled design - Whiteboard
+          </LabelSmall>
+          <LabelSmall
+            className="pointer"
+            color={theme.colors.primary500}
+            $style={{ textDecoration: "underline", marginLeft: "8px" }}
+          >
+            Save
+          </LabelSmall>
+        </Block>
+        <Block className="d-flex align-items-center justify-content-center">
+          <Block className="mr-2">
+            <Icons.Search2 />
+          </Block>
+          <Block className="mr-2">
+            <Icons.ActivityIcon size={24} />
+          </Block>
+          <Block className="mr-2">
+            <Icons.Info />
+          </Block>
+          <Block className="mr-2">
+            <Icons.Bell />
+          </Block>
+          <Block className={"p-relative downloadResultBtn ml-3 mr-1"}>
+            <BaseButton
+              title="Download"
+              disabled={downloadBtnDisable ? true : false}
+              fontSize="14px"
+              padding="15px"
+              borderRadius="10px"
+              fontFamily="poppins"
+              height="38px"
+              width="120px"
+              // className={clsx(classes.basePannelBtn, downloadBtnDisable && classes.disabledDownloadBtn)}
+            />
+
+            {!downloadBtnDisable && <DownloadPopup />}
+          </Block>
+        </Block>
+      </Block>
 
       {user ? (
         <>
-          <Block className="d-flex justify-content-end align-items-center mr-1 pointer">
-            <Icons.ActivityIcon size={24} />
-          </Block>
-          <BaseButton
-            title={`${user && user?.credits_remaining} Credits`}
-            width="120px"
-            height="38px"
-            bgColor="#F1F1F5"
-            borderRadius="10px"
-            fontSize="12px"
-            txtColor="#92929D"
-            fontFamily="poppins"
-            margin="0 0 0 17px"
-          />
-
           <BaseButton
             title="Upgrade"
             bgColor="#FF974A"
@@ -73,10 +150,6 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className={classes.profilePopupLinks}>
-                  <p className={classes.profileLinks}>
-                    {" "}
-                    <a>My Dashboard</a>
-                  </p>
                   <p
                     className={classes.profileLinks}
                     onClick={() => {
@@ -85,12 +158,6 @@ const Navbar = () => {
                   >
                     <a>Sign out</a>
                   </p>
-                </div>
-                <div className={classes.creditsOfProfile}>
-                  <div className={classes.remainingCredits}>Remaining Credits: {user && user?.credits_remaining}</div>
-                  <div className={classes.buyMoreCredits}>
-                    <a>Buy More</a>
-                  </div>
                 </div>
               </div>
             </div>

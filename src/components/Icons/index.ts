@@ -133,8 +133,20 @@ import Media from "./Media"
 import Elements2 from "./Elements2"
 import Templates2 from "./Templates2"
 import TextTool from "./TextTool"
+import Bell from "./Bell"
+import Clock from "./Clock"
+import Download2 from "./Download2"
+import Info from "./Info"
+import Pen from "./Pen"
+import Search2 from "./Search2"
 
 class Icons {
+  static Search2 = Search2
+  static Pen = Pen
+  static Info = Info
+  static Download2 = Download2
+  static Clock = Clock
+  static Bell = Bell
   static TextTool = TextTool
   static Templates2 = Templates2
   static Elements2 = Elements2
