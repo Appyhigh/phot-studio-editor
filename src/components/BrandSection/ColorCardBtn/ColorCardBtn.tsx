@@ -4,7 +4,7 @@ import { Block } from "baseui/block"
 import Icons from "~/components/Icons"
 import BrandColorPicker from "../ColorPicker/BrandColorPicker"
 
-const ColorCardBtn = ({ ColorCode, index, handleDelete, handleEdit }: any) => {
+const ColorCardBtn = ({ ColorCode, index, handleDelete, handleEdit, type }: any) => {
     const [isHover, setIsHover] = useState(false)
     const [openPopup, setOpenPopup] = useState(false)
     const [isEdit, setIsEdit] = useState(false)
@@ -62,7 +62,7 @@ const ColorCardBtn = ({ ColorCode, index, handleDelete, handleEdit }: any) => {
                 onMouseLeave={() => setIsEdit(false)}
                 style={{ position: "absolute", top: "-13rem", left: "136px", zIndex: "1" }}
             >
-                <BrandColorPicker index={index} handleAddColor={handleEdit} close={handleCloseEdit} />
+                <BrandColorPicker index={index} handleAddColor={handleEdit} close={handleCloseEdit} type={type} />
             </div>}
 
         </Block>

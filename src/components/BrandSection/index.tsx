@@ -20,7 +20,7 @@ const BrandSection = () => {
         "#linear-gradient(to right, rgba(89, 187, 242, 1), rgba(178, 41, 243, 1))",
     ]
     const [createSolidPopup, setCreateSolidPopup] = useState(false)
-    const [addColorType, setAddColorType] = useState('SolidColor')
+    const [addColorType, setAddColorType] = useState("SolidColor")
     const handleDeleteSolidColor = (index: number) => {
         const updatedColors = [...SolidColors]
         updatedColors.splice(index, 1)
@@ -34,24 +34,23 @@ const BrandSection = () => {
     }
 
     const handleAddSolidColor = (index: any, color: any, type: string) => {
-        if (type === 'SolidColor') {
+        if (type === "SolidColor") {
             setSolidColors([...SolidColors, color])
-        } else if (type === 'SolidBgColor') {
+        } else if (type === "SolidBgColor") {
             setBgSolidColors([...BgSolidColors, color])
         }
-
     }
     const handleEdit = (index: any, color: any, type: any) => {
-        if (type === 'SolidColor') {
-            const updatedColors = [...SolidColors];
-            updatedColors[index] = color;
-            setSolidColors(updatedColors);
-        } else if (type === 'SolidBgColor') {
-            const updatedColors = [...BgSolidColors];
-            updatedColors[index] = color;
-            setBgSolidColors(updatedColors);
+        if (type === "SolidColor") {
+            const updatedColors = [...SolidColors]
+            updatedColors[index] = color
+            setSolidColors(updatedColors)
+        } else if (type === "SolidBgColor") {
+            const updatedColors = [...BgSolidColors]
+            updatedColors[index] = color
+            setBgSolidColors(updatedColors)
         }
-    };
+    }
 
     const HandleUplaodModalClose = () => {
         setIsUploadLogo(false)
@@ -91,19 +90,34 @@ const BrandSection = () => {
                     <h3 className={classes.sectionHeading}>Solid Colors</h3>
                 </Block>
                 <Block className={classes.brandLogoBottom}>
-                    <CreateBtn Width="120px" Height="120px" HandleOnClick={() => HandleSolidColorCreateClick('SolidColor')} />
+                    <CreateBtn Width="120px" Height="120px" HandleOnClick={() => HandleSolidColorCreateClick("SolidColor")} />
                     {createSolidPopup && (
                         <div
                             id={`popup-${createSolidPopup}`}
                             onMouseLeave={() => setCreateSolidPopup(false)}
                             style={{ position: "absolute", top: "14px", left: "136px", zIndex: "1" }}
                         >
-                            <BrandColorPicker type={addColorType} handleAddColor={handleAddSolidColor} close={handleOpenAddColorPopup} />
+                            <BrandColorPicker
+                                type={addColorType}
+                                handleAddColor={handleAddSolidColor}
+                                close={handleOpenAddColorPopup}
+                            />
                         </div>
                     )}
 
                     {SolidColors.map((colors, ind) => {
-                        return <ColorCardBtn ColorCode={colors} index={ind} handleDelete={handleDeleteSolidColor} handleEdit={handleEdit} key={ind} />
+                        return (
+                            <>
+                                <ColorCardBtn
+                                    ColorCode={colors}
+                                    index={ind}
+                                    handleDelete={handleDeleteSolidColor}
+                                    handleEdit={handleEdit}
+                                    key={ind}
+                                    type={'SolidColor'}
+                                />
+                            </>
+                        )
                     })}
                 </Block>
             </Block>
@@ -113,9 +127,9 @@ const BrandSection = () => {
                     <h3 className={classes.sectionHeading}>Background Colors</h3>
                 </Block>
                 <Block className={classes.brandLogoBottom}>
-                    <CreateBtn Width="120px" Height="120px" HandleOnClick={() => HandleSolidColorCreateClick('SolidBgColor')} />
+                    <CreateBtn Width="120px" Height="120px" HandleOnClick={() => HandleSolidColorCreateClick("SolidBgColor")} />
                     {BgSolidColors.map((colors, ind) => {
-                        return <ColorCardBtn ColorCode={colors} index={ind} handleDelete={handleDeleteBgSolidColor} key={ind} />
+                        return <ColorCardBtn ColorCode={colors} index={ind} handleDelete={handleDeleteBgSolidColor} handleEdit={handleEdit} type={'SolidBgColor'} key={ind} />
                     })}
                 </Block>
             </Block>
