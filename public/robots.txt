@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Disallow: *
+
+# Host
+Host: https://studio.phot.ai
+
+# Sitemaps
+Sitemap: https://studio.phot.ai/sitemap.xml
