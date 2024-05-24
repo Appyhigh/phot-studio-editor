@@ -91,7 +91,7 @@ select {
   display: flex;
   position: absolute;
   top: 0;
-  right: 14px;
+  right: 8px;
   align-items: center;
   /* justify-content: center; */
   height: 100%;
@@ -157,4 +157,32 @@ select {
   width: 62px;
   cursor: pointer;
   border-radius: 4px;
+}
+.multiValueInputFieldsCon {
+  display: flex;
+  gap: 8px;
+}
+.valueContainer {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.colorSingleValInput {
+  display: flex;
+  border: 1px solid black;
+  max-width: 36px;
+  text-align: center;
+  padding: 4px 0 4px;
+  outline: none;
+  border-radius: 5px;
+}
+.cssInput {
+  width: 70%;
+  padding: 0.5rem;
+  background-color: transparent;
+  border-radius: 8px;
+  border: 1px solid black;
+  outline: none;
 }

@@ -8,7 +8,7 @@ const Home = () => {
 
     return (
         <Block style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-            <CommingSoon isOpen={true} />
+            {/* <CommingSoon isOpen={true} /> */}
             <HomeSlider />
             <PopularToolsSection />
             <AllToolsSection />
