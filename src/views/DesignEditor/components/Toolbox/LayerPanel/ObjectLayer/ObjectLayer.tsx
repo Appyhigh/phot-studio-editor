@@ -57,6 +57,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
   const { setBlinkInOutLoader } = useContext(LoaderContext)
   const colors = ["#FF6BB2", "#B69DFF", "#30C5E5", "#7BB872", "#49A8EE", "#3F91A2", "#DA4F7A", "#FFFFFF"]
   const { setImagesCt } = useContext(ImagesContext)
+  const [isRemoveBgShown, setIsRemoveBgShown] = useState(false)
   const handleChangeBg = useCallback(
     async (each: any) => {
       let inputImage
@@ -69,6 +70,8 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       ) {
         inputImage = activeObject?.metadata?.originalLayerPreview
         changeBGFillHandler(inputImage, each.color)
+        setObjectBgColor(each.color)
+        setMainImgInfo((prev: any) => ({ ...prev, swiper_selected_color: each.color }))
       } else {
         removeBackgroundBeforeChangingColor(each)
       }
@@ -152,6 +155,24 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
       console.log("Something went wrong while removing background...", error.message)
     }
   }
+  useEffect(() => {
+    if (mainImgInfo.swiper_selected_color.startsWith("#")) {
+      setObjectBgColor(mainImgInfo?.swiper_selected_color)
+    } else {
+      setObjectBgColor("#000000")
+    }
+  }, [mainImgInfo])
+
+  useEffect(() => {
+    if (activeObject?.src) {
+      setIsRemoveBgShown(activeObject?.preview !== activeObject?.metadata?.originalLayerPreview ||
+        activeObject?.src !== activeObject?.metadata?.originalLayerPreview)
+    } else if (activeObject?.preview.startsWith('http')) {
+      setIsRemoveBgShown(true)
+    } else {
+      setIsRemoveBgShown(activeObject?.preview !== activeObject?.metadata?.originalLayerPreview)
+    }
+  }, [activeObject, activeObject?.src])
 
   return showLayer ? (
     <>
@@ -221,25 +242,45 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
           <div className={classes.colorsWrapper}>
             {colors.map((each, idx) => {
               return (
-                <div
-                  key={idx}
-                  style={{ backgroundColor: each, border: idx == colors.length - 1 ? "1px solid #92929D" : "" }}
-                  className={clsx(classes.colorOption, "flex-center")}
-                  onClick={() => {
-                    if (idx === colors.length - 1) {
-                      setIsOpen(true)
-                    } else {
-                      handleChangeBg({ color: each })
-                    }
-                  }}
-                >
-                  {idx === colors.length - 1 && (
-                    <div>
-                      {" "}
-                      <Icons.ColorPlus />{" "}
-                    </div>
-                  )}
-                </div>
+                <>
+                  <div
+                    key={idx}
+                    style={{
+                      backgroundColor: each,
+                      border: idx == colors.length - 1 ? "1px solid #92929D" : "",
+                      position: "relative",
+                    }}
+                    className={clsx(classes.colorOption, "flex-center")}
+                    onClick={() => {
+                      if (idx === colors.length - 1) {
+                        setIsOpen(true)
+                      } else {
+                        handleChangeBg({ color: each })
+                      }
+                    }}
+                  >
+                    {objectBgColor === each && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          width: "42px",
+                          height: "42px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Icons.Selection size={"22"} />
+                      </div>
+                    )}
+                    {idx === colors.length - 1 && (
+                      <div>
+                        {" "}
+                        <Icons.ColorPlus />{" "}
+                      </div>
+                    )}
+                  </div>
+                </>
               )
             })}
           </div>
@@ -252,8 +293,7 @@ const ObjectLayer = ({ showLayer, handleClose }: any) => {
             }}
           />
 
-          {activeObject?.preview !== activeObject?.metadata?.originalLayerPreview ||
-          activeObject?.src !== activeObject?.metadata?.originalLayerPreview ? (
+          {isRemoveBgShown ? (
             <>
               <div className={clsx(classes.panelSubHeading, "my-2")}>Other tools</div>
               <div className={classes.otherToolsWrapper}>

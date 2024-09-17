@@ -8,7 +8,7 @@
   border: 1px solid #92929d;
 }
 .Container {
-  height: 98% !important;
+  height: 100% !important;
 }
 .eachLayer {
   margin: 8px 10px 8px 14px;
@@ -56,16 +56,4 @@
 
 .eachLayerSection:hover .threeDotsIcon {
   display: block;
-}
-
-@media screen and (max-height: 700px) {
-  .Container {
-    height: 97% !important;
-  }
-}
-
-@media screen and (max-height: 630px) {
-  .Container {
-    height: 96% !important;
-  }
 }

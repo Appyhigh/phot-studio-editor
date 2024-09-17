@@ -140,7 +140,7 @@ const BgRemover = () => {
       {(panelInfo.bgOptions && !panelInfo.bgRemoverBtnActive) && (
         <>
           {" "}
-          <Block className={clsx(activePanel === "BgRemover" ? "mt-1" : "mt-2")}>
+          <Block className="mt-2">
             <Block className={clsx("d-flex  flex-row", classes.bgOptionsSection)}>
               <Block
                 className={clsx(

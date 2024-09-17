@@ -41,6 +41,7 @@ export const HandleBgChangeOption = async (
         ? activeMainObject?.metadata?.originalLayerPreview ?? activeMainObject.preview
         : inputImg,
     },
+    swiper_selected_color: bg,
     _element: imageElement,
     _originalElement: imageElement,
   }

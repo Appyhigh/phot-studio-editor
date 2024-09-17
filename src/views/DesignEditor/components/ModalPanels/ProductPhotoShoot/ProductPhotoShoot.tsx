@@ -141,6 +141,7 @@ const ProductPhotoshoot = ({ handleClose }: any) => {
     if (productPhotoshootInfo.again) {
       setSteps((prev) => ({ ...prev, 1: false, 2: true, 3: false, 4: false }))
       setStepsComplete((prev) => ({ ...prev, 1: true, 2: false, 3: false, 4: false }))
+      setIsVisited((prev) => ({ ...prev, 1: true, 2: true, 3: false, 4: false }))
       setProductPhotoshootInfo((prev: any) => ({
         ...prev,
         prompt: "",

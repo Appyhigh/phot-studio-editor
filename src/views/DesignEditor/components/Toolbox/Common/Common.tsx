@@ -64,11 +64,11 @@ const Common = ({ type }: any) => {
             latest_ct = prev + 1
             DuplicateFunc({ editor, activeObject, latest_ct: 'groupImage' }).then(() => {
               setTimeout(() => {
-                if (activeObject._objects) {
+                if (activeObject?.name === 'group') {
                   setTimeout(() => {
                     editor.objects.group()
                     editor.objects.findById(activeObject.id)[0].center()
-                  }, 200);
+                  }, 900);
                   editor.objects.position("top", activeObject.top)
                   editor.objects.position("left", activeObject.left)
                   editor.objects.resize("height", activeObject.height * activeObject.scaleY)
@@ -76,7 +76,7 @@ const Common = ({ type }: any) => {
                 } else {
                   activeObject.center()
                 }
-              }, 300)
+              }, 1000)
             })
             return prev + 1
           })
